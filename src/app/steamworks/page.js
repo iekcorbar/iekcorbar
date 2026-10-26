@@ -488,6 +488,9 @@ export default function SteamworksExplainedPage() {
           <Card title="New: Steamworks Additions" stat="atmosphere, no shafts needed">
             <p>The sister plugin: a <b>Steam Clock</b> that reads the real wall clock, strikes its bell every hour and answers a right-click with the exact time, a self-joining <b>Brass Railing</b> and a <b>Vent Grille</b> for every brewery facade. See <Link href="/wiki?page=additions-intro" className="text-sp-gold underline">Additions in the wiki</Link>.</p>
           </Card>
+          <Card title="New: Steamworks Power" stat="industry for your river">
+            <p>The muscle add-on, all on the same shafts: a <b>Water Turbine</b> that drinks the current for 768 Tq, a <b>Mechanical Press</b> that stamps nuggets to ingots, snow to ice and gives the honey back its bottle - and a <b>Stock Ticker</b> that counts your chests from across the yard. See <Link href="/wiki?page=power-intro" className="text-sp-gold underline">Power in the wiki</Link>.</p>
+          </Card>
         </div>
       </Section>
 
@@ -506,7 +509,7 @@ export default function SteamworksExplainedPage() {
           <Link href="/wiki?page=steamworks" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Steamworks Wiki (quick reference)</Link>
           <Link href="/recipes" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><Wrench className="w-4 h-4" /> All Recipes</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.19`} + Steamworks Additions {`0.1.2`}). For exact per-machine stats, always right-click the part in-game.</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.19`} + Additions {`0.1.2`} + Power {`0.1.0`}). For exact per-machine stats, always right-click the part in-game.</p>
       </Section>
     </div>
   );

@@ -1,0 +1,26 @@
+# Steamworks Power - water turbine, mechanical press, stock ticker.
+
+turbine:
+  # RPM a water turbine delivers while current runs through it.
+  rpm: 12
+  # Torque per RPM (an encased steam engine runs 24 x 64; this is the calm river cousin).
+  capacity: 64
+
+press:
+  # Torque per RPM the press draws while it works.
+  impact: 8
+  # Work per item at 12 RPM per tick (like the millstone: 60 = 5 s at 12 RPM).
+  time: 60
+  # What the press makes. input: a material (HAY) or a Steamworks item (sw:zinc_nugget).
+  # output: "MATERIAL [amount] [chance%]" - the same notation the Steamworks machines.yml uses.
+  recipes:
+    - {input: sw:zinc_nugget 9, output: [sw:zinc_ingot 1]}
+    - {input: HONEY_BOTTLE, output: [GLASS_BOTTLE 1, HONEYCOMB 1 25%]}
+    - {input: CLAY, output: [BRICK 4]}
+    - {input: HAY_BLOCK, output: [LEATHER 1, HAY_BLOCK 1 50%]}
+    - {input: SNOW_BLOCK 4, output: [PACKED_ICE 2]}
+
+ticker:
+  # How many stock tickers one player may have counting in the same chunk (the plates cost nothing,
+  # but a wall of 40 tickers is hard to read). 0 = no limit.
+  max-per-chunk: 6

@@ -424,7 +424,7 @@ export default function WikiClient() {
         )}
       </div>
 
-      {isStaff && !isSearching && [[ 'steamworks', 'Steamworks'], ['additions', 'Steamworks Additions'], ['kitchen', 'Kitchen'], ['wildlife', 'Wildlife'], ['sakagura', 'Sakagura'], ['kura', 'Kura Storage'], ['satchel', 'Satchel Backpacks'], ['zukan', 'Zukan'], ['gouw', 'Gouw Land Claims']].map(([seed, label]) => (
+      {isStaff && !isSearching && [[ 'steamworks', 'Steamworks'], ['additions', 'Steamworks Additions'], ['power', 'Steamworks Power'], ['kitchen', 'Kitchen'], ['wildlife', 'Wildlife'], ['sakagura', 'Sakagura'], ['kura', 'Kura Storage'], ['satchel', 'Satchel Backpacks'], ['zukan', 'Zukan'], ['gouw', 'Gouw Land Claims']].map(([seed, label]) => (
         <SeedImport key={seed} seed={seed} label={label} hasPages={pagesList.some(p => p.category === label)} onDone={fetchWiki} />
       ))}
 

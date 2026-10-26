@@ -46,3 +46,5 @@ Desktop.ini
 mobile/.expo/
 
 deploy/
+
+__pycache__/

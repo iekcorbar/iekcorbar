@@ -25,4 +25,13 @@ public interface CustomPartRegistry {
 
     /** A fresh item of this part (also what the workbench result should be built from). */
     ItemStack item(CustomPart part, int amount);
+
+    /**
+     * A Steamworks material/part item by id, for your recipes: "material/zinc_nugget",
+     * "material/iron_dust", "part/cogwheel" - or null when the id is unknown.
+     */
+    ItemStack steamworksItem(String id);
+
+    /** Removes and un-registers every machine of your plugin (call it from your onDisable). */
+    void unregister(org.bukkit.plugin.Plugin owner);
 }

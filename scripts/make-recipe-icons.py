@@ -380,7 +380,7 @@ print(len(set(ids)), "icons")
 
 # which plugin folders hold a rendered model picture (public/recipes/<plugin>/<id>.png)
 pics = {}
-for d in ("kura", "kitchen", "steamworks"):
+for d in ("kura", "kitchen", "steamworks", "power"):
     path = f"public/recipes/{d}"
     pics[d] = sorted(f[:-4] for f in os.listdir(path) if f.endswith(".png")) if os.path.isdir(path) else []
 json.dump(pics, open("src/lib/recipe-pictures.json", "w"))

@@ -1,0 +1,20 @@
+name: SteamworksPower
+version: '${project.version}'
+main: com.iekcorbar.power.PowerPlugin
+api-version: '26.2'
+# Power add-on of Steamworks: water turbine, mechanical press, stock ticker.
+# Needs Steamworks (it is the network these machines plug into); models join Steamworks' FMM folder.
+depend: [Steamworks]
+description: Water turbine, mechanical press and stock ticker for the Steamworks network.
+author: iekcorbar
+
+commands:
+  power:
+    description: Steamworks Power commands
+    usage: /power <list|give|reload>
+    aliases: [pwr]
+
+permissions:
+  power.admin:
+    description: Give and configure Steamworks Power machines
+    default: op

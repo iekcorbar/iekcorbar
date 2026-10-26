@@ -75,8 +75,32 @@ final class ExtParts implements CustomPartRegistry {
         return item;
     }
 
+    @Override
+    public ItemStack steamworksItem(String id) {
+        int c = id.indexOf('/');
+        if (c <= 0) return null;
+        String kind = id.substring(0, c), key = id.substring(c + 1);
+        try {
+            if (kind.equals("material")) {
+                MaterialType t = MaterialType.byId(key);
+                return t == null ? null : plugin.items().createMaterial(t, 1);
+            }
+            if (kind.equals("part")) {
+                PartType t = PartType.byId(key);
+                return t == null || t == PartType.CUSTOM ? null : plugin.items().create(t, 1);
+            }
+        } catch (RuntimeException ignored) {
+        }
+        return null;
+    }
+
+    @Override
+    public void unregister(Plugin owner) {
+        unregisterInternal(owner);
+    }
+
     /** Every machine of one plugin walked out of the world: dropped, unsaved from the chunk. */
-    void unregister(Plugin owner) {
+    void unregisterInternal(Plugin owner) {
         List<CustomPart> mine = new ArrayList<>();
         for (CustomPart p : parts.values()) if (p.ownerPlugin().equalsIgnoreCase(owner.getName())) mine.add(p);
         for (CustomPart p : mine) parts.remove(p.id());

@@ -141,6 +141,39 @@ for (const m of addSrc.matchAll(/new DecorDef\("([a-z_]+)", "([^"]+)", "[^"]*"\)
 }
 out.plugins.push({ id: 'additions', name: 'Steamworks Additions', blurb: 'The Steam Clock and brass details.', recipes: addRecipes });
 
+// ---------------------------------------------------------------- Steamworks Power
+// machines are PowerPlugin.registerRecipes' shaped("id", result, new String[]{"..."}, 'C', ingredient, ...)
+// plus the press's work list from SteamworksPower/config.yml.
+const pwSrc = read('SteamworksPower/src/main/java/com/iekcorbar/power/PowerPlugin.java');
+const pwRecipes = [];
+const pwNames = { water_turbine: 'Water Turbine', mechanical_press: 'Mechanical Press', stock_ticker: 'Stock Ticker' };
+const swName = (t) => t.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+for (const m of pwSrc.matchAll(/shaped\("(\w+)",[^,]+,\s*new String\[\]\{([^}]*)\},\s*([\s\S]*?)\);\s*\n/g)) {
+  const [, id, rowsBody, pairs] = m;
+  const ingMap = {};
+  for (const p of pairs.matchAll(/'(\w)',\s*(?:new ItemStack\(Material\.(\w+)\)|swItem\("material\/(\w+)"\))/g)) {
+    const name = pretty(p[2] || p[3]);
+    ingMap[p[1]] = { name, count: 1 };
+  }
+  const rows = [...rowsBody.matchAll(/"([^"]*)"/g)].map((r) => r[1]);
+  const grid = rows.map((r) => [...r.padEnd(3).trimEnd()].map((c) => (c === ' ' ? null : ingMap[c]?.name ?? null)));
+  const uniq = new Map();
+  for (const c of rows.join('').replace(/ /g, '')) if (!uniq.has(ingMap[c].name)) uniq.set(ingMap[c].name, ingMap[c].count);
+  pwRecipes.push({
+    result: pwNames[id] || swName(id), count: 1, type: 'shaped', category: 'Workbench',
+    grid, ingredients: [...uniq].map(([name, count]) => ({ name, count })),  });
+}
+const pw = yaml.load(read('SteamworksPower/src/main/resources/config.yml'));
+for (const r of pw.press.recipes || []) {
+  pwRecipes.push({
+    category: 'Mechanical Press', type: 'machine',
+    ingredients: [spec(r.input)], outputs: (r.output || []).map(spec),
+    time: pw.press.time ? Math.round((pw.press.time / 20) * 10) / 10 : null, water: 0, heat: false,
+    note: 'Items lie on top of the press while its shaft turns.',
+  });
+}
+out.plugins.push({ id: 'power', name: 'Steamworks Power', blurb: 'Water turbine, mechanical press and stock ticker.', recipes: pwRecipes });
+
 // The java parser cannot read "new RecipeChoice.MaterialChoice(Tag.X)" and a few other forms: name them here.
 const WHO = { Station: 'Any Sign', Windmill: 'Any Wool' };
 function tidy(n, r) {
