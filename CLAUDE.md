@@ -388,6 +388,45 @@ IekcorbarSiteSync-1.15.0.jar in root EN in de site-zip (03:19). RESTANTIJK: de L
 staat nog als 'Lands' in MySQL (db.json wordt uit de zip gesloten) - één handmatige staff-edit
 via moderatie>wiki; daarna pas plugins/Lands verwijderen (lands_* tabellen worden dood vlees).
 
+### Gouw 0.2.1 + Relics 0.3.5: twee echte crash-bugs uit de server-log (2026-10-26, vroege ochtend)
+Log analyze (latest(5).log) wees twee dingen:
+1) **Gouw crashte bij inschakelen**: `IllegalPluginAccessException: Unable to find handler list for
+org.bukkit.event.player.PlayerEvent` - oorzaak: `GouwListener.onBucket(PlayerBucketEvent)`; die klas is
+ABSTRACT in Bukkit en heeft geen handlerList. Vaste regel: luister nooit naar een abstracte event-
+klasse. Fix = handlers gesplitst in `onBucketFill(PlayerBucketFillEvent)` + `onBucketEmpty(PlayerBucketEmptyEvent)`,
+dezelfde guard. Belangrijk: de crash gebeurde NA de Lands-import (L33 wel, L37 registerEvents niet),
+dus claims.json was wel gevuld maar **claim-bescherming stond die hele tijd UIT**. 0.2.0-note hierboven
+"is onveranderd" was dus te optimistisch - GOUW had nooit gedraaid.
+2) **Relics discs**: de 4 "could not set the jukebox song (NoSuchElementException)"-warnings + het
+VOLLEDIG ONTBREKEN van "Relics: loaded N music disc(s)" en "Disc songs written to ..." - terwijl de
+repo-jar (Relics-0.3.4.jar, 20:05) die code WEL bevat (discs_jar.txt: strings present). Conclusie: op de
+server staat een oudere 0.3.4-copy. Reden te meer om 0.3.5 te draaien: Discs.installDatapack schrijft dan
+`iekcorbarSeason2/datapacks/relics_discs` (pack_format 64, jukebox_song relics:<id>) en logt het pad;
+daarna ONE restart (warnings over song-set zijn normaal zolang de datapack nog niet geladen is; daarna
+speelt de schijf). mvn groen: Gouw-0.2.1.jar + Relics-0.3.5.jar in de repo-root.
+
+### Git-werkdag: skill `git-beheer` + eerste echte commit/push (2026-10-26)
+Gebruiker kent git niet; account baaye16 (sms-2FA); repo's blijven PRIVÉ. Skill staat in
+`~/.claude/skills/git-beheer/SKILL.md` (commit per werkblok, auto-push, alleen bron, agent mag
+privé-repos aanmaken - alles via MC gecheckt). Deze repo: er bestond alleen een "Initial commit" met
+alleen README.md, GEEN .gitignore, 104 losse dingen ongezien. Gedaan:
+- `.gitignore` aangemaakt VOOR eerste commit: node_modules/.next/target/..., *.jar *.zip, *PRIVE*,
+  forgotten players/, headdatabase/, src/lib/db.json, .env*, pluginset-aangepast/, upload-*/,
+  output_browser/, _archief/, logs.
+- **Secrets uit de bron gehaald** (stonden WÉL in bestanden die mee zouden):
+  IekcorbarSiteSync default config.yml (host/username/password) -> TODO's; `M@thanya13!`-val fallbacks
+  in src/lib/db.js, src/lib/migrate.js en MySQLSync.java -> TODO/omgezet. Echte waarden leven verder in
+  .env.local (nooit gecommit) en plugins/IekcorbarSiteSync/config.yml op de server.
+  SiteSync-jar 1.15.0 in de zip/root bevat nog de OUDE default-config: prima voor de server (config.yml
+  there al bestaat), pas herbouwen als ooit een verse install.
+- Tak `master` -> `main` (git branch -M). Eerste commit 0419dc9 (6041 bestanden, geen >50 MB) en
+  `git push -u origin main` OK na één browser-login van de gebruiker (GCM onthoudt nu).
+- Restant: GitHub default branch staat nog op `master` (verwijderen wordt geweigerd); gebruiker moet in
+  github.com/baaye16/iekcorbar-final/settings → Branches → default op `main` zetten, daarna `git push
+  origin --delete master`.
+- Let op: .env.local zit in géén zip en wordt van git gehouden; plugin-data-db.js noemt nog wel het
+  sql1.revivenode.com + db-naam in commentaar (geen ww) - ok voor privé-repo, eventueel anonimiseren.
+
 ### Backlog / later (gebruikersnotities, nooit vergeten)
 
 - **BedWars-plugin** (2026-10-26, gebruiker: "let op voor later: bedwars plugin - uitgebreid

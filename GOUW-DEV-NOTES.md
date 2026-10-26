@@ -70,6 +70,16 @@ Van "eventueel later: site-koppeling" is nu alles gedaan zodat Lands weg kan:
 - [x] site-zip herbouwd (IekcorbarSiteSync 1.15.0 + db.js erin; src/lib/db.json UITGESLOTEN van
       de zip, dus de LIVE-pagina staat nog als 'Lands' in MySQL).
 
+## Crash gevonden: Gouw 0.2.0 draaide NOOIT (2026-10-26, 0.2.1)
+Server-log (latest(5).log) liet `IllegalPluginAccessException: Unable to find handler list for
+org.bukkit.event.player.PlayerEvent` bij enable. Oorzaak: `onBucket(PlayerBucketEvent)` -
+PlayerBucketEvent is in Bukkit ABSTRACT (alleen de concrete Fill/Empty hebben een handlerList);
+Bukkit kan er niet naar luisteren. Gouw crashte op registerEvents (regel 37), dus VÓÓR de
+claim-bescherming: de Lands-import (reg 33) was wél gelukt, claims.json is gevuld, maar het
+beschermen zelf stond uit. Fix: handler gesplitst in onBucketFill/onBucketEmpty, versie 0.2.1
+(pom + letterlijke version in plugin.yml). mvn groen; Gouw-0.2.1.jar in de repo-root.
+**Uploaden + herstarten; log moet dan tonen: "Gouw enabled - N gouwen".**
+
 ## Lands definitief van de server (stappen, gebruiker)
 1. Nieuwe SiteSync jar 1.15.0 -> plugins/ (de server-de, niet de site-zip) + herstart; config.yml
    kan mee of handmatig de twee %lands%-regels schrappen.
