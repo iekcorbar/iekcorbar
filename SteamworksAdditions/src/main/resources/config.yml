@@ -1,0 +1,5 @@
+# Steamworks Additions - atmosphere props.
+
+props:
+  # Left-clicks needed to take a prop back in survival.
+  break-hits: 2

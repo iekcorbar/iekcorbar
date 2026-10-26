@@ -660,3 +660,26 @@ Moving items, Karakuri, Trains, Oil, Tools; conversie-recepten verschijnen als t
 De polish-werkwijze staat vastgelegd als skill 'steamworks-polish' (~/.claude/skills/).
 mvn groen; Steamworks-0.3.18.jar in deploy/ (0.3.17 ervoor was nooit live - vervangen).
 Nog open op deze missie: Steamworks-Additions losse jar + interactieve handboek test in het spel.
+
+### Steamworks Additions 0.1.0 - de eerste losse addon (26-10 laat op de avond)
+
+User: addon-content = "Sfeer: stootklok + messing details". Nieuwe Maven-module
+`SteamworksAdditions/` (com.iekcorbar.additions, ns "additions", softdepend Steamworks/FMM): draait
+op de GEDEELDE propkit-engine (Decor/DecorDef via sync.py, net als Garden/Zoo/Kitchendecor).
+Drie props: steam_clock (2 hoog, tikt elke in-game uur op de bell+resonate met toonhoogte per uur,
+zwevend TextDisplay-tijdsbord +2.45 boven de grond, dubbele slag om 12:00/00:00; de engine tickt alleen
+met spelers binnen 24 - dus geen kosten nachts/ver), brass_railing (connect-mask N/E/S/W,
+ijzeren stijlen + messing sporen), vent_grille (wall(), koper kader + verdigris lamellen).
+Commando's: /sa list | /sa give <speler> <prop> [aantal] (additions.admin). Config props.break-hits: 2.
+
+Engine-uitbreiding: propkit Decor.Prop krijgt `Runnable onRemove` (breek-haak, aangeroepen in
+breakProp na de save) - de klok-hangbord gebruikt die hook om netjes op te ruimen; alle vier andere
+engine-plugins opnieuw gebouwd (byte-verschil door sync, gedrag gelijk) en de verse jars staan in
+deploy/. Propresourcepack: SteamworksAdditions/tools/make_additions_pack.py (propmodels, 18 modellen:
+klok + reling-mask 0..15 + rooster), ns "additions".
+
+Site/pack: merge SOURCES +Additions-pack.zip, BUILD 6 -> iekcorbar-pack-build6.zip
+(sha1 18b33f6a, 15,42 MB, 5855 files, audit 0/0 op 2365 modellen). Wiki/docs: de addon-docs (klok/
+reling/rooster + /sa commando's) zijn NOG TE SCHRIJVEN (docs/wiki-steamworks of eigen addons-folder +
+seed) - volgende klus. Steamworks-polish skill is bijgewerkt met de addon-pijplijn.
+mvn groen (alle vijf). SteamworksAdditions-0.1.0.jar + pack build6 + vier herbouwde engine-jars in deploy/.

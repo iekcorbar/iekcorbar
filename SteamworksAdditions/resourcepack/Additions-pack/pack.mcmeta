@@ -1,0 +1,12 @@
+{
+ "pack": {
+  "description": "Steamworks Additions (steam clock, brass details)",
+  "pack_format": 64,
+  "supported_formats": {
+   "min_inclusive": 1,
+   "max_inclusive": 999
+  },
+  "min_format": 1,
+  "max_format": 999
+ }
+}

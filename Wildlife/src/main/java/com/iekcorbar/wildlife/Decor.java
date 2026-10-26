@@ -98,6 +98,8 @@ final class Decor implements Listener {
         Interaction hitbox;
         /** Spare slots for the plugin's own transient state (not saved). */
         final Map<String, Object> mem = new HashMap<>();
+        /** Optional cleanup when the prop breaks (e.g. the Steam Clock's floating text). Set by the plugin. */
+        Runnable onRemove;
 
         Prop(World world, int x, int y, int z, DecorDef def, BlockFace facing) {
             this.world = world;
@@ -518,6 +520,12 @@ final class Decor implements Listener {
         unindex(r);
         erase(r);
         save(r);
+        if (r.onRemove != null) {
+            try {
+                r.onRemove.run();     // e.g. the Steam Clock's floating time plate
+            } catch (Exception ignore) {
+            }
+        }
         for (int i = 0; i < r.height(); i++) {
             Block part = r.world.getBlockAt(r.x, r.y + i, r.z);
             if (part.getType() == Material.BARRIER || part.getType() == Material.LIGHT) part.setType(Material.AIR, true);
