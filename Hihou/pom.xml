@@ -14,13 +14,13 @@
     <packaging>jar</packaging>
 
     <name>Hihou</name>
-    <description>秘宝 treasure, event and vote chests with keys</description>
+    <description>ç§˜å® treasure, event and vote chests with keys</description>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.api.version>26.2.build.129-stable</paper.api.version>
+        <paper.api.version>26.2.build.135-stable</paper.api.version>
     </properties>
 
     <repositories>

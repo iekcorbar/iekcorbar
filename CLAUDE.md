@@ -486,6 +486,23 @@ al niet raken. mvn groen, Relics-0.3.6.jar in de root.
   gouw-seed, SiteSync-1.15.1.jar, Relics-0.3.7.jar (root), .env.local (zodat de live-server de DB-gegevens via de
   zip krijgt - de enige plek waar ze staan), db.json uitgesloten. Plesk: unzip → NPM install → npm run build → restart.
 
+- **Server-log opruiming na paper-135 update (2026-10-26, SiteSync 1.15.3 + Satchel 0.3.1)**:
+  gebruiker updatete de server naar Paper 26.2 build 135 en plakte de resterende waarschuwingen.
+  Twee eigen bugs gefixt: (1) SiteSync's AdvancementManager registratie was niet idempotent - de
+  dubbele load bij startup (onEnable + ServerResourcesReloadedEvent) gaf een muur "already exists"
+  want Paper's removeAdvancement weigert stil op sommige builds. registerAll() bouwt nu eerst een
+  want-map (key->JSON), laat ongewijzigde registered keys met rust, roept savePlayers() alleen aan
+  als er iets wijz én spelers online zijn (dito voor de "manual (plugin-induced) save" waarschuwing),
+  en fikt alleen wat echt anders is. (2) load-order cyclus [Satchel, Zukan, Satchel] waar MythicLib
+  over viel: Satchel softdependde op Zukan terwijl het alleen ZukanData via ServicesManager
+  REGISTREREERT (nooit Zukan-classes aanraakt); Zukan softdependt op Satchel (catalogus-volledigheid) -
+  die ene kant weg uit Satchel/plugin.yml, commentaar erbij. Alle poms van 26.2.build.129-stable naar
+  26.2.build.135-stable getrokken en ALLE 11 plugins opnieuw gebouwd: mvn groen, verse jars in root
+  (IekcorbarSiteSync-1.15.3.jar + Satchel-0.3.1.jar vervangen; de rest zelfde naam, nieuwe build).
+  Op de server nog open (niet van ons): MMOCore-quests verwijzen naar world 'world' (die naam bestaat
+  niet meer), TechCore ActionBar vs PacketEvents 2.14, PostOffice barrels.yml leeg, ProtocolLib
+  "not yet tested" op 26.2. Hert-oriëntatie-opmerking staat als OPEN-item in WILDLIFE-DEV-NOTES.md.
+
 ### Backlog / later (gebruikersnotities, nooit vergeten)
 
 - **BedWars-plugin** (2026-10-26, gebruiker: "let op voor later: bedwars plugin - uitgebreid

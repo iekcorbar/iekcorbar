@@ -74,6 +74,8 @@ public class AdvancementManager implements Listener, TabExecutor {
     private final File file;
     private final Map<String, TabDef> tabs = new LinkedHashMap<>();
     private final Map<String, AdvDef> advancements = new LinkedHashMap<>();
+    /** key -> the JSON we last successfully loaded for it; lets registerAll() skip untouched work. */
+    private final Map<NamespacedKey, String> registeredJson = new LinkedHashMap<>();
     private BukkitTask checkTask;
     private Method papiSetPlaceholders;
     private boolean papiResolved;
@@ -107,6 +109,7 @@ public class AdvancementManager implements Listener, TabExecutor {
 
     public void disable() {
         if (checkTask != null) checkTask.cancel();
+        registeredJson.clear();
     }
 
     /** Re-reads advancements.yml and (re)registers everything. Main thread only. */
@@ -169,31 +172,17 @@ public class AdvancementManager implements Listener, TabExecutor {
 
     @SuppressWarnings("deprecation")
     private int registerAll() {
-        Bukkit.savePlayers(); // see class comment: loading reloads progress from disk
-
-        // Remove our previously registered advancements (also ones deleted from the config).
-        List<NamespacedKey> old = new ArrayList<>();
-        for (Iterator<Advancement> it = Bukkit.advancementIterator(); it.hasNext(); ) {
-            NamespacedKey k = it.next().getKey();
-            if (k.getNamespace().equals(ns()) && !k.getKey().startsWith(TOAST_PREFIX)) old.add(k);
-        }
-        // Children first, so no parent disappears under a child.
-        old.sort((x, y) -> Integer.compare(y.getKey().length(), x.getKey().length()));
-        for (NamespacedKey k : old) {
-            try { Bukkit.getUnsafe().removeAdvancement(k); } catch (Exception ignored) { }
-        }
-
+        // Build everything first in a want-map: tab roots, then advancements (parent before child).
+        Map<NamespacedKey, JsonObject> want = new LinkedHashMap<>();
         for (TabDef t : tabs.values()) {
             JsonObject root = new JsonObject();
             JsonObject display = display(t.icon(), t.title(), t.description(), "task", false, false, false);
             display.addProperty("background", t.background());
             root.add("display", display);
             root.add("criteria", JsonParser.parseString("{\"tick\":{\"trigger\":\"minecraft:tick\"}}"));
-            load(rootKey(t.id()), root, "tab '" + t.id() + "'");
+            want.put(rootKey(t.id()), root);
         }
 
-        // Parents before children: keep registering whatever's ready until nothing changes.
-        int count = 0;
         Set<String> done = new HashSet<>();
         boolean progress = true;
         while (progress) {
@@ -212,9 +201,49 @@ public class AdvancementManager implements Listener, TabExecutor {
                 json.addProperty("parent", (d.parent == null ? rootKey(d.tab) : advKey(advancements.get(d.parent))).toString());
                 json.add("display", display(d.icon, d.title, d.description, d.frame, d.toast, d.announce, d.hidden));
                 json.add("criteria", JsonParser.parseString("{\"done\":{\"trigger\":\"minecraft:impossible\"}}"));
-                if (load(advKey(d), json, "advancement '" + d.id + "'")) count++;
+                want.put(advKey(d), json);
                 done.add(d.id);
                 progress = true;
+            }
+        }
+
+        // Idempotent core: a key that is still registered with exactly the JSON we loaded before is
+        // LEFT ALONE. Paper's removeAdvancement silently refuses on some builds, which used to turn
+        // the startup double-load (onEnable + ServerResourcesReloadedEvent) into a wall of
+        // "already exists" warnings. Nothing changed -> no registry touch, no savePlayers() either
+        // (that save is where the "manual (plugin-induced) save" warning came from).
+        Set<NamespacedKey> keep = new HashSet<>();
+        for (Map.Entry<NamespacedKey, JsonObject> e : want.entrySet()) {
+            String last = registeredJson.get(e.getKey());
+            if (last != null && last.equals(e.getValue().toString()) && Bukkit.getAdvancement(e.getKey()) != null) {
+                keep.add(e.getKey());
+            }
+        }
+
+        if (keep.size() < want.size()) {
+            if (!Bukkit.getOnlinePlayers().isEmpty()) Bukkit.savePlayers(); // loading reloads progress from disk
+            List<NamespacedKey> old = new ArrayList<>();
+            for (Iterator<Advancement> it = Bukkit.advancementIterator(); it.hasNext(); ) {
+                NamespacedKey k = it.next().getKey();
+                if (k.getNamespace().equals(ns()) && !k.getKey().startsWith(TOAST_PREFIX) && !keep.contains(k)) old.add(k);
+            }
+            // Children first, so no parent disappears under a child.
+            old.sort((x, y) -> Integer.compare(y.getKey().length(), x.getKey().length()));
+            for (NamespacedKey k : old) {
+                try { Bukkit.getUnsafe().removeAdvancement(k); } catch (Exception ignored) { }
+                registeredJson.remove(k);
+            }
+        }
+
+        int count = 0;
+        for (Map.Entry<NamespacedKey, JsonObject> e : want.entrySet()) {
+            if (keep.contains(e.getKey())) {
+                count++;
+                continue;
+            }
+            if (load(e.getKey(), e.getValue(), "advancement '" + e.getKey().getKey() + "'")) {
+                registeredJson.put(e.getKey(), e.getValue().toString());
+                count++;
             }
         }
         return count;

@@ -8,7 +8,7 @@
     <artifactId>IekcorbarSiteSync</artifactId>
     <!-- Bumped 2026-08-13 specifically so `/version IekcorbarSiteSync` in-game
          can distinguish this Java 25/Paper 26.1.2 retarget from whatever was
-         running before â€” every prior rebuild this session kept "1.0.0",
+         running before Ã¢â‚¬â€ every prior rebuild this session kept "1.0.0",
          which made it impossible to confirm from the server console alone
          whether a freshly built jar had actually made it onto the server.
          Bumped again 2026-09-06: adds on-join delivery of shop purchases
@@ -22,7 +22,7 @@
          closing the gap where staff acting outside the website left no
          audit trail.
          Bumped 2026-09-27 to 1.5.0: retargeted to Paper 26.2 (the live
-         server's new version) â€” compiles against 26.2.build.129-stable with
+         server's new version) Ã¢â‚¬â€ compiles against 26.2.build.135-stable with
          0 errors and nothing deprecated-for-removal; api-version '26.2'.
          Bumped 2026-10-23 to 1.6.0: custom books from books/*.txt with
          series/volumes, loot-table drops (LootGenerateEvent) and /ibook
@@ -37,7 +37,7 @@
           1.15.2 (2026-10-26): trader-book swap generalized to a marker map
           (BookManager.TRADER_BOOK_MARKERS) - the Sakagura Brewer's Manual can now
           be sold by wandering traders too (wanderingtrades/trades/brewers_manual.yml). -->
-    <version>1.15.2</version>
+    <version>1.15.3</version>
     <packaging>jar</packaging>
 
     <name>IekcorbarSiteSync</name>
@@ -47,15 +47,15 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- The live server's actual version â€” default builds (what actually
+        <!-- The live server's actual version Ã¢â‚¬â€ default builds (what actually
              gets shipped) always compile against this. 26.2 since
              2026-09-27 (was 26.1.2.build.74-stable). -->
-        <paper.api.version>26.2.build.129-stable</paper.api.version>
+        <paper.api.version>26.2.build.135-stable</paper.api.version>
     </properties>
 
     <repositories>
         <!-- Paper moved off the old org.spigotmc:spigot-api / hub.spigotmc.org
-             snapshot repo at some point after 1.20.4 â€” modern builds (this
+             snapshot repo at some point after 1.20.4 Ã¢â‚¬â€ modern builds (this
              one targets the live server's actual 26.1.2) are published as
              io.papermc.paper:paper-api on PaperMC's own repo instead. Kept
              spigotmc-repo removed since nothing else here depends on it. -->
@@ -75,7 +75,7 @@
 
     <dependencies>
         <!-- Matches the live server's actual Paper 26.1.2 (confirmed by the
-             user 2026-08-13 â€” this project had been targeting the old
+             user 2026-08-13 Ã¢â‚¬â€ this project had been targeting the old
              1.20.4 API, a real mismatch, see CLAUDE.md). Pinned to the
              latest 26.1.2-series stable build published on PaperMC's repo
              at the time of this change (26.1.2.build.74-stable) rather than
@@ -102,7 +102,7 @@
              server's own classpath (used internally for chat components/NBT),
              so plugins can use it at runtime without shading it in. Only
              needed to compile against here, for WebRewardsCommand's JSON
-             handling â€” safer and far less error-prone than hand-rolling a
+             handling Ã¢â‚¬â€ safer and far less error-prone than hand-rolling a
              JSON parser for VoteSpeed's reward config structures. -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -132,7 +132,7 @@
         </resources>
     </build>
 
-    <!-- Pre-upgrade compatibility checks â€” the live server is still on
+    <!-- Pre-upgrade compatibility checks Ã¢â‚¬â€ the live server is still on
          26.1.2 (some other plugins aren't 26.2-ready yet), but this lets
          that be verified ahead of time, repeatably, without ever touching
          what a plain `mvn package` ships. Run:
@@ -143,7 +143,7 @@
          Paper changed or removed between 26.1 and 26.2 (last checked
          2026-09-05 against 26.2.build.121-stable: compiled clean, 0
          errors). It does NOT prove runtime behavior on an actual 26.2
-         server â€” only that the source-level API surface this plugin uses
+         server Ã¢â‚¬â€ only that the source-level API surface this plugin uses
          still exists. Update the version below as newer 26.2 builds are
          published, and re-run this before the real server upgrade. -->
     <profiles>
