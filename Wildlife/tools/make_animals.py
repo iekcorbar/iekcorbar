@@ -19,7 +19,12 @@ Usage: python make_animals.py <out folder>   (-> fmm-models/wildlife)
 import base64, json, math, os, random, struct, sys, uuid, zlib
 
 RES = 128
-U = lambda: str(uuid.uuid4())
+# deterministic ids: uuid4 made every regeneration a byte-diff of all 133 files (and kept the
+# Wildlife/ and fmm-models/ trees apart forever); uuid5 from a counter keeps the git history
+# clean - same source -> same files, always (same trick as Steamworks/tools/make_models.py)
+import itertools as _it
+_c = _it.count()
+U = lambda: str(uuid.uuid5(uuid.NAMESPACE_URL, "iekcorbar-wildlife-%d" % next(_c)))
 
 BASE = {
     "deer": (150, 98, 60), "deer_white": (236, 230, 220), "fur_brown": (112, 76, 48), "fur_dark": (70, 48, 32),
@@ -330,14 +335,21 @@ def hop_walk(m, period=0.45, hop=0.5, fold=80):
 
 
 def stilt_walk(m, period=1.4, lift=18):
-    """Long-legged wader (crane, heron): the foot lifts slowly, holds, and is placed - a keyframed
-    step, not a sine. The neck folds forward with each step, the body dips as the foot lands."""
+    """Long-legged wader (crane, ostrich): the foot lifts slowly, holds, and is placed - a keyframed
+    step, not a sine. The old version gave the right leg the FULL step one half-period late, so its
+    foot was still in the air when the loop restarted and snapped back - the crane's stutter. Now each
+    leg owns half the cycle: left steps in the first beat, right in the second, and the loop closes.
+    The neck folds forward once per cycle and the body dips as each foot lands."""
+    half = period / 2.0
     def step(offset):
-        pts = [(0, (0, 0, 0)), (0.30 * period, (lift, 0, 0)), (0.45 * period, (lift, 0, 0)), (0.62 * period, (0, 0, 0)), (period, (0, 0, 0))]
+        pts = [(0.0, (0, 0, 0)), (0.35 * half, (lift, 0, 0)), (0.55 * half, (lift, 0, 0)),
+               (0.90 * half, (0, 0, 0)), (half, (0, 0, 0))]
         return [(t + offset, v) for t, v in pts]
-    m.anim("walk", period, {"leg_l": {"rotation": step(0)}, "leg_r": {"rotation": step(0.5 * period)},
-                            "body": {"position": [(0, (0, 0, 0)), (0.62 * period, (0, 0.18, 0)), (0.8 * period, (0, 0, 0)), (period, (0, 0, 0))]},
-                            "h_head": {"rotation": [(0, (0, 0, 0)), (0.3 * period, (6, 0, 0)), (0.62 * period, (0, 0, 0)), (period, (0, 0, 0))]}})
+    m.anim("walk", period, {"leg_l": {"rotation": step(0)}, "leg_r": {"rotation": step(half)},
+                            "body": {"position": [(0, (0, 0, 0)), (0.9 * half, (0, 0.18, 0)), (half, (0, 0, 0)),
+                                                  (1.9 * half, (0, 0.18, 0)), (period, (0, 0, 0))]},
+                            "h_head": {"rotation": [(0, (0, 0, 0)), (0.25 * period, (6, 0, 0)),
+                                                    (0.62 * period, (0, 0, 0)), (period, (0, 0, 0))]}})
 
 
 def quad_idle(m, tail=6, ear=None):
@@ -604,8 +616,11 @@ def elephant(m):
         m.box(name, x - 4.2, 0.0, z - 4.4, x + 4.2, 2.4, z + 4.2, g + "_d")
         for dx in (-2.8, -0.9, 0.9, 2.8):
             m.box(name, x + dx - 0.5, 0.0, z - 4.9, x + dx + 0.5, 1.2, z - 4.3, "tusk")   # toenails
-    # ears flap front-back about the X axis (the old Y-axis wave made them swing like flags)
-    ears = {"ear_l": {"rotation": wave(8, 3.0, 6)}, "ear_r": {"rotation": wave(8, 3.0, 6)}}
+    # ears flap front-back about the X axis (the old Y-axis wave made them swing like flags);
+    # the flap cycle must END with the walk clip, or the last third of the wave never plays and
+    # the ears snap forward at every stride - so one slow full flap per two steps, ears half a
+    # beat apart (a real herd's ears never move in perfect sync)
+    ears = {"ear_l": {"rotation": wave(8, 2.0, 6)}, "ear_r": {"rotation": wave(8, 2.0, 6, math.pi * 0.25)}}
     gait(m, 2.0, 13, head=4, tail=8, style="walk", bob=0.2, extra=ears)
     m.anim("idle", 4.0, {"h_head": {"rotation": [(0, (0, 0, 0)), (1.0, (0, 10, 0)), (2.0, (0, 10, 0)), (3.0, (0, -8, 0)), (4.0, (0, 0, 0))]},
                          "ear_l": {"rotation": wave(8, 4.0, 14)}, "ear_r": {"rotation": wave(8, 4.0, 14)},
