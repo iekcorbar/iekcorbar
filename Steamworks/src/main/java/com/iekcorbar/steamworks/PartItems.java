@@ -158,7 +158,7 @@ final class PartItems {
     /** Every model this plugin shows that FMM doesn't know (yet). */
     List<String> missingModels() {
         List<String> names = new ArrayList<>();
-        for (PartType t : PartType.values()) names.add(t.model());
+        for (PartType t : PartType.values()) if (t != PartType.CUSTOM) names.add(t.model());
         for (MaterialType t : MaterialType.values()) names.add(t.model());
         for (CarType t : CarType.values()) names.add(t.model());
         for (FluidType t : FluidType.values()) names.add(t.model());

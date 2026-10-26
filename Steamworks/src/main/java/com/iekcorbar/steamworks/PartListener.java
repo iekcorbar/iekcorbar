@@ -80,6 +80,7 @@ final class PartListener implements Listener {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         ItemStack hand = e.getItem();
         PartType held = plugin.items().typeOf(hand);
+        com.iekcorbar.steamworks.api.CustomPart heldExt = held == null ? plugin.customParts().partOf(hand) : null;
         if (n != null) {
             boolean block = hand != null && hand.getType().isBlock() && !hand.getType().isAir();
             if (plugin.items().materialOf(hand) == MaterialType.WRENCH) {
@@ -102,6 +103,9 @@ final class PartListener implements Listener {
             if (held != null) {
                 e.setCancelled(true);
                 place(p, hand, held, b.getRelative(e.getBlockFace()), b, e.getBlockFace());
+            } else if (heldExt != null) {
+                e.setCancelled(true);
+                placeExt(p, hand, heldExt, b.getRelative(e.getBlockFace()), b, e.getBlockFace());
             } else if (n.type == PartType.MILLSTONE && plugin.millstones().find(hand) != null) {
                 e.setCancelled(true);
                 if (plugin.millstones().interact(n, p, hand)) plugin.saveSoon(n);
@@ -126,6 +130,9 @@ final class PartListener implements Listener {
                 n.world.playSound(n.center(), org.bukkit.Sound.BLOCK_BELL_RESONATE, 0.7f, 0.9f);
                 n.world.spawnParticle(org.bukkit.Particle.CLOUD, n.center().add(0, 0.6, 0), 7, 0.12, 0.05, 0.12, 0.03);
                 p.swingMainHand();
+            } else if (n.type == PartType.CUSTOM && n.ext != null) {
+                e.setCancelled(true);
+                if (!n.ext.interact(ExtParts.view(n), p, hand)) plugin.showInfo(n, p);
             } else if (n.type == PartType.KETTLE && (!block || plugin.mixers().accepts(hand))) {
                 e.setCancelled(true);
                 if (!plugin.mixers().interact(n, p, hand)) plugin.showInfo(n, p);
@@ -145,11 +152,36 @@ final class PartListener implements Listener {
             }
             return;
         }
-        if (held == null) return;
+        if (held == null && heldExt == null) return;
         if (!p.isSneaking() && b.getType().isInteractable()) return; // open the chest/door as usual
         e.setCancelled(true);
         Block target = b.isReplaceable() ? b : b.getRelative(e.getBlockFace());
-        place(p, hand, held, target, b, e.getBlockFace());
+        if (heldExt != null) placeExt(p, hand, heldExt, target, b, e.getBlockFace());
+        else place(p, hand, held, target, b, e.getBlockFace());
+    }
+
+    /** Placement of an add-on machine: same barrier-block protocol, orientation asked from the part. */
+    private void placeExt(Player p, ItemStack hand, com.iekcorbar.steamworks.api.CustomPart part, Block target, Block against, BlockFace face) {
+        if (!target.isReplaceable() || plugin.kinetics().at(target) != null) return;
+        long tk = KNode.key(target.getX(), target.getY(), target.getZ());
+        long now = System.nanoTime();
+        if (tk == lastPlaceTarget && now - lastPlaceNano < 40_000_000L) return;   // second event for one click
+        org.bukkit.util.BoundingBox box = org.bukkit.util.BoundingBox.of(target);
+        if (!target.getWorld().getNearbyEntities(box, en -> en instanceof LivingEntity && !(en instanceof ArmorStand)).isEmpty()) return;
+        org.bukkit.Axis axis = part.initialAxis(face, p);
+        BlockState old = target.getState();
+        BlockPlaceEvent ev = new BlockPlaceEvent(target, old, against, hand, p, true, EquipmentSlot.HAND);
+        plugin.getServer().getPluginManager().callEvent(ev);
+        if (ev.isCancelled() || !ev.canBuild()) return;
+        target.setType(Material.BARRIER, false);
+        KNode n = new KNode(target.getWorld(), target.getX(), target.getY(), target.getZ(), PartType.CUSTOM, axis, face);
+        n.ext = part;
+        n.owner = p.getUniqueId();
+        plugin.addNode(n);
+        part.onPlace(ExtParts.view(n), p);
+        lastPlaceTarget = tk;
+        lastPlaceNano = now;
+        plugin.adv().grant(p, "placed");
     }
 
     private void crank(KNode n, Player p) {
@@ -258,7 +290,8 @@ final class PartListener implements Listener {
         e.setCancelled(true);
         int slot = e.getTargetSlot();
         if (slot >= 0 && slot < e.getPlayer().getInventory().getSize())
-            e.getPlayer().getInventory().setItem(slot, plugin.items().create(n.type, 1));
+            e.getPlayer().getInventory().setItem(slot, n.type == PartType.CUSTOM && n.ext != null
+                    ? plugin.customParts().item(n.ext, 1) : plugin.items().create(n.type, 1));
     }
 
     /** A hopper under a running steam hammer only takes what the hammer can't press (any more). */

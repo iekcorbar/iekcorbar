@@ -31,7 +31,7 @@ final class ZukanData implements Supplier<Map<String, Object>> {
     public Map<String, Object> get() {
         PartItems items = plugin.items();
         List<ItemStack> all = new ArrayList<>();
-        for (PartType t : PartType.values()) all.add(items.refreshModel(items.create(t, 1)));
+        for (PartType t : PartType.values()) if (t != PartType.CUSTOM) all.add(items.refreshModel(items.create(t, 1)));
         for (MaterialType t : MaterialType.values()) all.add(items.refreshModel(items.createMaterial(t, 1)));
         for (CarType t : CarType.values()) all.add(items.refreshModel(items.createCar(t, 1)));
         if (plugin.ores() != null) for (OreType t : OreType.values()) all.add(plugin.ores().item(t, 1));

@@ -86,6 +86,11 @@ final class KNode {
     long breakTarget = Long.MIN_VALUE;
     double breakProgress;
 
+    // add-on machines (type == CUSTOM): the registered part, its per-node state and pending save bytes
+    com.iekcorbar.steamworks.api.CustomPart ext;
+    Object extData;
+    byte[] extBlob;
+
     KNode(World world, int x, int y, int z, PartType type, Axis axis, BlockFace facing) {
         this.world = world;
         this.x = x;

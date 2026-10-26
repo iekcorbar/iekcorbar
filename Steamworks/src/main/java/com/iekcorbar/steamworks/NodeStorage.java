@@ -20,7 +20,7 @@ import java.util.List;
  */
 final class NodeStorage {
     private final SteamworksPlugin plugin;
-    private final NamespacedKey nodesKey, itemsKey, progressKey, outKey, waterKey, labelKey;
+    private final NamespacedKey nodesKey, itemsKey, progressKey, outKey, waterKey, labelKey, extKey;
 
     NodeStorage(SteamworksPlugin plugin) {
         this.plugin = plugin;
@@ -30,6 +30,7 @@ final class NodeStorage {
         outKey = new NamespacedKey(plugin, "out");
         waterKey = new NamespacedKey(plugin, "water");
         labelKey = new NamespacedKey(plugin, "label");
+        extKey = new NamespacedKey(plugin, "ext");
     }
 
     private NamespacedKey millKey(KNode n) {
@@ -45,8 +46,17 @@ final class NodeStorage {
         for (KNode n : plugin.kinetics().inChunk(chunk.getWorld(), chunk.getX(), chunk.getZ())) {
             if (!sb.isEmpty()) sb.append(';');
             sb.append(n.x).append(',').append(n.y).append(',').append(n.z).append(',')
-                    .append(n.type.name()).append(',').append(n.axis.name()).append(',').append(n.facing.name());
+                    .append(n.type == PartType.CUSTOM && n.ext != null ? "CUSTOM:" + n.ext.id() : n.type.name()).append(',')
+                    .append(n.axis.name()).append(',').append(n.facing.name());
             if (n.owner != null) sb.append(',').append(n.owner);
+            if (n.type == PartType.CUSTOM && n.ext != null) {
+                byte[] blob = n.ext.saveState(ExtParts.view(n));
+                if (blob != null && blob.length > 0) {
+                    PersistentDataContainer k = pdc.getAdapterContext().newPersistentDataContainer();
+                    k.set(extKey, PersistentDataType.BYTE_ARRAY, blob);
+                    pdc.set(millKey(n), PersistentDataType.TAG_CONTAINER, k);
+                }
+            }
             if (n.type == PartType.MILLSTONE) {
                 List<ItemStack> items = new ArrayList<>();
                 items.add(n.millInput == null ? ItemStack.empty() : n.millInput);
@@ -110,13 +120,29 @@ final class NodeStorage {
             String[] p = line.split(",");
             try {
                 int x = Integer.parseInt(p[0]), y = Integer.parseInt(p[1]), z = Integer.parseInt(p[2]);
-                PartType type = PartType.valueOf(p[3]);
+                PartType type;
+                com.iekcorbar.steamworks.api.CustomPart ext = null;
+                if (p[3].startsWith("CUSTOM:")) {                 // add-on machine: is its plugin here?
+                    type = PartType.CUSTOM;
+                    ext = plugin.customParts().byId(p[3].substring(7));
+                    if (ext == null) {
+                        plugin.getLogger().warning("Machine " + p[3] + " at " + x + "," + y + "," + z
+                                + " belongs to an add-on that is not installed - left untouched.");
+                        continue;
+                    }
+                } else type = PartType.valueOf(p[3]);
                 if (chunk.getWorld().getBlockAt(x, y, z).getType() != Material.BARRIER) {
                     lost = true; // removed by something else (WorldEdit, /setblock)
                     continue;
                 }
                 KNode n = new KNode(chunk.getWorld(), x, y, z, type, Axis.valueOf(p[4]), BlockFace.valueOf(p[5]));
                 if (p.length > 6) n.owner = java.util.UUID.fromString(p[6]);
+                if (ext != null) {
+                    n.ext = ext;
+                    PersistentDataContainer k = pdc.get(millKey(n), PersistentDataType.TAG_CONTAINER);
+                    byte[] blob = k == null ? null : k.get(extKey, PersistentDataType.BYTE_ARRAY);
+                    if (blob != null) ext.loadState(ExtParts.view(n), blob);
+                }
                 if (type == PartType.MILLSTONE) {
                     PersistentDataContainer mill = pdc.get(millKey(n), PersistentDataType.TAG_CONTAINER);
                     if (mill != null) {

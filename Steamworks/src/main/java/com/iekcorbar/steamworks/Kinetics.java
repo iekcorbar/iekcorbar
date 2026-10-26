@@ -66,6 +66,8 @@ final class Kinetics {
     final Set<KNode> arms = new HashSet<>();
     final Set<KNode> plants = new HashSet<>();
     final Set<KNode> crushers = new HashSet<>();
+    /** Machines registered by add-on plugins (KNode.type == CUSTOM, behaviour on KNode.ext). */
+    final Set<KNode> customs = new HashSet<>();
     long tick;
 
     Kinetics(KineticsHost plugin) {
@@ -123,6 +125,10 @@ final class Kinetics {
         if (n.type == PartType.ARM) arms.add(n);
         if (n.type == PartType.WINDMILL || n.type == PartType.STEAM_BOILER || n.type == PartType.STEAM_ENGINE) plants.add(n);
         if (n.type == PartType.CRUSHING_WHEEL) crushers.add(n);
+        if (n.type == PartType.CUSTOM && n.ext != null) {
+            customs.add(n);
+            if (n.ext.capacity() > 0) n.generated = n.ext.generatedSpeed(ExtParts.view(n));
+        }
         dirty.add(n);
     }
 
@@ -159,6 +165,7 @@ final class Kinetics {
         arms.remove(n);
         plants.remove(n);
         crushers.remove(n);
+        customs.remove(n);
         dirty.remove(n);
         for (Link l : links) dirty.add(l.other());
         dropNetwork(n.network, n);
@@ -167,6 +174,22 @@ final class Kinetics {
 
     void markDirty(KNode n) {
         if (n.alive) dirty.add(n);
+    }
+
+    /** Let every add-on machine do its work, and refresh the RPM of add-on power sources. */
+    void tickCustoms(long tick) {
+        if (customs.isEmpty()) return;
+        for (KNode n : customs) {
+            if (n.ext == null || !n.alive) continue;
+            n.ext.tick(ExtParts.view(n), tick);
+            if (n.ext.capacity() > 0 && tick % 20 == 0) {
+                double g = n.ext.generatedSpeed(ExtParts.view(n));
+                if (g != n.generated) {
+                    n.generated = g;
+                    markDirty(n);
+                }
+            }
+        }
     }
 
     private void dropNetwork(Network old, KNode except) {
@@ -182,6 +205,7 @@ final class Kinetics {
             case SHAFT, COGWHEEL, LARGE_COGWHEEL, GEARBOX, CLUTCH, GEARSHIFT, SPROCKET, CRUSHING_WHEEL,
                     SPEED_GAUGE, STRESS_GAUGE, STEAM_ENGINE, HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL,
                     BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL -> true;
+            case CUSTOM -> n.ext != null && n.ext.rotatable();
             default -> false;   // pure-Y machines (millstone, kettle, mixer, arm, boiler, depot, whistle) and fluid parts
         };
     }
@@ -273,6 +297,7 @@ final class Kinetics {
 
     /** Faces where a shaft can plug in. */
     static List<BlockFace> ports(KNode n) {
+        if (n.type == PartType.CUSTOM && n.ext != null) return new ArrayList<>(n.ext.ports(n.axis));
         List<BlockFace> out = new ArrayList<>(4);
         switch (n.type) {
             case GEARBOX -> {
@@ -307,6 +332,7 @@ final class Kinetics {
      * keeps the sign of the face and the other flips it.
      */
     static double portFactor(KNode n, BlockFace f) {
+        if (n.type == PartType.CUSTOM && n.ext != null) return n.ext.portFactor(f);
         if (n.type == PartType.GEARSHIFT) return n.powered && sign(f) < 0 ? -1 : 1;
         if (n.type != PartType.GEARBOX) return 1;
         Axis first = n.axis == Axis.X ? Axis.Y : Axis.X;
@@ -476,13 +502,13 @@ final class Kinetics {
         boolean opposed = false;
         for (KNode n : comp) {
             if (n.generated == 0) continue;
-            net.capacity += cfg.capacity(n.type) * Math.abs(n.generated);
+            net.capacity += (n.type == PartType.CUSTOM && n.ext != null ? n.ext.capacity() : cfg.capacity(n.type)) * Math.abs(n.generated);
             if (Math.signum(n.generated) != Math.signum(ref * n.ratio)) opposed = true;
         }
         KNode fastest = null;
         for (KNode n : comp) {
             double s = Math.abs(ref * n.ratio);
-            net.load += cfg.impact(n.type) * s;
+            net.load += (n.type == PartType.CUSTOM && n.ext != null ? n.ext.impact() : cfg.impact(n.type)) * s;
             if (s > cfg.maxRpm + 1e-6 && (fastest == null || s > Math.abs(ref * fastest.ratio))) fastest = n;
         }
 

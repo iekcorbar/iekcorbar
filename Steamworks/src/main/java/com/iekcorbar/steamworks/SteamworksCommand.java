@@ -42,7 +42,7 @@ final class SteamworksCommand implements TabExecutor {
                     .append(plugin.arms().docsLink(plugin.settings().docsUrl)));
             case "list" -> {
                 List<String> ids = new ArrayList<>();
-                for (PartType t : PartType.values()) ids.add(t.id());
+                for (PartType t : PartType.values()) if (t != PartType.CUSTOM) ids.add(t.id());
                 msg(s, "Parts: " + String.join(", ", ids));
                 ids.clear();
                 for (MaterialType t : MaterialType.values()) ids.add(t.id());
@@ -128,7 +128,7 @@ final class SteamworksCommand implements TabExecutor {
             for (Player p : plugin.getServer().getOnlinePlayers())
                 if (p.getName().toLowerCase(Locale.ROOT).startsWith(a[1].toLowerCase(Locale.ROOT))) out.add(p.getName());
         } else if (a.length == 3 && a[0].equalsIgnoreCase("give")) {
-            for (PartType t : PartType.values()) if (t.id().startsWith(a[2].toLowerCase(Locale.ROOT))) out.add(t.id());
+            for (PartType t : PartType.values()) if (t != PartType.CUSTOM && t.id().startsWith(a[2].toLowerCase(Locale.ROOT))) out.add(t.id());
             for (MaterialType t : MaterialType.values()) if (t.id().startsWith(a[2].toLowerCase(Locale.ROOT))) out.add(t.id());
             for (CarType t : CarType.values()) if (t.id().startsWith(a[2].toLowerCase(Locale.ROOT))) out.add(t.id());
             for (OreType t : OreType.values()) if (t.id().startsWith(a[2].toLowerCase(Locale.ROOT))) out.add(t.id());

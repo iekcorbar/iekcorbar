@@ -43,6 +43,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
     private Crushers crushers;
     private Adv adv;
     private EasterEggs eggs;
+    private final ExtParts customParts = new ExtParts(this);
     private final Set<Chunk> saveQueue = new HashSet<>();
 
     @Override
@@ -69,7 +70,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         getServer().getPluginManager().registerEvents(new PartListener(this), this);
         // items sold by wandering traders (WanderingTrades hands out a plain paper, see TraderSwap)
         getServer().getPluginManager().registerEvents(new TraderSwap(this, "Steamworks", name -> {
-            for (PartType t : PartType.values()) if (t.displayName.equals(name)) return items.create(t, 1);
+            for (PartType t : PartType.values()) if (t != PartType.CUSTOM && t.displayName.equals(name)) return items.create(t, 1);
             for (MaterialType t : MaterialType.values()) if (t.displayName.equals(name)) return items.createMaterial(t, 1);
             return null;
         }), this);
@@ -151,6 +152,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
                 mixers.tick(kinetics.tick);
             }
             if (kinetics.tick % 30 == 0) machineSounds();
+            kinetics.tickCustoms(kinetics.tick);
             if (kinetics.tick % 1200 == 0) {
                 for (KNode m : kinetics.mills) saveQueue.add(m.world.getChunkAt(m.x >> 4, m.z >> 4));
                 for (KNode m : kinetics.kettles) saveQueue.add(m.world.getChunkAt(m.x >> 4, m.z >> 4));
@@ -189,6 +191,19 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
             }
             n.world.playSound(n.center(), "steamworks:" + key, vol * scale, 0.9f + r.nextFloat() * 0.2f);
         }
+    }
+
+    /**
+     * The door for add-on plugins: register your {@link com.iekcorbar.steamworks.api.CustomPart}s
+     * from your onEnable (softdepend: [Steamworks]) and their machines join the network.
+     */
+    public com.iekcorbar.steamworks.api.CustomPartRegistry customParts() {
+        return customParts;
+    }
+
+    /** Runs {@code then} once FreeMinecraftModels knows the models (use it to register recipes safely). */
+    public void whenModelsReady(Runnable then) {
+        items.waitForModels(then);
     }
 
     @Override
@@ -295,6 +310,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         storage.save(c);
         saveQueue.remove(c);
         for (KNode n : nodes) {
+            if (n.type == PartType.CUSTOM && n.ext != null) n.ext.onRemove(ExtParts.view(n));
             visuals.remove(n);
             kinetics.remove(n);
         }
@@ -333,7 +349,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         }
         boolean drop = p == null || p.getGameMode() != GameMode.CREATIVE;
         if (drop) {
-            ItemStack part = items.create(n.type, 1);
+            ItemStack part = n.type == PartType.CUSTOM && n.ext != null ? customParts.item(n.ext, 1) : items.create(n.type, 1);
             if (toInventory && p != null)
                 for (ItemStack rest : p.getInventory().addItem(part).values())
                     n.world.dropItemNaturally(n.center(), rest);
@@ -351,6 +367,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         n.millInput = null;
         n.millOutput.clear();
         n.kettleItems.clear();
+        if (n.type == PartType.CUSTOM && n.ext != null) n.ext.onRemove(ExtParts.view(n));
         oil.broken(n);
         visuals.remove(n);
         kinetics.remove(n);
@@ -447,7 +464,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
             return Component.text("Signal: ", NamedTextColor.GOLD).append(n.signalRed
                     ? Component.text("red - the track after it is taken (or redstone)", NamedTextColor.RED)
                     : Component.text("green - the track is clear", NamedTextColor.GREEN));
-        Component name = Component.text(n.type.displayName + ": ", NamedTextColor.GOLD);
+        Component name = Component.text((n.type == PartType.CUSTOM && n.ext != null ? n.ext.displayName() : n.type.displayName) + ": ", NamedTextColor.GOLD);
         if (n.type == PartType.CLUTCH && n.powered)
             return name.append(Component.text("disengaged by redstone - the two sides are separate", NamedTextColor.YELLOW));
         if (n.type == PartType.GEARSHIFT && n.powered)

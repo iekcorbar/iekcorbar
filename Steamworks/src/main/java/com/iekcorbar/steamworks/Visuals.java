@@ -33,6 +33,16 @@ final class Visuals {
 
     void spawn(KNode n) {
         remove(n);
+        if (n.type == PartType.CUSTOM && n.ext != null) {          // add-on machines draw what they ask for
+            BlockFace cup = Kinetics.positive(n.axis);
+            BlockFace cfront = n.axis == Axis.Y ? BlockFace.SOUTH : BlockFace.UP;
+            Quaternionf corient = orientation(cup, cfront);
+            float csign = Kinetics.sign(cup);
+            for (com.iekcorbar.steamworks.api.CustomVisual v : n.ext.visuals(ExtParts.view(n)))
+                add(n, v.model(), v.spin() ? Role.SPIN : Role.STATIC, corient, v.spin() ? csign : 1f);
+            n.snap = true;
+            return;
+        }
         BlockFace up, front;
         switch (n.type) {
             case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL, EJECTOR -> {

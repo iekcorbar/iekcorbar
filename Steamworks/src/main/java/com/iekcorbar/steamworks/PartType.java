@@ -80,7 +80,12 @@ public enum PartType {
     VALVE("Fluid Valve", Material.COPPER_BLOCK, Kind.METAL,
             "A pipe gate: fluid passes only while this", "turns. Stop the network, cut the line."),
     WHISTLE("Steam Whistle", Material.COPPER_BLOCK, Kind.METAL,
-            "Right-click: toot. A machine works better", "when it can say so.");
+            "Right-click: toot. A machine works better", "when it can say so."),
+    /**
+     * Not a real part: nodes with this type get their answers from the {@code com.iekcorbar.steamworks.api}
+     * registry, so other plugins (add-ons) can add machines to the network. Nothing builds or gives CUSTOM.
+     */
+    CUSTOM("Add-on Machine", Material.IRON_BLOCK, Kind.METAL, "A machine from an add-on.");
 
     public final String displayName;
     public final Material breakParticle;
