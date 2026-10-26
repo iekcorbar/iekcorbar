@@ -30,6 +30,7 @@ SOURCES = [
     "Sakagura/resourcepack/Garden-pack.zip",
     "Kitchen/resourcepack/Kitchendecor-pack.zip",
     "Satchel/resourcepack/Satchel-pack.zip",
+    "Hihou/resourcepack/Hihou-pack.zip",
     "IekcorbarSiteSync/resourcepack/Mmo-pack.zip",
 ]
 OUT = "Iekcorbar-pack.zip"

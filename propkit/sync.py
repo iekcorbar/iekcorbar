@@ -7,6 +7,7 @@ TARGETS = {
     "Wildlife": ("com.iekcorbar.wildlife", "zoo"),
     "Sakagura": ("com.iekcorbar.sakagura", "garden"),
     "Kitchen": ("com.iekcorbar.kitchen", "kitchendecor"),
+    "Hihou": ("com.iekcorbar.hihou", "hihou"),
 }
 here = os.path.dirname(os.path.abspath(__file__))
 # Adv.java (advancement helper) goes into every plugin that shows advancements

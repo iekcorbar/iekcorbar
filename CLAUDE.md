@@ -548,3 +548,14 @@ achievements, app/push, News&Upcoming, journal) + UPDATE die de oude
 Lands-rollen-tip naar Gouw vertaalt. Bestaande 18 db.json-tips blijven staan.
 - Tips-draait: dag-van-jaar-modulo actieve tips (api/tips GET), staff beheert
 an/uit via Settings > Tips (permission settings_tips).
+
+### Hihou 0.1.0 - nieuwe plugin: kisten + sleutels (2026-10-26)
+
+- Gebruiker wilde een eigen plugin voor treasure/event/vote-kisten (plus lucky + victory) met
+  mooie modellen en fysieke sleutels; later Game-Island-spelauto­omatisering (zie HIHOU-DEV-NOTES.md v0.2).
+- 5 chest-decordefs op propkit (per kist UNIEKE loot in chests.json, Base64 Bukkit-objecten),
+  5 key-soorten (PDC key_type; 1 verbruik; console /ih key = vote-reward-haak zonder SiteSync-code),
+  take-only speler-GUI / staff edit-GUI, lucky pool uit config, event-venster, treasure-maps,
+  break-hits 100 + /ih remove. Pack tools/make_pack.py: 15 modellen (closed+open per type), alle
+  particle-entries; merge-packs 13e bron Hihou-pack.zip. mvn groen, jar in root.
+- Commando-tree in HIHOU-DEV-NOTES.md; game-engine types: FINISHP / LASTSTAND / ANSWER / MANUAL.

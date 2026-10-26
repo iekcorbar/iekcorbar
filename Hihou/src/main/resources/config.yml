@@ -1,0 +1,18 @@
+# Hihou - secret treasure chests with physical keys.
+#
+# How many bare-hand hits it takes to break a chest. Keep this high: staff use
+# /hihou remove instead, players should not be able to farm a chest open.
+break-hits: 100
+# Broadcast to the whole server when a chest is unlocked or a lucky prize drops.
+announce: true
+# Lucky chests draw 1 random prize per unlock from this pool: "MATERIAL [amount] [weight]"
+# (weight is relative - EMERALD at 20 vs TOTEM at 1 means 20x as common).
+lucky-pool:
+  - "EMERALD 3 20"
+  - "GOLDEN_CARROT 8 18"
+  - "EXPERIENCE_BOTTLE 6 16"
+  - "FIREWORK_ROCKET 4 12"
+  - "CAKE 1 8"
+  - "DIAMOND 1 8"
+  - "NAME_TAG 1 4"
+  - "TOTEM_OF_UNDYING 1 1"

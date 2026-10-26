@@ -1,0 +1,17 @@
+name: Hihou
+version: '${project.version}'
+main: com.iekcorbar.hihou.HihouPlugin
+api-version: '26.2'
+description: 秘宝 treasure, event and vote chests with physical keys - every prize is a chest you unlock yourself.
+author: iekcorbar
+
+commands:
+  hihou:
+    description: Hihou chests and keys
+    usage: /hihou <give|key|edit|remove|map|event|help>
+    aliases: [ih]
+
+permissions:
+  hihou.admin:
+    description: Place, edit and remove chests, create maps, toggle events
+    default: op
