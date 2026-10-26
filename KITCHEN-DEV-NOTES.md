@@ -110,3 +110,13 @@ automatisch (loopt Fruit.values()). Garden wild: nieuwe biomes ok.
 - `/kitchen take <me> rice 5` / `/brew take <me> apple` werken.
 - Fountain 3x: staat hij goed op de grond? particles op hoogte? (DISPLAY constants + transform
   up=(ts-1)*0.5 regelt dat).
+
+## Regel (27-10): NOOIT de oude tripwire-blokstatus terugzetten
+- De oude dragendeplanting (tripwire-disarmed = gewasstatus + blockstate-bestand uit de pack) is bewust
+  vervangen door PDC-plantlijst + ItemDisplay; de migratie codeert per chunk.
+- assets/minecraft/blockstates/tripwire.json (oa in de oude Iekcorbar-pack.zip en de losse
+  `assets`-map van sept) niet opnieuw importeren: dat haalt het oude systeem terug en geeft
+  magenta/verkeerde planten zodra modellen/stages niet meer matchen.
+- Mocht er ooit weer een echt blok als drager nodig zijn: suikerriet (2 age-states, geen
+  farmland-eis, geen blockstate-Gedoente). Eerste check bij 'grapes zijn paars': staat die losse
+  `assets`-map nog in de mixer? Buitensluiten.
