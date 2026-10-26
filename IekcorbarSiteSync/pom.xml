@@ -30,8 +30,11 @@
          Bumped same day to 1.7.0: books remember who read them; advancement
          requirement types books_read / book_read / book_series.
          1.7.1: auto page-splitting keeps line breaks (poems) and ignores
-         colour codes when measuring page length. -->
-    <version>1.15.0</version>
+         colour codes when measuring page length.
+          1.15.1 (2026-10-26): queued shop purchases honour ';;'-chained give_commands
+          (shop packs: kit + a /relics random roll) by dispatching each part separately
+          on join - the website-side purchase route splits the same way over RCON. -->
+    <version>1.15.1</version>
     <packaging>jar</packaging>
 
     <name>IekcorbarSiteSync</name>

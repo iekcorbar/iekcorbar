@@ -208,9 +208,30 @@ export async function POST(request) {
       status = 'queued';
     } else {
       try {
-        const giveResult = await sendRconCommand(giveCommand);
-        giveMessage = giveResult === 'BYPASS' ? '(RCON not configured — dev bypass)' : (giveResult || '(empty response)');
-        console.log(`[Shop RCON give] "${giveCommand}" -> "${giveMessage}"`);
+        // A giveCommand may chain several console commands separated by ';;' —
+        // shop packs do exactly this (`kit iek_epic {player};;relics random
+        // {player} epic`). RCON reliably carries ONE command per request, so
+        // split and send each part in order instead of trusting the server to
+        // multi-execute a single packet. If the FIRST part fails nothing was
+        // delivered at all, so requeue the whole chain (safe to retry); a
+        // later part failing only shows up in the receipt, because re-running
+        // the chain on join would duplicate what DID succeed.
+        const parts = giveCommand.split(';;').map(s => s.trim()).filter(Boolean);
+        const replies = [];
+        let firstPartFailed = false;
+        for (let i = 0; i < parts.length; i++) {
+          try {
+            const r = await sendRconCommand(parts[i]);
+            replies.push(r === 'BYPASS' ? '(dev bypass)' : (r || '(empty response)'));
+            console.log(`[Shop RCON give] "${parts[i]}" -> "${replies[replies.length - 1]}"`);
+          } catch (err) {
+            replies.push(`FAILED: ${err.message || 'Minecraft server offline'}`);
+            if (i === 0) firstPartFailed = true;
+            console.error('[Shop RCON give] failed:', parts[i], err);
+          }
+        }
+        giveMessage = replies.join(' | ');
+        if (firstPartFailed) status = 'queued';
       } catch (err) {
         console.error('[Shop RCON give] failed:', err);
         giveMessage = err.message || 'Minecraft server offline';

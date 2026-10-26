@@ -454,7 +454,7 @@ export default function ShopPage() {
                 <div>
                   <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Give command (RCON, must include {'{player}'})</label>
                   <input value={itemForm.giveCommand} onChange={e => setItemForm(f => ({ ...f, giveCommand: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="give {player} diamond 5" />
-                  <p className="text-[9px] text-text-warm/40 mt-1">Confirmed working on this server: plain vanilla <code>give {'{player}'} &lt;item&gt; &lt;amount&gt;</code>. For kits/other commands, verify in-game first.</p>
+                  <p className="text-[9px] text-text-warm/40 mt-1">Confirmed working on this server: plain vanilla <code>give {'{player}'} &lt;item&gt; &lt;amount&gt;</code>. For kits/other commands, verify in-game first. Several commands can be chained with <code>;;</code> (e.g. <code>kit mypack {'{player}'};;relics random {'{player}'} epic</code>) — they run in order, online and on the queued join-delivery.</p>
                 </div>
               )}
               <label className="flex items-center gap-2 text-xs text-text-warm/70 cursor-pointer">

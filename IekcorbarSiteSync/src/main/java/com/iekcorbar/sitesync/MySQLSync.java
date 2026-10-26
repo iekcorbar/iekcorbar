@@ -500,9 +500,17 @@ public class MySQLSync {
                             String itemName = rs.getString("item_name");
                             String giveTemplate = rs.getString("give_command");
                             String giveCommand = giveTemplate.replace("{player}", player.getName());
+                            // ';;' chains multiple console commands in one give_command
+                            // (shop packs: kit + a /relics random roll). dispatchCommand
+                            // takes exactly one command per call, same split as the
+                            // website-side purchase route does via RCON.
+                            String[] parts = giveCommand.split(";;");
 
                             Bukkit.getScheduler().runTask(plugin, () -> {
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), giveCommand);
+                                for (String part : parts) {
+                                    String cmd = part.trim();
+                                    if (!cmd.isEmpty()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+                                }
                                 player.sendMessage("§a[Shop] Your " + itemName + " purchase has been delivered!");
                                 ToastNotifier.showToast(plugin, player, "Delivered: " + itemName,
                                         ToastNotifier.iconFromGiveCommand(giveTemplate));
