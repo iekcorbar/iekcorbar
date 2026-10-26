@@ -89,13 +89,18 @@ ZukanData + spawn-ei + config? + docs/wiki-wildlife + seed + version 0.4.0.
 - Sounds: maak GEEN nieuwe custom sounds in deze batch — vanilla geluiden hergebruiken
   (wolf/fox/duck/cod), net zoals tortoise/hedgehog/crab nu al doen.
 
-## OPEN - hert staat/loopt scheef (2026-10-26, gebruiker: "het hert is niet goed georienteerd, dat loopt nog schuin - ik denk dat het schuin op het originele mob staat, of de AI denkt dat. zoiets")
-- Het hert is Species.DEER opEntityType HORSE + FMM-model wl_deer(_baby/_rare) - server-side te vinden in
-  plugins/FreeMinecraftModels/models/wildlife/wl_deer.bbmodel (repo-speek: upload-2026-10-24/plugins/...).
-- Symptoom: model wijkt af van de looprichting (schuin). Eerdere gelijke case: KRAB - zijn model "kijkt
-  langs -X" en Animals.java compenseert met e.setRotation(yaw + 90, 0) (regel ~385). Dus of (a) de
-  wl_deer-geometry in Blockbench is per ongeluk 45 graden gedraait ipv langs de mob-as, of (b) FMM's
-  yaw-init van de DynamicEntity klopt niet voor dit model.
-- Actie bij oppakken: wl_deer.bbmodel openen, look-direction van het head/face-check, of - als alle
-  deer-animaties scheef meedraaien - het model rechtzetten (niet de entity-yaw per-tick te lijf gaan).
-  Check ook of de walk-animatie in de .bbmodel/animation op de goede as bindt.
+## GEFIXT 26-10 - hert liep scheef (gebruiker: "het hert is niet goed georienteerd, dat loopt nog schuin - ik denk dat het schuin op het originele mob staat, of de AI denkt dat. zoiets")
+- De user klopte op de streep. make_animals.py's oriented()-docstring beschrijft exact dit symptoom:
+  "FMM treats model -X as forward; heads drawn at -Z walked sideways, facing right" - het hert op de
+  server draaide nog een pre-oriented (of verder verouderde) wl_deer-export. Extra bevinding: de walk-
+  animatie is na 24 okt ook gewijzigd (sync-trot 0.75s/26° -> 0.6.0 phase-shifted walk 0.95s/20°), dus
+  het server-bestand was dubbel verouderd. Deer-gedrag in Animals.java is onschuldig (alleen snort/
+  flee/eat, geen rotatie-hacks; de krab heeft z'n +90 juist omdat-ie als enige -X-face gebouwd is).
+- Actie: complete set gegenereerd met `python -I Wildlife/tools/make_animals.py fmm-models\wildlife`
+  -> 133 bbmodels in de repo onder fmm-models/wildlife/ (30 soorten x adult/baby/rare/rare_baby +
+  songbird/macaw-varianten; vanaf nu de bewaarde upload-bron, eerder stonden die files nergens vast).
+- Deploy naar server: vervang ALLE bestanden in plugins/FreeMinecraftModels/models/wildlife/ door deze
+  set en herstart (FMM laadt modellen bij enable). Check daarna een wild hert: kop recht vooruit, geen
+  diagonale stand meer tijdens rennen.
+- Staat een dier na deze deploy nog steeds scheef: dan is de map niet echt vervangen (vergelijk bbmodel-
+  tijdstempels op de server) of heet het modelbestand niet wl_<soort>.bbmodel.
