@@ -96,6 +96,8 @@ final class Relics implements Listener {
         boolean locked;
         UUID recipient;
 
+        boolean staffPlaced;   // placed (or claimed) by staff: players can never break it
+
         Relic(World world, int x, int y, int z, RelicType type, String mount, BlockFace facing) {
             this.world = world;
             this.x = x;
@@ -133,7 +135,8 @@ final class Relics implements Listener {
 
         String line() {
             return type.name() + "|" + x + "|" + y + "|" + z + "|" + mount + "|" + facing.name() + "|" + (variant.isEmpty() ? "-" : variant)
-                    + "|" + (remembersTune(type) ? tune : count) + "|" + (owner == null ? "-" : owner) + "|" + encodeGift();
+                    + "|" + (remembersTune(type) ? tune : count) + "|" + (owner == null ? "-" : owner) + "|" + encodeGift()
+                    + "|" + (staffPlaced ? 1 : 0);
         }
 
         /** The gift field of a saved line: "V2;<locked>;<recipient>;<base64 item>;<...>", or "-" when empty. */
@@ -410,6 +413,7 @@ final class Relics implements Listener {
             return;
         }
         Relic r = new Relic(target.getWorld(), target.getX(), target.getY(), target.getZ(), t, mount, facing);
+        r.staffPlaced = p.hasPermission("relics.admin"); // what staff places, players can never break
         if (t == RelicType.COOKIE_PLATE) r.count = 6;
         if (t == RelicType.CHAMPAGNE_TOWER) r.count = 14;
         if (t == RelicType.EASTER_EGG) {
@@ -573,6 +577,11 @@ final class Relics implements Listener {
     // ------------------------------------------------------------ breaking
 
     private void hit(Relic r, Player p) {
+        // staff-placed relics: players cannot break them at all, not even 3 hits deep
+        if (r.staffPlaced && !p.hasPermission("relics.admin")) {
+            p.sendActionBar(Component.text("This relic was placed by staff - only staff can remove it.", NamedTextColor.GRAY));
+            return;
+        }
         long now = plugin.tick;
         if (p.getGameMode() != GameMode.CREATIVE) {
             if (now - r.lastHit > 20) r.hits = 0;
@@ -677,11 +686,19 @@ final class Relics implements Listener {
         Relic r = at(e.getBlock());
         if (r != null) {
             e.setCancelled(true);
+            if (r.staffPlaced && !e.getPlayer().hasPermission("relics.admin")) {
+                e.getPlayer().sendActionBar(Component.text("This relic was placed by staff - only staff can remove it.", NamedTextColor.GRAY));
+                return;
+            }
             breakRelic(r, e.getPlayer().getGameMode() != GameMode.CREATIVE);
             return;
         }
         Relic above = at(e.getBlock().getRelative(BlockFace.UP));       // standing relic loses its ground
-        if (above != null && above.mount.equals("floor") && above.y == e.getBlock().getY() + 1) breakRelic(above, true);
+        if (above != null && above.mount.equals("floor") && above.y == e.getBlock().getY() + 1) {
+            if (above.staffPlaced && !e.getPlayer().hasPermission("relics.admin")) {   // the relic just floats on
+                e.getPlayer().sendActionBar(Component.text("The relic above keeps floating - it was placed by staff.", NamedTextColor.GRAY));
+            } else breakRelic(above, true);
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
@@ -757,6 +774,7 @@ final class Relics implements Listener {
                     r.owner = f[8].equals("-") ? null : UUID.fromString(f[8]);
                     r.readGift(f[9]);
                 }
+                if (f.length > 10) r.staffPlaced = f[10].equals("1");
                 if (r.type == RelicType.ADVENT_WREATH) r.candles = adventCandles();
                 if (at(r.world.getBlockAt(r.x, r.y, r.z)) != null) continue;
                 index(r);

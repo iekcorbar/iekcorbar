@@ -443,6 +443,17 @@ Satchel-0.3.0.jar in de root. **2026-10-26 UITGEVOERD**: import op de server dra
 gemigreerd (4 rugzakken terug als Satchel-bags) en BackpackPlus van de server af - plugin definitief
 vervangen door eigen Satchel. Commando/code blijft zitten (idempotent, geen schade bij vaker draaien).
 
+### Relics 0.3.6 - staff-relics onbreekbaar voor spelers (2026-10-26, ochtends)
+Gebruiker: "relics die door staff in game zijn geplaatst kan een speler nooit breken, alleen staff."
+Gedaan: Relic.veld `staffPlaced` (11e kolom in de chunk-PDC-lijn; oude 10-koloms-regels = false, dus
+backward compatible). Bij place(): `staffPlaced = p.hasPermission("relics.admin")`. Bescherming op BEIDE
+sloop-paden: hit() (3-klik Break-route, ook creative) én onBreak (basisblok + "vloer weg under floor-relic"
+geval; daar blijft de relic nu zwevend hangen i.p.v. te sneuvelen). Action bar: "This relic was placed by
+staff - only staff can remove it." Nieuw commando `/relics protect [off]` (relics.admin, lookingAt 24 blokken)
+om bestaande geplaatste relics alsnog te claimen/losgave - handig want alles vóór deze build staat ongeflagd.
+/remove (radius EN target) breekt wél door - is immers staff-only. Explosions/pistons konden de barrier-basis
+al niet raken. mvn groen, Relics-0.3.6.jar in de root.
+
 ### Backlog / later (gebruikersnotities, nooit vergeten)
 
 - **BedWars-plugin** (2026-10-26, gebruiker: "let op voor later: bedwars plugin - uitgebreid

@@ -190,6 +190,23 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             s.sendMessage(Component.text("Removed " + n + " relic(s) within " + (int) radius + " blocks.", n > 0 ? NamedTextColor.GREEN : NamedTextColor.GRAY));
             return true;
         }
+        if (sub.equals("protect")) {
+            if (denied(s, "relics.admin")) return true;
+            if (!(s instanceof Player self)) {
+                s.sendMessage("Players only.");
+                return true;
+            }
+            Relics.Relic r = relics.lookingAt(self, 24);
+            if (r == null) {
+                s.sendMessage(Component.text("You are not looking at a relic (within 24 blocks).", NamedTextColor.GRAY));
+                return true;
+            }
+            r.staffPlaced = a.length == 1 || !a[1].equalsIgnoreCase("off");
+            relics.save(r);
+            s.sendMessage(Component.text(r.type.displayName + (r.staffPlaced ? " is now staff-protected - players cannot break it." : " is breakable again (by whoever placed it)."),
+                    r.staffPlaced ? NamedTextColor.GREEN : NamedTextColor.YELLOW));
+            return true;
+        }
         if (sub.equals("where")) {
             if (denied(s, "relics.build")) return true;
             Player target = s instanceof Player self ? self : null;
@@ -506,7 +523,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"list", "give", "giveall", "disc", "remove", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"list", "give", "giveall", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && a[0].equalsIgnoreCase("remove")) {
             if ("target".startsWith(last)) out.add("target");
         } else if (a.length == 2 && a[0].equalsIgnoreCase("where")) {
