@@ -129,6 +129,11 @@ final class PartItems {
         return typeOf(item) != null || materialOf(item) != null || carOf(item) != null;
     }
 
+    /** The same model trick the parts use, for other items (the manual's book model). */
+    boolean showAs(ItemStack item, String model) {
+        return applyModel(item, model);
+    }
+
     ItemStack displayItem(String model) {
         ItemStack cached = displayCache.get(model);
         if (cached != null) return cached.clone();

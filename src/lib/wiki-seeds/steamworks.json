@@ -6,14 +6,14 @@
    "title": "Introduction",
    "category": "Steamworks",
    "parent": null,
-   "content": "## Welcome to Steamworks\n\nIekcorbar is a steampunk world with a Japanese heart, and Steamworks is how it gets its machines. Everything here is built from the normal game: no mods, no downloads, nothing to install. You just place parts and watch them turn.\n\n### What you will do\n\n* **Make things turn.** Start with a Hand Crank, then move on to a Water Wheel, a Windmill or a Steam Engine. Shafts, cogwheels and gearboxes carry the rotation wherever you want it.\n* **Put the rotation to work.** Grind grain, press metal, crush ore, brew in a kettle, drill and saw, move items on belts, or teach a Karakuri Arm to do a job for you.\n* **Go further.** Lay track and run your own trains, mine new ores (zinc, tin, sulfur), strike oil and refine it, and build with 32 new steampunk and Japanese blocks.\n\n### How the pages are organised\n\nRead the pages in order if you are new: first **Power and Transmission** (every machine needs it), then **Processing Machines**. The rest you can pick up when you need it. Every machine has its own page, so you can also look up one part at a time.\n\n### Good to know first\n\n* Machines **share the rotation** of one network. Too much load and the network stops by itself, it never breaks your parts.\n* Steamworks works together with our other plugins: Kitchen uses its flour and mixer, Kura storage can feed belts and arms, and Zukan (the recipe book) shows every recipe.\n* Stuck? Right-click any part with an empty hand to see its speed and what is wrong.\n\n### Start here\n\n1. Read [Steamworks](/wiki?page=steamworks) for the one-minute explanation and the first build.\n2. Open [Power and Transmission](/wiki?page=steamworks-power) and build your first crank.\n3. Look up recipes in [Crafting Recipes](/wiki?page=steamworks-recipes) or with **/zukan** in the game.\n"
+   "content": "## Welcome to Steamworks\n\nIekcorbar is a steampunk world with a Japanese heart, and Steamworks is how it gets its machines. Everything here is built from the normal game: no mods, no downloads, nothing to install. You just place parts and watch them turn.\n\n### What you will do\n\n* **Make things turn.** Start with a Hand Crank, then move on to a Water Wheel, a Windmill or a Steam Engine. Shafts, cogwheels and gearboxes carry the rotation wherever you want it.\n* **Put the rotation to work.** Grind grain, press metal, crush ore, brew in a kettle, drill and saw, move items on belts, or teach a Karakuri Arm to do a job for you.\n* **Go further.** Lay track and run your own trains, mine new ores (zinc, tin, sulfur), strike oil and refine it, and build with 32 new steampunk and Japanese blocks.\n\n### How the pages are organised\n\nRead the pages in order if you are new: first **Power and Transmission** (every machine needs it), then **Processing Machines**. The rest you can pick up when you need it. Every machine has its own page, so you can also look up one part at a time.\n\n### Good to know first\n\n* Machines **share the rotation** of one network. Too much load and the network stops by itself, it never breaks your parts.\n* Steamworks works together with our other plugins: Kitchen uses its flour and mixer, Kura storage can feed belts and arms, and Zukan (the recipe book) shows every recipe.\n* Stuck? Right-click any part with an empty hand to see its speed and what is wrong.\n* In-game there is the **Engineer's Manual**: type `/sw manual` anywhere for a living guide with clickable contents, recipe links and your own build progress.\n\n### Start here\n\n1. Read [Steamworks](/wiki?page=steamworks) for the one-minute explanation and the first build.\n2. Open [Power and Transmission](/wiki?page=steamworks-power) and build your first crank.\n3. Look up recipes in [Crafting Recipes](/wiki?page=steamworks-recipes) or with **/zukan** in the game.\n"
   },
   {
    "slug": "steamworks",
    "title": "Steamworks",
    "category": "Steamworks",
    "parent": null,
-   "content": "## Steamworks - machines that turn\n\nSteamworks adds steampunk and Japanese-style machines to Iekcorbar: shafts and cogwheels that carry rotation, power sources, processing machines, conveyor belts, a programmable robot arm, trains, custom ores and an oil industry. You only need the normal game - no mods.\n\n### How it works in one minute\n\n* **Rotation.** A power source (hand crank, water wheel) turns. Everything connected to it - shafts, cogwheels, gearboxes, machines - turns with it. Right-click any part with an empty hand to see its speed.\n* **Speed (RPM).** Cogwheels change speed: a small cogwheel driven by a large one turns twice as fast. Faster machines work quicker.\n* **Stress (Tq).** Every machine puts a load on its network; every source gives capacity. If the load is bigger than the capacity, the whole network **jams**: it stops and puffs steam until you add power or remove a machine. A Stress Gauge shows how close you are.\n* **Too fast.** A part that would turn faster than 192 RPM snaps its breaker pin and drops as an item.\n* **Opposite directions.** Two sources turning against each other, or gears locking each other in a loop, also jam the network.\n\n### Getting started\n\n1. Craft a few **Shafts** (2 copper ingots, stacked) and a **Hand Crank**.\n2. Place a **Millstone**, a shaft under it and the crank under the shaft (see Processing Machines).\n3. Hold right-click on the crank. Put cobblestone in the millstone and watch it become gravel.\n4. Build a **Water Wheel** in flowing water for power that never stops.\n\n> Picking parts up: left-click a part twice (once in creative). Parts are protected like normal blocks.\n\n### Pages\n\n* [Power and Transmission](/wiki?page=steamworks-power) - crank, water wheel, windmill, steam boiler and engine, shafts, cogwheels, gearbox, clutch, gearshift, chain drive, gauges\n* [Processing Machines](/wiki?page=steamworks-processing) - millstone, steam hammer, bellows fan, crushing wheels, kettle and mixer, flour and baking\n* [Automation](/wiki?page=steamworks-automation) - drill, saw, conveyor belt, Karakuri Arm\n* [Trains](/wiki?page=steamworks-trains) - locomotives, wagons, stations, signals, autopilot\n* [Ores and Materials](/wiki?page=steamworks-ores) - zinc, tin, sulfur, plates, brass\n* [Oil and Pollution](/wiki?page=steamworks-oil) - oil fields, pumpjack, tanks, refinery, waste\n* [Building Blocks](/wiki?page=steamworks-building-blocks) - 32 steampunk and Japanese blocks with stairs and slabs\n* [Crafting Recipes](/wiki?page=steamworks-recipes) - every recipe on one page\n\nThe **Karakuri Arm programming language** has its own page with examples and a checker: [Karakuri Arm Guide](/steamworks/arm). In the game, **/sw help** links there.\n"
+   "content": "## Steamworks - machines that turn\n\nSteamworks adds steampunk and Japanese-style machines to Iekcorbar: shafts and cogwheels that carry rotation, power sources, processing machines, conveyor belts, a programmable robot arm, trains, custom ores and an oil industry. You only need the normal game - no mods.\n\n### How it works in one minute\n\n* **Rotation.** A power source (hand crank, water wheel) turns. Everything connected to it - shafts, cogwheels, gearboxes, machines - turns with it. Right-click any part with an empty hand to see its speed.\n* **Speed (RPM).** Cogwheels change speed: a small cogwheel driven by a large one turns twice as fast. Faster machines work quicker.\n* **Stress (Tq).** Every machine puts a load on its network; every source gives capacity. If the load is bigger than the capacity, the whole network **jams**: it stops and puffs steam until you add power or remove a machine. A Stress Gauge shows how close you are.\n* **Too fast.** A part that would turn faster than 192 RPM snaps its breaker pin and drops as an item.\n* **Opposite directions.** Two sources turning against each other, or gears locking each other in a loop, also jam the network.\n\n### Getting started\n\n1. Craft a few **Shafts**: andesite + iron nuggets makes **Andesite Alloy**, two alloys stacked make eight shafts. Also make a **Hand Crank**.\n2. Place a **Millstone**, a shaft under it and the crank under the shaft (see Processing Machines).\n3. Hold right-click on the crank. Put cobblestone in the millstone and watch it become gravel.\n4. Build a **Water Wheel** in flowing water for power that never stops.\n\n> Picking parts up: left-click a part twice (once in creative). Parts are protected like normal blocks.\n\n### Pages\n\n* [Power and Transmission](/wiki?page=steamworks-power) - crank, water wheel, windmill, steam boiler and engine, shafts, cogwheels, gearbox, clutch, gearshift, chain drive, gauges\n* [Processing Machines](/wiki?page=steamworks-processing) - millstone, steam hammer, bellows fan, crushing wheels, kettle and mixer, flour and baking\n* [Automation](/wiki?page=steamworks-automation) - drill, saw, conveyor belt, Karakuri Arm\n* [Trains](/wiki?page=steamworks-trains) - locomotives, wagons, stations, signals, autopilot\n* [Ores and Materials](/wiki?page=steamworks-ores) - zinc, tin, sulfur, plates, brass\n* [Oil and Pollution](/wiki?page=steamworks-oil) - oil fields, pumpjack, tanks, refinery, waste\n* [Building Blocks](/wiki?page=steamworks-building-blocks) - 32 steampunk and Japanese blocks with stairs and slabs\n* [Crafting Recipes](/wiki?page=steamworks-recipes) - every recipe on one page\n\nThe **Karakuri Arm programming language** has its own page with examples and a checker: [Karakuri Arm Guide](/steamworks/arm). In the game, **/sw help** links there.\n"
   },
   {
    "slug": "steamworks-power",
@@ -139,14 +139,14 @@
    "title": "Kettle and Mixer",
    "category": "Steamworks",
    "parent": "steamworks-processing",
-   "content": "The **Kettle** holds ingredients and water; the **Mixer** on top of it stirs them. Power the mixer **from above**.\n\n* **Heat:** fire, a lit campfire, lava or a magma block under the kettle.\n* **Water:** right-click with a water bucket (holds 3 buckets). An empty bucket takes a bucket back out.\n* **Ingredients:** right-click with them, a hopper next to the kettle pointing into it, a conveyor belt ending at it, or a Karakuri Arm.\n* **Results:** right-click with an empty hand, or a chest under or next to the kettle. Sneak + empty hand takes the ingredients back.\n* The whisk drops into the pot while it mixes.\n\n| Ingredients | Needs | Result |\n|---|---|---|\n| 3 Copper Ingot + 1 Zinc Ingot | heat | 4 Brass Ingot |\n| Dirt | ¼ bucket water | Mud |\n| Sand + Dirt | ¼ bucket water | 2 Clay Balls |\n| 3 Wheat | water, heat | Bread |\n| 2 Flour | ¼ bucket water, heat | 2 Bread |\n| Flour + Cocoa Beans | heat | 8 Cookies |\n| 3 Flour + 2 Sugar + Egg | ½ bucket water, heat | Cake |\n| Flour + Pumpkin + Sugar + Egg | heat | 2 Pumpkin Pie |\n| Brown + Red Mushroom + Bowl | heat | Mushroom Stew |\n| 6 Beetroot + Bowl | heat | Beetroot Soup |\n| Pumpkin + Sugar + Egg | heat | Pumpkin Pie |\n| Slime Ball + Blaze Powder | - | Magma Cream |\n| Spider Eye + Sugar + Brown Mushroom | - | Fermented Spider Eye |\n| 2 Cobblestone + 2 Quartz | - | 2 Diorite |\n| Diorite + Cobblestone | - | 2 Andesite |\n| Diorite + Quartz | - | Granite |\n| 2 Sulfur + Coal or Charcoal | - | 2 Gunpowder |\n| Chemical Waste Canister + 4 Bone Meal | 1 bucket water, heat | Empty Canister + Sulfur |\n\nBack to [Steamworks Processing](/wiki?page=steamworks-processing)\n"
+   "content": "The **Kettle** holds ingredients and water; the **Mixer** on top of it stirs them. Power the mixer **from above**.\n\n* **Heat:** fire, a lit campfire, lava or a magma block under the kettle.\n* **Water:** right-click with a water bucket (holds 3 buckets). An empty bucket takes a bucket back out.\n* **Ingredients:** right-click with them, a hopper next to the kettle pointing into it, a conveyor belt ending at it, or a Karakuri Arm.\n* **Results:** right-click with an empty hand, or a chest under or next to the kettle. Sneak + empty hand takes the ingredients back.\n* The whisk drops into the pot while it mixes.\n\n| Ingredients | Needs | Result |\n|---|---|---|\n| 1 Copper Ingot + 1 Zinc Ingot | heat | 1 Brass Ingot |\n| Dirt | ¼ bucket water | Mud |\n| Sand + Dirt | ¼ bucket water | 2 Clay Balls |\n| 3 Wheat | water, heat | Bread |\n| 2 Flour | ¼ bucket water, heat | 2 Bread |\n| Flour + Cocoa Beans | heat | 8 Cookies |\n| 3 Flour + 2 Sugar + Egg | ½ bucket water, heat | Cake |\n| Flour + Pumpkin + Sugar + Egg | heat | 2 Pumpkin Pie |\n| Brown + Red Mushroom + Bowl | heat | Mushroom Stew |\n| 6 Beetroot + Bowl | heat | Beetroot Soup |\n| Pumpkin + Sugar + Egg | heat | Pumpkin Pie |\n| Slime Ball + Blaze Powder | - | Magma Cream |\n| Spider Eye + Sugar + Brown Mushroom | - | Fermented Spider Eye |\n| 2 Cobblestone + 2 Quartz | - | 2 Diorite |\n| Diorite + Cobblestone | - | 2 Andesite |\n| Diorite + Quartz | - | Granite |\n| 2 Sulfur + Coal or Charcoal | - | 2 Gunpowder |\n| Chemical Waste Canister + 4 Bone Meal | 1 bucket water, heat | Empty Canister + Sulfur |\n\nBack to [Steamworks Processing](/wiki?page=steamworks-processing)\n"
   },
   {
    "slug": "steamworks-automation",
    "title": "Steamworks Automation",
    "category": "Steamworks",
    "parent": null,
-   "content": "* [Mechanical Drill](/wiki?page=steamworks-automation-mechanical-drill)\n* [Mechanical Saw](/wiki?page=steamworks-automation-mechanical-saw)\n* [Conveyor Belt](/wiki?page=steamworks-automation-conveyor-belt)\n* [Karakuri Arm](/wiki?page=steamworks-automation-karakuri-arm)\n"
+   "content": "* [Mechanical Drill](/wiki?page=steamworks-automation-mechanical-drill)\n* [Mechanical Saw](/wiki?page=steamworks-automation-mechanical-saw)\n* [Conveyor Belt](/wiki?page=steamworks-automation-conveyor-belt)\n* [Chute](/wiki?page=steamworks-automation-chute)\n* [Funnel](/wiki?page=steamworks-automation-funnel)\n* [Depot & Weighted Ejector](/wiki?page=steamworks-automation-depot-weighted-ejector)\n* [Steam Whistle](/wiki?page=steamworks-automation-steam-whistle)\n* [Karakuri Arm](/wiki?page=steamworks-automation-karakuri-arm)\n"
   },
   {
    "slug": "steamworks-automation-mechanical-drill",
@@ -168,6 +168,34 @@
    "category": "Steamworks",
    "parent": "steamworks-automation",
    "content": "Lay it out in the direction you look; pieces in a row work as one belt. Power it with a shaft **at the side** of any piece.\n\n* The belt runs the way its rollers turn - reverse the rotation (sneak-crank or a Gearshift) and the belt runs the other way.\n* Carries items, mobs and players (sneak to stand still).\n* At the end of the line items go into a **chest**, barrel, hopper or **kettle** in front; otherwise they fall off.\n* Under a **Steam Hammer** (two blocks above the belt) items wait until they are pressed. A **Bellows Fan** blowing along the belt processes items while they ride.\n* Load: 0.5 Tq per RPM per piece. 16 RPM = 1.3 blocks per second.\n\nBack to [Steamworks Automation](/wiki?page=steamworks-automation)\n"
+  },
+  {
+   "slug": "steamworks-automation-chute",
+   "title": "Chute",
+   "category": "Steamworks",
+   "parent": "steamworks-automation",
+   "content": "The belt's quiet cousin: a low trough with brass lips. Powered, it slides items along it like a belt (a bit slower); unpowered, things simply drop through it. Great for feeding the top of a stack of machines.\n\nBack to [Steamworks Automation](/wiki?page=steamworks-automation)\n"
+  },
+  {
+   "slug": "steamworks-automation-funnel",
+   "title": "Funnel",
+   "category": "Steamworks",
+   "parent": "steamworks-automation",
+   "content": "A chute with a mouth: anything falling on its lid is sucked in and sent along. At the end of a line a funnel feeds chests, kettles **and millstones** (it drops the item straight into the stone). Reverse the flow with a Gearshift, just like belts.\n\nBack to [Steamworks Automation](/wiki?page=steamworks-automation)\n"
+  },
+  {
+   "slug": "steamworks-automation-depot-weighted-ejector",
+   "title": "Depot & Weighted Ejector",
+   "category": "Steamworks",
+   "parent": "steamworks-automation",
+   "content": "The **Depot** is a small pedestal: items delivered to it wait there, floating on the dish. An **Ejector** pointed at a depot (or with something on its own lid) hurls the item in the direction it faces - over a wall, onto a far belt, into the next funnel. Both need rotation; the ejector throws once every second at most.\n\nBack to [Steamworks Automation](/wiki?page=steamworks-automation)\n"
+  },
+  {
+   "slug": "steamworks-automation-steam-whistle",
+   "title": "Steam Whistle",
+   "category": "Steamworks",
+   "parent": "steamworks-automation",
+   "content": "A copper horn on a pipe stub. Right-click it to toot across the square - factory crews use it for shift change. No power needed, purely for the joy of it.\n\nBack to [Steamworks Automation](/wiki?page=steamworks-automation)\n"
   },
   {
    "slug": "steamworks-automation-karakuri-arm",
@@ -244,7 +272,7 @@
    "title": "Steamworks Oil",
    "category": "Steamworks",
    "parent": null,
-   "content": "* [Finding oil](/wiki?page=steamworks-oil-finding-oil)\n* [The oil chain](/wiki?page=steamworks-oil-the-oil-chain)\n* [Canisters](/wiki?page=steamworks-oil-canisters)\n* [Pollution](/wiki?page=steamworks-oil-pollution)\n"
+   "content": "* [Finding oil](/wiki?page=steamworks-oil-finding-oil)\n* [The oil chain](/wiki?page=steamworks-oil-the-oil-chain)\n* [Pumps and Valves](/wiki?page=steamworks-oil-pumps-and-valves)\n* [Canisters](/wiki?page=steamworks-oil-canisters)\n* [Pollution](/wiki?page=steamworks-oil-pollution)\n"
   },
   {
    "slug": "steamworks-oil-finding-oil",
@@ -259,6 +287,13 @@
    "category": "Steamworks",
    "parent": "steamworks-oil",
    "content": "1. **Pumpjack** - place it on the field and power it with a shaft through its side. Its beam nods up and down. At crank speed it pumps 32 mB of crude oil per second (load 8 Tq per RPM).\n2. **Pipes** - connect pumpjacks, tanks and refineries. They join up on their own; fluids flow without power.\n3. **Tanks** - hold 16 buckets (16,000 mB) of one fluid. You see the level and colour: crude oil black, fuel amber, chemical waste green.\n4. **Refinery** - needs **heat** under it (fire, a lit campfire, lava or magma). It turns 100 mB of crude oil per second into **60% fuel** and **40% chemical waste**. It stops when there is no room for fuel.\n\nRight-click a tank, pumpjack or refinery with an empty hand to see what it is doing.\n\nBack to [Steamworks Oil](/wiki?page=steamworks-oil)\n"
+  },
+  {
+   "slug": "steamworks-oil-pumps-and-valves",
+   "title": "Pumps and Valves",
+   "category": "Steamworks",
+   "parent": "steamworks-oil",
+   "content": "A **Mechanical Pump** and a **Fluid Valve** are pipe pieces with a personality of their own - both are powered by the rotation network, just like machines.\n\n* **Pump** - a junction on the line that can also *drink and fill*: right-click it with a canister to take 1,000 mB out of the whole connected network, or to pour a canister in. Handy far from any tank: one tap and the oil is in your bucket.\n* **Valve** - a shut-off tap. It only lets fluid pass **while it turns**; stop its network (or a clutch upstream) and the line is cut where the valve sits. Place one before your refinery to decide what happens to your oil while you sleep.\n\nBack to [Steamworks Oil](/wiki?page=steamworks-oil)\n"
   },
   {
    "slug": "steamworks-oil-canisters",
@@ -279,42 +314,63 @@
    "title": "Steamworks Recipes",
    "category": "Steamworks",
    "parent": null,
-   "content": "## Crafting recipes\nRows are the crafting grid from top to bottom; \"-\" is an empty slot. Steamworks parts and materials (shaft, cogwheel, plates...) must be the real Steamworks item, not plain paper. All recipes also show up in your recipe book.\n\n\n* [Power and transmission](/wiki?page=steamworks-recipes-power-and-transmission)\n* [Machines](/wiki?page=steamworks-recipes-machines)\n* [Karakuri Arm](/wiki?page=steamworks-recipes-karakuri-arm)\n* [Trains](/wiki?page=steamworks-recipes-trains)\n* [Oil](/wiki?page=steamworks-recipes-oil)\n* [Smelting](/wiki?page=steamworks-recipes-smelting)\n"
+   "content": "## Crafting recipes\nRows are the crafting grid from top to bottom; \"-\" is an empty slot. Steamworks parts and materials (shaft, cogwheel, plates...) must be the real Steamworks item, not plain paper. All recipes also show up in your recipe book.\nThis page is generated from the plugin's own recipe table - run `node scripts/build-recipes-data.js && python -I scripts/build-wiki-recipes-md.py` after recipe changes.\n\n\n* [Materials](/wiki?page=steamworks-recipes-materials)\n* [Power and transmission](/wiki?page=steamworks-recipes-power-and-transmission)\n* [Machines](/wiki?page=steamworks-recipes-machines)\n* [Moving items](/wiki?page=steamworks-recipes-moving-items)\n* [Karakuri Arm](/wiki?page=steamworks-recipes-karakuri-arm)\n* [Trains](/wiki?page=steamworks-recipes-trains)\n* [Oil](/wiki?page=steamworks-recipes-oil)\n* [Tools](/wiki?page=steamworks-recipes-tools)\n* [Smelting](/wiki?page=steamworks-recipes-smelting)\n"
+  },
+  {
+   "slug": "steamworks-recipes-materials",
+   "title": "Materials",
+   "category": "Steamworks",
+   "parent": "steamworks-recipes",
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Andesite Alloy | iron nugget andesite / andesite iron nugget | 1 |\n| Andesite Alloy | zinc nugget andesite / andesite zinc nugget | 1 |\n| Zinc Nugget | zinc ingot | 9 |\n| Andesite Casing | andesite alloy / strippedlogs | 1 |\n| Brass Casing | brass ingot / strippedlogs | 1 |\n| Whisk | - andesite alloy / iron plate andesite alloy iron plate / iron plate iron plate iron plate | 1 |\n| Propeller | - iron plate / iron plate andesite alloy iron plate / - iron plate | 1 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
   },
   {
    "slug": "steamworks-recipes-power-and-transmission",
    "title": "Power and transmission",
    "category": "Steamworks",
    "parent": "steamworks-recipes",
-   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Shaft | copper ingot / copper ingot (stacked) | 4 |\n| Cogwheel | - plank - / plank shaft plank / - plank - | 1 |\n| Large Cogwheel | plank - plank / - cogwheel - / plank - plank | 1 |\n| Gearbox | copper ingot - copper ingot / - cogwheel - / copper ingot - copper ingot | 1 |\n| Hand Crank | plank plank plank / - - shaft | 1 |\n| Windmill | wool plank wool / plank shaft plank / wool plank wool | 1 |\n| Steam Boiler | copper plate tank copper plate / copper plate blast furnace copper plate / copper plate ×3 | 1 |\n| Steam Engine | brass plate piston brass plate / brass plate large cogwheel brass plate / iron block ×3 | 1 |\n| Water Wheel | 8 planks around a shaft | 1 |\n| Speed Gauge | compass / shaft | 1 |\n| Stress Gauge | clock / shaft | 1 |\n| Clutch | iron plate / shaft / redstone | 1 |\n| Chain Sprocket | - iron nugget - / iron nugget shaft iron nugget / - iron nugget - | 2 |\n| Gearshift | copper plate / shaft / redstone | 1 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Shaft | andesite alloy / andesite alloy | 8 |\n| Cogwheel | any planks / shaft | 1 |\n| Large Cogwheel | any planks / any planks / shaft | 1 |\n| Large Cogwheel | any planks / cogwheel | 1 |\n| Gearbox | - cogwheel / cogwheel andesite casing cogwheel / - cogwheel | 1 |\n| Hand Crank | any planks any planks any planks / - andesite alloy | 1 |\n| Water Wheel | any planks any planks any planks / any planks shaft any planks / any planks any planks any planks | 1 |\n| Windmill | any wool / slabs / shaft | 1 |\n| Steam Boiler | copper plate tank copper plate / copper plate blast furnace copper plate / copper plate copper plate copper plate | 1 |\n| Steam Engine | golden plate / andesite alloy / copper block | 1 |\n| Speed Gauge | compass / andesite casing | 1 |\n| Speed Gauge | stress gauge | 1 |\n| Stress Gauge | speed gauge | 1 |\n| Clutch | andesite casing / shaft / redstone | 1 |\n| Sprocket | andesite casing iron nugget / iron nugget iron nugget | 1 |\n| Gearshift | andesite casing / cogwheel / redstone | 1 |\n| Whistle | golden plate / copper ingot | 1 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
   },
   {
    "slug": "steamworks-recipes-machines",
    "title": "Machines",
    "category": "Steamworks",
    "parent": "steamworks-recipes",
-   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Millstone | - plank - / stone cogwheel stone / stone stone stone | 1 |\n| Steam Hammer | iron ingot shaft iron ingot / - piston - / - iron block - | 1 |\n| Bellows Fan | - copper plate - / paper shaft paper / - copper plate - | 1 |\n| Kettle | iron plate / cauldron | 1 |\n| Mixer | - shaft - / iron plate cogwheel iron plate / - iron bars - | 1 |\n| Mechanical Drill | - iron ingot - / iron ingot iron plate iron ingot / - shaft - | 1 |\n| Mechanical Saw | iron nugget ×3 / iron nugget iron plate iron nugget / - shaft - | 1 |\n| Conveyor Belt | dried kelp ×3 / iron ingot shaft iron ingot | 4 |\n| Crushing Wheel | stone obsidian stone / obsidian large cogwheel obsidian / stone obsidian stone | 2 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Millstone | cogwheel / andesite casing / stones | 1 |\n| Steam Hammer | shaft / andesite casing / iron block | 1 |\n| Bellows Fan | shaft / andesite casing / propeller | 1 |\n| Kettle | andesite alloy - andesite alloy / andesite alloy andesite alloy andesite alloy | 1 |\n| Mixer | cogwheel / andesite casing / whisk | 1 |\n| Drill | - andesite alloy / andesite alloy iron ingot andesite alloy / - andesite casing | 1 |\n| Saw | - iron plate / iron plate iron ingot iron plate / - andesite casing | 1 |\n| Crushing Wheel | andesite alloy andesite alloy andesite alloy / andesite alloy stones any planks / andesite alloy andesite alloy andesite alloy | 2 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
+  },
+  {
+   "slug": "steamworks-recipes-moving-items",
+   "title": "Moving items",
+   "category": "Steamworks",
+   "parent": "steamworks-recipes",
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Belt | dried kelp dried kelp dried kelp / iron ingot shaft iron ingot | 4 |\n| Chute | iron plate / iron ingot / iron plate | 4 |\n| Funnel | andesite alloy / dried kelp | 2 |\n| Depot | andesite alloy / andesite casing | 1 |\n| Ejector | golden plate / depot / cogwheel | 1 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
   },
   {
    "slug": "steamworks-recipes-karakuri-arm",
    "title": "Karakuri Arm",
    "category": "Steamworks",
    "parent": "steamworks-recipes",
-   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Karakuri Arm | brass plate cogwheel brass plate / - shaft - / iron plate ×3 | 1 |\n| Gripper Head | iron ingot - iron ingot / iron ingot - iron ingot / - brass plate - | 1 |\n| Placer Head | iron ingot piston iron ingot / - brass plate - | 1 |\n| Drill Head | - brass plate - / iron ingot ×3 / - iron ingot - | 1 |\n| Punch Card | paper iron nugget paper | 2 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Arm | brass plate cogwheel brass plate / - shaft / iron plate iron plate iron plate | 1 |\n| Arm Gripper | iron ingot - iron ingot / iron ingot - iron ingot / - brass plate | 1 |\n| Arm Placer | iron ingot piston iron ingot / - brass plate | 1 |\n| Arm Drill | - brass plate / iron ingot iron ingot iron ingot / - iron ingot | 1 |\n| Punch Card | paper iron nugget paper | 2 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
   },
   {
    "slug": "steamworks-recipes-trains",
    "title": "Trains",
    "category": "Steamworks",
    "parent": "steamworks-recipes",
-   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Steam Locomotive | brass plate cogwheel brass plate / brass plate furnace brass plate / - minecart - | 1 |\n| Passenger Wagon | plank ×3 / plank iron plate plank / - minecart - | 1 |\n| Cargo Wagon | plank - plank / plank chest plank / - minecart - | 1 |\n| Station | lantern sign lantern / - stick - / - stick - | 1 |\n| Signal | redstone lamp / iron plate / iron bars | 1 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Locomotive | brass plate cogwheel brass plate / brass plate furnace brass plate / - minecart | 1 |\n| Passenger Wagon | any planks any planks any planks / any planks iron plate any planks / - minecart | 1 |\n| Cargo Wagon | any planks - any planks / any planks chest any planks / - minecart | 1 |\n| Station | lantern any sign lantern / - stick / - stick | 1 |\n| Signal | redstone lamp / iron plate / iron bars | 1 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
   },
   {
    "slug": "steamworks-recipes-oil",
    "title": "Oil",
    "category": "Steamworks",
    "parent": "steamworks-recipes",
-   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Oil Dowsing Rod | - - copper ingot / - stick - / stick - - | 1 |\n| Pumpjack | brass plate piston brass plate / iron plate shaft iron plate / iron plate - iron plate | 1 |\n| Pipe | copper plate ×3 | 6 |\n| Tank | iron plate pipe iron plate / glass - glass / iron plate pipe iron plate | 1 |\n| Refinery | pipe tank pipe / brass plate kettle brass plate / brass plate blast furnace brass plate | 1 |\n| Empty Canister | - tin ingot - / tin ingot - tin ingot / tin ingot ×3 | 2 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Pipe | copper plate copper ingot copper plate | 4 |\n| Tank | copper plate / barrel / copper plate | 1 |\n| Pump | cogwheel / pipe | 1 |\n| Valve | iron plate / pipe | 1 |\n| Pumpjack | brass plate piston brass plate / iron plate shaft iron plate / iron plate - iron plate | 1 |\n| Refinery | pipe tank pipe / brass plate kettle brass plate / brass plate blast furnace brass plate | 1 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
+  },
+  {
+   "slug": "steamworks-recipes-tools",
+   "title": "Tools",
+   "category": "Steamworks",
+   "parent": "steamworks-recipes",
+   "content": "| Item | Grid | Makes |\n|---|---|---|\n| Wrench | - iron ingot iron ingot / stick iron ingot / stick | 1 |\n| Dowsing Rod | - copper ingot / - stick / stick | 1 |\n| Canister | - tin ingot / tin ingot - tin ingot / tin ingot tin ingot tin ingot | 2 |\n\nBack to [Steamworks Recipes](/wiki?page=steamworks-recipes)\n"
   },
   {
    "slug": "steamworks-recipes-smelting",

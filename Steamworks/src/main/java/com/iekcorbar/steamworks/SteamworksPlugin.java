@@ -24,6 +24,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
     private Kinetics kinetics;
     private Visuals visuals;
     private PartItems items;
+    private Manual manual;
     private NodeStorage storage;
     private Millstones millstones;
     private Hammers hammers;
@@ -63,6 +64,8 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         mixers.load(new File(getDataFolder(), "machines.yml"));
         items.registerRecipes();
 
+        manual = new Manual(this);
+        getServer().getPluginManager().registerEvents(manual, this);
         getServer().getPluginManager().registerEvents(new PartListener(this), this);
         // items sold by wandering traders (WanderingTrades hands out a plain paper, see TraderSwap)
         getServer().getPluginManager().registerEvents(new TraderSwap(this, "Steamworks", name -> {
@@ -201,6 +204,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
     Kinetics kinetics() { return kinetics; }
     Visuals visuals() { return visuals; }
     PartItems items() { return items; }
+    Manual manual() { return manual; }
     Adv adv() { return adv; }
     EasterEggs eggs() { return eggs; }
     Millstones millstones() { return millstones; }
@@ -411,6 +415,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
 
     void showInfo(KNode n, Player p) {
         if (n.type == PartType.KETTLE) eggs.kettleLook(n, p);
+        if (n.speed() != 0) manual.markSpinning(p, n.type);   // the manual knows what you have seen turn
         p.sendActionBar(info(n));
     }
 

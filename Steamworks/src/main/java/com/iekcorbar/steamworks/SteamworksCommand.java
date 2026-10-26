@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import com.iekcorbar.steamworks.trains.CarType;
 
 import java.util.ArrayList;
@@ -95,6 +96,13 @@ final class SteamworksCommand implements TabExecutor {
                 }
                 msg(s, "Gave " + (t != null ? t.displayName : mt != null ? mt.displayName : ot != null ? ot.displayName : dt != null ? dt.displayName : shape ? a[2] : ct.displayName) + " to " + target.getName() + ".");
             }
+            case "manual" -> {
+                if (!(s instanceof Player p)) return msg(s, "Players only.");
+                ItemStack book = plugin.manual().create(p);
+                for (var left : p.getInventory().addItem(book).values())
+                    p.getWorld().dropItemNaturally(p.getLocation(), left);
+                p.openBook(book);
+            }
             case "reload" -> {
                 if (!s.hasPermission("steamworks.admin")) return msg(s, "No permission.");
                 plugin.reload();
@@ -114,7 +122,7 @@ final class SteamworksCommand implements TabExecutor {
     public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
         List<String> out = new ArrayList<>();
         if (a.length == 1) {
-            for (String o : s.hasPermission("steamworks.admin") ? List.of("help", "info", "list", "give", "giveall", "reload") : List.of("help", "info", "list"))
+            for (String o : s.hasPermission("steamworks.admin") ? List.of("help", "info", "list", "manual", "give", "giveall", "reload") : List.of("help", "info", "list", "manual"))
                 if (o.startsWith(a[0].toLowerCase(Locale.ROOT))) out.add(o);
         } else if (a.length == 2 && a[0].equalsIgnoreCase("give")) {
             for (Player p : plugin.getServer().getOnlinePlayers())

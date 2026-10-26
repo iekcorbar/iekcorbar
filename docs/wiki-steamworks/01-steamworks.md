@@ -18,7 +18,7 @@ Steamworks adds steampunk and Japanese-style machines to Iekcorbar: shafts and c
 
 ### Getting started
 
-1. Craft a few **Shafts** (2 copper ingots, stacked) and a **Hand Crank**.
+1. Craft a few **Shafts**: andesite + iron nuggets makes **Andesite Alloy**, two alloys stacked make eight shafts. Also make a **Hand Crank**.
 2. Place a **Millstone**, a shaft under it and the crank under the shaft (see Processing Machines).
 3. Hold right-click on the crank. Put cobblestone in the millstone and watch it become gravel.
 4. Build a **Water Wheel** in flowing water for power that never stops.

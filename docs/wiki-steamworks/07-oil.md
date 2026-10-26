@@ -15,6 +15,12 @@ About 1 in 12 overworld chunks has an oil field underneath - more often in deser
 
 Right-click a tank, pumpjack or refinery with an empty hand to see what it is doing.
 
+## Pumps and Valves
+A **Mechanical Pump** and a **Fluid Valve** are pipe pieces with a personality of their own - both are powered by the rotation network, just like machines.
+
+* **Pump** - a junction on the line that can also *drink and fill*: right-click it with a canister to take 1,000 mB out of the whole connected network, or to pour a canister in. Handy far from any tank: one tap and the oil is in your bucket.
+* **Valve** - a shut-off tap. It only lets fluid pass **while it turns**; stop its network (or a clutch upstream) and the line is cut where the valve sits. Place one before your refinery to decide what happens to your oil while you sleep.
+
 ## Canisters
 Craft them from tin. Right-click a tank with an **Empty Canister** to take 1,000 mB; right-click with a full canister to pour it in.
 * A **Fuel Canister** in a locomotive gives 5 minutes of steam.

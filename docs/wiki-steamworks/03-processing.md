@@ -85,7 +85,7 @@ The **Kettle** holds ingredients and water; the **Mixer** on top of it stirs the
 
 | Ingredients | Needs | Result |
 |---|---|---|
-| 3 Copper Ingot + 1 Zinc Ingot | heat | 4 Brass Ingot |
+| 1 Copper Ingot + 1 Zinc Ingot | heat | 1 Brass Ingot |
 | Dirt | ¼ bucket water | Mud |
 | Sand + Dirt | ¼ bucket water | 2 Clay Balls |
 | 3 Wheat | water, heat | Bread |

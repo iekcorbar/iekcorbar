@@ -71,6 +71,12 @@ final class PartListener implements Listener {
             hit(n, p);
             return;
         }
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK && e.getAction() != Action.RIGHT_CLICK_AIR) return;
+        if (plugin.manual().isManual(e.getItem())) {            // the manual always opens, wherever you click
+            e.setCancelled(true);
+            p.openBook(plugin.manual().create(p));
+            return;
+        }
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         ItemStack hand = e.getItem();
         PartType held = plugin.items().typeOf(hand);
@@ -229,6 +235,7 @@ final class PartListener implements Listener {
         lastPlaceTarget = tk;
         lastPlaceNano = now;
         plugin.adv().grant(p, "placed");
+        plugin.manual().markPlaced(p, type);
         if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
         target.getWorld().playSound(n.center(), type.placeSound(), 1f, 0.9f);
         p.swingMainHand();

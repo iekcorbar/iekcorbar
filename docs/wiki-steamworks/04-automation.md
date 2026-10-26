@@ -25,6 +25,18 @@ Lay it out in the direction you look; pieces in a row work as one belt. Power it
 * Under a **Steam Hammer** (two blocks above the belt) items wait until they are pressed. A **Bellows Fan** blowing along the belt processes items while they ride.
 * Load: 0.5 Tq per RPM per piece. 16 RPM = 1.3 blocks per second.
 
+## Chute
+The belt's quiet cousin: a low trough with brass lips. Powered, it slides items along it like a belt (a bit slower); unpowered, things simply drop through it. Great for feeding the top of a stack of machines.
+
+## Funnel
+A chute with a mouth: anything falling on its lid is sucked in and sent along. At the end of a line a funnel feeds chests, kettles **and millstones** (it drops the item straight into the stone). Reverse the flow with a Gearshift, just like belts.
+
+## Depot & Weighted Ejector
+The **Depot** is a small pedestal: items delivered to it wait there, floating on the dish. An **Ejector** pointed at a depot (or with something on its own lid) hurls the item in the direction it faces - over a wall, onto a far belt, into the next funnel. Both need rotation; the ejector throws once every second at most.
+
+## Steam Whistle
+A copper horn on a pipe stub. Right-click it to toot across the square - factory crews use it for shift change. No power needed, purely for the joy of it.
+
 ## Karakuri Arm
 A programmable robot arm, powered **from below**, with swappable tool heads:
 

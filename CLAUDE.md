@@ -639,3 +639,24 @@ fluid valve/stoomfluit met Create-recepten + eigen modellen.
 ### Steamworks 0.3.17 - batch 2: item-logistiek + fluidie (2026-10-26, nacht)
 
 7 nieuwe PartTypes met Create-recepten uit hun jar: CHUTE (glijbaan A/I/A iron plates x4) en FUNNEL (alloy+dried kelp x2) draaien mee in de belt-loop (Belts.direction/tick familie-check: belt/chute/funnel geven elkaar door), funnel zuigt items uit de kolom boven zich (mundbox y+1.5..2.6, alleen powered). DEPOT (alloy+casing) is een schap: items die eenlijnig op een depot leveren blijven erboven staan; EJECTOR (gold plate+depot+cog, throwt naar facing) pakt items van eigen dak OF van het depot waar hij naar kijkt en werpt ze weg (vx .55/vy .38, cooldown 16t, block.tripwire.attach). PUMP (cog+pipe, static+spin-as) = tank-api op een pijpleiding: rechtermuis met canister door het hele netwerk heengaand/vullen via Oil.pumpInteract. VALVE (iron plate+pipe) geleidt vloeistof ALLEEN zolang zijn netwerk draait (Oil.conducts-check in de tanks-BFS) - een afzetklep dus. WHISTLE (gold plate+copper) = rechts-kik toet-je (bell.use+resonate, alleen zonder blok in de hand). Kinetics: belts-lijst uitgebreid met chute/funnel + nieuwe ejectors-set (aan/uit bij add/remove), canRotate/turnFace (facing-groep + horizontale groep), ports: ejector=facing-opposite, depot/whistle not-kinetic. Visuals/PartListener/recipes/KNode(ejectUntil)/machines: zie commits. FMM: 7 nieuwe models (make_models.py, funnel-depot-ejector-pump-valve-whistle-chute) - nu 26 nieuwe files in deploy/fmm-steamworks. Site-parser build-recipes-data.js fixte een echte bug: //-commentaren AAN END van regels lieten statements aan elkaar lijmen (alle 0.3.16-comment-rijen werden overgeslagen) -> nu strip-anywhere //; steamworks 183 recipes. mvn groen. Nog te controleren op de server: afstelling worp-afstand en funnel-vs-ketel interactie na deploy.
+
+### Steamworks 0.3.18 - interactief Ingenieurshandboek + wiki-sync (2026-10-26, nacht)
+
+Manual.java: /sw manual geeft een WRITTEN_BOOK met het engineers_manual FMM-model wiens pagina's
+BIJ ELK OPENEN opnieuw gebouwd worden: klikbare inhoud (change_page), [recipe]-knoppen per onderdeel
+(run_command /zukan), en een voortgangs-checklist in de player-PDC (steamworks:manual_progress,
+"part:PSC;..."): O geplaatst (PartListener.place), O gezien-draaien (showInfo met speed!=0),
+O gecraft (CraftItemEvent). Quick-Start bladzijde, Materials/Tools-hoofdstukken, tip per
+hoofdstuk. API-les 26.2: geen WrittenBookMeta meer -> DataComponentTypes.WRITTEN_BOOK_CONTENT
+builder, Player.openBook(item) 1-arg, ClickEvent.runCommand camelCase, result via
+e.getInventory().getResult(). Handboek is 13 bladzijden (max 16: 7 hoofdstukken + materials +
+progress), PartListener-intercept voor elke rechtsklik.
+
+Wiki: scripts/build-wiki-recipes-md.py genereert 08-recipes.md uit recipes-data.json (de hand-tabel
+was drift-gevoelig - was precies het probleem van vanavond; secties: Materials, Power, Machines,
+Moving items, Karakuri, Trains, Oil, Tools; conversie-recepten verschijnen als tweede regel).
+04: Chute/Funnel/Depot+Ejector/Whistle-secties, 07: Pumps and Valves, 01+03: Create-recepten
+(Shaft nu alloy-ketting, brass 1:1), 00: /sw manual. Seed opnieuw: steamworks 59 pagina's.
+De polish-werkwijze staat vastgelegd als skill 'steamworks-polish' (~/.claude/skills/).
+mvn groen; Steamworks-0.3.18.jar in deploy/ (0.3.17 ervoor was nooit live - vervangen).
+Nog open op deze missie: Steamworks-Additions losse jar + interactieve handboek test in het spel.

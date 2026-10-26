@@ -23,6 +23,7 @@ Read the pages in order if you are new: first **Power and Transmission** (every 
 * Machines **share the rotation** of one network. Too much load and the network stops by itself, it never breaks your parts.
 * Steamworks works together with our other plugins: Kitchen uses its flour and mixer, Kura storage can feed belts and arms, and Zukan (the recipe book) shows every recipe.
 * Stuck? Right-click any part with an empty hand to see its speed and what is wrong.
+* In-game there is the **Engineer's Manual**: type `/sw manual` anywhere for a living guide with clickable contents, recipe links and your own build progress.
 
 ### Start here
 
