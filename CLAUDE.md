@@ -424,6 +424,8 @@ alleen README.md, GEEN .gitignore, 104 losse dingen ongezien. Gedaan:
 - Restant: GitHub default branch staat nog op `master` (verwijderen wordt geweigerd); gebruiker moet in
   github.com/baaye16/iekcorbar-final/settings → Branches → default op `main` zetten, daarna `git push
   origin --delete master`.
+- Beslissing (gebruiker, 2026-10-26): het db-wachtwoord wordt NIET veranderd ondanks dat het in de
+  git-history van 2 commits opdook - repo is privé en alleen-access, risico aanvaard. Niet meer over zeuren.
 - Let op: .env.local zit in géén zip en wordt van git gehouden; plugin-data-db.js noemt nog wel het
   sql1.revivenode.com + db-naam in commentaar (geen ww) - ok voor privé-repo, eventueel anonimiseren.
 
