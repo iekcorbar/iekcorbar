@@ -11,9 +11,10 @@ Iekcorbar's countryside has new animals living next to the familiar ones: deer i
 ### How it works
 
 1. **Get a spyglass** (copper + amethyst shard, as in vanilla).
-2. **Find an animal** in the right biome. Some only come out by day, fireflies only at night, and snails like the rain.
-3. **Watch it through the spyglass** for about a second. It goes into your **Field Journal** and you get an advancement.
-4. **Read your journal** with **/wildlife journal**, or craft a **Field Journal** (book + feather + wheat seeds) and right-click it. Species you haven't found yet show a hint.
+2. **Find an animal** in the right biome. Some only come out by day, fireflies only at night, and snails like the rain. Shy species are also rarer in the wild.
+3. **Approach like a naturalist, not a hunter.** Deer, zebras, cranes and songbirds bolt when an upright or sprinting player gets close; a **sneaking, still** one may come near enough. Tortoises hide, hedgehogs curl - even from a friendly boot.
+4. **Watch it through the spyglass** until the dots fill. A calm species takes a second; a shy one up to four - and **from far away it goes twice as fast** while standing right in front of it takes twice as long. A bolted animal resets the meter.
+5. **Read your journal** with **/wildlife journal**, or craft a **Field Journal** (book + feather + wheat seeds) and right-click it. Species you haven't found yet show a hint - recorded ones show a **true fact** and a **myth** about the animal. Some of those facts surprise even old hands.
 
 ### Rare looks
 

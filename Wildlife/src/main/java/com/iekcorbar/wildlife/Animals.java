@@ -65,7 +65,7 @@ final class Animals implements Listener {
         final String model;
         final boolean baby;
         boolean attached, curled, sleeping, hiding, waving, frozen;
-        long busyUntil, tailBack, rideUntil, awakeAt, panicUntil;
+        long busyUntil, tailBack, rideUntil, awakeAt, panicUntil, fleeUntil;
         /** Babies: world time they grow up, and how long was left when a golden dandelion froze them. Adults: love mode (plugin tick) and next breeding (world time). */
         long growAt, frozenLeft, loveUntil, breedAfter;
         org.bukkit.Location threat;
@@ -296,21 +296,23 @@ final class Animals implements Listener {
                     }
                 }
             }
-            switch (a.species) {
-                case DEER, LIZARD -> {
-                    Player threat = nearestPlayer(e, a.species == Species.DEER ? 12 : 6);
-                    if (threat != null && !threat.isSneaking()) {
-                        if (a.species == Species.DEER && tick >= a.busyUntil) {
-                            w.playSound(e.getLocation(), "wildlife:deer.snort", 0.8f, 1f);
-                            a.busyUntil = tick + 100;
-                        }
-                        flee(e, threat, 2.6);
-                    }
-                    else if (a.species == Species.DEER && r.nextInt(120) == 0 && tick >= a.busyUntil) {
-                        plugin.fmm().play(e, "eat", false);
-                        a.busyUntil = tick + 50;
-                    }
+            // General safari shyness (0.6.0): tiered flight radius - an upright/sprinting player
+            // inside the animal's radius makes it bolt; a sneaking, still one can watch and record.
+            int radius = a.species.fleeRadius();
+            if (radius > 0 && tick >= a.busyUntil) {
+                Player threat = nearestPlayer(e, radius);
+                if (threat != null && (!threat.isSneaking() || threat.isSprinting())) {
+                    if (a.species == Species.DEER) w.playSound(e.getLocation(), "wildlife:deer.snort", 0.8f, 1f);
+                    flee(e, threat, 2.2 + a.species.shy() * 0.25);
+                    a.fleeUntil = tick + 40; // any running spyglass observation breaks for 2 s
+                    a.busyUntil = tick + 20 + 10 * a.species.shy(); // one reaction per 1-1.5 s, no jittering
                 }
+                else if (a.species == Species.DEER && r.nextInt(120) == 0 && tick >= a.busyUntil) {
+                    plugin.fmm().play(e, "eat", false);
+                    a.busyUntil = tick + 50;
+                }
+            }
+            switch (a.species) {
                 case HEDGEHOG, SNAIL -> {
                     boolean scared = e instanceof Armadillo ar && ar.getState() != Armadillo.State.IDLE;
                     Player close = nearestPlayer(e, 3);

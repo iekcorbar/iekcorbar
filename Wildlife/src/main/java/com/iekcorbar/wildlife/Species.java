@@ -199,6 +199,39 @@ enum Species {
         return name().toLowerCase(Locale.ROOT);
     }
 
+    /**
+     * Safari shyness tier (0.6.0). 0 = never bolts (hedgehog curls, tortoise hides, capybara simply
+     * doesn't care, the big/dangerous ones don't run from us); 1 = nervous close-up only; 2 = bolts
+     * from any unsneaking player within 18 blocks; 3 = bolts from 24 and takes real patience.
+     * Also drives how long the spyglass must stay on the animal (Journal.observeChecks).
+     */
+    int shy() {
+        return switch (this) {
+            case DEER, ZEBRA, KANGAROO, SONGBIRD, MACAW, LIZARD, MOLE, TANUKI, CRANE -> 3;
+            case BOAR, DUCK, CRAB, KOALA, MACAQUE, OSTRICH, ELEPHANT -> 2;
+            default -> 0;
+        };
+    }
+
+    /** Spyglass 5-tick checks needed to record a sighting: longer for shyer animals. */
+    int observeChecks() {
+        return switch (shy()) {
+            case 3 -> 16; // 4 s of steady, undisturbed watching
+            case 2 -> 8;  // 2 s
+            default -> 4; // 1 s
+        };
+    }
+
+    /** Flight radius for this animal's tier; 0 = never flees a player. */
+    int fleeRadius() {
+        return switch (shy()) {
+            case 3 -> 24;
+            case 2 -> 18;
+            case 1 -> 10;
+            default -> 0;
+        };
+    }
+
     /** Common looks (songbirds come in four colours, macaws in three). */
     List<String> models() {
         if (this == SONGBIRD) return List.of("wl_songbird", "wl_songbird_cardinal", "wl_songbird_canary", "wl_songbird_sparrow");

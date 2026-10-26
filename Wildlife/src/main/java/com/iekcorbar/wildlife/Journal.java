@@ -39,7 +39,6 @@ import java.util.UUID;
  * technique as IekcorbarSiteSync's AdvancementManager), again after /minecraft:reload.
  */
 final class Journal implements Listener {
-    private static final int OBSERVE_CHECKS = 4; // x 5 ticks = 1 second through the spyglass
 
     private record Watch(UUID target, int checks) {}
 
@@ -82,12 +81,18 @@ final class Journal implements Listener {
             }
             Watch w = watching.get(p.getUniqueId());
             int checks = w != null && w.target().equals(t.getUniqueId()) ? w.checks() + 1 : 1;
+            if (a.fleeUntil > plugin.tick || a.panicUntil > plugin.tick) checks = 0; // a running animal cannot be observed
             watching.put(p.getUniqueId(), new Watch(t.getUniqueId(), checks));
+            // Safari (0.6.0): shy animals need longer; far-off steady watching pays, point-blank does not.
+            int need = a.species.observeChecks();
+            double dist = t.getLocation().distance(p.getLocation());
+            if (dist > 45) need = Math.max(2, need / 2);
+            else if (dist < 10) need = need * 2;
             boolean known = seen(p, false).contains(a.species.id()) && (!a.rare || seen(p, true).contains(a.species.id()));
             if (known) {
                 p.sendActionBar(Component.text(a.name(), NamedTextColor.GREEN).append(Component.text("  - in your journal", NamedTextColor.GRAY)));
-            } else if (checks < OBSERVE_CHECKS) {
-                p.sendActionBar(Component.text("Observing", NamedTextColor.GOLD).append(Component.text(" " + "•".repeat(checks) + "◦".repeat(OBSERVE_CHECKS - checks), NamedTextColor.YELLOW)));
+            } else if (checks < need) {
+                p.sendActionBar(Component.text("Observing", NamedTextColor.GOLD).append(Component.text(" " + "•".repeat(Math.min(checks, need)) + "◦".repeat(Math.max(0, need - checks)), NamedTextColor.YELLOW)));
             } else {
                 record(p, a);
             }
@@ -129,12 +134,21 @@ final class Journal implements Listener {
         pages.add(Component.text("Field Journal\n\n", NamedTextColor.DARK_GREEN).decorate(TextDecoration.BOLD)
                 .append(Component.text("Species: " + seen.size() + " / " + Species.values().length + "\n", NamedTextColor.BLACK).decoration(TextDecoration.BOLD, false))
                 .append(Component.text("Rare looks: " + rares.size() + " / " + Species.values().length + "\n\n", NamedTextColor.DARK_PURPLE).decoration(TextDecoration.BOLD, false))
-                .append(Component.text("Watch an animal through a spyglass for a moment to record it.\n\nAnimals are shy and rare - each lives in its own kind of place.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, false)));
+                .append(Component.text("Watch an animal through a spyglass to record it - shy ones take longer.\n\nWalk or sprint close and they bolt; sneak up slowly and keep your distance. A steady view from afar records fastest.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, false)));
         for (Species s : Species.values()) {
             if (seen.contains(s.id())) {
                 Component page = Component.text(s.displayName + "\n", NamedTextColor.DARK_GREEN).decorate(TextDecoration.BOLD)
                         .append(Component.text(where(s) + "\n\n", NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, false).decorate(TextDecoration.ITALIC))
-                        .append(Component.text(s.notes + "\n\n", NamedTextColor.BLACK).decoration(TextDecoration.BOLD, false))
+                        .append(Component.text(s.notes + "\n", NamedTextColor.BLACK).decoration(TextDecoration.BOLD, false));
+                String[] fk = Facts.of(s);
+                if (fk != null) {
+                    page = page.append(Component.text("\nDid you know? ", NamedTextColor.DARK_AQUA).decoration(TextDecoration.BOLD, true))
+                            .append(Component.text(fk[0] + "\n", NamedTextColor.BLACK).decoration(TextDecoration.BOLD, false))
+                            .append(Component.text("Myth: ", NamedTextColor.DARK_RED).decorate(TextDecoration.BOLD)
+                                    .append(Component.text(fk[1], NamedTextColor.DARK_GRAY)).decoration(TextDecoration.BOLD, false).decorate(TextDecoration.ITALIC))
+                            .append(Component.text("\n", NamedTextColor.BLACK));
+                }
+                page = page.append(Component.text("\n", NamedTextColor.BLACK))
                         .append(rares.contains(s.id())
                                 ? Component.text("Rare: " + s.rareName() + " ✔", NamedTextColor.DARK_PURPLE).decoration(TextDecoration.BOLD, false)
                                 : Component.text("Rare: ???", NamedTextColor.GRAY).decoration(TextDecoration.BOLD, false));
