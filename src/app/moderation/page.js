@@ -327,6 +327,7 @@ function ModerationContent() {
   const [settingsJavaVersion, setSettingsJavaVersion] = useState('');
   const [settingsMapUrl, setSettingsMapUrl] = useState('');
   const [settingsServerAddress, setSettingsServerAddress] = useState('');
+  const [settingsDonatePaypal, setSettingsDonatePaypal] = useState('');
   const [settingsSaved, setSettingsSaved] = useState(false);
 
   // Admin-only raw RCON terminal (Console tab)
@@ -1345,6 +1346,7 @@ function ModerationContent() {
         setSettingsJavaVersion(data.settings.java_version || '');
         setSettingsMapUrl(data.settings.map_url || '');
         setSettingsServerAddress(data.settings.server_address || '');
+        setSettingsDonatePaypal(data.settings.donate_paypal_url || '');
       }
     } catch (err) { console.error("Failed to load settings", err); }
   }
@@ -5268,7 +5270,7 @@ function ModerationContent() {
                   e.preventDefault();
                   setError(''); setSuccessMsg('');
                   try {
-                    const res = await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ java_version: settingsJavaVersion, map_url: settingsMapUrl, server_address: settingsServerAddress, role: user.role }) });
+                    const res = await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ java_version: settingsJavaVersion, map_url: settingsMapUrl, server_address: settingsServerAddress, donate_paypal_url: settingsDonatePaypal, role: user.role }) });
                     const data = await res.json();
                     if (res.ok) { setSuccessMsg('Settings saved!'); setSettingsSaved(true); setTimeout(() => { setSuccessMsg(''); setSettingsSaved(false); }, 3000); }
                     else setError(data.error);
@@ -5288,6 +5290,11 @@ function ModerationContent() {
                     <label className="block text-[9px] uppercase font-bold text-sp-gold/80">Live Map URL</label>
                     <p className="text-[10px] text-text-warm/40">Players will be directed to this URL from the Map page. Leave empty to show a placeholder.</p>
                     <input type="url" value={settingsMapUrl} onChange={e => setSettingsMapUrl(e.target.value)} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2.5 focus:outline-hidden focus:border-sp-gold" placeholder="https://map.yourserver.com" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-[9px] uppercase font-bold text-sp-gold/80">Donation PayPal.me URL</label>
+                    <p className="text-[10px] text-text-warm/40">The link the /donate page's button opens (e.g. <code>https://paypal.me/yourname</code>). Leave empty to hide the donate button there — the page then explains donations aren't open right now.</p>
+                    <input type="url" value={settingsDonatePaypal} onChange={e => setSettingsDonatePaypal(e.target.value)} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2.5 focus:outline-hidden focus:border-sp-gold font-mono" placeholder="https://paypal.me/…" />
                   </div>
                   <button type="submit" className={`px-6 py-3 font-bold uppercase text-sm rounded-lg transition-all cursor-pointer font-serif flex items-center gap-2 ${settingsSaved ? 'bg-green-700 border-green-600 text-white' : 'bg-sp-gold hover:bg-white text-black border border-transparent'}`}>
                     <Settings className="w-4 h-4" /> {settingsSaved ? 'Saved!' : 'Save Settings'}

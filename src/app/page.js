@@ -17,6 +17,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Sparkles,
+  HeartHandshake,
   MessageSquare,
   Shield,
   Activity,
@@ -319,6 +320,26 @@ export default function HomePage() {
             </div>
           )}
         </div>
+      </section>
+
+      {/* PROJECT NOTICE — added 2026-10-26 alongside the donation section, as
+          the plain-spoken legal framing the user asked for on the homepage
+          itself: private hobby project (no company/KvK), the Shop only ever
+          trades in-game currency that can't be bought with real money, and
+          donations are purely voluntary. Kept compact so it doesn't compete
+          with the hero CTA. */}
+      <section className="bg-neutral-900/30 border border-sp-bronze/40 rounded-xl px-5 py-4 text-center space-y-1">
+        <p className="text-xs text-text-warm/70 leading-relaxed">
+          <HeartHandshake className="w-4 h-4 text-sp-copper inline-block mr-1.5" />
+          <strong className="text-white">iekcorbar is a private community project, not a company.</strong>{' '}
+          The Shop works entirely with in-game currencies you earn by playing — nothing here is ever sold for real money.
+          Running the server does cost us money, so voluntary donations are welcome, never expected.
+        </p>
+        <p className="text-[10px] text-text-warm/40">
+          <Link href="/donate" className="hover:text-white underline">Support the project</Link> ·{' '}
+          <Link href="/terms" className="hover:text-white underline">Terms</Link> ·{' '}
+          <Link href="/privacy" className="hover:text-white underline">Privacy</Link>
+        </p>
       </section>
 
       {/* APP CTA — Android app / iPhone home screen (hidden for people already using it) */}

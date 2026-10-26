@@ -35,6 +35,7 @@ import {
   Users2,
   Wine,
   Trophy,
+  HeartHandshake,
   Apple,
   Smartphone,
   Bug,
@@ -905,6 +906,7 @@ export default function ClientProviders({ children }) {
                     { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                     { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                     { href: '/shop', label: 'Shop', icon: ShoppingBag, match: (p) => p.startsWith('/shop') },
+                    { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                     { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
                   ]}
                 />
@@ -1100,6 +1102,7 @@ export default function ClientProviders({ children }) {
                 { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                 { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                 { href: '/shop', label: 'Shop', icon: ShoppingBag, match: (p) => p.startsWith('/shop') },
+                { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                 { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
               ].map(({ href, label, icon: Icon, match }) => (
                 <Link
@@ -1619,6 +1622,7 @@ export default function ClientProviders({ children }) {
                       <li>Your email address</li>
                       <li>Your password (cryptographically secured via hashing)</li>
                     </ul>
+                    <p className="mt-1">If you donate via our Support page, PayPal handles the payment entirely — we never see or store bank or card details.</p>
                   </div>
 
                   <div>

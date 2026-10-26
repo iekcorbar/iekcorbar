@@ -10,7 +10,7 @@ export const metadata = {
   title: 'Privacy Policy — iekcorbar'
 };
 
-const LAST_UPDATED = '27 September 2026';
+const LAST_UPDATED = '26 October 2026';
 
 function Section({ icon: Icon, title, children }) {
   return (
@@ -47,6 +47,7 @@ export default function PrivacyPage() {
           <li>Your password (cryptographically secured via hashing — never stored in plain text)</li>
         </ul>
         <p>While you use the site, we also store what you create or do on it yourself: chat messages, journal entries, event and project sign-ups, votes, friendships and your notification history.</p>
+        <p>If you choose to <Link href="/donate" className="text-sp-gold hover:text-white underline font-bold">donate</Link>, the payment itself is handled entirely by PayPal — we never see or store your bank or card details. We only keep what the donation generates on our side (for example a thank-you record linked to your account, if you tell us who you are), and donor names or emails are never shared beyond the project team.</p>
       </Section>
 
       <Section icon={Smartphone} title="2. The Android app">
