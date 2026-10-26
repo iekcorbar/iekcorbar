@@ -414,8 +414,8 @@ alleen README.md, GEEN .gitignore, 104 losse dingen ongezien. Gedaan:
   forgotten players/, headdatabase/, src/lib/db.json, .env*, pluginset-aangepast/, upload-*/,
   output_browser/, _archief/, logs.
 - **Secrets uit de bron gehaald** (stonden WÉL in bestanden die mee zouden):
-  IekcorbarSiteSync default config.yml (host/username/password) -> TODO's; `M@thanya13!`-val fallbacks
-  in src/lib/db.js, src/lib/migrate.js en MySQLSync.java -> TODO/omgezet. Echte waarden leven verder in
+  IekcorbarSiteSync default config.yml (host/username/password) -> TODO's; het echte db-wachtwoord
+  als fallback in src/lib/db.js, src/lib/migrate.js en MySQLSync.java -> TODO/omgezet. Echte waarden leven verder in
   .env.local (nooit gecommit) en plugins/IekcorbarSiteSync/config.yml op de server.
   SiteSync-jar 1.15.0 in de zip/root bevat nog de OUDE default-config: prima voor de server (config.yml
   there al bestaat), pas herbouwen als ooit een verse install.
