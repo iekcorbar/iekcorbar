@@ -1,20 +1,29 @@
-"""Merges all our own resource packs into ONE reproducible zip: Iekcorbar-pack.zip.
+"""Merges ALL resource packs into ONE reproducible zip: iekcorbar-packv2.zip.
 
 Why: ResourcePackManager mixes every zip in plugins/ResourcePackManager/mixer/ into one pack and
 re-sends it to players whenever the mix changes. Six small zips of ours meant six inputs that could
 each trigger a re-mix, and every build wrote new timestamps, so the bytes (and hash) changed even
 when nothing had. This script writes one zip with fixed timestamps and sorted entries: the same
-content always gives the same bytes.
+content always gives the same bytes. Since 2026-10-26 this single file is named
+iekcorbar-packv2.zip - ONE zip in the mixer, nothing else; it replaced the old Iekcorbar-pack.zip
+because garden/brewery models on the server had drifted out of sync (stale per-plugin copies in
+the mixer fighting the merged copy).
 
-Inputs (built by each plugin's tools/make_pack.py first):
+Inputs, part 1 - our own packs (built by each plugin's tools/make_pack.py first):
   Steamworks/resourcepack/Steamworks-blocks.zip, Kitchen/resourcepack/Kitchen-pack.zip,
   Sakagura/resourcepack/Sakagura-pack.zip, Relics/resourcepack/Relics-pack.zip,
   Kura/resourcepack/Kura-pack.zip, Wildlife/resourcepack/Wildlife-sounds.zip (any that exist)
-The packs use separate namespaces; the only shared paths are pack.mcmeta (identical) and, if two
-packs ever ship the same file with different content, this script stops with an error.
+Inputs, part 2 - third-party exports currently served from the mixer, read from the local backup
+"E:\\backups server\\rspm mixer": EliteMobs, FreeMinecraftModels (+shared), TechCore,
+ValhallaMMO (default+resource), BackpackPlus and ResourcePackManager's own two. Our sources are
+processed first: when a third-party zip ships the same path with different bytes our version WINS
+and the overwrite is printed (currently the two groups share zero paths - verified 2026-10-26).
+If one of those plugins later re-exports a newer pack, drop the new zip in that backup folder and
+re-run this script, then upload the new iekcorbar-packv2.zip to the mixer.
 
-Usage (repo root): python -I scripts/merge-packs.py   ->  Iekcorbar-pack.zip
-Then replace those zips in plugins/ResourcePackManager/mixer/ by this single file.
+Usage (repo root): python -I scripts/merge-packs.py   ->  iekcorbar-packv2.zip
+Then put ONLY that file in plugins/ResourcePackManager/mixer/ (delete old Iekcorbar-pack.zip,
+the per-plugin zips that used to live there AND the third-party zips - they are inside now).
 """
 import glob, hashlib, json, os, sys, zipfile
 
@@ -33,8 +42,24 @@ SOURCES = [
     "Hihou/resourcepack/Hihou-pack.zip",
     "IekcorbarSiteSync/resourcepack/Mmo-pack.zip",
 ]
-OUT = "Iekcorbar-pack.zip"
+OUT = "iekcorbar-packv2.zip"
 FIXED = (2026, 1, 1, 0, 0, 0)
+
+# Server-mixer copies of the plugin-owned packs (measured 2026-10-26 from the backup at E:\.
+# Garden/Sakagura/Relics are NOT here: their authoritative build is our SOURCES above.
+# Empty plugin zips are skipped at runtime. Refresh these copies after a plugin update and rerun.
+THIRD_DIR = r"E:\backups server\rspm mixer"
+THIRD_SOURCES = [
+    "BackpackPlus_resource_pack.zip",
+    "EliteMobs_resource_pack.zip",
+    "FreeMinecraftModels_resource_pack.zip",
+    "FreeMinecraftModels_shared_resource_pack.zip",
+    "ResourcePackManager_resource_pack.zip",
+    "ResourcePackManager_shared_resource_pack.zip",
+    "TechCore_resource_pack.zip",
+    "ValhallaMMO_default.zip",
+    "ValhallaMMO_resource_pack.zip",
+]
 
 FACES = {"north": (2, 0), "south": (2, 1), "west": (0, 0), "east": (0, 1), "down": (1, 0), "up": (1, 1)}
 
@@ -75,22 +100,110 @@ def fix_zfight(model):
 files = {}
 owner = {}
 found = []
+dropped = []
+merged = []
+
+
+def json_union(name, a, b):
+    """Merge two colliding JSONs the way the game's own pack stack would want: plugins that all
+    ship their own atlases/blocks.json, font/default.json or items/<vanilla>.json each add list
+    entries (atlas sources, font providers, custom-model-data ranges) - union them instead of
+    letting one zip silently kill the others' textures. Returns merged bytes, or None when the
+    files are structurally different (then the first one simply wins, like RPM did before)."""
+    try:
+        ja, jb = json.loads(a), json.loads(b)
+    except ValueError:
+        return None
+    if not isinstance(ja, dict) or not isinstance(jb, dict):
+        return None
+    key = lambda s: json.dumps(s, sort_keys=True)
+
+    def list_union(field):
+        if isinstance(ja.get(field), list) and isinstance(jb.get(field), list):
+            have = {key(s) for s in ja[field]}
+            add = [s for s in jb[field] if key(s) not in have]
+            if add:
+                ja[field] = ja[field] + add
+            return True
+        return False
+
+    if "/atlases/" in name and list_union("sources"):
+        return json.dumps(ja, indent=1).encode("utf-8")
+    if "/font/" in name and list_union("providers"):
+        return json.dumps(ja, indent=1).encode("utf-8")
+    if name.endswith("sounds.json") and all(isinstance(v, dict) for v in ja.values()) and all(isinstance(v, dict) for v in jb.values()):
+        for k, v in jb.items():
+            ja.setdefault(k, v)
+        return json.dumps(ja, indent=1).encode("utf-8")
+    ma, mb = ja.get("model"), jb.get("model")
+    if "/items/" in name and isinstance(ma, dict) and isinstance(mb, dict) \
+            and ma.get("type") == "range_dispatch" == mb.get("type") \
+            and isinstance(ma.get("entries"), list) and isinstance(mb.get("entries"), list):
+        have = {key(s) for s in ma["entries"]}
+        add = [s for s in mb["entries"] if key(s) not in have]
+        # range_dispatch wants its thresholds in ascending order
+        ma["entries"] = sorted(ma["entries"] + add, key=lambda s: s.get("threshold", 0))
+        return json.dumps(ja, indent=1).encode("utf-8")
+    return None
+
+
+def merge(path, ours):
+    """One source zip into files. Ours (SOURCES) are read first and NEVER lose: same path from a
+    plugin-owned zip with different bytes is dropped and listed at the end. Plugin zips colliding
+    with each other on atlas/font/sounds/items JSON get their list entries UNIONED (json_union);
+    anything else stays first-wins, like RPM's own overlay order on the server did before. Two of
+    our OWN packs disagreeing stays a hard error - that is ours bug, not the mixer's."""
+    with zipfile.ZipFile(path) as z:
+        for name in z.namelist():
+            if name.endswith("/"):
+                continue
+            data = z.read(name)
+            if name not in files:
+                files[name] = data
+                owner[name] = "ours:" + path if ours else path
+                continue
+            if files[name] == data or name == "pack.mcmeta":
+                continue  # identical bytes, or the mcmeta we overwrite ourselves at the end
+            if owner[name].startswith("ours:"):
+                if ours:
+                    sys.exit(f"CONFLICT: {name} differs between our own packs {owner[name][5:]} and {path}")
+                dropped.append((name, path))  # plugin copy loses against ours
+                continue
+            if not ours:
+                if name.endswith(".json"):
+                    m = json_union(name, files[name], data)
+                    if m is not None:
+                        files[name] = m
+                        dropped_note = f"union-merged {name} <- {os.path.basename(path)}"
+                        merged.append(dropped_note)
+                        continue
+                dropped.append((name, path))  # plugin vs plugin: earlier one wins
+
+
 for src in SOURCES:
     if not os.path.exists(src):
         print("skipping (not built):", src)
         continue
     found.append(src)
-    with zipfile.ZipFile(src) as z:
-        for name in z.namelist():
-            if name.endswith("/"):
-                continue
-            data = z.read(name)
-            if name in files and files[name] != data:
-                if name == "pack.mcmeta":
-                    continue  # first pack's wins; all ours say the same
-                sys.exit(f"CONFLICT: {name} differs between {owner[name]} and {src}")
-            files.setdefault(name, data)
-            owner.setdefault(name, src)
+    merge(src, True)
+
+for src in THIRD_SOURCES:
+    p = os.path.join(THIRD_DIR, src)
+    if not os.path.exists(p):
+        print("skipping (not in mixer backup):", src)
+        continue
+    if zipfile.ZipFile(p).namelist() == []:
+        print("skipping (empty zip):", src)
+        continue
+    found.append(p)
+    merge(p, False)
+
+for note in merged:
+    print(" ", note)
+for name, loser in dropped[:20]:
+    print(f"  dropped from {os.path.basename(loser)}: {name}")
+if len(dropped) > 20:
+    print(f"  ...and {len(dropped) - 20} more identical-path plugin copies (ours or the first zip won)")
 
 fixed = 0
 for name in list(files):
@@ -105,7 +218,7 @@ for name in list(files):
             files[name] = json.dumps(m, indent=1).encode("utf-8")
 print("z-fighting faces separated:", fixed)
 
-mcmeta = {"pack": {"description": "Iekcorbar (Steamworks, Kitchen, Sakagura, Relics, Kura, Wildlife, Zukan, MMO items)", "pack_format": 64,
+mcmeta = {"pack": {"description": "Iekcorbar v2 - alles in één: Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items + EliteMobs, FMM, TechCore, ValhallaMMO, BackpackPlus", "pack_format": 64,
                    "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}}
 files["pack.mcmeta"] = json.dumps(mcmeta, indent=1).encode("utf-8")
 icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pack-icon.png")  # scripts/make-pack-icon.py
