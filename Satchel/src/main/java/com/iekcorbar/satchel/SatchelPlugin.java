@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class SatchelPlugin extends JavaPlugin {
     private Items items;
     private Backpacks backpacks;
+    private BackpackImport backpackImport;
     private Adv adv;
     private long tick;
 
@@ -20,11 +21,13 @@ public final class SatchelPlugin extends JavaPlugin {
         items = new Items(this);
         adv = Achievements.create(this, items);
         backpacks = new Backpacks(this, items, adv);
+        backpackImport = new BackpackImport(this);
         items.registerRecipes();
         adv.start();
         var pm = getServer().getPluginManager();
         pm.registerEvents(items, this);
         pm.registerEvents(backpacks, this);
+        pm.registerEvents(backpackImport, this);
         var cmd = new SatchelCommand(this);
         getCommand("satchel").setExecutor(cmd);
         getCommand("satchel").setTabCompleter(cmd);
@@ -40,6 +43,10 @@ public final class SatchelPlugin extends JavaPlugin {
 
     Items items() {
         return items;
+    }
+
+    BackpackImport backpackImport() {
+        return backpackImport;
     }
 
     String docsUrl() {

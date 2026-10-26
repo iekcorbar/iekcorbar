@@ -427,6 +427,19 @@ alleen README.md, GEEN .gitignore, 104 losse dingen ongezien. Gedaan:
 - Let op: .env.local zit in géén zip en wordt van git gehouden; plugin-data-db.js noemt nog wel het
   sql1.revivenode.com + db-naam in commentaar (geen ww) - ok voor privé-repo, eventueel anonimiseren.
 
+### Satchel 0.3.0 - BackpackPlus-importer (2026-10-26)
+BackpackPlus (3.2.0) staat nog naast Satchel op de server; z'n backpack.db bevat 17 rugzakken maar
+slechts **4 met inhoud** (Valerium1411 t2/94KB, kooyer t2 20KB + t3 15KB, Darkmatter86 t1 12KB; de rest
+leeg, laatste updates juli-sept 2026). Items staan als base64 Java-serialized ItemStacks per slot in een
+JSON-paginastructuur - in Python onleesbaar, in Bukkit gewoon te reconstrueren. Daarom: `BackpackImport.java`
+met /satchel importbackpacks [path] (satchel.admin): (1) vindt sqlite-jdbc in libraries/ (door BackpackPlus
+zelf gedownload, URLClassLoader, geen shade), (2) leest backpacks-tabel, mapt oldSize 9/27/36/45 -> canvas/
+copper/iron/diamond (groeit naar netherite als het niet past, rest items los mee), (3) online direct geven,
+offline via pending-import.json + join-outgifte, (4) idempotent: geimporteerde rij-id's in
+backpackplus-imported.txt. Oude db wordt ALLEEN gelezen - terugdraaien = BackpackPlus terugzetten. mvn groen,
+Satchel-0.3.0.jar in de root. Gebruiker: jar uploaden, herstart (met Gouw 0.2.1 + Relics 0.3.5 erbij), in
+game /satchel importbackpacks draaien, dan plugins/BackpackPlus naar archive/ (backpack.db bewaren).
+
 ### Backlog / later (gebruikersnotities, nooit vergeten)
 
 - **BedWars-plugin** (2026-10-26, gebruiker: "let op voor later: bedwars plugin - uitgebreid

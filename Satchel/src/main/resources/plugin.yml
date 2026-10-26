@@ -9,7 +9,7 @@ softdepend: [Zukan]
 commands:
   satchel:
     description: Satchel backpack commands
-    usage: /satchel <help|give|giveall|list|reload>
+    usage: /satchel <help|give|giveall|list|reload|importbackpacks>
     aliases: [backpack]
 
 permissions:

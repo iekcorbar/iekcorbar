@@ -77,6 +77,7 @@ final class SatchelCommand implements CommandExecutor, TabCompleter {
                 plugin.reload();
                 s.sendMessage(Component.text("Satchel reloaded.", NamedTextColor.GREEN));
             }
+            case "importbackpacks" -> plugin.backpackImport().run(s, args);
             default -> {
                 s.sendMessage(Component.text("Satchel - backpacks", NamedTextColor.GOLD));
                 s.sendMessage(Component.text("Right-click a backpack to open it. Craft the next tier from the old backpack to keep everything in it.", NamedTextColor.GRAY));
@@ -97,7 +98,7 @@ final class SatchelCommand implements CommandExecutor, TabCompleter {
         List<String> out = new ArrayList<>();
         String a = args[args.length - 1].toLowerCase(Locale.ROOT);
         if (args.length == 1) {
-            for (String o : new String[]{"help", "list", "give", "giveall", "reload"}) if (o.startsWith(a)) out.add(o);
+            for (String o : new String[]{"help", "list", "give", "giveall", "reload", "importbackpacks"}) if (o.startsWith(a)) out.add(o);
         } else if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
             for (SItem t : SItem.values()) if (t.id().startsWith(a)) out.add(t.id());
         } else if ((args.length == 2 && args[0].equalsIgnoreCase("giveall")) || (args.length == 3 && args[0].equalsIgnoreCase("give"))) {
