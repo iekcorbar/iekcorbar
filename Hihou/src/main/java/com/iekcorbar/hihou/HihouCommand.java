@@ -94,6 +94,7 @@ final class HihouCommand implements TabExecutor {
                 Bukkit.broadcast(Component.text("秘宝 Event chests are now " + (open ? "OPEN - go and vote, hunt and win!" : "closed. Thanks for playing!"),
                         open ? NamedTextColor.GOLD : NamedTextColor.GRAY));
             }
+            case "game" -> game(s, a);
             case "reload" -> {
                 if (!admin(s)) return true;
                 plugin.reloadConfig();
@@ -120,6 +121,70 @@ final class HihouCommand implements TabExecutor {
         s.sendMessage(Component.text(t, c));
     }
 
+    // ------------------------------------------------------------ /ih game ...
+
+    private void game(CommandSender s, String[] a) {
+        if (a.length < 2) {
+            msg(s, "/ih game create|set|start|stop|win|delete|list <name> ...", NamedTextColor.RED);
+            return;
+        }
+        String sub = a[1].toLowerCase(Locale.ROOT);
+        var games = plugin.games();
+        switch (sub) {
+            case "list" -> {
+                if (games.names().isEmpty()) msg(s, "No games yet - /ih game create <name> race|last|manual", NamedTextColor.GRAY);
+                for (String g : games.names()) msg(s, games.info(g), NamedTextColor.GRAY);
+            }
+            case "create" -> {
+                if (!admin(s)) return;
+                if (a.length < 4) { msg(s, "/ih game create <name> race|last|manual", NamedTextColor.RED); return; }
+                String err = games.create(a[2].toLowerCase(Locale.ROOT), a[3].toLowerCase(Locale.ROOT));
+                msg(s, err.isEmpty() ? "Created. Prize: /ih game set " + a[2] + " prize key victory" : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            case "set" -> {
+                if (!admin(s) || !(s instanceof Player p)) return;
+                if (a.length < 4) { msg(s, "/ih game set <name> finish|center|size <r>|prize <none|key [type] [amt]|chest>", NamedTextColor.RED); return; }
+                String game = a[2].toLowerCase(Locale.ROOT), what = a[3].toLowerCase(Locale.ROOT);
+                String err = switch (what) {
+                    case "finish" -> games.setFinish(p, game);
+                    case "center" -> games.setCenter(p, game);
+                    case "size" -> a.length > 4 ? games.setSize(game, parseInt(a[4], 0)) : "Give a radius.";
+                    case "prize" -> games.setPrize(game, a.length > 4 ? a[4].toLowerCase(Locale.ROOT) : "none",
+                            a.length > 5 ? a[5].toLowerCase(Locale.ROOT) : null, a.length > 6 ? parseInt(a[6], 1) : 1);
+                    default -> "Unknown setter.";
+                };
+                msg(s, err.isEmpty() ? "Saved." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            case "start" -> {
+                if (!admin(s)) return;
+                if (a.length < 3) { msg(s, "/ih game start <name> [seconds]", NamedTextColor.RED); return; }
+                String err = games.start(a[2].toLowerCase(Locale.ROOT), a.length > 3 ? parseInt(a[3], 0) : 0);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            case "stop" -> {
+                if (!admin(s)) return;
+                if (a.length < 3) { msg(s, "/ih game stop <name>", NamedTextColor.RED); return; }
+                String err = games.stop(a[2].toLowerCase(Locale.ROOT));
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            case "win" -> {
+                if (!admin(s)) return;
+                if (a.length < 4) { msg(s, "/ih game win <name> <player>", NamedTextColor.RED); return; }
+                Player t = Bukkit.getPlayerExact(a[3]);
+                if (t == null) { msg(s, "Player offline.", NamedTextColor.RED); return; }
+                String err = games.win(a[2].toLowerCase(Locale.ROOT), t);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            case "delete" -> {
+                if (!admin(s)) return;
+                if (a.length < 3) { msg(s, "/ih game delete <name>", NamedTextColor.RED); return; }
+                String err = games.delete(a[2].toLowerCase(Locale.ROOT));
+                msg(s, err.isEmpty() ? "Deleted." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            default -> msg(s, "/ih game create|set|start|stop|win|delete|list", NamedTextColor.RED);
+        }
+    }
+
     private static int parseInt(String s, int def) {
         try {
             return Math.max(1, Integer.parseInt(s));
@@ -131,9 +196,13 @@ final class HihouCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
         List<String> out = new ArrayList<>();
-        if (a.length == 1) out.addAll(List.of("give", "key", "edit", "remove", "map", "event", "reload", "help"));
+        if (a.length == 1) out.addAll(List.of("give", "key", "edit", "remove", "map", "event", "game", "reload", "help"));
+        else if (a.length == 2 && a[0].equalsIgnoreCase("game")) out.addAll(List.of("create", "set", "start", "stop", "win", "delete", "list"));
         else if (a.length == 2 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("key"))) out.addAll(List.of(Keys.TYPES));
         else if (a.length == 2 && a[0].equalsIgnoreCase("event")) out.addAll(List.of("open", "close"));
+        else if (a.length == 4 && a[1].equalsIgnoreCase("create")) out.addAll(List.of(Games.GAME_TYPES));
+        else if (a.length == 4 && a[1].equalsIgnoreCase("set")) out.addAll(List.of("finish", "center", "size", "prize"));
+        else if (a.length == 5 && a[1].equalsIgnoreCase("set") && a[3].equalsIgnoreCase("prize")) out.addAll(List.of("none", "key", "chest"));
         String prefix = a[a.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(x -> !x.startsWith(prefix));
         return out;

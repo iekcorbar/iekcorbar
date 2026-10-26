@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class HihouPlugin extends JavaPlugin {
     private Keys keys;
     private Chests chests;
+    private Games games;
     private long tick;
 
     @Override
@@ -18,9 +19,11 @@ public final class HihouPlugin extends JavaPlugin {
         saveDefaultConfig();
         keys = new Keys(this);
         chests = new Chests(this, keys);
+        games = new Games(this, keys);
         var pm = getServer().getPluginManager();
         pm.registerEvents(chests.decor, this);
         pm.registerEvents(chests, this);
+        pm.registerEvents(games, this);
         chests.decor.registerRecipes(); // none defined yet (chests are staff-given), harmless
         HihouCommand cmd = new HihouCommand(this);
         getCommand("hihou").setExecutor(cmd);
@@ -29,7 +32,8 @@ public final class HihouPlugin extends JavaPlugin {
             tick += 5;
             chests.decor.tick(tick);
         }, 5L, 5L);
-        getLogger().info("Hihou enabled: " + Chests.TYPES.length + " chest types, keys ready.");
+        games.onEnableCleanupAnnounce();
+        getLogger().info("Hihou enabled: " + Chests.TYPES.length + " chest types, " + Games.GAME_TYPES.length + " game modes.");
     }
 
     @Override
@@ -46,5 +50,9 @@ public final class HihouPlugin extends JavaPlugin {
 
     Chests chests() {
         return chests;
+    }
+
+    Games games() {
+        return games;
     }
 }

@@ -559,3 +559,8 @@ an/uit via Settings > Tips (permission settings_tips).
   break-hits 100 + /ih remove. Pack tools/make_pack.py: 15 modellen (closed+open per type), alle
   particle-entries; merge-packs 13e bron Hihou-pack.zip. mvn groen, jar in root.
 - Commando-tree in HIHOU-DEV-NOTES.md; game-engine types: FINISHP / LASTSTAND / ANSWER / MANUAL.
+
+### Hihou 0.2.0 - Game Island geautomatiseerd (2026-10-26)
+
+Hihou 0.2.0: Game-Island-automatisering - Games.java met 3 modi (race=drukplaat-finish aanwijzen per kijk, last=midden+straal-cirkel met start-gelockte participanten, manual=staff-winner), registry games.json, prijs per spel (none|key|chest -> victory key + teleport naar Victory-kist), GO/win/expire broadcasts, /ih game create|set|start|stop|win|delete|list + tab. mvn groen, jar 0.2.0 in root, HIHOU-DEV-NOTES compleet (testflow + open opties). Eerdere 0.1.0-kistenkant blijft zoals beschreven.
+
