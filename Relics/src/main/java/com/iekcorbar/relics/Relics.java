@@ -847,6 +847,20 @@ final class Relics implements Listener {
             boolean night = time > 13000 && time < 23000;
             Location front = c.clone().add(r.facing.getDirection().multiply(0.45));
             switch (r.type.effect) {
+                case DOLL -> {
+                    // wooden helpers with a little personality: a clink, a knock, a sweep - on average once every few minutes
+                    if (rnd.nextInt(120) == 0) switch (r.type) {
+                        case DRUNKARD_BARREL -> {
+                            r.world.playSound(c, "minecraft:block.glass.place", 0.4f, 0.7f + rnd.nextFloat() * 0.4f);
+                            if (rnd.nextBoolean())
+                                r.world.spawnParticle(Particle.HAPPY_VILLAGER, front.clone().add(0, 1.2, 0), 3, 0.15, 0.1, 0.15, 0);
+                        }
+                        case GREETER_DOLL -> r.world.playSound(c, "minecraft:block.wood.chime", 0.5f, 0.9f + rnd.nextFloat() * 0.3f);
+                        case SWEEPER_DOLL -> r.world.playSound(c, "minecraft:block.grass.break", 0.45f, 1.05f);
+                        default -> {
+                        }
+                    };
+                }
                 case SKULL -> {
                     if (night || rnd.nextInt(4) == 0)
                         r.world.spawnParticle(Particle.DUST, front.clone().add(0, -0.1, 0), 2, 0.15, 0.03, 0.03, 0,

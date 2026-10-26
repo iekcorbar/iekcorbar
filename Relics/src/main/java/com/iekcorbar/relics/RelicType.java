@@ -174,11 +174,11 @@ enum RelicType {
     BOTTLE_RACK(Collection.CURIO, "Bottle Rack", "Tokkuri at attention, waiting to be filled.",
             Base.NONE, 1, 0, "bottle_rack", null, null, Effect.NONE, Use.NONE, 1f, false),
     DRUNKARD_BARREL(Collection.CURIO, "Drunkard in a Barrel", "He meant to guard the stock. Right-click to change his pose.",
-            Base.NONE, 1, 0, "drunkard_barrel", null, null, Effect.NONE, Use.POSE, 1f, false),
+            Base.NONE, 1, 0, "drunkard_barrel", null, null, Effect.DOLL, Use.POSE, 1f, false),
     GREETER_DOLL(Collection.CURIO, "Greeter Doll", "The friendliest staff you will ever have. Right-click to change his pose.",
-            Base.NONE, 1, 0, "greeter_doll", null, null, Effect.NONE, Use.POSE, 1f, false),
+            Base.NONE, 1, 0, "greeter_doll", null, null, Effect.DOLL, Use.POSE, 1f, false),
     SWEEPER_DOLL(Collection.CURIO, "Sweeper Doll", "Still sweeping at closing time. Right-click to change his pose.",
-            Base.NONE, 1, 0, "sweeper_doll", null, null, Effect.NONE, Use.POSE, 1f, false);
+            Base.NONE, 1, 0, "sweeper_doll", null, null, Effect.DOLL, Use.POSE, 1f, false);
 
     enum Collection {
         SHADOW("Shoutlander's Shadow"), XMAS("Xmas Town"), NEW_YEAR("New Year"), EASTER("Easter"), PATRICK("St. Patrick's Day"),
@@ -210,7 +210,7 @@ enum RelicType {
     /** SOLID = barrier (you bump into it); LIGHT = invisible light block; NONE = nothing (walk through). */
     enum Base { SOLID, LIGHT, NONE }
 
-    enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, RAINBOW, SWAP, SPARK, SHISHI }
+    enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, RAINBOW, SWAP, SPARK, SHISHI, DOLL }
 
     /** What a right-click does (NONE = show the lore line). POSE = wooden dolls swap their pose model. */
     enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE }

@@ -601,3 +601,16 @@ User: "meer relics, voornamelijk props voor de brouwerij; figuranten neerzetten 
 
 Pack: Relics 132 modellen; merge `BUILD` 4→5 → `deploy/iekcorbar-pack-build5.zip` (sha1 ed102511, 5818 files, audit 0/0 op 2347 modellen). Sweep in merge-packs.py is ingeperkt tot pack-namen (site-zips staan nu ook in deploy/ en mogen NOOIT weg van de sweep). let op server-mixer: het oude bestand heet daar nog `iekcorbar-packv2.zip` - die moet WEG en `iekcorbar-pack-build5.zip` komt in de plaats (dezelfde RPM-regels: mixer = ene onszijds bestand). mvn groen, Relics-0.3.9.jar in deploy/.
 
+### Backlog: suggesties 26-10 avond (nog niets van gekozen)
+
+User vroeg om suggesties ("sta overal voor open") en besloot toen: alles opsparen tot de volgende
+deploy-batch (zie `deploy/TE-DEPLOYEN.txt` + AGENTS.md "Deploy-batching"). Piekvolgorde zoals
+besproken: (1) BedWars-arena bouwen om Hihou 0.4.0 eindelijk te testen, (2) "Brouwerij-Backdrop"-shop-pakket
+(`;;` give-commands; de 12 nieuwe relics zijn shop-stock), (3) deploy-manifest/checklist = nu TE-DEPLOYEN.txt,
+(4) december: Xmas Town-plein + `/relics secret` rond + countdown-board naar de opening, (5) brouwerij-gevelwedstrijd
+met noren+sugidama als signage, (6) seizoenswissel in de shop-relics, (7) GEBOUWD (0.3.10, idd 26-10):
+`Effect.DOLL` - poppen maken af-en-toe geluid + spats (dronkaard: fles-klink + happy-villagers, zwaaier:
+wood.chime, veger: grass.break), ~1x/4 min per pop, alleen bij spelers binnen 24, (8) update-notities op de site uit de Discord-posts, (9) tick-times in de gaten houden
+bij perken vol displays, (10) community "Guild Hall"-project met Kura/Steamworks/fontein. Niets hiervan is gebouwd;
+wacht op keus van de user.
+

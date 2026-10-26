@@ -19,6 +19,16 @@ Dit bestand houdt de harde regels vast die áltijd gelden (ook als de sessie ver
 4. **Na elke packbouw:** `python -I scripts/merge-packs.py && python -I scripts/audit-pack.py`
    (laatste kiest automatisch de nieuwste pack in `deploy/`, exit-code 0 = schoon).
 
+## Deploy-batching (userregel 26-10 avond)
+
+De gebruiker deployt NIET na elke klus, maar in batching wanneer het hem uitkomt. Daarom:
+- Elk afgemaakt artefact (pack, jar, site-zip) gaat in `deploy/` én krijgt één regel in
+  `deploy/TE-DEPLOYEN.txt`: wat, waar naartoe op de server, wat vervangen/verwijderen, hoe te testen.
+- Nooit aandringen, nooit "even checken of het al staat" - de lijst ís de status; de gebruiker pakt hem.
+- Regels pas afvinken/verwijderen nadat de gebruiker bevestigt dat het live staat.
+- Bij twijfel of iets al uitgeleverd is: noteer dat op de regel ("alleen als nog niet live"),
+  niet zelf oplossen en niet navragen - de server draait gewoon door op wat er staat.
+
 ## Wat er van 26 okt (avond) aan de hand was — onthoud dit voor 26.2-modellen
 
 Paper/Minecraft **26.2** is op twee punten streng voor dit resourcepack, en allebei gaven
