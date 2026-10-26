@@ -7,8 +7,9 @@
     <groupId>com.iekcorbar</groupId>
     <artifactId>Hihou</artifactId>
     <!-- Treasure, event and vote chests with physical keys: every prize is a chest you unlock yourself.
-         Built on the shared propkit Decor engine (see propkit/sync.py), like the zoo props. -->
-    <version>0.2.0</version>
+         Built on the shared propkit Decor engine (see propkit/sync.py), like the zoo props.
+         v0.3: BedWars etappe 0.3.0 - arenas, teams and the join flow in the bw/ module. -->
+    <version>0.3.0</version>
     <packaging>jar</packaging>
 
     <name>Hihou</name>

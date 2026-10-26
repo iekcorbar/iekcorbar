@@ -491,7 +491,8 @@ al niet raken. mvn groen, Relics-0.3.6.jar in de root.
   one-block-each-arena, maar de volle Create-achtige variant: eigen kits/upgrades, resources-
   generators op Steamworks-rpm's (energie-thema past bij de server), team-shop via SiteSync/Gouw-
   claims, FMM-modellen (koffers, bed-framework, generators), RPM-/wildlife-thema's voor de eilanden.
-  Nog NIET begonnen; alleen deze notitie.
+  GESTART als Hihou bw/-module: etappe 0.3.0 (arena's+teams+join, arenas.json) is KLAAR en mvn-groen;
+  0.4.0 = generators+bed+sudden-death+spectators, 0.5.0 = shop+upgrades+kits. Zie HIHOU-DEV-NOTES.md.
 
 ### MMOItems: alle custom items eigen 3D-model + pack in repo (2026-10-26)
 

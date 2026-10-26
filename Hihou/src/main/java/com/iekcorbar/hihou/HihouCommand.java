@@ -1,5 +1,6 @@
 package com.iekcorbar.hihou;
 
+import com.iekcorbar.hihou.bw.BwGameManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -95,6 +96,7 @@ final class HihouCommand implements TabExecutor {
                         open ? NamedTextColor.GOLD : NamedTextColor.GRAY));
             }
             case "game" -> game(s, a);
+            case "bw" -> bw(s, a);
             case "reload" -> {
                 if (!admin(s)) return true;
                 plugin.reloadConfig();
@@ -185,8 +187,92 @@ final class HihouCommand implements TabExecutor {
         }
     }
 
-    private static int parseInt(String s, int def) {
-        try {
+    // ------------------------------------------------------------ /ih bw ... (etappe 0.3.0: arenas, teams, join)
+
+    private void bw(CommandSender s, String[] a) {
+        if (a.length < 2) {
+            msg(s, "/ih bw list|info|create|delete|set|team|join|leave|start|stop <...>", NamedTextColor.RED);
+            return;
+        }
+        String sub = a[1].toLowerCase(Locale.ROOT);
+        var mgr = plugin.bw();
+        switch (sub) {
+            case "list" -> {
+                if (mgr.names().isEmpty()) msg(s, "No arenas yet - /ih bw create <name>", NamedTextColor.GRAY);
+                for (String name : mgr.names()) msg(s, mgr.info(name), NamedTextColor.GRAY);
+            }
+            case "info" -> {
+                if (a.length < 3) { msg(s, "/ih bw info <arena>", NamedTextColor.RED); return; }
+                msg(s, mgr.info(a[2].toLowerCase(Locale.ROOT)), NamedTextColor.GRAY);
+            }
+            case "create" -> {
+                if (!admin(s)) return;
+                if (a.length < 3) { msg(s, "/ih bw create <arena>", NamedTextColor.RED); return; }
+                String err = mgr.create(a[2]);
+                msg(s, err.isEmpty() ? "Arena created. Stand at the lobby spot: /ih bw set " + a[2].toLowerCase(Locale.ROOT)
+                        + " spawn, then /ih bw team " + a[2].toLowerCase(Locale.ROOT) + " add <team> <color>." : err,
+                        err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            case "delete" -> {
+                if (!admin(s)) return;
+                if (a.length < 3) { msg(s, "/ih bw delete <arena>", NamedTextColor.RED); return; }
+                String err = mgr.delete(a[2]);
+                msg(s, err.isEmpty() ? "Deleted." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            case "set" -> {
+                if (!admin(s) || !(s instanceof Player p)) return;
+                if (a.length < 4) { msg(s, "/ih bw set <arena> spawn|center|size <r>|min <n>|maxteam <n>", NamedTextColor.RED); return; }
+                String arena = a[2].toLowerCase(Locale.ROOT), what = a[3].toLowerCase(Locale.ROOT);
+                String err = switch (what) {
+                    case "spawn" -> mgr.setSpawn(p, arena);
+                    case "center" -> mgr.setCenter(p, arena);
+                    case "size" -> a.length > 4 ? mgr.setSize(arena, parseInt(a[4], 0)) : "Give a radius.";
+                    case "min" -> a.length > 4 ? mgr.setMin(arena, parseInt(a[4], 0)) : "Give a number.";
+                    case "maxteam" -> a.length > 4 ? mgr.setMaxTeam(arena, parseInt(a[4], 0)) : "Give a number.";
+                    default -> "Unknown setter.";
+                };
+                msg(s, err.isEmpty() ? "Saved." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            case "team" -> {
+                if (!admin(s) || !(s instanceof Player p)) return;
+                if (a.length < 4) { msg(s, "/ih bw team <arena> add <name> <color>|del <name>|spawn <name>", NamedTextColor.RED); return; }
+                String arena = a[2].toLowerCase(Locale.ROOT), op = a[3].toLowerCase(Locale.ROOT);
+                String err = switch (op) {
+                    case "add" -> a.length > 5 ? mgr.teamAdd(arena, a[4], a[5]) : "Give a team name and a color.";
+                    case "del" -> a.length > 4 ? mgr.teamDel(arena, a[4]) : "Give a team name.";
+                    case "spawn" -> a.length > 4 ? mgr.teamSetSpawn(p, arena, a[4]) : "Give a team name (stand where the team spawns).";
+                    default -> "Unknown team op.";
+                };
+                msg(s, err.isEmpty() ? "Saved." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            case "join" -> {
+                if (!(s instanceof Player p)) { msg(s, "Players only.", NamedTextColor.RED); return; }
+                if (a.length < 3) { msg(s, "/ih bw join <arena> [team]", NamedTextColor.RED); return; }
+                String err = mgr.join(p, a[2], a.length > 3 ? a[3] : null);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            case "leave" -> {
+                if (!(s instanceof Player p)) { msg(s, "Players only.", NamedTextColor.RED); return; }
+                String err = mgr.leave(p);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            case "start" -> {
+                if (!admin(s)) return;
+                if (a.length < 3) { msg(s, "/ih bw start <arena> [seconds]", NamedTextColor.RED); return; }
+                String err = mgr.start(a[2], a.length > 3 ? parseInt(a[3], 0) : 0);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            case "stop" -> {
+                if (!admin(s)) return;
+                if (a.length < 3) { msg(s, "/ih bw stop <arena>", NamedTextColor.RED); return; }
+                String err = mgr.stop(a[2]);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            default -> msg(s, "/ih bw list|info|create|delete|set|team|join|leave|start|stop", NamedTextColor.RED);
+        }
+    }
+
+    private static int parseInt(String s, int def) {        try {
             return Math.max(1, Integer.parseInt(s));
         } catch (NumberFormatException e) {
             return def;
@@ -196,8 +282,19 @@ final class HihouCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
         List<String> out = new ArrayList<>();
-        if (a.length == 1) out.addAll(List.of("give", "key", "edit", "remove", "map", "event", "game", "reload", "help"));
+        if (a.length == 1) out.addAll(List.of("give", "key", "edit", "remove", "map", "event", "game", "bw", "reload", "help"));
         else if (a.length == 2 && a[0].equalsIgnoreCase("game")) out.addAll(List.of("create", "set", "start", "stop", "win", "delete", "list"));
+        else if (a.length == 2 && a[0].equalsIgnoreCase("bw")) out.addAll(List.of("list", "info", "create", "delete", "set", "team", "join", "leave", "start", "stop"));
+        else if (a.length == 3 && a[0].equalsIgnoreCase("bw")
+                && List.of("info", "delete", "set", "team", "join", "start", "stop").contains(a[1].toLowerCase(Locale.ROOT)))
+            out.addAll(plugin.bw().names());
+        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("set")) out.addAll(List.of("spawn", "center", "size", "min", "maxteam"));
+        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team")) out.addAll(List.of("add", "del", "spawn"));
+        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("join")) out.addAll(plugin.bw().teamNames(a[2]));
+        else if (a.length == 5 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team"))
+            out.addAll(plugin.bw().teamNames(a[2]));
+        else if (a.length == 6 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team") && a[3].equalsIgnoreCase("add"))
+            out.addAll(List.of(BwGameManager.TEAM_COLORS));
         else if (a.length == 2 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("key"))) out.addAll(List.of(Keys.TYPES));
         else if (a.length == 2 && a[0].equalsIgnoreCase("event")) out.addAll(List.of("open", "close"));
         else if (a.length == 4 && a[1].equalsIgnoreCase("create")) out.addAll(List.of(Games.GAME_TYPES));

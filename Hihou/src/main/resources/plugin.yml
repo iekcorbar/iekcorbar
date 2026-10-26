@@ -8,7 +8,7 @@ author: iekcorbar
 commands:
   hihou:
     description: Hihou chests and keys
-    usage: /hihou <give|key|edit|remove|map|event|game|help>
+    usage: /hihou <give|key|edit|remove|map|event|game|bw|help>
     aliases: [ih]
 
 permissions:
