@@ -35,7 +35,7 @@ final class Visuals {
         remove(n);
         BlockFace up, front;
         switch (n.type) {
-            case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL -> {
+            case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL, EJECTOR -> {
                 up = n.facing;
                 front = Kinetics.axisOf(up) == Axis.Y ? BlockFace.SOUTH : BlockFace.UP;
             }
@@ -142,6 +142,18 @@ final class Visuals {
                 add(n, "sw_steam_engine_flywheel", Role.SPIN, orient, sign);
             }
             case CRUSHING_WHEEL -> add(n, "sw_crushing_wheel", Role.SPIN, orient, sign);
+            case CHUTE, FUNNEL -> {
+                Quaternionf frame = orientation(BlockFace.UP, n.facing);   // laid out like a belt, items slide on top
+                add(n, n.type.model(), Role.STATIC, frame, 1);
+            }
+            case DEPOT -> add(n, "sw_depot", Role.STATIC, orientation(BlockFace.UP, n.facing), 1);
+            case EJECTOR -> add(n, "sw_ejector", Role.STATIC, orient, sign);
+            case PUMP -> {
+                add(n, "sw_pump", Role.STATIC, orient, sign);
+                add(n, "sw_shaft_half", Role.SPIN, orient, sign);          // the impeller axle you can see through the glass
+            }
+            case VALVE -> add(n, "sw_valve", Role.STATIC, orient, sign);
+            case WHISTLE -> add(n, "sw_whistle", Role.STATIC, orient, sign);
             case GEARBOX -> add(n, n.type.model(), Role.STATIC, orient, sign);
             default -> add(n, n.type.model(), Role.SPIN, orient, sign);
         }

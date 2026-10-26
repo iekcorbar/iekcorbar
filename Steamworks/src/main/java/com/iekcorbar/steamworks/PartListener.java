@@ -111,6 +111,15 @@ final class PartListener implements Listener {
             } else if (n.type == PartType.TANK && plugin.items().materialOf(hand) != null) {
                 e.setCancelled(true);
                 if (!plugin.oil().interact(n, p, hand)) plugin.showInfo(n, p);
+            } else if (n.type == PartType.PUMP && plugin.items().materialOf(hand) != null) {
+                e.setCancelled(true);
+                if (!plugin.oil().pumpInteract(n, p, hand)) plugin.showInfo(n, p);
+            } else if (n.type == PartType.WHISTLE && !block) {
+                e.setCancelled(true);
+                n.world.playSound(n.center(), org.bukkit.Sound.BLOCK_BELL_USE, 1.4f, 0.72f);
+                n.world.playSound(n.center(), org.bukkit.Sound.BLOCK_BELL_RESONATE, 0.7f, 0.9f);
+                n.world.spawnParticle(org.bukkit.Particle.CLOUD, n.center().add(0, 0.6, 0), 7, 0.12, 0.05, 0.12, 0.03);
+                p.swingMainHand();
             } else if (n.type == PartType.KETTLE && (!block || plugin.mixers().accepts(hand))) {
                 e.setCancelled(true);
                 if (!plugin.mixers().interact(n, p, hand)) plugin.showInfo(n, p);
@@ -180,7 +189,7 @@ final class PartListener implements Listener {
                         && beside.axis != faceAxis) axis = beside.axis;
             }
             case GEARBOX -> axis = faceAxis == Axis.Y ? Kinetics.axisOf(p.getFacing()) : Axis.Y;
-            case MILLSTONE, KETTLE, MIXER, PIPE, TANK, REFINERY, ARM, STEAM_BOILER -> axis = Axis.Y;
+            case MILLSTONE, KETTLE, MIXER, PIPE, TANK, REFINERY, ARM, STEAM_BOILER, DEPOT, WHISTLE -> axis = Axis.Y;
             case STATION, SIGNAL -> {
                 axis = Axis.Y;
                 facing = p.getFacing().getOppositeFace(); // the board faces the player
@@ -189,11 +198,11 @@ final class PartListener implements Listener {
             case STEAM_HAMMER, PUMPJACK, STEAM_ENGINE, CRUSHING_WHEEL -> axis = faceAxis != Axis.Y ? faceAxis
                     : Kinetics.axisOf(p.getFacing()) == Axis.X ? Axis.Z : Axis.X;
             // blows away from what it was placed against (shaft behind it); sneak = blow toward it
-            case BELT -> {
+            case BELT, CHUTE, FUNNEL -> {
                 facing = p.getFacing();                       // the way it is laid out
                 axis = Kinetics.axisOf(facing) == Axis.X ? Axis.Z : Axis.X; // rollers across it
             }
-            case BELLOWS_FAN, DRILL, SAW, WINDMILL -> {
+            case BELLOWS_FAN, DRILL, SAW, WINDMILL, EJECTOR -> {
                 facing = p.isSneaking() ? face.getOppositeFace() : face;
                 axis = Kinetics.axisOf(facing);
             }

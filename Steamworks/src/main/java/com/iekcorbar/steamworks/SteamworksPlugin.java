@@ -124,6 +124,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
             oil.tick(kinetics.tick);
             if (kinetics.tick % 2 == 0) breakers.tick(kinetics.tick);
             belts.tick();
+            belts.eject();
             shapes.tick();
             arms.tick();
             plants.tick(kinetics.tick);

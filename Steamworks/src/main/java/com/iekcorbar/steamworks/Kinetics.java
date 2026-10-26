@@ -62,6 +62,7 @@ final class Kinetics {
     final Set<KNode> refineries = new HashSet<>();
     final Set<KNode> breakers = new HashSet<>();
     final Set<KNode> belts = new HashSet<>();
+    final Set<KNode> ejectors = new HashSet<>();
     final Set<KNode> arms = new HashSet<>();
     final Set<KNode> plants = new HashSet<>();
     final Set<KNode> crushers = new HashSet<>();
@@ -117,7 +118,8 @@ final class Kinetics {
         if (n.type == PartType.PUMPJACK) pumpjacks.add(n);
         if (n.type == PartType.REFINERY) refineries.add(n);
         if (n.type == PartType.DRILL || n.type == PartType.SAW) breakers.add(n);
-        if (n.type == PartType.BELT) belts.add(n);
+        if (n.type == PartType.BELT || n.type == PartType.CHUTE || n.type == PartType.FUNNEL) belts.add(n);
+        if (n.type == PartType.EJECTOR) ejectors.add(n);
         if (n.type == PartType.ARM) arms.add(n);
         if (n.type == PartType.WINDMILL || n.type == PartType.STEAM_BOILER || n.type == PartType.STEAM_ENGINE) plants.add(n);
         if (n.type == PartType.CRUSHING_WHEEL) crushers.add(n);
@@ -153,6 +155,7 @@ final class Kinetics {
         refineries.remove(n);
         breakers.remove(n);
         belts.remove(n);
+        ejectors.remove(n);
         arms.remove(n);
         plants.remove(n);
         crushers.remove(n);
@@ -178,8 +181,8 @@ final class Kinetics {
         return switch (n.type) {
             case SHAFT, COGWHEEL, LARGE_COGWHEEL, GEARBOX, CLUTCH, GEARSHIFT, SPROCKET, CRUSHING_WHEEL,
                     SPEED_GAUGE, STRESS_GAUGE, STEAM_ENGINE, HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL,
-                    BELT, STATION, SIGNAL -> true;
-            default -> false;   // pure-Y machines (millstone, kettle, mixer, arm, boiler) and fluid parts
+                    BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL -> true;
+            default -> false;   // pure-Y machines (millstone, kettle, mixer, arm, boiler, depot, whistle) and fluid parts
         };
     }
 
@@ -207,18 +210,19 @@ final class Kinetics {
     static boolean turnFace(KNode n, BlockFace clicked) {
         Axis a = axisOf(clicked);
         switch (n.type) {
-            case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL -> {
+            case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL, EJECTOR -> {
                 BlockFace f = clockwise(n.facing, a);
                 if (f == n.facing) return false;
                 n.facing = f;
                 n.axis = axisOf(f);
                 return true;
             }
-            case BELT, STATION, SIGNAL -> {
+            case BELT, CHUTE, FUNNEL, STATION, SIGNAL -> {
                 BlockFace f = clockwise(n.facing, a);
                 if (f == n.facing || axisOf(f) == Axis.Y) return false;   // must stay horizontal
                 n.facing = f;
-                if (n.type == PartType.BELT) n.axis = axisOf(f) == Axis.X ? Axis.Z : Axis.X;
+                if (n.type == PartType.BELT || n.type == PartType.CHUTE || n.type == PartType.FUNNEL)
+                    n.axis = axisOf(f) == Axis.X ? Axis.Z : Axis.X;
                 return true;
             }
             case STEAM_ENGINE -> {                                       // stays horizontal too
@@ -274,11 +278,11 @@ final class Kinetics {
             case GEARBOX -> {
                 for (BlockFace f : FACES) if (axisOf(f) != n.axis) out.add(f);
             }
-            case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL -> out.add(n.facing.getOppositeFace());
+            case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL, EJECTOR -> out.add(n.facing.getOppositeFace());
             case MILLSTONE -> out.add(BlockFace.DOWN);
             case MIXER -> out.add(BlockFace.UP);
             case ARM -> out.add(BlockFace.DOWN);
-            case KETTLE, STATION, SIGNAL, PIPE, TANK, REFINERY, STEAM_BOILER -> { } // not kinetic
+            case KETTLE, STATION, SIGNAL, PIPE, TANK, REFINERY, STEAM_BOILER, DEPOT, WHISTLE -> { } // not kinetic
             case CLUTCH -> {
                 if (!n.powered) {
                     out.add(positive(n.axis));

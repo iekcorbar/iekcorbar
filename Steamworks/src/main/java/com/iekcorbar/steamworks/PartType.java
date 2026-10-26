@@ -66,7 +66,21 @@ public enum PartType {
     STEAM_ENGINE("Steam Engine", Material.IRON_BLOCK, Kind.METAL,
             "Power source on top of a burning Steam Boiler.", "The strongest one. Shaft through its side."),
     CRUSHING_WHEEL("Crushing Wheel", Material.STONE, Kind.STONE,
-            "Place two side by side: items dropped on them", "are crushed (ores give double). Output falls below.");
+            "Place two side by side: items dropped on them", "are crushed (ores give double). Output falls below."),
+    CHUTE("Chute", Material.IRON_BLOCK, Kind.METAL,
+            "A belt's quieter cousin: powered it slides", "items along it, unpowered they just fall through."),
+    FUNNEL("Funnel", Material.IRON_BLOCK, Kind.METAL,
+            "A chute with a mouth: items landing on top", "suck in and ride along. At the end it feeds", "containers, kettles and millstones."),
+    DEPOT("Depot", Material.POLISHED_ANDESITE, Kind.STONE,
+            "A small pedestal: items delivered here wait", "for the Weighted Ejector facing them."),
+    EJECTOR("Weighted Ejector", Material.GOLD_BLOCK, Kind.METAL,
+            "Powered, it flings the item on top of it (or on", "the depot it looks at) to where it faces."),
+    PUMP("Mechanical Pump", Material.COPPER_BLOCK, Kind.METAL,
+            "In a pipe line: right-click with a canister to", "fill or empty it from the connected network.", "A closed valve anywhere on the line stops it."),
+    VALVE("Fluid Valve", Material.COPPER_BLOCK, Kind.METAL,
+            "A pipe gate: fluid passes only while this", "turns. Stop the network, cut the line."),
+    WHISTLE("Steam Whistle", Material.COPPER_BLOCK, Kind.METAL,
+            "Right-click: toot. A machine works better", "when it can say so.");
 
     public final String displayName;
     public final Material breakParticle;

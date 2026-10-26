@@ -261,6 +261,14 @@ final class PartItems {
         r.put(PartType.STEAM_BOILER, new Object[]{1, new String[]{"CTC", "CFC", "CCC"}, 'C', MaterialType.COPPER_PLATE, 'T', PartType.TANK, 'F', Material.BLAST_FURNACE}); // ours (Create burns under the engine directly)
         r.put(PartType.STEAM_ENGINE, new Object[]{1, new String[]{"P", "A", "C"}, 'P', MaterialType.GOLDEN_PLATE, 'A', MaterialType.ANDESITE_ALLOY, 'C', Material.COPPER_BLOCK});
         r.put(PartType.CRUSHING_WHEEL, new Object[]{2, new String[]{"AAA", "ASP", "AAA"}, 'A', MaterialType.ANDESITE_ALLOY, 'S', stones, 'P', planks}); // Create builds these on a 5x5 assembly table
+        // batch 2 (0.3.17): item logistics + fluid parts, recipes exactly as Create 6 has them
+        r.put(PartType.CHUTE, new Object[]{4, new String[]{"A", "I", "A"}, 'A', MaterialType.IRON_PLATE, 'I', Material.IRON_INGOT});
+        r.put(PartType.FUNNEL, new Object[]{2, new String[]{"A", "K"}, 'A', MaterialType.ANDESITE_ALLOY, 'K', Material.DRIED_KELP});
+        r.put(PartType.DEPOT, new Object[]{1, new String[]{"A", "C"}, 'A', MaterialType.ANDESITE_ALLOY, 'C', MaterialType.ANDESITE_CASING});
+        r.put(PartType.EJECTOR, new Object[]{1, new String[]{"A", "D", "I"}, 'A', MaterialType.GOLDEN_PLATE, 'D', PartType.DEPOT, 'I', PartType.COGWHEEL});
+        r.put(PartType.PUMP, new Object[]{1, new String[]{"C", "P"}, 'C', PartType.COGWHEEL, 'P', PartType.PIPE});   // Create: shapeless cog + pipe, as a column here
+        r.put(PartType.VALVE, new Object[]{1, new String[]{"I", "P"}, 'I', MaterialType.IRON_PLATE, 'P', PartType.PIPE});
+        r.put(PartType.WHISTLE, new Object[]{1, new String[]{"P", "C"}, 'P', MaterialType.GOLDEN_PLATE, 'C', Material.COPPER_INGOT});
 
         for (Map.Entry<PartType, Object[]> e : r.entrySet()) addRecipe(e.getKey().id(), create(e.getKey(), (int) e.getValue()[0]), e.getValue());
         addRecipe("large_cogwheel_from_little", create(PartType.LARGE_COGWHEEL, 1), new Object[]{1, new String[]{"P", "C"}, 'P', planks, 'C', PartType.COGWHEEL});

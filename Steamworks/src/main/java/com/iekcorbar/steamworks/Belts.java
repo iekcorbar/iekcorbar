@@ -2,6 +2,7 @@ package com.iekcorbar.steamworks;
 
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Container;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -46,7 +47,14 @@ final class Belts {
             BoundingBox box = new BoundingBox(n.x, n.y + 0.95, n.z, n.x + 1, n.y + 1.6, n.z + 1);
             Block ahead = n.world.getBlockAt(n.x + d.getBlockX(), n.y, n.z + d.getBlockZ());
             KNode next = plugin.kinetics().at(ahead);
-            boolean end = next == null || next.type != PartType.BELT;
+            boolean end = next == null || !(next.type == PartType.BELT || next.type == PartType.CHUTE || next.type == PartType.FUNNEL);
+            if (n.type == PartType.FUNNEL) {
+                // the mouth: items falling past the rim (y above the funnel's lid) drop into the flow
+                BoundingBox mouth = new BoundingBox(n.x, n.y + 1.5, n.z, n.x + 1, n.y + 2.6, n.z + 1);
+                for (Entity e : n.world.getNearbyEntities(mouth))
+                    if (e instanceof Item)
+                        e.teleport(new org.bukkit.Location(n.world, n.x + 0.5, n.y + 1.2, n.z + 0.5));
+            }
             for (Entity e : n.world.getNearbyEntities(box)) {
                 if (!(e instanceof Item) && !(e instanceof LivingEntity)) continue;
                 if (e instanceof Player p && (p.isFlying() || p.getGameMode() == GameMode.SPECTATOR || p.isSneaking())) continue;
@@ -90,6 +98,19 @@ final class Belts {
             plugin.saveSoon(next);
             return finish(item, stack, left);
         }
+        if (next != null && next.type == PartType.MILLSTONE && next.millInput == null) {
+            next.millInput = stack.clone();   // the millstone's own tick shows and grinds it
+            plugin.saveSoon(next);
+            item.remove();
+            return true;
+        }
+        if (next != null && next.type == PartType.DEPOT) {
+            // the depot is a shelf: the item waits there for the ejector it looks at, or for a hand
+            item.teleport(new org.bukkit.Location(next.world, next.x + 0.5, next.y + 1.1, next.z + 0.5));
+            item.setVelocity(new Vector());
+            next.world.playSound(next.center(), "block.stone_pressure_plate.use", 0.5f, 1.4f);
+            return false;
+        }
         if (next == null && ahead.getState(false) instanceof Container c) {
             Map<Integer, ItemStack> rest = c.getInventory().addItem(stack.clone());
             int left = rest.values().stream().mapToInt(ItemStack::getAmount).sum();
@@ -111,5 +132,32 @@ final class Belts {
     private boolean heldByHammer(KNode belt, Item item) {
         KNode h = plugin.kinetics().rel(belt, 0, 2, 0);
         return h != null && h.type == PartType.STEAM_HAMMER && h.speed() != 0 && plugin.hammers().recipes.find(item.getItemStack()) != null;
+    }
+
+    /** Weighted ejectors: powered, they fling whatever rests on top of them (or on the depot they look at). */
+    void eject() {
+        for (KNode n : plugin.kinetics().ejectors) {
+            if (n.speed() == 0 || plugin.kinetics().tick < n.ejectUntil) continue;
+            BlockFace f = n.facing;
+            Item item = firstItem(n, new BoundingBox(n.x, n.y + 0.6, n.z, n.x + 1, n.y + 2.4, n.z + 1));
+            org.bukkit.Location from = n.center().add(0, 0.8, 0);
+            if (item == null) {
+                KNode dep = plugin.kinetics().rel(n, f.getModX(), 0, f.getModZ());
+                if (dep != null && dep.type == PartType.DEPOT) {
+                    item = firstItem(dep, new BoundingBox(dep.x, dep.y + 0.6, dep.z, dep.x + 1, dep.y + 2.0, dep.z + 1));
+                    from = dep.center().add(0, 0.8, 0);
+                }
+            }
+            if (item == null) continue;
+            n.ejectUntil = plugin.kinetics().tick + 16;
+            item.teleport(from.add(new Vector(f.getModX(), 0, f.getModZ()).multiply(0.45)));
+            item.setVelocity(new Vector(f.getModX(), 0, f.getModZ()).multiply(0.55).setY(0.38));
+            n.world.playSound(n.center(), "block.tripwire.attach", 0.7f, 1.15f);
+        }
+    }
+
+    private static Item firstItem(KNode n, BoundingBox box) {
+        for (Entity e : n.world.getNearbyEntities(box)) if (e instanceof Item i) return i;
+        return null;
     }
 }

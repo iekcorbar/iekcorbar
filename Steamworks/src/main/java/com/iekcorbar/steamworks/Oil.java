@@ -94,7 +94,13 @@ final class Oil implements Listener {
 
     static boolean fluidPart(KNode n) {
         return n != null && (n.type == PartType.PIPE || n.type == PartType.TANK || n.type == PartType.PUMPJACK || n.type == PartType.REFINERY
-                || n.type == PartType.STEAM_BOILER);
+                || n.type == PartType.STEAM_BOILER || n.type == PartType.PUMP || n.type == PartType.VALVE);
+    }
+
+    /** Fluid may pass this neighbour node on its way to a tank: pipes and pumps always, valves only while turning. */
+    private boolean conducts(KNode m) {
+        if (m.type == PartType.PIPE || m.type == PartType.PUMP) return true;
+        return m.type == PartType.VALVE && m.speed() != 0;
     }
 
     /** Tanks reachable from a machine: directly beside it or through pipes. */
@@ -110,7 +116,7 @@ final class Oil implements Listener {
                 KNode m = plugin.kinetics().rel(n, f.getModX(), f.getModY(), f.getModZ());
                 if (m == null || !seen.add(m)) continue;
                 if (m.type == PartType.TANK) out.add(m);
-                else if (m.type == PartType.PIPE) q.add(m);
+                else if (conducts(m)) q.add(m);
             }
         }
         return out;
@@ -351,6 +357,34 @@ final class Oil implements Listener {
         if (!creative) p.getInventory().setItemInMainHand(plugin.items().createMaterial(MaterialType.CANISTER, 1));
         p.playSound(n.center(), Sound.ITEM_BUCKET_EMPTY, 0.6f, 0.8f);
         tankChanged(n);
+        return true;
+    }
+
+    /** Right-click on a mechanical pump with a canister: fill from, or hand over to, the whole connected network. */
+    boolean pumpInteract(KNode n, Player p, ItemStack hand) {
+        if (n.type != PartType.PUMP || hand == null || hand.isEmpty()) return false;
+        MaterialType m = plugin.items().materialOf(hand);
+        if (m == null) return false;
+        boolean creative = p.getGameMode() == GameMode.CREATIVE;
+        if (m == MaterialType.CANISTER) {
+            for (FluidType f : FluidType.values()) {
+                int have = 0;
+                for (KNode t : tanks(n)) if (t.fluid == f) have += t.fluidAmount;
+                if (have < CANISTER) continue;
+                pull(n, f, CANISTER);
+                if (!creative) hand.setAmount(hand.getAmount() - 1);
+                for (ItemStack left : p.getInventory().addItem(plugin.items().createMaterial(f.canister, 1)).values())
+                    p.getWorld().dropItemNaturally(p.getLocation(), left);
+                p.playSound(n.center(), Sound.ITEM_BUCKET_FILL, 0.6f, 0.8f);
+                return true;
+            }
+            return false;
+        }
+        FluidType f = FluidType.byCanister(m);
+        if (f == null || room(n, f) < CANISTER) return false;
+        push(n, f, CANISTER);
+        if (!creative) p.getInventory().setItemInMainHand(plugin.items().createMaterial(MaterialType.CANISTER, 1));
+        p.playSound(n.center(), Sound.ITEM_BUCKET_EMPTY, 0.6f, 0.8f);
         return true;
     }
 

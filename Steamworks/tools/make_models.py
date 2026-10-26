@@ -81,14 +81,16 @@ class Model:
             "variable_placeholders": "", "variable_placeholder_buttons": [], "timeline_setups": [],
             "unhandled_root_fields": {}, "resolution": {"width": RES, "height": RES},
             "elements": self.elements,
-            "outliner": [{"name": "body", "origin": [0, 0, 0], "color": 0, "uuid": U(), "export": True,
+            "outliner": [{"name": "body", "origin": [0, 0, 0], "color": 0,
+                          "uuid": str(uuid.uuid5(uuid.NAMESPACE_URL, self.name + ":outliner")), "export": True,
                           "mirror_uv": False, "isOpen": True, "locked": False, "visibility": True,
                           "autouv": 0, "children": [e["uuid"] for e in self.elements]}],
             "textures": [{"path": "", "name": "steamworks.png", "folder": "", "namespace": "", "id": "0",
                           "width": RES, "height": RES, "uv_width": RES, "uv_height": RES, "particle": False,
                           "render_mode": "default", "render_sides": "auto", "frame_time": 1,
                           "frame_order_type": "loop", "frame_order": "", "frame_interpolate": False,
-                          "visible": True, "internal": True, "saved": False, "uuid": U(), "relative_path": "",
+                          "visible": True, "internal": True, "saved": False,
+                          "uuid": str(uuid.uuid5(uuid.NAMESPACE_URL, self.name + ":texture")), "relative_path": "",
                           "source": TEX}],
             "animations": [],
         }
@@ -1107,6 +1109,98 @@ def zinc_nugget():
     return m
 
 
+# ---------------------------------------------------------------- batch 2: item logistics + fluid parts (26-10 night)
+
+def chute():
+    # runs along model Z like the belt; the trough floor sits right under the carry box (y ~ +6.5)
+    m = Model("sw_chute")
+    m.cube("floor", (-6.2, 6.2, -8.0), (6.2, 7.0, 8.0), "steel")
+    for s in (-1, 1):
+        m.cube(f"wall{s}", (s * 6.2 - 1.0, 7.0, -8.0), (s * 6.2 + 1.0, 9.4, 8.0), "darkwood")
+        m.cube(f"lip{s}", (s * 6.9 - 0.5, 9.2, -8.0), (s * 6.9 + 0.5, 9.7, 8.0), "brass")
+    m.cube("brace_a", (-6.4, 4.6, -6.4), (6.4, 5.4, -5.6), "steel")
+    m.cube("brace_b", (-6.4, 4.6, 5.6), (6.4, 5.4, 6.4), "steel")
+    for s in (-1, 1):
+        m.cube(f"leg_a{s}", (s * 5.8 - 0.8, -8.0, -6.4), (s * 5.8 + 0.8, 4.8, -5.2), "steel")
+        m.cube(f"leg_b{s}", (s * 5.8 - 0.8, -8.0, 5.2), (s * 5.8 + 0.8, 4.8, 6.4), "steel")
+    return m
+
+
+def funnel():
+    m = Model("sw_funnel")
+    es = chute().elements
+    m.elements = [dict(e) for e in es if not e["name"].startswith("brace")]  # trough without braces (same uuids as the chute is fine: separate file)
+    m.cube("hood_back", (-6.0, 9.4, 3.6), (6.0, 13.0, 7.2), "darkwood")
+    m.cube("hood_lid", (-6.2, 12.6, -1.0), (6.2, 13.6, 7.4), "steel")
+    m.cube("hood_brow", (-6.4, 12.4, -1.8), (6.4, 13.2, -0.6), "brass")
+    m.cube("mouth_rim", (-6.0, 9.4, -2.0), (6.0, 10.4, -1.2), "brass")
+    return m
+
+
+def depot():
+    m = Model("sw_depot")
+    m.cube("base", (-5.5, -8.0, -5.5), (5.5, -6.5, 5.5), "darkstone")
+    m.cube("column", (-1.8, -6.5, -1.8), (1.8, 6.0, 1.8), "stone")
+    m.cube("dish", (-5.8, 6.0, -5.8), (5.8, 7.2, 5.8), "dial")
+    for k in range(4):
+        base, _res = split(k * 90)
+        u1, v1, u2, v2 = {0: (-6.4, 4.4, 6.4, 7.4), 90: (4.4, -6.4, 7.4, 6.4), 180: (-6.4, -7.4, -4.4, -6.4), 270: (-7.4, -6.4, -4.4, 6.4)}[base]
+        box(m, f"rim{k}", u1, v1, 6.6, u2, v2, 7.4, "brass")
+    return m
+
+
+def ejector():
+    # throws towards model +Y like the drill points; brass cap, heavy counterweight behind
+    m = Model("sw_ejector")
+    m.cube("foot", (-6.0, -8.0, -6.0), (6.0, -4.5, 6.0), "steel")
+    m.cube("body", (-5.0, -5.0, -5.0), (5.0, 5.5, 5.0), "darkwood")
+    m.cube("band", (-5.4, -2.5, -5.4), (5.4, -1.0, 5.4), "brass")
+    m.cube("plate", (-6.2, 5.5, -6.2), (6.2, 7.4, 6.2), "brass")
+    m.cube("plate_top", (-5.2, 7.4, -5.2), (5.2, 7.9, 5.2), "gold")
+    m.cube("spring_a", (-1.4, -4.6, 4.2), (1.4, 5.6, 5.2), "steel")
+    m.cube("spring_b", (-1.4, -4.6, -5.2), (1.4, 5.6, -4.2), "steel")
+    m.cube("weight", (-3.2, 1.2, -3.2), (3.2, 4.6, 3.2), "dark")
+    return m
+
+
+def pump():
+    # inline with a pipe run (axle through model Y); glass belly shows the impeller
+    m = Model("sw_pump")
+    for y in (-8.0, 6.4):
+        m.cube(f"flange{y}", (-3.4, y, -3.4), (3.4, y + 1.6, 3.4), "copper")
+    m.cube("pipe", (-2.2, -6.6, -2.2), (2.2, 6.6, 2.2), "copper")
+    m.cube("belly", (-5.6, -4.0, -5.6), (5.6, 4.0, 5.6), "verdigris")
+    m.cube("window", (-5.9, -2.6, -2.6), (-5.4, 2.6, 2.6), "dial")
+    m.cube("window_e", (5.4, -2.6, -2.6), (5.9, 2.6, 2.6), "dial")
+    m.cube("cap", (-2.8, 4.0, -2.8), (2.8, 5.2, 2.8), "brass")
+    return m
+
+
+def valve():
+    # pipe along model Y, brass handwheel across it
+    m = Model("sw_valve")
+    m.cube("pipe", (-2.4, -8.0, -2.4), (2.4, 8.0, 2.4), "copper")
+    for y in (-7.4, 6.2):
+        m.cube(f"flange{y}", (-3.6, y, -3.6), (3.6, y + 1.8, 3.6), "dark")
+    m.cube("yoke", (-1.2, 2.0, -1.2), (1.2, 6.2, 1.2), "steel")
+    disk(m, "wheel", 5.2, 5.4, 6.4, "brass")
+    m.cube("hub", (-1.6, 5.2, -1.6), (1.6, 6.6, 1.6), "brass")
+    return m
+
+
+def whistle():
+    # sits on the pipe it screams about: flange below, copper body, flaring bell and a gold ring
+    m = Model("sw_whistle")
+    m.cube("flange", (-4.6, -8.0, -4.6), (4.6, -6.4, 4.6), "copper")
+    m.cube("stem", (-2.2, -6.4, -2.2), (2.2, 1.0, 2.2), "copper")
+    m.cube("body", (-3.0, 1.0, -3.0), (3.0, 4.6, 3.0), "copper")
+    m.cube("flare_a", (-3.8, 4.6, -3.8), (3.8, 5.8, 3.8), "copper")
+    m.cube("flare_b", (-4.8, 5.8, -4.8), (4.8, 7.0, 4.8), "copper")
+    m.cube("ring", (-4.0, 6.8, -4.0), (4.0, 7.5, 4.0), "gold")
+    m.cube("slot", (-0.6, 2.2, -3.2), (0.6, 4.4, 3.2), "black")
+    return m
+
+
 def build():
     parts = [shaft(), cogwheel(), large_cogwheel(), gearbox(), hand_crank(), water_wheel(),
              gauge_body("sw_speed_gauge_body", "brass"), gauge_body("sw_stress_gauge_body", "copper"),
@@ -1133,6 +1227,7 @@ def build():
              steam_engine(), steam_engine_flywheel(), crushing_wheel(), flour_sack(),
              alloy_lump(), casing("sw_andesite_casing", "stone"), casing("sw_brass_casing", "brass"),
              whisk(), propeller(), zinc_nugget(),
+             chute(), funnel(), depot(), ejector(), pump(), valve(), whistle(),
              track_straight(), track_slope(), track_curve()]
     for part, metal, frame in (("clutch", "steel", "brass"), ("gearshift", "darkwood", "copper")):
         parts.append(switch_casing(f"sw_{part}_casing", metal, frame, False))

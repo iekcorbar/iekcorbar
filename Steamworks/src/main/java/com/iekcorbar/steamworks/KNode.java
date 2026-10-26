@@ -50,6 +50,9 @@ final class KNode {
     // steam hammer
     double hammerProgress;
 
+    // weighted ejector: tick until the next throw
+    long ejectUntil;
+
     // kettle (results go in millOutput) + mixer
     final List<ItemStack> kettleItems = new ArrayList<>();
     int kettleWater;

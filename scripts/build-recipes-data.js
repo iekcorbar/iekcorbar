@@ -44,7 +44,7 @@ const out = { generated: new Date().toISOString().slice(0, 10), plugins: [] };
 
 // ---------------------------------------------------------------- java crafting
 function javaCrafting(file, category) {
-  const src = read(file).split(/\r?\n/).map((l) => l.replace(/^\s*\/\/.*$/, '')).join('\n');
+  const src = read(file).split(/\r?\n/).map((l) => l.replace(/\/\/.*$/, '')).join('\n');
   const stmts = src.split(/;\s*\n/);
   const list = [];
   for (let st of stmts) {
