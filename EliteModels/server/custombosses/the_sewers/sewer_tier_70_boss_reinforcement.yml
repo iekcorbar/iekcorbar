@@ -1,0 +1,18 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+entityType: DROWNED
+healthMultiplier: 0.25
+isEnabled: true
+level: dynamic
+instanced: true
+mainHand: TRIDENT
+name: $reinforcementLevel &4Drowned One
+powers:
+- attack_poison.yml
+- attack_vacuum.yml
+classLoot: false
+customModel: em_diver_drowned

@@ -1,0 +1,166 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+boots: DIAMOND_BOOTS
+bossType: BOSS
+chestplate: DIAMOND_CHESTPLATE
+damageMultiplier: 1.75
+deathMessage: '&2The Drowned King has been slain!'
+deathMessages:
+- '&e&l---------------------------------------------'
+- '&4The Drowned King has been slain!'
+- '&c&l    1st Damager: $damager1name &cwith $damager1damage damage!'
+- '&6&l    2nd Damager: $damager2name &6with $damager2damage damage!'
+- '&e&l    3rd Damager: $damager3name &ewith $damager3damage damage!'
+- '&4Slayers: $players'
+- '&e&l---------------------------------------------'
+dropsEliteMobsLoot: true
+entityType: DROWNED
+escapeMessage: '&2The sewers grow quiet, for now...'
+followDistance: 70
+healthMultiplier: 7
+helmet: GOLDEN_HELMET
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 80
+leggings: DIAMOND_LEGGINGS
+level: dynamic
+instanced: true
+mainHand: TRIDENT
+name: $bossLevel &4Drowned King
+powers:
+- firestorm.yml
+- invulnerability_arrow.yml
+- movement_speed.yml
+- flame_pyre.yml
+- hyper_loot.yml
+- filename: attack_push.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: shield_wall.yml
+  difficultyID:
+  - 2
+- amount: 1
+  chance: 0.5
+  filename: sewer_tier_70_boss_reinforcement.yml
+  inheritAggro: true
+  inheritLevel: true
+  spawnNearby: false
+  summonType: ON_HIT
+spawnCooldown: 120
+spawnLocations:
+- em_sewer_maze,-384.5,100.5,-171.5,0.0,0.0:0
+spawnMessage: '&cThe sewers echo with the clamor of a returned king...'
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: sewer_drowned_kings_crown_normal.yml
+  chance: 0.1
+  difficultyID: 0
+- filename: sewer_drowned_kings_trident_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_drowned_kings_boots_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_drowned_kings_chestplate_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_drowned_kings_crown_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_drowned_kings_leggings_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_drowned_kings_trident_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_drowned_kings_boots_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_drowned_kings_chestplate_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_drowned_kings_crown_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_drowned_kings_leggings_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_drowned_kings_mace_normal.yml
+  chance: 0.08
+  difficultyID: 0
+- filename: sewer_drowned_kings_mace_hard.yml
+  chance: 0.08
+  difficultyID: 1
+- filename: sewer_drowned_kings_mace_mythic.yml
+  chance: 0.08
+  difficultyID: 2
+- filename: sewer_drowned_kings_spear_normal.yml
+  chance: 0.08
+  difficultyID: 0
+- filename: sewer_drowned_kings_spear_hard.yml
+  chance: 0.08
+  difficultyID: 1
+- filename: sewer_drowned_kings_spear_mythic.yml
+  chance: 0.08
+  difficultyID: 2
+- filename: sewer_drowned_kings_bow_normal.yml
+  chance: 0.08
+  difficultyID: 0
+- filename: sewer_drowned_kings_bow_hard.yml
+  chance: 0.08
+  difficultyID: 1
+- filename: sewer_drowned_kings_bow_mythic.yml
+  chance: 0.08
+  difficultyID: 2
+- filename: sewer_drowned_kings_crossbow_normal.yml
+  chance: 0.08
+  difficultyID: 0
+- filename: sewer_drowned_kings_crossbow_hard.yml
+  chance: 0.08
+  difficultyID: 1
+- filename: sewer_drowned_kings_crossbow_mythic.yml
+  chance: 0.08
+  difficultyID: 2
+- filename: cl_the_sewers_king_swords_f3aaf646.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_axes_57640bac.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_bows_4ce68428.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_crossbows_e094c4ec.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_tridents_e76bdd31.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_hoes_67e80cbf.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_maces_76a20299.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_spears_802a95b5.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_staves_3d456f9a.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_wands_b477f72f.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_dps_helmets_1c16f1ff.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_dps_chestplates_d8e3d5c6.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_dps_leggings_65a98aea.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_dps_boots_df6bcc81.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_tank_helmets_8be5b5ea.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_tank_chestplates_70b0efa9.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_tank_leggings_a4a0859e.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_tank_boots_7a94494c.yml
+  chance: 1.0
+- filename: cl_the_sewers_king_shields_96b372f2.yml
+  chance: 1.0
+customModel: em_diver_drowned

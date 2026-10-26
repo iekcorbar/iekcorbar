@@ -1,0 +1,24 @@
+isEnabled: true
+entityType: PIG
+name: ''
+level: '1'
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+dropsSkillXP: false
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+classLoot: true
+eliteScript:
+  HideSeat:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - duration: 2147483647
+      action: POTION_EFFECT
+      Target:
+        targetType: SELF
+      amplifier: 0
+      potionEffectType: INVISIBILITY
+customModel: em_pipe_pig

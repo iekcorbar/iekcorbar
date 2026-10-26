@@ -1,0 +1,20 @@
+# Zukan - recipe + item browser. Guide: docs-url
+docs-url: https://iekcorbar.com/wiki?page=zukan
+
+# Plugins whose recipes and items Zukan asks for (they register a small data service when installed).
+providers: ["Steamworks", "Kitchen", "Sakagura", "Relics", "Kura", "Wildlife", "Satchel"]
+
+# Recipe namespaces (and items tagged by those plugins) Zukan never lists. MMOItems has its own item browser.
+ignored-namespaces: ["mmoitems"]
+
+# Most options shown for one ingredient slot (e.g. "any planks"); the slot cycles through them.
+max-choices: 24
+
+# Look of the browser: "steampunk" (needs the Zukan resource pack, part of the merged Iekcorbar pack) or "plain" (grey glass panes, works without any pack).
+gui-style: steampunk
+
+# Pressing F (swap hands) while holding the Zukan book opens the browser.
+swap-key: true
+
+# Craftable Zukan book (right-click opens the browser). Turn off to rely on /zukan only.
+book-recipe: true

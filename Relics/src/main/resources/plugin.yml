@@ -1,0 +1,26 @@
+name: Relics
+version: '${project.version}'
+main: com.iekcorbar.relics.RelicsPlugin
+api-version: '26.2'
+description: Lore relics - placeable props from the story of Iekcorbar.
+author: iekcorbar
+
+commands:
+  relics:
+    description: Relics commands
+    usage: /relics <list|give|giveall|disc|remove|where|info|board|music|gift|secret>
+    aliases: [relic]
+
+permissions:
+  relics.admin:
+    description: All Relics staff commands
+    default: op
+    children:
+      relics.give: true
+      relics.build: true
+  relics.give:
+    description: Give relics, treats and music discs
+    default: op
+  relics.build:
+    description: See, remove and control placed relics (where, info, remove, board, music)
+    default: op

@@ -1,0 +1,19 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+entityType: VEX
+healthMultiplier: 0.25
+isEnabled: true
+instanced: true
+level: dynamic # 60
+name: $reinforcementLevel &1Snowy Wraith
+powers:
+- attack_freeze.yml
+- invulnerability_knockback.yml
+- invulnerability_arrow.yml
+- invulnerability_fire.yml
+classLoot: false
+customModel: em_imp_vex

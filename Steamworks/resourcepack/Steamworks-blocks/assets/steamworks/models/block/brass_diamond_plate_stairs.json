@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/brass_diamond_plate",
+    "top": "steamworks:block/brass_diamond_plate",
+    "side": "steamworks:block/brass_diamond_plate"
+  }
+}

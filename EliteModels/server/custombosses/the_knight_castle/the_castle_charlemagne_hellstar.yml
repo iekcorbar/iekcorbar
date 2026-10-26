@@ -1,0 +1,25 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: BLAZE
+followDistance: 100
+healthMultiplier: 3.0
+isEnabled: true
+isRegionalBoss: false
+leashRadius: 100
+level: dynamic # 95
+instanced: true
+movementSpeedAttribute: 0.01
+name: $minibossLevel &cHellstar
+powers:
+- invulnerability_fire.yml
+- invisibility.yml
+- attack_fireball.yml
+trails:
+- FLAME
+classLoot: false
+customModel: em_furnace_blaze

@@ -1,0 +1,18 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: SKELETON
+mainHand: BOW
+name: $eventBossLevel &fRotted Corpse
+mountedEntity: forgotten_experiment_3.yml
+level: dynamic
+healthMultiplier: 1.0
+damageMultiplier: 1.0
+powers:
+- lightning_bolts.yml
+- invulnerability_fire.yml
+movementSpeedAttribute: 0.3
+followDistance: 80
+customModel: em_clockwork_skeleton

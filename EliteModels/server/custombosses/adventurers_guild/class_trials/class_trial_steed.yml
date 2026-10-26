@@ -1,0 +1,8 @@
+extends: class_trial_actor_base.yml
+isEnabled: true
+entityType: HORSE
+name: '&eSummoned Steed'
+healthMultiplier: 1.0
+damageMultiplier: 0
+ai: false
+customModel: em_clockwork_horse

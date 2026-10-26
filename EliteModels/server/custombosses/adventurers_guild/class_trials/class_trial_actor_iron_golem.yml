@@ -1,0 +1,4 @@
+extends: class_trial_actor_base.yml
+isEnabled: true
+entityType: IRON_GOLEM
+customModel: em_boiler_golem

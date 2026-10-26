@@ -1,0 +1,25 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: ZOMBIE
+followDistance: 30
+frozen: false
+healthMultiplier: 0.05
+isEnabled: true
+isRegionalBoss: false
+leashRadius: 30
+mainHand: BOW
+movementSpeedAttribute: 0.1
+name: $reinforcementLevel &aBow Dispenser
+normalizedCombat: true
+powers:
+- invulnerability_fire.yml
+uniqueLootList:
+- filename=tricky_bow.yml:amount=1:chance=1.0
+classLoot: false
+customModel: em_steam_zombie

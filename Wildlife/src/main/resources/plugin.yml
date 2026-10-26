@@ -1,0 +1,26 @@
+name: Wildlife
+version: '${project.version}'
+main: com.iekcorbar.wildlife.WildlifePlugin
+api-version: '26.2'
+description: New wildlife next to the vanilla animals, a Field Journal and a Wildlife advancement tab.
+author: iekcorbar
+depend: [FreeMinecraftModels]
+softdepend: [Vault, CMI]
+
+commands:
+  wildlife:
+    description: Wildlife commands
+    usage: /wildlife <help|journal|spawn|egg|give|giveall|info|reload>
+    aliases: [wl]
+
+  zoo:
+    description: Zoo settings and items
+    usage: /zoo <set|give|info|help>
+
+permissions:
+  wildlife.zoo.staff:
+    description: Walk through every zoo gate and change any kiosk
+    default: op
+  wildlife.admin:
+    description: Spawn animals, give items, reload
+    default: op

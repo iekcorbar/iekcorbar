@@ -1,0 +1,297 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: WITHER_SKELETON
+mainHand: BOW
+name: $minibossLevel &eHolder of Void
+level: dynamic # 55
+healthMultiplier: 5.0
+damageMultiplier: 0.9
+movementSpeedAttribute: 0.37
+spawnCooldown: 1
+powers:
+- filename: em_id_the_nether_bell_red_boss_lev_zone_normal.yml
+  difficultyID:
+  - 0
+- filename: em_id_the_nether_bell_red_boss_lev_zone_hard.yml
+  difficultyID:
+  - 1
+- filename: em_id_the_nether_bell_red_boss_lev_zone_mythical.yml
+  difficultyID:
+  - 2
+- invulnerability_fire.yml
+- filename: shield_wall.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: taze.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 40
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  NetherBellChestDomePlace:
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      shape: DOME
+      radius: 4
+      borderRadius: 3
+      Target:
+        targetType: LOCATION
+        location: same_as_boss,20.0,87.0,39.0,0.0,0.0
+    Actions:
+    - action: PLACE_BLOCK
+      Target:
+        targetType: ZONE_BORDER
+      material: RED_STAINED_GLASS
+  NetherBellChestDomeRemove:
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      shape: DOME
+      radius: 4
+      borderRadius: 3
+      Target:
+        targetType: LOCATION
+        location: same_as_boss,20.0,87.0,39.0,0.0,0.0
+    Actions:
+    - action: PLACE_BLOCK
+      Target:
+        targetType: ZONE_BORDER
+      material: AIR
+    - action: MESSAGE
+      wait: 222
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 200
+      sValue: '&7A glass dome has shattered around a chest near the &cNether Temple&7.'
+  TagVoidBell:
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      shape: DOME
+      radius: 2
+      borderRadius: 1
+      Target:
+        targetType: LOCATION
+        location: same_as_boss,-197.0,92,-199.0,0.0,0.0
+    Actions:
+    - action: PLACE_BLOCK
+      Target:
+        targetType: ZONE_BORDER
+      material: AIR
+    - action: MESSAGE
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 20
+      sValue: '&7A chest has been revealed!'
+    - action: TITLE_MESSAGE
+      wait: 5
+      title: '&cThe Void Bell'
+      subtitle: '&cGrows Stronger!'
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 30
+      duration: 30
+      fadeIn: 5
+      fadeOut: 5
+    - action: PLAY_SOUND
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 30
+      sValue: minecraft:entity.player.death
+    - action: TAG
+      Target:
+        targetType: NEARBY_MOBS
+        range: 2000
+      tags:
+      - Red3
+      Conditions:
+        hasTags:
+        - VoidBell
+        Target:
+          targetType: ACTION_TARGET
+        conditionType: FILTERING
+  SpawnPrep:
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      shape: DOME
+      radius: 2
+      borderRadius: 1
+      Target:
+        targetType: LOCATION
+        location: same_as_boss,-197.0,92,-199.0,0.0,0.0
+    Actions:
+    - action: SET_MOB_AI
+      bValue: false
+      Target:
+        targetType: SELF
+    - action: PLACE_BLOCK
+      Target:
+        targetType: ZONE_BORDER
+      material: WHITE_STAINED_GLASS
+  ActivateMobs:
+    Events:
+    - ZoneEnterEvent
+    Zone:
+      shape: SPHERE
+      radius: 18
+      Target:
+        targetType: SELF
+    Actions:
+    - action: TITLE_MESSAGE
+      wait: 24
+      title: '&cThe Void Bell'
+      subtitle: '&cRings!'
+      Target:
+        targetType: WORLD_PLAYERS
+      duration: 15
+      fadeIn: 5
+      fadeOut: 5
+    - action: PLAY_SOUND
+      wait: 24
+      sValue: block.bell.use
+      Target:
+        targetType: SELF
+      repeatEvery: 10
+      times: 4
+    - action: SET_MOB_AI
+      wait: 24
+      Target:
+        targetType: NEARBY_MOBS
+        range: 25
+      bValue: true
+      Conditions:
+        hasTags:
+        - Disturbed
+        Target:
+          targetType: ACTION_TARGET
+    - action: SET_MOB_AI
+      wait: 24
+      Target:
+        targetType: SELF
+      bValue: true
+    - action: MAKE_INVULNERABLE
+      wait: 34
+      Target:
+        targetType: NEARBY_MOBS
+        range: 25
+      invulnerable: false
+      Conditions:
+        hasTags:
+        - Disturbed
+        Target:
+          targetType: ACTION_TARGET
+    - action: PUSH
+      wait: 24
+      Target:
+        targetType: NEARBY_MOBS
+        range: 25
+      vValue: 0,0.6,0
+      Conditions:
+        hasTags:
+        - Disturbed
+        Target:
+          targetType: ACTION_TARGET
+    Cooldowns:
+      local: 99999
+      global: 100
+spawnLocations:
+- em_id_the_nether_bell,-188.5,91,-195.5,-40.0,0.0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_sword_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_sword_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_sword_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: cl_story_nether_bell_swords_5b0e5445.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_axes_9a9cc081.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_bows_e09343b5.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_crossbows_7413b656.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tridents_9c6deb80.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_hoes_b95b5ce8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_maces_2d5735b1.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_spears_d1f22e48.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_staves_3d92b639.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_wands_e5e77fbb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_helmets_d647333b.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_chestplates_3d33aaeb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_leggings_8994d82f.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_boots_a48a83ae.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_helmets_c53bb16e.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_chestplates_f21db6b8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_leggings_41290a61.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_boots_d3f7f477.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_shields_16efa34b.yml
+  chance: 1.0
+customModel: em_ember_wither_skeleton

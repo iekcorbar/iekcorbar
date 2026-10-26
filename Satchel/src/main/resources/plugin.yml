@@ -1,0 +1,21 @@
+name: Satchel
+version: '${project.version}'
+main: com.iekcorbar.satchel.SatchelPlugin
+api-version: '26.2'
+description: Backpacks in six tiers with upgrade slots - pickup, magnet, feeding and everlasting.
+author: iekcorbar
+softdepend: [Zukan]
+
+commands:
+  satchel:
+    description: Satchel backpack commands
+    usage: /satchel <help|give|giveall|list|reload>
+    aliases: [backpack]
+
+permissions:
+  satchel.use:
+    description: Use backpacks
+    default: true
+  satchel.admin:
+    description: Give items, reload the config
+    default: op

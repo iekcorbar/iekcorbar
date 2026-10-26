@@ -1,0 +1,111 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 0.8
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Open1:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: PLACE_BLOCK
+      duration: 1200
+      material: AIR
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      Target:
+        location: same_as_boss,330.5,92.0,80.5,0.0,0.0
+        targetType: LOCATION
+      height: 3.0
+      radius: 2.0
+      shape: CYLINDER
+  Open2:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: PLACE_BLOCK
+      duration: 1200
+      material: AIR
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      Target:
+        location: same_as_boss,299.5,90.0,89.5,0.0,0.0
+        targetType: LOCATION
+      height: 3.0
+      radius: 2.0
+      shape: CYLINDER
+entityType: WITHER_SKELETON
+followDistance: 30
+frozen: false
+healthMultiplier: 4
+instanced: true
+isEnabled: true
+leashRadius: 30
+level: dynamic # 10
+mainHand: NETHERITE_SWORD
+movementSpeedAttribute: 0.32
+name: $minibossLevel &5Soul Shadow
+normalizedCombat: true
+powers:
+- the_climb_ghast_buff.yml
+- taze.yml
+- lightning_bolts.yml
+- thunderstorm.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: invulnerability_arrow.yml
+- difficultyID:
+  - 2
+  filename: invulnerability_knockback.yml
+- filename: the_climb_skeletal_shadow_summon.yml
+  summonType: ON_COMBAT_ENTER
+- filename: the_climb_skeletal_shadow_summon.yml
+  summonType: ON_COMBAT_ENTER
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: the_climb_skeletal_shadow_p2_swords_52c13e64.yml
+  chance: 1.0
+- filename: cl_story_climb_axes_31b58f5d.yml
+  chance: 1.0
+- filename: cl_story_climb_bows_147d3e16.yml
+  chance: 1.0
+- filename: cl_story_climb_crossbows_320c599d.yml
+  chance: 1.0
+- filename: cl_story_climb_tridents_462a95e9.yml
+  chance: 1.0
+- filename: cl_story_climb_hoes_90f57b2c.yml
+  chance: 1.0
+- filename: cl_story_climb_maces_7f63f619.yml
+  chance: 1.0
+- filename: cl_story_climb_spears_743b64fe.yml
+  chance: 1.0
+- filename: cl_story_climb_staves_3ba7efcc.yml
+  chance: 1.0
+- filename: cl_story_climb_wands_0b2088fe.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_helmets_6a5e6399.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_chestplates_ed45bf2e.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_leggings_4a065545.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_boots_edc18702.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_helmets_77716983.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_chestplates_ebe1c9ff.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_leggings_7b9e21c5.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_boots_0634543f.yml
+  chance: 1.0
+- filename: cl_story_climb_shields_4f3929f0.yml
+  chance: 1.0
+customModel: em_ember_wither_skeleton

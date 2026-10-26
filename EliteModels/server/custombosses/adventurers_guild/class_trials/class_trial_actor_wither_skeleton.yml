@@ -1,0 +1,4 @@
+extends: class_trial_actor_base.yml
+isEnabled: true
+entityType: WITHER_SKELETON
+customModel: em_ember_wither_skeleton

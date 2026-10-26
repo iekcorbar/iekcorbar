@@ -1,0 +1,132 @@
+# Relics - placeable props from the lore of Iekcorbar.
+# Collection 1: "Shoutlander's Shadow" (Halloween 2026).
+# Time zone for the advent wreath, advent calendar and the New Year countdown at midnight
+# (e.g. Europe/Amsterdam, Europe/London, America/New_York).
+timezone: Europe/Amsterdam
+
+# Left-clicks needed to break a relic in survival.
+break-hits: 3
+
+# How far the music props (music box, harp, bone xylophone, gramophone) carry, in blocks. One music box should
+# fill a whole town square (Xmas Town, Halloween Town), so players do not need a box on every corner.
+music-radius: 64
+
+# When locked gift boxes may be opened, as "MM-DD to MM-DD" in the timezone above (a bare day repeats every
+# month, "any" is always open - handy to test the whole secret santa flow outside December). Default: Christmas.
+gift-window: "12-24 to 12-26"
+
+# Music discs: the custom discs that play in a jukebox (a paper disc with a jukebox_playable component).
+# The list lives HERE in the plugin config file (on the server: plugins/Relics/config.yml) - not in a generated
+# file - so adding a disc is just adding an entry below. tools/make_discs.py <ffmpeg> fills the generated entries
+# between the BEGIN/END markers from the audio files dropped in Relics/discs/ (+ Relics/discs/discs.txt); outside
+# the markers you can add or remove your own by hand. Restart the server once after adding a disc: the plugin then
+# writes the relics_discs jukebox data pack, and the resource pack needs a rebuild (tools/make_pack.py).
+discs:
+  # BEGIN:generated
+  jingle_bells:
+    title: Jingle Bells
+    seconds: 40
+    event: disc.jingle_bells
+    recipe: SNOWBALL
+    colour: 0
+  deck_the_halls:
+    title: Deck the Halls
+    seconds: 41
+    event: disc.deck_the_halls
+    recipe: SWEET_BERRIES
+    colour: 1
+  we_wish:
+    title: We Wish You a Merry Christmas
+    seconds: 31
+    event: disc.we_wish
+    recipe: COOKIE
+    colour: 2
+  silent_night:
+    title: Silent Night
+    seconds: 86
+    event: disc.silent_night
+    recipe: CANDLE
+    colour: 3
+  bountiful_barn_ballad:
+    title: Bountiful Barn Ballad
+    seconds: 130
+    event: disc.bountiful_barn_ballad
+    recipe: ""
+    colour: 4
+  gears_of_christmas:
+    title: Gears Of Christmas
+    seconds: 132
+    event: disc.gears_of_christmas
+    recipe: ""
+    colour: 5
+  ghosts_of_the_samurai:
+    title: Ghosts Of The Samurai
+    seconds: 208
+    event: disc.ghosts_of_the_samurai
+    recipe: ""
+    colour: 0
+  trick_or_treat_at_halloween:
+    title: Trick Or Treat At Halloween
+    seconds: 108
+    event: disc.trick_or_treat_at_halloween
+    recipe: ""
+    colour: 1
+  # END:generated
+
+
+# Xmas Town advent calendar: what each door gives (1-24 December, 25 = Christmas Day).
+# Items: "<MATERIAL> [amount]" or "relics:<relic or food id> [amount]" (see /relics list).
+advent-calendar:
+  rewards:
+    1: ["relics:candy_cane 3"]
+    2: ["relics:gingerbread_cookie 6"]
+    3: ["GOLD_NUGGET 9"]
+    4: ["relics:hot_chocolate 2"]
+    5: ["relics:string_lights 4"]
+    6: ["COOKIE 8", "relics:candy_cane 2"]
+    7: ["relics:gift_box 2"]
+    8: ["EMERALD 2"]
+    9: ["relics:mulled_cider 2"]
+    10: ["relics:snow_lantern"]
+    11: ["FIREWORK_ROCKET 8"]
+    12: ["relics:christmas_stollen 2"]
+    13: ["relics:steam_lantern"]
+    14: ["GOLD_INGOT 2"]
+    15: ["relics:toy_train"]
+    16: ["relics:gingerbread_cookie 12"]
+    17: ["relics:kadomatsu"]
+    18: ["EMERALD 4"]
+    19: ["relics:snow_globe"]
+    20: ["relics:hot_chocolate 3", "relics:candy_cane 3"]
+    21: ["relics:advent_wreath"]
+    22: ["DIAMOND"]
+    23: ["relics:music_box"]
+    24: ["relics:christmas_tree", "relics:gift_box 3"]
+    25: ["relics:cookie_plate", "DIAMOND 2", "FIREWORK_ROCKET 16"]
+
+# Easter egg hunt: what finding an egg gives (one random line). Each player can find each egg once.
+easter:
+  egg-rewards: ["relics:chocolate_bunny 2", "relics:hot_cross_bun 2", "GOLD_NUGGET 4", "EMERALD", "relics:easter_egg", "COOKIE 4", "RABBIT_FOOT"]
+
+# St. Patrick's Day: what the Pot of Gold gives each player once a day.
+st-patricks:
+  pot-of-gold: ["GOLD_NUGGET 6", "relics:shamrock_cookie 2"]
+
+# New Year Countdown Board: the time zones a board can follow, "Label|Zone/Id" (any Java zone id).
+# A board in "world" mode counts down to the zone whose New Year comes next; sneak + right-click (placer or staff)
+# cycles a board through world -> each zone below. The home zone is the `timezone` above.
+new-year:
+  zones:
+    - "Kiritimati|Pacific/Kiritimati"
+    - "Auckland|Pacific/Auckland"
+    - "Sydney|Australia/Sydney"
+    - "Tokyo|Asia/Tokyo"
+    - "Dubai|Asia/Dubai"
+    - "Amsterdam|Europe/Amsterdam"
+    - "London|Europe/London"
+    - "New York|America/New_York"
+    - "Los Angeles|America/Los_Angeles"
+    - "Honolulu|Pacific/Honolulu"
+# Firework launchers near a board also fire (a shorter show) at the New Year of every other zone a "world" board
+# passes; false = only for the home zone and for boards fixed to a zone.
+  fireworks-every-zone: true

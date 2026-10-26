@@ -1,0 +1,72 @@
+/* Shared profile header + tab strip (ProfileHero.js). Plain CSS: gradients,
+   overlap and keyframes. Colours come from the chosen banner via --accent. */
+
+.ph { position: relative; border-radius: 18px; overflow: hidden; border: 1px solid rgba(184, 115, 51, .45); background: #0d0907; box-shadow: 0 18px 50px rgba(0, 0, 0, .55); animation: ph-in .6s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes ph-in { from { opacity: 0; transform: translateY(14px); } }
+
+.ph-banner { position: relative; height: 170px; overflow: hidden; }
+.ph-has-image .ph-gear { display: none; }
+.ph-report-banner { position: absolute; right: 10px; bottom: 8px; z-index: 2; padding: 2px 8px; border-radius: 6px; font-size: 10px; color: rgba(255, 255, 255, .65); background: rgba(0, 0, 0, .45); cursor: pointer; opacity: 0; transition: opacity .2s; }
+.ph:hover .ph-report-banner, .ph-report-banner:focus-visible { opacity: 1; }
+@media (hover: none) { .ph-report-banner { opacity: .85; } }
+.ph-shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(13, 9, 7, .85)), repeating-linear-gradient(90deg, rgba(255, 255, 255, .03) 0 2px, transparent 2px 9px); }
+.ph-gear { position: absolute; color: rgba(255, 255, 255, .09); animation: ph-spin 70s linear infinite; }
+.ph-gear-b { animation-direction: reverse; animation-duration: 48s; color: rgba(255, 255, 255, .07); }
+.ph-gear-c { animation-duration: 90s; color: rgba(255, 255, 255, .06); }
+@keyframes ph-spin { to { transform: rotate(360deg); } }
+
+.ph-body { position: relative; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 22px; padding: 0 26px 24px; }
+.ph-skin { flex-shrink: 0; width: 132px; margin-top: -100px; display: flex; justify-content: center; animation: ph-float 5s ease-in-out infinite; }
+.ph-skin img { height: 232px; width: auto; filter: drop-shadow(0 12px 16px rgba(0, 0, 0, .7)); user-select: none; }
+@keyframes ph-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+.ph-main { flex: 1; min-width: 240px; padding-top: 16px; }
+.ph-name { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ph-name h1 { font-family: var(--font-serif, Georgia, serif); font-weight: 900; font-size: 30px; line-height: 1.1; letter-spacing: .03em; color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, .6), 0 0 22px color-mix(in srgb, var(--accent) 40%, transparent); }
+.ph-role { font-size: 10px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; }
+.ph-bio { margin-top: 10px; max-width: 62ch; font-size: 14px; line-height: 1.55; color: rgba(240, 225, 200, .88); white-space: pre-wrap; border-left: 3px solid var(--accent); padding-left: 12px; }
+
+.ph-chips { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.ph-chips li { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px; font-size: 11px; color: rgba(240, 225, 200, .75); background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .09); }
+.ph-chips li svg { width: 13px; height: 13px; color: var(--accent); }
+.ph-chips li strong { color: #fff; font-weight: 700; }
+.ph-chip-label { text-transform: uppercase; letter-spacing: .08em; font-size: 9px; font-weight: 700; opacity: .7; }
+
+.ph-actions { padding-top: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 170px; }
+
+@media (max-width: 720px) {
+  .ph-banner { height: 130px; }
+  .ph-body { padding: 0 16px 18px; gap: 6px; justify-content: center; text-align: center; }
+  .ph-skin { margin-top: -84px; width: 110px; }
+  .ph-skin img { height: 190px; }
+  .ph-main { min-width: 100%; padding-top: 4px; }
+  .ph-name { justify-content: center; max-width: 100%; }
+  .ph-name h1 { font-size: 24px; max-width: 100%; overflow-wrap: anywhere; }
+  .ph-bio { margin-left: auto; margin-right: auto; text-align: left; }
+  .ph-chips { justify-content: center; }
+  .ph-actions { width: 100%; }
+}
+
+/* tab strip */
+.pt-strip { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 4px; border-radius: 12px; background: rgba(0, 0, 0, .35); border: 1px solid rgba(184, 115, 51, .3); }
+.pt-strip::-webkit-scrollbar { display: none; }
+.pt-tab { display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0; padding: 9px 16px; border-radius: 9px; cursor: pointer; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: rgba(240, 225, 200, .55); transition: background .25s, color .25s; }
+.pt-tab svg { width: 14px; height: 14px; }
+.pt-tab:hover { color: #fff; background: rgba(255, 255, 255, .05); }
+.pt-tab.is-on { color: #1a1008; background: linear-gradient(180deg, #f0cf7a, #b8862f); box-shadow: 0 2px 8px rgba(0, 0, 0, .5); }
+.pt-tab em { font-style: normal; font-size: 10px; padding: 1px 6px; border-radius: 999px; background: rgba(0, 0, 0, .3); }
+.pt-tab.is-on em { background: rgba(0, 0, 0, .18); }
+
+.pt-panel { animation: pt-in .4s ease both; }
+@keyframes pt-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* phones: five tabs must fit one row, so drop the icons and tighten up */
+@media (max-width: 720px) {
+  .pt-strip { gap: 2px; padding: 3px; scroll-snap-type: x proximity; }
+  .pt-tab { padding: 9px 9px; gap: 4px; font-size: 10px; letter-spacing: .05em; scroll-snap-align: start; }
+  .pt-tab svg { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ph, .ph-gear, .ph-skin, .pt-panel { animation: none !important; }
+}

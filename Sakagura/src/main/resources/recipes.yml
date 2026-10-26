@@ -1,0 +1,363 @@
+# Sakagura recipes. The first group comes from iekcorbar.com/brewing (keep them in sync with the
+# website); the second group is Sakagura's own. Regenerate with tools/make_recipes.py, or edit freely
+# and /brew reload. Names: poor / normal / good quality (one name = always that one).
+# Effects: TYPE/level/seconds, ranges like 0-1 scale with quality (harmful ones get milder).
+# Lore lines starting with + / ++ / +++ only show on poor / normal / good brews.
+recipes:
+  # ---- from iekcorbar.com/brewing
+  absinthe:
+    names: ["Poor Absinthe", "Absinthe", "Strong Absinthe"]
+    color: "GREEN"
+    difficulty: 8
+    alcohol: 42
+    lore: ["+++<dark_gray>High proof liquor"]
+    effects: ["POISON/15-25"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["Grass/15"]}
+      - {type: distill, runs: 6}
+  ap_mead:
+    names: ["Apple Mead", "Sweet Apple Mead", "Sweet Golden Apple Mead"]
+    color: "ORANGE"
+    difficulty: 4
+    alcohol: 11
+    lore: ["+Is there any Apple in this?", "++Refreshing taste of Apple", "+++Sweetest hint of Apple"]
+    effects: ["WATER_BREATHING/1-2/150"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["Sugar Cane/6", "Apple/2"]}
+      - {type: age, years: 4, wood: "oak"}
+  beer:
+    names: ["Skunky Beer", "Beer", "Fine Beer"]
+    color: "ffd333"
+    difficulty: 1
+    alcohol: 6
+    lore: ["+++<dark_gray>Crisp taste"]
+    effects: []
+    steps:
+      - {type: cook, time: 8, ingredients: ["Wheat/6"]}
+      - {type: age, years: 3, wood: "any"}
+  cidre:
+    names: ["Poor Cidre", "Apple Cider", "Great Apple Cider"]
+    color: "f86820"
+    difficulty: 4
+    alcohol: 7
+    lore: []
+    effects: []
+    steps:
+      - {type: cook, time: 7, ingredients: ["Apple/14"]}
+      - {type: age, years: 3, wood: "any"}
+  darkbeer:
+    names: ["Skunky Darkbeer", "Darkbeer", "Fine Darkbeer"]
+    color: "650013"
+    difficulty: 2
+    alcohol: 7
+    lore: ["+++<dark_gray>Roasted taste"]
+    effects: []
+    steps:
+      - {type: cook, time: 8, ingredients: ["Wheat/6"]}
+      - {type: distill, runs: 3}
+  eggnog:
+    names: ["Egg Liquor", "Eggnog", "Advocaat"]
+    color: "ffe680"
+    difficulty: 4
+    alcohol: 10
+    lore: ["Made with raw egg"]
+    effects: []
+    steps:
+      - {type: cook, time: 2, ingredients: ["Egg/5", "Sugar/2", "Milk Bucket/1"]}
+      - {type: age, years: 3, wood: "any"}
+  g_vodka:
+    names: ["Rancid Vodka", "Golden Vodka", "Shimmering Golden Vodka"]
+    color: "ORANGE"
+    difficulty: 6
+    alcohol: 20
+    lore: []
+    effects: ["WEAKNESS/28", "POISON/4"]
+    steps:
+      - {type: cook, time: 18, ingredients: ["Potato/10", "Gold Nugget/2"]}
+      - {type: distill, runs: 3}
+  gin:
+    names: ["Pale Gin", "Gin", "Old Tom Gin"]
+    color: "99ddff"
+    difficulty: 6
+    alcohol: 20
+    lore: ["++With the", "++taste of juniper", "+++Perfectly finished off", "+++with juniper"]
+    effects: []
+    steps:
+      - {type: cook, time: 6, ingredients: ["Wheat/9", "Blue Orchid/6", "Apple/1"]}
+      - {type: distill, runs: 2}
+  hot_choc:
+    names: ["Hot Chocolate"]
+    color: "DARK_RED"
+    difficulty: 2
+    alcohol: 0
+    lore: []
+    effects: ["haste/40"]
+    steps:
+      - {type: cook, time: 2, ingredients: ["Cookie/3"]}
+  iced_coffee:
+    names: ["Watery Coffee", "Iced Coffee", "Strong Iced Coffee"]
+    color: "BLACK"
+    difficulty: 4
+    alcohol: -8
+    lore: []
+    effects: ["REGENERATION/30", "SPEED/10"]
+    steps:
+      - {type: mix, time: 1, ingredients: ["Cookie/8", "Snowball/4", "Milk Bucket/1"]}
+  potato_soup:
+    names: ["Potato soup"]
+    color: "ORANGE"
+    difficulty: 1
+    alcohol: 0
+    lore: []
+    effects: ["instant_health/0-1"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["Potato/5", "Short Grass/3"]}
+  rum:
+    names: ["Bitter Rum", "Spicy Rum", "Golden Rum"]
+    color: "DARK_RED"
+    difficulty: 6
+    alcohol: 30
+    lore: ["+<dark_gray>Too bitter to drink", "++<dark_gray>Spiced by the barrel", "+++<yellow>Spiced Gold"]
+    effects: ["FIRE_RESISTANCE/1/20-100", "+POISON/0-1/0-30"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["Sugar Cane/18"]}
+      - {type: distill, runs: 2}
+      - {type: age, years: 14, wood: "oak"}
+  tequila:
+    names: ["Mezcal", "Tequila", "Tequila anejo"]
+    color: "f5f07e"
+    difficulty: 5
+    alcohol: 20
+    lore: ["Desert spirit"]
+    effects: []
+    steps:
+      - {type: cook, time: 15, ingredients: ["Cactus/8"]}
+      - {type: distill, runs: 2}
+      - {type: age, years: 12, wood: "birch"}
+  vodka:
+    names: ["Lousy Vodka", "Vodka", "Russian Vodka"]
+    color: "WHITE"
+    difficulty: 4
+    alcohol: 20
+    lore: ["+<dark_gray>Almost undrinkable"]
+    effects: ["WEAKNESS/15", "POISON/10"]
+    steps:
+      - {type: cook, time: 15, ingredients: ["Potato/10"]}
+      - {type: distill, runs: 3}
+  whiskey:
+    names: ["Unsightly Whiskey", "Whiskey", "Scotch Whiskey"]
+    color: "ORANGE"
+    difficulty: 7
+    alcohol: 26
+    lore: ["<gray>Single Malt"]
+    effects: []
+    steps:
+      - {type: cook, time: 10, ingredients: ["Wheat/10"]}
+      - {type: distill, runs: 2}
+      - {type: age, years: 18, wood: "spruce"}
+  brandy:
+    names: ["Unsightly Brandy", "Brandy", "French Brandy"]
+    color: "cc7241"
+    difficulty: 8
+    alcohol: 35
+    lore: ["With a hint of grapes"]
+    effects: []
+    steps:
+      - {type: cook, time: 5, ingredients: ["Sweet Berries/5"]}
+      - {type: distill, runs: 4}
+      - {type: age, years: 12, wood: "dark_oak"}
+  apple_juice:
+    names: ["Apple Juice"]
+    color: "af2a2d"
+    difficulty: 1
+    alcohol: 0
+    lore: []
+    effects: []
+    steps:
+      - {type: cook, time: 6, ingredients: ["Apple/9", "Sugar/6"]}
+  red_sangria:
+    names: ["Red Sangria"]
+    color: "4a0408"
+    difficulty: 5
+    alcohol: 25
+    lore: []
+    effects: []
+    steps:
+      - {type: mix, time: 4, ingredients: ["Red Wine/1", "Apple Liquor/1", "Brandy/1", "Sugar/6", "Apple/1"]}
+      - {type: age, years: 1, wood: "copper"}
+  french_75:
+    names: ["French 75"]
+    color: "ffe491"
+    difficulty: 3
+    alcohol: 20
+    lore: []
+    effects: []
+    steps:
+      - {type: mix, time: 3, ingredients: ["Apple Juice/1", "Gin/2", "Sugar/4"]}
+  # ---- Sakagura's own
+  sake:
+    names: ["Rough Sake", "Sake", "Daiginjo Sake"]
+    color: "f2efe0"
+    difficulty: 6
+    alcohol: 15
+    lore: ["<gray>Rice, water and patience"]
+    effects: ["REGENERATION/0-1/20-40"]
+    steps:
+      - {type: cook, time: 8, ingredients: ["kitchen:steamed_rice/6", "Sugar/1"]}
+      - {type: age, years: 2, wood: "spruce"}
+  nigori:
+    names: ["Watery Nigori", "Nigori Sake", "Creamy Nigori"]
+    color: "ffffff"
+    difficulty: 3
+    alcohol: 12
+    lore: ["<gray>Cloudy and unfiltered"]
+    effects: ["SATURATION/1/2"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["kitchen:steamed_rice/5", "Sugar/2"]}
+  shochu:
+    names: ["Harsh Shochu", "Shochu", "Smooth Shochu"]
+    color: "e8e4d8"
+    difficulty: 6
+    alcohol: 25
+    lore: ["<gray>Distilled twice"]
+    effects: ["RESISTANCE/0/30-60"]
+    steps:
+      - {type: cook, time: 7, ingredients: ["sakagura:barley/6", "Potato/2"]}
+      - {type: distill, runs: 2}
+  umeshu:
+    names: ["Sour Umeshu", "Umeshu", "Aged Umeshu"]
+    color: "c98a3a"
+    difficulty: 5
+    alcohol: 14
+    lore: ["<gray>Plum wine, sweet and tart"]
+    effects: ["REGENERATION/1/20-40"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["sakagura:ume/6", "Sugar/4", "Shochu/1"]}
+      - {type: age, years: 3, wood: "cherry"}
+  yuzu_chuhai:
+    names: ["Flat Chuhai", "Yuzu Chuhai", "Sparkling Yuzu Chuhai"]
+    color: "f7e04a"
+    difficulty: 3
+    alcohol: 8
+    lore: ["<gray>Shochu, yuzu and bubbles"]
+    effects: ["SPEED/0/60-120"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["sakagura:yuzu/3", "Sugar/2", "Shochu/1"]}
+  momo_sake:
+    names: ["Bland Momo Sake", "Momo Sake", "Blushing Momo Sake"]
+    color: "f7b2a2"
+    difficulty: 5
+    alcohol: 10
+    lore: ["<gray>Peach sake"]
+    effects: ["HEALTH_BOOST/0/60-120"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["sakagura:peach/4", "Sake/1"]}
+      - {type: age, years: 1, wood: "birch"}
+  sakura_liqueur:
+    names: ["Wilted Liqueur", "Sakura Liqueur", "Cherry Blossom Liqueur"]
+    color: "ffb7c5"
+    difficulty: 6
+    alcohol: 18
+    lore: ["<light_purple>Smells of spring"]
+    effects: ["LUCK/0/120-300"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["sakagura:cherry/6", "Sugar/3", "Pink Petals/4"]}
+      - {type: distill, runs: 1}
+      - {type: age, years: 2, wood: "cherry"}
+  steam_whisky:
+    names: ["Sooty Whisky", "Steam Whisky", "Brass Reserve Whisky"]
+    color: "b06a2c"
+    difficulty: 8
+    alcohol: 32
+    lore: ["<gold>Distilled in a copper still"]
+    effects: ["STRENGTH/0/60-120"]
+    steps:
+      - {type: cook, time: 10, ingredients: ["sakagura:barley/10"]}
+      - {type: distill, runs: 3}
+      - {type: age, years: 8, wood: "copper"}
+  hop_ale:
+    names: ["Flat Ale", "Hop Ale", "Golden Hop Ale"]
+    color: "d9a441"
+    difficulty: 3
+    alcohol: 6
+    lore: ["<gray>Bitter and fresh"]
+    effects: ["HASTE/0/60-120"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["sakagura:barley/6", "sakagura:hops/3"]}
+      - {type: age, years: 2, wood: "oak"}
+  red_wine:
+    names: ["Harsh Red Wine", "Red Wine", "Full-Bodied Red Wine"]
+    color: "7b1e2b"
+    difficulty: 6
+    alcohol: 12
+    lore: ["<gray>From our own vines"]
+    effects: ["REGENERATION/0/20-40"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["sakagura:grape/8"]}
+      - {type: age, years: 4, wood: "oak"}
+  juniper_gin:
+    names: ["Pine-Needle Gin", "Juniper Gin", "Botanical Gin"]
+    color: "dff3f0"
+    difficulty: 6
+    alcohol: 30
+    lore: ["<gray>Juniper and a little ginger"]
+    effects: ["NIGHT_VISION/0/120-300"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["sakagura:juniper/6", "sakagura:ginger/1", "Wheat/3"]}
+      - {type: distill, runs: 3}
+  berry_wine:
+    names: ["Sour Berry Wine", "Berry Wine", "Forest Berry Wine"]
+    color: "6a2a7a"
+    difficulty: 4
+    alcohol: 10
+    lore: ["<gray>Blueberries and strawberries"]
+    effects: ["REGENERATION/0/20-30"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["sakagura:blueberry/4", "sakagura:strawberry/4", "Sugar/2"]}
+      - {type: age, years: 2, wood: "birch"}
+  apple_liquor:
+    names: ["Weak Apple Liquor", "Apple Liquor", "Fine Apple Liquor"]
+    color: "e8b04a"
+    difficulty: 5
+    alcohol: 25
+    lore: ["<gray>Needed for a good sangria"]
+    effects: []
+    steps:
+      - {type: cook, time: 5, ingredients: ["Apple/6", "Sugar/2"]}
+      - {type: distill, runs: 2}
+  amazake:
+    names: ["Thin Amazake", "Amazake", "Rich Amazake"]
+    color: "f6efe0"
+    difficulty: 2
+    alcohol: 0
+    lore: ["<gray>Sweet rice drink, no alcohol"]
+    effects: ["SATURATION/0/3"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["kitchen:steamed_rice/3", "sakagura:ginger/1"]}
+  matcha_latte:
+    names: ["Watery Matcha", "Matcha Latte", "Ceremonial Matcha Latte"]
+    color: "8fbf5a"
+    difficulty: 2
+    alcohol: 0
+    lore: ["<green>Green and gentle"]
+    effects: ["HASTE/0/120-240"]
+    steps:
+      - {type: cook, time: 2, ingredients: ["kitchen:tea_leaves/3", "Milk Bucket/1", "Sugar/1"]}
+  mugicha:
+    names: ["Weak Mugicha", "Mugicha", "Roasted Mugicha"]
+    color: "a8743a"
+    difficulty: 1
+    alcohol: 0
+    lore: ["<gray>Cold barley tea"]
+    effects: ["FIRE_RESISTANCE/0/60-120"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["sakagura:barley/3", "Snowball/2"]}
+  ramune:
+    names: ["Flat Ramune", "Ramune", "Fizzy Ramune"]
+    color: "9fd8f0"
+    difficulty: 2
+    alcohol: 0
+    lore: ["<aqua>The marble rattles"]
+    effects: ["JUMP_BOOST/0-1/60-120"]
+    steps:
+      - {type: mix, time: 1, ingredients: ["Sugar/3", "sakagura:yuzu/1", "Glass/1"]}

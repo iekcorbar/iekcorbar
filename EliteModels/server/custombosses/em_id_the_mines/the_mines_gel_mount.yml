@@ -1,0 +1,26 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: HUSK
+isBaby: true
+name: $normalLevel &aDried Corpse
+level: dynamic # 20
+instanced: true
+healthMultiplier: 1
+damageMultiplier: 0.9
+movementSpeedAttribute: 0.3
+powers:
+- filename: skeleton_tracking_arrow.yml
+  difficultyID:
+  - 2
+frozen: false
+# leashRadius: 20
+followDistance: 20
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: false
+normalizedCombat: true
+dropsRandomLoot: false
+classLoot: false
+customModel: em_rust_husk

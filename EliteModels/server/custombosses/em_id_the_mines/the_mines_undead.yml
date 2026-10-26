@@ -1,0 +1,46 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+name: $normalLevel &fUndead
+level: dynamic # 20
+instanced: true
+healthMultiplier: 0.8
+damageMultiplier: 1.2
+movementSpeedAttribute: 0.25
+onDamageMessages:
+- Slay, kill, end
+- You shouldn’t be here.
+- You glow bright!
+uniqueLootList:
+- filename: the_mines_undead_drop_hoe_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: the_mines_undead_drop_hoe_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: the_mines_undead_drop_hoe_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+frozen: false
+# leashRadius: 100
+followDistance: 50
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: false
+normalizedCombat: true
+dropsRandomLoot: false
+eliteScript:
+  SetTime:
+    Events:
+    - EliteMobDeathEvent
+    Actions:
+    - action: SET_TIME
+      time: 17000
+      Target:
+        targetType: SELF
+spawnLocations:
+- em_id_the_mines,262.5,114.5,-83.5,0.0,0.0:1676457803413
+classLoot: false
+customModel: em_steam_zombie

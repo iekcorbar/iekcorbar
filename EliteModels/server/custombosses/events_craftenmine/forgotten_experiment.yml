@@ -1,0 +1,24 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIFIED_PIGLIN
+name: $eventBossLevel &5Forgotten Experiment
+mountedEntity: forgotten_experiment_1.yml
+level: dynamic
+healthMultiplier: 2.5
+damageMultiplier: 1.0
+phases:
+- forgotten_experiment_p2.yml:0.44
+powers:
+- skeleton_tracking_arrow.yml
+- plasma_blaster.yml
+movementSpeedAttribute: 0.32
+followDistance: 80
+locationMessage: '&cForgotten Experiment: $distance blocks away!'
+spawnMessage: '&cA Forgotten Dr. Craftenmine Experiment has escaped the laboratory!'
+deathMessage: '&aThe Forgotten Experiment has been shutdown by $players!'
+escapeMessage: '&4The Forgotten Experiment has vanished!'
+announcementPriority: 2
+customModel: em_gilded_zombified_piglin

@@ -1,0 +1,46 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  SummonFiend:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: FILTERING
+        hasTags:
+        - IsFiend
+      FinalTarget:
+        targetType: SELF
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: TELEPORT
+    Cooldowns:
+      global: 50
+      local: 999
+    Events:
+    - PlayerDamagedByEliteMobEvent
+    Zone:
+      Target:
+        targetType: SELF
+        track: false
+      radius: 200
+      shape: SPHERE
+entityType: VEX
+followDistance: 80
+frozen: false
+healthMultiplier: 0.2
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 45
+movementSpeedAttribute: 0.28
+name: $reinforcementLevel &dNether Sprite
+normalizedCombat: true
+classLoot: false
+customModel: em_imp_vex

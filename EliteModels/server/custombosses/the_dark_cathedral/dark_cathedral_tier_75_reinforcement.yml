@@ -1,0 +1,35 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: DROWNED
+mainHand: TRIDENT
+scale: 0.2
+name: $reinforcementLevel &bChild of Cthulhu
+level: dynamic # 16
+healthMultiplier: 50.25
+damageMultiplier: 0.6
+movementSpeedAttribute: 1.0E-4
+dropsEliteMobsLoot: false
+instanced: true
+eliteScript:
+  Levitate:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: POTION_EFFECT
+      potionEffectType: LEVITATION
+      amplifier: 2
+      duration: 10
+      repeatEvery: 12
+      Target:
+        targetType: SELF
+    - action: SPAWN_PARTICLE
+      particles:
+      - particle: DRIP_WATER
+      Target:
+        targetType: SELF
+      repeatEvery: 10
+      times: 10
+classLoot: false
+customModel: em_diver_drowned

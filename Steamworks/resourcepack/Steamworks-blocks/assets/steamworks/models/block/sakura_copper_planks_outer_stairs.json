@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "steamworks:block/sakura_copper_planks",
+    "top": "steamworks:block/sakura_copper_planks",
+    "side": "steamworks:block/sakura_copper_planks"
+  }
+}

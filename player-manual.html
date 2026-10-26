@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iekcorbar — Player Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --bronze: #8b6914;
+      --copper: #b87333;
+      --dark: #0f0c08;
+      --dark-2: #1a1510;
+      --dark-3: #221d14;
+      --paper: #fdf8f0;
+      --ink: #1a1208;
+      --ink-light: #3d2f1a;
+      --red: #8b1a1a;
+      --green: #1a5c2a;
+      --blue: #1a3a5c;
+      --pink: #d88a9a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Crimson Text', Georgia, serif;
+      background: #e8e0d0;
+      color: var(--ink);
+      font-size: 11pt;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 20px;
+      background: var(--paper);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.35);
+    }
+
+    .page::before, .page::after {
+      content: '✦';
+      position: absolute;
+      font-size: 18pt;
+      color: var(--gold);
+      opacity: 0.4;
+    }
+    .page::before { top: 14px; left: 18px; }
+    .page::after  { top: 14px; right: 18px; }
+
+    .page-border {
+      position: absolute;
+      inset: 8mm;
+      border: 1.5px solid var(--gold);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .page-border::before {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 0.5px solid var(--bronze);
+      opacity: 0.5;
+    }
+
+    .page-content {
+      padding: 18mm 20mm 16mm;
+    }
+
+    /* COVER */
+    .cover {
+      background: linear-gradient(160deg, #0f0c08 0%, #1a1510 40%, #221d14 100%);
+      color: var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 297mm;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 35%, rgba(216,138,154,0.10) 0%, transparent 70%);
+    }
+
+    .cover-border {
+      position: absolute;
+      inset: 12mm;
+      border: 2px solid rgba(201,168,76,0.5);
+    }
+
+    .cover-corner {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.7;
+    }
+    .cover-corner.tl { top: 14mm; left: 14mm; border-width: 2px 0 0 2px; }
+    .cover-corner.tr { top: 14mm; right: 14mm; border-width: 2px 2px 0 0; }
+    .cover-corner.bl { bottom: 14mm; left: 14mm; border-width: 0 0 2px 2px; }
+    .cover-corner.br { bottom: 14mm; right: 14mm; border-width: 0 2px 2px 0; }
+
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 20mm;
+    }
+
+    .cover-emblem { font-size: 48pt; margin-bottom: 8mm; }
+
+    .cover-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 5mm;
+    }
+
+    .cover-title {
+      font-family: 'Cinzel', serif;
+      font-size: 32pt;
+      font-weight: 900;
+      color: var(--gold-light);
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+      text-shadow: 0 2px 20px rgba(201,168,76,0.5);
+      margin-bottom: 3mm;
+    }
+
+    .cover-title span {
+      display: block;
+      font-size: 20pt;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 2mm;
+    }
+
+    .cover-rule {
+      width: 80mm;
+      margin: 7mm auto;
+      display: flex;
+      align-items: center;
+      gap: 4mm;
+    }
+    .cover-rule hr { flex: 1; border: none; border-top: 1px solid rgba(201,168,76,0.4); }
+    .cover-rule span { color: var(--gold); font-size: 12pt; opacity: 0.7; }
+
+    .cover-tagline {
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+      font-size: 13pt;
+      color: rgba(201,168,76,0.7);
+      margin-bottom: 12mm;
+      line-height: 1.5;
+    }
+
+    .cover-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(139,105,20,0.8);
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding-top: 4mm;
+      margin-top: 8mm;
+    }
+
+    /* CHAPTER HEADER */
+    .chapter-header {
+      background: linear-gradient(135deg, #1a1510 0%, #2a2018 100%);
+      margin: 0 -20mm 8mm;
+      padding: 6mm 20mm;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .chapter-number {
+      font-family: 'Cinzel', serif;
+      font-size: 7pt;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 1.5mm;
+    }
+
+    .chapter-title {
+      font-family: 'Cinzel', serif;
+      font-size: 18pt;
+      font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 0.03em;
+    }
+
+    h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 13pt;
+      font-weight: 600;
+      color: var(--ink);
+      border-bottom: 1px solid rgba(201,168,76,0.5);
+      padding-bottom: 1.5mm;
+      margin: 7mm 0 3mm;
+      letter-spacing: 0.02em;
+    }
+
+    p {
+      margin-bottom: 3mm;
+      text-align: justify;
+    }
+
+    .ornament {
+      text-align: center;
+      color: var(--gold);
+      font-size: 13pt;
+      opacity: 0.5;
+      margin: 5mm 0;
+      letter-spacing: 0.3em;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 3mm;
+      margin: 5mm 0;
+      opacity: 0.6;
+    }
+    .divider hr { flex: 1; border: none; border-top: 1px solid var(--bronze); }
+    .divider span { color: var(--gold); font-size: 10pt; }
+
+    /* FEATURE CARDS */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4mm;
+      margin: 4mm 0;
+    }
+    .feature-card {
+      border: 1px solid rgba(139,105,20,0.35);
+      border-radius: 2mm;
+      padding: 4mm;
+      background: rgba(201,168,76,0.05);
+    }
+    .feature-name {
+      font-family: 'Cinzel', serif;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: var(--ink-light);
+      margin-bottom: 1.5mm;
+    }
+    .feature-desc { font-size: 8.75pt; color: var(--ink-light); }
+
+    /* CALLOUT BOXES */
+    .callout {
+      border-left: 3px solid;
+      padding: 3mm 4mm;
+      margin: 3mm 0;
+      border-radius: 0 2mm 2mm 0;
+    }
+    .callout.note    { border-color: #2980b9; background: rgba(41,128,185,0.07); }
+    .callout.warning { border-color: #e67e22; background: rgba(230,126,34,0.07); }
+    .callout.danger  { border-color: #c0392b; background: rgba(192,57,43,0.07); }
+    .callout.tip     { border-color: #27ae60; background: rgba(39,174,96,0.07); }
+
+    .callout-title {
+      font-family: 'Cinzel', serif;
+      font-size: 9pt;
+      font-weight: 600;
+      margin-bottom: 1mm;
+    }
+    .callout.note    .callout-title { color: #1a5276; }
+    .callout.warning .callout-title { color: #7e5109; }
+    .callout.danger  .callout-title { color: #922b21; }
+    .callout.tip     .callout-title { color: #1e8449; }
+    .callout p { font-size: 9pt; margin-bottom: 0; text-align: left; }
+
+    /* STEPS */
+    .steps { counter-reset: step; list-style: none; margin: 3mm 0; }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 3mm;
+      margin-bottom: 3mm;
+      font-size: 9.5pt;
+    }
+    .steps li::before {
+      content: counter(step);
+      min-width: 6mm;
+      height: 6mm;
+      background: var(--ink);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 8pt;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.3mm;
+      flex-shrink: 0;
+    }
+    .steps li strong { display: block; font-family: 'Cinzel', serif; font-size: 9pt; color: var(--ink-light); margin-bottom: 0.5mm; }
+
+    /* BULLET LISTS */
+    ul.body-list { padding-left: 5mm; margin: 2mm 0; }
+    ul.body-list li { font-size: 9.5pt; margin-bottom: 1.5mm; padding-left: 2mm; }
+
+    .cmd {
+      font-family: 'Courier New', monospace;
+      font-size: 8pt;
+      background: rgba(0,0,0,0.06);
+      padding: 0.5mm 1.5mm;
+      border-radius: 1mm;
+      border: 0.5px solid rgba(139,105,20,0.3);
+      color: var(--ink-light);
+    }
+
+    /* TOC */
+    .toc-entry {
+      display: flex;
+      align-items: baseline;
+      gap: 2mm;
+      margin-bottom: 2.5mm;
+    }
+    .toc-entry-title { font-family: 'Crimson Text', serif; font-size: 10.5pt; color: var(--ink); }
+    .toc-dots { flex: 1; border-bottom: 1px dotted rgba(139,105,20,0.4); margin-bottom: 1.5mm; }
+    .toc-page { font-family: 'Cinzel', serif; font-size: 9pt; color: var(--bronze); min-width: 5mm; text-align: right; }
+    .toc-section {
+      font-family: 'Cinzel', serif;
+      font-size: 7.5pt;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin: 5mm 0 2mm;
+      border-bottom: 0.5px solid rgba(139,105,20,0.3);
+      padding-bottom: 1mm;
+    }
+
+    /* SCREENSHOT PLACEHOLDER */
+    .shot {
+      border: 1.5px dashed rgba(139,105,20,0.5);
+      border-radius: 2mm;
+      background: rgba(201,168,76,0.05);
+      padding: 6mm 4mm;
+      margin: 3mm 0;
+      text-align: center;
+    }
+    .shot-icon { font-size: 16pt; color: var(--bronze); opacity: 0.6; margin-bottom: 1.5mm; }
+    .shot-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--ink-light);
+      letter-spacing: 0.03em;
+      margin-bottom: 1mm;
+    }
+    .shot-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      color: rgba(61,47,26,0.6);
+    }
+
+    /* PAGE FOOTER */
+    .page-footer {
+      position: absolute;
+      bottom: 10mm;
+      left: 20mm;
+      right: 20mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      color: rgba(61,47,26,0.5);
+      border-top: 0.5px solid rgba(139,105,20,0.3);
+      padding-top: 2mm;
+    }
+    .page-footer .footer-logo { font-family: 'Cinzel', serif; font-size: 7pt; color: var(--bronze); letter-spacing: 0.1em; }
+
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; }
+      .page:last-child { page-break-after: avoid; }
+      .print-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="page cover">
+  <div class="cover-border"></div>
+  <div class="cover-corner tl"></div>
+  <div class="cover-corner tr"></div>
+  <div class="cover-corner bl"></div>
+  <div class="cover-corner br"></div>
+  <div class="cover-inner">
+    <div class="cover-emblem">⚙</div>
+    <div class="cover-subtitle">Player Handbook</div>
+    <div class="cover-title">Iekcorbar<span>Website &amp; Getting Started Guide</span></div>
+    <div class="cover-rule"><hr /><span>⚙</span><hr /></div>
+    <div class="cover-tagline">
+      A steampunk-meets-Japanese-folklore RPG Minecraft server.<br/>
+      Everything you need to register, log in, and find your way around the website.
+    </div>
+    <div class="cover-meta">Iekcorbar Minecraft Server &nbsp;&middot;&nbsp; iekcorbar.com &nbsp;&middot;&nbsp; 2026 Edition</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">Front Matter</div>
+      <div class="chapter-title">Table of Contents</div>
+    </div>
+    <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <div class="toc-section">Part I &mdash; Getting Started</div>
+    <div class="toc-entry"><div class="toc-entry-title">§1 &nbsp; Welcome to Iekcorbar</div><div class="toc-dots"></div><div class="toc-page">3</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§2 &nbsp; Creating Your Account</div><div class="toc-dots"></div><div class="toc-page">4</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§3 &nbsp; Logging In</div><div class="toc-dots"></div><div class="toc-page">5</div></div>
+    <div class="toc-section">Part II &mdash; Your Profile</div>
+    <div class="toc-entry"><div class="toc-entry-title">§4 &nbsp; Your Profile Page</div><div class="toc-dots"></div><div class="toc-page">6</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§5 &nbsp; Your Logbook (Journal)</div><div class="toc-dots"></div><div class="toc-page">7</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§6 &nbsp; Friends</div><div class="toc-dots"></div><div class="toc-page">8</div></div>
+    <div class="toc-section">Part III &mdash; Around the Site</div>
+    <div class="toc-entry"><div class="toc-entry-title">§7 &nbsp; Chat</div><div class="toc-dots"></div><div class="toc-page">9</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§8 &nbsp; The Brewery Mini-Game</div><div class="toc-dots"></div><div class="toc-page">10</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§9 &nbsp; Wiki, Events, Rules &amp; Voting</div><div class="toc-dots"></div><div class="toc-page">11</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§10 &nbsp; Reporting a Player or a Bug</div><div class="toc-dots"></div><div class="toc-page">12</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§11 &nbsp; Installing the Site as an App</div><div class="toc-dots"></div><div class="toc-page">13</div></div>
+    <div class="divider"><hr /><span>⚙</span><hr /></div>
+    <div class="callout tip">
+      <div class="callout-title">💡 About This Guide</div>
+      <p>This handbook covers the <strong>website</strong> &mdash; your account, profile, and everything reachable from the navigation bar. It doesn't cover in-game mechanics, jobs, or the economy, which are best learned in-game and on the Wiki.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 2</span>
+  </div>
+</div>
+
+<!-- WELCOME -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 1 &mdash; Part I: Getting Started</div>
+      <div class="chapter-title">Welcome to Iekcorbar</div>
+    </div>
+    <p>Iekcorbar is a custom RPG Paper Minecraft server built around mechanical steampunk aesthetics, Japanese folklore, and cherry-blossom scenery &mdash; gears and cogs alongside sakura petals and shogunate-style architecture. Beyond the in-game world, the website is where you manage your account, track your stats, chat with other players, and keep a personal journal of your journey.</p>
+    <h2>Server Address</h2>
+    <p style="text-align:center;font-family:'Courier New',monospace;font-size:14pt;background:rgba(0,0,0,0.05);border:1px solid rgba(139,105,20,0.3);border-radius:2mm;padding:4mm;margin:4mm 0;">85.202.160.151:2267</p>
+    <p>Add this as a server in your Minecraft Java Edition client. You'll need to be connected to it partway through account registration &mdash; see §2.</p>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ Live Server Status</div>
+      <p>The homepage shows whether the server is online right now, how many players are connected, and a live Discord member count &mdash; check it before you try to join.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 3</span>
+  </div>
+</div>
+
+<!-- REGISTRATION -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 2 &mdash; Part I: Getting Started</div>
+      <div class="chapter-title">Creating Your Account</div>
+    </div>
+    <p>Registration links your website account to a specific Minecraft username, and proves you actually own that username by asking you to read a one-time code from inside the game itself. It happens in three steps, in this exact order:</p>
+    <ol class="steps">
+      <li><div><strong>Fill in the registration form</strong>Click "Sign In / Register" and switch to "No account? Join the crew now." Enter your <strong>Email Address</strong>, an <strong>Access Key (Password)</strong>, and your exact <strong>Minecraft IGN (In-Game Name)</strong>. Submitting this immediately whitelists that username on the server.</div></li>
+      <li><div><strong>Join the Minecraft server</strong>Open Minecraft and connect to <span class="cmd">85.202.160.151:2267</span> using the exact username you just registered with. You must be online in-game for the next step to work.</div></li>
+      <li><div><strong>Request your code</strong>Back on the website, click "Send Verification Code." A message is sent straight to your in-game chat with a 6-digit code &mdash; look for it in Minecraft, not your email.</div></li>
+      <li><div><strong>Verify</strong>Type that 6-digit code into the website and submit. Your account is created immediately and you're logged in.</div></li>
+    </ol>
+    <div class="shot">
+      <div class="shot-icon">📷</div>
+      <div class="shot-label">Screenshot: Registration form and in-game verification code step</div>
+      <div class="shot-note">To be added</div>
+    </div>
+    <div class="callout warning">
+      <div class="callout-title">⚠ Common Snags</div>
+      <p>If "Send Verification Code" doesn't work, it almost always means you're not actually connected to the server under the exact username you registered with &mdash; double-check both. The code also expires after a while; if it stops working, restart registration rather than trying an old code.</p>
+    </div>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ One Account, One Minecraft Username</div>
+      <p>Each email and each Minecraft username can only be registered once. If you already have an account, use §3 to log in instead &mdash; don't register again with the same details.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 4</span>
+  </div>
+</div>
+
+<!-- LOGGING IN -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 3 &mdash; Part I: Getting Started</div>
+      <div class="chapter-title">Logging In</div>
+    </div>
+    <p>Once registered, logging back in is simple: click "Sign In / Register," enter your email and password, and you're in. No in-game step is needed again after the first time.</p>
+    <div class="callout tip">
+      <div class="callout-title">💡 Staying Logged In</div>
+      <p>The site remembers you across visits on the same browser. If you're ever unexpectedly signed out after the site has been updated, just log back in &mdash; it happens occasionally and is nothing to worry about.</p>
+    </div>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ Forgotten Password</div>
+      <p>There is currently no self-service "forgot password" flow. If you're locked out, reach out to staff directly for help.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 5</span>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 4 &mdash; Part II: Your Profile</div>
+      <div class="chapter-title">Your Profile Page</div>
+    </div>
+    <p>Your Profile is the hub for everything tied to your account &mdash; find it in the navigation bar once logged in.</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-name">Minecraft Identity</div>
+        <div class="feature-desc">Confirm or update the IGN linked to your account.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-name">Steampunk Wardrobe</div>
+        <div class="feature-desc">Set a custom skin, either by URL or by uploading an image file.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-name">In-Game Stats</div>
+        <div class="feature-desc">Playtime, balance, Elite Coins, kills/deaths, mob kills, blocks mined, land claims, and active jobs &mdash; synced live from the server.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-name">Registered Events</div>
+        <div class="feature-desc">Community events you've signed up for.</div>
+      </div>
+    </div>
+    <p>Further down the page you'll also find the <strong>Anonymous Report</strong> form (§10), the <strong>Report a Bug</strong> form (§10), and your <strong>Logbook</strong> (§5).</p>
+    <div class="shot">
+      <div class="shot-icon">📷</div>
+      <div class="shot-label">Screenshot: Profile page, stats + wardrobe section</div>
+      <div class="shot-note">To be added</div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 6</span>
+  </div>
+</div>
+
+<!-- LOGBOOK -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 5 &mdash; Part II: Your Profile</div>
+      <div class="chapter-title">Your Logbook (Journal)</div>
+    </div>
+    <p>At the bottom of your Profile is your personal Logbook &mdash; a diary that behaves like a real book, with pages you flip through rather than a plain scrolling list.</p>
+    <h2>Writing an Entry</h2>
+    <ol class="steps">
+      <li><div><strong>Click "New Entry"</strong>Pick a date, write your entry, and optionally attach a screenshot.</div></li>
+      <li><div><strong>Save</strong>Your new page joins the book in date order. The book opens to your most recent page by default; use the arrows either side to flip through older ones.</div></li>
+    </ol>
+    <h2>Who Can See It</h2>
+    <p>Your Logbook is private by default. Once someone becomes your <strong>Friend</strong> (§6), they can see your whole Logbook from your profile automatically. You can also share one specific page directly with a friend using the share button on that page &mdash; they'll get a notification linking straight to it.</p>
+    <div class="callout tip">
+      <div class="callout-title">💡 Sharing Outside the Site</div>
+      <p>Each page also has an external share button that uses your device's normal share menu &mdash; handy for posting a page to Discord or anywhere else.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 7</span>
+  </div>
+</div>
+
+<!-- FRIENDS -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 6 &mdash; Part II: Your Profile</div>
+      <div class="chapter-title">Friends</div>
+    </div>
+    <p>Find the Friends page in the navigation bar. It's the one place to manage requests and see who's in your crew.</p>
+    <ol class="steps">
+      <li><div><strong>Send a request</strong>Type a Minecraft username and send &mdash; no need to know their email.</div></li>
+      <li><div><strong>Respond to requests</strong>Incoming requests appear on your Friends page and in the notification bell (top of every page); accept or decline from either.</div></li>
+      <li><div><strong>Manage your crew</strong>Your current friends list is on the same page, with an option to remove anyone.</div></li>
+    </ol>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ Why Add Friends?</div>
+      <p>Being friends is what unlocks seeing each other's Logbook (§5) and lets you jump straight to someone's profile from their name anywhere on the site.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 8</span>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 7 &mdash; Part III: Around the Site</div>
+      <div class="chapter-title">Chat</div>
+    </div>
+    <p>The Chat page lets you message any other registered player directly, separate from in-game or Discord chat.</p>
+    <ul class="body-list">
+      <li>Pick a contact from your recent conversations or search the full member directory.</li>
+      <li>Send text and image attachments.</li>
+      <li>Your most recent conversation reopens automatically the next time you visit &mdash; no need to re-find it.</li>
+    </ul>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 9</span>
+  </div>
+</div>
+
+<!-- BREWING -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 8 &mdash; Part III: Around the Site</div>
+      <div class="chapter-title">The Brewery Mini-Game</div>
+    </div>
+    <p>The Brewing page is a website-only companion to the in-game Brewery &mdash; recipes here match what you already know from playing, just started from your browser instead.</p>
+    <ol class="steps">
+      <li><div><strong>Pick a recipe</strong>Under the Brew tab, choose from the available recipes &mdash; you must be logged in and have your Minecraft IGN linked (§4).</div></li>
+      <li><div><strong>Wait</strong>Brewing takes somewhere between 5 and 15 real-world minutes depending on the recipe's difficulty. You can only have one brew going at a time.</div></li>
+      <li><div><strong>Collect the result</strong>Once ready, the quality your brew turned out (it's decided the moment you start, but only revealed when it's done) shows up on the page and joins your Collection tab.</div></li>
+    </ol>
+    <p>The Blueprints tab shows barrel and distillery build guides. There's no in-game reward for completing a brew &mdash; results live entirely on the website as a personal collection.</p>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 10</span>
+  </div>
+</div>
+
+<!-- WIKI / EVENTS / RULES / VOTE -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 9 &mdash; Part III: Around the Site</div>
+      <div class="chapter-title">Wiki, Events, Rules &amp; Voting</div>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-name">Wiki</div>
+        <div class="feature-desc">Lore and reference articles about the server &mdash; the best place to look up anything not covered here.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-name">Events</div>
+        <div class="feature-desc">Upcoming community events with dates and details; register your interest directly on the page. Community polls also appear here.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-name">Rules</div>
+        <div class="feature-desc">The full, current server rules. Read them before you play &mdash; staff enforce what's written here.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-name">Vote</div>
+        <div class="feature-desc">Links to vote for the server on external listing sites, plus whatever in-game rewards are currently configured for voting.</div>
+      </div>
+    </div>
+    <p>The <strong>Updates</strong> page (also in the nav) is where staff post the server's changelog and announcements &mdash; worth checking after any downtime or big change.</p>
+    <p>The <strong>Projects</strong> page lists community build projects you can sign up to help with, and the <strong>Map</strong> page gives a live overview of the world.</p>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 11</span>
+  </div>
+</div>
+
+<!-- REPORTING -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 10 &mdash; Part III: Around the Site</div>
+      <div class="chapter-title">Reporting a Player or a Bug</div>
+    </div>
+    <p>There are two separate forms, both on your Profile page &mdash; use the right one.</p>
+    <h2>Reporting a Player</h2>
+    <p>Use the <strong>Anonymous Report</strong> form for rule violations &mdash; hacking, harassment, griefing, and similar. Pick a category, describe what happened, and submit. Your identity is <strong>never</strong> recorded or linked to the report in any way, even internally.</p>
+    <h2>Reporting a Website Bug</h2>
+    <p>Use the <strong>Report a Bug</strong> form for problems with the website itself &mdash; something broken, not working as expected, or displaying wrong. Unlike the player-report form, this one is <em>not</em> anonymous: your username and email are included, since staff may need to ask follow-up questions to reproduce the issue.</p>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ In-Game Problems</div>
+      <p>For something happening in-game right now (an active griefer, a stuck situation), the fastest route is contacting online staff directly rather than waiting on either form.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 12</span>
+  </div>
+</div>
+
+<!-- PWA -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 11 &mdash; Part III: Around the Site</div>
+      <div class="chapter-title">Installing the Site as an App</div>
+    </div>
+    <p>The website can be installed on your phone like a native app &mdash; a home-screen icon that opens full-screen, no browser bar.</p>
+    <ul class="body-list">
+      <li><strong>Android / Chrome:</strong> the browser offers to install it automatically &mdash; look for an "Install" or "Add to Home Screen" prompt, or find it in the browser's menu.</li>
+      <li><strong>iPhone / Safari:</strong> there's no automatic prompt. Tap the Share icon, then "Add to Home Screen."</li>
+    </ul>
+    <div class="divider"><hr /><span>⚙</span><hr /></div>
+    <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <p style="text-align:center;font-style:italic;color:var(--ink-light);font-size:10pt;margin-top:4mm;">
+      That's the full tour. See you in-game.
+    </p>
+    <div style="text-align:center;margin-top:5mm;font-family:'Cinzel',serif;font-size:9pt;color:var(--bronze);letter-spacing:0.15em;">
+      ⚙ &nbsp; IEKCORBAR MINECRAFT SERVER &nbsp; ⚙<br/>
+      <span style="font-family:'Crimson Text',serif;font-size:8pt;letter-spacing:0.05em;color:rgba(139,105,20,0.6);">iekcorbar.com &nbsp;&middot;&nbsp; 2026 Edition</span>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>iekcorbar.com</span>
+    <span>Page 13</span>
+  </div>
+</div>
+
+<div class="print-hint" style="text-align:center;padding:12px;font-family:sans-serif;font-size:12px;color:#555;background:#e8e0d0;">
+  To save as PDF: Press <strong>Ctrl+P</strong> &rarr; Change "Destination" to <strong>"Save as PDF"</strong> &rarr; Set margins to <strong>None</strong> &rarr; Save
+</div>
+
+</body>
+</html>

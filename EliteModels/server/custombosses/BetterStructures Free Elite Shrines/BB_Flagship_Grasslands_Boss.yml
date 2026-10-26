@@ -1,0 +1,78 @@
+isEnabled: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+entityType: IRON_GOLEM
+name: $bossLevel &0Mortician
+level: dynamic
+scaledCombat: true
+healthMultiplier: 6
+damageMultiplier: 1.5
+powers:
+- attack_vacuum.yml
+- arrow_rain.yml
+- fireworks_barrage.yml
+- invulnerability_fire.yml
+- lightning_bolts.yml
+- BB_Grasslands_Flagship_Fury.yml
+normalizedCombat: true
+dropsEliteMobsLoot: true
+dropsVanillaLoot: false
+dropsRandomLoot: false
+trails: CRIT_MAGIC
+isRegionalBoss: true
+leashRadius: 100
+removeAfterDeath: true
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: flagship_grassland_mortician_blade.yml
+  chance: 0.34
+- filename: flagship_grassland_flower.yml
+  chance: 0.33
+- filename: flagship_grassland_titanium_helmet.yml
+  chance: 0.33
+- filename: cl_free_elite_shrines_relics_swords_1f004f58.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_axes_01d9afdb.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_bows_c84bbe57.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_crossbows_10771fc3.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tridents_506adca9.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_hoes_1db6777c.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_maces_f203306a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_spears_c437376d.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_staves_d52016c8.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_wands_f0433d6a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_helmets_54ef7624.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_chestplates_087ed5be.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_leggings_cc39b2c7.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_boots_2e894e3e.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_helmets_e32f6641.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_chestplates_1c729159.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_leggings_e514c384.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_boots_667b860f.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_shields_5b64e89d.yml
+  chance: 1.0
+spawnLocations:
+- iekcorbarSeason2,6488.5,48.0,1807.5,0.0,0.0
+- iekcorbarSeason2,21656.5,50.0,-1776.5,0.0,0.0
+- iekcorbarSeason2,21832.5,64.0,-2128.5,0.0,0.0
+customModel: em_boiler_golem

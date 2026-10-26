@@ -1,0 +1,715 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0f0f12;
+  --foreground: #f4ebd0; /* Soft warm parchment text */
+  --steampunk-gold: #d17b3f;
+  --steampunk-copper: #c87533;
+  --steampunk-bronze: #7c593c;
+  --steampunk-dark: #141416;
+  --steampunk-charcoal: #1e1e24;
+  --sakura-pink: #ffb7c5;
+  --sakura-accent: #f472b6;
+  --sakura-dark: #be185d;
+  --crimson: #991b1b;
+}
+
+@theme {
+  --color-bg-dark: #0f0f12;
+  --color-text-warm: #f4ebd0;
+  --color-sp-gold: #d17b3f;
+  --color-sp-copper: #c87533;
+  --color-sp-bronze: #7c593c;
+  --color-sp-dark: #141416;
+  --color-sp-charcoal: #1e1e24;
+  --color-sakura-pink: #ffb7c5;
+  --color-sakura-accent: #f472b6;
+  --color-sakura-dark: #be185d;
+  --color-crimson: #991b1b;
+
+  /* Custom Animations */
+  --animate-spin-gear-cw: spin-gear-cw 12s linear infinite;
+  --animate-spin-gear-ccw: spin-gear-ccw 8s linear infinite;
+  --animate-sakura-fall-1: sakura-fall-1 10s linear infinite;
+  --animate-sakura-fall-2: sakura-fall-2 14s linear infinite;
+  --animate-sakura-fall-3: sakura-fall-3 18s linear infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-steam-rise: steam-rise 4s ease-out infinite;
+
+  @keyframes spin-gear-cw {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes spin-gear-ccw {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @keyframes sakura-fall-1 {
+    0% {
+      transform: translateY(-5vh) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% { opacity: 1; }
+    90% { opacity: 0.9; }
+    100% {
+      transform: translateY(105vh) translateX(80px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  @keyframes sakura-fall-2 {
+    0% {
+      transform: translateY(-5vh) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    15% { opacity: 0.8; }
+    85% { opacity: 0.8; }
+    100% {
+      transform: translateY(105vh) translateX(-60px) rotate(-180deg);
+      opacity: 0;
+    }
+  }
+  @keyframes sakura-fall-3 {
+    0% {
+      transform: translateY(-5vh) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    5% { opacity: 0.6; }
+    95% { opacity: 0.6; }
+    100% {
+      transform: translateY(105vh) translateX(40px) rotate(270deg);
+      opacity: 0;
+    }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(209, 123, 63, 0.2); }
+    50% { box-shadow: 0 0 20px rgba(209, 123, 63, 0.6); }
+  }
+  @keyframes steam-rise {
+    0% { transform: translateY(10px) scale(0.8); opacity: 0; }
+    50% { opacity: 0.4; }
+    100% { transform: translateY(-30px) scale(1.3); opacity: 0; }
+  }
+}
+
+/* Custom Steampunk Styles */
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(212, 175, 55, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(198, 117, 51, 0.03) 0%, transparent 45%),
+    linear-gradient(rgba(18, 18, 20, 0.95), rgba(15, 15, 18, 0.98));
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Steampunk Borders and Scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--steampunk-dark);
+  border-left: 1px solid var(--steampunk-bronze);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--steampunk-copper);
+  border: 2px solid var(--steampunk-dark);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--steampunk-gold);
+}
+
+.steampunk-border {
+  border: 3px solid var(--steampunk-bronze);
+  position: relative;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 0, 0, 0.8),
+    0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15); /* Metallic bevel highlight */
+  border-radius: 8px;
+}
+.steampunk-border::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px; right: 3px; bottom: 3px;
+  border: 1px dashed rgba(209, 123, 63, 0.4);
+  pointer-events: none;
+}
+.steampunk-border::before {
+  content: '';
+  position: absolute;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  top: 6px;
+  left: 6px;
+  pointer-events: none;
+  /* 4 metallic rivets in the corners of the panel */
+  background-image: 
+    radial-gradient(circle, #d17b3f 2px, #5c381d 3px, transparent 4px),
+    radial-gradient(circle, #d17b3f 2px, #5c381d 3px, transparent 4px),
+    radial-gradient(circle, #d17b3f 2px, #5c381d 3px, transparent 4px),
+    radial-gradient(circle, #d17b3f 2px, #5c381d 3px, transparent 4px);
+  background-position: 
+    0 0, 
+    100% 0, 
+    0 100%, 
+    100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.9;
+}
+
+.steampunk-glass {
+  background: rgba(18, 18, 20, 0.88);
+  backdrop-filter: blur(10px);
+  border: 2.5px solid var(--steampunk-bronze);
+  box-shadow: 
+    inset 0 0 15px rgba(0, 0, 0, 0.95),
+    0 4px 8px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.steampunk-glow {
+  text-shadow: 
+    -1.5px -1.5px 0 #000,  
+     1.5px -1.5px 0 #000,
+    -1.5px  1.5px 0 #000,
+     1.5px  1.5px 0 #000,
+     0 0 10px rgba(209, 123, 63, 0.7);
+  -webkit-text-stroke: 1px #000;
+}
+
+.steampunk-btn {
+  background: linear-gradient(135deg, var(--steampunk-bronze), #563316);
+  border: 2px solid var(--steampunk-gold);
+  color: #fff;
+  text-shadow: 1px 1px 2px black;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.steampunk-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transition: all 0.5s ease;
+}
+.steampunk-btn:hover::before {
+  left: 100%;
+}
+
+/* Riveted-brass hazard tape — a steampunk stand-in for the generic yellow/
+   black "under construction" stripe, built from the same design tokens as
+   everything else instead of introducing new colors. Used as a thin top/
+   bottom border on the "still being built" banners (see /achievements). */
+.steampunk-hazard-stripes {
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--steampunk-gold) 0px, var(--steampunk-gold) 14px,
+    var(--steampunk-dark) 14px, var(--steampunk-dark) 28px
+  );
+}
+.steampunk-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+  background: linear-gradient(135deg, var(--steampunk-copper), var(--steampunk-bronze));
+}
+
+.sakura-btn {
+  background: linear-gradient(135deg, var(--sakura-dark), #700d36);
+  border: 2px solid var(--sakura-pink);
+  color: #fff;
+  text-shadow: 1px 1px 2px black;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+}
+.sakura-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 15px rgba(244, 114, 182, 0.6);
+  background: linear-gradient(135deg, var(--sakura-accent), var(--sakura-dark));
+}
+
+/* Realistic Metal Borders */
+.border-metal-steel {
+  border: 2px solid #5a5a66;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.15), 
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.border-metal-silver {
+  border: 2px solid #b8b8c4;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.3), 
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.border-metal-bronze {
+  border: 2px solid #7c593c;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.2), 
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.border-metal-copper {
+  border: 2px solid #d17b3f;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.25), 
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* 3D Minecraft Torch styles from Uiverse.io by 00Kubi */
+.torch-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+.torch-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+.torch-simple-text {
+  position: absolute;
+  bottom: -60px;
+  width: 120px;
+  text-align: center;
+  color: #ffd700;
+  font-size: 16pt;
+  font-weight: 800;
+  font-family: monospace;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  transition: all 0.3s ease;
+}
+.torch {
+  display: flex;
+  justify-content: center;
+  height: 150px;
+}
+.torch-head,
+.torch-stick {
+  position: absolute;
+  width: 30px;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+}
+.torch-stick {
+  position: relative;
+  height: 120px;
+}
+.torch-face {
+  position: absolute;
+  transform-style: preserve-3d;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50% 50%;
+  background-color: #000000;
+}
+.torch-face.top {
+  transform: rotateX(90deg) translateZ(15px);
+}
+.torch-face.left {
+  transform: rotateY(-90deg) translateZ(15px);
+}
+.torch-face.right {
+  transform: rotateY(0deg) translateZ(15px);
+}
+.torch-face div {
+  width: 102%;
+  height: 102%;
+  transition: all 0.3s ease;
+}
+.torch-face.top div:nth-child(1),
+.torch-face.left div:nth-child(3),
+.torch-face.right div:nth-child(3) {
+  background-color: #ffff97aa;
+}
+.torch-face.top div:nth-child(2),
+.torch-face.left div:nth-child(1),
+.torch-face.right div:nth-child(1) {
+  background-color: #ffd800aa;
+}
+.torch-face.top div:nth-child(3),
+.torch-face.left div:nth-child(4),
+.torch-face.right div:nth-child(4) {
+  background-color: #ffffffaa;
+}
+.torch-face.top div:nth-child(4),
+.torch-face.left div:nth-child(2),
+.torch-face.right div:nth-child(2) {
+  background-color: #ff8f00aa;
+}
+.torch-side {
+  position: absolute;
+  width: 30px;
+  height: 120px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: repeat(8, 12.5%);
+  cursor: pointer;
+  translate: 0 12px;
+}
+.torch-side-left {
+  transform: rotateY(-90deg) translateZ(15px) translateY(8px);
+}
+.torch-side-right {
+  transform: rotateY(0deg) translateZ(15px) translateY(8px);
+}
+.torch-side-left div,
+.torch-side-right div {
+  width: 103%;
+  height: 103%;
+  transition: all 0.3s ease;
+}
+.torch-side div:nth-child(1) {
+  background-color: #443622;
+}
+.torch-side div:nth-child(2) {
+  background-color: #2e2517;
+}
+.torch-side div:nth-child(3),
+.torch-side div:nth-child(5) {
+  background-color: #4b3b23;
+}
+.torch-side div:nth-child(4),
+.torch-side div:nth-child(10) {
+  background-color: #251e12;
+}
+.torch-side div:nth-child(6) {
+  background-color: #292115;
+}
+.torch-side div:nth-child(7) {
+  background-color: #4b3c26;
+}
+.torch-side div:nth-child(8) {
+  background-color: #292115;
+}
+.torch-side div:nth-child(9) {
+  background-color: #4b3a21;
+}
+.torch-side div:nth-child(11),
+.torch-side div:nth-child(15) {
+  background-color: #3d311d;
+}
+.torch-side div:nth-child(12) {
+  background-color: #2c2315;
+}
+.torch-side div:nth-child(13) {
+  background-color: #493a22;
+}
+.torch-side div:nth-child(14) {
+  background-color: #2b2114;
+}
+.torch-side div:nth-child(16) {
+  background-color: #271e10;
+}
+.torch-light-effect {
+  position: absolute;
+  top: -20px;
+  left: -35px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 223, 89, 0.9) 0%,
+    rgba(255, 183, 43, 0.4) 30%,
+    transparent 70%
+  );
+  filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.torch-particles {
+  position: absolute;
+  top: -10px;
+  left: -20px;
+  width: 70px;
+  height: 70px;
+  pointer-events: none;
+}
+.torch-particles span {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #ffd700;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 0 10px #ffd700;
+  filter: blur(1px);
+}
+@keyframes torchParticleFloat {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(var(--x) * 20px), calc(var(--y) * -40px)) scale(0)
+      rotate(360deg);
+    opacity: 0;
+  }
+}
+.torch-particles span:nth-child(1) {
+  --x: 1;
+  --y: 1;
+}
+.torch-particles span:nth-child(2) {
+  --x: -1;
+  --y: 1;
+}
+.torch-particles span:nth-child(3) {
+  --x: 0.5;
+  --y: 1;
+}
+.torch-particles span:nth-child(4) {
+  --x: -0.5;
+  --y: 1;
+}
+.torch-particles span:nth-child(5) {
+  --x: 0.7;
+  --y: 1;
+}
+.torch-particles span:nth-child(6) {
+  --x: -0.7;
+  --y: 1;
+}
+.torch-particles span:nth-child(7) {
+  --x: 0.3;
+  --y: 1;
+}
+.torch-particles span:nth-child(8) {
+  --x: -0.3;
+  --y: 1;
+}
+.torch-container input:checked ~ .torch .torch-light-effect {
+  opacity: 1;
+  animation: torchFlicker 4s infinite;
+}
+.torch-container input:checked ~ .torch .torch-particles span {
+  animation: torchParticleFloat 2s infinite;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(1) {
+  animation-delay: 0s;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(4) {
+  animation-delay: 0.6s;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(5) {
+  animation-delay: 0.8s;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(6) {
+  animation-delay: 1s;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(7) {
+  animation-delay: 1.2s;
+}
+.torch-container input:checked ~ .torch .torch-particles span:nth-child(8) {
+  animation-delay: 1.4s;
+}
+@keyframes torchFlicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  25%,
+  75% {
+    opacity: 0.9;
+  }
+}
+.torch-container:hover .torch {
+  transform: scale(1.05) rotate(2deg);
+  transition: all 0.3s ease;
+}
+.torch-container:hover .torch-simple-text {
+  transform: scale(1.1);
+  text-shadow:
+    0 0 15px rgba(255, 215, 0, 0.7),
+    0 0 30px rgba(255, 215, 0, 0.4);
+  letter-spacing: 2px;
+}
+.torch-container input:checked ~ .torch .torch-face {
+  filter: drop-shadow(0px 0px 8px rgb(255, 255, 255))
+    drop-shadow(0px 0px 20px rgba(255, 237, 156, 0.8))
+    drop-shadow(0px 0px 40px rgba(255, 227, 101, 0.5));
+  transition: filter 0.3s ease;
+}
+.torch-container input:checked ~ .torch .torch-side {
+  filter: brightness(1.3);
+  transition: filter 0.3s ease;
+}
+.torch-glow-effect {
+  position: absolute;
+  top: -30px;
+  left: -45px;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 160, 0, 0.4) 0%,
+    rgba(255, 120, 0, 0.2) 30%,
+    transparent 70%
+  );
+  filter: blur(15px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  animation: torchGlowPulse 3s infinite;
+}
+.torch-smoke {
+  position: absolute;
+  top: -20px;
+  left: -10px;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+}
+.torch-smoke span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+}
+@keyframes torchGlowPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+@keyframes torchSmokeRise {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(calc(var(--x) * 30px), calc(var(--y) * -60px)) scale(3);
+    opacity: 0;
+  }
+}
+.torch-smoke span:nth-child(1) {
+  --x: 0.5;
+  --y: 1;
+}
+.torch-smoke span:nth-child(2) {
+  --x: -0.5;
+  --y: 1;
+}
+.torch-smoke span:nth-child(3) {
+  --x: 0.2;
+  --y: 1;
+}
+.torch-smoke span:nth-child(4) {
+  --x: -0.2;
+  --y: 1;
+}
+.torch-container input:checked ~ .torch .torch-smoke span {
+  animation: torchSmokeRise 3s infinite;
+}
+.torch-container input:checked ~ .torch .torch-smoke span:nth-child(1) {
+  animation-delay: 0s;
+}
+.torch-container input:checked ~ .torch .torch-smoke span:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.torch-container input:checked ~ .torch .torch-smoke span:nth-child(3) {
+  animation-delay: 1.6s;
+}
+.torch-container input:checked ~ .torch .torch-smoke span:nth-child(4) {
+  animation-delay: 2.4s;
+}
+.torch-container input:checked ~ .torch .torch-glow-effect {
+  opacity: 1;
+}
+.torch-container input:checked ~ .torch .torch-side div {
+  filter: brightness(1.3);
+  box-shadow: inset 0 0 5px rgba(255, 183, 43, 0.2);
+}
+
+/* Profile Journal — hand-rolled 3D page-flip (see profile page's "Logbook").
+   One entry per page: the incoming page renders normally underneath, and
+   while navigating an absolutely-positioned copy of the outgoing page
+   rotates away over it around a book-like hinge, then unmounts. */
+.journal-book {
+  perspective: 2200px;
+}
+.journal-page-stack {
+  position: relative;
+  transform-style: preserve-3d;
+}
+.journal-page-enter {
+  animation: journal-page-enter 0.35s ease-out;
+}
+@keyframes journal-page-enter {
+  0% { opacity: 0; transform: scale(0.985); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.journal-page-flip-next {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  backface-visibility: hidden;
+  animation: journal-flip-next 0.5s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+.journal-page-flip-prev {
+  position: absolute;
+  inset: 0;
+  transform-origin: right center;
+  backface-visibility: hidden;
+  animation: journal-flip-prev 0.5s cubic-bezier(0.45, 0, 0.55, 1) forwards;
+}
+@keyframes journal-flip-next {
+  0% { transform: rotateY(0deg); filter: brightness(1); }
+  100% { transform: rotateY(-150deg); filter: brightness(0.55); }
+}
+@keyframes journal-flip-prev {
+  0% { transform: rotateY(0deg); filter: brightness(1); }
+  100% { transform: rotateY(150deg); filter: brightness(0.55); }
+}
+.journal-page-edge {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  width: 10px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(212,175,55,0.12), rgba(212,175,55,0.02));
+  pointer-events: none;
+}
+

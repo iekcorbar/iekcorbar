@@ -1,0 +1,19 @@
+# Gouw - chunk land claims, successor of the Lands plugin.
+
+# How many chunks one player may claim. Staff with gouw.admin: unlimited.
+max-chunks: 16
+
+# Action bar when walking into or out of a gouw, plus a particle pulse on the entered chunk's border.
+enter-messages: true
+
+# Gouwen of players who have not been online for this many days are released (0 = never). Checked an
+# hour after start and every hour, and by hand from the staff page of /gouw menu. Online owners and
+# owners with no known last-play (imported Lands gouwen of players who never joined here) are kept.
+expire-inactive-days: 0
+
+# First start (or /gouw admin import): the old Lands claims are read from its SQLite database and
+# written to plugins/Gouw/claims.json. After that Gouw never touches the Lands file again.
+import:
+  lands-database: plugins/Lands/Data/database_v2.db
+  # the "server" column of the Lands database (Lands could run multi-server)
+  server: server-1

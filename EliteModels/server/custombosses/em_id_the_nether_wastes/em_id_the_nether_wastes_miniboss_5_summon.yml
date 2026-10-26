@@ -1,0 +1,27 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.03
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: WOLF
+followDistance: 20
+frozen: false
+healthMultiplier: 1.2
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 50
+movementSpeedAttribute: 0.42
+name: $reinforcementLevel &7Obsidian Hound
+normalizedCombat: true
+powers:
+- frost_cone.yml
+- bullet_hell.yml
+- attack_push.yml
+- difficultyID:
+  - 2
+  filename: attack_blinding.yml
+classLoot: false
+customModel: em_cog_wolf

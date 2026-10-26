@@ -1,0 +1,96 @@
+# The Birthday Wish - a poem by Darkmatter86
+# Text unchanged from "A Birthday Wish.docx"; only colours and page layout added.
+# Palette (dark tones, readable on the parchment page):
+#   copper &#8a4f1c titles | brass &#7a5a12 ornaments | ink &#2b1d0e text | rust &#8b2a1a accents
+title: &6The Birthday Wish
+model: sakura_journal
+author: Darkmatter86
+description: A poem in fourteen verses.
+copyable: false
+loot: false
+===
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+
+&#8a4f1c&lThe Birthday
+&#8a4f1c&lWish
+
+
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+
+&#2b1d0e&oA tale in verse
+
+&8by Darkmatter86
+---
+&#2b1d0eThe villager left his house one morning
+It was a very special day
+Everyone had gathered around in the town square
+For it was the villager’s birthday
+---
+&#2b1d0eHe was greeted with cheers and confetti
+Hugs and kisses with lots of gifts
+The happiest day of the year, he felt it
+But deep inside the forest around, the mood shifts
+---
+&#2b1d0ePillagers were on the prowl ready to attack
+They cared not for balloons and presents
+All they wanted was to cause trouble
+And frighten them with their presence
+---
+&#2b1d0eBut to our villager, the sun beamed bright on his face
+As he sat in front of a large chocolate cake
+A candle lit with his friends around
+As they waited to see what wish he would make
+---
+&#2b1d0eThey would never find out
+For the wind shifted blowing out his candle
+A horde of pillagers stormed the village
+Way to many for the villagers and golems to handle
+---
+&#8b2a1a&lIt was a massacre
+&#2b1d0eOne by one the villagers perished and died
+The happy face of the birthday boy replaced with a sad one
+As he knelt down, watched and cried
+---
+&#2b1d0eThen came his turn as one pillage fired an arrow into his heart
+Down our boy went on his last breath
+Swearing revenge on the pillagers
+Who left with their loot laughing at all the death
+---
+&#2b1d0eThe last of the villagers alive
+Buried their dead and wept heavy tears
+Not to be attacked again, they left
+Carrying with them what they could on top of their own fears
+---
+&#2b1d0eA year passed, the village was now a cobwebbed wreck
+At the cemetery, a rustling below the dirt
+A hand out of the ground with raging vigour
+A &#8b2a1a&lrevenant&#2b1d0e in the skin of our birthday boy ready to hurt
+---
+&#2b1d0eThe pillagers were in celebration
+Back at the outpost, they went through their treasure
+Happiness and merriment abound
+Filled with food and drink and all sorts of pleasure
+---
+&#2b1d0eThe guards on stand never saw it coming
+One by one, they were ripped apart with superhuman force
+The sound of screams could be heard from inside the outpost
+A shuddering through the spine coursed
+---
+&#2b1d0eIt went quiet as one pillage looked through the window
+Only to see nothing but empty dark
+They gathered their weapons
+Targets on their back left a mark
+---
+&#2b1d0eFor the &#8b2a1a&lrevenant&#2b1d0e struck through them like a knife through butter
+One left standing as all others fell
+Saved till last as revenge craves it
+A special place in the heart to burn in the depths of hell
+---
+&#2b1d0eOne arrow and that was it
+The revenge was short and sweet at best
+A candle was lit as the &#8b2a1a&lrevenant&#2b1d0e held his killer’s head
+Blowing it out, wish granted for a peaceful rest
+
+&#7a5a12⚙ ━━━━━━━ ⚙

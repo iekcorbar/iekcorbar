@@ -1,0 +1,40 @@
+# Kitchen - Japanese farming and cooking.
+# Full guide: docs-url below (also shown by /kitchen help).
+docs-url: https://iekcorbar.com/wiki?page=kitchen
+
+crops:
+  # average minutes from planting to ripe (only while the chunk is loaded, like vanilla crops)
+  growth-minutes:
+    rice: 22
+    soybean: 18
+    napa_cabbage: 20
+    green_onion: 16
+    daikon: 20
+    tea: 26
+    corn: 24
+    tomato: 18
+    chili: 20
+    sesame: 22
+  # crops on Rich Soil grow this much faster
+  rich-soil-speed: 1.6
+  # minimum light level at the crop (vanilla crops use 9)
+  min-light: 9
+
+wild-crops:
+  enabled: true
+  # chance per chunk (0-1) that a patch of wild crops appears the first time the chunk loads
+  chance-per-chunk: 0.12
+  # also in chunks that existed before the plugin was installed
+  generate-in-existing-chunks: true
+
+cooking-pot:
+  # seconds a recipe takes when it doesn't set its own time
+  default-seconds: 10
+
+compost:
+  # minutes until Organic Compost turns into Rich Soil (faster with water next to it)
+  minutes: 20
+
+stations:
+  # left-clicks needed to break a station/prop in survival
+  break-hits: 3

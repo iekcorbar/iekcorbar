@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/boiler_plate",
+    "top": "steamworks:block/boiler_plate",
+    "side": "steamworks:block/boiler_plate"
+  }
+}

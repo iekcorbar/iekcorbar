@@ -1,0 +1,212 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: HUSK
+mainHand: BONE
+name: $normalLevel &fDisturbed Carcass
+level: dynamic # 55
+healthMultiplier: 1.5
+damageMultiplier: 0.4
+movementSpeedAttribute: 0.33
+powers:
+- invulnerability_fire.yml
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 150
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  SpawnPrep:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: SET_MOB_AI
+      bValue: false
+      Target:
+        targetType: SELF
+    - action: MAKE_INVULNERABLE
+      wait: 1
+      Target:
+        targetType: SELF
+      invulnerable: true
+  ActivateMobs:
+    Events:
+    - ZoneEnterEvent
+    Zone:
+      shape: SPHERE
+      radius: 18
+      Target:
+        targetType: SELF
+    Actions:
+    - action: TITLE_MESSAGE
+      wait: 24
+      title: '&cThe Void Bell'
+      subtitle: '&cRings!'
+      Target:
+        targetType: WORLD_PLAYERS
+      duration: 15
+      fadeIn: 5
+      fadeOut: 5
+    - action: PLAY_SOUND
+      wait: 24
+      sValue: void_bell_ring_4
+      Target:
+        targetType: SELF
+      repeatEvery: 10
+      times: 4
+    - action: SET_MOB_AI
+      wait: 24
+      Target:
+        targetType: NEARBY_MOBS
+        range: 25
+      bValue: true
+      Conditions:
+        hasTags:
+        - Disturbed
+        Target:
+          targetType: ACTION_TARGET
+    - action: SET_MOB_AI
+      wait: 24
+      Target:
+        targetType: SELF
+      bValue: true
+    - action: MAKE_INVULNERABLE
+      wait: 34
+      Target:
+        targetType: NEARBY_MOBS
+        range: 25
+      invulnerable: false
+      Conditions:
+        hasTags:
+        - Disturbed
+        Target:
+          targetType: ACTION_TARGET
+    - action: MAKE_INVULNERABLE
+      wait: 34
+      Target:
+        targetType: SELF
+      invulnerable: false
+    - action: PUSH
+      wait: 24
+      Target:
+        targetType: NEARBY_MOBS
+        range: 25
+      vValue: 0,0.6,0
+      Conditions:
+        hasTags:
+        - Disturbed
+        Target:
+          targetType: ACTION_TARGET
+    - action: PUSH
+      wait: 24
+      Target:
+        targetType: SELF
+      vValue: 0,0.6,0
+    Cooldowns:
+      local: 99999
+      global: 100
+spawnLocations:
+- em_id_the_nether_bell,180.5,67.3,-176.5,10.0,0.0
+- em_id_the_nether_bell,80.5,68.3,-268.5,30.0,0.0
+- em_id_the_nether_bell,108.5,62.3,-165.5,50.0,0.0
+- em_id_the_nether_bell,176.5,62.3,-98.5,70.0,0.0
+- em_id_the_nether_bell,169.5,62.3,-46.5,90.0,0.0
+- em_id_the_nether_bell,251.5,66.3,-57.5,111.0,0.0
+- em_id_the_nether_bell,170.5,67.3,-1.5,133.0,0.0
+- em_id_the_nether_bell,68.5,65.3,-200.5,155.0,0.0
+- em_id_the_nether_bell,14.5,63.3,-197.5,160.0,0.0
+- em_id_the_nether_bell,7.5,63.3,-140.5,-20.0,0.0
+- em_id_the_nether_bell,-83.5,62.3,-133.5,-40.0,0.0
+- em_id_the_nether_bell,-128.5,61.3,-155.5,-60.0,0.0
+- em_id_the_nether_bell,-128.5,69.3,-103.5,-80.0,0.0
+- em_id_the_nether_bell,-87.5,86.3,-96.5,-111.0,0.0
+- em_id_the_nether_bell,-144.5,63.3,-45.5,20.0,0.0
+- em_id_the_nether_bell,-187.5,62.3,-4.5,40.0,0.0
+- em_id_the_nether_bell,-144.5,61.3,16.5,60.0,0.0
+- em_id_the_nether_bell,-206.5,63.3,80.5,80.0,0.0
+- em_id_the_nether_bell,-108.5,64.3,96.5,100.0,0.0
+- em_id_the_nether_bell,-145.5,61.3,222.5,10.0,0.0
+- em_id_the_nether_bell,-61.5,63.3,213.5,30.0,0.0
+- em_id_the_nether_bell,13.5,61.3,223.5,50.0,0.0
+- em_id_the_nether_bell,125.5,61.3,200.5,70.0,0.0
+- em_id_the_nether_bell,137.5,62.3,134.5,90.0,0.0
+- em_id_the_nether_bell,180.5,62.3,69.5,111.0,0.0
+- em_id_the_nether_bell,287.5,66.3,15.5,-5.0,0.0
+- em_id_the_nether_bell,92.5,75.3,8.5,-15.0,0.0
+- em_id_the_nether_bell,59.5,84.3,-27.5,25.0,0.0
+- em_id_the_nether_bell,0.5,78.3,-60.5,-35.0,0.0
+- em_id_the_nether_bell,-44.5,82.3,-33.5,45.0,0.0
+- em_id_the_nether_bell,-79.5,72.3,-6.5,-55.0,0.0
+- em_id_the_nether_bell,-62.5,81.3,18.5,60.0,0.0
+- em_id_the_nether_bell,-23.5,82.3,44.5,-75.0,0.0
+- em_id_the_nether_bell,45.5,77.3,75.5,85.0,0.0
+- em_id_the_nether_bell,49.5,83.7,12.5,-105.0,0.0
+- em_id_the_nether_bell,153.5,66.3,22.5,63.8,0.0
+- em_id_the_nether_bell,107.5,70.3,29.5,154.5,0.0
+- em_id_the_nether_bell,84.5,67.3,64.5,91.5,0.0
+- em_id_the_nether_bell,76.5,74.3,93.5,-119.9,0.0
+- em_id_the_nether_bell,109.5,69.3,106.5,12.1,0.0
+- em_id_the_nether_bell,48.5,70.3,123.5,-128.5,0.0
+- em_id_the_nether_bell,10.5,76.3,81.5,146.1,0.0
+- em_id_the_nether_bell,18.5,84.3,52.5,110.0,0.0
+- em_id_the_nether_bell,-7.5,81.3,70.5,-108.5,0.0
+- em_id_the_nether_bell,-32.5,65.3,174.5,98.9,0.0
+- em_id_the_nether_bell,-67.5,69.3,150.5,-164.5,0.0
+- em_id_the_nether_bell,-45.5,76.3,104.5,-12.5,0.0
+- em_id_the_nether_bell,-71.5,69.3,87.5,-170.2,0.0
+- em_id_the_nether_bell,-48.5,77.3,52.5,-59.7,0.0
+- em_id_the_nether_bell,-116.5,64.3,40.5,-128.4,0.0
+- em_id_the_nether_bell,-159.5,68.3,-26.5,-55.5,0.0
+- em_id_the_nether_bell,-58.5,71.3,-89.5,-121.3,0.0
+- em_id_the_nether_bell,-1.5,67.3,-109.5,29.8,0.0
+- em_id_the_nether_bell,27.5,73.3,-65.5,-29.2,0.0
+- em_id_the_nether_bell,80.5,75.3,-44.5,-155.6,0.0
+- em_id_the_nether_bell,116.5,77.3,-81.5,-175.5,0.0
+- em_id_the_nether_bell,85.5,67.3,-126.5,-122.5,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_nether_bell_swords_5b0e5445.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_axes_9a9cc081.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_bows_e09343b5.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_crossbows_7413b656.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tridents_9c6deb80.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_hoes_b95b5ce8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_maces_2d5735b1.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_spears_d1f22e48.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_staves_3d92b639.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_wands_e5e77fbb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_helmets_d647333b.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_chestplates_3d33aaeb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_leggings_8994d82f.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_boots_a48a83ae.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_helmets_c53bb16e.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_chestplates_f21db6b8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_leggings_41290a61.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_boots_d3f7f477.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_shields_16efa34b.yml
+  chance: 1.0
+customModel: em_rust_husk

@@ -1,0 +1,14 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+entityType: ENDERMITE
+healthMultiplier: 0.25
+isEnabled: true
+level: 100
+name: $reinforcementLevel &5Reality Corruptor
+normalizedCombat: true
+timeout: 2
+classLoot: false
+customModel: em_cog_endermite

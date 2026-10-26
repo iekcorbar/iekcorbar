@@ -1,0 +1,19 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+entityType: VEX
+healthMultiplier: 0.25
+isBaby: true
+isEnabled: true
+isPersistent: false
+level: dynamic
+instanced: true
+name: $reinforcementLevel &2Shadow
+powers:
+- attack_blinding.yml
+- attack_confusing.yml
+classLoot: false
+customModel: em_imp_vex

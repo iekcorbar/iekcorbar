@@ -1,0 +1,80 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: STRAY
+name: $normalLevel &3Twisted Miner
+level: dynamic # 10
+instanced: true
+healthMultiplier: 1
+damageMultiplier: 0.85
+onDamageMessages:
+- Hurt, disable, collect, bring back.
+powers:
+- invulnerability_fire.yml
+- attack_blinding.yml
+- filename: shield_wall.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: attack_vacuum.yml
+  difficultyID:
+  - 2
+mainHand: IRON_SWORD
+# leashRadius: 30
+movementSpeedAttribute: 0.33
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: true
+followDistance: 30
+normalizedCombat: true
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_climb,385.5,46.5,285.5,0.0,0.0
+- em_id_the_climb,371.5,50.5,267.5,0.0,0.0
+- em_id_the_climb,362.5,53.5,264.5,0.0,0.0
+- em_id_the_climb,339.5,60.5,246.5,0.0,0.0
+- em_id_the_climb,291.5,77.5,225.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: the_climb_shambling_skeleton_swords_7eb3bff8.yml
+  chance: 1.0
+- filename: cl_story_climb_axes_31b58f5d.yml
+  chance: 1.0
+- filename: the_climb_shambling_skeleton_bows_d031ed42.yml
+  chance: 1.0
+- filename: cl_story_climb_crossbows_320c599d.yml
+  chance: 1.0
+- filename: cl_story_climb_tridents_462a95e9.yml
+  chance: 1.0
+- filename: cl_story_climb_hoes_90f57b2c.yml
+  chance: 1.0
+- filename: cl_story_climb_maces_7f63f619.yml
+  chance: 1.0
+- filename: cl_story_climb_spears_743b64fe.yml
+  chance: 1.0
+- filename: cl_story_climb_staves_3ba7efcc.yml
+  chance: 1.0
+- filename: cl_story_climb_wands_0b2088fe.yml
+  chance: 1.0
+- filename: the_climb_shambling_skeleton_dps_helmets_a6a473e2.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_chestplates_ed45bf2e.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_leggings_4a065545.yml
+  chance: 1.0
+- filename: the_climb_shambling_skeleton_dps_boots_23f8042a.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_helmets_77716983.yml
+  chance: 1.0
+- filename: the_climb_shambling_skeleton_tank_chestplates_37ba0c8c.yml
+  chance: 1.0
+- filename: the_climb_shambling_skeleton_tank_leggings_c101202f.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_boots_0634543f.yml
+  chance: 1.0
+- filename: cl_story_climb_shields_4f3929f0.yml
+  chance: 1.0
+customModel: em_frost_stray

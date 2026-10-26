@@ -1,0 +1,18 @@
+name: Sakagura
+version: '${project.version}'
+main: com.iekcorbar.sakagura.Sakagura
+api-version: '26.2'
+description: Brewing and a fruit garden - cauldron, distilling, sake casks, quality, drunkenness.
+author: iekcorbar
+softdepend: [Kitchen, Steamworks]
+
+commands:
+  brew:
+    description: Sakagura brewing commands
+    usage: /brew <help|recipes|drunk|give|take|reload>
+    aliases: [sakagura]
+
+permissions:
+  sakagura.admin:
+    description: Give drinks/items, set drunkenness, reload
+    default: op

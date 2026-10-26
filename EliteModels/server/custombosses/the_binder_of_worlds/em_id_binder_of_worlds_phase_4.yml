@@ -1,0 +1,217 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+bossType: BOSS
+cullReinforcements: true
+damageMultiplier: 1.8
+deathMessages:
+- '&e&l---------------------------------------------'
+- '&9The binder is bound to this mortal plane no more!'
+- '&c&l    1st Damager: $damager1name &cwith $damager1damage damage!'
+- '&6&l    2nd Damager: $damager2name &6with $damager2damage damage!'
+- '&e&l    3rd Damager: $damager3name &ewith $damager3damage damage!'
+- '&aSlayers: $players'
+- '&e&l---------------------------------------------'
+dropsEliteMobsLoot: true
+entityType: ENDER_DRAGON
+followDistance: 200
+healthMultiplier: 120
+isEnabled: true
+level: 100
+name: $bossLevel &eBinder of Worlds
+normalizedCombat: true
+powers:
+- difficultyID:
+  - 0
+  filename: em_id_the_binder_of_worlds_pull_sphere_p4_normal.yml
+- difficultyID:
+  - 1
+  filename: em_id_the_binder_of_worlds_pull_sphere_p4_hard.yml
+- difficultyID:
+  - 2
+  filename: em_id_the_binder_of_worlds_pull_sphere_p4_mythic.yml
+- ender_dragon_tornado.yml
+- ender_dragon_shockwave.yml
+- ender_dragon_arrow_bombardment.yml
+- ender_dragon_empowered_lightning.yml
+- lightningRod: true
+  location: 80,10,0
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- lightningRod: true
+  location: -80,10,0
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- lightningRod: true
+  location: 0,10,80
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- lightningRod: true
+  location: 0,10,-80
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritAggro: true
+  inheritLevel: true
+  location: 80,20,0
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritAggro: true
+  inheritLevel: true
+  location: -80,20,80
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritAggro: true
+  inheritLevel: true
+  location: 0,20,80
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritAggro: true
+  inheritLevel: true
+  location: 0,20,-80
+  summonType: ON_COMBAT_ENTER
+spawnCooldown: 10080
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.25
+  difficultyID: 2
+  filename: unbind_scroll.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_axe_tank_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_axe_tank_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_axe_tank_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_boots_dps_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_boots_dps_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_boots_dps_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_boots_tank_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_boots_tank_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_boots_tank_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_chestplate_dps_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_chestplate_dps_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_chestplate_dps_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_chestplate_tank_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_chestplate_tank_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_chestplate_tank_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_helmet_dps_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_helmet_dps_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_helmet_dps_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_helmet_tank_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_helmet_tank_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_helmet_tank_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_leggings_dps_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_leggings_dps_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_leggings_dps_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_leggings_tank_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_leggings_tank_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_leggings_tank_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_shield_tank_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_shield_tank_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_shield_tank_mythic.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_shield_dps_mythic.yml
+- chance: 0.02
+  difficultyID: 0
+  filename: em_id_the_binder_of_worlds_drop_sword_dps_normal.yml
+- chance: 0.02
+  difficultyID: 1
+  filename: em_id_the_binder_of_worlds_drop_sword_dps_hard.yml
+- chance: 0.02
+  difficultyID: 2
+  filename: em_id_the_binder_of_worlds_drop_sword_dps_mythic.yml
+- filename: cl_binder_of_worlds_unbound_swords_ae3c4ef1.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_axes_56f5b9b4.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_bows_8c45fe50.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_crossbows_6b01094d.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_tridents_113a13dd.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_hoes_370df57c.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_maces_02acd3e0.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_spears_47972073.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_staves_6b56b521.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_wands_4bdaf703.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_dps_helmets_e0a72c91.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_dps_chestplates_d2031b73.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_dps_leggings_cc607691.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_dps_boots_0fab9b4a.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_tank_helmets_27323914.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_tank_chestplates_4e2a309a.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_tank_leggings_1169d97b.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_tank_boots_26c51be6.yml
+  chance: 1.0
+- filename: cl_binder_of_worlds_unbound_shields_1f298119.yml
+  chance: 1.0
+customModel: em_zeppelin_dragon

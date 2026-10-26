@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/boiler_tiles",
+    "top": "steamworks:block/boiler_tiles",
+    "side": "steamworks:block/boiler_tiles"
+  }
+}

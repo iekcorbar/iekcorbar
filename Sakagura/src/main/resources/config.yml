@@ -1,0 +1,22 @@
+# Sakagura - brewing and the fruit garden (replaces the old Brewery plugin).
+docs-url: https://iekcorbar.com/wiki?page=sakagura
+
+aging:
+  # real-time minutes for one "year" in a sake cask (counts while nobody is around too)
+  minutes-per-year: 20
+
+drunk:
+  # how fast players sober up (drunk level points per minute, level goes 0-100)
+  sober-per-minute: 2.0
+  # drunk level added per % alcohol of a drink (a 20% drink adds 12 with 0.6)
+  per-alcohol-percent: 0.6
+
+garden:
+  # chance (0-1) that a patch of wild fruit bushes appears the first time a chunk loads
+  wild-chance-per-chunk: 0.1
+
+distilling:
+  # the Steam Still: bottles + a glowstone dust inside, fire/lava/campfire below.
+  seconds-per-run: 20     # one run distills the bottles inside and spends one glowstone dust
+  bottles-per-run: 3      # max bottle stacks served per run; the rest waits for the next one
+  debug: false            # log every second what a still sees (finding why it does nothing)

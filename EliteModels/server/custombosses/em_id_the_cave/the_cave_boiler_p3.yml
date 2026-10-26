@@ -1,0 +1,178 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Message:
+    Actions:
+    - Target:
+        range: 10
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '&cThe Boiler''s &7hard boiled magma shell has cracked, exposing it''s
+        slimy insides.'
+    Events:
+    - ElitePhaseSwitchEvent
+  Summon:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SUMMON_REINFORCEMENT
+      sValue: the_cave_broiled_miner.yml
+    Cooldowns:
+      global: 20
+      local: 244
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    - PlayerDamagedByEliteMobEvent
+    - EliteMobTargetPlayerEvent
+    - ElitePhaseSwitchEvent
+    - EliteMobEnterCombatEvent
+    - EliteMobDamagedEvent
+  Summon2:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SUMMON_REINFORCEMENT
+      sValue: the_cave_broiled_miner.yml
+    Cooldowns:
+      global: 20
+      local: 122
+    Events:
+    - EliteMobTargetPlayerEvent
+    - ElitePhaseSwitchEvent
+    - EliteMobEnterCombatEvent
+entityType: SLIME
+followDistance: 80
+healthMultiplier: 10.0
+instanced: true
+isEnabled: true
+leashRadius: 80
+level: dynamic # 15
+movementSpeedAttribute: 2.5
+name: $bossLevel &cThe Boiler
+normalizedCombat: true
+powers:
+- implosion.yml
+- the_cave_roof_fall.yml
+- shield_wall.yml
+- invulnerability_arrow.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_poison.yml
+- difficultyID:
+  - 2
+  filename: attack_web.yml
+song: name=elitemobs:the_cave_sanctum.phase2 length=35996
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.99
+  filename: the_cave_lore_note_the_boiler.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: the_cave_axe_tank_normal.yml
+- chance: 0.05
+  difficultyID: 1
+  filename: the_cave_axe_tank_hard.yml
+- chance: 0.05
+  difficultyID: 2
+  filename: the_cave_axe_tank_mythic.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: the_cave_boots_tank_normal.yml
+- chance: 0.05
+  difficultyID: 1
+  filename: the_cave_boots_tank_hard.yml
+- chance: 0.05
+  difficultyID: 2
+  filename: the_cave_boots_tank_mythic.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: the_cave_chestplate_tank_normal.yml
+- chance: 0.05
+  difficultyID: 1
+  filename: the_cave_chestplate_tank_hard.yml
+- chance: 0.05
+  difficultyID: 2
+  filename: the_cave_chestplate_tank_mythic.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: the_cave_helmet_dps_normal.yml
+- chance: 0.05
+  difficultyID: 1
+  filename: the_cave_helmet_dps_hard.yml
+- chance: 0.05
+  difficultyID: 2
+  filename: the_cave_helmet_dps_mythic.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: the_cave_helmet_tank_normal.yml
+- chance: 0.05
+  difficultyID: 1
+  filename: the_cave_helmet_tank_hard.yml
+- chance: 0.05
+  difficultyID: 2
+  filename: the_cave_helmet_tank_mythic.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: the_cave_leggings_tank_normal.yml
+- chance: 0.05
+  difficultyID: 1
+  filename: the_cave_leggings_tank_hard.yml
+- chance: 0.05
+  difficultyID: 2
+  filename: the_cave_leggings_tank_mythic.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: the_cave_shield_tank_normal.yml
+- chance: 0.05
+  difficultyID: 1
+  filename: the_cave_shield_tank_hard.yml
+- chance: 0.05
+  difficultyID: 2
+  filename: the_cave_shield_tank_mythic.yml
+- filename: cl_story_cave_swords_3f101335.yml
+  chance: 1.0
+- filename: cl_story_cave_axes_2311de0c.yml
+  chance: 1.0
+- filename: cl_story_cave_bows_2c2893c1.yml
+  chance: 1.0
+- filename: cl_story_cave_crossbows_082af867.yml
+  chance: 1.0
+- filename: cl_story_cave_tridents_8df35ece.yml
+  chance: 1.0
+- filename: cl_story_cave_hoes_9c129193.yml
+  chance: 1.0
+- filename: cl_story_cave_maces_6411eac8.yml
+  chance: 1.0
+- filename: cl_story_cave_spears_36e35388.yml
+  chance: 1.0
+- filename: cl_story_cave_staves_95f28c3f.yml
+  chance: 1.0
+- filename: cl_story_cave_wands_c625b81b.yml
+  chance: 1.0
+- filename: cl_story_cave_dps_helmets_53895c2d.yml
+  chance: 1.0
+- filename: cl_story_cave_dps_chestplates_72c0efce.yml
+  chance: 1.0
+- filename: cl_story_cave_dps_leggings_f8def35e.yml
+  chance: 1.0
+- filename: cl_story_cave_dps_boots_93c8af4b.yml
+  chance: 1.0
+- filename: cl_story_cave_tank_helmets_534b118f.yml
+  chance: 1.0
+- filename: cl_story_cave_tank_chestplates_c4295d28.yml
+  chance: 1.0
+- filename: cl_story_cave_tank_leggings_a9d39c8a.yml
+  chance: 1.0
+- filename: cl_story_cave_tank_boots_8bb0e56a.yml
+  chance: 1.0
+- filename: cl_story_cave_shields_f2005558.yml
+  chance: 1.0
+customModel: em_gear_slime

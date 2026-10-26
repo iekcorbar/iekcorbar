@@ -1,0 +1,26 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: SKELETON
+name: $normalLevel &fSlow Giver
+level: dynamic # 99
+healthMultiplier: 99.1
+damageMultiplier: 0.1
+movementSpeedAttribute: 1.0E-4
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 25
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+powers:
+- invulnerability_fire.yml
+- invisibility.yml
+- em_id_the_deep_mines_remove_immortal_script.lua
+spawnLocations:
+- em_id_the_deep_mines,62.5,104,290.5,0.0,0.0
+classLoot: false
+customModel: em_clockwork_skeleton

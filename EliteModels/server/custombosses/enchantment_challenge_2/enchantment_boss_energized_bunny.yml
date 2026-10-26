@@ -1,0 +1,804 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  StrikeBolt:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 0,0,20
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt2:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 0,0,-20
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt20:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 0,0,10
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt22:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 0,0,-10
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt23:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 10,0,0
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt24:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: -10,0,0
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt25:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: -5,0,-5
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt26:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 5,0,5
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt27:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: -5,0,5
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt28:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 5,0,-5
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt3:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 20,0,0
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt4:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: -20,0,0
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt5:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: -15,0,-15
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt6:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 15,0,15
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt7:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: -15,0,15
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  StrikeBolt8:
+    Actions:
+    - Target:
+        coverage: 0.4
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      repeatEvery: 10
+      times: 13
+    - Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+        track: true
+      action: STRIKE_LIGHTNING
+      wait: 125
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SET_ON_FIRE
+      duration: 155
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    - Target:
+        targetType: ZONE_FULL
+      action: DAMAGE
+      multiplier: 0.5
+      repeatEvery: 5
+      times: 4
+      wait: 128
+    Zone:
+      Target:
+        offset: 15,0,-15
+        targetType: SELF_SPAWN
+      height: 2
+      radius: 6
+      shape: CYLINDER
+  Trigger:
+    Actions:
+    - action: RUN_SCRIPT
+      onlyRunOneScript: true
+      scripts:
+      - StrikeBolt
+      - StrikeBolt2
+      - StrikeBolt3
+      - StrikeBolt4
+      - StrikeBolt5
+      - StrikeBolt6
+      - StrikeBolt7
+      - StrikeBolt8
+      - StrikeBolt20
+      - StrikeBolt22
+      - StrikeBolt23
+      - StrikeBolt24
+      - StrikeBolt25
+      - StrikeBolt26
+      - StrikeBolt27
+      - StrikeBolt28
+    - action: RUN_SCRIPT
+      onlyRunOneScript: true
+      scripts:
+      - StrikeBolt
+      - StrikeBolt2
+      - StrikeBolt3
+      - StrikeBolt4
+      - StrikeBolt5
+      - StrikeBolt6
+      - StrikeBolt7
+      - StrikeBolt8
+      - StrikeBolt20
+      - StrikeBolt22
+      - StrikeBolt23
+      - StrikeBolt24
+      - StrikeBolt25
+      - StrikeBolt26
+      - StrikeBolt27
+      - StrikeBolt28
+    - action: RUN_SCRIPT
+      onlyRunOneScript: true
+      scripts:
+      - StrikeBolt
+      - StrikeBolt2
+      - StrikeBolt3
+      - StrikeBolt4
+      - StrikeBolt5
+      - StrikeBolt6
+      - StrikeBolt7
+      - StrikeBolt8
+      - StrikeBolt20
+      - StrikeBolt22
+      - StrikeBolt23
+      - StrikeBolt24
+      - StrikeBolt25
+      - StrikeBolt26
+      - StrikeBolt27
+      - StrikeBolt28
+    - action: RUN_SCRIPT
+      onlyRunOneScript: true
+      scripts:
+      - StrikeBolt
+      - StrikeBolt2
+      - StrikeBolt3
+      - StrikeBolt4
+      - StrikeBolt5
+      - StrikeBolt6
+      - StrikeBolt7
+      - StrikeBolt8
+      - StrikeBolt20
+      - StrikeBolt22
+      - StrikeBolt23
+      - StrikeBolt24
+      - StrikeBolt25
+      - StrikeBolt26
+      - StrikeBolt27
+      - StrikeBolt28
+      wait: 120
+    - action: RUN_SCRIPT
+      onlyRunOneScript: true
+      scripts:
+      - StrikeBolt
+      - StrikeBolt2
+      - StrikeBolt3
+      - StrikeBolt4
+      - StrikeBolt5
+      - StrikeBolt6
+      - StrikeBolt7
+      - StrikeBolt8
+      - StrikeBolt20
+      - StrikeBolt22
+      - StrikeBolt23
+      - StrikeBolt24
+      - StrikeBolt25
+      - StrikeBolt26
+      - StrikeBolt27
+      - StrikeBolt28
+      wait: 240
+    Cooldowns:
+      global: 60
+      local: 140
+    Events:
+    - EliteMobDamagedByPlayerEvent
+entityType: RABBIT
+followDistance: 60
+frozen: false
+healthMultiplier: 3.0
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 60
+movementSpeedAttribute: 0.56
+name: $minibossLevel &eEnergized Bunny
+normalizedCombat: true
+powers:
+- attack_arrow.yml
+- invulnerability_fire.yml
+spawnLocations:
+- em_id_enchantment_challenge_2,1.5,65,0.5,0,0
+trails:
+- ELECTRIC_SPARK
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.15
+  difficultyID: 0
+  filename: ec_02_axe_normal.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: enchanted_book_lightning.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec02_swords_8b1cce68.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_axes_91b5aa9e.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_bows_ba0f7a6f.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_crossbows_eb833d48.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_tridents_9bdff44c.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_hoes_9b51ee7d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_maces_8d5034d7.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_spears_26d5c657.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_staves_5d755cda.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_wands_5eb0a9be.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_dps_helmets_ea8361ad.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_dps_chestplates_b369c604.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_dps_leggings_ef00e8d6.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_dps_boots_4dd886c9.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_tank_helmets_44a6361a.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_tank_chestplates_cede44ce.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_tank_leggings_d29116dc.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_tank_boots_fe067aed.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec02_shields_f48d7030.yml
+  chance: 1.0
+customModel: em_wind_rabbit

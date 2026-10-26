@@ -1,0 +1,79 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIFIED_PIGLIN
+name: $normalLevel &3Rotting Carcass
+level: dynamic # 10
+instanced: true
+healthMultiplier: 1.35
+damageMultiplier: 0.85
+onDamageMessages:
+- The Weaver shall turn you into something great.
+powers:
+- invulnerability_fire.yml
+- invulnerability_knockback.yml
+- attack_wither.yml
+- filename: attack_weakness.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: movement_speed.yml
+  difficultyID:
+  - 2
+mainHand: GOLDEN_AXE
+# leashRadius: 30
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: true
+followDistance: 30
+normalizedCombat: true
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_climb,275.5,78.5,178.5,0.0,0.0
+- em_id_the_climb,291.5,86.5,146.5,0.0,0.0
+- em_id_the_climb,293.5,92.5,109.5,0.0,0.0
+- em_id_the_climb,308.5,96.5,44.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_climb_swords_8ea5dae3.yml
+  chance: 1.0
+- filename: the_climb_rotting_carcass_axes_b51da022.yml
+  chance: 1.0
+- filename: cl_story_climb_bows_147d3e16.yml
+  chance: 1.0
+- filename: cl_story_climb_crossbows_320c599d.yml
+  chance: 1.0
+- filename: cl_story_climb_tridents_462a95e9.yml
+  chance: 1.0
+- filename: cl_story_climb_hoes_90f57b2c.yml
+  chance: 1.0
+- filename: cl_story_climb_maces_7f63f619.yml
+  chance: 1.0
+- filename: cl_story_climb_spears_743b64fe.yml
+  chance: 1.0
+- filename: cl_story_climb_staves_3ba7efcc.yml
+  chance: 1.0
+- filename: cl_story_climb_wands_0b2088fe.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_helmets_6a5e6399.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_chestplates_ed45bf2e.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_leggings_4a065545.yml
+  chance: 1.0
+- filename: the_climb_rotting_carcass_dps_boots_36a67072.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_helmets_77716983.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_chestplates_ebe1c9ff.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_leggings_7b9e21c5.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_boots_0634543f.yml
+  chance: 1.0
+- filename: cl_story_climb_shields_4f3929f0.yml
+  chance: 1.0
+customModel: em_gilded_zombified_piglin

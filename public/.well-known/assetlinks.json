@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.iekcorbar.app",
+      "sha256_cert_fingerprints": [
+        "15:08:4A:63:1D:88:F5:95:1A:BF:98:34:6D:78:6F:69:6F:AC:68:DB:62:39:6A:4D:AE:C6:29:26:99:09:9D:74",
+        "14:86:C7:C5:88:5D:B0:0A:99:BC:58:D6:16:AA:3F:3E:46:7B:1B:9F:CB:C2:2A:8F:B4:1E:97:86:BB:63:00:4E"
+      ]
+    }
+  }
+]

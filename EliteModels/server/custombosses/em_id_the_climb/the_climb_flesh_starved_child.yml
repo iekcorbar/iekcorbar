@@ -1,0 +1,66 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: HUSK
+frozen: false
+healthMultiplier: 3
+instanced: true
+isBaby: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 30
+level: dynamic # 10
+movementSpeedAttribute: 0.36
+name: $minibossLevel &4Broiled Villager
+normalizedCombat: true
+powers:
+- invulnerability_fire.yml
+spawnLocations:
+- em_id_the_climb,426.5,126.5,69.5,0.0,0.0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_climb_swords_8ea5dae3.yml
+  chance: 1.0
+- filename: cl_story_climb_axes_31b58f5d.yml
+  chance: 1.0
+- filename: cl_story_climb_bows_147d3e16.yml
+  chance: 1.0
+- filename: cl_story_climb_crossbows_320c599d.yml
+  chance: 1.0
+- filename: cl_story_climb_tridents_462a95e9.yml
+  chance: 1.0
+- filename: cl_story_climb_hoes_90f57b2c.yml
+  chance: 1.0
+- filename: cl_story_climb_maces_7f63f619.yml
+  chance: 1.0
+- filename: cl_story_climb_spears_743b64fe.yml
+  chance: 1.0
+- filename: cl_story_climb_staves_3ba7efcc.yml
+  chance: 1.0
+- filename: cl_story_climb_wands_0b2088fe.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_helmets_6a5e6399.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_chestplates_ed45bf2e.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_leggings_4a065545.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_boots_edc18702.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_helmets_77716983.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_chestplates_ebe1c9ff.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_leggings_7b9e21c5.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_boots_0634543f.yml
+  chance: 1.0
+- filename: cl_story_climb_shields_4f3929f0.yml
+  chance: 1.0
+customModel: em_rust_husk

@@ -1,0 +1,55 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 0.8
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Sleep:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+    Events:
+    - EliteMobSpawnEvent
+  WakeUp:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: true
+    Events:
+    - EliteMobDamagedEvent
+entityType: IRON_GOLEM
+followDistance: 110
+frozen: false
+healthMultiplier: 25
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 110
+level: dynamic # 25
+name: $bossLevel &cAncient Guardian
+normalizedCombat: true
+phases:
+- the_bridge_ancient_guardian_p2.yml:0.70
+- the_bridge_ancient_guardian_p3.yml:0.35
+powers:
+- em_id_the_bridge_lava_fall_p1.yml
+- movement_speed.yml
+- attack_push.yml
+- difficultyID:
+  - 0
+  filename: em_id_the_bridge_pull_vacuum_p1_normal.yml
+- difficultyID:
+  - 1
+  filename: em_id_the_bridge_pull_vacuum_p1_hard.yml
+- difficultyID:
+  - 2
+  filename: em_id_the_bridge_pull_vacuum_p1_mythic.yml
+spawnLocations:
+- em_id_the_bridge,-183.5,107,-13.5,90.0,0.0
+classLoot: false
+customModel: em_boiler_golem

@@ -1,0 +1,46 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: WARDEN
+name: $minibossLevel &eHolder of Misery
+level: dynamic # 55
+healthMultiplier: 1.0E-4
+damageMultiplier: 0.01
+movementSpeedAttribute: 1.0E-5
+instanced: true
+isRegionalBoss: false
+normalizedCombat: true
+frozen: false
+followDistance: 40
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  TagOnSpawn:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: TAG
+      Target:
+        targetType: SELF
+      tags:
+      - ShadowClone
+    - action: SET_MOB_AWARE
+      Target:
+        targetType: SELF
+      bValue: false
+  DeadMsg:
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    Actions:
+    - action: MESSAGE
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 35
+      sValue: '&7It was just a shadow clone...'
+    Cooldowns:
+      local: 60000
+      global: 3
+classLoot: false
+customModel: em_sculk_warden

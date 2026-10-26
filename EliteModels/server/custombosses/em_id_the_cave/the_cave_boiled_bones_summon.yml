@@ -1,0 +1,31 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: SKELETON
+followDistance: 25
+healthMultiplier: 0.25
+isEnabled: true
+instanced: true
+leashRadius: 25
+level: dynamic # 15
+mainHand: BOW
+name: $reinforcementLevel &fBoiled Bones
+normalizedCombat: true
+powers:
+- difficultyID:
+  - 1
+  filename: attack_weakness.yml
+- difficultyID:
+  - 2
+  filename: implosion.yml
+- difficultyID:
+  - 2
+  filename: invulnerability_arrow.yml
+- invulnerability_fire.yml
+- attack_push.yml
+classLoot: false
+customModel: em_clockwork_skeleton

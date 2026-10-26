@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/rice_straw_wall",
+    "top": "steamworks:block/rice_straw_wall",
+    "side": "steamworks:block/rice_straw_wall"
+  }
+}

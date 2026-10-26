@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/lacquer_brass_panel",
+    "top": "steamworks:block/lacquer_brass_panel",
+    "side": "steamworks:block/lacquer_brass_panel"
+  }
+}

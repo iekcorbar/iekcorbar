@@ -1,0 +1,37 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+bossType: BOSS
+cullReinforcements: true
+damageMultiplier: 1.75
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+entityType: BLAZE
+followDistance: 200
+healthMultiplier: 30
+isEnabled: true
+level: dynamic # 20
+instanced: true
+name: $bossLevel &cSparky
+powers:
+- arrow_fireworks.yml
+- fireworks_barrage.yml
+- skeleton_tracking_arrow.yml
+- filename: fireworks_phase_2_reinforcement.yml
+  inheritLevel: true
+  location: 35,0,0
+  summonType: ON_COMBAT_ENTER
+- filename: fireworks_phase_2_reinforcement.yml
+  inheritLevel: true
+  location: -35,0,0
+  summonType: ON_COMBAT_ENTER
+- filename: fireworks_phase_2_reinforcement.yml
+  inheritLevel: true
+  location: 0,0,35
+  summonType: ON_COMBAT_ENTER
+- filename: fireworks_phase_2_reinforcement.yml
+  inheritLevel: true
+  location: 0,0,-35
+  summonType: ON_COMBAT_ENTER
+classLoot: false
+customModel: em_furnace_blaze

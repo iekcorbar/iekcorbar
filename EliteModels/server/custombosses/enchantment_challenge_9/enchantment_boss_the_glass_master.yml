@@ -1,0 +1,271 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.4
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  GlassDrop1:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: POTION_EFFECT
+      amplifier: 0
+      duration: 5
+      potionEffectType: HARM
+      repeatEvery: 10
+      times: 2
+    Zone:
+      Target:
+        targetType: LANDING_LOCATION
+      height: 2
+      radius: 1
+      shape: CYLINDER
+  GlassDropVisual1:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: SPAWN_FALLING_BLOCK
+      landingScripts:
+      - GlassDrop1
+      material: GLASS
+      wait: 25
+    - Target:
+        offset: 0,5,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: true
+      action: PLAY_SOUND
+      sValue: block.glass.break
+      wait: 25
+    - Target:
+        range: 50
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '[&fThe Glass Master] A big block of glass is heading towards your head!'
+    Zone:
+      Target:
+        offset: 0,12,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: false
+      shape: CUBOID
+      x: 3
+      y: 3
+      z: 3
+  GlassDropVisual2:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: SPAWN_FALLING_BLOCK
+      landingScripts:
+      - GlassDrop1
+      material: GLASS
+      wait: 25
+    - Target:
+        offset: 0,5,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: true
+      action: PLAY_SOUND
+      sValue: block.glass.break
+      wait: 25
+    - Target:
+        range: 50
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '[&fThe Glass Master] Hope that block of glass cuts you to pieces!'
+    Zone:
+      Target:
+        offset: 0,12,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: false
+      shape: CUBOID
+      x: 3
+      y: 3
+      z: 3
+  GlassDropVisual3:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: SPAWN_FALLING_BLOCK
+      landingScripts:
+      - GlassDrop1
+      material: GLASS
+      wait: 25
+    - Target:
+        offset: 0,5,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: true
+      action: PLAY_SOUND
+      sValue: block.glass.break
+      wait: 25
+    - Target:
+        range: 50
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '[&fThe Glass Master] Ok now make sure to stand still so the big block
+        of glass smashes you!'
+    Zone:
+      Target:
+        offset: 0,12,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: false
+      shape: CUBOID
+      x: 3
+      y: 3
+      z: 3
+  GlassDropVisual4:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: SPAWN_FALLING_BLOCK
+      landingScripts:
+      - GlassDrop1
+      material: GLASS
+      wait: 25
+    - Target:
+        offset: 0,5,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: true
+      action: PLAY_SOUND
+      sValue: block.glass.break
+      wait: 25
+    - Target:
+        range: 50
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '[&fThe Glass Master] You and this big block of glass should meet!'
+    Zone:
+      Target:
+        offset: 0,12,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: false
+      shape: CUBOID
+      x: 3
+      y: 3
+      z: 3
+  GlassDropVisual5:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: SPAWN_FALLING_BLOCK
+      landingScripts:
+      - GlassDrop1
+      material: GLASS
+      wait: 25
+    - Target:
+        offset: 0,5,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: true
+      action: PLAY_SOUND
+      sValue: block.glass.break
+      wait: 25
+    - Target:
+        range: 50
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '[&fThe Glass Master] I really hope this big block of glass drops on
+        you!'
+    Zone:
+      Target:
+        offset: 0,12,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: false
+      shape: CUBOID
+      x: 3
+      y: 3
+      z: 3
+  Trigger:
+    Actions:
+    - action: RUN_SCRIPT
+      onlyRunOneScript: true
+      scripts:
+      - GlassDropVisual1
+      - GlassDropVisual2
+      - GlassDropVisual3
+      - GlassDropVisual4
+      - GlassDropVisual5
+    Cooldowns:
+      global: 60
+      local: 99
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    - PlayerDamagedByEliteMobEvent
+entityType: WITCH
+followDistance: 60
+frozen: false
+healthMultiplier: 3.0
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 60
+movementSpeedAttribute: 0.31
+name: $minibossLevel &fThe Glass Master
+normalizedCombat: true
+powers:
+- invulnerability_arrow.yml
+- invulnerability_fire.yml
+spawnLocations:
+- em_id_enchantment_challenge_9,1.5,65,0.5,0,0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.25
+  difficultyID: 0
+  filename: ec_09_leggings_normal.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: ec_09_bow_normal.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: enchanted_book_arrow_knockback.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec09_swords_0fcce0d1.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_axes_6ef19cae.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_bows_d03de14d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_crossbows_e77938de.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_tridents_4fb84ca0.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_hoes_0ffa5964.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_maces_a14adce6.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_spears_9e84c133.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_staves_f186c676.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_wands_f1d7fa59.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_dps_helmets_dc324f39.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_dps_chestplates_c39f0175.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_dps_leggings_71f7710e.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_dps_boots_0412fc86.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_tank_helmets_4427de21.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_tank_chestplates_b56ef13c.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_tank_leggings_ed6c5de3.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_tank_boots_bd101db5.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec09_shields_cb1aaa75.yml
+  chance: 1.0
+customModel: em_brew_witch

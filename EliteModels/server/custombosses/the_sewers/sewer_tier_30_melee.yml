@@ -1,0 +1,90 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+leashRadius: 40
+followDistance: 30
+isRegionalBoss: true
+spawnCooldown: 5
+isEnabled: true
+entityType: RAVAGER
+name: $normalLevel &5Sewer Beast
+level: dynamic
+instanced: true
+powers:
+- attack_push.yml
+- attack_gravity.yml
+- invulnerability_arrow.yml
+healthMultiplier: 1
+damageMultiplier: 1
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+spawnLocations:
+- em_sewer_maze,-170.69999998807907,133.49407684330518,-66.02018683554428,6.4923706,9.293564:1595586750956
+- em_sewer_maze,-253.7682293407156,111.2,-89.84807669264657,19.344,-99.69592:0
+- em_sewer_maze,-170.69999998807907,133.49407684330518,-34.80545258260969,6.4923706,9.293564:1608702178127
+- em_sewer_maze,-314.01931290740737,111.2,-85.21386223511229,19.644037,-15.998541:1609388225973
+- em_sewer_maze,-314.03711542240654,111.2,-114.2061510846431,-8.19803,16.193848:1611043117345
+- em_sewer_maze,-253.85370232614548,111.2,-301.38566026459813,22.343967,-173.50233:1609849194376
+- em_sewer_maze,-177.34560815267878,133.2,-125.07354917266511,358.99524,34.79355:1598582894056
+- em_sewer_maze,-201.6899294752386,133.2,-38.38674508574355,23.549772,63.959473:1611058234730
+- em_sewer_maze,-298.2949141929897,111.2,-98.51975885398036,30.44391,-37.59613:1611043151731
+- em_sewer_maze,-177.13300503110594,111.2,-305.78277806522846,20.09386,-57.102646:1609849122378
+- em_sewer_maze,-262.49669925427753,111.2,-77.41024808609265,23.543756,68.02624:1609388104996
+- em_sewer_maze,-271.6289192126601,111.2,-86.41651116517563,13.494053,-91.59696:0
+- em_sewer_maze,-277.7767512029037,111.2,-113.23225013127653,30.14397,-289.29663:0
+- em_sewer_maze,-254.708819946336,111.2,-262.65350639281064,28.343952,-184.30269:1608795068275
+- em_sewer_maze,-277.4933746537162,111.2,-74.23447550039774,22.494038,-158.64906:1609388044978
+- em_sewer_maze,-172.2363485090273,133.2,-97.4287087723456,275.14618,31.193584:1598725755837
+- em_sewer_maze,-190.31791180840798,133.2,-49.699728097848244,16.949791,183.5072:1608701398101
+- em_sewer_maze,-301.92452349514065,111.2,-65.60466071104511,20.54404,72.051056:1609388405973
+- em_sewer_maze,-297.92579086710776,111.2,-54.48806438472229,26.394028,30.801352:1609387864971
+- em_sewer_maze,-170.35431885341472,133.2,-176.5323894303227,276.49182,35.393726:1606243515369
+- em_sewer_maze,-189.13093001412318,133.2,-83.30467850105761,76.94987,291.4969:1600503002003
+- em_sewer_maze,-217.77514769032308,111.2,-305.98890292497987,39.29395,-98.65241:1609849134878
+- em_sewer_maze,-215.51165784746857,112.2,-318.69736652843676,21.743853,0.19748342:1609849139550
+- em_sewer_maze,-265.2106170689114,111.2,-122.35739393000529,31.34379,-258.06384:1608166830279
+- em_sewer_maze,-166.923269543286,133.2,-145.92511543500706,126.490814,6.293557:1606243515368
+- em_sewer_maze,-243.5,111.5,-134.5,0.0,0.0:0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_the_sewers_tunnels_swords_585f8af9.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_axes_4f2b49e7.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_bows_b7fdc637.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_crossbows_dc0db6d5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tridents_5a34965a.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_hoes_a0c18962.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_maces_ffccc452.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_spears_f90fd53b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_staves_40482056.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_wands_712be25e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_helmets_9917a646.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_chestplates_ddb3baab.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_leggings_b55e815e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_boots_e2a3eb58.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_helmets_341bb342.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_chestplates_1f0e9b0b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_leggings_cc0387b5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_boots_e5dddda6.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_shields_fcaba11c.yml
+  chance: 1.0
+customModel: em_ram_ravager

@@ -1,0 +1,13 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 1.0
+entityType: SHULKER
+followDistance: 200
+healthMultiplier: 1.0
+isEnabled: true
+level: 100
+name: $reinforcementLevel &5Reality Riftrender
+normalizedCombat: true
+classLoot: false
+customModel: em_vault_shulker

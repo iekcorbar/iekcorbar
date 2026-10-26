@@ -1,0 +1,6 @@
+# FreeMinecraftModels - settings for thin_steam_pipe_elbow.bbmodel (same folder as the model)
+isEnabled: true
+# Hit it 3 times (within 5 s) to pick it up again; IekcorbarSiteSync turns the
+# dropped item back into the normal Thin Steam Pipe Elbow item.
+scripts:
+- pickupable.lua

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.iekcorbar</groupId>
+    <artifactId>IekcorbarSiteSync</artifactId>
+    <!-- Bumped 2026-08-13 specifically so `/version IekcorbarSiteSync` in-game
+         can distinguish this Java 25/Paper 26.1.2 retarget from whatever was
+         running before — every prior rebuild this session kept "1.0.0",
+         which made it impossible to confirm from the server console alone
+         whether a freshly built jar had actually made it onto the server.
+         Bumped again 2026-09-06: adds on-join delivery of shop purchases
+         made while offline, plus advancement-toast notifications for it
+         (see MySQLSync.processQueuedShopPurchases, ToastNotifier).
+         Bumped again same day: website achievement system now delivers its
+         own advancement toasts too (MySQLSync.processPendingAchievements),
+         on join and on every periodic sync tick for online players.
+         Bumped again same day: ModerationAuditListener mirrors in-game/
+         console "cmi kick/ban/tempban/unban" commands into moderation_logs,
+         closing the gap where staff acting outside the website left no
+         audit trail.
+         Bumped 2026-09-27 to 1.5.0: retargeted to Paper 26.2 (the live
+         server's new version) — compiles against 26.2.build.129-stable with
+         0 errors and nothing deprecated-for-removal; api-version '26.2'.
+         Bumped 2026-10-23 to 1.6.0: custom books from books/*.txt with
+         series/volumes, loot-table drops (LootGenerateEvent) and /ibook
+         (see BookManager).
+         Bumped same day to 1.7.0: books remember who read them; advancement
+         requirement types books_read / book_read / book_series.
+         1.7.1: auto page-splitting keeps line breaks (poems) and ignores
+         colour codes when measuring page length. -->
+    <version>1.15.0</version>
+    <packaging>jar</packaging>
+
+    <name>IekcorbarSiteSync</name>
+    <description>Minecraft Spigot/Paper plugin bridge for Iekcorbar website &amp; MySQL integration</description>
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- The live server's actual version — default builds (what actually
+             gets shipped) always compile against this. 26.2 since
+             2026-09-27 (was 26.1.2.build.74-stable). -->
+        <paper.api.version>26.2.build.129-stable</paper.api.version>
+    </properties>
+
+    <repositories>
+        <!-- Paper moved off the old org.spigotmc:spigot-api / hub.spigotmc.org
+             snapshot repo at some point after 1.20.4 — modern builds (this
+             one targets the live server's actual 26.1.2) are published as
+             io.papermc.paper:paper-api on PaperMC's own repo instead. Kept
+             spigotmc-repo removed since nothing else here depends on it. -->
+        <repository>
+            <id>papermc-repo</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>codemc</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Matches the live server's actual Paper 26.1.2 (confirmed by the
+             user 2026-08-13 — this project had been targeting the old
+             1.20.4 API, a real mismatch, see CLAUDE.md). Pinned to the
+             latest 26.1.2-series stable build published on PaperMC's repo
+             at the time of this change (26.1.2.build.74-stable) rather than
+             the newer 26.2.x series, to match the live server's version
+             exactly instead of assuming it's been updated further.
+
+             Version comes from the paper.api.version property (see
+             <properties> above) rather than being hardcoded here, so the
+             verify-paper-26.2 profile can override just this one coordinate
+             for a compatibility check without touching the default build. -->
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>${paper.api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- provided, not bundled: Paper/Spigot already ships Gson on the
+             server's own classpath (used internally for chat components/NBT),
+             so plugins can use it at runtime without shading it in. Only
+             needed to compile against here, for WebRewardsCommand's JSON
+             handling — safer and far less error-prone than hand-rolling a
+             JSON parser for VoteSpeed's reward config structures. -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>25</source>
+                    <target>25</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <!-- Pre-upgrade compatibility checks — the live server is still on
+         26.1.2 (some other plugins aren't 26.2-ready yet), but this lets
+         that be verified ahead of time, repeatably, without ever touching
+         what a plain `mvn package` ships. Run:
+
+             mvn -P verify-paper-26.2 clean compile
+
+         A clean compile means the plugin's code doesn't touch anything
+         Paper changed or removed between 26.1 and 26.2 (last checked
+         2026-09-05 against 26.2.build.121-stable: compiled clean, 0
+         errors). It does NOT prove runtime behavior on an actual 26.2
+         server — only that the source-level API surface this plugin uses
+         still exists. Update the version below as newer 26.2 builds are
+         published, and re-run this before the real server upgrade. -->
+    <profiles>
+        <!-- 26.2 is now the default (see <properties>). Kept so the old
+             26.1.2 target can still be built if the server ever has to roll
+             back: mvn -P paper-26.1 clean package -->
+        <profile>
+            <id>paper-26.1</id>
+            <properties>
+                <paper.api.version>26.1.2.build.74-stable</paper.api.version>
+            </properties>
+        </profile>
+    </profiles>
+</project>

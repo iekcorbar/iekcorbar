@@ -1,0 +1,18 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: CAVE_SPIDER
+followDistance: 30
+frozen: false
+healthMultiplier: 0.25
+instanced: true
+isEnabled: true
+level: dynamic # 20
+name: $reinforcementLevel &4Soul Splintering
+normalizedCombat: true
+classLoot: false
+customModel: em_lantern_cave_spider

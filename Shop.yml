@@ -1,0 +1,379 @@
+####################################################################################################
+# VotingPlugin - VoteShop (Shop.yml) - iekcorbar edition (2026-10-23)
+#
+# Players get 1 vote point per vote (Config.yml: PointsOnVote: 1) -> max 3 points a day
+# (3 vote sites). Prices below are in vote points; /vote shop or the Vote Shop button.
+#
+# Three categories:
+#   Lore Library     - custom lore books (IekcorbarSiteSync: /ibook give)
+#   TechCore Workshop- TechCore items      (TechCore:        /tech item give <player> <TYPE:ID> [amount])
+#   Supplies         - vanilla items
+#
+# ADDING A LORE BOOK: copy the 'guild_chronicle_1' block under Categories > LoreLibrary > Shop,
+#   rename the key + Identifier_Name, and change the book id in the command
+#   (the id is the .txt file name in plugins/IekcorbarSiteSync/books/, see /ibook list).
+# ADDING A TECHCORE ITEM: copy a block under Categories > TechCore > Shop and change the
+#   TYPE:ID in the command (TYPE = folder/category, ID = item key, e.g. MATERIAL:STEEL_INGOT;
+#   use tab-complete on /tech item give to see them) and the ItemModel (techcore:<id lowercase>).
+#
+# Chest titles sit on a light-grey background -> dark colours (&8 &4).
+# After editing: /av reload
+####################################################################################################
+
+VoteShop:
+  Enabled: true
+  Name: '&8⚙ &4&lVote Shop &8⚙'
+  BackButton: true
+  HideLimitedReached: true
+  LimitReached: '&7You already bought this.'
+  RequireConfirmation: true
+  Disabled: '&cThe Vote Shop is closed right now.'
+  ReopenGUIOnPurchase: false
+  BackButtonItem:
+    Material: BARRIER
+    Amount: 1
+    Name: '&c◀ Back'
+    Slot: -2 # last slot
+
+# ---------------------------------------------------------------------------------------------
+# Main page: three category buttons
+# ---------------------------------------------------------------------------------------------
+Shop:
+  LoreLibrary:
+    Category: 'LoreLibrary'
+    DisplayItem:
+      Material: BOOKSHELF
+      Amount: 1
+      Name: '&6&lLore Library'
+      Lore:
+        - '&7Rare lore books from the archives.'
+        - '&7Read them to unlock &eLore advancements&7.'
+        - ''
+        - '&a▶ Open'
+    Permission: ''
+    HideOnNoPermission: true
+
+  TechCore:
+    Category: 'TechCore'
+    DisplayItem:
+      Material: PISTON
+      Amount: 1
+      Name: '&6&lTechCore Workshop'
+      Lore:
+        - '&7Parts and tools for your machines.'
+        - ''
+        - '&a▶ Open'
+    Permission: ''
+    HideOnNoPermission: true
+
+  Supplies:
+    Category: 'Supplies'
+    DisplayItem:
+      Material: BARREL
+      Amount: 1
+      Name: '&6&lSupplies'
+      Lore:
+        - '&7Useful everyday items.'
+        - ''
+        - '&a▶ Open'
+    Permission: ''
+    HideOnNoPermission: true
+
+Categories:
+
+  # -------------------------------------------------------------------------------------------
+  # Lore Library - each book can be bought once (Limit: 1)
+  # -------------------------------------------------------------------------------------------
+  LoreLibrary:
+    Name: '&8⚙ &4Lore Library'
+    BackButton: true
+    Shop:
+      guild_chronicle_1:
+        Identifier_Name: 'Chronicles of the Guild I'
+        DisplayItem:
+          Material: WRITTEN_BOOK
+          Amount: 1
+          Name: '&6Chronicles of the Guild I'
+          Lore:
+            - '&7Volume &e1 &7of &eChronicles of the Guild'
+            - '&8The Devastation'
+            - ''
+            - '&6Cost: &e4 vote points'
+            - '&8One copy per player'
+        Cost: 4
+        Limit: 1
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'ibook give %player% guild_chronicle_1'
+          Messages:
+            Player: '&aThe archive hands you &6Chronicles of the Guild I&a. Right-click it to read!'
+
+      guild_chronicle_2:
+        Identifier_Name: 'Chronicles of the Guild II'
+        DisplayItem:
+          Material: WRITTEN_BOOK
+          Amount: 1
+          Name: '&6Chronicles of the Guild II'
+          Lore:
+            - '&7Volume &e2 &7of &eChronicles of the Guild'
+            - '&8The First Settlement'
+            - ''
+            - '&6Cost: &e4 vote points'
+            - '&8One copy per player'
+        Cost: 4
+        Limit: 1
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'ibook give %player% guild_chronicle_2'
+          Messages:
+            Player: '&aThe archive hands you &6Chronicles of the Guild II&a. Right-click it to read!'
+
+      guild_chronicle_3:
+        Identifier_Name: 'Chronicles of the Guild III'
+        DisplayItem:
+          Material: WRITTEN_BOOK
+          Amount: 1
+          Name: '&6Chronicles of the Guild III'
+          Lore:
+            - '&7Volume &e3 &7of &eChronicles of the Guild'
+            - '&8The Return'
+            - ''
+            - '&6Cost: &e4 vote points'
+            - '&8One copy per player'
+        Cost: 4
+        Limit: 1
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'ibook give %player% guild_chronicle_3'
+          Messages:
+            Player: '&aThe archive hands you &6Chronicles of the Guild III&a. Right-click it to read!'
+
+  # -------------------------------------------------------------------------------------------
+  # TechCore Workshop - PRICES ARE A FIRST PROPOSAL, balance them against TechCore progression
+  # -------------------------------------------------------------------------------------------
+  TechCore:
+    Name: '&8⚙ &4TechCore Workshop'
+    BackButton: true
+    Shop:
+      steel_ingot:
+        Identifier_Name: '8 Steel Ingots'
+        DisplayItem:
+          Material: PAPER
+          ItemModel: 'techcore:steel_ingot'
+          Amount: 8
+          Name: '&f8x Steel Ingot'
+          Lore:
+            - '&7Base material for TechCore machines.'
+            - ''
+            - '&6Cost: &e3 vote points'
+        Cost: 3
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'tech item give %player% MATERIAL:STEEL_INGOT 8'
+          Messages:
+            Player: '&aYou bought &f8 Steel Ingots&a.'
+
+      steel_plate:
+        Identifier_Name: '4 Steel Plates'
+        DisplayItem:
+          Material: PAPER
+          ItemModel: 'techcore:steel_plate'
+          Amount: 4
+          Name: '&f4x Steel Plate'
+          Lore:
+            - '&7Pressed steel for machine casings.'
+            - ''
+            - '&6Cost: &e4 vote points'
+        Cost: 4
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'tech item give %player% MATERIAL:STEEL_PLATE 4'
+          Messages:
+            Player: '&aYou bought &f4 Steel Plates&a.'
+
+      steel_gear:
+        Identifier_Name: '4 Steel Gears'
+        DisplayItem:
+          Material: PAPER
+          ItemModel: 'techcore:steel_gear'
+          Amount: 4
+          Name: '&f4x Steel Gear'
+          Lore:
+            - '&7A durable transmission component.'
+            - ''
+            - '&6Cost: &e4 vote points'
+        Cost: 4
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'tech item give %player% MATERIAL:STEEL_GEAR 4'
+          Messages:
+            Player: '&aYou bought &f4 Steel Gears&a.'
+
+      wrench:
+        Identifier_Name: 'Wrench'
+        DisplayItem:
+          Material: IRON_HOE
+          ItemModel: 'techcore:wrench'
+          Amount: 1
+          Name: '&fWrench'
+          Lore:
+            - '&7A specialised engineering tool.'
+            - ''
+            - '&6Cost: &e5 vote points'
+        Cost: 5
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'tech item give %player% TOOL:WRENCH 1'
+          Messages:
+            Player: '&aYou bought a &fWrench&a.'
+
+      universal_upgrade_card:
+        Identifier_Name: 'Universal Upgrade Card'
+        DisplayItem:
+          Material: PAPER
+          ItemModel: 'techcore:universal_upgrade_card'
+          Amount: 1
+          Name: '&bUniversal Upgrade Card'
+          Lore:
+            - '&7A universal machine upgrade module.'
+            - ''
+            - '&6Cost: &e10 vote points'
+        Cost: 10
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Commands:
+            - 'tech item give %player% TOOL:UNIVERSAL_UPGRADE_CARD 1'
+          Messages:
+            Player: '&aYou bought a &bUniversal Upgrade Card&a.'
+
+  # -------------------------------------------------------------------------------------------
+  # Supplies - vanilla items
+  # -------------------------------------------------------------------------------------------
+  Supplies:
+    Name: '&8⚙ &4Supplies'
+    BackButton: true
+    Shop:
+      xp_bottles:
+        Identifier_Name: '16 Bottles o Enchanting'
+        DisplayItem:
+          Material: EXPERIENCE_BOTTLE
+          Amount: 16
+          Name: '&a16x Bottle o'' Enchanting'
+          Lore:
+            - '&6Cost: &e2 vote points'
+        Cost: 2
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Items:
+            xp:
+              Material: EXPERIENCE_BOTTLE
+              Amount: 16
+
+      ender_pearls:
+        Identifier_Name: '8 Ender Pearls'
+        DisplayItem:
+          Material: ENDER_PEARL
+          Amount: 8
+          Name: '&38x Ender Pearl'
+          Lore:
+            - '&6Cost: &e2 vote points'
+        Cost: 2
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Items:
+            pearls:
+              Material: ENDER_PEARL
+              Amount: 8
+
+      name_tag:
+        Identifier_Name: 'Name Tag'
+        DisplayItem:
+          Material: NAME_TAG
+          Amount: 1
+          Name: '&fName Tag'
+          Lore:
+            - '&6Cost: &e2 vote points'
+        Cost: 2
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Items:
+            tag:
+              Material: NAME_TAG
+              Amount: 1
+
+      diamond:
+        Identifier_Name: 'Diamond'
+        DisplayItem:
+          Material: DIAMOND
+          Amount: 1
+          Name: '&bDiamond'
+          Lore:
+            - '&6Cost: &e3 vote points'
+        Cost: 3
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Items:
+            diamond:
+              Material: DIAMOND
+              Amount: 1
+
+      golden_apples:
+        Identifier_Name: '2 Golden Apples'
+        DisplayItem:
+          Material: GOLDEN_APPLE
+          Amount: 2
+          Name: '&62x Golden Apple'
+          Lore:
+            - '&6Cost: &e3 vote points'
+        Cost: 3
+        Permission: ''
+        HideOnNoPermission: true
+        CloseGUI: true
+        Rewards:
+          Items:
+            apples:
+              Material: GOLDEN_APPLE
+              Amount: 2
+
+ShopConfirmPurchase:
+  UseDialog: false
+  Title: '&8Buy this?'
+  YesItem:
+    Material: EMERALD_BLOCK
+    Amount: 1
+    Name: '&a✔ Yes, buy it'
+  NoItem:
+    Material: BARRIER
+    Amount: 1
+    Name: '&c✖ No'

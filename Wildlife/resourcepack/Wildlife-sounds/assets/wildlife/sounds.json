@@ -1,0 +1,243 @@
+{
+ "duck.ambient": {
+  "sounds": [
+   "wildlife:duck/ambient_1",
+   "wildlife:duck/ambient_2",
+   "wildlife:duck/ambient_3"
+  ],
+  "subtitle": "subtitles.wildlife.duck.ambient"
+ },
+ "duck.hurt": {
+  "sounds": [
+   "wildlife:duck/hurt_1",
+   "wildlife:duck/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.duck.hurt"
+ },
+ "deer.ambient": {
+  "sounds": [
+   "wildlife:deer/ambient_1",
+   "wildlife:deer/ambient_2"
+  ],
+  "subtitle": "subtitles.wildlife.deer.ambient"
+ },
+ "deer.snort": {
+  "sounds": [
+   "wildlife:deer/snort_1",
+   "wildlife:deer/snort_2"
+  ],
+  "subtitle": "subtitles.wildlife.deer.snort"
+ },
+ "bear.ambient": {
+  "sounds": [
+   "wildlife:bear/ambient_1",
+   "wildlife:bear/ambient_2"
+  ],
+  "subtitle": "subtitles.wildlife.bear.ambient"
+ },
+ "bear.hurt": {
+  "sounds": [
+   "wildlife:bear/hurt_1",
+   "wildlife:bear/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.bear.hurt"
+ },
+ "boar.ambient": {
+  "sounds": [
+   "wildlife:boar/ambient_1",
+   "wildlife:boar/ambient_2",
+   "wildlife:boar/ambient_3"
+  ],
+  "subtitle": "subtitles.wildlife.boar.ambient"
+ },
+ "boar.hurt": {
+  "sounds": [
+   "wildlife:boar/hurt_1",
+   "wildlife:boar/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.boar.hurt"
+ },
+ "songbird.ambient": {
+  "sounds": [
+   "wildlife:songbird/ambient_1",
+   "wildlife:songbird/ambient_2",
+   "wildlife:songbird/ambient_3",
+   "wildlife:songbird/ambient_4"
+  ],
+  "subtitle": "subtitles.wildlife.songbird.ambient"
+ },
+ "songbird.hurt": {
+  "sounds": [
+   "wildlife:songbird/hurt_1",
+   "wildlife:songbird/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.songbird.hurt"
+ },
+ "crab.ambient": {
+  "sounds": [
+   "wildlife:crab/ambient_1",
+   "wildlife:crab/ambient_2"
+  ],
+  "subtitle": "subtitles.wildlife.crab.ambient"
+ },
+ "crab.wave": {
+  "sounds": [
+   "wildlife:crab/wave_1"
+  ],
+  "subtitle": "subtitles.wildlife.crab.wave"
+ },
+ "capybara.ambient": {
+  "sounds": [
+   "wildlife:capybara/ambient_1",
+   "wildlife:capybara/ambient_2"
+  ],
+  "subtitle": "subtitles.wildlife.capybara.ambient"
+ },
+ "tortoise.hide": {
+  "sounds": [
+   "wildlife:tortoise/hide_1"
+  ],
+  "subtitle": "subtitles.wildlife.tortoise.hide"
+ },
+ "hedgehog.ambient": {
+  "sounds": [
+   "wildlife:hedgehog/ambient_1",
+   "wildlife:hedgehog/ambient_2"
+  ],
+  "subtitle": "subtitles.wildlife.hedgehog.ambient"
+ },
+ "lizard.hurt": {
+  "sounds": [
+   "wildlife:lizard/hurt_1"
+  ],
+  "subtitle": "subtitles.wildlife.lizard.hurt"
+ },
+ "snail.hurt": {
+  "sounds": [
+   "wildlife:snail/hurt_1",
+   "wildlife:snail/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.snail.hurt"
+ },
+ "insect.flutter": {
+  "sounds": [
+   "wildlife:insect/flutter_1",
+   "wildlife:insect/flutter_2"
+  ],
+  "subtitle": "subtitles.wildlife.insect.flutter"
+ },
+ "dragonfly.buzz": {
+  "sounds": [
+   "wildlife:dragonfly/buzz_1",
+   "wildlife:dragonfly/buzz_2"
+  ],
+  "subtitle": "subtitles.wildlife.dragonfly.buzz"
+ },
+ "ambient.forest_birds": {
+  "sounds": [
+   "wildlife:ambient/forest_birds_1",
+   "wildlife:ambient/forest_birds_2",
+   "wildlife:ambient/forest_birds_3",
+   "wildlife:ambient/forest_birds_4",
+   "wildlife:ambient/forest_birds_5",
+   "wildlife:ambient/forest_birds_6"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.forest_birds"
+ },
+ "ambient.woodpecker": {
+  "sounds": [
+   "wildlife:ambient/woodpecker_1",
+   "wildlife:ambient/woodpecker_2"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.woodpecker"
+ },
+ "ambient.crickets": {
+  "sounds": [
+   "wildlife:ambient/crickets_1",
+   "wildlife:ambient/crickets_2",
+   "wildlife:ambient/crickets_3"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.crickets"
+ },
+ "ambient.owl": {
+  "sounds": [
+   "wildlife:ambient/owl_1",
+   "wildlife:ambient/owl_2"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.owl"
+ },
+ "ambient.frogs": {
+  "sounds": [
+   "wildlife:ambient/frogs_1",
+   "wildlife:ambient/frogs_2",
+   "wildlife:ambient/frogs_3",
+   "wildlife:ambient/frogs_4"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.frogs"
+ },
+ "ambient.gull": {
+  "sounds": [
+   "wildlife:ambient/gull_1",
+   "wildlife:ambient/gull_2",
+   "wildlife:ambient/gull_3"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.gull"
+ },
+ "ambient.waves": {
+  "sounds": [
+   "wildlife:ambient/waves_1",
+   "wildlife:ambient/waves_2"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.waves"
+ },
+ "ambient.cicadas": {
+  "sounds": [
+   "wildlife:ambient/cicadas_1",
+   "wildlife:ambient/cicadas_2"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.cicadas"
+ },
+ "ambient.wind": {
+  "sounds": [
+   "wildlife:ambient/wind_1",
+   "wildlife:ambient/wind_2"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.wind"
+ },
+ "ambient.jungle_bird": {
+  "sounds": [
+   "wildlife:ambient/jungle_bird_1",
+   "wildlife:ambient/jungle_bird_2"
+  ],
+  "subtitle": "subtitles.wildlife.ambient.jungle_bird"
+ },
+ "elephant.ambient": {
+  "sounds": [
+   "wildlife:elephant/ambient_1",
+   "wildlife:elephant/ambient_2"
+  ],
+  "subtitle": "subtitles.wildlife.elephant.ambient"
+ },
+ "elephant.hurt": {
+  "sounds": [
+   "wildlife:elephant/hurt_1",
+   "wildlife:elephant/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.elephant.hurt"
+ },
+ "zebra.ambient": {
+  "sounds": [
+   "wildlife:zebra/ambient_1",
+   "wildlife:zebra/ambient_2",
+   "wildlife:zebra/ambient_3"
+  ],
+  "subtitle": "subtitles.wildlife.zebra.ambient"
+ },
+ "zebra.hurt": {
+  "sounds": [
+   "wildlife:zebra/hurt_1",
+   "wildlife:zebra/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.zebra.hurt"
+ }
+}

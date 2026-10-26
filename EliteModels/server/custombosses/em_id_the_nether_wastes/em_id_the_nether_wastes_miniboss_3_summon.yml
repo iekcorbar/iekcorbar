@@ -1,0 +1,86 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.01
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  DisableOnHit:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 33
+    Cooldowns:
+      global: 1
+      local: 93
+    Events:
+    - EliteMobDamagedByPlayerEvent
+  Laugh1:
+    Actions:
+    - Target:
+        targetType: DIRECT_TARGET
+      action: MESSAGE
+      sValue: '&7[Reinforced Frame] &fMUAHAHAHA!'
+  Laugh2:
+    Actions:
+    - Target:
+        targetType: DIRECT_TARGET
+      action: MESSAGE
+      sValue: '&7[Reinforced Frame] &fAHAHAHAHA!'
+  Laugh3:
+    Actions:
+    - Target:
+        targetType: DIRECT_TARGET
+      action: MESSAGE
+      sValue: '&7[Reinforced Frame] &fOHOHOHOHO!'
+  Laugh4:
+    Actions:
+    - Target:
+        targetType: DIRECT_TARGET
+      action: MESSAGE
+      sValue: '&7[Reinforced Frame] &fHEHEHEHE!'
+  Laugh5:
+    Actions:
+    - Target:
+        targetType: DIRECT_TARGET
+      action: MESSAGE
+      sValue: '&7[Reinforced Frame] &fKEKEKEKE!'
+  MasterLaugh:
+    Actions:
+    - action: RUN_SCRIPT
+      onlyRunOneScript: true
+      scripts:
+      - Laugh1
+      - Laugh2
+      - Laugh3
+      - Laugh4
+      - Laugh5
+    Cooldowns:
+      global: 1
+      local: 100
+    Events:
+    - PlayerDamagedByEliteMobEvent
+entityType: SKELETON
+followDistance: 20
+frozen: false
+healthMultiplier: 6.2
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 50
+mainHand: BONE
+movementSpeedAttribute: 0.46
+name: $reinforcementLevel &7Reinforced Frame
+normalizedCombat: true
+powers:
+- attack_push.yml
+- attack_vacuum.yml
+- invulnerability_fire.yml
+- difficultyID:
+  - 2
+  filename: attack_gravity.yml
+classLoot: false
+customModel: em_clockwork_skeleton

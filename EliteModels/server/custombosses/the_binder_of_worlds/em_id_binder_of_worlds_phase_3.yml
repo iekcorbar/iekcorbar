@@ -1,0 +1,167 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+bossType: BOSS
+cullReinforcements: true
+damageMultiplier: 1.8
+dropsEliteMobsLoot: true
+entityType: ENDER_DRAGON
+followDistance: 200
+healthMultiplier: 120
+isEnabled: true
+level: 100
+name: $bossLevel &eBinder of Worlds
+normalizedCombat: true
+powers:
+- difficultyID:
+  - 0
+  filename: em_id_the_binder_of_worlds_ray_towers_p3_normal.yml
+- difficultyID:
+  - 1
+  filename: em_id_the_binder_of_worlds_ray_towers_p3_hard.yml
+- difficultyID:
+  - 2
+  filename: em_id_the_binder_of_worlds_ray_towers_p3_mythic.yml
+- ender_dragon_tornado.yml
+- ender_dragon_endermite_bombardment.yml
+- lightningRod: true
+  location: 80,10,0
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- lightningRod: true
+  location: -80,10,0
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- lightningRod: true
+  location: 0,10,80
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritLevel: true
+  location: 80,20,0
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritLevel: true
+  location: -80,20,80
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritLevel: true
+  location: 0,20,80
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_ghast_reinforcement.yml
+  inheritLevel: true
+  location: 0,20,-80
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_enderman_reinforcement.yml
+  inheritAggro: true
+  inheritLevel: true
+  spawnNearby: true
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -9,-5,17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,9
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,-9
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,-17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -9,-5,-17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 9,-5,-17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,-17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,-9
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 9,-5,17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,17
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,9
+  summonType: ON_COMBAT_ENTER
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -9,-5,17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,9
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,-9
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -17,-5,-17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: -9,-5,-17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 9,-5,-17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,-17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,-9
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 9,-5,17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,17
+  summonType: ON_HIT
+- chance: 0.01
+  filename: em_id_binder_of_worlds_phase_3_shulker_reinforcement.yml
+  inheritLevel: true
+  location: 17,-5,9
+  summonType: ON_HIT
+spawnCooldown: 10080
+classLoot: false
+customModel: em_zeppelin_dragon

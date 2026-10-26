@@ -1,0 +1,29 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: WARDEN
+name: $minibossLevel &eHolder of Misery
+level: dynamic # 55
+healthMultiplier: 2.0
+damageMultiplier: 0.4
+movementSpeedAttribute: 0.35
+powers:
+- invulnerability_fire.yml
+- filename: attack_push.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: attack_wither.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 40
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+classLoot: false
+customModel: em_sculk_warden

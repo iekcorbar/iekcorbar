@@ -1,0 +1,25 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ENDERMAN
+name: $eventBossLevel &1Altered Enderman
+level: dynamic
+healthMultiplier: 3.0
+damageMultiplier: 1.0
+powers:
+- attack_vacuum.yml
+- invisibility.yml
+- flame_pyre.yml
+trails:
+- FLAME
+uniqueLootList:
+- filename=altered_enderman_drop_charm.yml:amount=1:chance=0.5
+movementSpeedAttribute: 0.28
+followDistance: 65
+locationMessage: '&cAltered Enderman: $distance blocks away!'
+deathMessage: '&aAltered Enderman was put out of it''s misery by $players!'
+escapeMessage: '&4Altered Enderman has phased out of existence!'
+announcementPriority: 2
+customModel: em_brass_enderman

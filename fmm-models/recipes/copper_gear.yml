@@ -1,0 +1,18 @@
+# FreeMinecraftModels crafting recipe - goes in plugins/FreeMinecraftModels/recipes/
+# Crafting table:   C C C      C = copper ingot
+#                   C K C      K = clock
+#                   G I G      G = gold ingot (brass stand), I = iron ingot (axle)
+isEnabled: true
+model_id: copper_gear
+shape:
+- CCC
+- CKC
+- GIG
+ingredients:
+  C: COPPER_INGOT
+  K: CLOCK
+  G: GOLD_INGOT
+  I: IRON_INGOT
+# Not for sale in /fmm shop - crafting only.
+shopEnabled: false
+shopPrice: 0

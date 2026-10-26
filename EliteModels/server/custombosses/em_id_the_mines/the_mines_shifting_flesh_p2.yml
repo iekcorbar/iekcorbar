@@ -1,0 +1,33 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: HUSK
+name: $normalLevel &8Shifting Miner
+level: dynamic # 20
+mainHand: TRIDENT
+offHand: IRON_PICKAXE
+helmet: LEATHER_HELMET
+boots: LEATHER_BOOTS
+instanced: true
+healthMultiplier: 4
+damageMultiplier: 1
+movementSpeedAttribute: 0.3
+frozen: false
+# leashRadius: 30
+followDistance: 30
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+normalizedCombat: true
+dropsRandomLoot: false
+eliteScript:
+  SetTime:
+    Events:
+    - ElitePhaseSwitchEvent
+    Actions:
+    - action: SET_TIME
+      time: 17000
+      Target:
+        targetType: SELF
+classLoot: false
+customModel: em_rust_husk

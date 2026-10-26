@@ -1,0 +1,38 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+bossType: BOSS
+cullReinforcements: true
+damageMultiplier: 1.8
+dropsEliteMobsLoot: true
+entityType: ENDER_DRAGON
+followDistance: 200
+healthMultiplier: 120
+isEnabled: true
+isPersistent: true
+level: 100
+name: $bossLevel &eBinder of Worlds
+normalizedCombat: true
+powers:
+- difficultyID:
+  - 0
+  filename: em_id_the_binder_of_worlds_suppresion_barrier_p2_normal.yml
+- difficultyID:
+  - 1
+  filename: em_id_the_binder_of_worlds_suppresion_barrier_p2_hard.yml
+- difficultyID:
+  - 2
+  filename: em_id_the_binder_of_worlds_suppresion_barrier_p2_mythic.yml
+- ender_dragon_shockwave.yml
+- ender_dragon_empowered_lightning.yml
+- ender_dragon_disco_fireballs.yml
+- ender_dragon_aimed_fireball.yml
+- lightningRod: true
+  location: 80,10,0
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- lightningRod: true
+  location: -80,10,0
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+spawnCooldown: 10080
+classLoot: false
+customModel: em_zeppelin_dragon

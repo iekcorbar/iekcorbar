@@ -1,0 +1,411 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "OR": [
+          {
+            "instrument": "harp|basedrum|snare|hat|bass|flute|bell|guitar|chime|xylophone|iron_xylophone|cow_bell|didgeridoo|bit|banjo|pling|trumpet|trumpet_exposed|trumpet_oxidized|trumpet_weathered|zombie|skeleton|creeper|dragon|wither_skeleton|piglin"
+          },
+          {
+            "instrument": "custom_head",
+            "powered": "false",
+            "note": "14|15|16|17|18|19|20|21|22|23|24"
+          }
+        ]
+      },
+      "apply": {
+        "model": "minecraft:block/note_block"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "0"
+      },
+      "apply": {
+        "model": "steamworks:block/zinc_ore"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "1"
+      },
+      "apply": {
+        "model": "steamworks:block/deepslate_zinc_ore"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "2"
+      },
+      "apply": {
+        "model": "steamworks:block/tin_ore"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "3"
+      },
+      "apply": {
+        "model": "steamworks:block/deepslate_tin_ore"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "4"
+      },
+      "apply": {
+        "model": "steamworks:block/sulfur_ore"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "5"
+      },
+      "apply": {
+        "model": "steamworks:block/deepslate_sulfur_ore"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "6"
+      },
+      "apply": {
+        "model": "steamworks:block/nether_sulfur_ore"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "7"
+      },
+      "apply": {
+        "model": "steamworks:block/riveted_copper_plate"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "8"
+      },
+      "apply": {
+        "model": "steamworks:block/brass_tiles"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "9"
+      },
+      "apply": {
+        "model": "steamworks:block/cast_iron_grate"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "10"
+      },
+      "apply": {
+        "model": "steamworks:block/pipe_wall"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "11"
+      },
+      "apply": {
+        "model": "steamworks:block/gear_panel"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "12"
+      },
+      "apply": {
+        "model": "steamworks:block/boiler_plate"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "13"
+      },
+      "apply": {
+        "model": "steamworks:block/brass_diamond_plate"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "14"
+      },
+      "apply": {
+        "model": "steamworks:block/verdigris_plate"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "15"
+      },
+      "apply": {
+        "model": "steamworks:block/lacquer_brass_panel"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "16"
+      },
+      "apply": {
+        "model": "steamworks:block/copper_shoji"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "17"
+      },
+      "apply": {
+        "model": "steamworks:block/gear_inlay_wood"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "18"
+      },
+      "apply": {
+        "model": "steamworks:block/brass_crest_lacquer"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "19"
+      },
+      "apply": {
+        "model": "steamworks:block/boiler_tiles"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "20"
+      },
+      "apply": {
+        "model": "steamworks:block/sakura_copper_planks"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "21"
+      },
+      "apply": {
+        "model": "steamworks:block/paper_lantern_wall"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "22"
+      },
+      "apply": {
+        "model": "steamworks:block/maki_e_lacquer"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "23"
+      },
+      "apply": {
+        "model": "steamworks:block/shoji_screen"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "true",
+        "note": "24"
+      },
+      "apply": {
+        "model": "steamworks:block/vermilion_wood"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "0"
+      },
+      "apply": {
+        "model": "steamworks:block/tatami"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "1"
+      },
+      "apply": {
+        "model": "steamworks:block/woven_bamboo"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "2"
+      },
+      "apply": {
+        "model": "steamworks:block/yakisugi"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "3"
+      },
+      "apply": {
+        "model": "steamworks:block/sakura_planks"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "4"
+      },
+      "apply": {
+        "model": "steamworks:block/rice_straw_wall"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "5"
+      },
+      "apply": {
+        "model": "steamworks:block/wooden_lattice"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "6"
+      },
+      "apply": {
+        "model": "steamworks:block/kawara_roof_tiles"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "7"
+      },
+      "apply": {
+        "model": "steamworks:block/granite_pavers"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "8"
+      },
+      "apply": {
+        "model": "steamworks:block/mossy_garden_stone"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "9"
+      },
+      "apply": {
+        "model": "steamworks:block/banded_plaster_wall"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "10"
+      },
+      "apply": {
+        "model": "steamworks:block/lantern_stone"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "11"
+      },
+      "apply": {
+        "model": "steamworks:block/raked_gravel_tile"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "12"
+      },
+      "apply": {
+        "model": "steamworks:block/dark_slate"
+      }
+    },
+    {
+      "when": {
+        "instrument": "custom_head",
+        "powered": "false",
+        "note": "13"
+      },
+      "apply": {
+        "model": "steamworks:block/white_plaster"
+      }
+    }
+  ]
+}

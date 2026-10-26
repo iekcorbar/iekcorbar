@@ -1,0 +1,135 @@
+# Steamworks - kinetic machines
+#
+# How it works: power sources (hand crank, water wheel) turn a network of
+# connected parts. Every part has a speed in RPM. Machines put a load on the
+# network: load = impact x speed. Sources give capacity: capacity x their own
+# speed. If the load is bigger than the capacity the whole network jams (stops,
+# puffs steam) until you add power or take machines away. Two sources turning
+# against each other, or gears that lock each other in a loop, also jam it.
+# A part that would turn faster than max-rpm snaps its breaker pin: it drops as
+# an item and the network stops.
+
+# Where players find the Steamworks guide (Karakuri Arm language etc.); linked from /sw help and arm messages.
+docs-url: https://iekcorbar.com/steamworks
+
+max-rpm: 192
+# Parts per network (bigger networks jam).
+max-network-size: 512
+# Speed names in the info line: below medium = slow, from fast up = fast.
+speed-levels:
+  medium: 24
+  fast: 80
+# Left-clicks needed to pick a part up in survival (within one second).
+survival-break-hits: 2
+
+parts:
+  hand-crank:
+    rpm: 16
+    capacity: 8          # torque per RPM -> 8 x 16 = 128 Tq
+    ticks-per-turn: 20   # how long one right-click keeps it turning
+    exhaustion: 0.25     # hunger cost per right-click
+  water-wheel:
+    rpm-per-side: 4      # each side with water flowing along the paddles
+    max-rpm: 8
+    capacity: 32         # 32 x 8 = 256 Tq
+    check-interval-ticks: 40
+  millstone:
+    impact: 4            # load = 4 x speed
+    speed-divisor: 12    # grind progress per tick = speed / 12 ...
+    min-rate: 0.5        # ... but at least this
+    max-rate: 16         # ... and at most this
+  steam-hammer:
+    impact: 8            # load = 8 x speed -> one hand crank drives exactly one hammer
+    cycle: 100           # work needed for one strike (one item)
+    speed-divisor: 8     # work per tick = speed / 8 -> 16 RPM = one strike per 2.5 s
+    min-rate: 0.25
+    max-rate: 25
+  bellows-fan:
+    impact: 4            # load = 4 x speed
+    rpm-per-block: 4     # air reach = speed / 4 blocks ...
+    min-range: 3         # ... at least this
+    max-range: 12        # ... at most this
+    push: 0.05           # push strength on items/mobs in the stream
+    push-players: true
+    process-ticks: 100   # time an item must spend in a lava/fire/water/soul fire stream (5 s)
+  drill:
+    impact: 4                      # drill and saw: load = 4 x speed
+    ticks-per-hardness-at-1rpm: 400 # break time = (hardness + 0.2) x 400 / speed -> stone at 16 RPM ~2 s
+  belt:
+    impact: 0.5                    # per belt piece: load = 0.5 x speed
+    blocks-per-tick-per-rpm: 0.004 # 16 RPM = 1.3 blocks per second
+  arm:
+    impact: 4
+    move-ticks-at-16-rpm: 12       # one arm action (pick, drop, place...) takes this long at 16 RPM; faster = quicker
+    range: 4                       # taught points must be within this many blocks
+  windmill:
+    capacity: 64            # torque per RPM -> 8 RPM high up = 512 Tq
+    rpm-below-64: 4
+    rpm-64-to-100: 6
+    rpm-above-100: 8
+    rain-bonus: 2
+    thunder-bonus: 4
+    free-radius: 5          # the sails need this many blocks of open air round the hub (in front of it)
+  steam-boiler:
+    fuel-ticks-per-1000mb: 6000   # fuel from pipes: 1000 mB burns 5 minutes (coal: like a furnace)
+  steam-engine:
+    rpm: 24
+    capacity: 64            # 24 x 64 = 1536 Tq
+  crushing-wheel:
+    impact: 8               # per wheel
+    speed-divisor: 8        # work per tick = speed / 8 (recipe time 100 = 3 s at 16 RPM)
+  saw:
+    max-tree-logs: 192             # a cut log fells up to this many connected logs above it
+  mixer:
+    impact: 4            # load = 4 x speed
+    speed-divisor: 12    # mixing progress per tick = speed / 12 (like the millstone) ...
+    min-rate: 0.5
+    max-rate: 16
+
+trains:
+  # Speeds in blocks per tick (x 20 = blocks per second). A vanilla minecart does 0.4.
+  max-speed: 0.5
+  acceleration: 0.005    # per tick while W is held (and there is fuel)
+  brake: 0.02            # per tick while S is held
+  reverse-max-speed: 0.15
+  friction: 0.0015       # slowing down when nobody gives steam
+  max-fuel-ticks: 72000  # the firebox holds up to an hour of steam
+  autopilot-speed: 0.3   # right-click a locomotive with a clock: it drives itself
+  station-wait-seconds: 6
+  signal-section-max-blocks: 128  # a signal watches the track after it up to the next signal, at most this far
+  # Ticks of steam per fuel item (only used while giving steam with W or S).
+  fuel:
+    COAL: 2400
+    CHARCOAL: 2400
+    COAL_BLOCK: 24000
+    BLAZE_ROD: 3600
+
+ores:
+  # Custom ores are note blocks in states vanilla never uses; they need the
+  # Steamworks-blocks resource pack (resourcepack/Steamworks-blocks.zip) for their look.
+  # Veins are added the first time a chunk loads (also chunks that already existed).
+  generate-in-existing-chunks: true
+  zinc:          {min-y: -48, max-y: 72, veins-per-chunk: 7, vein-size: 7}
+  tin:           {min-y: -24, max-y: 96, veins-per-chunk: 6, vein-size: 6}
+  sulfur:        {min-y: -64, max-y: 0, veins-per-chunk: 3, vein-size: 6}
+  nether-sulfur: {min-y: 10, max-y: 118, veins-per-chunk: 7, vein-size: 7}
+
+oil:
+  # Hidden oil fields: this share of overworld chunks has one (x2.5 in deserts, badlands
+  # and oceans). Find them with the Oil Dowsing Rod. Pumping uses them up.
+  field-chance: 0.08
+  field-min-mb: 20000
+  field-max-mb: 120000
+  pumpjack-impact: 8                 # load = 8 x speed
+  pumpjack-mb-per-rpm-second: 2      # 16 RPM = 32 mB of crude oil per second
+  tank-capacity-mb: 16000            # 16 buckets
+  refinery-mb-per-second: 100        # crude oil refined per second (needs heat under it)
+  refinery-fuel-part: 0.6            # the rest becomes chemical waste
+  fuel-canister-train-ticks: 6000    # 5 minutes of steam per fuel canister
+  # Waste with no tank room is dumped into the chunk. Pollution goes down by this much every
+  # 5 seconds; above 300 grass and leaves die, above 600 players there are poisoned.
+  pollution-decay-per-5s: 1
+
+visuals:
+  # Render distance multiplier of the part models (1.0 = like other entities).
+  view-range: 0.6

@@ -1,0 +1,73 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: HUSK
+name: $normalLevel &eAncient Husk
+level: dynamic # 45
+healthMultiplier: 0.25
+damageMultiplier: 0.1
+movementSpeedAttribute: 0.45
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 80
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_deep_mines,85.5,108.5,205.5,0.0,0.0
+- em_id_the_deep_mines,86.5,108.5,210.5,0.0,0.0:1711714855502
+- em_id_the_deep_mines,84.5,108.5,211.5,0.0,0.0
+- em_id_the_deep_mines,83.5,107.5,208.5,0.0,0.0:1711714773866
+- em_id_the_deep_mines,81.5,108.5,206.5,0.0,0.0:1711714767264
+- em_id_the_deep_mines,76.5,109.5,202.5,0.0,0.0
+- em_id_the_deep_mines,74.5,109.5,202.5,0.0,0.0:1711714770966
+- em_id_the_deep_mines,72.5,108.5,206.5,0.0,0.0
+- em_id_the_deep_mines,73.5,108.5,210.5,0.0,0.0
+- em_id_the_deep_mines,73.5,109.5,212.5,0.0,0.0
+- em_id_the_deep_mines,72.5,111.5,213.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_deep_mines_swords_8d15cf02.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_axes_cedd4aa4.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_bows_b6c8d98d.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_crossbows_30ddf671.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_tridents_ef892282.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_hoes_1230f16b.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_maces_26754aa4.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_spears_d7ace56c.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_staves_ddb894eb.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_wands_508977f6.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_dps_helmets_e5cd2ef5.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_dps_chestplates_2a0f5219.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_dps_leggings_1965d4e3.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_dps_boots_35d9f72a.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_tank_helmets_2c10cdd9.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_tank_chestplates_d332b108.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_tank_leggings_00e66b52.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_tank_boots_e2e4be2e.yml
+  chance: 1.0
+- filename: cl_story_deep_mines_shields_a907d85d.yml
+  chance: 1.0
+customModel: em_rust_husk

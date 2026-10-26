@@ -1,0 +1,87 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 0.15
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  FireAura:
+    Actions:
+    - Target:
+        coverage: 0.22
+        targetType: ZONE_FULL
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.03
+      repeatEvery: 5
+      times: 40
+    - Target:
+        targetType: ZONE_FULL
+      action: SET_ON_FIRE
+      duration: 200
+      repeatEvery: 10
+      times: 17
+      wait: 30
+    Cooldowns:
+      global: 60
+      local: 400
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    - EliteMobEnterCombatEvent
+    - EliteMobTargetPlayerEvent
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      filter: PLAYER
+      radius: 7
+      shape: DOME
+  Sleep:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+    Events:
+    - EliteMobSpawnEvent
+  WakeUp:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: true
+    Events:
+    - EliteMobDamagedByPlayerEvent
+entityType: MAGMA_CUBE
+followDistance: 80
+healthMultiplier: 10.0
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 80
+level: dynamic # 15
+movementSpeedAttribute: 2.5
+name: $bossLevel &cThe Boiler
+normalizedCombat: true
+phases:
+- the_cave_boiler_p2.yml:0.8
+- the_cave_boiler_p3.yml:0.40
+powers:
+- attack_push.yml
+- invulnerability_fire.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_poison.yml
+- difficultyID:
+  - 2
+  filename: attack_blinding.yml
+song: name=elitemobs:the_cave_sanctum.idle length=30014
+spawnLocations:
+- em_id_the_cave,-18.5,58,-33.9,-90.0,0.0:1675866614880
+trails:
+- SMOKE_LARGE
+classLoot: false
+customModel: em_magma_cube_furnace

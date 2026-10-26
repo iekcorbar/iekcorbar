@@ -1,0 +1,50 @@
+citizens_id,npc_name,role,file
+49,Shichō Riku,Registrar (job office),shicho_riku.png
+50,Master Farmer,Job master,master_farmer.png
+51,Master Fisherman,Job master,master_fisherman.png
+52,Master Miner,Job master,master_miner.png
+53,Sensei Mechanical Craftsman,Jobs 2 sensei,sensei_mechanical_craftsman.png
+54,Master Digger,Job master,master_digger.png
+55,Master Chef,Job master,master_chef.png
+56,Master Woodcutter,Job master,master_woodcutter.png
+57,Sensei Iron Samurai,Jobs 3 sensei,sensei_iron_samurai.png
+58,Master Explorer,Job master,master_explorer.png
+59,Master Builder,Job master,master_builder.png
+60,Master Hunter,Job master,master_hunter.png
+61,Sensei Machine Lord,Jobs 4 sensei,sensei_machine_lord.png
+62,Master Brewer,Job master,master_brewer.png
+63,Master Crafter,Job master,master_crafter.png
+64,Master Enchanter,Job master,master_enchanter.png
+44,Jiraiya,Shinobi master (Jobs 5),jiraiya.png
+65,Sensei Emperor of Steam,Jobs 5 sensei,sensei_emperor_of_steam.png
+66,Master Weaponsmith,Job master,master_weaponsmith.png
+68,Master Armorsmith,Job master,master_armorsmith.png
+82,Aiko,Tea House,aiko.png
+83,Goro,Sake Brewery,goro.png
+84,Taro,BBQ Master,taro.png
+85,Daichi,Sushi Master,daichi.png
+86,Momo,Candy Merchant,momo.png
+87,Sora,Fruit Market,sora.png
+88,Ren,Coffee House,ren.png
+89,Yuki,Ice Cream Cart,yuki.png
+95,Brakka Stonewall,Armor Merchant,brakka_stonewall.png
+78,Gemologist Petra,Gem Shop,gemologist_petra.png
+81,FishingRodney,Rod Merchant,fishingrodney.png
+96,Aster Veyl,Special Upgrade Merchant,aster_veyl.png
+90,Elias Packwright,Backpack maker,elias_packwright.png
+91,Mara Threadneedle,Backpack tailor,mara_threadneedle.png
+92,Brann Gearlock,Backpack engineer,brann_gearlock.png
+97,Orion the Adventurer,Backpack adventurer,orion_the_adventurer.png
+79,Vorkan Kross,Blacksmith (contracts),vorkan_kross.png
+76,Mad doctor,Mad Doctor,mad_doctor.png
+94,Cleric,Cleric,cleric.png
+126,Capitan Usop,Sea captain (to the capital),capitan_usop.png
+125,Alpha Test Techcore,Techcore engineer,techcore_engineer.png
+122,Tutorial,Tutorial guide,tutorial_guide.png
+123,Dialogue tutorial,Dialogue guide,dialogue_guide.png
+127,Race Assignor,Race Assignor,race_assignor.png
+128,Class Assignor,Class Assignor,class_assignor.png
+93,Guard,"Guard variant A (iron helmet, brown beard)",guard_a.png
+99,Guard,"Guard variant B (kabuto-style, moustache)",guard_b.png
+100,Guard,"Guard variant C (brass cap, tan)",guard_c.png
+101,Guard,"Guard variant D (goggles, red hair)",guard_d.png

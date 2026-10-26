@@ -1,0 +1,6 @@
+# FreeMinecraftModels - settings for verdigris_gear_tilt_22.bbmodel (same folder as the model)
+isEnabled: true
+# Hit it 3 times (within 5 s) to pick it up again; IekcorbarSiteSync turns the
+# dropped item back into the normal Verdigris Gear item.
+scripts:
+- pickupable.lua

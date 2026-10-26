@@ -1,0 +1,71 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.01
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Sound:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 25
+      sValue: entity.evoker.cast_spell
+    Events:
+    - EliteMobSpawnEvent
+  Tag:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      wait: 1
+    - Target:
+        targetType: SELF
+      action: PUSH
+      vValue: 0,0.7,0
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: TAG
+      duration: 20
+      repeatEvery: 21
+      tags:
+      - Tag3
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      Target:
+        offset: 18,0,0
+        targetType: SELF_SPAWN
+      filter: ELITE
+      height: 2
+      radius: 30
+      shape: CYLINDER
+entityType: ZOMBIFIED_PIGLIN
+followDistance: 40
+frozen: true
+healthMultiplier: 1.0
+instanced: true
+isBaby: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 20
+movementSpeedAttribute: 0.001
+name: $reinforcementLevel &cSoul of Undying
+normalizedCombat: true
+trails:
+- HEART
+classLoot: false
+customModel: em_gilded_zombified_piglin

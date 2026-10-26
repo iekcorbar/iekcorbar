@@ -1,0 +1,23 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 1.0
+dropsEliteMobsLoot: false
+entityType: WITHER_SKELETON
+followDistance: 200
+healthMultiplier: 1.0
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 35
+level: 100
+mainHand: NETHERITE_SWORD
+name: $reinforcementLevel &7Reality Rupturer
+normalizedCombat: true
+powers:
+- attack_gravity.yml
+- attack_push.yml
+- invulnerability_knockback.yml
+- invulnerability_fire.yml
+reinforcement: true
+classLoot: false
+customModel: em_ember_wither_skeleton

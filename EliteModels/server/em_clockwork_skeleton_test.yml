@@ -1,0 +1,14 @@
+isEnabled: true
+entityType: SKELETON
+name: '&8[&aLv.1 &6Clockwork Skeleton &7(model test)&8]'
+level: '1'
+healthMultiplier: 1.0
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+dropsSkillXP: false
+customModel: em_clockwork_skeleton
+followDistance: 20
+bossType: NORMAL
+onSpawnBlockStates: []
+onRemoveBlockStates: []

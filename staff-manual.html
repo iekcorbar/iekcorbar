@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iekcorbar — Official Staff Manual</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --bronze: #8b6914;
+      --copper: #b87333;
+      --dark: #0f0c08;
+      --dark-2: #1a1510;
+      --dark-3: #221d14;
+      --paper: #fdf8f0;
+      --ink: #1a1208;
+      --ink-light: #3d2f1a;
+      --red: #8b1a1a;
+      --green: #1a5c2a;
+      --blue: #1a3a5c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Crimson Text', Georgia, serif;
+      background: #e8e0d0;
+      color: var(--ink);
+      font-size: 11pt;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 20px;
+      background: var(--paper);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.35);
+    }
+
+    .page::before, .page::after {
+      content: '✦';
+      position: absolute;
+      font-size: 18pt;
+      color: var(--gold);
+      opacity: 0.4;
+    }
+    .page::before { top: 14px; left: 18px; }
+    .page::after  { top: 14px; right: 18px; }
+
+    .page-border {
+      position: absolute;
+      inset: 8mm;
+      border: 1.5px solid var(--gold);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .page-border::before {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border: 0.5px solid var(--bronze);
+      opacity: 0.5;
+    }
+
+    .page-content {
+      padding: 18mm 20mm 16mm;
+    }
+
+    /* COVER */
+    .cover {
+      background: linear-gradient(160deg, #0f0c08 0%, #1a1510 40%, #221d14 100%);
+      color: var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 297mm;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 35%, rgba(201,168,76,0.08) 0%, transparent 70%);
+    }
+
+    .cover-border {
+      position: absolute;
+      inset: 12mm;
+      border: 2px solid rgba(201,168,76,0.5);
+    }
+
+    .cover-corner {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.7;
+    }
+    .cover-corner.tl { top: 14mm; left: 14mm; border-width: 2px 0 0 2px; }
+    .cover-corner.tr { top: 14mm; right: 14mm; border-width: 2px 2px 0 0; }
+    .cover-corner.bl { bottom: 14mm; left: 14mm; border-width: 0 0 2px 2px; }
+    .cover-corner.br { bottom: 14mm; right: 14mm; border-width: 0 2px 2px 0; }
+
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 20mm;
+    }
+
+    .cover-emblem { font-size: 48pt; margin-bottom: 8mm; }
+
+    .cover-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 5mm;
+    }
+
+    .cover-title {
+      font-family: 'Cinzel', serif;
+      font-size: 32pt;
+      font-weight: 900;
+      color: var(--gold-light);
+      line-height: 1.15;
+      letter-spacing: 0.04em;
+      text-shadow: 0 2px 20px rgba(201,168,76,0.5);
+      margin-bottom: 3mm;
+    }
+
+    .cover-title span {
+      display: block;
+      font-size: 20pt;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 2mm;
+    }
+
+    .cover-rule {
+      width: 80mm;
+      margin: 7mm auto;
+      display: flex;
+      align-items: center;
+      gap: 4mm;
+    }
+    .cover-rule hr { flex: 1; border: none; border-top: 1px solid rgba(201,168,76,0.4); }
+    .cover-rule span { color: var(--gold); font-size: 12pt; opacity: 0.7; }
+
+    .cover-tagline {
+      font-family: 'Crimson Text', serif;
+      font-style: italic;
+      font-size: 13pt;
+      color: rgba(201,168,76,0.7);
+      margin-bottom: 12mm;
+      line-height: 1.5;
+    }
+
+    .cover-meta {
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(139,105,20,0.8);
+      border-top: 1px solid rgba(201,168,76,0.2);
+      padding-top: 4mm;
+      margin-top: 8mm;
+    }
+
+    /* CHAPTER HEADER */
+    .chapter-header {
+      background: linear-gradient(135deg, #1a1510 0%, #2a2018 100%);
+      margin: 0 -20mm 8mm;
+      padding: 6mm 20mm;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .chapter-number {
+      font-family: 'Cinzel', serif;
+      font-size: 7pt;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin-bottom: 1.5mm;
+    }
+
+    .chapter-title {
+      font-family: 'Cinzel', serif;
+      font-size: 18pt;
+      font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 0.03em;
+    }
+
+    h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 13pt;
+      font-weight: 600;
+      color: var(--ink);
+      border-bottom: 1px solid rgba(201,168,76,0.5);
+      padding-bottom: 1.5mm;
+      margin: 7mm 0 3mm;
+      letter-spacing: 0.02em;
+    }
+
+    h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: var(--ink-light);
+      margin: 5mm 0 2mm;
+    }
+
+    p {
+      margin-bottom: 3mm;
+      text-align: justify;
+    }
+
+    .ornament {
+      text-align: center;
+      color: var(--gold);
+      font-size: 13pt;
+      opacity: 0.5;
+      margin: 5mm 0;
+      letter-spacing: 0.3em;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 3mm;
+      margin: 5mm 0;
+      opacity: 0.6;
+    }
+    .divider hr { flex: 1; border: none; border-top: 1px solid var(--bronze); }
+    .divider span { color: var(--gold); font-size: 10pt; }
+
+    /* ROLE CARDS */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4mm;
+      margin: 4mm 0;
+    }
+
+    .role-card {
+      border: 1px solid;
+      border-radius: 2mm;
+      padding: 4mm;
+    }
+
+    .role-card.owner { border-color: #e8c97a; background: rgba(201,168,76,0.07); }
+    .role-card.admin { border-color: #c0392b; background: rgba(192,57,43,0.07); }
+    .role-card.mod   { border-color: #2980b9; background: rgba(41,128,185,0.07); }
+
+    .role-name {
+      font-family: 'Cinzel', serif;
+      font-size: 10pt;
+      font-weight: 700;
+      margin-bottom: 1.5mm;
+    }
+    .role-card.owner .role-name { color: #b8860b; }
+    .role-card.admin .role-name { color: #922b21; }
+    .role-card.mod   .role-name { color: #1a5276; }
+
+    .role-badge {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 6pt;
+      padding: 0.5mm 2mm;
+      border-radius: 1mm;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 2mm;
+    }
+    .role-card.owner .role-badge { background: rgba(201,168,76,0.2); color: #b8860b; border: 0.5px solid #b8860b; }
+    .role-card.admin .role-badge { background: rgba(192,57,43,0.15); color: #922b21; border: 0.5px solid #922b21; }
+    .role-card.mod   .role-badge { background: rgba(41,128,185,0.15); color: #1a5276; border: 0.5px solid #1a5276; }
+
+    .role-desc { font-size: 9pt; color: var(--ink-light); margin-bottom: 2mm; }
+
+    .role-perms { list-style: none; font-size: 8.5pt; color: var(--ink); }
+    .role-perms li::before { content: '> '; color: var(--gold); font-weight: bold; }
+
+    /* TABLES */
+    .punish-table, .cmd-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3mm 0;
+    }
+    .punish-table { font-size: 9pt; }
+    .cmd-table { font-size: 8.5pt; }
+
+    .punish-table thead th, .cmd-table thead th {
+      background: linear-gradient(135deg, #1a1510, #2a2018);
+      color: var(--gold-light);
+      font-family: 'Cinzel', serif;
+      font-size: 8pt;
+      padding: 2.5mm 3mm;
+      text-align: left;
+      letter-spacing: 0.05em;
+      border-bottom: 1.5px solid var(--gold);
+    }
+
+    .punish-table tbody tr:nth-child(even),
+    .cmd-table tbody tr:nth-child(even) { background: rgba(201,168,76,0.04); }
+
+    .punish-table tbody td, .cmd-table tbody td {
+      padding: 2mm 3mm;
+      border-bottom: 0.5px solid rgba(139,105,20,0.2);
+      vertical-align: top;
+    }
+
+    .punish-table tbody td:first-child { font-weight: 600; color: var(--ink-light); }
+
+    .cmd {
+      font-family: 'Courier New', monospace;
+      font-size: 8pt;
+      background: rgba(0,0,0,0.06);
+      padding: 0.5mm 1.5mm;
+      border-radius: 1mm;
+      border: 0.5px solid rgba(139,105,20,0.3);
+      color: var(--ink-light);
+    }
+
+    /* CALLOUT BOXES */
+    .callout {
+      border-left: 3px solid;
+      padding: 3mm 4mm;
+      margin: 3mm 0;
+      border-radius: 0 2mm 2mm 0;
+    }
+    .callout.note    { border-color: #2980b9; background: rgba(41,128,185,0.07); }
+    .callout.warning { border-color: #e67e22; background: rgba(230,126,34,0.07); }
+    .callout.danger  { border-color: #c0392b; background: rgba(192,57,43,0.07); }
+    .callout.tip     { border-color: #27ae60; background: rgba(39,174,96,0.07); }
+
+    .callout-title {
+      font-family: 'Cinzel', serif;
+      font-size: 9pt;
+      font-weight: 600;
+      margin-bottom: 1mm;
+    }
+    .callout.note    .callout-title { color: #1a5276; }
+    .callout.warning .callout-title { color: #7e5109; }
+    .callout.danger  .callout-title { color: #922b21; }
+    .callout.tip     .callout-title { color: #1e8449; }
+    .callout p { font-size: 9pt; margin-bottom: 0; text-align: left; }
+
+    /* CHECKLIST */
+    .checklist { list-style: none; margin: 2mm 0; }
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 3mm;
+      font-size: 9.5pt;
+      padding: 1.5mm 0;
+      border-bottom: 0.5px solid rgba(139,105,20,0.1);
+    }
+    .check-box {
+      min-width: 5mm;
+      height: 5mm;
+      border: 1.5px solid var(--bronze);
+      border-radius: 0.5mm;
+      margin-top: 0.5mm;
+      background: rgba(255,255,255,0.5);
+    }
+    .checklist li strong {
+      display: block;
+      font-family: 'Cinzel', serif;
+      font-size: 8.5pt;
+      color: var(--ink-light);
+      font-weight: 600;
+    }
+    .checklist li span { font-size: 8.5pt; color: var(--ink-light); display: block; }
+
+    /* STEPS */
+    .steps { counter-reset: step; list-style: none; margin: 3mm 0; }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 3mm;
+      margin-bottom: 3mm;
+      font-size: 9.5pt;
+    }
+    .steps li::before {
+      content: counter(step);
+      min-width: 6mm;
+      height: 6mm;
+      background: var(--ink);
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-size: 8pt;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.3mm;
+      flex-shrink: 0;
+    }
+    .steps li strong { display: block; font-family: 'Cinzel', serif; font-size: 9pt; color: var(--ink-light); margin-bottom: 0.5mm; }
+
+    /* BULLET LISTS */
+    ul.body-list { padding-left: 5mm; margin: 2mm 0; }
+    ul.body-list li { font-size: 9.5pt; margin-bottom: 1.5mm; padding-left: 2mm; }
+    ul.body-list ul.body-list { margin-top: 1.5mm; }
+
+    /* TOC */
+    .toc-entry {
+      display: flex;
+      align-items: baseline;
+      gap: 2mm;
+      margin-bottom: 2.5mm;
+    }
+    .toc-entry-title { font-family: 'Crimson Text', serif; font-size: 10.5pt; color: var(--ink); }
+    .toc-dots { flex: 1; border-bottom: 1px dotted rgba(139,105,20,0.4); margin-bottom: 1.5mm; }
+    .toc-page { font-family: 'Cinzel', serif; font-size: 9pt; color: var(--bronze); min-width: 5mm; text-align: right; }
+    .toc-section {
+      font-family: 'Cinzel', serif;
+      font-size: 7.5pt;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--bronze);
+      margin: 5mm 0 2mm;
+      border-bottom: 0.5px solid rgba(139,105,20,0.3);
+      padding-bottom: 1mm;
+    }
+
+    /* SCREENSHOT PLACEHOLDER */
+    .shot {
+      border: 1.5px dashed rgba(139,105,20,0.5);
+      border-radius: 2mm;
+      background: rgba(201,168,76,0.05);
+      padding: 6mm 4mm;
+      margin: 3mm 0;
+      text-align: center;
+    }
+    .shot-icon { font-size: 16pt; color: var(--bronze); opacity: 0.6; margin-bottom: 1.5mm; }
+    .shot-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8pt;
+      font-weight: 600;
+      color: var(--ink-light);
+      letter-spacing: 0.03em;
+      margin-bottom: 1mm;
+    }
+    .shot-note {
+      font-family: 'Inter', sans-serif;
+      font-size: 7.5pt;
+      color: rgba(61,47,26,0.6);
+    }
+
+    /* PAGE FOOTER */
+    .page-footer {
+      position: absolute;
+      bottom: 10mm;
+      left: 20mm;
+      right: 20mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 7pt;
+      color: rgba(61,47,26,0.5);
+      border-top: 0.5px solid rgba(139,105,20,0.3);
+      padding-top: 2mm;
+    }
+    .page-footer .footer-logo { font-family: 'Cinzel', serif; font-size: 7pt; color: var(--bronze); letter-spacing: 0.1em; }
+
+    @media print {
+      body { background: none; }
+      .page { margin: 0; box-shadow: none; page-break-after: always; }
+      .page:last-child { page-break-after: avoid; }
+      .print-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="page cover">
+  <div class="cover-border"></div>
+  <div class="cover-corner tl"></div>
+  <div class="cover-corner tr"></div>
+  <div class="cover-corner bl"></div>
+  <div class="cover-corner br"></div>
+  <div class="cover-inner">
+    <div class="cover-emblem">⚙</div>
+    <div class="cover-subtitle">Official Internal Document</div>
+    <div class="cover-title">Iekcorbar<span>Website &amp; Staff Panel Manual</span></div>
+    <div class="cover-rule"><hr /><span>⚙</span><hr /></div>
+    <div class="cover-tagline">
+      "Forged in Steam, Tempered by Honour"<br/>
+      A practical guide to logging in, using the Staff Panel,<br/>and everything it actually does
+    </div>
+    <div class="cover-meta">Iekcorbar Minecraft Server &nbsp;&middot;&nbsp; Confidential &mdash; Staff Use Only &nbsp;&middot;&nbsp; 2026 Edition</div>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">Front Matter</div>
+      <div class="chapter-title">Table of Contents</div>
+    </div>
+    <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <div class="toc-section">Part I &mdash; Getting Access</div>
+    <div class="toc-entry"><div class="toc-entry-title">§1 &nbsp; Staff Roles &amp; What Each Can Do</div><div class="toc-dots"></div><div class="toc-page">3</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§2 &nbsp; General Staff Conduct (Guidance)</div><div class="toc-dots"></div><div class="toc-page">4</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§3 &nbsp; Logging In &amp; Two-Factor Authentication</div><div class="toc-dots"></div><div class="toc-page">5</div></div>
+    <div class="toc-section">Part II &mdash; The Staff Panel</div>
+    <div class="toc-entry"><div class="toc-entry-title">§4 &nbsp; Staff Panel &mdash; Overview</div><div class="toc-dots"></div><div class="toc-page">6</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§5 &nbsp; Crew &amp; Sanctions</div><div class="toc-dots"></div><div class="toc-page">7</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§6 &nbsp; Reports Inbox</div><div class="toc-dots"></div><div class="toc-page">8</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§7 &nbsp; Bug Reports</div><div class="toc-dots"></div><div class="toc-page">9</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§8 &nbsp; Content Tabs (Wiki, Updates, Polls, Events)</div><div class="toc-dots"></div><div class="toc-page">10</div></div>
+    <div class="toc-entry"><div class="toc-entry-title">§9 &nbsp; Settings <em>(Admin Only)</em></div><div class="toc-dots"></div><div class="toc-page">11</div></div>
+    <div class="toc-section">Part III &mdash; Beyond the Panel</div>
+    <div class="toc-entry"><div class="toc-entry-title">§10 &nbsp; Player-Facing Features to Know</div><div class="toc-dots"></div><div class="toc-page">12</div></div>
+    <div class="divider"><hr /><span>⚙</span><hr /></div>
+    <div class="callout tip">
+      <div class="callout-title">💡 How to Use This Manual</div>
+      <p>Everything in this manual describes what the Iekcorbar <strong>website</strong> actually does, verified directly against its code &mdash; not a generic moderation policy template. §2 is the one section that's general guidance rather than a description of a real feature; it's labelled as such. Confidential, staff use only.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 2</span>
+  </div>
+</div>
+
+<!-- ROLES -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 1 &mdash; Part I: Getting Access</div>
+      <div class="chapter-title">Staff Roles &amp; What Each Can Do</div>
+    </div>
+    <p>Every account on the website has exactly one role stored against it: <strong>Player</strong>, <strong>Moderator</strong>, or <strong>Admin</strong>. There is no larger hierarchy underneath that &mdash; these three roles are the whole system.</p>
+    <div class="role-grid">
+      <div class="role-card admin">
+        <span class="role-badge">Admin</span>
+        <div class="role-name">⚙ Admin</div>
+        <div class="role-desc">Full access to every Staff Panel tab, including Settings.</div>
+        <ul class="role-perms">
+          <li>Everything a Moderator can do</li>
+          <li>Full Settings tab (all sub-tabs)</li>
+          <li>Change any other account's role</li>
+          <li>Edit Site Content (role display names, page titles)</li>
+        </ul>
+      </div>
+      <div class="role-card mod">
+        <span class="role-badge">Moderator</span>
+        <div class="role-name">🛡 Moderator</div>
+        <div class="role-desc">Full day-to-day enforcement access, no site configuration.</div>
+        <ul class="role-perms">
+          <li>Kick / ban / temp-ban / unban / staff notes</li>
+          <li>Reports Inbox &amp; Bug Reports</li>
+          <li>Wiki, Updates, Polls, Events tabs</li>
+          <li>Settings tab is visible but shows nothing</li>
+        </ul>
+      </div>
+      <div class="role-card owner">
+        <span class="role-badge">Player</span>
+        <div class="role-name">👤 Player</div>
+        <div class="role-desc">Ordinary registered account &mdash; the default for everyone.</div>
+        <ul class="role-perms">
+          <li>No Staff Panel access at all</li>
+          <li>Visiting /moderation shows an access-denied message</li>
+        </ul>
+      </div>
+    </div>
+    <h2>How a Role Actually Gets Changed</h2>
+    <p>There is no self-service way to become staff. An existing Admin changes another account's role from the <strong>Clearance Role</strong> dropdown in the Crew &amp; Sanctions tab (see §5) &mdash; that's the only mechanism. An Admin cannot change their own role from that dropdown; their own row shows "Owner (Protected)" instead.</p>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ Two-Factor Authentication Is Automatic</div>
+      <p>The moment an account's role is set to Moderator or Admin, that account is required to set up 2FA the next time it logs in &mdash; there's no separate step to turn it on. See §3.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 3</span>
+  </div>
+</div>
+
+<!-- CONDUCT -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 2 &mdash; Part I: Getting Access</div>
+      <div class="chapter-title">General Staff Conduct</div>
+    </div>
+    <div class="callout warning">
+      <div class="callout-title">⚠ This Section Is Guidance, Not a Fixed Rulebook</div>
+      <p>Unlike the rest of this manual, the points below aren't a description of something the website enforces &mdash; they're general good practice. Adapt them to how your own team actually operates; don't treat the wording as official policy with specific mandated timings.</p>
+    </div>
+    <ul class="body-list">
+      <li><strong>Stay impartial.</strong> Treat friends and strangers the same way when reviewing a report or issuing a sanction.</li>
+      <li><strong>Write real reasons.</strong> Every kick/ban/tempban reason you type is logged and can be shown to the player &mdash; write it as if they'll read it back to you.</li>
+      <li><strong>Recuse yourself when conflicted.</strong> If a report involves someone you know personally, let another staff member handle it.</li>
+      <li><strong>Keep player data private.</strong> Bug reports and reports both reveal information (bug reports show the reporter's identity) &mdash; don't share it outside the staff team.</li>
+      <li><strong>Ask before a permanent action if you're unsure.</strong> A ban is easy to issue and awkward to reverse; a second opinion costs nothing.</li>
+    </ul>
+    <div class="callout danger">
+      <div class="callout-title">🚫 Misuse of Sanctions</div>
+      <p>Kick/ban/tempban dispatch a real, live in-game command the moment you submit them (§5). Treat that with the same seriousness as if you were typing the command directly into the server console yourself.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 4</span>
+  </div>
+</div>
+
+<!-- LOGIN & 2FA -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 3 &mdash; Part I: Getting Access</div>
+      <div class="chapter-title">Logging In &amp; Two-Factor Authentication</div>
+    </div>
+    <p>Moderator and Admin accounts are protected by real Two-Factor Authentication (2FA) on top of the normal password. This is mandatory and cannot be turned off per-account.</p>
+    <h2>First-Time Setup (once per staff account)</h2>
+    <ol class="steps">
+      <li><div><strong>Log in as normal</strong>Enter your email and password on the website as usual.</div></li>
+      <li><div><strong>Scan the QR code</strong>Because your account is Moderator or Admin, you'll see a QR code instead of being logged straight in. Open an authenticator app &mdash; <strong>Google Authenticator</strong> or <strong>Authy</strong> both work &mdash; and scan it. Can't scan? Use the manual entry code shown underneath instead.</div></li>
+      <li><div><strong>Confirm with a code</strong>Your authenticator app now shows a fresh 6-digit code every 30 seconds. Type the current code into the website to finish setup. That app is now permanently linked to your account.</div></li>
+    </ol>
+    <div class="shot">
+      <div class="shot-icon">📷</div>
+      <div class="shot-label">Screenshot: 2FA setup screen (QR code + manual entry key)</div>
+      <div class="shot-note">To be added &mdash; capture from a live login as Admin/Moderator</div>
+    </div>
+    <h2>Every Login After That</h2>
+    <p>Enter your email and password, then enter the current 6-digit code from your authenticator app when prompted. No QR code appears again unless another Admin resets your 2FA.</p>
+    <div class="callout warning">
+      <div class="callout-title">⚠ Lost Your Authenticator App?</div>
+      <p>There is currently no self-service reset. Contact another Admin directly (not over public Discord) to have your account's 2FA cleared so you can set it up again on a new device.</p>
+    </div>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ "Not Authenticated" Errors After a Site Update</div>
+      <p>The Staff Panel and several other features (Friends, Journal, Bug Reports, Site Content) check a real, secure session &mdash; not just whatever your browser happens to remember. If you were already logged in before an update and suddenly see "Not authenticated" errors, simply <strong>log out and log back in</strong> (2FA included, if you're staff). That refreshes your session and resolves it every time.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 5</span>
+  </div>
+</div>
+
+<!-- PANEL OVERVIEW -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 4 &mdash; Part II: The Staff Panel</div>
+      <div class="chapter-title">Staff Panel &mdash; Overview</div>
+    </div>
+    <p>The Staff Panel lives at <strong>/moderation</strong> on the website. Players are redirected away from it entirely; Moderators and Admins see a row of tabs across the top, exactly as listed below &mdash; these are the real tab names as they appear on screen.</p>
+    <div class="shot">
+      <div class="shot-icon">📷</div>
+      <div class="shot-label">Screenshot: Staff Panel tab bar, full width</div>
+      <div class="shot-note">To be added &mdash; capture the top navigation of /moderation</div>
+    </div>
+    <table class="cmd-table">
+      <thead><tr><th>Tab</th><th>What it's for</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td>Crew &amp; Sanctions</td><td>Kick / ban / temp-ban / unban / staff notes, and the member list with role management</td><td>Mod + Admin</td></tr>
+        <tr><td>Reports Inbox</td><td>Anonymous player-submitted rule-violation reports</td><td>Mod + Admin</td></tr>
+        <tr><td>Bug Reports</td><td>Website bugs submitted by players from their own profile (identity included)</td><td>Mod + Admin</td></tr>
+        <tr><td>Events Manager</td><td>Community events shown on /events</td><td>Mod + Admin</td></tr>
+        <tr><td>Wiki Lore</td><td>Articles shown on /wiki</td><td>Mod + Admin</td></tr>
+        <tr><td>Updates Manager</td><td>Public changelog / announcement posts</td><td>Mod + Admin</td></tr>
+        <tr><td>Polls Manager</td><td>Community polls</td><td>Mod + Admin</td></tr>
+        <tr><td>Settings</td><td>Site configuration, several sub-tabs &mdash; see §9</td><td><strong>Admin only</strong></td></tr>
+      </tbody>
+    </table>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ Moderators and the Settings Tab</div>
+      <p>The Settings tab button is visible to Moderators, but clicking it shows an empty panel &mdash; there's no "access denied" message, it's simply blank. This is expected, not a bug: Settings content is Admin-only.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 6</span>
+  </div>
+</div>
+
+<!-- CREW & SANCTIONS -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 5 &mdash; Part II: The Staff Panel</div>
+      <div class="chapter-title">Crew &amp; Sanctions</div>
+    </div>
+    <div class="callout warning">
+      <div class="callout-title">⚠ These Actions Are Real, Not Simulated</div>
+      <p>Kick, Ban, Temp-Ban and Unban dispatch a <strong>live in-game command</strong> the instant you submit &mdash; over RCON, straight to the server's <strong>CMI</strong> plugin (<span class="cmd">cmi kick</span> / <span class="cmd">cmi ban</span> / <span class="cmd">cmi tempban [player] 7d [reason]</span> / <span class="cmd">cmi unban</span>). There is no preview or separate "apply" step. If the Minecraft server can't be reached, the panel shows an error and applies/logs nothing &mdash; safe to just try again.</p>
+    </div>
+    <h2>Issue Penalty Form</h2>
+    <ul class="body-list">
+      <li><strong>Target In-Game Name (IGN)</strong> &mdash; exact Minecraft username.</li>
+      <li><strong>Sanction Action</strong> &mdash; Kick (eject now), Ban (permanent), Tempban (fixed <strong>7-day</strong> duration, not adjustable per case), Unban, or Staff Note (record only, no in-game command sent).</li>
+      <li><strong>Violation Reason</strong> &mdash; required, logged, and visible in the transmission log below.</li>
+    </ul>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ Staff Are Protected</div>
+      <p>Kick/ban/tempban against another Moderator or Admin account is blocked by the panel itself &mdash; it never even reaches the game server.</p>
+    </div>
+    <h2>Registered Members Table</h2>
+    <p>Below the form: every account, with columns <strong>Player Skin, Email Address, IGN, Clearance Role, Sanction Commands</strong>. The Clearance Role dropdown is only editable by Admins (Moderators see it as plain text); an Admin's own row reads "Owner (Protected)" instead of a dropdown. Each row also has quick-action buttons &mdash; Note and Unban are always available, Kick / Tempban / Ban only appear for non-staff accounts.</p>
+    <div class="shot">
+      <div class="shot-icon">📷</div>
+      <div class="shot-label">Screenshot: Issue Penalty form + Registered Members table</div>
+      <div class="shot-note">To be added</div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 7</span>
+  </div>
+</div>
+
+<!-- REPORTS INBOX -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 6 &mdash; Part II: The Staff Panel</div>
+      <div class="chapter-title">Reports Inbox</div>
+    </div>
+    <p>Any player can submit a report against another player from that player's profile page &mdash; category, target username, and a details field. <strong>Reporter identity is never stored anywhere</strong>, including in the database, so there is no way to see who submitted a given report.</p>
+    <h2>Handling a Report</h2>
+    <ol class="steps">
+      <li><div><strong>Review it</strong>Newest reports appear first, with category, target, timestamp and the reporter's written details.</div></li>
+      <li><div><strong>Act directly from the card</strong>Kick and Ban buttons are right on each report, alongside a Message link to open a chat with the reported player.</div></li>
+      <li><div><strong>Dismiss when done</strong>Removes it from the inbox. There's no separate "resolved" vs "denied" state to set &mdash; dismissing is the only outcome the panel tracks.</div></li>
+    </ol>
+    <div class="callout tip">
+      <div class="callout-title">💡 Best Practice</div>
+      <p>Check the Reports Inbox at the start of every session &mdash; a quick pass through it is one of the most visible things staff do for community trust.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 8</span>
+  </div>
+</div>
+
+<!-- BUG REPORTS -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 7 &mdash; Part II: The Staff Panel</div>
+      <div class="chapter-title">Bug Reports</div>
+    </div>
+    <p>Separate from the Reports Inbox. Any logged-in player can submit a website bug report from their own profile page &mdash; a subject and a description. <strong>Unlike player reports, the reporter's identity is included</strong> (username and email), so you can follow up and ask for reproduction steps.</p>
+    <h2>Working a Bug Report</h2>
+    <ul class="body-list">
+      <li>Mark each one <strong>Open</strong>, <strong>Fixed</strong>, or <strong>Won't Fix</strong> as you triage it.</li>
+      <li>Delete a report once it's fully dealt with, if you want it off the list.</li>
+    </ul>
+    <div class="callout danger">
+      <div class="callout-title">🚫 Marking "Fixed" Announces Nothing</div>
+      <p>Changing status here is purely internal bookkeeping &mdash; it does <strong>not</strong> post anything to the public Updates feed. If a fix is worth telling players about, add an entry yourself in Updates Manager (§8) once it's actually shipped.</p>
+    </div>
+    <div class="callout note">
+      <div class="callout-title">ℹ️ Email Copy</div>
+      <p>Reports are also emailed to <span class="cmd">bugs@iekcorbar.com</span> when that mailbox is fully configured. The Staff Panel is always the source of truth regardless &mdash; check it directly rather than relying on the inbox.</p>
+    </div>
+    <div class="shot">
+      <div class="shot-icon">📷</div>
+      <div class="shot-label">Screenshot: Bug Reports tab with status buttons</div>
+      <div class="shot-note">To be added</div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 9</span>
+  </div>
+</div>
+
+<!-- CONTENT TABS -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 8 &mdash; Part II: The Staff Panel</div>
+      <div class="chapter-title">Content Tabs</div>
+    </div>
+    <p>Four tabs manage public-facing content directly &mdash; changes go live immediately, there's no draft/preview step.</p>
+    <h2>Wiki Lore</h2>
+    <p>Create, edit, and delete the articles shown on the public <strong>/wiki</strong> page &mdash; races, jobs, brewing, lands, and anything else worth documenting for players.</p>
+    <h2>Updates Manager</h2>
+    <p>Post entries to the public Updates / changelog feed. This is the right place to announce a shipped fix or new feature &mdash; nothing else on the site posts here automatically.</p>
+    <h2>Polls Manager</h2>
+    <p>Create community polls and review how players are voting.</p>
+    <h2>Events Manager</h2>
+    <p>Create and edit community events shown on <strong>/events</strong>, which players can register interest in directly on the site.</p>
+    <div class="callout tip">
+      <div class="callout-title">💡 Brewing Recipes &amp; Blueprints</div>
+      <p>The <strong>/brewing</strong> page itself (not the Staff Panel) has its own "New Recipe" / "New Blueprint" buttons for Moderators and Admins &mdash; there's no separate manager tab for it.</p>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 10</span>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 9 &mdash; Part II: The Staff Panel</div>
+      <div class="chapter-title">Settings <span style="font-size:11pt;">(Admin Only)</span></div>
+    </div>
+    <p>Settings is split into sub-tabs, all Admin-only &mdash; enforced by a real server-side check, so a Moderator cannot reach these even by other means.</p>
+    <ul class="body-list">
+      <li><strong>General:</strong> Java version badge and map URL shown on the homepage.</li>
+      <li><strong>Carousel:</strong> Homepage image slideshow items.</li>
+      <li><strong>Starter Guide:</strong> The "Getting Started" steps on the homepage. Each step can have an image or PDF attached, up to 20MB &mdash; useful for a downloadable player manual.</li>
+      <li><strong>Rules Manager:</strong> The public <strong>/rules</strong> page content.</li>
+      <li><strong>Vote Sites:</strong> Voting-site links and reward configuration.</li>
+      <li><strong>Projects Manager:</strong> Community build projects players can sign up for.</li>
+      <li><strong>Site Content:</strong> Rename how roles display across the whole site (e.g. if your LuckPerms group names don't match "Admin / Moderator / Player") and a couple of page titles. This only changes the displayed label &mdash; it never changes anyone's actual permissions or in-game rank.</li>
+    </ul>
+    <div class="shot">
+      <div class="shot-icon">📷</div>
+      <div class="shot-label">Screenshot: Settings sub-tab navigation + Site Content editor</div>
+      <div class="shot-note">To be added</div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 11</span>
+  </div>
+</div>
+
+<!-- PLAYER-FACING FEATURES -->
+<div class="page">
+  <div class="page-border"></div>
+  <div class="page-content">
+    <div class="chapter-header">
+      <div class="chapter-number">§ 10 &mdash; Part III: Beyond the Panel</div>
+      <div class="chapter-title">Player-Facing Features to Know</div>
+    </div>
+    <p>These live on the website but aren't Staff Panel tools &mdash; players will ask you about them, so it helps to know how they work.</p>
+    <h2>Profile Journal (Logbook)</h2>
+    <p>Every player has a private diary on their own profile with a page-flip animation &mdash; one entry per day, optionally with a photo. Private by default; becomes visible to an accepted Friend automatically, and a player can also explicitly share one specific page with a friend (they get a notification linking straight to it).</p>
+    <h2>Friends System</h2>
+    <p>Accessible from the nav bar. A request is sent by Minecraft username; the other side accepts or declines from their Friends page or the notification bell. Being friends is what unlocks seeing someone's Journal.</p>
+    <h2>Bug Reports (Player Side)</h2>
+    <p>The "Report a Bug" card on a player's own profile is where the Bug Reports tab (§7) gets its content. If a player asks whether their report went through, check that tab for their username/email.</p>
+    <h2>Installing the Site as an App</h2>
+    <p>The website can be installed like a native app on a phone. On Android/Chrome, the browser offers this automatically; on iPhone there's no automatic prompt &mdash; players need Share &rarr; "Add to Home Screen" instead.</p>
+    <div class="divider"><hr /><span>⚙</span><hr /></div>
+    <div class="ornament">✦ &nbsp; ✦ &nbsp; ✦</div>
+    <p style="text-align:center;font-style:italic;color:var(--ink-light);font-size:10pt;margin-top:4mm;">
+      This concludes the Iekcorbar Staff &amp; Website Manual.
+    </p>
+    <div style="text-align:center;margin-top:5mm;font-family:'Cinzel',serif;font-size:9pt;color:var(--bronze);letter-spacing:0.15em;">
+      ⚙ &nbsp; IEKCORBAR MINECRAFT SERVER &nbsp; ⚙<br/>
+      <span style="font-family:'Crimson Text',serif;font-size:8pt;letter-spacing:0.05em;color:rgba(139,105,20,0.6);">Confidential &mdash; Staff Use Only &nbsp;&middot;&nbsp; 2026 Edition</span>
+    </div>
+  </div>
+  <div class="page-footer">
+    <span class="footer-logo">⚙ IEKCORBAR</span>
+    <span>Confidential &mdash; Staff Use Only</span>
+    <span>Page 12</span>
+  </div>
+</div>
+
+<div class="print-hint" style="text-align:center;padding:12px;font-family:sans-serif;font-size:12px;color:#555;background:#e8e0d0;">
+  To save as PDF: Press <strong>Ctrl+P</strong> &rarr; Change "Destination" to <strong>"Save as PDF"</strong> &rarr; Set margins to <strong>None</strong> &rarr; Save
+</div>
+
+</body>
+</html>

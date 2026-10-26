@@ -1,0 +1,271 @@
+{
+ "source": "docs/wiki-kitchen (regenerate with scripts/build-wiki-seed.py)",
+ "pages": [
+  {
+   "slug": "kitchen-intro",
+   "title": "Introduction",
+   "category": "Kitchen",
+   "parent": null,
+   "content": "## Welcome to the Kitchen\n\nKitchen turns farming and food into a hobby of its own. Plant rice in a flooded field, harvest tea in a cherry grove, cut fish on a cutting board and cook a bowl of ramen over a fire. Then do what makes it special: put the dish on the table and let your friends eat from it, bite by bite. Everything works in the normal game, no mods needed.\n\n### What you will do\n\n* **Grow.** Ten new crops grow in the wild and on your farmland: rice, soybeans, napa cabbage, green onion, daikon, tea, corn, tomato, chili peppers and sesame. Picking a ripe crop with a right-click makes it grow back.\n* **Prepare.** Use a knife on the Cutting Board, then cook in the Cooking Pot over a campfire or a Kamado Stove.\n* **Share.** Sushi platters, ramen, bento boxes, dango and tea sets can be placed on a table. Every bite is its own little animation.\n* **Decorate.** Tansu cabinets, baskets, crates, tatami mats and cushions make the kitchen yours.\n\n### How the pages are organised\n\nStart with **Crops** (where to find seeds), then **Stations** (how to cut and cook), then **Recipes** and **Shared Meals**. **Props** is the furniture page. Each crop, station, meal and prop has its own page.\n\n### Good to know first\n\n* Food is more than decoration: dishes give good effects, and a shared meal feeds a whole table.\n* Kitchen works with Steamworks (flour, mochi, tofu in bulk), with Sakagura (drinks need Kitchen ingredients) and with Kura (store your crates in the network).\n* The recipe book **/zukan** lists every cutting and cooking recipe.\n\n### Start here\n\n1. Read [Kitchen](/wiki?page=kitchen) for the one-minute explanation.\n2. Find some wild seeds on the [Crops](/wiki?page=kitchen-crops) page.\n3. Build a [Cutting Board and a Cooking Pot](/wiki?page=kitchen-stations) and cook your first meal.\n"
+  },
+  {
+   "slug": "kitchen",
+   "title": "Kitchen",
+   "category": "Kitchen",
+   "parent": null,
+   "content": "## Kitchen - Japanese farming and cooking\n\nKitchen adds new crops, cooking stations and Japanese dishes to Iekcorbar. Grow rice and soybeans, cut fish into sashimi, cook ramen in a clay pot over a fire, and put a sushi platter on the table for your friends to eat from piece by piece. You only need the normal game - no mods.\n\n### How it works in one minute\n\n1. **Find seeds.** Wild crops grow in the world (rice by swamps and rivers, tea in cherry groves and jungles, and so on). Break them for seeds.\n2. **Plant them** on farmland like wheat. Rice needs wet farmland (water nearby).\n3. **Cut** ingredients on a **Cutting Board** with a **knife**.\n4. **Cook** meals in a **Cooking Pot** placed on a campfire, fire, lava, magma block or a lit **Kamado Stove**.\n5. **Eat** dishes straight away, or **sneak + right-click** a block to put a meal down and share it.\n\n### Pages\n\n* [Crops](/wiki?page=kitchen-crops) - what grows where and how to harvest it\n* [Stations](/wiki?page=kitchen-stations) - knives, Cutting Board, Cooking Pot, Kamado Stove\n* [Recipes](/wiki?page=kitchen-recipes) - everything you can cut, cook and craft\n* [Shared Meals](/wiki?page=kitchen-shared-meals) - sushi platters, ramen, bento and tea sets\n* [Props](/wiki?page=kitchen-props) - cabinet, basket, crates, rich soil, tatami and cushions\n\n### Works with Steamworks\n\n* Steamworks **flour** can replace wheat in noodles, soy sauce and tempura.\n* A **millstone** grinds rice into flour, a **steam hammer** pounds steamed rice into mochi, and a heated **kettle + mixer** makes tofu and steamed rice in bulk.\n\nType **/kitchen** in game for a short help and a link back here.\n"
+  },
+  {
+   "slug": "kitchen-crops",
+   "title": "Kitchen Crops",
+   "category": "Kitchen",
+   "parent": null,
+   "content": "## Crops\n\nKitchen crops grow on **farmland** (or [Rich Soil](/wiki?page=kitchen-props)) like wheat: they need light (level 9 or more) and only grow while the area is loaded. Bone meal speeds them up. A ripe crop can be **picked by right-clicking it** - it drops the harvest and starts growing again, so you don't have to replant.\n\n* [Rice](/wiki?page=kitchen-crops-rice)\n* [Soybean](/wiki?page=kitchen-crops-soybean)\n* [Napa Cabbage](/wiki?page=kitchen-crops-napa-cabbage)\n* [Green Onion](/wiki?page=kitchen-crops-green-onion)\n* [Daikon](/wiki?page=kitchen-crops-daikon)\n* [Tea](/wiki?page=kitchen-crops-tea)\n* [Corn](/wiki?page=kitchen-crops-corn)\n* [Tomato](/wiki?page=kitchen-crops-tomato)\n* [Chili Pepper](/wiki?page=kitchen-crops-chili-pepper)\n* [Sesame](/wiki?page=kitchen-crops-sesame)\n\n### Good to know\n\n* **Rice** only grows on **wet** farmland (water within 4 blocks, like normal farmland hydration). On Rich Soil it needs water within 2 blocks.\n* **Tea** is a bush: after picking it drops back to a young bush instead of starting from seed.\n* **Corn** cuts on the Cutting Board into **Cornmeal** (for polenta and pickling).\n* Breaking a young crop gives the seed back. Breaking a ripe one gives the harvest.\n* Trampling the farmland pops the crop off, just like wheat.\n* With a **knife**, breaking tall grass sometimes gives **Straw** (for bales, mats and compost).\n"
+  },
+  {
+   "slug": "kitchen-crops-rice",
+   "title": "Rice",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Rice\n* **Harvest:** 2-4 Rice\n* **Where it grows wild:** swamps, rivers\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-soybean",
+   "title": "Soybean",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Soybeans\n* **Harvest:** 2-4 Soybeans\n* **Where it grows wild:** plains\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-napa-cabbage",
+   "title": "Napa Cabbage",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Napa Cabbage Seeds\n* **Harvest:** 1 Napa Cabbage + seeds\n* **Where it grows wild:** beaches\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-green-onion",
+   "title": "Green Onion",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Green Onion\n* **Harvest:** 2-3 Green Onions\n* **Where it grows wild:** forests, taiga\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-daikon",
+   "title": "Daikon",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Daikon Seeds\n* **Harvest:** 1 Daikon + seeds\n* **Where it grows wild:** meadows, flower fields\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-tea",
+   "title": "Tea",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Tea Seeds\n* **Harvest:** 2-3 Tea Leaves\n* **Where it grows wild:** cherry groves, jungles\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-corn",
+   "title": "Corn",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Corn\n* **Harvest:** 2-4 Corn\n* **Where it grows wild:** badlands, savanna\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-tomato",
+   "title": "Tomato",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Tomato\n* **Harvest:** 1-3 Tomatoes\n* **Where it grows wild:** -\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-chili-pepper",
+   "title": "Chili Pepper",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Chili Pepper\n* **Harvest:** 1-3 Chili Peppers\n* **Where it grows wild:** -\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-crops-sesame",
+   "title": "Sesame",
+   "category": "Kitchen",
+   "parent": "kitchen-crops",
+   "content": "* Sesame Seeds\n* **Harvest:** 2-3 Sesame Seeds\n* **Where it grows wild:** -\n\nBack to [Kitchen Crops](/wiki?page=kitchen-crops)\n"
+  },
+  {
+   "slug": "kitchen-stations",
+   "title": "Kitchen Stations",
+   "category": "Kitchen",
+   "parent": null,
+   "content": "## Stations\n\nStations are placed like blocks. Break them by hitting them a few times (one hit in creative); whatever is inside drops.\n\n\n* [Knives](/wiki?page=kitchen-stations-knives)\n* [Cutting Board](/wiki?page=kitchen-stations-cutting-board)\n* [Cooking Pot](/wiki?page=kitchen-stations-cooking-pot)\n* [Kamado Stove](/wiki?page=kitchen-stations-kamado-stove)\n"
+  },
+  {
+   "slug": "kitchen-stations-knives",
+   "title": "Knives",
+   "category": "Kitchen",
+   "parent": "kitchen-stations",
+   "content": "| Knife | Recipe |\n|---|---|\n| Flint Knife | flint + stick (diagonal) |\n| Iron Hocho | iron ingot + stick (diagonal) |\n| Diamond Hocho | diamond + stick (diagonal) |\n| Netherite Hocho | Diamond Hocho + netherite ingot in a smithing table |\n\nKnives cut food on the Cutting Board and are light weapons.\n\nBack to [Kitchen Stations](/wiki?page=kitchen-stations)\n"
+  },
+  {
+   "slug": "kitchen-stations-cutting-board",
+   "title": "Cutting Board",
+   "category": "Kitchen",
+   "parent": "kitchen-stations",
+   "content": "Recipe: **stick + 2 planks** in a row.\n\n1. Right-click the board with an ingredient to put it on.\n2. Right-click with a **knife** to cut it - the pieces pop out. Every cut uses a little knife durability.\n3. Right-click with an empty hand to take it back.\n\nBack to [Kitchen Stations](/wiki?page=kitchen-stations)\n"
+  },
+  {
+   "slug": "kitchen-stations-cooking-pot",
+   "title": "Cooking Pot",
+   "category": "Kitchen",
+   "parent": "kitchen-stations",
+   "content": "Recipe: **iron ingot, stick, iron ingot** on top, **brick, empty, brick** in the middle, **3 bricks** at the bottom.\n\nPut it **on a heat source**: campfire, fire, lava, magma block, a lit furnace or smoker, or a lit Kamado Stove. Right-click to open it:\n\n* **6 ingredient slots** (left) - one item from each filled slot is used per dish.\n* **Container slot** - bowls or glass bottles for soups and drinks.\n* **Result slot** (right) - take the finished food out.\n\nThe clock in the middle tells you what is happening: cooking progress, \"Needs heat\", \"Needs a bowl\", or \"No recipe with these ingredients\". The pot keeps cooking while nobody looks inside, as long as the area is loaded.\n\nBack to [Kitchen Stations](/wiki?page=kitchen-stations)\n"
+  },
+  {
+   "slug": "kitchen-stations-kamado-stove",
+   "title": "Kamado Stove",
+   "category": "Kitchen",
+   "parent": "kitchen-stations",
+   "content": "Recipe: **3 bricks**, **brick, campfire, brick**, **3 cobblestone**.\n\n* Light it with **flint and steel** (or a fire charge); put it out with a **water bucket** or a **shovel**.\n* A lit stove **heats a Cooking Pot** placed on top of it.\n* Without a pot on top it is a **grill**: right-click with raw food (anything a campfire can cook) to put up to 4 items on it. They cook twice as fast as on a campfire and pop off when done.\n\nBack to [Kitchen Stations](/wiki?page=kitchen-stations)\n"
+  },
+  {
+   "slug": "kitchen-recipes",
+   "title": "Kitchen Recipes",
+   "category": "Kitchen",
+   "parent": null,
+   "content": "## Recipes\n\n\n* [Cutting Board (with a knife)](/wiki?page=kitchen-recipes-cutting-board-with-a-knife)\n* [Cooking Pot (over heat)](/wiki?page=kitchen-recipes-cooking-pot-over-heat)\n* [Crafting table](/wiki?page=kitchen-recipes-crafting-table)\n* [What the dishes do](/wiki?page=kitchen-recipes-what-the-dishes-do)\n"
+  },
+  {
+   "slug": "kitchen-recipes-cutting-board-with-a-knife",
+   "title": "Cutting Board (with a knife)",
+   "category": "Kitchen",
+   "parent": "kitchen-recipes",
+   "content": "| Put on the board | You get |\n|---|---|\n| Napa Cabbage | 2 Cabbage Leaves |\n| Daikon | 3 Daikon Slices |\n| Green Onion | 2 Chopped Green Onion |\n| Salmon | 2 Salmon Sashimi (+ bone meal 50%) |\n| Tropical Fish | 2 Tuna Sashimi (+ bone meal 50%) |\n| Cod | 2 Cod Slices (+ bone meal 50%) |\n| Pufferfish | 1 Fugu Sashimi (+ bone meal 50%) |\n| Beef | 2 Thin Beef Slices |\n| Porkchop | 2 Pork Slices |\n| Chicken | 2 Chicken Cuts |\n| Pumpkin | 4 Kabocha Slices (+ seeds 50%) |\n| Dried Kelp | 1 Nori |\n| Wheat | 1 Straw (+ seeds 50%) |\n| Any log or wood | the stripped log + Tree Bark |\n\nBack to [Kitchen Recipes](/wiki?page=kitchen-recipes)\n"
+  },
+  {
+   "slug": "kitchen-recipes-cooking-pot-over-heat",
+   "title": "Cooking Pot (over heat)",
+   "category": "Kitchen",
+   "parent": "kitchen-recipes",
+   "content": "| Ingredients | Container | Result |\n|---|---|---|\n| 2 Rice | - | 2 Steamed Rice |\n| 2 Soybeans | - | 2 Edamame |\n| 3 Soybeans | - | 2 Tofu |\n| 2 Soybeans, Rice | - | 2 Miso Paste |\n| Soybeans, Wheat (or flour) | glass bottle | Soy Sauce |\n| Nori, Cod Slice (or Tuna Sashimi) | glass bottle | Dashi Stock |\n| 2 Tea Leaves | glass bottle | Green Tea |\n| 2 Eggs, Sugar | - | Tamagoyaki |\n| 2 Daikon Slices, Sugar | - | 2 Takuan |\n| 2 Kabocha Slices, Wheat (or flour), Egg | - | 2 Kabocha Tempura |\n| 2 Steamed Rice, Sugar | - | 3 Mochi |\n| Miso Paste, Tofu, Chopped Green Onion | bowl | Miso Soup |\n| Raw Noodles, Dashi, Pork Slices, Egg, Chopped Green Onion | bowl | Ramen |\n| Steamed Rice, Beef Slices, Chopped Green Onion, Soy Sauce | bowl | Gyudon |\n| Steamed Rice, Chicken Cuts, Egg, Chopped Green Onion | bowl | Oyakodon |\n| Daikon Slices, Egg, Tofu, Dashi | bowl | Oden |\n| 2 Cabbage Leaves, Tofu, Mushroom, Chopped Green Onion, Dashi | bowl | Nabe Hot Pot |\n\nEmpty bottles from Soy Sauce and Dashi come back out of the pot.\n\nBack to [Kitchen Recipes](/wiki?page=kitchen-recipes)\n"
+  },
+  {
+   "slug": "kitchen-recipes-crafting-table",
+   "title": "Crafting table",
+   "category": "Kitchen",
+   "parent": "kitchen-recipes",
+   "content": "| Ingredients | Result |\n|---|---|\n| 2 Wheat + Egg | 2 Raw Noodles |\n| 2 Steamworks Flour + Egg | 3 Raw Noodles |\n| 2 Steamed Rice + Nori | 2 Onigiri |\n| Steamed Rice + Salmon Sashimi | 2 Salmon Nigiri |\n| Steamed Rice + Tuna Sashimi | 2 Tuna Nigiri |\n| Nori + Steamed Rice + a fish slice or Daikon Slices | 3 Maki Rolls |\n| 3 Mochi + stick | Dango |\n| 3 clay balls in a row | 2 Porcelain Plates |\n\nBack to [Kitchen Recipes](/wiki?page=kitchen-recipes)\n"
+  },
+  {
+   "slug": "kitchen-recipes-what-the-dishes-do",
+   "title": "What the dishes do",
+   "category": "Kitchen",
+   "parent": "kitchen-recipes",
+   "content": "* **Miso Soup, Oden, Nabe**: Regeneration for a few seconds.\n* **Ramen, Gyudon, Oyakodon**: Regeneration plus Resistance for a minute.\n* **Green Tea**: Speed for a minute and cures poison, hunger and nausea. You can always drink it.\n* **Fugu Sashimi**: very filling and gives night vision... unless the cook got it wrong (15% poison).\n\nBack to [Kitchen Recipes](/wiki?page=kitchen-recipes)\n"
+  },
+  {
+   "slug": "kitchen-shared-meals",
+   "title": "Kitchen Shared Meals",
+   "category": "Kitchen",
+   "parent": null,
+   "content": "## Shared Meals\n\nSome dishes are meant to be put on the table. **Sneak + right-click the top of a block** to put one down. Anyone can then **right-click it to take a bite**: the chopsticks pick up one piece, you eat it, and the next person takes the next piece. Tea cups are lifted and drunk the same way.\n\n* [Sushi Platter](/wiki?page=kitchen-shared-meals-sushi-platter)\n* [Ramen](/wiki?page=kitchen-shared-meals-ramen)\n* [Bento Box](/wiki?page=kitchen-shared-meals-bento-box)\n* [Dango Plate](/wiki?page=kitchen-shared-meals-dango-plate)\n* [Tea Set](/wiki?page=kitchen-shared-meals-tea-set)\n\n### Good to know\n\n* You can't take a bite when you're full - except tea: you can always drink tea (each cup gives Speed).\n* The last bite of a ramen bowl also gives the ramen's Regeneration and Resistance.\n* When the meal is finished the empty plate (or bowl) stays for a moment and then drops.\n* **Hit** a meal to pick it up. An untouched meal comes back whole; a started one only gives the plate or bowl back.\n* Meals can stand on any solid block, including Kitchen crates and cabinets.\n"
+  },
+  {
+   "slug": "kitchen-shared-meals-sushi-platter",
+   "title": "Sushi Platter",
+   "category": "Kitchen",
+   "parent": "kitchen-shared-meals",
+   "content": "* Plate + 2 Salmon Nigiri + 2 Tuna Nigiri + 2 Maki Rolls\n* **Bites:** 6\n\nBack to [Kitchen Shared Meals](/wiki?page=kitchen-shared-meals)\n"
+  },
+  {
+   "slug": "kitchen-shared-meals-ramen",
+   "title": "Ramen",
+   "category": "Kitchen",
+   "parent": "kitchen-shared-meals",
+   "content": "* from the Cooking Pot (you can also just eat it)\n* **Bites:** 4\n\nBack to [Kitchen Shared Meals](/wiki?page=kitchen-shared-meals)\n"
+  },
+  {
+   "slug": "kitchen-shared-meals-bento-box",
+   "title": "Bento Box",
+   "category": "Kitchen",
+   "parent": "kitchen-shared-meals",
+   "content": "* wooden slab + Steamed Rice + Tamagoyaki + Kabocha Tempura + Takuan + Salmon Sashimi\n* **Bites:** 4\n\nBack to [Kitchen Shared Meals](/wiki?page=kitchen-shared-meals)\n"
+  },
+  {
+   "slug": "kitchen-shared-meals-dango-plate",
+   "title": "Dango Plate",
+   "category": "Kitchen",
+   "parent": "kitchen-shared-meals",
+   "content": "* Plate + 3 Dango\n* **Bites:** 3\n\nBack to [Kitchen Shared Meals](/wiki?page=kitchen-shared-meals)\n"
+  },
+  {
+   "slug": "kitchen-shared-meals-tea-set",
+   "title": "Tea Set",
+   "category": "Kitchen",
+   "parent": "kitchen-shared-meals",
+   "content": "* Plate + 4 Green Tea\n* **Bites:** 4 cups\n\nBack to [Kitchen Shared Meals](/wiki?page=kitchen-shared-meals)\n"
+  },
+  {
+   "slug": "kitchen-props",
+   "title": "Kitchen Props",
+   "category": "Kitchen",
+   "parent": null,
+   "content": "## Props\n\nFurniture and storage for your kitchen and farm. Break them by hitting them a few times; what's inside drops.\n\n* [Tansu Cabinet](/wiki?page=kitchen-props-tansu-cabinet)\n* [Bamboo Basket](/wiki?page=kitchen-props-bamboo-basket)\n* [Crates and sacks](/wiki?page=kitchen-props-crates-and-sacks)\n* [Rice Straw Bale](/wiki?page=kitchen-props-rice-straw-bale)\n* [Organic Compost](/wiki?page=kitchen-props-organic-compost)\n* [Rich Soil](/wiki?page=kitchen-props-rich-soil)\n* [Tatami Mat](/wiki?page=kitchen-props-tatami-mat)\n* [Zabuton Cushion](/wiki?page=kitchen-props-zabuton-cushion)\n"
+  },
+  {
+   "slug": "kitchen-props-tansu-cabinet",
+   "title": "Tansu Cabinet",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* 3 wooden slabs, trapdoor + empty + trapdoor, 3 wooden slabs\n* **What it does:** Storage (27 slots), turns to face you\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  },
+  {
+   "slug": "kitchen-props-bamboo-basket",
+   "title": "Bamboo Basket",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* bamboo in a U shape (7 bamboo)\n* **What it does:** Storage (9 slots) that catches items dropped onto it\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  },
+  {
+   "slug": "kitchen-props-crates-and-sacks",
+   "title": "Crates and sacks",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* 9 of one crop (rice, soybeans, napa cabbage, daikon, green onion, tea leaves, carrots, potatoes, beetroots)\n* **What it does:** Packed storage block; craft it back into 9\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  },
+  {
+   "slug": "kitchen-props-rice-straw-bale",
+   "title": "Rice Straw Bale",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* 9 Straw\n* **What it does:** Decoration; craft it back into 9 straw\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  },
+  {
+   "slug": "kitchen-props-organic-compost",
+   "title": "Organic Compost",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* dirt + 2 Straw + 2 Tree Bark + bone meal\n* **What it does:** Turns into Rich Soil after about 20 minutes (faster with water next to it)\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  },
+  {
+   "slug": "kitchen-props-rich-soil",
+   "title": "Rich Soil",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* from compost\n* **What it does:** Kitchen crops planted on it grow faster; no hoe needed\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  },
+  {
+   "slug": "kitchen-props-tatami-mat",
+   "title": "Tatami Mat",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* 3 Straw in a row (gives 2)\n* **What it does:** Floor mat you can walk over\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  },
+  {
+   "slug": "kitchen-props-zabuton-cushion",
+   "title": "Zabuton Cushion",
+   "category": "Kitchen",
+   "parent": "kitchen-props",
+   "content": "* wool on top of Straw\n* **What it does:** Right-click to sit on it\n\nBack to [Kitchen Props](/wiki?page=kitchen-props)\n"
+  }
+ ]
+}

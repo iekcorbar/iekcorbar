@@ -1,0 +1,66 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 0.15
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Message:
+    Actions:
+    - Target:
+        range: 30
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '&7You feel immense heat coming from the ground.'
+    Events:
+    - ElitePhaseSwitchEvent
+  Summon:
+    Actions:
+    - Target:
+        offset: 1,2,1
+        targetType: DIRECT_TARGET
+      action: SUMMON_REINFORCEMENT
+      sValue: the_cave_boiled_bones_summon.yml
+      wait: 88
+    Cooldowns:
+      global: 60
+      local: 333
+    Events:
+    - EliteMobDamagedByPlayerEvent
+entityType: MAGMA_CUBE
+followDistance: 80
+healthMultiplier: 10.0
+instanced: true
+isEnabled: true
+leashRadius: 80
+level: dynamic # 15
+movementSpeedAttribute: 2.5
+name: $bossLevel &cThe Boiler
+normalizedCombat: true
+powers:
+- amount: 3
+  filename: the_cave_boiled_bones_summon.yml
+  inheritAggro: true
+  inheritLevel: true
+  spawnNearby: false
+  summonType: ON_COMBAT_ENTER
+- chance: 0.99
+  filename: the_cave_boiled_bones_summon.yml
+  inheritAggro: true
+  inheritLevel: true
+  spawnNearby: false
+  summonType: ON_HIT
+- the_cave_flame_pillars.yml
+- invulnerability_fire.yml
+- difficultyID:
+  - 2
+  filename: attack_blinding.yml
+- difficultyID:
+  - 2
+  filename: flamethrower.yml
+song: name=elitemobs:the_cave_sanctum.phase1 length=35996
+trails:
+- SMOKE_LARGE
+classLoot: false
+customModel: em_magma_cube_furnace

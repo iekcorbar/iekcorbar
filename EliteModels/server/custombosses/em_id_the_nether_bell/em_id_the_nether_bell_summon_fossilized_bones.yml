@@ -1,0 +1,62 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: WITHER_SKELETON
+name: $minibossLevel &eFossilized Bones
+level: dynamic # 55
+scale: 0.8
+healthMultiplier: 6.0
+damageMultiplier: 0.6
+movementSpeedAttribute: 0.35
+powers:
+- em_id_the_nether_bell_void_push_dome.yml
+- filename: em_id_the_nether_bell_miniboss_fossil_air_charge_normal.yml
+  difficultyID:
+  - 0
+- filename: em_id_the_nether_bell_miniboss_fossil_air_charge_hard.yml
+  difficultyID:
+  - 1
+- filename: em_id_the_nether_bell_miniboss_fossil_air_charge_mythical.yml
+  difficultyID:
+  - 2
+- invulnerability_fire.yml
+- invulnerability_arrow.yml
+- filename: shield_wall.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: invulnerability_knockback.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 60
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  SpawnPrep:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: TAG
+      Target:
+        targetType: SELF
+      tags:
+      - Phase2
+    - action: SET_MOB_AI
+      bValue: false
+      Target:
+        targetType: SELF
+    - action: MAKE_INVULNERABLE
+      wait: 1
+      Target:
+        targetType: SELF
+      invulnerable: true
+spawnLocations:
+- em_id_the_nether_bell,-2.5,94.1,0.5,-22.0,0.0
+classLoot: false
+customModel: em_ember_wither_skeleton

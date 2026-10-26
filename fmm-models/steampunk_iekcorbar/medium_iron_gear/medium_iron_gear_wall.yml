@@ -1,0 +1,6 @@
+# FreeMinecraftModels - settings for medium_iron_gear_wall.bbmodel (same folder as the model)
+isEnabled: true
+# Hit it 3 times (within 5 s) to pick it up again; IekcorbarSiteSync turns the
+# dropped item back into the normal Medium Iron Gear item.
+scripts:
+- pickupable.lua

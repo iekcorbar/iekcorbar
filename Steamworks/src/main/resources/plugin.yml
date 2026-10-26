@@ -1,0 +1,18 @@
+name: Steamworks
+version: '${project.version}'
+main: com.iekcorbar.steamworks.SteamworksPlugin
+api-version: '26.2'
+description: Steampunk/Japanese kinetic machines - shafts, cogwheels, cranks, water wheels, millstones and steam hammers.
+author: iekcorbar
+softdepend: [FreeMinecraftModels, Kitchen]
+
+commands:
+  steamworks:
+    description: Steamworks admin commands
+    usage: /steamworks <give|info|list|reload>
+    aliases: [sw]
+
+permissions:
+  steamworks.admin:
+    description: Give parts, reload the config
+    default: op

@@ -1,0 +1,39 @@
+# WanderingTrades 1.9.6 trade config: the Zukan recipe book (iekcorbar)
+#
+# Some wandering traders sell the Zukan book. The book is made from the name and lore below; the first time a
+# player right-clicks it, the Zukan plugin swaps it for the real one (so keep the name exactly "Zukan" and the
+# LAST lore line exactly "Zukan recipe browser" - that is how Zukan recognises it).
+# Staff can hand out real books with /zukan givebook [player] [amount], and players can craft one (book + compass).
+
+enabled: true
+
+# chance that a wandering trader gets this trade (allowMultipleSets is true in config.yml, so this is a plain percentage)
+chance: 0.25
+
+randomized: false
+randomAmount: 1
+
+invincible: false
+customName: NONE
+disableHeroOfTheVillageGifts: false
+
+trades:
+  zukan_book:
+    maxUses: 2
+    experienceReward: true
+    ingredients:
+      1:
+        customname: NONE
+        material: EMERALD
+        amount: 6
+      2:
+        customname: NONE
+        material: BOOK
+        amount: 1
+    result:
+      customname: "<gold>Zukan"
+      material: BOOK
+      amount: 1
+      lore:
+        - "<gray>Right-click: every item and recipe."
+        - "<dark_gray>Zukan recipe browser"

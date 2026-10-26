@@ -1,0 +1,23 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIFIED_PIGLIN
+mainHand: IRON_SWORD
+name: $eventBossLevel &cFailed Pigxperiment
+level: dynamic
+healthMultiplier: 3.5
+damageMultiplier: 1.1
+phases:
+- failed_pigxperiment_p2.yml:0.45
+powers:
+- attack_gravity.yml
+movementSpeedAttribute: 0.3
+followDistance: 80
+locationMessage: '&cFailed Pigxperiment: $distance blocks away!'
+spawnMessage: '&cA failed Dr. Craftenmine experiment has escaped!'
+deathMessage: '&aThe Failed Pigxperiment was slain by $players!'
+escapeMessage: '&4The Failed Pigxperiment has escaped!'
+announcementPriority: 2
+customModel: em_gilded_zombified_piglin

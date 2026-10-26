@@ -1,0 +1,32 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+cullReinforcements: false
+damageMultiplier: 0.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Summon:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SUMMON_REINFORCEMENT
+      duration: 500
+      repeatEvery: 3
+      sValue: the_mines_swarmling_summon_weak.yml
+      times: 2
+    Events:
+    - EliteMobDeathEvent
+entityType: CAVE_SPIDER
+followDistance: 10
+frozen: false
+healthMultiplier: 0.15
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 20
+name: $reinforcementLevel &2Lesser Swarmling
+normalizedCombat: true
+classLoot: false
+customModel: em_lantern_cave_spider

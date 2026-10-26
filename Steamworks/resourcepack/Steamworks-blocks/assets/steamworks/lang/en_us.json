@@ -1,0 +1,20 @@
+{
+ "subtitles.steamworks.engine.chuff": "Steam engine chuffs",
+ "subtitles.steamworks.boiler.hiss": "Boiler hisses",
+ "subtitles.steamworks.gear.clatter": "Gears clatter",
+ "subtitles.steamworks.millstone.grind": "Millstone grinds",
+ "subtitles.steamworks.hammer.strike": "Steam hammer strikes",
+ "subtitles.steamworks.fan.whoosh": "Fan blows",
+ "subtitles.steamworks.drill.grind": "Drill grinds",
+ "subtitles.steamworks.saw.buzz": "Saw buzzes",
+ "subtitles.steamworks.belt.rumble": "Belt rumbles",
+ "subtitles.steamworks.pumpjack.creak": "Pumpjack creaks",
+ "subtitles.steamworks.windmill.creak": "Windmill creaks",
+ "subtitles.steamworks.arm.servo": "Robot arm whirs",
+ "subtitles.steamworks.train.chuff": "Locomotive chuffs",
+ "subtitles.steamworks.train.whistle": "Train whistles",
+ "subtitles.steamworks.train.brake": "Train brakes",
+ "subtitles.steamworks.train.clack": "Rails clack",
+ "subtitles.steamworks.station.bell": "Station bell rings",
+ "subtitles.steamworks.machine.hum": "Machines hum"
+}

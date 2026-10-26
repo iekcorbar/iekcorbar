@@ -1,0 +1,79 @@
+isEnabled: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+entityType: SPIDER
+name: $minibossLevel &2Weaver
+level: dynamic
+scaledCombat: true
+healthMultiplier: 3
+damageMultiplier: 1
+isBaby: false
+powers:
+- attack_weakness.yml
+- fireworks_barrage.yml
+- attack_fire.yml
+- BB_HiddenChamber_Barren_Cage.yml
+normalizedCombat: true
+dropsEliteMobsLoot: true
+dropsVanillaLoot: false
+dropsRandomLoot: false
+trails: CLOUD
+isRegionalBoss: true
+leashRadius: 20
+removeAfterDeath: true
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: hiddenchamber_barren_lightning_rod.yml
+  chance: 1
+- filename: cl_free_elite_shrines_relics_swords_1f004f58.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_axes_01d9afdb.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_bows_c84bbe57.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_crossbows_10771fc3.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tridents_506adca9.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_hoes_1db6777c.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_maces_f203306a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_spears_c437376d.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_staves_d52016c8.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_wands_f0433d6a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_helmets_54ef7624.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_chestplates_087ed5be.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_leggings_cc39b2c7.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_boots_2e894e3e.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_helmets_e32f6641.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_chestplates_1c729159.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_leggings_e514c384.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_boots_667b860f.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_shields_5b64e89d.yml
+  chance: 1.0
+spawnLocations:
+- iekcorbarSeason2,5038.5,26.0,2511.5,0.0,0.0
+- iekcorbarSeason2,12238.5,22.0,-992.5,0.0,0.0
+- iekcorbarSeason2,18302.5,21.0,31.5,0.0,0.0
+- iekcorbarSeason2,22078.5,41.0,-1792.5,0.0,0.0
+- iekcorbarSeason2,23662.5,34.0,-2096.5,0.0,0.0
+- iekcorbarSeason2,24350.5,11.0,-2176.5,0.0,0.0
+- iekcorbarSeason2,30974.5,3.0,-48.5,0.0,0.0
+- iekcorbarSeason2,21630.5,47.0,-320.5,0.0,0.0
+- iekcorbarSeason2,34990.5,34.0,-320.5,0.0,0.0
+customModel: em_brass_spider

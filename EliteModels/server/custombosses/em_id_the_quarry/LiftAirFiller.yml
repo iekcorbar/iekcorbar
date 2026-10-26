@@ -1,0 +1,56 @@
+announcementPriority: 0
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+name: $eventBossLevel &dLift Air Filler
+level: 1
+healthMultiplier: 0.1
+damageMultiplier: 0.01
+isRegionalBoss: true
+normalizedCombat: true
+movementSpeedAttribute: 0.001
+powers:
+- invisibility.yml
+deathMessages:
+- Filling lift with blocks!
+instanced: true
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_quarry,358.5,111,102.5,0.0,0.0:1710246485081
+eliteScript:
+  FillAir:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: POTION_EFFECT
+      potionEffectType: HEAL
+      amplifier: 99
+      duration: 20
+      Target:
+        targetType: SELF
+      wait: 200
+    Cooldowns:
+      local: 9999
+      global: 5
+  FillZone:
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      shape: CUBOID
+      x: 25
+      y: 156
+      z: 25
+      Target:
+        targetType: LOCATION
+        location: same_as_boss,362.5,-54,78.5,0,0
+    Actions:
+    - action: PLACE_BLOCK
+      material: AIR
+      Target:
+        targetType: ZONE_FULL
+classLoot: false
+customModel: em_steam_zombie

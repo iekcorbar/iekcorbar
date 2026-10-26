@@ -1,0 +1,162 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  CloseArena:
+    Actions:
+    - FinalTarget:
+        location: same_as_boss,100.5,110,29.5,0,0
+        targetType: LOCATION
+      Target:
+        range: 50
+        targetType: NEARBY_PLAYERS
+      action: TELEPORT
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.1
+        targetType: ZONE_FULL
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: PUSH
+      repeatEvery: 1
+      vValue: -1,0,0
+    Cooldowns:
+      global: 10
+      local: 99999
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    Zone:
+      Target:
+        location: same_as_boss,110.5,110,29.5,0,0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 2
+      y: 6
+      z: 20
+  MakeDome:
+    Actions:
+    - Target:
+        targetType: ZONE_BORDER
+      action: PLACE_BLOCK
+      material: RED_STAINED_GLASS
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      Target:
+        location: same_as_boss,233.5,112,27.5,0,0
+        targetType: LOCATION
+        track: true
+      borderRadius: 10
+      radius: 11
+      shape: DOME
+  RemoveDome:
+    Actions:
+    - Target:
+        targetType: ZONE_BORDER
+      action: PLACE_BLOCK
+      material: AIR
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      Target:
+        location: same_as_boss,233.5,112,27.5,0,0
+        targetType: LOCATION
+        track: true
+      borderRadius: 10
+      radius: 11
+      shape: DOME
+  Sleep:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+    Events:
+    - EliteMobSpawnEvent
+  WakeUp:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: true
+    Events:
+    - EliteMobDamagedByPlayerEvent
+entityType: ZOGLIN
+followDistance: 40
+frozen: false
+healthMultiplier: 4
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+level: dynamic # 20
+movementSpeedAttribute: 0.32
+name: $minibossLevel &cTransmuted Flesh
+normalizedCombat: true
+powers:
+- difficultyID:
+  - 1
+  - 2
+  filename: taze.yml
+- the_mines_mini_boss_tusk_boost.yml
+spawnLocations:
+- em_id_the_mines,89.5,110,30.5,-90.0,0.0:1676457445077
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_mines_swords_f5c77fe4.yml
+  chance: 1.0
+- filename: cl_story_mines_axes_23aac663.yml
+  chance: 1.0
+- filename: cl_story_mines_bows_a6d16b50.yml
+  chance: 1.0
+- filename: cl_story_mines_crossbows_bc046011.yml
+  chance: 1.0
+- filename: cl_story_mines_tridents_e00d07bd.yml
+  chance: 1.0
+- filename: cl_story_mines_hoes_94e447fa.yml
+  chance: 1.0
+- filename: cl_story_mines_maces_96b8e254.yml
+  chance: 1.0
+- filename: cl_story_mines_spears_258f1267.yml
+  chance: 1.0
+- filename: cl_story_mines_staves_9801a7fb.yml
+  chance: 1.0
+- filename: cl_story_mines_wands_88a081b9.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_helmets_d62cc6c8.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_chestplates_527dffa2.yml
+  chance: 1.0
+- filename: the_mines_mini_boss_tusk_dps_leggings_ded949e4.yml
+  chance: 1.0
+- filename: the_mines_mini_boss_tusk_dps_boots_af61e5a3.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_helmets_23d0f6a6.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_chestplates_905e88bf.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_leggings_cccc8016.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_boots_e7f99614.yml
+  chance: 1.0
+- filename: cl_story_mines_shields_687daaca.yml
+  chance: 1.0
+customModel: em_cinder_zoglin

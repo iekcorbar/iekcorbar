@@ -1,0 +1,68 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: RABBIT
+name: $normalLevel &ka
+level: 100
+healthMultiplier: 120.0
+damageMultiplier: 0.1
+movementSpeedAttribute: 1.0E-6
+dropsEliteMobsLoot: false
+followDistance: 200
+trails:
+- PORTAL
+powers:
+- invulnerability_knockback.yml
+- invulnerability_arrow.yml
+- invulnerability_knockback.yml
+- invulnerability_fire.yml
+- invisibility.yml
+eliteScript:
+  Trigger:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: SET_MOB_AI
+      wait: 5
+      Target:
+        targetType: SELF
+      bValue: false
+    - action: RUN_SCRIPT
+      repeatEvery: 20
+      scripts:
+      - Zap
+      Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+  Zap:
+    Zone:
+      shape: STATIC_RAY
+      Target2:
+        targetType: NEARBY_PLAYERS
+        range: 9
+      ignoresSolidBlocks: true
+      Target:
+        targetType: SELF
+    Actions:
+    - action: SPAWN_PARTICLE
+      particles:
+      - particle: ELECTRIC_SPARK
+      Target:
+        targetType: ZONE_FULL
+    - action: PLAY_SOUND
+      sValue: entity.iron_golem.hurt
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 9
+    - action: POTION_EFFECT
+      potionEffectType: HARM
+      amplifier: 1
+      duration: 10
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 9
+classLoot: false
+customModel: em_wind_rabbit

@@ -1,0 +1,19 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.3
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: SILVERFISH
+followDistance: 13
+healthMultiplier: 0.1
+isEnabled: true
+instanced: true
+leashRadius: 13
+level: dynamic # 10
+movementSpeedAttribute: 0.24
+name: $reinforcementLevel &bUndead Rat
+normalizedCombat: true
+classLoot: false
+customModel: em_screw_silverfish

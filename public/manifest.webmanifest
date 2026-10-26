@@ -1,0 +1,16 @@
+{
+  "name": "iekcorbar",
+  "short_name": "iekcorbar",
+  "description": "A custom RPG Paper Minecraft server themed around mechanical steampunk, Japanese folklore, custom trinkets, land claims, and brewery dynamics.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0f0f12",
+  "theme_color": "#141416",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/app-icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/app-icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,138 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: WITHER_SKELETON
+mainHand: BOW
+name: $eventBossLevel &6Void Piercer
+level: dynamic # 55
+scale: 1.33
+healthMultiplier: 1.5
+damageMultiplier: 0.75
+movementSpeedAttribute: 0.001
+powers:
+- invulnerability_fire.yml
+- skeleton_tracking_arrow.yml
+- filename: attack_arrow.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: bullet_hell.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 80
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_nether_bell,112.5,82.5,-126.5,0.0,0.0
+- em_id_the_nether_bell,119.5,88.5,-77.5,0.0,0.0
+- em_id_the_nether_bell,77.5,86.5,-25.5,0.0,0.0
+- em_id_the_nether_bell,127.5,84.5,11.5,0.0,0.0
+- em_id_the_nether_bell,122.5,76.5,41.5,0.0,0.0
+- em_id_the_nether_bell,95.5,84.5,75.5,0.0,0.0
+- em_id_the_nether_bell,99.5,78.5,117.5,0.0,0.0
+- em_id_the_nether_bell,20.5,86.5,98.5,0.0,0.0
+- em_id_the_nether_bell,-16.5,88.5,82.5,0.0,0.0
+- em_id_the_nether_bell,-43.5,90.5,46.5,0.0,0.0
+- em_id_the_nether_bell,-70.5,89.5,-36.5,0.0,0.0
+- em_id_the_nether_bell,-35.5,92.5,-63.5,0.0,0.0
+- em_id_the_nether_bell,18.5,99.5,-42.5,0.0,0.0
+- em_id_the_nether_bell,50.5,98.5,-12.5,0.0,0.0
+- em_id_the_nether_bell,16.5,94.5,68.5,0.0,0.0
+- em_id_the_nether_bell,-22.5,75.5,-189.5,0.0,0.0
+- em_id_the_nether_bell,155.5,73.5,-16.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: em_id_the_nether_bell_mobs_drop_soulsand_boots.yml
+  chance: 0.08
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_sword_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_sword_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_mythic.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_mythic.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_mythic.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_mythic.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_sword_mythic.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: cl_story_nether_bell_swords_5b0e5445.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_axes_9a9cc081.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_bows_e09343b5.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_crossbows_7413b656.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tridents_9c6deb80.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_hoes_b95b5ce8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_maces_2d5735b1.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_spears_d1f22e48.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_staves_3d92b639.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_wands_e5e77fbb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_helmets_d647333b.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_chestplates_3d33aaeb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_leggings_8994d82f.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_boots_a48a83ae.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_helmets_c53bb16e.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_chestplates_f21db6b8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_leggings_41290a61.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_boots_d3f7f477.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_shields_16efa34b.yml
+  chance: 1.0
+customModel: em_ember_wither_skeleton

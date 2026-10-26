@@ -1,0 +1,24 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: WITCH
+mountedEntity: conjoined_subjects_mount.yml
+name: $eventBossLevel &fSubject d84a
+level: dynamic
+healthMultiplier: 2.5
+damageMultiplier: 1.0
+powers:
+- skeleton_tracking_arrow.yml
+- attack_arrow.yml
+uniqueLootList:
+- filename=conjoined_subjects_drop_shield.yml:amount=1:chance=0.1
+movementSpeedAttribute: 0.3
+followDistance: 80
+locationMessage: '&cConjoined Subjects: $distance blocks away!'
+spawnMessage: '&cDr. Craftenmine''s twisted creation is out in the wild!'
+deathMessage: '&aThe Conjoined Subjects were put to rest by $players!'
+escapeMessage: '&4The Conjoined Subjects have left this place!'
+announcementPriority: 2
+customModel: em_brew_witch

@@ -1,0 +1,209 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+bossType: BOSS
+cullReinforcements: true
+damageMultiplier: 1.8
+dropsEliteMobsLoot: true
+entityType: ENDER_DRAGON
+followDistance: 200
+healthMultiplier: 120
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+level: 100
+name: $bossLevel &eBinder of Worlds
+normalizedCombat: true
+phases:
+- em_id_binder_of_worlds_phase_2.yml:0.75
+- em_id_binder_of_worlds_phase_3.yml:0.5
+- em_id_binder_of_worlds_phase_4.yml:0.25
+powers:
+- difficultyID:
+  - 0
+  filename: em_id_the_binder_of_worlds_harm_sphere_p1_normal.yml
+- difficultyID:
+  - 1
+  filename: em_id_the_binder_of_worlds_harm_sphere_p1_hard.yml
+- difficultyID:
+  - 2
+  filename: em_id_the_binder_of_worlds_harm_sphere_p1_mythic.yml
+- ender_dragon_arrow_bombardment.yml
+- ender_dragon_ender_fireball_bombardment.yml
+- ender_dragon_fireball_bombardment.yml
+- ender_dragon_potion_bombardment.yml
+- ender_dragon_endermite_bombardment.yml
+- location: 68,10,68
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- location: -68,10,68
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- location: 68,10,-68
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- location: -68,10,-68
+  summonType: ON_COMBAT_ENTER_PLACE_CRYSTAL
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -82,-6.45,-82
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -80,-6.45,-91
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -82,-6.45,-100
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -91,-6.45,-80
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -100,-6.45,-82
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -100,-6.45,-100
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -88,-2.45,-88
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -94,-2.45,-94
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_parkour_reinforcement.yml
+  inheritLevel: true
+  location: -70,9.55,-70
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 69,-6.45,-69
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 91,-6.45,-65
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 112,-6.45,-68
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 116,-6.45,-90
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 90,-6.45,-115
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 68,-6.45,-112
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 65,-6.45,-91
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_reinforcement.yml
+  inheritLevel: true
+  location: 80,-6.45,-79
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_miniboss.yml
+  inheritLevel: true
+  location: 94,-2.45,-94
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_miniboss.yml
+  inheritLevel: true
+  location: 87,-2.45,-88
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_ranged_miniboss.yml
+  inheritLevel: true
+  location: 70,9.55,-69
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 69,-6.45,69
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 90,-6.45,65
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 112,-6.45,69
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 116,-6.45,90
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 66,-6.45,91
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 68,-6.45,112
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 90,-6.45,115
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_reinforcement.yml
+  inheritLevel: true
+  location: 80,4.55,79
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_miniboss.yml
+  inheritLevel: true
+  location: 93,-2.45,93
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_status_miniboss.yml
+  inheritLevel: true
+  location: 88,-2.45,87
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -69,-6.45,68
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -66,-6.45,91
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -69,-6.45,113
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -91,-6.45,116
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -91,-6.45,66
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -112,-6.45,69
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -116,-6.45,90
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_reinforcement.yml
+  inheritLevel: true
+  location: -79,4.55,79
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_miniboss.yml
+  inheritLevel: true
+  location: -88,-2.45,87
+  summonType: ON_COMBAT_ENTER
+- filename: em_id_binder_of_worlds_phase_1_melee_miniboss.yml
+  inheritLevel: true
+  location: -94,-2.45,93
+  summonType: ON_COMBAT_ENTER
+spawnCooldown: 10080
+spawnLocations:
+- em_id_binder_of_worlds,0.5,68.5,0.5,0.0,0.0
+spawnMessage: '&5The binder of worlds approaches!'
+classLoot: false
+customModel: em_zeppelin_dragon

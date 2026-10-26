@@ -1,0 +1,89 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: SKELETON
+mainHand: IRON_PICKAXE
+offHand: APPLE
+name: $normalLevel &eCalcium Miner
+level: dynamic # 40
+healthMultiplier: 2.4
+damageMultiplier: 0.4
+movementSpeedAttribute: 0.33
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+trails:
+- BONE
+powers:
+- filename: attack_weakness.yml
+  difficultyID:
+  - 1
+- filename: fireworks_barrage.yml
+  difficultyID:
+  - 2
+frozen: false
+followDistance: 80
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_quarry,373.5,58.5,107.5,0.0,0.0
+- em_id_the_quarry,366.5,56.5,97.5,0.0,0.0
+- em_id_the_quarry,345.5,56.5,101.5,0.0,0.0
+- em_id_the_quarry,348.5,56.5,124.5,0.0,0.0
+- em_id_the_quarry,344.5,15.5,98.5,0.0,0.0:1709718286283
+- em_id_the_quarry,361.5,16.5,108.5,0.0,0.0:1709718297587
+- em_id_the_quarry,358.5,10.5,126.5,0.0,0.0:1709718288538
+- em_id_the_quarry,351.5,11.5,125.5,0.0,0.0:1709718233640
+- em_id_the_quarry,352.5,7.5,139.5,0.0,0.0
+- em_id_the_quarry,375.5,-25.5,105.5,0.0,0.0
+- em_id_the_quarry,370.5,-21.5,112.5,0.0,0.0
+- em_id_the_quarry,354.5,-22.5,125.5,0.0,0.0
+- em_id_the_quarry,379.5,-32.5,119.5,0.0,0.0
+- em_id_the_quarry,353.5,-29.5,123.5,0.0,0.0
+- em_id_the_quarry,331.5,-33.5,105.5,0.0,0.0
+- em_id_the_quarry,348.5,-26.5,92.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_quarry_swords_2729e742.yml
+  chance: 1.0
+- filename: cl_story_quarry_axes_d871d3ab.yml
+  chance: 1.0
+- filename: cl_story_quarry_bows_ccabbcb4.yml
+  chance: 1.0
+- filename: cl_story_quarry_crossbows_4e4680f9.yml
+  chance: 1.0
+- filename: cl_story_quarry_tridents_9ced9fbf.yml
+  chance: 1.0
+- filename: cl_story_quarry_hoes_5211e998.yml
+  chance: 1.0
+- filename: cl_story_quarry_maces_7f24961b.yml
+  chance: 1.0
+- filename: cl_story_quarry_spears_8d549051.yml
+  chance: 1.0
+- filename: cl_story_quarry_staves_1ce41de2.yml
+  chance: 1.0
+- filename: cl_story_quarry_wands_7eb59ac6.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_helmets_73ccb419.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_chestplates_3148278f.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_leggings_ca5a54fd.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_boots_3e7f381e.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_helmets_2f899f43.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_chestplates_21a5129c.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_leggings_da76caa5.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_boots_0c31ed26.yml
+  chance: 1.0
+- filename: cl_story_quarry_shields_d080f0ef.yml
+  chance: 1.0
+customModel: em_clockwork_skeleton

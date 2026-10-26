@@ -1,0 +1,118 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+boots: LEATHER_BOOTS
+bossType: MINIBOSS
+damageMultiplier: 1.3
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  SummonDay:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_TIME
+      time: 6000
+      wait: 25
+    Events:
+    - EliteMobDeathEvent
+  SummonNight:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_TIME
+      time: 18000
+      wait: 10
+    Events:
+    - EliteMobSpawnEvent
+  TridentRain:
+    Actions:
+    - Target:
+        coverage: 0.3
+        targetType: ZONE_FULL
+      action: SUMMON_REINFORCEMENT
+      duration: 50
+      repeatEvery: 55
+      sValue: enchantment_boss_loveable_impaler_trident_launcher.yml
+      times: 2
+    Cooldowns:
+      global: 60
+      local: 222
+    Events:
+    - PlayerDamagedByEliteMobEvent
+    Zone:
+      Target:
+        offset: 0,11,0
+        range: 50
+        targetType: NEARBY_PLAYERS
+        track: true
+      height: 1
+      radius: 3
+      shape: CYLINDER
+entityType: DROWNED
+followDistance: 60
+frozen: false
+healthMultiplier: 3.5
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 60
+mainHand: TRIDENT
+movementSpeedAttribute: 0.28
+name: $minibossLevel &bLoveable Impaler
+normalizedCombat: true
+powers:
+- attack_lightning.yml
+- invulnerability_fire.yml
+spawnLocations:
+- em_id_enchantment_challenge_5,1.5,65,0.5,0,0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.25
+  difficultyID: 0
+  filename: ec_05_boots_normal.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: enchanted_book_damage_all.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec05_swords_f72c04dd.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_axes_73c82f83.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_bows_245cb5b9.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_crossbows_ad201aae.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_tridents_e4a2d239.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_hoes_f3b715cb.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_maces_f3d33fa7.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_spears_6462d78b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_staves_0af9bb17.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_wands_ddfdcc5a.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_dps_helmets_cd8ebc85.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_dps_chestplates_a4383ef3.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_dps_leggings_ddec6496.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_dps_boots_880786b8.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_tank_helmets_dc6d181d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_tank_chestplates_1bf7c9df.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_tank_leggings_db70cc72.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_tank_boots_17fa368f.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec05_shields_88cf8736.yml
+  chance: 1.0
+customModel: em_diver_drowned

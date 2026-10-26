@@ -1,0 +1,7 @@
+extends: class_trial_actor_iron_golem.yml
+isEnabled: true
+name: '&fTraining Construct'
+healthMultiplier: 0.6
+damageMultiplier: 0.25
+ai: true
+customModel: em_boiler_golem

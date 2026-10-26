@@ -1,0 +1,37 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Float:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 10
+      potionEffectType: LEVITATION
+      repeatEvery: 14
+    Events:
+    - EliteMobSpawnEvent
+entityType: RABBIT
+followDistance: 80
+frozen: false
+healthMultiplier: 20.11
+instanced: true
+isBaby: true
+isEnabled: true
+isRegionalBoss: false
+leashRadius: 80
+level: dynamic # 20
+movementSpeedAttribute: 1.0E-4
+name: $reinforcementLevel &eArrow Launcher
+normalizedCombat: true
+powers:
+- invisibility.yml
+- skeleton_tracking_arrow.yml
+classLoot: false
+customModel: em_wind_rabbit

@@ -1,0 +1,26 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+isBaby: true
+name: $normalLevel &fDummy Surprise
+level: dynamic # 45
+healthMultiplier: 0.1
+damageMultiplier: 0.1
+movementSpeedAttribute: 0.001
+frozen: true
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+powers:
+- invisibility.yml
+- em_id_the_deep_mines_boom_surprise_power.lua
+followDistance: 30
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_deep_mines,67.5,109.5,209.5,0.0,0.0:1711719484106
+classLoot: false
+customModel: em_steam_zombie

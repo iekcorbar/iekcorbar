@@ -1,0 +1,57 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: SKELETON
+mainHand: BOW
+name: $normalLevel &fAncient Bones
+level: dynamic # 55
+healthMultiplier: 1.7
+damageMultiplier: 0.7
+movementSpeedAttribute: 0.31
+powers:
+- invulnerability_arrow.yml
+- filename: attack_lightning.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: lightning_bolts.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 40
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  SpawnPrep:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: TAG
+      Target:
+        targetType: SELF
+      tags:
+      - Phase2
+    - action: SET_MOB_AI
+      bValue: false
+      Target:
+        targetType: SELF
+    - action: MAKE_INVULNERABLE
+      wait: 1
+      Target:
+        targetType: SELF
+      invulnerable: true
+spawnLocations:
+- em_id_the_nether_bell,12.5,93.4,-2.5,30.0,0.0
+- em_id_the_nether_bell,9.5,93.4,11.5,-50.0,0.0
+- em_id_the_nether_bell,18.5,93.4,6.5,98.0,0.0:1719502866742
+- em_id_the_nether_bell,0.5,93.4,-4.5,170.0,0.0
+- em_id_the_nether_bell,-6.5,93.4,13.5,-180.0,0.0
+- em_id_the_nether_bell,-15.5,93.4,2.5,11.0,0.0
+- em_id_the_nether_bell,-13.5,93.4,-3.5,57.0,0.0
+classLoot: false
+customModel: em_clockwork_skeleton

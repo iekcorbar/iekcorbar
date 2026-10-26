@@ -1,0 +1,139 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+boots: NETHERITE_BOOTS
+bossType: BOSS
+chestplate: NETHERITE_CHESTPLATE
+damageMultiplier: 0.8
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  ErectBarrier1:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: PUSH
+      repeatEvery: 5
+      vValue: 0,0,-1
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.1
+        targetType: ZONE_FULL
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 20
+    - FinalTarget:
+        location: same_as_boss,90.5,134,-86.5,-180,0
+        targetType: LOCATION
+      Target:
+        range: 99
+        targetType: NEARBY_PLAYERS
+      action: TELEPORT
+    Cooldowns:
+      global: 20
+      local: 99999
+    Zone:
+      Target:
+        location: same_as_boss,90.5,134,-77.5,0,0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 13
+      y: 18
+      z: 2
+  ErectBarrier2:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: PUSH
+      repeatEvery: 5
+      vValue: -1,0,0
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.05
+        targetType: ZONE_FULL
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 20
+    Cooldowns:
+      global: 20
+      local: 99999
+    Zone:
+      Target:
+        location: same_as_boss,108.5,134,-100.5,0,0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 2
+      y: 18
+      z: 50
+  Sleep:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+    Events:
+    - EliteMobSpawnEvent
+  TriggerBarriers:
+    Actions:
+    - action: RUN_SCRIPT
+      scripts:
+      - ErectBarrier1
+      - ErectBarrier2
+    Events:
+    - EliteMobEnterCombatEvent
+  WakeUp:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: true
+    Events:
+    - EliteMobDamagedByPlayerEvent
+entityType: WITHER_SKELETON
+followDistance: 90
+frozen: false
+healthMultiplier: 15
+helmet: NETHERITE_HELMET
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leggings: NETHERITE_LEGGINGS
+level: dynamic # 30
+mainHand: NETHERITE_SWORD
+movementSpeedAttribute: 0.28
+name: $bossLevel &cRoyal Guard
+normalizedCombat: true
+offHand: NETHERITE_SWORD
+phases:
+- em_id_the_city_royal_guard_p2.yml:0.70
+- em_id_the_city_royal_guard_p3.yml:0.40
+powers:
+- difficultyID:
+  - 1
+  - 2
+  filename: invulnerability_knockback.yml
+- em_id_the_city_final_boss_thunder_pillars.yml
+spawnLocations:
+- em_id_the_city,90.5,134,-101.5,0.0,0.0:1701964560179
+classLoot: false
+customModel: em_ember_wither_skeleton

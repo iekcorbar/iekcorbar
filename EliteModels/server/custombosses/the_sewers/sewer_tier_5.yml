@@ -1,0 +1,76 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+leashRadius: 40
+followDistance: 30
+isRegionalBoss: true
+spawnCooldown: 4
+isEnabled: true
+entityType: VINDICATOR
+name: $normalLevel &7Sewer worker
+level: dynamic
+instanced: true
+mainHand: IRON_AXE
+healthMultiplier: 1
+damageMultiplier: 1
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+onDamageMessages:
+- This area is restricted!
+- Don't jump into the vats!
+- You're not supposed to be here|
+onDamagedMessages:
+- Do you know what you're doing!?
+- Foolishness!
+- Don't you dare!
+spawnLocations:
+- em_sewer_maze,-70.17178578884845,168.2,-173.17112099568718,-271.24023,64.19999:1611935877458
+- em_sewer_maze,-135.02262355317436,168.2,-153.28849346821508,-98.53906,60.750263:1609026066482
+- em_sewer_maze,-70.43846307626053,168.2,-174.13499832314378,-271.24023,64.19999:1611935881234
+- em_sewer_maze,-130.39762674971664,168.2,-171.67396911490718,-47.532227,51.900173:1611540314218
+- em_sewer_maze,-117.12782160766056,162.2,-166.40989416757444,-71.37402,-1.4997427:1611935963962
+- em_sewer_maze,-105.13138759611667,168.2,-169.85898023126538,-124.34766,41.24988:1611935940613
+- em_sewer_maze,-106.21847515732084,169.2,-152.3609257554766,-170.86523,21.450315:1611035465342
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_the_sewers_tunnels_swords_585f8af9.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_axes_4f2b49e7.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_bows_b7fdc637.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_crossbows_dc0db6d5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tridents_5a34965a.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_hoes_a0c18962.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_maces_ffccc452.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_spears_f90fd53b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_staves_40482056.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_wands_712be25e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_helmets_9917a646.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_chestplates_ddb3baab.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_leggings_b55e815e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_boots_e2a3eb58.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_helmets_341bb342.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_chestplates_1f0e9b0b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_leggings_cc0387b5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_boots_e5dddda6.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_shields_fcaba11c.yml
+  chance: 1.0
+customModel: em_steam_vindicator

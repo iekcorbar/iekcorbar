@@ -1,0 +1,22 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 1.0
+dropsEliteMobsLoot: false
+entityType: HUSK
+followDistance: 200
+healthMultiplier: 1.0
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 35
+level: 100
+name: $reinforcementLevel &8Reality Waster
+normalizedCombat: true
+powers:
+- attack_gravity.yml
+- attack_push.yml
+- invulnerability_knockback.yml
+- invulnerability_fire.yml
+reinforcement: true
+classLoot: false
+customModel: em_rust_husk

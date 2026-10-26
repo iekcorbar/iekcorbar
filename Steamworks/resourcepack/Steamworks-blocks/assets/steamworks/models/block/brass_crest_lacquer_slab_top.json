@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "steamworks:block/brass_crest_lacquer",
+    "top": "steamworks:block/brass_crest_lacquer",
+    "side": "steamworks:block/brass_crest_lacquer"
+  }
+}

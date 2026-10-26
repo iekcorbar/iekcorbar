@@ -1,0 +1,58 @@
+# WanderingTrades 1.9.6 player heads config
+
+# Should player heads from players who have been on the server
+# be added to wandering traders
+playerHeadsFromServer: true
+
+# After this many days of not logging in, a player will
+# no longer be considered for player head trades.
+#
+# Set to -1 for all players that ever logged in to be
+# included
+days: 90
+
+# what is the chance a trader will have player head trades
+# range: [0.01 - 1] ie 0.5 for 50%
+# iekcorbar: rare (was 0.8) - player heads are a $2500 item in /hdb
+playerHeadsFromServerChance: 0.2
+
+# how many different player heads should each trader that has them have
+# WARNING!!! THIS MUST BE EQUAL TO OR BELOW THE AMOUNT OF PLAYERS
+#     THAT HAVE EVER LOGGED INTO YOUR SERVER!
+# recommended range [1 - 4]
+# may be a number, or a range for random selection
+#   range example: " randomAmount: '0:5' " -> will pick a random number 0 to 5
+playerHeadsFromServerAmount: '1'
+
+# usernames listed here will not be used for player head trades
+# for exmaple put your staff or OPs name so players cannot buy their head
+usernameBlacklist:
+- Notch
+
+# if Vault is installed and this is enabled, players must have
+# the wanderingtrades.headavailable permission for their
+# head to show up in Wandering Traders
+permissionWhitelist: false
+
+# the ingredients are fully customizable, and the second one is optional
+# for the heads the name, amount, and lore are customizable
+headTrade:
+  maxUses: 1
+  experienceReward: true
+  # iekcorbar: expensive on purpose (was 1 emerald + 1 iron ingot).
+  # The itemStackAsBytes lines were removed - while present they override material/amount.
+  ingredients:
+    '1':
+      customname: NONE
+      material: EMERALD
+      amount: 32
+    '2':
+      customname: NONE
+      material: DIAMOND
+      amount: 1
+  head:
+    customname: <gold>{PLAYER}'s Head
+    amount: 1
+    lore:
+    - '<gray><italic>A likeness cast in brass and memory,'
+    - '<gray><italic>bartered from a wandering trader.'

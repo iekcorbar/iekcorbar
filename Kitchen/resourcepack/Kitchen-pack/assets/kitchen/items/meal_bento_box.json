@@ -1,0 +1,6 @@
+{
+ "model": {
+  "type": "minecraft:model",
+  "model": "kitchen:item/meal_bento_box"
+ }
+}

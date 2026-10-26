@@ -1,0 +1,33 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: HUSK
+frozen: false
+healthMultiplier: 0.1
+instanced: true
+isBaby: true
+isEnabled: true
+level: dynamic # 15
+mainHand: IRON_PICKAXE
+movementSpeedAttribute: 0.38
+name: $reinforcementLevel &4Broiled Miner
+normalizedCombat: true
+powers:
+- difficultyID:
+  - 1
+  filename: attack_weakness.yml
+- difficultyID:
+  - 2
+  filename: implosion.yml
+- difficultyID:
+  - 2
+  filename: invulnerability_arrow.yml
+- invulnerability_fire.yml
+- attack_vacuum.yml
+uniqueLootList: []
+classLoot: false
+customModel: em_rust_husk

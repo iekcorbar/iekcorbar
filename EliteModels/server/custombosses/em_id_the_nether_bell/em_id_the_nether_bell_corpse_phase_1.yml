@@ -1,0 +1,93 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+# mainHand: BOW
+name: $normalLevel &fUnrotten
+level: dynamic # 55
+healthMultiplier: 1.5
+damageMultiplier: 0.3
+movementSpeedAttribute: 0.3
+powers:
+- invulnerability_fire.yml
+- filename: attack_arrow.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: attack_vacuum.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 40
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  SpawnPrep:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: TAG
+      Target:
+        targetType: SELF
+      tags:
+      - Phase1
+    - action: SET_MOB_AI
+      bValue: false
+      Target:
+        targetType: SELF
+    - action: MAKE_INVULNERABLE
+      wait: 1
+      Target:
+        targetType: SELF
+      invulnerable: true
+  TagAncientCorpse:
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    Actions:
+    - action: TAG
+      Target:
+        targetType: NEARBY_MOBS
+      tags:
+      - Aura
+    - action: MESSAGE
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 40
+      sValue: '&f[Ancient Bones] &fThe ancient ritual begins!'
+    - action: MESSAGE
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 40
+      sValue: '&7The &cAncient Corpse &7has been empowered!'
+    Cooldowns:
+      local: 99999
+      global: 100
+  UnTagAncientCorpse:
+    Events:
+    - EliteMobDeathEvent
+    Actions:
+    - action: UNTAG
+      Target:
+        targetType: NEARBY_MOBS
+      tags:
+      - Aura
+    - action: MESSAGE
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 40
+      sValue: '&7The ancient ritual falters...'
+spawnLocations:
+- em_id_the_nether_bell,21.5,93.4,1.5,45.0,0.0
+- em_id_the_nether_bell,14.5,93.4,10.5,144.0,0.0:1719486418542
+- em_id_the_nether_bell,5.5,94.4,0.5,180.0,0.0:1719507600724
+- em_id_the_nether_bell,-5.5,94.4,7.5,56.0,0.0
+- em_id_the_nether_bell,-10.5,93.4,-3.5,111.0,0.0
+- em_id_the_nether_bell,-14.5,93.4,10.5,78.0,0.0
+- em_id_the_nether_bell,1.5,92.4,16.5,11.0,0.0
+classLoot: false
+customModel: em_steam_zombie

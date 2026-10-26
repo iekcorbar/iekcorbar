@@ -1,0 +1,17 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+entityType: GHAST
+followDistance: 200
+healthMultiplier: 0.25
+isEnabled: true
+isPersistent: true
+level: dynamic # 20
+instanced: true
+name: $reinforcementLevel &cBoomi
+powers:
+- arrow_fireworks.yml
+classLoot: false
+customModel: em_airship_ghast

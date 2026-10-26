@@ -1,0 +1,41 @@
+# WanderingTrades 1.9.6 trade config: the Wildlife Field Journal (iekcorbar)
+#
+# Some wandering traders sell the Field Journal of the Wildlife plugin. The book is made from the name and lore
+# below; the first time a player right-clicks it, Wildlife swaps it for the real journal (so keep the name exactly
+# "Field Journal" and the LAST lore line exactly "Wildlife" - that is how Wildlife recognises it).
+# Staff can still hand out real journals with /wildlife give <player> journal, and players can craft one.
+
+enabled: true
+
+# chance that a wandering trader gets this trade (allowMultipleSets is true in config.yml, so this is a plain percentage)
+chance: 0.30
+
+# add all trades of this file (there is one)
+randomized: false
+randomAmount: 1
+
+invincible: false
+customName: NONE
+disableHeroOfTheVillageGifts: false
+
+trades:
+  field_journal:
+    maxUses: 1
+    experienceReward: true
+    ingredients:
+      1:
+        customname: NONE
+        material: EMERALD
+        amount: 12
+      2:
+        customname: NONE
+        material: SPYGLASS
+        amount: 1
+    result:
+      customname: "<white>Field Journal"
+      material: BOOK
+      amount: 1
+      lore:
+        - "<gray>Right-click to read."
+        - "<gray>Watch animals through a spyglass to fill it."
+        - "<dark_green>Wildlife"

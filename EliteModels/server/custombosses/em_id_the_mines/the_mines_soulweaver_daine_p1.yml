@@ -1,0 +1,69 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 0.8
+scale: 2.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  AntiCheese:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      FinalTarget:
+        location: same_as_boss,228.5,24,-26.5,178,12
+        targetType: LOCATION
+      Target:
+        targetType: ZONE_FULL
+      action: TELEPORT
+      repeatEvery: 20
+      times: 999
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: MESSAGE
+      repeatEvery: 10
+      sValue: '&4[Soulweaver Daine] &fTrying to escape? I don''t think so!'
+      times: 1998
+      wait: 1
+    Cooldowns:
+      global: 10
+      local: 19985
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    Zone:
+      Target:
+        location: same_as_boss,234.5,27,4.5,0,0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 30
+      y: 60
+      z: 12
+entityType: SPIDER
+followDistance: 110
+frozen: false
+healthMultiplier: 20
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 20
+name: $bossLevel &4Soulweaver Daine
+normalizedCombat: true
+powers:
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_wither.yml
+- movement_speed.yml
+- the_mines_daine_bool_hard.yml
+- the_mines_daine_mumble.yml
+classLoot: false
+customModel: em_brass_spider

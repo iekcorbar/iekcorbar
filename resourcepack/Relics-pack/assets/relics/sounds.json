@@ -1,0 +1,304 @@
+{
+ "grave.whisper": {
+  "sounds": [
+   "relics:grave/whisper_1",
+   "relics:grave/whisper_2",
+   "relics:grave/whisper_3",
+   "relics:grave/whisper_4"
+  ],
+  "subtitle": "subtitles.relics.grave.whisper"
+ },
+ "egg_sac.heartbeat": {
+  "sounds": [
+   "relics:egg_sac/heartbeat_1",
+   "relics:egg_sac/heartbeat_2"
+  ],
+  "subtitle": "subtitles.relics.egg_sac.heartbeat"
+ },
+ "egg_sac.squelch": {
+  "sounds": [
+   "relics:egg_sac/squelch_1",
+   "relics:egg_sac/squelch_2"
+  ],
+  "subtitle": "subtitles.relics.egg_sac.squelch"
+ },
+ "flame.crackle": {
+  "sounds": [
+   "relics:flame/crackle_1",
+   "relics:flame/crackle_2"
+  ],
+  "subtitle": "subtitles.relics.flame.crackle"
+ },
+ "portal.hum": {
+  "sounds": [
+   "relics:portal/hum_1",
+   "relics:portal/hum_2"
+  ],
+  "subtitle": "subtitles.relics.portal.hum"
+ },
+ "totem.alarm": {
+  "sounds": [
+   "relics:totem/alarm_1"
+  ],
+  "subtitle": "subtitles.relics.totem.alarm"
+ },
+ "cage.creak": {
+  "sounds": [
+   "relics:cage/creak_1",
+   "relics:cage/creak_2"
+  ],
+  "subtitle": "subtitles.relics.cage.creak"
+ },
+ "skull.growl": {
+  "sounds": [
+   "relics:skull/growl_1",
+   "relics:skull/growl_2"
+  ],
+  "subtitle": "subtitles.relics.skull.growl"
+ },
+ "sleigh.bells": {
+  "sounds": [
+   "relics:sleigh/bells_1",
+   "relics:sleigh/bells_2"
+  ],
+  "subtitle": "subtitles.relics.sleigh.bells"
+ },
+ "gift.open": {
+  "sounds": [
+   "relics:gift/open_1"
+  ],
+  "subtitle": "subtitles.relics.gift.open"
+ },
+ "snow_globe.chime": {
+  "sounds": [
+   "relics:snow_globe/chime_1",
+   "relics:snow_globe/chime_2"
+  ],
+  "subtitle": "subtitles.relics.snow_globe.chime"
+ },
+ "advent.open": {
+  "sounds": [
+   "relics:advent/open_1"
+  ],
+  "subtitle": "subtitles.relics.advent.open"
+ },
+ "toy_train.chuff": {
+  "sounds": [
+   "relics:toy_train/chuff_1",
+   "relics:toy_train/chuff_2"
+  ],
+  "subtitle": "subtitles.relics.toy_train.chuff"
+ },
+ "hearth.crackle": {
+  "sounds": [
+   "relics:hearth/crackle_1",
+   "relics:hearth/crackle_2"
+  ],
+  "subtitle": "subtitles.relics.hearth.crackle"
+ },
+ "music_box.jingle_bells": {
+  "sounds": [
+   "relics:music_box/jingle_bells_1"
+  ],
+  "subtitle": "subtitles.relics.music_box.jingle_bells"
+ },
+ "music_box.deck_the_halls": {
+  "sounds": [
+   "relics:music_box/deck_the_halls_1"
+  ],
+  "subtitle": "subtitles.relics.music_box.deck_the_halls"
+ },
+ "music_box.we_wish": {
+  "sounds": [
+   "relics:music_box/we_wish_1"
+  ],
+  "subtitle": "subtitles.relics.music_box.we_wish"
+ },
+ "temple_bell.toll": {
+  "sounds": [
+   "relics:temple_bell/toll_1"
+  ],
+  "subtitle": "subtitles.relics.temple_bell.toll"
+ },
+ "clock.strike": {
+  "sounds": [
+   "relics:clock/strike_1"
+  ],
+  "subtitle": "subtitles.relics.clock.strike"
+ },
+ "clock.tick": {
+  "sounds": [
+   "relics:clock/tick_1",
+   "relics:clock/tick_2"
+  ],
+  "subtitle": "subtitles.relics.clock.tick"
+ },
+ "confetti.pop": {
+  "sounds": [
+   "relics:confetti/pop_1",
+   "relics:confetti/pop_2"
+  ],
+  "subtitle": "subtitles.relics.confetti.pop"
+ },
+ "sparkler.fizz": {
+  "sounds": [
+   "relics:sparkler/fizz_1",
+   "relics:sparkler/fizz_2"
+  ],
+  "subtitle": "subtitles.relics.sparkler.fizz"
+ },
+ "egg.found": {
+  "sounds": [
+   "relics:egg/found_1"
+  ],
+  "subtitle": "subtitles.relics.egg.found"
+ },
+ "gold.jingle": {
+  "sounds": [
+   "relics:gold/jingle_1",
+   "relics:gold/jingle_2"
+  ],
+  "subtitle": "subtitles.relics.gold.jingle"
+ },
+ "harp.play": {
+  "sounds": [
+   "relics:harp/play_1"
+  ],
+  "subtitle": "subtitles.relics.harp.play"
+ },
+ "tesla.zap": {
+  "sounds": [
+   "relics:tesla/zap_1",
+   "relics:tesla/zap_2",
+   "relics:tesla/zap_3"
+  ],
+  "subtitle": "subtitles.relics.tesla.zap"
+ },
+ "gramophone.sakura": {
+  "sounds": [
+   "relics:gramophone/sakura_1"
+  ],
+  "subtitle": "subtitles.relics.gramophone.sakura"
+ },
+ "shishi_odoshi.clack": {
+  "sounds": [
+   "relics:shishi_odoshi/clack_1",
+   "relics:shishi_odoshi/clack_2"
+  ],
+  "subtitle": "subtitles.relics.shishi_odoshi.clack"
+ },
+ "harp.minstrel_boy": {
+  "sounds": [
+   "relics:harp/minstrel_boy_1"
+  ],
+  "subtitle": "subtitles.relics.harp.minstrel_boy"
+ },
+ "harp.londonderry_air": {
+  "sounds": [
+   "relics:harp/londonderry_air_1"
+  ],
+  "subtitle": "subtitles.relics.harp.londonderry_air"
+ },
+ "harp.molly_malone": {
+  "sounds": [
+   "relics:harp/molly_malone_1"
+  ],
+  "subtitle": "subtitles.relics.harp.molly_malone"
+ },
+ "harp.county_down": {
+  "sounds": [
+   "relics:harp/county_down_1"
+  ],
+  "subtitle": "subtitles.relics.harp.county_down"
+ },
+ "harp.fair_moved": {
+  "sounds": [
+   "relics:harp/fair_moved_1"
+  ],
+  "subtitle": "subtitles.relics.harp.fair_moved"
+ },
+ "bones.shuffle": {
+  "sounds": [
+   "relics:bones/shuffle_1"
+  ],
+  "subtitle": "subtitles.relics.bones.shuffle"
+ },
+ "bones.waltz": {
+  "sounds": [
+   "relics:bones/waltz_1"
+  ],
+  "subtitle": "subtitles.relics.bones.waltz"
+ },
+ "bones.lullaby": {
+  "sounds": [
+   "relics:bones/lullaby_1"
+  ],
+  "subtitle": "subtitles.relics.bones.lullaby"
+ },
+ "bones.mountain_king": {
+  "sounds": [
+   "relics:bones/mountain_king_1"
+  ],
+  "subtitle": "subtitles.relics.bones.mountain_king"
+ },
+ "disc.silent_night": {
+  "sounds": [
+   "relics:disc/silent_night_1"
+  ],
+  "subtitle": "subtitles.relics.disc.silent_night"
+ },
+ "disc.jingle_bells": {
+  "sounds": [
+   "relics:disc/jingle_bells_1"
+  ],
+  "subtitle": "subtitles.relics.disc.jingle_bells"
+ },
+ "disc.deck_the_halls": {
+  "sounds": [
+   "relics:disc/deck_the_halls_1"
+  ],
+  "subtitle": "subtitles.relics.disc.deck_the_halls"
+ },
+ "disc.we_wish": {
+  "sounds": [
+   "relics:disc/we_wish_1"
+  ],
+  "subtitle": "subtitles.relics.disc.we_wish"
+ },
+ "disc.bountiful_barn_ballad": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_bountiful_barn_ballad",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ },
+ "disc.gears_of_christmas": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_gears_of_christmas",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ },
+ "disc.ghosts_of_the_samurai": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_ghosts_of_the_samurai",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ },
+ "disc.trick_or_treat_at_halloween": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_trick_or_treat_at_halloween",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ }
+}

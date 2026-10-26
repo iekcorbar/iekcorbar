@@ -1,0 +1,179 @@
+# ============================================================================
+#  Iekcorbar custom advancements
+# ============================================================================
+#  Real Minecraft advancements (own tab(s) in the advancement screen [L],
+#  toast + chat announcement) that you define here — no datapack needed.
+#
+#  After editing this file:   /iadv reload
+#  Other commands:            /iadv list
+#                             /iadv grant <player> <id>
+#                             /iadv revoke <player> <id>
+#                             /iadv check <player>      (re-check requirements now)
+#  Permission: iekcorbar.advancements.admin (default: op)
+#
+#  Text (title / description / message) supports colors:
+#    legacy codes:  "&6Gold &lbold"      or  MiniMessage:  "<gold>Gold <bold>bold"
+#
+#  Icons: any Minecraft item id, e.g. minecraft:diamond, minecraft:cherry_sapling
+#  Frame: task (normal) | goal (rounded) | challenge (spiky, purple toast + sound)
+#
+#  IDs (the keys below) may only contain lowercase letters, digits, _ and -.
+#  Renaming an id = a new advancement (players lose that progress), so don't
+#  rename ids of advancements players already earned.
+# ============================================================================
+
+# How often (seconds) online players are checked for automatic requirements.
+check-interval-seconds: 20
+
+# ---------------------------------------------------------------------------
+#  TABS — each tab is its own page in the advancement screen.
+# ---------------------------------------------------------------------------
+tabs:
+  iekcorbar:
+    title: "&6Iekcorbar"
+    description: "Sakura & steam adventures"
+    icon: minecraft:cherry_sapling
+    # Background texture of the tab: any block texture, e.g.
+    # minecraft:block/cherry_planks, minecraft:block/stone_bricks,
+    # minecraft:block/copper_block, minecraft:block/deepslate_tiles
+    background: minecraft:block/cherry_planks
+
+# ---------------------------------------------------------------------------
+#  ADVANCEMENTS
+# ---------------------------------------------------------------------------
+#  tab:          which tab it belongs to (see above)
+#  parent:       id of the advancement it hangs under (leave out = directly under the tab)
+#  title / description / icon / frame
+#  hidden:       true = invisible until earned (secret advancement)
+#  announce:     true = message in chat for everyone when earned
+#  toast:        true = popup top-right for the player
+#
+#  requirements: ALL listed requirements must be met. Types:
+#    - type: manual                 only via /iadv grant (e.g. by staff, or RCON from the website)
+#    - type: playtime, hours: 10
+#    - type: break_block, block: diamond_ore, amount: 50        (also: blocks: [a, b] = combined)
+#    - type: place_block, block: cherry_planks, amount: 500
+#    - type: craft_item, item: brewing_stand, amount: 1
+#    - type: kill_entity, entity: zombie, amount: 100
+#    - type: statistic, statistic: JUMP, amount: 1000           (any Bukkit Statistic name;
+#          add block:/item:/entity: for statistics that need one, e.g. statistic: USE_ITEM, item: bow)
+#    - type: placeholder, placeholder: "%jobs_total_levels%", min: 25     (needs PlaceholderAPI;
+#          or equals: "some text" for text values)
+#    - type: permission, permission: "group.vip"
+#    - type: location, world: world_nether                      (just being in that world)
+#    - type: location, world: world, x: 120, z: -340, radius: 30   (near a spot)
+#    - type: advancements, list: [first_steps, miner]           (other advancements from this file)
+#    - type: website, achievement: first-chat-message           (earned when the website awards that
+#          achievement slug — see Staff Panel achievements)
+#    Lore books (books/*.txt, see books.yml). "Read" = the player opened the book at least once
+#    (right-click it, read it on a lectern, or /ibook open):
+#    - type: books_read, amount: 5                              (any 5 different lore books)
+#    - type: book_read, book: brewers_handbook_1                (that exact book; books: [a, b] = all of them)
+#    - type: book_series, series: "The Brewer's Handbook"       (every volume of that series)
+#    - type: book_series, series: "The Brewer's Handbook", amount: 2   (at least 2 volumes of it)
+#
+#  rewards (optional, given once when earned):
+#    commands:  console commands, {player} = player name
+#    xp:        experience points
+#    message:   private message to the player
+# ---------------------------------------------------------------------------
+advancements:
+
+  first_steps:
+    tab: iekcorbar
+    title: "First Steps"
+    description: "Play on Iekcorbar for 1 hour"
+    icon: minecraft:leather_boots
+    frame: task
+    announce: false
+    toast: true
+    requirements:
+      - type: playtime
+        hours: 1
+
+  miner:
+    tab: iekcorbar
+    parent: first_steps
+    title: "Steam-Powered Miner"
+    description: "Mine 64 iron ore"
+    icon: minecraft:iron_pickaxe
+    frame: task
+    requirements:
+      - type: break_block
+        blocks: [iron_ore, deepslate_iron_ore]
+        amount: 64
+    rewards:
+      xp: 50
+      message: "&6Nice! &eYou earned 50 XP."
+
+  diamond_hunter:
+    tab: iekcorbar
+    parent: miner
+    title: "Diamond Hunter"
+    description: "Mine 25 diamond ore"
+    icon: minecraft:diamond
+    frame: goal
+    announce: true
+    requirements:
+      - type: break_block
+        blocks: [diamond_ore, deepslate_diamond_ore]
+        amount: 25
+
+  monster_slayer:
+    tab: iekcorbar
+    parent: first_steps
+    title: "Yokai Slayer"
+    description: "Defeat 100 zombies"
+    icon: minecraft:iron_sword
+    frame: goal
+    announce: true
+    requirements:
+      - type: kill_entity
+        entity: zombie
+        amount: 100
+
+  veteran:
+    tab: iekcorbar
+    parent: first_steps
+    title: "&6Iekcorbar Veteran"
+    description: "Play for 100 hours"
+    icon: minecraft:clock
+    frame: challenge
+    announce: true
+    requirements:
+      - type: playtime
+        hours: 100
+
+  nether_traveler:
+    tab: iekcorbar
+    parent: first_steps
+    title: "Into the Furnace"
+    description: "Enter the Nether"
+    icon: minecraft:netherrack
+    frame: task
+    requirements:
+      - type: location
+        world: world_nether
+
+  website_chatter:
+    tab: iekcorbar
+    parent: first_steps
+    title: "Pen Pal"
+    description: "Send your first chat message on iekcorbar.com"
+    icon: minecraft:writable_book
+    frame: task
+    requirements:
+      - type: website
+        achievement: first-chat-message
+
+  secret_friend:
+    tab: iekcorbar
+    parent: first_steps
+    title: "Friend of the Crew"
+    description: "Given by staff for helping others"
+    icon: minecraft:cherry_leaves
+    frame: challenge
+    hidden: true
+    announce: true
+    requirements:
+      - type: manual

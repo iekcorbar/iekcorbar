@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/riveted_copper_plate",
+    "top": "steamworks:block/riveted_copper_plate",
+    "side": "steamworks:block/riveted_copper_plate"
+  }
+}

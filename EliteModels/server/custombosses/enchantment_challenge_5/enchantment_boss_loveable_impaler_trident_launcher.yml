@@ -1,0 +1,36 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Float:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 10
+      potionEffectType: LEVITATION
+      repeatEvery: 14
+    Events:
+    - EliteMobSpawnEvent
+entityType: DROWNED
+followDistance: 30
+frozen: false
+healthMultiplier: 2.2
+isEnabled: true
+isRegionalBoss: false
+leashRadius: 30
+mainHand: TRIDENT
+movementSpeedAttribute: 1.0E-4
+name: $reinforcementLevel &bTrident Launcher
+normalizedCombat: true
+powers:
+- invisibility.yml
+- invulnerability_fire.yml
+classLoot: false
+customModel: em_diver_drowned

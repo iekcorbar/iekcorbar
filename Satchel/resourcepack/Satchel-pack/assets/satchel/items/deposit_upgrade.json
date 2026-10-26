@@ -1,0 +1,6 @@
+{
+ "model": {
+  "type": "minecraft:model",
+  "model": "satchel:item/deposit_upgrade"
+ }
+}

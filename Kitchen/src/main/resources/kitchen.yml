@@ -1,0 +1,125 @@
+# Kitchen recipes.
+# Items: kitchen:<id> (see /kitchen list), sw:<id> (a Steamworks material, e.g. sw:flour),
+# #<tag> (a vanilla item tag, e.g. #logs), a vanilla item name, or several joined with |.
+# Outputs may end with x<count> and/or <chance>%.  A section missing here falls back to the
+# plugin's built-in one, so new recipe groups appear after an update without deleting this file.
+
+# Put the item on a Cutting Board, then right-click the board with a knife.
+cutting:
+  napa_cabbage:
+    input: kitchen:napa_cabbage
+    output: [kitchen:cabbage_leaf x2]
+  corn:
+    input: kitchen:corn
+    output: [kitchen:cornmeal x2]
+  daikon:
+    input: kitchen:daikon
+    output: [kitchen:daikon_slices x3]
+  green_onion:
+    input: kitchen:green_onion
+    output: [kitchen:chopped_green_onion x2]
+  salmon:
+    input: SALMON
+    output: [kitchen:salmon_sashimi x2, BONE_MEAL 50%]
+  tuna:
+    input: TROPICAL_FISH
+    output: [kitchen:tuna_sashimi x2, BONE_MEAL 50%]
+  cod:
+    input: COD
+    output: [kitchen:cod_slice x2, BONE_MEAL 50%]
+  fugu:
+    input: PUFFERFISH
+    output: [kitchen:fugu_sashimi, BONE_MEAL 50%]
+  beef:
+    input: BEEF
+    output: [kitchen:beef_slices x2]
+  pork:
+    input: PORKCHOP
+    output: [kitchen:pork_slices x2]
+  chicken:
+    input: CHICKEN
+    output: [kitchen:chicken_cuts x2, BONE_MEAL 50%]
+  kabocha:
+    input: PUMPKIN|CARVED_PUMPKIN
+    output: [kitchen:kabocha_slices x4, PUMPKIN_SEEDS 50%]
+  nori:
+    input: DRIED_KELP
+    output: [kitchen:nori]
+  wheat_straw:
+    input: WHEAT
+    output: [kitchen:straw, WHEAT_SEEDS 50%]
+  logs:
+    input: "#logs"
+    output: [stripped, kitchen:tree_bark]
+
+# Cooking Pot: up to 6 ingredients (one item from each filled slot), an optional container
+# (BOWL / GLASS_BOTTLE) in the container slot, and heat below the pot.
+cooking:
+  steamed_rice:
+    ingredients: [kitchen:rice, kitchen:rice]
+    result: kitchen:steamed_rice x2
+    seconds: 8
+  edamame:
+    ingredients: [kitchen:soybeans, kitchen:soybeans]
+    result: kitchen:edamame x2
+    seconds: 6
+  tofu:
+    ingredients: [kitchen:soybeans, kitchen:soybeans, kitchen:soybeans]
+    result: kitchen:tofu x2
+  miso:
+    ingredients: [kitchen:soybeans, kitchen:soybeans, kitchen:rice]
+    result: kitchen:miso x2
+  soy_sauce:
+    ingredients: [kitchen:soybeans, WHEAT|sw:flour]
+    container: GLASS_BOTTLE
+    result: kitchen:soy_sauce
+  dashi:
+    ingredients: [kitchen:nori, kitchen:cod_slice|kitchen:tuna_sashimi]
+    container: GLASS_BOTTLE
+    result: kitchen:dashi
+  green_tea:
+    ingredients: [kitchen:tea_leaves, kitchen:tea_leaves]
+    container: GLASS_BOTTLE
+    result: kitchen:green_tea
+    seconds: 6
+  tamagoyaki:
+    ingredients: [EGG, EGG, SUGAR]
+    result: kitchen:tamagoyaki
+  takuan:
+    ingredients: [kitchen:daikon_slices, kitchen:daikon_slices, SUGAR]
+    result: kitchen:takuan x2
+  tempura:
+    ingredients: [kitchen:kabocha_slices, kitchen:kabocha_slices, WHEAT|sw:flour, EGG]
+    result: kitchen:tempura x2
+  mochi:
+    ingredients: [kitchen:steamed_rice, kitchen:steamed_rice, SUGAR]
+    result: kitchen:mochi x3
+  miso_soup:
+    ingredients: [kitchen:miso, kitchen:tofu, kitchen:chopped_green_onion]
+    container: BOWL
+    result: kitchen:miso_soup
+  ramen:
+    ingredients: [kitchen:raw_noodles, kitchen:dashi, kitchen:pork_slices, EGG, kitchen:chopped_green_onion]
+    container: BOWL
+    result: kitchen:ramen
+    seconds: 14
+  gyudon:
+    ingredients: [kitchen:steamed_rice, kitchen:beef_slices, kitchen:chopped_green_onion, kitchen:soy_sauce]
+    container: BOWL
+    result: kitchen:gyudon
+    seconds: 12
+  oyakodon:
+    ingredients: [kitchen:steamed_rice, kitchen:chicken_cuts, EGG, kitchen:chopped_green_onion]
+    container: BOWL
+    result: kitchen:oyakodon
+    seconds: 12
+  oden:
+    ingredients: [kitchen:daikon_slices, EGG, kitchen:tofu, kitchen:dashi]
+    container: BOWL
+    result: kitchen:oden
+    seconds: 12
+  nabe:
+    ingredients: [kitchen:cabbage_leaf, kitchen:cabbage_leaf, kitchen:tofu, BROWN_MUSHROOM|RED_MUSHROOM, kitchen:chopped_green_onion, kitchen:dashi]
+    container: BOWL
+    result: kitchen:nabe
+    seconds: 14

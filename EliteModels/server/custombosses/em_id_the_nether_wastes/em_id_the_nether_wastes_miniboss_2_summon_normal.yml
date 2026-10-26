@@ -1,0 +1,123 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.01
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  BlinkToPlayer:
+    Actions:
+    - FinalTarget:
+        offset: 0,3,0
+        range: 20
+        targetType: NEARBY_PLAYERS
+      Target:
+        targetType: SELF
+      action: TELEPORT
+      repeatEvery: 240
+    Cooldowns:
+      local: 99999
+    Events:
+    - EliteMobDamagedByPlayerEvent
+  RepelAura:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        range: 30
+        targetType: NEARBY_MOBS
+      action: POTION_EFFECT
+      amplifier: 0
+      duration: 20
+      potionEffectType: HEAL
+      repeatEvery: 50
+    - Target:
+        range: 40
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: The Hexer has cast a protection spell on &cThick Miasma&f!
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+        speed: 0.1
+      repeatEvery: 10
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      RelativeVector:
+        DestinationTarget:
+          targetType: ACTION_TARGET
+        SourceTarget:
+          targetType: ZONE_BORDER
+        multiplier: 0.5
+        normalize: true
+      Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 1
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - amount: 2
+        particle: EXPLOSION_LARGE
+      repeatEvery: 40
+    Cooldowns:
+      global: 1
+      local: 99999
+    Events:
+    - EliteMobTargetPlayerEvent
+    Zone:
+      Target:
+        range: 40
+        targetType: NEARBY_MOBS
+        track: true
+      borderRadius: 1
+      radius: 2
+      shape: SPHERE
+entityType: ILLUSIONER
+followDistance: 20
+frozen: false
+healthMultiplier: 1.0
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 50
+movementSpeedAttribute: 0.24
+name: $reinforcementLevel Hexer
+normalizedCombat: true
+powers:
+- skeleton_tracking_arrow.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: invulnerability_arrow.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: gold_explosion.yml
+- difficultyID:
+  - 2
+  filename: plasma_blaster.yml
+classLoot: false
+customModel: em_clockwork_illusioner

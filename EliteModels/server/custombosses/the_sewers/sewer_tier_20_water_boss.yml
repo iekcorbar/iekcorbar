@@ -1,0 +1,97 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.4
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+entityType: SKELETON
+followDistance: 30
+healthMultiplier: 4.0
+helmet: GOLDEN_HELMET
+isEnabled: true
+isPersistent: true
+isRegionalBoss: true
+leashRadius: 40
+level: dynamic
+instanced: true
+mainHand: BOW
+name: $minibossLevel &1Forgotten Hero
+powers:
+- attack_fire.yml
+- skeleton_tracking_arrow.yml
+spawnCooldown: 4
+spawnLocations:
+- em_sewer_maze,-313.5,99.5,-159.5,0.0,0.0:0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: sewer_spelunkers_sword_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_spelunkers_boots_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_spelunkers_chestplate_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_spelunkers_helmet_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_spelunkers_leggings_hard.yml
+  chance: 0.1
+  difficultyID: 1
+- filename: sewer_spelunkers_sword_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_spelunkers_boots_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_spelunkers_chestplate_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_spelunkers_helmet_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: sewer_spelunkers_leggings_mythic.yml
+  chance: 0.1
+  difficultyID: 2
+- filename: cl_the_sewers_tunnels_swords_585f8af9.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_axes_4f2b49e7.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_bows_b7fdc637.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_crossbows_dc0db6d5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tridents_5a34965a.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_hoes_a0c18962.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_maces_ffccc452.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_spears_f90fd53b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_staves_40482056.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_wands_712be25e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_helmets_9917a646.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_chestplates_ddb3baab.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_leggings_b55e815e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_boots_e2a3eb58.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_helmets_341bb342.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_chestplates_1f0e9b0b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_leggings_cc0387b5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_boots_e5dddda6.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_shields_fcaba11c.yml
+  chance: 1.0
+customModel: em_clockwork_skeleton

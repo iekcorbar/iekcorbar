@@ -1,0 +1,43 @@
+# Kura - storage network. Guide: docs-url
+docs-url: https://iekcorbar.com/wiki?page=kura
+
+# Blocks that count as storage inside a network (vanilla material names, * = wildcard).
+# Furnaces, hoppers, brewing stands etc. are left out on purpose: putting items "anywhere" in them would be wrong.
+storage-blocks: ["CHEST", "TRAPPED_CHEST", "BARREL", "SHULKER_BOX", "*_SHULKER_BOX", "*COPPER_CHEST"]
+
+# Containers carrying one of these data keys are never used as storage (e.g. Sakagura sake casks, whose drinks age inside).
+excluded-container-keys: ["sakagura:cask"]
+
+network:
+  # Most blocks (containers, trims, cables) one network may have.
+  max-blocks: 4096
+
+parts:
+  # Left-clicks needed to break a part (they sit on a barrier block). Creative breaks at once.
+  break-hits: 3
+
+inventory-hopper:
+  interval-ticks: 10
+  items-per-transfer: 8
+
+inventory-interface:
+  interval-ticks: 20
+
+wireless:
+  # Wireless Terminal: opens the terminal you look at from this far away.
+  range: 16
+  # Advanced Wireless Terminal: bound to one terminal, works within this range.
+  # A beacon within 8 blocks of that terminal makes it reachable anywhere in the same world (level 1-3) or from any world (level 4).
+  advanced-range: 64
+  # Chunks a remote network may keep loaded while its terminal is open.
+  max-loaded-chunks: 25
+
+filing-cabinet:
+  # Items one Filing Cabinet holds (all variants of one item, e.g. enchanted books). Kept in the item when broken.
+  capacity: 256
+
+# Copper golem couriers: right-click a copper golem with an Inventory Configurator to bind it to the nearest Inventory
+# Interface; it then carries items from copper chests and Steamworks machine outputs into the network.
+couriers:
+  enabled: true
+  radius: 12   # blocks around the interface where it looks for supplies (4-24)

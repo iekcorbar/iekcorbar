@@ -1,0 +1,182 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+boots: GOLDEN_BOOTS
+bossType: MINIBOSS
+chestplate: GOLDEN_CHESTPLATE
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  CloseArena:
+    Actions:
+    - FinalTarget:
+        location: same_as_boss,330.5,112,27.5,0,0
+        targetType: LOCATION
+      Target:
+        range: 50
+        targetType: NEARBY_PLAYERS
+      action: TELEPORT
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.1
+        targetType: ZONE_FULL
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: PUSH
+      repeatEvery: 1
+      vValue: 1,0,0
+    Cooldowns:
+      global: 10
+      local: 99999
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    Zone:
+      Target:
+        location: same_as_boss,322.5,112,27.5,0,0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 2
+      y: 8
+      z: 14
+  MakeDome:
+    Actions:
+    - Target:
+        targetType: ZONE_BORDER
+      action: PLACE_BLOCK
+      material: YELLOW_STAINED_GLASS
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      Target:
+        location: same_as_boss,233.5,111,27.5,0,0
+        targetType: LOCATION
+        track: true
+      borderRadius: 8
+      radius: 9
+      shape: DOME
+  RemoveDome:
+    Actions:
+    - Target:
+        targetType: ZONE_BORDER
+      action: PLACE_BLOCK
+      material: AIR
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      Target:
+        location: same_as_boss,233.5,111,27.5,0,0
+        targetType: LOCATION
+        track: true
+      borderRadius: 8
+      radius: 9
+      shape: DOME
+  Sleep:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+    Events:
+    - EliteMobSpawnEvent
+  WakeUp:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: true
+    Events:
+    - EliteMobDamagedByPlayerEvent
+entityType: WITHER_SKELETON
+followDistance: 40
+frozen: false
+healthMultiplier: 4
+helmet: GOLDEN_HELMET
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leggings: GOLDEN_LEGGINGS
+level: dynamic # 20
+mainHand: IRON_SWORD
+movementSpeedAttribute: 0.36
+name: $minibossLevel &eCorrupted Blacksmith
+normalizedCombat: true
+offHand: SHIELD
+powers:
+- the_mines_mini_boss_forger_boo.yml
+spawnLocations:
+- em_id_the_mines,343.5,112,27.5,90.0,0.0:1676457445076
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.5
+  difficultyID: 0
+  filename: the_mines_forger_drop_chestplate_tank_normal.yml
+- chance: 0.5
+  difficultyID: 1
+  filename: the_mines_forger_drop_chestplate_tank_hard.yml
+- chance: 0.5
+  difficultyID: 2
+  filename: the_mines_forger_drop_chestplate_tank_mythic.yml
+- chance: 0.5
+  difficultyID: 0
+  filename: the_mines_forger_drop_helmet_tank_normal.yml
+- chance: 0.5
+  difficultyID: 1
+  filename: the_mines_forger_drop_helmet_tank_hard.yml
+- chance: 0.5
+  difficultyID: 2
+  filename: the_mines_forger_drop_helmet_tank_mythic.yml
+- filename: cl_story_mines_swords_f5c77fe4.yml
+  chance: 1.0
+- filename: cl_story_mines_axes_23aac663.yml
+  chance: 1.0
+- filename: cl_story_mines_bows_a6d16b50.yml
+  chance: 1.0
+- filename: cl_story_mines_crossbows_bc046011.yml
+  chance: 1.0
+- filename: cl_story_mines_tridents_e00d07bd.yml
+  chance: 1.0
+- filename: cl_story_mines_hoes_94e447fa.yml
+  chance: 1.0
+- filename: cl_story_mines_maces_96b8e254.yml
+  chance: 1.0
+- filename: cl_story_mines_spears_258f1267.yml
+  chance: 1.0
+- filename: cl_story_mines_staves_9801a7fb.yml
+  chance: 1.0
+- filename: cl_story_mines_wands_88a081b9.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_helmets_d62cc6c8.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_chestplates_527dffa2.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_leggings_3c7084ec.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_boots_87c73439.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_helmets_23d0f6a6.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_chestplates_905e88bf.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_leggings_cccc8016.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_boots_e7f99614.yml
+  chance: 1.0
+- filename: cl_story_mines_shields_687daaca.yml
+  chance: 1.0
+customModel: em_ember_wither_skeleton

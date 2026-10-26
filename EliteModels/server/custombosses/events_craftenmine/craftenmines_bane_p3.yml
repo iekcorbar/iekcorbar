@@ -1,0 +1,38 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: HUSK
+name: $eventBossLevel &kunknown
+chestplate: LEATHER_CHESTPLATE
+leggings: LEATHER_LEGGINGS
+boots: NETHERITE_BOOTS
+level: dynamic
+healthMultiplier: 4.5
+damageMultiplier: 1.25
+powers:
+- attack_push.yml
+- ground_pound.yml
+- zombie_bloat.yml
+- attack_gravity.yml
+- invulnerability_fire.yml
+- invulnerability_knockback.yml
+trails:
+- FLAME
+- LAVA
+- SMOKE_LARGE
+uniqueLootList:
+- filename=craftenmines_bane_drop_chestplate.yml:amount=1:chance=0.2
+- filename=craftenmines_bane_drop_leggings.yml:amount=1:chance=0.2
+movementSpeedAttribute: 0.42
+followDistance: 50
+locationMessage: '&cUnknown: $distance blocks away!'
+deathMessage: '&aDr. Craftemine''s creation was slain by $players!'
+escapeMessage: '&4Dr. Craftemine''s creation has disappeared!'
+onDamageMessages:
+- KILLLLLL!
+- DESTROYYYYY!
+- EXTERMINAAATE!
+announcementPriority: 2
+customModel: em_rust_husk

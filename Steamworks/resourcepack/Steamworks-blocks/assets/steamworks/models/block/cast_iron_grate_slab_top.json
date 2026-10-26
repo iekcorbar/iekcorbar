@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "steamworks:block/cast_iron_grate",
+    "top": "steamworks:block/cast_iron_grate",
+    "side": "steamworks:block/cast_iron_grate"
+  }
+}

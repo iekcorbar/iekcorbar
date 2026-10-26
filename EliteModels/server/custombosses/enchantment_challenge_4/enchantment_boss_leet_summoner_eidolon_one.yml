@@ -1,0 +1,60 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.5
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Annoy:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.3
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.01
+      repeatEvery: 5
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: SET_ON_FIRE
+      duration: 30
+      repeatEvery: 5
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 3
+      filter: PLAYER
+      radius: 4
+      shape: SPHERE
+entityType: VEX
+followDistance: 30
+frozen: false
+healthMultiplier: 0.25
+isEnabled: true
+isRegionalBoss: false
+leashRadius: 30
+mainHand: TRIDENT
+movementSpeedAttribute: 0.2
+name: $reinforcementLevel &dEidolon
+normalizedCombat: true
+powers:
+- invulnerability_fire.yml
+classLoot: false
+customModel: em_imp_vex

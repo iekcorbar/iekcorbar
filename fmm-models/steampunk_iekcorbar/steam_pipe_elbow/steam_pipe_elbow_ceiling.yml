@@ -1,0 +1,6 @@
+# FreeMinecraftModels - settings for steam_pipe_elbow_ceiling.bbmodel (same folder as the model)
+isEnabled: true
+# Hit it 3 times (within 5 s) to pick it up again; IekcorbarSiteSync turns the
+# dropped item back into the normal Steam Pipe Elbow item.
+scripts:
+- pickupable.lua

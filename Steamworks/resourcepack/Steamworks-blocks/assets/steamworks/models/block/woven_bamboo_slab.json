@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "steamworks:block/woven_bamboo",
+    "top": "steamworks:block/woven_bamboo",
+    "side": "steamworks:block/woven_bamboo"
+  }
+}

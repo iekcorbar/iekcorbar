@@ -1,0 +1,9 @@
+extends: class_trial_actor_base.yml
+isEnabled: true
+entityType: VEX
+name: '&bBound Eidolon'
+healthMultiplier: 0.35
+damageMultiplier: 0.25
+ai: true
+mainHand: STONE_SWORD
+customModel: em_imp_vex

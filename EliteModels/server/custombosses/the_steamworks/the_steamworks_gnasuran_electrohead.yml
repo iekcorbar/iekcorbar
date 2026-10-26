@@ -1,0 +1,79 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+isRegionalBoss: true
+entityType: ZOMBIE
+isBaby: true
+chestplate: NETHERITE_CHESTPLATE
+leggings: NETHERITE_LEGGINGS
+boots: NETHERITE_BOOTS
+mainHand: TRIDENT
+name: $normalLevel &4Gnasuran Electrohead
+level: dynamic
+instanced: true
+frozen: false
+spawnCooldown: 60
+healthMultiplier: 1.0
+damageMultiplier: 1.0
+leashRadius: 10
+followDistance: 10
+movementSpeedAttribute: 0.25
+dropsEliteMobsLoot: true
+dropsVanillaLoot: false
+dropsRandomLoot: false
+powers:
+- taze.yml
+- filename: attack_lightning.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: lightning_bolts.yml
+  difficultyID:
+  - 2
+spawnLocations:
+- em_steamworks_lair,-94.5,-40.5,-82.5,0.0,0.0
+- em_steamworks_lair,-100.5,-18.5,-83.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_steamworks_workshop_swords_0fb80124.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_axes_f4300e39.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_bows_8bef8725.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_crossbows_f70f5e86.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_tridents_5545fc22.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_hoes_3de152d9.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_maces_109ac73c.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_spears_0cda1c18.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_staves_4b4910ec.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_wands_b01cbea8.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_dps_helmets_a76d05cf.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_dps_chestplates_a1e1b064.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_dps_leggings_24b17d02.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_dps_boots_512284bf.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_tank_helmets_e70b3969.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_tank_chestplates_f2e98f30.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_tank_leggings_0f5dafd3.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_tank_boots_508ab977.yml
+  chance: 1.0
+- filename: cl_steamworks_workshop_shields_38afeb48.yml
+  chance: 1.0
+customModel: em_steam_zombie

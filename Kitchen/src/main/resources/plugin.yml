@@ -1,0 +1,17 @@
+name: Kitchen
+version: '${project.version}'
+main: com.iekcorbar.kitchen.KitchenPlugin
+api-version: '26.2'
+description: Japanese farming and cooking - crops, cutting board, cooking pot, kitchen props and animated meals.
+author: iekcorbar
+
+commands:
+  kitchen:
+    description: Kitchen commands
+    usage: /kitchen <help|give|take|list|reload>
+    aliases: [kt]
+
+permissions:
+  kitchen.admin:
+    description: Give items, reload the config
+    default: op

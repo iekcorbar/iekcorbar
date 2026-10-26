@@ -1,0 +1,553 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Push1:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 1,1,0
+    Zone:
+      Target:
+        offset: 2,0,0
+        targetType: SELF
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 3
+  Push2:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: -1,1,0
+    Zone:
+      Target:
+        offset: -2,0,0
+        targetType: SELF
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 3
+  Push21:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 1,1,0
+    Zone:
+      Target:
+        offset: 4,0,0
+        targetType: SELF
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 5
+  Push22:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: -1,1,0
+    Zone:
+      Target:
+        offset: -4,0,0
+        targetType: SELF
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 5
+  Push23:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 0,1,-1
+    Zone:
+      Target:
+        offset: 0,0,-4
+        targetType: SELF
+      shape: CUBOID
+      x: 5
+      y: 2
+      z: 1
+  Push24:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 0,1,1
+    Zone:
+      Target:
+        offset: 0,0,4
+        targetType: SELF
+      shape: CUBOID
+      x: 5
+      y: 2
+      z: 1
+  Push3:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 0,1,-1
+    Zone:
+      Target:
+        offset: 0,0,-2
+        targetType: SELF
+      shape: CUBOID
+      x: 3
+      y: 2
+      z: 1
+  Push31:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 1,1,0
+    Zone:
+      Target:
+        offset: 6,0,0
+        targetType: SELF
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 7
+  Push32:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: -1,1,0
+    Zone:
+      Target:
+        offset: -6,0,0
+        targetType: SELF
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 7
+  Push33:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 0,1,-1
+    Zone:
+      Target:
+        offset: 0,0,-6
+        targetType: SELF
+      shape: CUBOID
+      x: 7
+      y: 2
+      z: 1
+  Push34:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 0,1,1
+    Zone:
+      Target:
+        offset: 0,0,6
+        targetType: SELF
+      shape: CUBOID
+      x: 7
+      y: 2
+      z: 1
+  Push4:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: PUSH
+      repeatEvery: 5
+      times: 4
+      vValue: 0,1,1
+    Zone:
+      Target:
+        offset: 0,0,2
+        targetType: SELF
+      shape: CUBOID
+      x: 3
+      y: 2
+      z: 1
+  PushVisual1:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 2,0,0
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 3
+  PushVisual2:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: -2,0,0
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 3
+  PushVisual21:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 4,0,0
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 5
+  PushVisual22:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: -4,0,0
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 5
+  PushVisual23:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 0,0,-4
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 5
+      y: 2
+      z: 1
+  PushVisual24:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 0,0,4
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 5
+      y: 2
+      z: 1
+  PushVisual3:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 0,0,-2
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 3
+      y: 2
+      z: 1
+  PushVisual31:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 6,0,0
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 7
+  PushVisual32:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: -6,0,0
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 7
+  PushVisual33:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 0,0,-6
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 7
+      y: 2
+      z: 1
+  PushVisual34:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 0,0,6
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 7
+      y: 2
+      z: 1
+  PushVisual4:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 5
+      times: 4
+    Zone:
+      Target:
+        offset: 0,0,2
+        targetType: SELF
+        track: true
+      shape: CUBOID
+      x: 3
+      y: 2
+      z: 1
+  Trigger:
+    Actions:
+    - Target:
+        range: 80
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '&7The mighty beast starts slamming it''s hooves into the ground.'
+    - action: RUN_SCRIPT
+      scripts:
+      - PushVisual1
+      - Push1
+      - PushVisual2
+      - Push2
+      - PushVisual3
+      - Push3
+      - PushVisual4
+      - Push4
+      wait: 30
+    - action: RUN_SCRIPT
+      scripts:
+      - PushVisual21
+      - Push21
+      - PushVisual22
+      - Push22
+      - PushVisual23
+      - Push23
+      - PushVisual24
+      - Push24
+      wait: 50
+    - action: RUN_SCRIPT
+      scripts:
+      - PushVisual31
+      - Push31
+      - PushVisual32
+      - Push32
+      - PushVisual33
+      - Push33
+      - PushVisual34
+      - Push34
+      wait: 70
+    Cooldowns:
+      global: 20
+      local: 200
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    - PlayerDamagedByEliteMobEvent
+entityType: RAVAGER
+followDistance: 60
+frozen: false
+healthMultiplier: 4.0
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 60
+movementSpeedAttribute: 0.31
+name: $minibossLevel &5Ravegarer
+normalizedCombat: true
+powers:
+- attack_confusing.yml
+- invulnerability_arrow.yml
+- invulnerability_fire.yml
+spawnLocations:
+- em_id_enchantment_challenge_6,1.5,65,0.5,0,0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.15
+  difficultyID: 0
+  filename: ec_06_hoe_normal.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: enchanted_book_critical_strikes.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec06_swords_941fecae.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_axes_4325f327.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_bows_069397fe.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_crossbows_e57dd912.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_tridents_8ea1b1d4.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_hoes_0dbd2da9.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_maces_770469eb.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_spears_b556f49c.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_staves_73ddcb76.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_wands_b61a3103.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_dps_helmets_e50a6542.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_dps_chestplates_53be8af2.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_dps_leggings_f0035ecb.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_dps_boots_dd7e9530.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_tank_helmets_847fd1c1.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_tank_chestplates_2104fe15.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_tank_leggings_916eb74c.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_tank_boots_9bd26551.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec06_shields_b91d862a.yml
+  chance: 1.0
+customModel: em_ram_ravager

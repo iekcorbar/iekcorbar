@@ -1,0 +1,90 @@
+# ============================================================================
+#  Lore advancements - TO PASTE into plugins/IekcorbarSiteSync/advancements.yml
+# ============================================================================
+#  This is NOT a separate file the plugin reads. Copy the two blocks below into
+#  the existing advancements.yml:
+#    - the 'lore:' tab  -> under the existing   tabs:
+#    - the advancements -> under the existing   advancements:
+#  Keep the indentation (2 spaces). Then: /iadv reload  and  /iadv list
+#
+#  "Read" = the player opened the book at least once (right-click it, read it on
+#  a lectern, or /ibook open). Needs IekcorbarSiteSync 1.7.0 or newer.
+#
+#  Already pasted first_lore / lore_seeker from an earlier message? Then only
+#  add the advancements you don't have yet - duplicate ids are not allowed.
+# ============================================================================
+
+tabs:
+  lore:
+    title: "&6Lore of Iekcorbar"
+    description: "Find and read the lost books"
+    icon: minecraft:written_book
+    background: minecraft:block/bookshelf
+
+advancements:
+
+  first_lore:
+    tab: lore
+    title: "A Curious Volume"
+    description: "Read your first lore book"
+    icon: minecraft:written_book
+    frame: task
+    announce: false
+    requirements:
+      - type: books_read
+        amount: 1
+
+  # Chronicles of the Guild ---------------------------------------------------
+
+  guild_chronicle_begun:
+    tab: lore
+    parent: first_lore
+    title: "The Devastation"
+    description: "Read Chronicles of the Guild, Volume I"
+    icon: minecraft:cracked_stone_bricks
+    frame: task
+    announce: false
+    requirements:
+      - type: book_read
+        book: guild_chronicle_1
+
+  guild_chronicles_complete:
+    tab: lore
+    parent: guild_chronicle_begun
+    title: "&6Keeper of the Guild's History"
+    description: "Read every volume of Chronicles of the Guild"
+    icon: minecraft:lectern
+    frame: challenge
+    announce: true
+    requirements:
+      - type: book_series
+        series: "Chronicles of the Guild"
+    rewards:
+      xp: 100
+      message: "&6You know the history as the Guild tells it... &7for now."
+
+  # Other lore -----------------------------------------------------------------
+
+  birthday_wish:
+    tab: lore
+    parent: first_lore
+    title: "A Wish Granted"
+    description: "Read The Birthday Wish"
+    icon: minecraft:cake
+    frame: task
+    announce: false
+    requirements:
+      - type: book_read
+        book: the_birthday_wish
+
+  lore_seeker:
+    tab: lore
+    parent: first_lore
+    title: "Lore Seeker"
+    description: "Read 10 different lore books"
+    icon: minecraft:bookshelf
+    frame: goal
+    announce: true
+    requirements:
+      - type: books_read
+        amount: 10

@@ -1,0 +1,66 @@
+name: IekcorbarSiteSync
+# Was a hand-maintained literal in sync with pom.xml's own version by hand —
+# exactly the kind of two-places-to-update version-management gap that
+# caused real confusion before (see pom.xml's own version-bump comment).
+# Maven resource filtering is already on for this directory (see the
+# <resources> block in pom.xml), so the Maven property reference below now
+# makes pom.xml the single source of truth instead.
+version: ${project.version}
+main: com.iekcorbar.sitesync.IekcorbarSiteSync
+api-version: '26.2'
+description: Bridge plugin between Minecraft Server, Iekcorbar Website and MySQL
+author: Iekcorbar
+softdepend: [Vault, Jobs, Lands, PlaceholderAPI, Votifier]
+# Load before FreeMinecraftModels so our prop placement listener runs before
+# FMM's own (both LOWEST) - see PropPlacementManager.
+# No EliteMobs in softdepend: EliteMobs needs FMM, so softdepend EliteMobs + loadbefore FMM made a load cycle (MythicLib warned about it).
+loadbefore: [FreeMinecraftModels]
+
+commands:
+  webstats:
+    description: Returns JSON player statistics for the website via RCON
+    permission: iekcorbar.webstats
+    permission-message: You do not have permission to execute webstats.
+    usage: /webstats <username>
+  iadv:
+    description: Manage the custom advancements from advancements.yml
+    permission: iekcorbar.advancements.admin
+    permission-message: You do not have permission to manage custom advancements.
+    usage: /iadv <reload|list|grant|revoke|check>
+  ibook:
+    description: Custom books (books/*.txt) - list, give, open, reload
+    aliases: [ibooks]
+    permission: iekcorbar.books.admin
+    permission-message: You do not have permission to manage custom books.
+    usage: /ibook <list|info|give|giveseries|open|reload>
+
+  iprop:
+    description: FreeMinecraftModels props - give the Steam Wrench, reload props.yml
+    permission: iekcorbar.props.admin
+    permission-message: You do not have permission to manage props.
+    usage: /iprop <wrench [player]|reload>
+  props:
+    description: Creative-only menu with every steampunk prop item
+    permission: iekcorbar.props.creative
+    permission-message: You do not have permission to use the props menu.
+    usage: /props
+
+permissions:
+  iekcorbar.props.creative:
+    description: Allows /props (take prop items for free, only while in creative mode)
+    default: op
+  iekcorbar.props.admin:
+    description: Allows /iprop (give the Steam Wrench, reload props.yml)
+    default: op
+  iekcorbar.heads.creativefree:
+    description: Free HeadDatabase heads, but only while in creative mode (everyone else always pays)
+    default: false
+  iekcorbar.books.admin:
+    description: Allows /ibook (give custom books, open them, reload books.yml and books/)
+    default: op
+  iekcorbar.webstats:
+    description: Allows retrieving player stats via RCON
+    default: op
+  iekcorbar.advancements.admin:
+    description: Allows /iadv (reload, list, grant, revoke, check custom advancements)
+    default: op

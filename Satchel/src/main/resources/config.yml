@@ -1,0 +1,22 @@
+# Satchel - backpacks. Guide: docs-url
+docs-url: https://iekcorbar.com/wiki?page=satchel
+
+# Where a worn/carried backpack works: it only has to be somewhere in the player's inventory.
+crafting:
+  # Backpacks are meant to be bought from wandering traders and the shop NPC (/satchel give <tier> <player>).
+  # true = also allow crafting them (upgrade plates are always craftable).
+  backpacks: false
+
+pickup:
+  # Items the Pickup Upgrade collects: "all", or "matching" (only kinds already in the backpack).
+  mode: all
+magnet:
+  radius: 6
+  # blocks per tick pull speed
+  speed: 0.35
+feeding:
+  # Eat when this many hunger points (of 20) are missing.
+  hunger-missing: 6
+everlasting:
+  # Fire-proof, void-proof and never despawns.
+  enabled: true

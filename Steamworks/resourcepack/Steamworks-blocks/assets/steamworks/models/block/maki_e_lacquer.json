@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "steamworks:block/maki_e_lacquer"
+  }
+}

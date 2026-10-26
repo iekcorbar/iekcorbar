@@ -1,0 +1,130 @@
+# iekcorbar - beloning per stem (2026-10-23)
+# Afgestemd op het budget in SpecialRewards.yml ("max per dag via stemmen ~ $350 + items"):
+#   3 sites x $50 = $150  +  AllSitesToday-bonus $150  =  $300 per dag.
+# (TopG wordt niet gebruikt.)
+# Daarbovenop per stem een kleine kans op extra's (Lucky, hooguit een per stem):
+#   1 op 10  -> 1 diamond
+#   1 op 25  -> 16 XP-bottles
+#   1 op 100 -> $500 jackpot
+# Na aanpassen: /av reload
+VoteSites:
+  MinecraftServers_org:
+    Enabled: true
+    ServiceSite: MinecraftServers.org
+    VoteURL: 'https://minecraftservers.org/server/694993'
+    VoteDelay: 24h
+    DisplayItem:
+      Material: GRASS_BLOCK
+      Amount: 1
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 50'
+      Messages:
+        Player: '&aThanks for voting on &e%ServiceSite%&a! &e+$50'
+      Sound:
+        Enabled: true
+        Sound: 'entity.player.levelup'
+        Volume: 1.0
+        Pitch: 1.0
+      OnlyOneLucky: true
+      Lucky:
+        '100':
+          Commands:
+          - 'cmi money give %player% 500'
+          Messages:
+            Player: '&6&lJACKPOT! &aYou won an extra &e$500&a!'
+        '25':
+          Items:
+            xpbottles:
+              Material: EXPERIENCE_BOTTLE
+              Amount: 16
+          Messages:
+            Player: '&dLucky! &aYou also got &e16 Bottles o'' Enchanting&a.'
+        '10':
+          Items:
+            diamond:
+              Material: DIAMOND
+              Amount: 1
+          Messages:
+            Player: '&dLucky! &aYou also got &ea Diamond&a.'
+
+  Minecraft_MP:
+    Enabled: true
+    ServiceSite: Minecraft-MP.com
+    VoteURL: 'https://minecraft-mp.com/server-s365687'
+    VoteDelay: 24h
+    DisplayItem:
+      Material: COMPASS
+      Amount: 1
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 50'
+      Messages:
+        Player: '&aThanks for voting on &e%ServiceSite%&a! &e+$50'
+      Sound:
+        Enabled: true
+        Sound: 'entity.player.levelup'
+        Volume: 1.0
+        Pitch: 1.0
+      OnlyOneLucky: true
+      Lucky:
+        '100':
+          Commands:
+          - 'cmi money give %player% 500'
+          Messages:
+            Player: '&6&lJACKPOT! &aYou won an extra &e$500&a!'
+        '25':
+          Items:
+            xpbottles:
+              Material: EXPERIENCE_BOTTLE
+              Amount: 16
+          Messages:
+            Player: '&dLucky! &aYou also got &e16 Bottles o'' Enchanting&a.'
+        '10':
+          Items:
+            diamond:
+              Material: DIAMOND
+              Amount: 1
+          Messages:
+            Player: '&dLucky! &aYou also got &ea Diamond&a.'
+
+  PlanetMinecraft:
+    Enabled: true
+    ServiceSite: PlanetMinecraft.com
+    VoteURL: 'https://www.planetminecraft.com/server/iekcorbar-7080659/'
+    VoteDelay: 24h
+    DisplayItem:
+      Material: MAP
+      Amount: 1
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 50'
+      Messages:
+        Player: '&aThanks for voting on &e%ServiceSite%&a! &e+$50'
+      Sound:
+        Enabled: true
+        Sound: 'entity.player.levelup'
+        Volume: 1.0
+        Pitch: 1.0
+      OnlyOneLucky: true
+      Lucky:
+        '100':
+          Commands:
+          - 'cmi money give %player% 500'
+          Messages:
+            Player: '&6&lJACKPOT! &aYou won an extra &e$500&a!'
+        '25':
+          Items:
+            xpbottles:
+              Material: EXPERIENCE_BOTTLE
+              Amount: 16
+          Messages:
+            Player: '&dLucky! &aYou also got &e16 Bottles o'' Enchanting&a.'
+        '10':
+          Items:
+            diamond:
+              Material: DIAMOND
+              Amount: 1
+          Messages:
+            Player: '&dLucky! &aYou also got &ea Diamond&a.'
+

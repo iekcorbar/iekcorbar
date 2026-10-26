@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "steamworks:block/shoji_screen",
+    "top": "steamworks:block/shoji_screen",
+    "side": "steamworks:block/shoji_screen"
+  }
+}

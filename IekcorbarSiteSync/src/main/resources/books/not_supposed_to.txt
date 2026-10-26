@@ -1,0 +1,23 @@
+# A joke book that turns up very rarely in buried treasure and ancient cities.
+title: &8Untitled
+author: Nobody
+description: You were not supposed to find this.
+copyable: false
+loot: true
+loot-weight: 1
+loot-tables: minecraft:chests/buried_treasure, minecraft:chests/ancient_city
+===
+&8You were not supposed to find this.
+---
+&8Really.
+
+Put it back.
+---
+&8...
+
+You are still reading.
+---
+&8Fine.
+
+The cake is not a lie.
+It is just in another chest.

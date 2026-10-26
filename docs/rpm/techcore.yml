@@ -1,0 +1,11 @@
+# Drop into plugins/ResourcePackManager/compatible_plugins/ (same format as free_minecraft_models.yml).
+# Makes ResourcePackManager merge TechCore's generated pack into the one pack players get,
+# and re-merge it whenever TechCore regenerates it.
+isEnabled: true
+pluginName: TechCore
+encrypts: false
+distributes: true
+zips: true
+resourcePackUpdated: true
+localPath: TechCore/generated/techcore-resourcepack.zip
+cluster: false

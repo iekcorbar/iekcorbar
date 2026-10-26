@@ -1,0 +1,33 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.02
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: HUSK
+followDistance: 20
+frozen: false
+healthMultiplier: 0.4
+instanced: true
+isBaby: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 50
+movementSpeedAttribute: 0.28
+name: $reinforcementLevel &7Nether Deviling
+normalizedCombat: true
+powers:
+- invulnerability_fire.yml
+- attack_vacuum.yml
+- difficultyID:
+  - 0
+  filename: attack_push.yml
+- difficultyID:
+  - 1
+  filename: arrow_rain.yml
+- difficultyID:
+  - 2
+  filename: attack_fire.yml
+classLoot: false
+customModel: em_rust_husk

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "steamworks:block/wooden_lattice",
+    "top": "steamworks:block/wooden_lattice",
+    "side": "steamworks:block/wooden_lattice"
+  }
+}

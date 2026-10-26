@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "steamworks:block/paper_lantern_wall",
+    "top": "steamworks:block/paper_lantern_wall",
+    "side": "steamworks:block/paper_lantern_wall"
+  }
+}

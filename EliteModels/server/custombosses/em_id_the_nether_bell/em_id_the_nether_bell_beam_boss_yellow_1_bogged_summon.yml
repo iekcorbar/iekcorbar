@@ -1,0 +1,30 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: BOGGED
+mainHand: BOW
+name: $minibossLevel &eHolder of Misery
+level: dynamic # 55
+healthMultiplier: 2.0
+damageMultiplier: 0.5
+movementSpeedAttribute: 0.34
+powers:
+- invulnerability_fire.yml
+- filename: arrow_rain.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: arrow_fireworks.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: false
+normalizedCombat: true
+frozen: false
+followDistance: 40
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+classLoot: false
+customModel: em_bog_bogged

@@ -1,0 +1,14 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 1.0
+dropsVanillaLoot: false
+entityType: ENDERMAN
+followDistance: 200
+healthMultiplier: 1.0
+isEnabled: true
+level: 100
+name: $reinforcementLevel &5Reality Slayer
+normalizedCombat: true
+classLoot: false
+customModel: em_brass_enderman

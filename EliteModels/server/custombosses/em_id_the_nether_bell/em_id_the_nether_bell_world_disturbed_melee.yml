@@ -1,0 +1,297 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: HUSK
+mainHand: BONE
+name: $normalLevel &fDisturbed Carcass
+level: dynamic # 55
+healthMultiplier: 1.5
+damageMultiplier: 0.4
+movementSpeedAttribute: 0.37
+powers:
+- invulnerability_arrow.yml
+- filename: attack_vacuum.yml
+  difficultyID:
+  - 1
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 150
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  SpawnPrep:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: TAG
+      Target:
+        targetType: SELF
+      tags:
+      - Disturbed
+    - action: SET_MOB_AI
+      bValue: false
+      Target:
+        targetType: SELF
+    - action: MAKE_INVULNERABLE
+      wait: 1
+      Target:
+        targetType: SELF
+      invulnerable: true
+spawnLocations:
+- em_id_the_nether_bell,182.5,67.3,-178.5,46.0,0.0
+- em_id_the_nether_bell,177.5,67.3,-174.5,-89.0,0.0
+- em_id_the_nether_bell,83.5,68.3,-270.5,-125.0,0.0
+- em_id_the_nether_bell,78.5,68.3,-270.5,-93.0,0.0
+- em_id_the_nether_bell,78.5,68.3,-265.5,-8.0,0.0
+- em_id_the_nether_bell,82.5,68.3,-266.5,80.0,0.0
+- em_id_the_nether_bell,116.5,62.3,-173.5,141.0,0.0
+- em_id_the_nether_bell,122.5,62.3,-171.5,64.0,0.0
+- em_id_the_nether_bell,120.5,63.3,-181.5,70.0,0.0
+- em_id_the_nether_bell,165.5,62.3,-98.5,-123.0,0.0
+- em_id_the_nether_bell,165.5,62.3,-103.5,108.0,0.0
+- em_id_the_nether_bell,258.5,66.3,-64.5,-24.0,0.0
+- em_id_the_nether_bell,253.5,66.3,-66.5,-86.0,0.0
+- em_id_the_nether_bell,245.5,66.3,-66.5,-129.0,0.0
+- em_id_the_nether_bell,241.5,66.3,-59.5,-145.0,0.0
+- em_id_the_nether_bell,240.5,66.3,-50.5,-141.0,0.0
+- em_id_the_nether_bell,247.5,66.3,-39.5,-25.0,0.0
+- em_id_the_nether_bell,254.5,66.3,-39.5,155.0,0.0
+- em_id_the_nether_bell,259.5,66.3,-41.5,-123.0,0.0
+- em_id_the_nether_bell,262.5,66.3,-49.5,-40.0,0.0
+- em_id_the_nether_bell,181.5,65.3,-7.5,-3.0,0.0
+- em_id_the_nether_bell,168.5,67.3,1.5,129.0,0.0
+- em_id_the_nether_bell,77.5,65.3,-194.5,-5.0,0.0
+- em_id_the_nether_bell,73.5,65.3,-190.5,-109.0,0.0
+- em_id_the_nether_bell,12.5,63.3,-201.5,-4.0,0.0
+- em_id_the_nether_bell,18.5,63.3,-201.5,-19.0,0.0
+- em_id_the_nether_bell,-80.5,62.3,-135.5,59.0,0.0
+- em_id_the_nether_bell,-83.5,62.3,-138.5,125.0,0.0
+- em_id_the_nether_bell,-87.5,62.3,-139.5,137.0,0.0
+- em_id_the_nether_bell,-93.5,62.3,-137.5,15.0,0.0
+- em_id_the_nether_bell,-80.5,62.3,-131.5,-33.0,0.0
+- em_id_the_nether_bell,-77.5,62.3,-122.5,63.0,0.0
+- em_id_the_nether_bell,-119.5,61.3,-161.5,42.0,0.0
+- em_id_the_nether_bell,-122.5,61.3,-163.5,-75.0,0.0
+- em_id_the_nether_bell,-115.5,61.3,-155.5,13.0,0.0
+- em_id_the_nether_bell,-133.5,61.3,-150.5,-138.0,0.0
+- em_id_the_nether_bell,-137.5,61.3,-153.5,142.0,0.0
+- em_id_the_nether_bell,-135.5,61.3,-151.5,109.0,0.0
+- em_id_the_nether_bell,-126.5,67.3,-102.5,153.0,0.0
+- em_id_the_nether_bell,-87.5,81.3,-94.5,-70.0,0.0
+- em_id_the_nether_bell,-88.5,75.3,-92.5,-16.0,0.0
+- em_id_the_nether_bell,-147.5,63.3,-46.5,38.0,0.0
+- em_id_the_nether_bell,-155.5,63.3,-61.5,-58.0,0.0
+- em_id_the_nether_bell,-126.5,63.3,-53.5,113.0,0.0
+- em_id_the_nether_bell,-194.5,63.3,-17.5,128.0,0.0
+- em_id_the_nether_bell,-199.5,62.3,1.5,104.0,0.0
+- em_id_the_nether_bell,-140.5,61.3,12.5,107.0,0.0
+- em_id_the_nether_bell,-134.5,61.3,10.5,104.0,0.0
+- em_id_the_nether_bell,-133.5,61.3,15.5,-85.0,0.0
+- em_id_the_nether_bell,-136.5,61.3,22.5,-80.0,0.0
+- em_id_the_nether_bell,-146.5,61.3,24.5,21.0,0.0
+- em_id_the_nether_bell,-153.5,61.3,24.5,-44.0,0.0
+- em_id_the_nether_bell,-157.5,61.3,18.5,66.0,0.0
+- em_id_the_nether_bell,-159.5,61.3,9.5,-111.0,0.0
+- em_id_the_nether_bell,-153.5,61.3,0.5,110.0,0.0
+- em_id_the_nether_bell,-216.5,64.3,73.5,38.0,0.0
+- em_id_the_nether_bell,-115.5,63.3,91.5,-4.0,0.0
+- em_id_the_nether_bell,-140.5,63.3,220.5,10.0,0.0
+- em_id_the_nether_bell,-139.5,63.3,222.5,-56.0,0.0
+- em_id_the_nether_bell,-145.5,61.3,212.5,-16.0,0.0
+- em_id_the_nether_bell,-155.5,63.3,213.5,-125.0,0.0
+- em_id_the_nether_bell,-156.5,64.3,220.5,94.0,0.0
+- em_id_the_nether_bell,-149.5,64.3,226.5,87.0,0.0
+- em_id_the_nether_bell,-59.5,63.3,221.5,-118.0,0.0
+- em_id_the_nether_bell,-69.5,63.3,218.5,-61.0,0.0
+- em_id_the_nether_bell,2.5,61.3,219.5,104.0,0.0
+- em_id_the_nether_bell,6.5,61.3,230.5,-57.0,0.0
+- em_id_the_nether_bell,22.5,62.3,228.5,80.0,0.0
+- em_id_the_nether_bell,23.5,62.3,214.5,-97.0,0.0
+- em_id_the_nether_bell,153.5,65.3,144.5,24.0,0.0
+- em_id_the_nether_bell,125.5,64.3,121.5,10.0,0.0
+- em_id_the_nether_bell,178.5,62.3,76.5,20.0,0.0
+- em_id_the_nether_bell,191.5,62.3,67.5,30.0,0.0
+- em_id_the_nether_bell,173.5,61.3,53.5,40.0,0.0
+- em_id_the_nether_bell,285.5,66.3,7.5,50.0,0.0
+- em_id_the_nether_bell,267.5,66.3,17.5,60.0,0.0
+- em_id_the_nether_bell,80.5,75.3,9.5,70.0,0.0
+- em_id_the_nether_bell,103.5,75.3,15.5,80.0,0.0
+- em_id_the_nether_bell,56.5,84.3,-25.5,90.0,0.0
+- em_id_the_nether_bell,59.5,84.3,-31.5,100.0,0.0
+- em_id_the_nether_bell,1.5,80.3,-48.5,111.0,0.0
+- em_id_the_nether_bell,0.5,77.3,-71.5,122.0,0.0
+- em_id_the_nether_bell,-50.5,80.3,-39.5,133.0,0.0
+- em_id_the_nether_bell,-32.5,86.3,-29.5,144.0,0.0
+- em_id_the_nether_bell,-36.5,86.3,-19.5,155.0,0.0
+- em_id_the_nether_bell,-91.5,69.3,-9.5,166.0,0.0
+- em_id_the_nether_bell,-74.5,75.3,-14.5,-10.0,0.0
+- em_id_the_nether_bell,-60.5,77.3,25.5,-20.0,0.0
+- em_id_the_nether_bell,-70.5,77.3,17.5,-30.0,0.0
+- em_id_the_nether_bell,-56.5,77.3,10.5,-40.0,0.0
+- em_id_the_nether_bell,57.5,75.8,76.5,-50.0,0.0
+- em_id_the_nether_bell,57.5,75.3,82.5,-60.0,0.0
+- em_id_the_nether_bell,36.5,78.3,85.5,-70.0,0.0
+- em_id_the_nether_bell,55.5,81.3,11.5,-80.0,0.0
+- em_id_the_nether_bell,-189.5,89.3,-191.5,-90.0,0.0
+- em_id_the_nether_bell,299.5,67.3,-25.5,-100.0,0.0
+- em_id_the_nether_bell,303.5,67.3,-17.5,-111.0,0.0
+- em_id_the_nether_bell,297.5,67.3,-12.5,-122.0,0.0
+- em_id_the_nether_bell,212.5,66.3,178.5,-133.0,0.0
+- em_id_the_nether_bell,0.5,68.3,298.5,-144.0,0.0
+- em_id_the_nether_bell,9.5,67.3,289.5,-155.0,0.0
+- em_id_the_nether_bell,-192.5,68.3,215.5,-166.0,0.0
+- em_id_the_nether_bell,-203.5,68.3,210.5,10.0,0.0
+- em_id_the_nether_bell,-219.5,62.3,39.5,20.0,0.0
+- em_id_the_nether_bell,-219.5,62.3,37.5,30.0,0.0
+- em_id_the_nether_bell,56.5,61.3,165.5,-108.3,0.0
+- em_id_the_nether_bell,74.5,61.3,164.5,-79.9,0.0
+- em_id_the_nether_bell,-114.5,61.3,10.5,135.7,0.0
+- em_id_the_nether_bell,-114.5,61.3,3.5,115.8,0.0
+- em_id_the_nether_bell,57.5,62.3,-84.5,97.5,0.0
+- em_id_the_nether_bell,69.5,62.3,-86.5,-15.3,0.0
+- em_id_the_nether_bell,137.5,68.3,20.5,-95.2,0.0
+- em_id_the_nether_bell,142.5,66.3,35.5,-51.4,0.0
+- em_id_the_nether_bell,162.5,64.3,45.5,55.1,0.0
+- em_id_the_nether_bell,111.5,70.3,36.5,174.6,0.0
+- em_id_the_nether_bell,82.5,73.3,75.5,-133.0,0.0
+- em_id_the_nether_bell,74.5,74.3,101.5,-49.3,0.0
+- em_id_the_nether_bell,72.5,74.3,89.5,-168.1,0.0
+- em_id_the_nether_bell,93.5,67.3,105.5,-166.9,0.0
+- em_id_the_nether_bell,97.5,67.3,99.5,-109.6,0.0
+- em_id_the_nether_bell,38.5,70.3,135.5,-138.3,0.0
+- em_id_the_nether_bell,32.5,70.3,133.5,-68.6,0.0
+- em_id_the_nether_bell,32.5,72.3,121.5,11.8,0.0
+- em_id_the_nether_bell,7.5,70.3,88.5,-125.3,0.0
+- em_id_the_nether_bell,23.5,74.3,87.5,6.2,0.0
+- em_id_the_nether_bell,27.5,85.3,39.5,-121.4,0.0
+- em_id_the_nether_bell,-12.5,82.3,68.5,-157.7,0.0
+- em_id_the_nether_bell,-21.5,65.3,170.5,90.6,0.0
+- em_id_the_nether_bell,-42.5,66.3,166.5,87.3,0.0
+- em_id_the_nether_bell,-37.5,66.3,166.5,105.3,0.0
+- em_id_the_nether_bell,-68.5,69.3,152.5,120.3,0.0
+- em_id_the_nether_bell,-67.5,65.3,134.5,-12.0,0.0
+- em_id_the_nether_bell,-45.5,69.3,102.5,-168.8,0.0
+- em_id_the_nether_bell,-48.5,69.3,102.5,-90.6,0.0
+- em_id_the_nether_bell,-67.5,69.3,87.5,148.0,0.0
+- em_id_the_nether_bell,-60.5,71.3,71.5,-177.4,0.0
+- em_id_the_nether_bell,-44.5,77.3,45.5,66.1,0.0
+- em_id_the_nether_bell,-46.5,77.3,45.5,-83.0,0.0
+- em_id_the_nether_bell,-59.5,73.3,53.5,149.6,0.0
+- em_id_the_nether_bell,-48.5,75.3,67.5,-162.7,0.0
+- em_id_the_nether_bell,-99.5,66.3,24.5,-149.5,0.0
+- em_id_the_nether_bell,-94.5,67.3,40.5,-100.6,0.0
+- em_id_the_nether_bell,-149.5,66.3,-20.5,16.3,0.0
+- em_id_the_nether_bell,-46.5,69.3,-79.5,-158.6,0.0
+- em_id_the_nether_bell,-51.5,69.3,-83.5,-127.5,0.0
+- em_id_the_nether_bell,7.5,67.3,-100.5,40.6,0.0
+- em_id_the_nether_bell,0.5,67.3,-98.5,104.4,0.0
+- em_id_the_nether_bell,19.5,73.3,-65.5,109.9,0.0
+- em_id_the_nether_bell,39.5,80.3,-44.5,-34.7,0.0
+- em_id_the_nether_bell,73.5,75.3,-32.5,-112.1,0.0
+- em_id_the_nether_bell,68.5,78.3,-43.5,17.1,0.0
+- em_id_the_nether_bell,62.5,80.3,-49.5,124.4,0.0
+- em_id_the_nether_bell,84.5,73.3,-49.5,27.7,0.0
+- em_id_the_nether_bell,120.5,79.3,-74.5,106.7,0.0
+- em_id_the_nether_bell,116.5,79.3,-67.5,21.2,0.0
+- em_id_the_nether_bell,93.5,68.3,-78.5,-42.0,0.0
+- em_id_the_nether_bell,104.5,72.3,-94.5,-175.8,0.0
+- em_id_the_nether_bell,110.5,68.3,-122.5,33.6,0.0
+- em_id_the_nether_bell,100.5,66.3,-118.5,159.9,0.0
+- em_id_the_nether_bell,67.5,68.3,-139.5,-153.9,0.0
+- em_id_the_nether_bell,69.5,68.3,-137.5,178.2,0.0
+- em_id_the_nether_bell,90.5,67.3,-139.5,48.8,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: em_id_the_nether_bell_mobs_drop_soulsand_boots.yml
+  chance: 0.01
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_sword_normal.yml
+  chance: 0.01
+  difficultyID: 0
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_sword_hard.yml
+  chance: 0.01
+  difficultyID: 1
+- filename: em_id_the_nether_bell_trash_drop_boots_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_chestplate_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_helmet_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_leggings_tank_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: em_id_the_nether_bell_trash_drop_sword_mythic.yml
+  chance: 0.01
+  difficultyID: 2
+- filename: cl_story_nether_bell_swords_5b0e5445.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_axes_9a9cc081.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_bows_e09343b5.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_crossbows_7413b656.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tridents_9c6deb80.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_hoes_b95b5ce8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_maces_2d5735b1.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_spears_d1f22e48.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_staves_3d92b639.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_wands_e5e77fbb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_helmets_d647333b.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_chestplates_3d33aaeb.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_leggings_8994d82f.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_dps_boots_a48a83ae.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_helmets_c53bb16e.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_chestplates_f21db6b8.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_leggings_41290a61.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_tank_boots_d3f7f477.yml
+  chance: 1.0
+- filename: cl_story_nether_bell_shields_16efa34b.yml
+  chance: 1.0
+customModel: em_rust_husk

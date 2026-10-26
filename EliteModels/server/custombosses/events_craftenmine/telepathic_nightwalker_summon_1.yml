@@ -1,0 +1,17 @@
+classLoot: true
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+isBaby: true
+name: $eventBossLevel &fBrainwashed Undead
+healthMultiplier: 0.5
+damageMultiplier: 0.05
+dropsEliteMobsLoot: true
+dropsVanillaLoot: false
+dropsRandomLoot: false
+movementSpeedAttribute: 0.26
+followDistance: 80
+customModel: em_steam_zombie

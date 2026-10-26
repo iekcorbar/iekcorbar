@@ -1,0 +1,200 @@
+# Steamworks machine recipes.
+#
+# input:  a material (COBBLESTONE), an item tag (tag:wool) or a Steamworks
+#         material (sw:iron_plate)
+# time:   (millstone only) grind work needed for one item. At 12 RPM the
+#         millstone does 1 per tick, so time 200 = 10 seconds; faster = quicker.
+# output: "MATERIAL [amount] [chance%]" - chance is optional (default 100%).
+#         Steamworks materials as sw:<id> (iron_plate, copper_plate, golden_plate).
+#
+# A section missing from this file (e.g. after an update) uses the built-in
+# recipes; delete this file once to get a fresh copy with every section.
+
+millstone:
+  - input: COBBLESTONE
+    time: 200
+    output: [GRAVEL]
+  - input: GRAVEL
+    time: 160
+    output: [SAND, FLINT 1 20%]
+  - input: SANDSTONE
+    time: 160
+    output: [SAND 2]
+  - input: RED_SANDSTONE
+    time: 160
+    output: [RED_SAND 2]
+  - input: TERRACOTTA
+    time: 200
+    output: [RED_SAND]
+  - input: BONE
+    time: 80
+    output: [BONE_MEAL 4, BONE_MEAL 1 50%]
+  - input: SUGAR_CANE
+    time: 60
+    output: [SUGAR 2]
+  - input: tag:wool
+    time: 100
+    output: [STRING 3, STRING 1 50%]
+  - input: GLOWSTONE
+    time: 120
+    output: [GLOWSTONE_DUST 4]
+  - input: BLAZE_ROD
+    time: 120
+    output: [BLAZE_POWDER 3]
+  - input: COCOA_BEANS
+    time: 60
+    output: [BROWN_DYE 2]
+  - input: INK_SAC
+    time: 60
+    output: [BLACK_DYE 2]
+  - input: WHEAT
+    time: 80
+    output: [sw:flour 2, WHEAT_SEEDS 1 50%]
+  # Kitchen plugin (skipped without it): rice flour works like wheat flour
+  - input: kitchen:rice
+    time: 100
+    output: [sw:flour 1, sw:flour 1 50%]
+  # flowers -> twice the dye of a crafting table
+  - {input: DANDELION, time: 50, output: [YELLOW_DYE 2]}
+  - {input: POPPY, time: 50, output: [RED_DYE 2]}
+  - {input: BLUE_ORCHID, time: 50, output: [LIGHT_BLUE_DYE 2]}
+  - {input: ALLIUM, time: 50, output: [MAGENTA_DYE 2]}
+  - {input: AZURE_BLUET, time: 50, output: [LIGHT_GRAY_DYE 2]}
+  - {input: RED_TULIP, time: 50, output: [RED_DYE 2]}
+  - {input: ORANGE_TULIP, time: 50, output: [ORANGE_DYE 2]}
+  - {input: WHITE_TULIP, time: 50, output: [LIGHT_GRAY_DYE 2]}
+  - {input: PINK_TULIP, time: 50, output: [PINK_DYE 2]}
+  - {input: OXEYE_DAISY, time: 50, output: [LIGHT_GRAY_DYE 2]}
+  - {input: CORNFLOWER, time: 50, output: [BLUE_DYE 2]}
+  - {input: LILY_OF_THE_VALLEY, time: 50, output: [WHITE_DYE 2]}
+  - {input: WITHER_ROSE, time: 50, output: [BLACK_DYE 2]}
+  - {input: PINK_PETALS, time: 50, output: [PINK_DYE 1]}
+  - {input: SUNFLOWER, time: 80, output: [YELLOW_DYE 4]}
+  - {input: LILAC, time: 80, output: [MAGENTA_DYE 4]}
+  - {input: ROSE_BUSH, time: 80, output: [RED_DYE 4]}
+  - {input: PEONY, time: 80, output: [PINK_DYE 4]}
+
+# Steam hammer: one item per strike (speed sets how often it strikes,
+# see config.yml). Items must lie in the block under the hammer.
+steam_hammer:
+  # mochitsuki: pound steamed rice into mochi (needs the Kitchen plugin; skipped without it)
+  - {input: kitchen:steamed_rice, output: [kitchen:mochi 2]}
+  - {input: IRON_INGOT, output: [sw:iron_plate]}
+  - {input: COPPER_INGOT, output: [sw:copper_plate]}
+  - {input: GOLD_INGOT, output: [sw:golden_plate]}
+  - {input: sw:brass_ingot, output: [sw:brass_plate]}
+  - {input: SUGAR_CANE, output: [PAPER]}
+  - {input: SNOW_BLOCK, output: [ICE]}
+  - {input: CLAY, output: [CLAY_BALL 4]}
+  # cracked bricks without a furnace
+  - {input: STONE_BRICKS, output: [CRACKED_STONE_BRICKS]}
+  - {input: DEEPSLATE_BRICKS, output: [CRACKED_DEEPSLATE_BRICKS]}
+  - {input: DEEPSLATE_TILES, output: [CRACKED_DEEPSLATE_TILES]}
+  - {input: NETHER_BRICKS, output: [CRACKED_NETHER_BRICKS]}
+  - {input: POLISHED_BLACKSTONE_BRICKS, output: [CRACKED_POLISHED_BLACKSTONE_BRICKS]}
+
+# Bellows fan. Air through lava smelts and through fire/campfire smokes with
+# the normal furnace/smoker recipes (nothing to set up here). Air through
+# water washes and through soul fire / soul campfire "haunts" with these
+# recipes. The whole stack is done at once; chances roll per item.
+fan_washing:
+  - {input: GRAVEL, output: [FLINT 1 25%, IRON_NUGGET 1 12%]}
+  - {input: SAND, output: [CLAY_BALL 1 25%]}
+  - {input: RED_SAND, output: [GOLD_NUGGET 3 12%, DEAD_BUSH 1 5%]}
+  - {input: SOUL_SAND, output: [QUARTZ 4 12%, GOLD_NUGGET 1 2%]}
+  - {input: tag:wool, output: [WHITE_WOOL]}
+  - {input: MAGMA_BLOCK, output: [OBSIDIAN]}
+  # concrete powder -> concrete
+  - {input: WHITE_CONCRETE_POWDER, output: [WHITE_CONCRETE]}
+  - {input: ORANGE_CONCRETE_POWDER, output: [ORANGE_CONCRETE]}
+  - {input: MAGENTA_CONCRETE_POWDER, output: [MAGENTA_CONCRETE]}
+  - {input: LIGHT_BLUE_CONCRETE_POWDER, output: [LIGHT_BLUE_CONCRETE]}
+  - {input: YELLOW_CONCRETE_POWDER, output: [YELLOW_CONCRETE]}
+  - {input: LIME_CONCRETE_POWDER, output: [LIME_CONCRETE]}
+  - {input: PINK_CONCRETE_POWDER, output: [PINK_CONCRETE]}
+  - {input: GRAY_CONCRETE_POWDER, output: [GRAY_CONCRETE]}
+  - {input: LIGHT_GRAY_CONCRETE_POWDER, output: [LIGHT_GRAY_CONCRETE]}
+  - {input: CYAN_CONCRETE_POWDER, output: [CYAN_CONCRETE]}
+  - {input: PURPLE_CONCRETE_POWDER, output: [PURPLE_CONCRETE]}
+  - {input: BLUE_CONCRETE_POWDER, output: [BLUE_CONCRETE]}
+  - {input: BROWN_CONCRETE_POWDER, output: [BROWN_CONCRETE]}
+  - {input: GREEN_CONCRETE_POWDER, output: [GREEN_CONCRETE]}
+  - {input: RED_CONCRETE_POWDER, output: [RED_CONCRETE]}
+  - {input: BLACK_CONCRETE_POWDER, output: [BLACK_CONCRETE]}
+
+fan_haunting:
+  - {input: TORCH, output: [SOUL_TORCH]}
+  - {input: LANTERN, output: [SOUL_LANTERN]}
+  - {input: CAMPFIRE, output: [SOUL_CAMPFIRE]}
+  - {input: POTATO, output: [POISONOUS_POTATO]}
+  - {input: SAND, output: [SOUL_SAND]}
+  - {input: DIRT, output: [SOUL_SOIL]}
+  - {input: CRIMSON_FUNGUS, output: [WARPED_FUNGUS]}
+  - {input: ROTTEN_FLESH, output: [LEATHER 1 30%]}
+
+# Mixer (on top of a Kettle). All inputs must be in the kettle at once.
+# inputs: "MATERIAL|tag:x|sw:id [count]"
+# water:  quarter buckets used (a bucket = 4); heat: needs fire/campfire/lava/magma under the kettle
+# time:   mixing work, like the millstone (200 = 10 s at 12 RPM)
+mixer:
+  - {inputs: [COPPER_INGOT 3, sw:zinc_ingot 1], heat: true, time: 240, output: [sw:brass_ingot 4]}
+  - {inputs: [sw:sulfur 2, CHARCOAL 1], time: 120, output: [GUNPOWDER 2]}
+  - {inputs: [sw:sulfur 2, COAL 1], time: 120, output: [GUNPOWDER 2]}
+  # chemical waste canister -> neutralized (empty canister back + a little sulfur)
+  - {inputs: [sw:waste_canister 1, BONE_MEAL 4], water: 4, heat: true, time: 300, output: [sw:canister 1, sw:sulfur 1]}
+  - {inputs: [DIRT 1], water: 1, time: 60, output: [MUD]}
+  - {inputs: [WHEAT 3], water: 1, heat: true, time: 160, output: [BREAD]}
+  # Kitchen plugin (skipped without it): tofu and steamed rice in bulk
+  - {inputs: [kitchen:soybeans 3], water: 1, heat: true, time: 160, output: [kitchen:tofu 3]}
+  - {inputs: [kitchen:rice 2], water: 1, heat: true, time: 120, output: [kitchen:steamed_rice 2]}
+  # baking with flour (millstone: wheat -> flour)
+  - {inputs: [sw:flour 2], water: 1, heat: true, time: 120, output: [BREAD 2]}
+  - {inputs: [sw:flour 1, COCOA_BEANS 1], heat: true, time: 100, output: [COOKIE 8]}
+  - {inputs: [sw:flour 3, SUGAR 2, EGG 1], water: 2, heat: true, time: 240, output: [CAKE]}
+  - {inputs: [sw:flour 1, PUMPKIN 1, SUGAR 1, EGG 1], heat: true, time: 160, output: [PUMPKIN_PIE 2]}
+  - {inputs: [BROWN_MUSHROOM 1, RED_MUSHROOM 1, BOWL 1], heat: true, time: 120, output: [MUSHROOM_STEW]}
+  - {inputs: [BEETROOT 6, BOWL 1], heat: true, time: 120, output: [BEETROOT_SOUP]}
+  - {inputs: [PUMPKIN 1, SUGAR 1, EGG 1], heat: true, time: 160, output: [PUMPKIN_PIE]}
+  - {inputs: [SLIME_BALL 1, BLAZE_POWDER 1], time: 120, output: [MAGMA_CREAM]}
+  - {inputs: [SPIDER_EYE 1, SUGAR 1, BROWN_MUSHROOM 1], time: 120, output: [FERMENTED_SPIDER_EYE]}
+  - {inputs: [SAND 1, DIRT 1], water: 1, time: 120, output: [CLAY_BALL 2]}
+  - {inputs: [COBBLESTONE 2, QUARTZ 2], time: 120, output: [DIORITE 2]}
+  - {inputs: [DIORITE 1, COBBLESTONE 1], time: 120, output: [ANDESITE 2]}
+  - {inputs: [DIORITE 1, QUARTZ 1], time: 120, output: [GRANITE 1]}
+
+# Crushing wheels (a pair side by side; items lying on top get crushed, results fall out below).
+# time: crushing work, done at speed / 8 per tick (100 = 2.5 s at 16 RPM).
+# Inputs may also be Steamworks ore blocks: ore:zinc_ore, ore:deepslate_tin_ore, ...
+crusher:
+  - {input: IRON_ORE, time: 100, output: [RAW_IRON 2, RAW_IRON 1 50%]}
+  - {input: DEEPSLATE_IRON_ORE, time: 120, output: [RAW_IRON 2, RAW_IRON 1 50%]}
+  - {input: COPPER_ORE, time: 100, output: [RAW_COPPER 7, RAW_COPPER 3 50%]}
+  - {input: DEEPSLATE_COPPER_ORE, time: 120, output: [RAW_COPPER 7, RAW_COPPER 3 50%]}
+  - {input: GOLD_ORE, time: 100, output: [RAW_GOLD 2, RAW_GOLD 1 50%]}
+  - {input: DEEPSLATE_GOLD_ORE, time: 120, output: [RAW_GOLD 2, RAW_GOLD 1 50%]}
+  - {input: NETHER_GOLD_ORE, time: 80, output: [GOLD_NUGGET 10]}
+  - {input: COAL_ORE, time: 80, output: [COAL 2, COAL 1 25%]}
+  - {input: DEEPSLATE_COAL_ORE, time: 100, output: [COAL 2, COAL 1 25%]}
+  - {input: REDSTONE_ORE, time: 100, output: [REDSTONE 6, REDSTONE 2 50%]}
+  - {input: DEEPSLATE_REDSTONE_ORE, time: 120, output: [REDSTONE 6, REDSTONE 2 50%]}
+  - {input: LAPIS_ORE, time: 100, output: [LAPIS_LAZULI 8, LAPIS_LAZULI 2 50%]}
+  - {input: DEEPSLATE_LAPIS_ORE, time: 120, output: [LAPIS_LAZULI 8, LAPIS_LAZULI 2 50%]}
+  - {input: NETHER_QUARTZ_ORE, time: 80, output: [QUARTZ 2, QUARTZ 1 50%]}
+  - {input: DIAMOND_ORE, time: 200, output: [DIAMOND 1, DIAMOND 1 25%]}
+  - {input: DEEPSLATE_DIAMOND_ORE, time: 240, output: [DIAMOND 1, DIAMOND 1 25%]}
+  - {input: EMERALD_ORE, time: 200, output: [EMERALD 1, EMERALD 1 25%]}
+  - {input: DEEPSLATE_EMERALD_ORE, time: 240, output: [EMERALD 1, EMERALD 1 25%]}
+  - {input: ore:zinc_ore, time: 100, output: [sw:raw_zinc 2, sw:raw_zinc 1 50%]}
+  - {input: ore:deepslate_zinc_ore, time: 120, output: [sw:raw_zinc 2, sw:raw_zinc 1 50%]}
+  - {input: ore:tin_ore, time: 100, output: [sw:raw_tin 2, sw:raw_tin 1 50%]}
+  - {input: ore:deepslate_tin_ore, time: 120, output: [sw:raw_tin 2, sw:raw_tin 1 50%]}
+  - {input: ore:sulfur_ore, time: 100, output: [sw:sulfur 5, sw:sulfur 2 50%]}
+  - {input: ore:deepslate_sulfur_ore, time: 120, output: [sw:sulfur 5, sw:sulfur 2 50%]}
+  - {input: ore:nether_sulfur_ore, time: 80, output: [sw:sulfur 5, sw:sulfur 2 50%]}
+  # quicker versions of millstone work
+  - {input: COBBLESTONE, time: 60, output: [GRAVEL]}
+  - {input: GRAVEL, time: 60, output: [SAND, FLINT 1 25%]}
+  - {input: BONE, time: 40, output: [BONE_MEAL 6]}
+  - {input: tag:wool, time: 50, output: [STRING 4]}
+  - {input: BLAZE_ROD, time: 60, output: [BLAZE_POWDER 4]}
+  - {input: WHEAT, time: 40, output: [sw:flour 2, sw:flour 1 25%]}

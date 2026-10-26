@@ -1,0 +1,24 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: WOLF
+name: $eventBossLevel &dRapid Mutator
+level: dynamic
+healthMultiplier: 3.0
+damageMultiplier: 1.0
+powers:
+- arrow_rain.yml
+- attack_blinding.yml
+trails:
+- SMOKE_NORMAL
+- SMOKE_NORMAL
+- SMOKE_NORMAL
+movementSpeedAttribute: 0.36
+followDistance: 80
+locationMessage: '&cRapid Mutator: $distance blocks away!'
+deathMessage: '&aThe Rapid Mutator was put to rest by $players!'
+escapeMessage: '&4The Rapid Mutator has vanished!'
+announcementPriority: 2
+customModel: em_cog_wolf

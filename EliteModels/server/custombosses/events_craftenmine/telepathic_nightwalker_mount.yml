@@ -1,0 +1,18 @@
+classLoot: true
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: SPIDER
+name: $eventBossLevel &fDominated Matriarch
+healthMultiplier: 1.0
+damageMultiplier: 0.15
+dropsEliteMobsLoot: true
+dropsVanillaLoot: false
+dropsRandomLoot: false
+powers:
+- attack_blinding.yml
+movementSpeedAttribute: 0.34
+followDistance: 80
+customModel: em_brass_spider

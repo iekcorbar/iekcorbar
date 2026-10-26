@@ -1,0 +1,87 @@
+isEnabled: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+entityType: STRAY
+name: $minibossLevel &9Chamber Guardian
+level: dynamic
+scaledCombat: true
+healthMultiplier: 3
+damageMultiplier: 2
+isBaby: false
+helmet: CHAINMAIL_HELMET
+chestplate: CHAINMAIL_CHESTPLATE
+leggings: CHAINMAIL_LEGGINGS
+boots: CHAINMAIL_BOOTS
+mainHand: BOW
+powers:
+- lightning_bolts.yml
+- arrow_fireworks.yml
+- BB_HiddenChamber_Tundra_DreamTeam.yml
+normalizedCombat: true
+dropsEliteMobsLoot: true
+dropsVanillaLoot: false
+dropsRandomLoot: false
+trails: SNOWFLAKE
+isRegionalBoss: true
+leashRadius: 20
+removeAfterDeath: true
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: hiddenchamber_tundra_guardian_helmet.yml
+  chance: 0.25
+- filename: hiddenchamber_tundra_guardian_boots.yml
+  chance: 0.25
+- filename: hiddenchamber_tundra_guardian_chestplate.yml
+  chance: 0.25
+- filename: cl_free_elite_shrines_relics_swords_1f004f58.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_axes_01d9afdb.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_bows_c84bbe57.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_crossbows_10771fc3.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tridents_506adca9.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_hoes_1db6777c.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_maces_f203306a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_spears_c437376d.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_staves_d52016c8.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_wands_f0433d6a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_helmets_54ef7624.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_chestplates_087ed5be.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_leggings_cc39b2c7.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_boots_2e894e3e.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_helmets_e32f6641.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_chestplates_1c729159.yml
+  chance: 1.0
+- filename: bb_hiddenchamber_tundra_boss_tank_leggings_153c1df7.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tank_boots_667b860f.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_shields_5b64e89d.yml
+  chance: 1.0
+spawnLocations:
+- iekcorbarSeason2,6676.5,-38.0,2876.5,0.0,0.0
+- iekcorbarSeason2,17428.5,-1.0,-259.5,0.0,0.0
+- iekcorbarSeason2,17700.5,-10.0,-419.5,0.0,0.0
+- iekcorbarSeason2,23172.5,-34.0,-1427.5,0.0,0.0
+- iekcorbarSeason2,31940.5,-49.0,-307.5,0.0,0.0
+- iekcorbarSeason2,20324.5,-45.0,-307.5,0.0,0.0
+- iekcorbarSeason2,21380.5,-50.0,-307.5,0.0,0.0
+- iekcorbarSeason2,23364.5,-11.0,-307.5,0.0,0.0
+- iekcorbarSeason2,31748.5,-27.0,60.5,0.0,0.0
+customModel: em_frost_stray

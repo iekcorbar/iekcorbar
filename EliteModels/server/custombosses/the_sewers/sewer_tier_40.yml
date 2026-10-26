@@ -1,0 +1,103 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+leashRadius: 40
+followDistance: 30
+isRegionalBoss: true
+spawnCooldown: 5
+isEnabled: true
+entityType: ILLUSIONER
+name: $normalLevel &6Mirage
+level: dynamic
+instanced: true
+mainHand: BOW
+powers:
+- attack_push.yml
+- attack_wither.yml
+- gold_explosion.yml
+- invulnerability_fire.yml
+healthMultiplier: 1
+damageMultiplier: 1
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+onDamageMessages:
+- You victory, a lie
+- Your odds, grim
+- Your life, mine
+onDamagedMessages:
+- This pain, an illusion
+- This blood, a mirage
+- This weakness, a lie
+spawnLocations:
+- em_sewer_maze,-166.23339865072595,121.7,-231.12271912631732,15.681257,69.46123:1600903968126
+- em_sewer_maze,-153.9236657686293,122.2,-280.7584495735053,20.931225,341.70947:1600904208127
+- em_sewer_maze,-213.6367939824994,122.2,-241.8748381486791,34.881382,154.66127:0
+- em_sewer_maze,-202.6401628037237,122.2,-222.32913164281078,34.43149,117.609665:1600904387128
+- em_sewer_maze,-210.84932592634536,122.7,-138.83556850751788,14.932308,53.900166:1611058353655
+- em_sewer_maze,-201.5822476995408,122.2,-210.44260382014818,17.48145,152.25978:1600904387126
+- em_sewer_maze,-229.7427383364194,122.2,-230.06323905724744,14.031366,233.26122:1600051765990
+- em_sewer_maze,-146.21193224190318,122.2,-265.88251678968464,15.381237,262.81012:1600904328126
+- em_sewer_maze,-221.52131345237902,122.2,-133.80066502545247,11.482314,67.55017:1611058296230
+- em_sewer_maze,-158.41136113807357,122.2,-277.6436066449049,20.931225,341.70947:1600881887127
+- em_sewer_maze,-217.73684457903914,122.2,-218.11215576509184,29.031433,205.06006:0
+- em_sewer_maze,-231.47790914159435,122.2,-138.14361208002458,11.482314,67.55017:1608616271615
+- em_sewer_maze,-181.47323014761696,122.2,-231.49467325082733,52.88115,234.76094:1600903969125
+- em_sewer_maze,-194.38253028986915,122.2,-281.6874555571097,18.081226,252.30927:1600881827129
+- em_sewer_maze,-217.64057439737567,122.2,-246.28340084692343,34.881382,154.66127:1600881767127
+- em_sewer_maze,-157.76174508519898,122.2,-245.8662537846846,32.481304,315.6106:1600882127127
+- em_sewer_maze,-141.41279919821037,122.2,-256.1675635867572,19.731228,14.709412:1600904268126
+- em_sewer_maze,-165.78881786175512,122.2,-203.61437597274949,1.7314149,117.15962:1600904087128
+- em_sewer_maze,-141.9415709195206,122.2,-241.9405834891856,13.131255,134.1095:1600904328126
+- em_sewer_maze,-178.06860332699992,122.2,-257.559878301628,30.910967,16.431217:1608166710285
+- em_sewer_maze,-171.69054441193012,122.2,-209.73460996593877,38.931416,93.60949:1600904087128
+- em_sewer_maze,-154.13916787820432,122.2,-230.2002820580151,10.581267,145.9613:1600903968127
+- em_sewer_maze,-206.20170598793996,122.2,-205.79825911393812,23.48145,246.30925:1600904387126
+- em_sewer_maze,-202.7125411663462,122.2,-242.55897299522672,46.281418,96.46088:0
+- em_sewer_maze,-130.06088767410552,123.2,-256.5257265728974,7.5812697,69.759705:1600904268126
+- em_sewer_maze,-190.47314438921325,122.2,-277.6471847633955,18.081226,252.30927:1600881827127
+- em_sewer_maze,-191.39339873603194,122.2,-254.52279899882691,11.631232,166.80804:1606597882709
+- em_sewer_maze,-169.99444084265178,122.2,-233.7336236376815,15.681257,69.46123:1606597942683
+- em_sewer_maze,-205.90179677322328,122.2,-257.65602566292404,37.731316,318.75934:1600881767128
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_the_sewers_tunnels_swords_585f8af9.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_axes_4f2b49e7.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_bows_b7fdc637.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_crossbows_dc0db6d5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tridents_5a34965a.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_hoes_a0c18962.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_maces_ffccc452.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_spears_f90fd53b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_staves_40482056.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_wands_712be25e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_helmets_9917a646.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_chestplates_ddb3baab.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_leggings_b55e815e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_boots_e2a3eb58.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_helmets_341bb342.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_chestplates_1f0e9b0b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_leggings_cc0387b5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_boots_e5dddda6.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_shields_fcaba11c.yml
+  chance: 1.0
+customModel: em_clockwork_illusioner

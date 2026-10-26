@@ -1,0 +1,140 @@
+announcementPriority: 0
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 1.0
+deathMessages:
+- Soul Weaver I have failed you.
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  OpenPath:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_TIME
+      time: 6000
+    - Target:
+        targetType: ZONE_FULL
+      action: PLACE_BLOCK
+      duration: 12000
+      material: AIR
+    - action: RUN_SCRIPT
+      scripts:
+      - OpenPath2
+    Events:
+    - EliteMobDeathEvent
+    Zone:
+      Target:
+        location: same_as_boss,400.5,124.0,98.5,0.0,0.0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 5
+      y: 5
+      z: 1
+  OpenPath2:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+      action: PLACE_BLOCK
+      duration: 12000
+      material: AIR
+    Zone:
+      Target:
+        location: same_as_boss,389.5,121.0,65.5,0.0,0.0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 1
+      y: 3
+      z: 3
+entityType: SKELETON
+followDistance: 30
+frozen: false
+healthMultiplier: 7
+instanced: true
+isEnabled: true
+leashRadius: 30
+level: dynamic # 10
+mainHand: NETHERITE_SWORD
+movementSpeedAttribute: 0.33
+name: $bossLevel &cUndead Beastmaster
+normalizedCombat: true
+powers:
+- the_climb_ice_pillars.yml
+- taze.yml
+- lightning_bolts.yml
+- thunderstorm.yml
+- invulnerability_fire.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_push.yml
+- difficultyID:
+  - 2
+  filename: attack_web.yml
+- filename: the_climb_undead_beastmaster_summon_p4.yml
+  summonType: ON_COMBAT_ENTER
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.99
+  filename: the_climb_lore_note_final_boss.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: the_climb_beastmaster_drop_chestplate_tank_normal.yml
+- chance: 0.25
+  difficultyID: 1
+  filename: the_climb_beastmaster_drop_chestplate_tank_hard.yml
+- chance: 0.25
+  difficultyID: 2
+  filename: the_climb_beastmaster_drop_chestplate_tank_mythic.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: the_climb_beastmaster_drop_helmet_tank_normal.yml
+- chance: 0.25
+  difficultyID: 1
+  filename: the_climb_beastmaster_drop_helmet_tank_hard.yml
+- chance: 0.25
+  difficultyID: 2
+  filename: the_climb_beastmaster_drop_helmet_tank_mythic.yml
+- filename: the_climb_undead_beastmaster_p4_swords_42224cd3.yml
+  chance: 1.0
+- filename: the_climb_undead_beastmaster_p4_axes_5bf016c9.yml
+  chance: 1.0
+- filename: the_climb_undead_beastmaster_p4_bows_ba0e23ef.yml
+  chance: 1.0
+- filename: cl_story_climb_crossbows_320c599d.yml
+  chance: 1.0
+- filename: cl_story_climb_tridents_462a95e9.yml
+  chance: 1.0
+- filename: cl_story_climb_hoes_90f57b2c.yml
+  chance: 1.0
+- filename: cl_story_climb_maces_7f63f619.yml
+  chance: 1.0
+- filename: cl_story_climb_spears_743b64fe.yml
+  chance: 1.0
+- filename: cl_story_climb_staves_3ba7efcc.yml
+  chance: 1.0
+- filename: cl_story_climb_wands_0b2088fe.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_helmets_6a5e6399.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_chestplates_ed45bf2e.yml
+  chance: 1.0
+- filename: the_climb_undead_beastmaster_p4_dps_leggings_cc001891.yml
+  chance: 1.0
+- filename: the_climb_undead_beastmaster_p4_dps_boots_9a174077.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_helmets_77716983.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_chestplates_ebe1c9ff.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_leggings_7b9e21c5.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_boots_0634543f.yml
+  chance: 1.0
+- filename: cl_story_climb_shields_4f3929f0.yml
+  chance: 1.0
+customModel: em_clockwork_skeleton

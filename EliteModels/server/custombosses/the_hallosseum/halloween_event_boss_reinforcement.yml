@@ -1,0 +1,15 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+entityType: SKELETON
+healthMultiplier: 0.25
+isEnabled: true
+level: dynamic # 30
+instanced: true
+mainHand: BOW
+name: $reinforcementLevel Spooky Skeleton
+classLoot: false
+customModel: em_clockwork_skeleton

@@ -1,0 +1,153 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: HUSK
+isBaby: true
+name: $normalLevel &eMolten Marvel
+level: dynamic # 40
+healthMultiplier: 1.0
+damageMultiplier: 0.1
+movementSpeedAttribute: 0.33
+powers:
+- attack_push.yml
+- invulnerability_arrow.yml
+- invulnerability_fire.yml
+- filename: attack_fire.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: attack_vacuum.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 15
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  'false':
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: POTION_EFFECT
+      wait: 5
+      potionEffectType: SLOW
+      amplifier: 99
+      duration: 20
+      Target:
+        targetType: SELF
+      repeatEvery: 19
+      Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        hasTags:
+        - slow
+    - action: TAG
+      tags:
+      - slow
+      Target:
+        targetType: SELF
+  'true':
+    Events:
+    - EliteMobTargetPlayerEvent
+    Actions:
+    - action: UNTAG
+      tags:
+      - slow
+      Target:
+        targetType: SELF
+spawnLocations:
+- em_id_the_quarry,382.5,110.5,27.5,0.0,0.0:1704968050375
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: em_id_the_quarry_trash_boots_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_quarry_trash_bow_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_quarry_trash_chestplate_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_quarry_trash_helmet_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_quarry_trash_leggings_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: em_id_the_quarry_trash_boots_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_quarry_trash_bow_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_quarry_trash_chestplate_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_quarry_trash_helmet_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_quarry_trash_leggings_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: em_id_the_quarry_trash_boots_tank_mythical.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_quarry_trash_bow_tank_mythical.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_quarry_trash_chestplate_tank_mythical.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_quarry_trash_helmet_tank_mythical.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: em_id_the_quarry_trash_leggings_tank_mythical.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: cl_story_quarry_swords_2729e742.yml
+  chance: 1.0
+- filename: cl_story_quarry_axes_d871d3ab.yml
+  chance: 1.0
+- filename: cl_story_quarry_bows_ccabbcb4.yml
+  chance: 1.0
+- filename: cl_story_quarry_crossbows_4e4680f9.yml
+  chance: 1.0
+- filename: cl_story_quarry_tridents_9ced9fbf.yml
+  chance: 1.0
+- filename: cl_story_quarry_hoes_5211e998.yml
+  chance: 1.0
+- filename: cl_story_quarry_maces_7f24961b.yml
+  chance: 1.0
+- filename: cl_story_quarry_spears_8d549051.yml
+  chance: 1.0
+- filename: cl_story_quarry_staves_1ce41de2.yml
+  chance: 1.0
+- filename: cl_story_quarry_wands_7eb59ac6.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_helmets_73ccb419.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_chestplates_3148278f.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_leggings_ca5a54fd.yml
+  chance: 1.0
+- filename: cl_story_quarry_dps_boots_3e7f381e.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_helmets_2f899f43.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_chestplates_21a5129c.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_leggings_da76caa5.yml
+  chance: 1.0
+- filename: cl_story_quarry_tank_boots_0c31ed26.yml
+  chance: 1.0
+- filename: cl_story_quarry_shields_d080f0ef.yml
+  chance: 1.0
+customModel: em_rust_husk

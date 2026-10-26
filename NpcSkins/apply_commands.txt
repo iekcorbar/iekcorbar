@@ -1,0 +1,100 @@
+# Citizens: run in game as an OP. Replace <URL> with the public address of the PNG (see README).
+# The 24 'Guard' NPCs can use guard_a..guard_d in any mix (ids 93, 99-121).
+/npc select 49   (* Shichō Riku)
+/npc skin --url <URL>/shicho_riku.png
+/npc select 50   (* Master Farmer)
+/npc skin --url <URL>/master_farmer.png
+/npc select 51   (* Master Fisherman)
+/npc skin --url <URL>/master_fisherman.png
+/npc select 52   (* Master Miner)
+/npc skin --url <URL>/master_miner.png
+/npc select 53   (* Sensei Mechanical Craftsman)
+/npc skin --url <URL>/sensei_mechanical_craftsman.png
+/npc select 54   (* Master Digger)
+/npc skin --url <URL>/master_digger.png
+/npc select 55   (* Master Chef)
+/npc skin --url <URL>/master_chef.png
+/npc select 56   (* Master Woodcutter)
+/npc skin --url <URL>/master_woodcutter.png
+/npc select 57   (* Sensei Iron Samurai)
+/npc skin --url <URL>/sensei_iron_samurai.png
+/npc select 58   (* Master Explorer)
+/npc skin --url <URL>/master_explorer.png
+/npc select 59   (* Master Builder)
+/npc skin --url <URL>/master_builder.png
+/npc select 60   (* Master Hunter)
+/npc skin --url <URL>/master_hunter.png
+/npc select 61   (* Sensei Machine Lord)
+/npc skin --url <URL>/sensei_machine_lord.png
+/npc select 62   (* Master Brewer)
+/npc skin --url <URL>/master_brewer.png
+/npc select 63   (* Master Crafter)
+/npc skin --url <URL>/master_crafter.png
+/npc select 64   (* Master Enchanter)
+/npc skin --url <URL>/master_enchanter.png
+/npc select 44   (* Jiraiya)
+/npc skin --url <URL>/jiraiya.png
+/npc select 65   (* Sensei Emperor of Steam)
+/npc skin --url <URL>/sensei_emperor_of_steam.png
+/npc select 66   (* Master Weaponsmith)
+/npc skin --url <URL>/master_weaponsmith.png
+/npc select 68   (* Master Armorsmith)
+/npc skin --url <URL>/master_armorsmith.png
+/npc select 82   (* Aiko)
+/npc skin --url <URL>/aiko.png
+/npc select 83   (* Goro)
+/npc skin --url <URL>/goro.png
+/npc select 84   (* Taro)
+/npc skin --url <URL>/taro.png
+/npc select 85   (* Daichi)
+/npc skin --url <URL>/daichi.png
+/npc select 86   (* Momo)
+/npc skin --url <URL>/momo.png
+/npc select 87   (* Sora)
+/npc skin --url <URL>/sora.png
+/npc select 88   (* Ren)
+/npc skin --url <URL>/ren.png
+/npc select 89   (* Yuki)
+/npc skin --url <URL>/yuki.png
+/npc select 95   (* Brakka Stonewall)
+/npc skin --url <URL>/brakka_stonewall.png
+/npc select 78   (* Gemologist Petra)
+/npc skin --url <URL>/gemologist_petra.png
+/npc select 81   (* FishingRodney)
+/npc skin --url <URL>/fishingrodney.png
+/npc select 96   (* Aster Veyl)
+/npc skin --url <URL>/aster_veyl.png
+/npc select 90   (* Elias Packwright)
+/npc skin --url <URL>/elias_packwright.png
+/npc select 91   (* Mara Threadneedle)
+/npc skin --url <URL>/mara_threadneedle.png
+/npc select 92   (* Brann Gearlock)
+/npc skin --url <URL>/brann_gearlock.png
+/npc select 97   (* Orion the Adventurer)
+/npc skin --url <URL>/orion_the_adventurer.png
+/npc select 79   (* Vorkan Kross)
+/npc skin --url <URL>/vorkan_kross.png
+/npc select 76   (* Mad doctor)
+/npc skin --url <URL>/mad_doctor.png
+/npc select 94   (* Cleric)
+/npc skin --url <URL>/cleric.png
+/npc select 126   (* Capitan Usop)
+/npc skin --url <URL>/capitan_usop.png
+/npc select 125   (* Alpha Test Techcore)
+/npc skin --url <URL>/techcore_engineer.png
+/npc select 122   (* Tutorial)
+/npc skin --url <URL>/tutorial_guide.png
+/npc select 123   (* Dialogue tutorial)
+/npc skin --url <URL>/dialogue_guide.png
+/npc select 127   (* Race Assignor)
+/npc skin --url <URL>/race_assignor.png
+/npc select 128   (* Class Assignor)
+/npc skin --url <URL>/class_assignor.png
+/npc select 93   (* Guard)
+/npc skin --url <URL>/guard_a.png
+/npc select 99   (* Guard)
+/npc skin --url <URL>/guard_b.png
+/npc select 100   (* Guard)
+/npc skin --url <URL>/guard_c.png
+/npc select 101   (* Guard)
+/npc skin --url <URL>/guard_d.png

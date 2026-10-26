@@ -1,0 +1,86 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.01
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Float:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PUSH
+      vValue: 0,0.5,0
+    - Target:
+        targetType: SELF
+      action: POTION_EFFECT
+      amplifier: 1
+      duration: 20
+      potionEffectType: LEVITATION
+      repeatEvery: 23
+      wait: 5
+    Events:
+    - EliteMobSpawnEvent
+  FrostSphere:
+    Actions:
+    - Target:
+        coverage: 0.06
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SNOWFLAKE
+      repeatEvery: 1
+      times: 999
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 20
+      potionEffectType: SLOW
+      repeatEvery: 1
+      times: 999
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 2
+      radius: 3
+      shape: SPHERE
+  PushToNearbyPlayers:
+    Actions:
+    - RelativeVector:
+        DestinationTarget:
+          offset: 0,2,0
+          targetType: DIRECT_TARGET
+        SourceTarget:
+          targetType: SELF
+        multiplier: 0.1
+        normalize: true
+      Target:
+        targetType: SELF
+      action: PUSH
+      repeatEvery: 1
+    Events:
+    - EliteMobTargetPlayerEvent
+entityType: ZOMBIE
+followDistance: 20
+frozen: false
+healthMultiplier: 1.0
+instanced: true
+isBaby: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 50
+movementSpeedAttribute: 0.35
+name: $reinforcementLevel Frostball
+normalizedCombat: true
+powers:
+- invulnerability_fire.yml
+- invisibility.yml
+classLoot: false
+customModel: em_steam_zombie

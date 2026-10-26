@@ -1,0 +1,4 @@
+extends: class_trial_actor_base.yml
+isEnabled: true
+entityType: WOLF
+customModel: em_cog_wolf

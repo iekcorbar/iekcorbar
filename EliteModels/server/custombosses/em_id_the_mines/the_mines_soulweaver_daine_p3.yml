@@ -1,0 +1,323 @@
+onSpawnBlockStates: []
+bossType: BOSS
+damageMultiplier: 0.8
+scale: 2.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: SPIDER
+followDistance: 110
+frozen: false
+healthMultiplier: 20
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 20
+name: $bossLevel &4Soulweaver Daine
+normalizedCombat: true
+onRemoveBlockStates:
+- 2.5,19.0,50.5/minecraft:chiseled_stone_bricks
+- 2.5,19.0,51.5/minecraft:chiseled_stone_bricks
+- 2.5,19.0,52.5/minecraft:air
+- 2.5,20.0,50.5/minecraft:stone_bricks
+- 2.5,20.0,51.5/minecraft:mossy_stone_bricks
+- 2.5,20.0,52.5/minecraft:air
+- 2.5,21.0,50.5/minecraft:stone_bricks
+- 2.5,21.0,51.5/minecraft:cracked_stone_bricks
+- 2.5,21.0,52.5/minecraft:air
+- 2.5,22.0,50.5/minecraft:stone_brick_stairs[facing=west,half=bottom,shape=outer_left,waterlogged=false]
+- 2.5,22.0,51.5/minecraft:stone_brick_stairs[facing=north,half=bottom,shape=outer_left,waterlogged=false]
+- 2.5,22.0,52.5/minecraft:stone_brick_slab[type=top,waterlogged=false]
+- 2.5,23.0,50.5/minecraft:cracked_stone_bricks
+- 2.5,23.0,51.5/minecraft:mossy_stone_bricks
+- 2.5,23.0,52.5/minecraft:air
+- 2.5,24.0,50.5/minecraft:stone_bricks
+- 2.5,24.0,51.5/minecraft:mossy_stone_bricks
+- 2.5,24.0,52.5/minecraft:air
+- 2.5,25.0,50.5/minecraft:stone_brick_stairs[facing=east,half=bottom,shape=inner_left,waterlogged=false]
+- 2.5,25.0,51.5/minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_left,waterlogged=false]
+- 2.5,25.0,52.5/minecraft:air
+- 2.5,26.0,50.5/minecraft:cracked_stone_bricks
+- 2.5,26.0,51.5/minecraft:mossy_stone_bricks
+- 2.5,26.0,52.5/minecraft:dead_brain_coral_block
+- 3.5,19.0,50.5/minecraft:cobweb
+- 3.5,19.0,51.5/minecraft:air
+- 3.5,19.0,52.5/minecraft:air
+- 3.5,20.0,50.5/minecraft:air
+- 3.5,20.0,51.5/minecraft:air
+- 3.5,20.0,52.5/minecraft:air
+- 3.5,21.0,50.5/minecraft:cobweb
+- 3.5,21.0,51.5/minecraft:air
+- 3.5,21.0,52.5/minecraft:air
+- 3.5,22.0,50.5/minecraft:air
+- 3.5,22.0,51.5/minecraft:air
+- 3.5,22.0,52.5/minecraft:air
+- 3.5,23.0,50.5/minecraft:cobweb
+- 3.5,23.0,51.5/minecraft:air
+- 3.5,23.0,52.5/minecraft:air
+- 3.5,24.0,50.5/minecraft:cobweb
+- 3.5,24.0,51.5/minecraft:air
+- 3.5,24.0,52.5/minecraft:air
+- 3.5,25.0,50.5/minecraft:air
+- 3.5,25.0,51.5/minecraft:air
+- 3.5,25.0,52.5/minecraft:air
+- 3.5,26.0,50.5/minecraft:cobweb
+- 3.5,26.0,51.5/minecraft:dead_brain_coral_block
+- 3.5,26.0,52.5/minecraft:air
+- 4.5,19.0,50.5/minecraft:air
+- 4.5,19.0,51.5/minecraft:air
+- 4.5,19.0,52.5/minecraft:air
+- 4.5,20.0,50.5/minecraft:air
+- 4.5,20.0,51.5/minecraft:air
+- 4.5,20.0,52.5/minecraft:air
+- 4.5,21.0,50.5/minecraft:air
+- 4.5,21.0,51.5/minecraft:air
+- 4.5,21.0,52.5/minecraft:air
+- 4.5,22.0,50.5/minecraft:air
+- 4.5,22.0,51.5/minecraft:air
+- 4.5,22.0,52.5/minecraft:air
+- 4.5,23.0,50.5/minecraft:cobweb
+- 4.5,23.0,51.5/minecraft:air
+- 4.5,23.0,52.5/minecraft:air
+- 4.5,24.0,50.5/minecraft:air
+- 4.5,24.0,51.5/minecraft:air
+- 4.5,24.0,52.5/minecraft:air
+- 4.5,25.0,50.5/minecraft:air
+- 4.5,25.0,51.5/minecraft:air
+- 4.5,25.0,52.5/minecraft:air
+- 4.5,26.0,50.5/minecraft:air
+- 4.5,26.0,51.5/minecraft:cobblestone
+- 4.5,26.0,52.5/minecraft:air
+- 5.5,19.0,50.5/minecraft:air
+- 5.5,19.0,51.5/minecraft:air
+- 5.5,19.0,52.5/minecraft:grass
+- 5.5,20.0,50.5/minecraft:air
+- 5.5,20.0,51.5/minecraft:air
+- 5.5,20.0,52.5/minecraft:air
+- 5.5,21.0,50.5/minecraft:air
+- 5.5,21.0,51.5/minecraft:air
+- 5.5,21.0,52.5/minecraft:air
+- 5.5,22.0,50.5/minecraft:air
+- 5.5,22.0,51.5/minecraft:air
+- 5.5,22.0,52.5/minecraft:air
+- 5.5,23.0,50.5/minecraft:air
+- 5.5,23.0,51.5/minecraft:air
+- 5.5,23.0,52.5/minecraft:air
+- 5.5,24.0,50.5/minecraft:cobweb
+- 5.5,24.0,51.5/minecraft:air
+- 5.5,24.0,52.5/minecraft:air
+- 5.5,25.0,50.5/minecraft:air
+- 5.5,25.0,51.5/minecraft:air
+- 5.5,25.0,52.5/minecraft:air
+- 5.5,26.0,50.5/minecraft:air
+- 5.5,26.0,51.5/minecraft:air
+- 5.5,26.0,52.5/minecraft:air
+- 6.5,19.0,50.5/minecraft:grass
+- 6.5,19.0,51.5/minecraft:air
+- 6.5,19.0,52.5/minecraft:air
+- 6.5,20.0,50.5/minecraft:air
+- 6.5,20.0,51.5/minecraft:air
+- 6.5,20.0,52.5/minecraft:air
+- 6.5,21.0,50.5/minecraft:air
+- 6.5,21.0,51.5/minecraft:air
+- 6.5,21.0,52.5/minecraft:air
+- 6.5,22.0,50.5/minecraft:air
+- 6.5,22.0,51.5/minecraft:air
+- 6.5,22.0,52.5/minecraft:air
+- 6.5,23.0,50.5/minecraft:air
+- 6.5,23.0,51.5/minecraft:air
+- 6.5,23.0,52.5/minecraft:air
+- 6.5,24.0,50.5/minecraft:air
+- 6.5,24.0,51.5/minecraft:air
+- 6.5,24.0,52.5/minecraft:air
+- 6.5,25.0,50.5/minecraft:cobweb
+- 6.5,25.0,51.5/minecraft:air
+- 6.5,25.0,52.5/minecraft:air
+- 6.5,26.0,50.5/minecraft:air
+- 6.5,26.0,51.5/minecraft:air
+- 6.5,26.0,52.5/minecraft:air
+- 7.5,19.0,50.5/minecraft:grass
+- 7.5,19.0,51.5/minecraft:air
+- 7.5,19.0,52.5/minecraft:air
+- 7.5,20.0,50.5/minecraft:air
+- 7.5,20.0,51.5/minecraft:air
+- 7.5,20.0,52.5/minecraft:air
+- 7.5,21.0,50.5/minecraft:air
+- 7.5,21.0,51.5/minecraft:air
+- 7.5,21.0,52.5/minecraft:air
+- 7.5,22.0,50.5/minecraft:air
+- 7.5,22.0,51.5/minecraft:air
+- 7.5,22.0,52.5/minecraft:air
+- 7.5,23.0,50.5/minecraft:air
+- 7.5,23.0,51.5/minecraft:air
+- 7.5,23.0,52.5/minecraft:air
+- 7.5,24.0,50.5/minecraft:air
+- 7.5,24.0,51.5/minecraft:air
+- 7.5,24.0,52.5/minecraft:air
+- 7.5,25.0,50.5/minecraft:cobweb
+- 7.5,25.0,51.5/minecraft:air
+- 7.5,25.0,52.5/minecraft:air
+- 7.5,26.0,50.5/minecraft:cobblestone
+- 7.5,26.0,51.5/minecraft:cobblestone
+- 7.5,26.0,52.5/minecraft:air
+- 8.5,19.0,50.5/minecraft:air
+- 8.5,19.0,51.5/minecraft:cobweb
+- 8.5,19.0,52.5/minecraft:air
+- 8.5,20.0,50.5/minecraft:air
+- 8.5,20.0,51.5/minecraft:air
+- 8.5,20.0,52.5/minecraft:air
+- 8.5,21.0,50.5/minecraft:air
+- 8.5,21.0,51.5/minecraft:air
+- 8.5,21.0,52.5/minecraft:air
+- 8.5,22.0,50.5/minecraft:air
+- 8.5,22.0,51.5/minecraft:cobweb
+- 8.5,22.0,52.5/minecraft:air
+- 8.5,23.0,50.5/minecraft:air
+- 8.5,23.0,51.5/minecraft:air
+- 8.5,23.0,52.5/minecraft:air
+- 8.5,24.0,50.5/minecraft:air
+- 8.5,24.0,51.5/minecraft:air
+- 8.5,24.0,52.5/minecraft:air
+- 8.5,25.0,50.5/minecraft:air
+- 8.5,25.0,51.5/minecraft:cobweb
+- 8.5,25.0,52.5/minecraft:air
+- 8.5,26.0,50.5/minecraft:dead_brain_coral_block
+- 8.5,26.0,51.5/minecraft:cobblestone
+- 8.5,26.0,52.5/minecraft:cobblestone
+- 9.5,19.0,50.5/minecraft:air
+- 9.5,19.0,51.5/minecraft:chiseled_stone_bricks
+- 9.5,19.0,52.5/minecraft:chiseled_stone_bricks
+- 9.5,20.0,50.5/minecraft:air
+- 9.5,20.0,51.5/minecraft:mossy_stone_bricks
+- 9.5,20.0,52.5/minecraft:mossy_stone_bricks
+- 9.5,21.0,50.5/minecraft:air
+- 9.5,21.0,51.5/minecraft:stone_bricks
+- 9.5,21.0,52.5/minecraft:mossy_stone_bricks
+- 9.5,22.0,50.5/minecraft:air
+- 9.5,22.0,51.5/minecraft:stone_brick_stairs[facing=north,half=bottom,shape=inner_left,waterlogged=false]
+- 9.5,22.0,52.5/minecraft:stone_brick_stairs[facing=west,half=bottom,shape=inner_left,waterlogged=false]
+- 9.5,23.0,50.5/minecraft:air
+- 9.5,23.0,51.5/minecraft:cracked_stone_bricks
+- 9.5,23.0,52.5/minecraft:mossy_stone_bricks
+- 9.5,24.0,50.5/minecraft:air
+- 9.5,24.0,51.5/minecraft:stone_bricks
+- 9.5,24.0,52.5/minecraft:mossy_stone_bricks
+- 9.5,25.0,50.5/minecraft:dead_brain_coral_block
+- 9.5,25.0,51.5/minecraft:stone_bricks
+- 9.5,25.0,52.5/minecraft:stone_bricks
+- 9.5,26.0,50.5/minecraft:cobblestone
+- 9.5,26.0,51.5/minecraft:cobblestone
+- 9.5,26.0,52.5/minecraft:cracked_stone_bricks
+powers:
+- the_mines_daine_mumble.yml
+- the_mines_daine_bool_hard.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_wither.yml
+- movement_speed.yml
+- the_mines_daine_hole_digger.yml
+- the_mines_daine_void_teleport.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_weakness.yml
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.99
+  filename: em_id_the_mines_daine_lore.yml
+- chance: 0.1
+  difficultyID: 0
+  filename: the_mines_daine_drop_chestplate_dps_normal.yml
+- chance: 0.1
+  difficultyID: 1
+  filename: the_mines_daine_drop_chestplate_dps_hard.yml
+- chance: 0.1
+  difficultyID: 2
+  filename: the_mines_daine_drop_chestplate_dps_mythic.yml
+- chance: 0.1
+  difficultyID: 0
+  filename: the_mines_daine_drop_boots_dps_normal.yml
+- chance: 0.1
+  difficultyID: 1
+  filename: the_mines_daine_drop_boots_dps_hard.yml
+- chance: 0.1
+  difficultyID: 2
+  filename: the_mines_daine_drop_boots_dps_mythic.yml
+- chance: 0.1
+  difficultyID: 0
+  filename: the_mines_daine_drop_crossbow_tank_normal.yml
+- chance: 0.1
+  difficultyID: 1
+  filename: the_mines_daine_drop_crossbow_tank_hard.yml
+- chance: 0.1
+  difficultyID: 2
+  filename: the_mines_daine_drop_crossbow_tank_mythic.yml
+- chance: 0.1
+  difficultyID: 0
+  filename: the_mines_daine_drop_helmet_tank_normal.yml
+- chance: 0.1
+  difficultyID: 1
+  filename: the_mines_daine_drop_helmet_tank_hard.yml
+- chance: 0.1
+  difficultyID: 2
+  filename: the_mines_daine_drop_helmet_tank_mythic.yml
+- chance: 0.1
+  difficultyID: 0
+  filename: the_mines_daine_drop_leggings_tank_normal.yml
+- chance: 0.1
+  difficultyID: 1
+  filename: the_mines_daine_drop_leggings_tank_hard.yml
+- chance: 0.1
+  difficultyID: 2
+  filename: the_mines_daine_drop_leggings_tank_mythic.yml
+- chance: 0.1
+  difficultyID: 0
+  filename: the_mines_daine_drop_sword_dps_normal.yml
+- chance: 0.1
+  difficultyID: 1
+  filename: the_mines_daine_drop_sword_dps_hard.yml
+- chance: 0.1
+  difficultyID: 2
+  filename: the_mines_daine_drop_sword_dps_mythic.yml
+- filename: cl_story_mines_swords_f5c77fe4.yml
+  chance: 1.0
+- filename: cl_story_mines_axes_23aac663.yml
+  chance: 1.0
+- filename: the_mines_soulweaver_daine_p3_bows_50f43c3b.yml
+  chance: 1.0
+- filename: cl_story_mines_crossbows_bc046011.yml
+  chance: 1.0
+- filename: cl_story_mines_tridents_e00d07bd.yml
+  chance: 1.0
+- filename: cl_story_mines_hoes_94e447fa.yml
+  chance: 1.0
+- filename: cl_story_mines_maces_96b8e254.yml
+  chance: 1.0
+- filename: cl_story_mines_spears_258f1267.yml
+  chance: 1.0
+- filename: cl_story_mines_staves_9801a7fb.yml
+  chance: 1.0
+- filename: cl_story_mines_wands_88a081b9.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_helmets_d62cc6c8.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_chestplates_527dffa2.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_leggings_3c7084ec.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_boots_87c73439.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_helmets_23d0f6a6.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_chestplates_905e88bf.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_leggings_cccc8016.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_boots_e7f99614.yml
+  chance: 1.0
+- filename: cl_story_mines_shields_687daaca.yml
+  chance: 1.0
+customModel: em_brass_spider

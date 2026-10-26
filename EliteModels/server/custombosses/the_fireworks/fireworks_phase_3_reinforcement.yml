@@ -1,0 +1,19 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+entityType: SKELETON
+followDistance: 200
+healthMultiplier: 0.25
+isEnabled: true
+isPersistent: true
+level: dynamic # 20
+instanced: true
+mainHand: BOW
+name: $reinforcementLevel &cPartygoer
+powers:
+- arrow_fireworks.yml
+- fireworks_barrage.yml
+classLoot: false
+customModel: em_clockwork_skeleton

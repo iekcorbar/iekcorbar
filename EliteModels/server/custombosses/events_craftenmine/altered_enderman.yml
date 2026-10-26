@@ -1,0 +1,25 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ENDERMAN
+name: $eventBossLevel &1Altered Enderman
+level: dynamic
+healthMultiplier: 3.0
+damageMultiplier: 1.0
+phases:
+- altered_enderman_p2.yml:0.25
+powers:
+- attack_vacuum.yml
+- attack_fire.yml
+trails:
+- FLAME
+movementSpeedAttribute: 0.28
+followDistance: 65
+locationMessage: '&cAltered Enderman: $distance blocks away!'
+spawnMessage: '&cDr. Craftenmine''s ender creation has been set loose!'
+deathMessage: '&aAltered Enderman was put out of it''s misery by $players!'
+escapeMessage: '&4Altered Enderman has phased out of existence!'
+announcementPriority: 2
+customModel: em_brass_enderman

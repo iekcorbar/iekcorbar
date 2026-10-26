@@ -1,0 +1,7 @@
+extends: class_trial_actor_wolf.yml
+isEnabled: true
+name: '&fTraining Wolf'
+healthMultiplier: 0.4
+damageMultiplier: 0.3
+ai: true
+customModel: em_cog_wolf

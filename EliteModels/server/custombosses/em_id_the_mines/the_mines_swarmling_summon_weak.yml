@@ -1,0 +1,21 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: CAVE_SPIDER
+followDistance: 10
+frozen: false
+healthMultiplier: 0.1
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 20
+name: $reinforcementLevel &2Weak Swarmling
+normalizedCombat: true
+powers:
+- attack_blinding.yml
+classLoot: false
+customModel: em_lantern_cave_spider

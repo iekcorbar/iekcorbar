@@ -1,0 +1,70 @@
+# IekcorbarSiteSync Configuration
+
+# ReviveNode / MySQL Database Configuration
+# Fill in your ReviveNode MySQL connection details below:
+database:
+  enabled: true
+  host: "TODO-server-ip"         # Plesk web server IP (where MySQL actually lives) — NOT this Minecraft server's own IP
+  port: 3306                   # MySQL Port (default 3306)
+  name: "iekcorbar"            # Database Name
+  username: "TODO"             # Database Username  - LET OP: de echte gegevens staan ALLEEN op de server
+  password: "TODO"             # Database Password  - in plugins/IekcorbarSiteSync/config.yml, nooit in git
+  ssl: false                   # Enable SSL if required by your provider
+  sync-interval-seconds: 30    # Sync frequency in seconds
+
+# Automatically sync all player statistics (playtime, kills, deaths, mob kills, blocks mined, balance, elite coins, lands, jobs)
+sync-player-stats: true
+
+# Generic PlaceholderAPI bridge — lets the website show data from ANY plugin
+# that registers PlaceholderAPI placeholders (Lands, ValhallaMMO, ValhallaRaces,
+# etc.) without needing a code change/plugin rebuild every time you want a new
+# stat. Requires PlaceholderAPI itself to be installed on this server.
+#
+# Add/remove/rename entries freely — the key on the left is what shows up on
+# the website, the value on the right is the exact placeholder to resolve.
+# Verify a placeholder actually works BEFORE adding it here by running
+# "/papi parse <yourname> <placeholder>" in-game (e.g. "/papi parse Notch
+# %lands_player_chunks_claimed%") — if that prints the placeholder text back
+# unchanged instead of a real value, the plugin isn't installed, the
+# placeholder name is wrong, or that specific plugin doesn't support offline
+# players (this sync only runs for currently-online players).
+#
+# "lands_claims" is special-cased: if present, it's parsed as a whole number
+# and also written into the website's existing dedicated claims column (the
+# one the homepage "Claims Protected" counter sums) — every other key here
+# just goes into a generic per-player stats blob the website can display.
+# 2026-10-26: the Lands plugin is retired; Gouw's claims are synced straight
+# from plugins/Gouw/claims.json (see GouwClaims.java), so the %lands% entries
+# are gone. Keep this bridge for the OTHER plugins below.
+placeholder-sync:
+  enabled: true
+  placeholders:
+    valhalla_race: "%valhallaraces_racename%"
+    valhalla_class: "%valhallaraces_classname_1%"
+    mmocore_class: "%mmocore_class%"
+    mmocore_level: "%mmocore_level%"
+    # Example for a ValhallaMMO skill — replace <skill> with the real
+    # profile id from your server's own Valhalla config, then verify with
+    # /papi parse before uncommenting:
+    # valhalla_smithing_level: "%valhallammo_smithingprofile_level%"
+
+# Mirrors in-game/console CMI moderation commands (cmi kick/ban/tempban/unban)
+# into the website's own moderation_logs table, so staff acting directly
+# in-game (bypassing the Staff Panel) still show up in the site's moderation
+# history. See ModerationAuditListener.java.
+moderation-audit:
+  enabled: true
+
+# HeadDatabase: heads are free ONLY for players with iekcorbar.heads.creativefree
+# while they are in creative mode; everyone else (OP included) always pays.
+# Leaving this section out = enabled with the built-in node list.
+creative-heads:
+  enabled: true
+  # Uncomment to override the HeadDatabase "free" permission nodes that get
+  # switched on/off (Bukkit doesn't expand wildcards, so list each one):
+  # free-nodes:
+  #   - "headdb.free.*"
+  #   - "headdb.free.blocks"
+
+# Print debug info in server console
+debug: false

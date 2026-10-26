@@ -1,0 +1,23 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: RABBIT
+name: $eventBossLevel &dRapid Mutator
+level: dynamic
+healthMultiplier: 3.0
+damageMultiplier: 1.0
+phases:
+- rapid_mutator_p2.yml:0.66
+- rapid_mutator_p3.yml:0.33
+powers:
+- arrow_rain.yml
+movementSpeedAttribute: 0.3
+followDistance: 80
+locationMessage: '&cRapid Mutator: $distance blocks away!'
+spawnMessage: '&cA Dr. Craftenmine experiment is out in the wild!'
+deathMessage: '&aThe Rapid Mutator was vanquished by $players!'
+escapeMessage: '&4The Rapid Mutator has vanished!'
+announcementPriority: 2
+customModel: em_wind_rabbit

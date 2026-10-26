@@ -1,0 +1,202 @@
+# iekcorbar - speciale stembeloningen (2026-09-28)
+# Bedragen afgestemd op de economie: actieve spelers verdienen ca. $200/uur,
+# de rijkste speler heeft ~$108k. Max per dag via stemmen ~ $350 + items.
+VoteMilestonesOptions:
+  Groups:
+    Default: ALL
+    ExampleId: FIRST
+VoteMilestones:
+  FirstVoteAllTime:
+    Enabled: true
+    Total: AllTime
+    At: 1
+    Group: first
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 100'
+      Messages:
+        Player: '&aThanks for your very first vote! &e+$100'
+  Every50Votes:
+    Enabled: true
+    Total: ALLTIME_VOTES
+    Every: 50
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 1500'
+      Items:
+        lapis:
+          Material: LAPIS_LAZULI
+          Amount: 20
+      Messages:
+        Player: '&6&lMILESTONE! &aYou reached &e%amount% &avotes! &e+$1500'
+  AllSitesToday_AllDone:
+    Enabled: true
+    Total: ALLSITES_TODAY
+    At: 3 # aantal stemsites in VoteSites.yml (MinecraftServers.org, Minecraft-MP.com, PlanetMinecraft.com)
+    Limit:
+      Type: WINDOW_DAY
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 150'
+      Items:
+        diamond:
+          Material: DIAMOND
+          Amount: 1
+      Messages:
+        Player: '&eYou voted on all sites today! &a+$150 + 1 Diamond'
+VoteParty:
+  Enabled: true
+  VotesRequired: 50
+  GiveAllPlayers: false
+  GiveOnlinePlayersOnly: true
+  ResetEachDay: false
+  ResetWeekly: false
+  ResetMonthly: false
+  OnlyOncePerDay: false
+  OnlyOncePerWeek: false
+  ResetExtraVotesWeekly: false
+  ResetExtraVotesMonthly: false
+  CountFakeVotes: true
+  UserVotesRequired: 0
+  CountOfflineVotes: true
+  Broadcast: '&d&lVOTEPARTY! &a50 votes reached, everyone online gets a reward!'
+  VoteReminder:
+    AtVotes:
+    - 10
+    - 5
+    Broadcast: '&6%votesrequired% &evotes left until the VoteParty! &7/vote'
+    Commands: []
+  GlobalCommands: []
+  GlobalRandomCommand: []
+  Rewards:
+    Commands:
+    - 'cmi money give %player% 250'
+    Items:
+      apple:
+        Material: GOLDEN_APPLE
+        Amount: 3
+    Messages:
+      Player: '&d&lVOTEPARTY! &a+$250 and 3 Golden Apples'
+VoteStreaks:
+  Daily3Votes:
+    Type: DAILY
+    Enabled: false
+    Requirements:
+      Amount: 3
+      VotesRequired: 3
+    AllowMissedAmount: 1
+    AllowMissedPeriod: 7
+    Recurring: true
+    Rewards:
+      Commands: []
+  ProgressGroups:
+    DagelijkseReeks:
+      Type: DAILY
+      VotesRequired: 1
+      AllowMissedAmount: 1
+      AllowMissedPeriod: 7
+      RequireMilestoneForLostRewards: true
+      LostRewards:
+        Messages:
+          Player: "&cYou lost your %streak% day voting streak."
+      Milestones:
+        DailyStreak7:
+          Enabled: true
+          Amount: 7
+          Recurring: false
+          Rewards:
+            Commands:
+            - 'cmi money give %player% 750'
+            Items:
+              diamondblock:
+                Material: DIAMOND_BLOCK
+                Amount: 2
+            Messages:
+              Player: "&6You reached a 7 day voting streak! &a+$750 and 2 Diamond Blocks"
+        DailyStreak30:
+          Enabled: true
+          Amount: 30
+          Recurring: false
+          Rewards:
+            Commands:
+            - 'cmi money give %player% 3000'
+            Items:
+              netherite:
+                Material: NETHERITE_INGOT
+                Amount: 1
+            Messages:
+              Player: "&6&lYou reached a 30 day voting streak! &a+$3000 and 1 Netherite Ingot"
+NameMCLikeReward:
+  Enabled: false
+  Url: "play.iekcorbar.com"
+  CheckIntervalMinutes: 10
+  Rewards:
+    Messages:
+      Player: "&aThanks for liking the server on NameMC!"
+FirstVote: {}
+FirstVoteToday: {}
+AllSites: {}
+OnlyOneCumulative: false
+Cumulative:
+  '20':
+    Enabled: false
+    TotalToUse: AllTime
+    Rewards:
+      Messages:
+        Player: '&aYou got %cumulative% cumulative votes!'
+ResetMilestonesMonthly: false
+MileStones:
+  '20':
+    Enabled: false
+    Rewards:
+      Messages:
+        Player: '&aYou got %milestone% milestone votes!'
+VoteStreak:
+  Day:
+    '2':
+      Enabled: false
+      Rewards:
+        Messages:
+          Player: "&aYou voted for %Streak% %Type%'s in a row!"
+  Week:
+    '2':
+      Enabled: false
+      Rewards:
+        Messages:
+          Player: "&aYou voted for %Streak% %Type%'s in a row!"
+  Month:
+    '2':
+      Enabled: false
+      Rewards:
+        Messages:
+          Player: "&aYou voted for %Streak% %Type%'s in a row!"
+  Requirement:
+    UsePercentage: false
+    Day: 50
+    Week: 50
+    Month: 50
+# Maandelijkse top-stemmers
+EnableMonthlyAwards: true
+MonthlyAwards:
+  1:
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 5000'
+      Messages:
+        Player: '&6You were the #1 voter of the month! &a+$5000'
+  2:
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 2500'
+      Messages:
+        Player: '&6You were the #2 voter of the month! &a+$2500'
+  3:
+    Rewards:
+      Commands:
+      - 'cmi money give %player% 1000'
+      Messages:
+        Player: '&6You were the #3 voter of the month! &a+$1000'
+EnableWeeklyAwards: false
+WeeklyAwards: {}
+EnableDailyRewards: false
+DailyAwards: {}

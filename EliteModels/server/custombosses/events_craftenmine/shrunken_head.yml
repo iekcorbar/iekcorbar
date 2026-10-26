@@ -1,0 +1,21 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIFIED_PIGLIN
+isBaby: true
+name: $eventBossLevel &aShrunken Head
+level: dynamic
+healthMultiplier: 1.0
+damageMultiplier: 0.1
+powers:
+- attack_arrow.yml
+movementSpeedAttribute: 0.27
+followDistance: 80
+locationMessage: '&cShrunken Head: $distance blocks away!'
+spawnMessage: '&cBio materials have escaped Dr. Craftenmine''s laboratory!'
+deathMessage: '&aThe Shrunken Heads have been exterminated by $players!'
+escapeMessage: '&4The Shrunken Heads have escaped!'
+announcementPriority: 2
+customModel: em_gilded_zombified_piglin

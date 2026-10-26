@@ -1,0 +1,106 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+bossType: BOSS
+cullReinforcements: true
+damageMultiplier: 1.75
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+entityType: BLAZE
+followDistance: 200
+healthMultiplier: 30
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 70
+level: dynamic # 20
+instanced: true
+name: $bossLevel &cSparky
+phases:
+- fireworks_level_50_boss_phase_2.yml:0.66
+- fireworks_level_50_boss_phase_3.yml:0.33
+powers:
+- arrow_fireworks.yml
+- fireworks_barrage.yml
+spawnCooldown: 360
+spawnLocations:
+- em_fireworks,-2.5,71.5,0.5,0.0,0.0:0
+spawnMessage: '&eSparks fill the sky!'
+eliteScript:
+  PushZone:
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      shape: CYLINDER
+      radius: 80
+      height: 5
+      filter: ELITE
+      Target:
+        targetType: SELF_SPAWN
+        offset: 0,10,0
+    Actions:
+    - action: PUSH
+      vValue: 0,-10,0
+      repeatEvery: 10
+      Target:
+        targetType: ZONE_FULL
+      Conditions:
+        isAlive: true
+        Target:
+          targetType: SELF
+  # - action: SPAWN_PARTICLE
+  # Target:
+  # targetType: ZONE_FULL
+  # particles:
+  # - particle: FLAME
+  # repeatEvery: 10
+  TeleToSpawn:
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      shape: CYLINDER
+      radius: 90
+      height: 3
+      filter: ELITE
+      Target:
+        targetType: SELF_SPAWN
+        offset: 0,-13,0
+    Actions:
+    - action: TELEPORT
+      Target:
+        targetType: ZONE_FULL
+      FinalTarget:
+        targetType: SELF_SPAWN
+      repeatEvery: 10
+      Conditions:
+        isAlive: true
+        Target:
+          targetType: SELF
+  # - action: SPAWN_PARTICLE
+  # Target:
+  # targetType: ZONE_FULL
+  # particles:
+  # - particle: FLAME
+  # repeatEvery: 10
+  MessagePlayers:
+    Events:
+    - ZoneEnterEvent
+    Zone:
+      shape: CYLINDER
+      radius: 90
+      height: 3
+      filter: ELITE
+      Target:
+        targetType: SELF_SPAWN
+        offset: 0,-13,0
+    Actions:
+    - action: MESSAGE
+      wait: 10
+      Target:
+        targetType: NEARBY_PLAYERS
+        range: 50
+      sValue: '&cSparky &fwas teleported back to spawn!'
+    Cooldowns:
+      local: 100
+      global: 1
+classLoot: false
+customModel: em_furnace_blaze

@@ -1,0 +1,80 @@
+# WanderingTrades 1.9.6 trade config: Satchel rare backpacks (iekcorbar)
+#
+# Backpacks are not craftable. The trade result is a plain paper named exactly like the backpack with the LAST lore
+# line exactly "Satchel"; the first time a player right-clicks it, the Satchel plugin swaps it for the real backpack.
+# Keep the names and the last lore line as they are. Staff: /satchel give <tier> [player].
+
+enabled: true
+
+# chance that a wandering trader gets this trade (allowMultipleSets is true in config.yml, so this is a plain percentage)
+chance: 0.10
+
+# a trader gets ONE random trade of this file
+randomized: true
+randomAmount: 1
+
+invincible: false
+customName: NONE
+disableHeroOfTheVillageGifts: false
+
+trades:
+  gold:
+    maxUses: 1
+    experienceReward: true
+    ingredients:
+      1:
+        customname: NONE
+        material: EMERALD
+        amount: 48
+      2:
+        customname: NONE
+        material: GOLD_INGOT
+        amount: 16
+    result:
+      customname: "<gold>Gold Backpack"
+      material: PAPER
+      amount: 1
+      lore:
+        - "<gray>Right-click to open."
+        - "<gray>Upgrades go in the bottom row."
+        - "<dark_aqua>Satchel"
+  diamond:
+    maxUses: 1
+    experienceReward: true
+    ingredients:
+      1:
+        customname: NONE
+        material: EMERALD
+        amount: 56
+      2:
+        customname: NONE
+        material: DIAMOND
+        amount: 8
+    result:
+      customname: "<gold>Diamond Backpack"
+      material: PAPER
+      amount: 1
+      lore:
+        - "<gray>Right-click to open."
+        - "<gray>Upgrades go in the bottom row."
+        - "<dark_aqua>Satchel"
+  netherite:
+    maxUses: 1
+    experienceReward: true
+    ingredients:
+      1:
+        customname: NONE
+        material: EMERALD
+        amount: 64
+      2:
+        customname: NONE
+        material: NETHERITE_INGOT
+        amount: 2
+    result:
+      customname: "<gold>Netherite Backpack"
+      material: PAPER
+      amount: 1
+      lore:
+        - "<gray>Right-click to open."
+        - "<gray>Upgrades go in the bottom row."
+        - "<dark_aqua>Satchel"

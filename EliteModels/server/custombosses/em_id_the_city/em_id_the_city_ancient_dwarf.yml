@@ -1,0 +1,70 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+name: $normalLevel &eAncient Dwarf
+level: dynamic # 30
+instanced: true
+healthMultiplier: 2
+damageMultiplier: 1
+movementSpeedAttribute: 0.31
+onDamageMessages:
+- Why! Why! Why!
+frozen: false
+# leashRadius: 100
+followDistance: 80
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: true
+normalizedCombat: true
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_city,-37.5,123.5,3.5,0.0,0.0:1701249130737
+- em_id_the_city,6.5,123.5,-60.5,0.0,0.0
+- em_id_the_city,41.5,123.5,-113.5,0.0,0.0
+- em_id_the_city,41.5,123.5,-105.5,0.0,0.0
+- em_id_the_city,159.5,134.5,49.5,0.0,0.0:1701249554584
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_city_swords_72374882.yml
+  chance: 1.0
+- filename: cl_story_city_axes_3e3836c3.yml
+  chance: 1.0
+- filename: em_id_the_city_ancient_dwarf_bows_82b29498.yml
+  chance: 1.0
+- filename: cl_story_city_crossbows_4f840ddc.yml
+  chance: 1.0
+- filename: cl_story_city_tridents_1c9b78a1.yml
+  chance: 1.0
+- filename: cl_story_city_hoes_3d3a19dd.yml
+  chance: 1.0
+- filename: cl_story_city_maces_6a599269.yml
+  chance: 1.0
+- filename: cl_story_city_spears_26a9b9f7.yml
+  chance: 1.0
+- filename: cl_story_city_staves_5096e479.yml
+  chance: 1.0
+- filename: cl_story_city_wands_9c8a028f.yml
+  chance: 1.0
+- filename: cl_story_city_dps_helmets_d1c8d4c9.yml
+  chance: 1.0
+- filename: em_id_the_city_ancient_dwarf_dps_chestplates_daa9d85e.yml
+  chance: 1.0
+- filename: em_id_the_city_ancient_dwarf_dps_leggings_b8a3f838.yml
+  chance: 1.0
+- filename: cl_story_city_dps_boots_e3407892.yml
+  chance: 1.0
+- filename: cl_story_city_tank_helmets_cbfd6c5f.yml
+  chance: 1.0
+- filename: cl_story_city_tank_chestplates_cd2d8317.yml
+  chance: 1.0
+- filename: cl_story_city_tank_leggings_29c315dd.yml
+  chance: 1.0
+- filename: cl_story_city_tank_boots_f725eaca.yml
+  chance: 1.0
+- filename: cl_story_city_shields_ee853241.yml
+  chance: 1.0
+customModel: em_steam_zombie

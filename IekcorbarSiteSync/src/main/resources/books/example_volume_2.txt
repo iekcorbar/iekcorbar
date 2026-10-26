@@ -1,0 +1,21 @@
+# EXAMPLE BOOK - volume 2 of the same series (see example_volume_1.txt for all options).
+title: &6The Brewer's Handbook II
+author: Old Mirai
+series: The Brewer's Handbook
+volume: 2
+description: Pages stained with ink and sake.
+copyable: false
+loot: false
+===
+&l&6The Brewer's
+&l&6Handbook&r
+
+&oVolume II&r
+&8Ageing and patience
+
+by Old Mirai
+---
+&lChapter 3&r
+&8Ageing&r
+
+A brew left alone grows deeper. A brew checked every hour grows nothing at all.

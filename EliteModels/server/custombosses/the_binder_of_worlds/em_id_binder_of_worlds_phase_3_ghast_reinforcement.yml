@@ -1,0 +1,14 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 1.0
+dropsEliteMobsLoot: false
+entityType: GHAST
+followDistance: 200
+healthMultiplier: 1.0
+isEnabled: true
+level: 100
+name: $reinforcementLevel &5Reality Shredder
+normalizedCombat: true
+classLoot: false
+customModel: em_airship_ghast

@@ -1,0 +1,40 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 0.8
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Speak:
+    Actions:
+    - Target:
+        range: 30
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '&5[Soul Shadow] &fI guard the path forward. No one shall pass!'
+    - Target:
+        targetType: SELF
+      action: DAMAGE
+      multiplier: 0.5
+      wait: 120
+    Events:
+    - EliteMobEnterCombatEvent
+entityType: WITHER_SKELETON
+followDistance: 30
+frozen: true
+healthMultiplier: 4
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 30
+level: dynamic # 10
+mainHand: NETHERITE_SWORD
+name: $minibossLevel &5Soul Shadow
+normalizedCombat: true
+phases:
+- the_climb_skeletal_shadow_p2.yml:.9999
+spawnLocations:
+- em_id_the_climb,309.5,86.5,72.5,0.0,0.0
+classLoot: false
+customModel: em_ember_wither_skeleton

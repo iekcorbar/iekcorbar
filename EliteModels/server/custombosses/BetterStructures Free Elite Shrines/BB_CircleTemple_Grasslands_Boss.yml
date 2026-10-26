@@ -1,0 +1,73 @@
+isEnabled: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+entityType: ZOMBIE
+name: $minibossLevel &dKnight
+level: dynamic
+scaledCombat: true
+healthMultiplier: 3.5
+damageMultiplier: 2
+isBaby: false
+helmet: DIAMOND_HELMET
+chestplate: DIAMOND_CHESTPLATE
+leggings: DIAMOND_LEGGINGS
+boots: DIAMOND_BOOTS
+powers:
+- BB_CircleTemple_Grasslands_LightningZone.yml
+- invulnerability_fire.yml
+- taze.yml
+- attack_lightning.yml
+- movement_speed.yml
+normalizedCombat: true
+dropsEliteMobsLoot: true
+dropsVanillaLoot: false
+dropsRandomLoot: false
+trails: ELECTRIC_SPARK
+isRegionalBoss: true
+leashRadius: 18
+movementSpeedAttribute: 0.2
+removeAfterDeath: true
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_free_elite_shrines_relics_swords_1f004f58.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_axes_01d9afdb.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_bows_c84bbe57.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_crossbows_10771fc3.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_tridents_506adca9.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_hoes_1db6777c.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_maces_f203306a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_spears_c437376d.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_staves_d52016c8.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_wands_f0433d6a.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_helmets_54ef7624.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_chestplates_087ed5be.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_leggings_cc39b2c7.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_dps_boots_2e894e3e.yml
+  chance: 1.0
+- filename: bb_circletemple_grasslands_boss_tank_helmets_ad726fbf.yml
+  chance: 1.0
+- filename: bb_circletemple_grasslands_boss_tank_chestplates_d0e1bc45.yml
+  chance: 1.0
+- filename: bb_circletemple_grasslands_boss_tank_leggings_ded2ad18.yml
+  chance: 1.0
+- filename: bb_circletemple_grasslands_boss_tank_boots_583b5b33.yml
+  chance: 1.0
+- filename: cl_free_elite_shrines_relics_shields_5b64e89d.yml
+  chance: 1.0
+customModel: em_steam_zombie

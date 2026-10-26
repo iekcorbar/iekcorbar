@@ -1,0 +1,33 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 1.0
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: SKELETON
+followDistance: 30
+frozen: false
+healthMultiplier: 7
+instanced: true
+isEnabled: true
+leashRadius: 30
+level: dynamic # 10
+mainHand: NETHERITE_SWORD
+movementSpeedAttribute: 0.33
+name: $bossLevel &cUndead Beastmaster
+normalizedCombat: true
+powers:
+- taze.yml
+- lightning_bolts.yml
+- thunderstorm.yml
+- invulnerability_fire.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_push.yml
+- difficultyID:
+  - 2
+  filename: attack_web.yml
+classLoot: false
+customModel: em_clockwork_skeleton

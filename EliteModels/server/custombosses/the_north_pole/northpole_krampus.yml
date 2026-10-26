@@ -1,0 +1,107 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 1.75
+dropsEliteMobsLoot: true
+entityType: RAVAGER
+healthMultiplier: 6.0
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 14
+instanced: true
+level: dynamic # 60
+name: $bossLevel &5Krampus
+powers:
+- bonus_loot.yml
+- movement_speed.yml
+- attack_fire.yml
+- attack_fireball.yml
+- invulnerability_arrow.yml
+- invulnerability_knockback.yml
+- invulnerability_fire.yml
+- invulnerability_fall_damage.yml
+- amount: 1
+  chance: 0.25
+  filename: northpole_skeleton_summon.yml
+  inheritAggro: true
+  inheritLevel: true
+  spawnNearby: false
+  summonType: ON_HIT
+spawnCooldown: 30
+spawnLocations:
+- em_north_pole,-289.9023245391839,18.2,-458.01306175518937,10.050073,88.35156:1611245558941
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- northpole_treat.yml:0.1
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_treat_v2.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_amazing_treat.yml:0.5
+- northpole_incredible_treat.yml:0.5
+- northpole_incredible_treat.yml:0.5
+- northpole_incredible_treat.yml:0.5
+- northpole_coalbringer.yml:0.5
+- northpole_winters_reaper.yml:0.5
+- northpole_icicle_spear.yml:0.5
+- xmas_lost_present.yml:0.1
+- xmas_lost_present.yml:0.1
+- xmas_lost_present.yml:0.1
+- xmas_lost_present.yml:0.1
+- xmas_lost_present.yml:0.1
+- xmas_lost_present.yml:0.1
+- filename: cl_north_pole_seasonal_swords_fe094451.yml
+  chance: 1.0
+- filename: northpole_krampus_axes_0db6c872.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_bows_1452471e.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_crossbows_27dc1590.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_tridents_25a25429.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_hoes_b090697f.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_maces_1d4190e9.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_spears_0a2c19a5.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_staves_354129f1.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_wands_965efc96.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_dps_helmets_2eed31ca.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_dps_chestplates_8304d9b6.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_dps_leggings_b800c94d.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_dps_boots_d372218a.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_tank_helmets_4cfac7c4.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_tank_chestplates_489df044.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_tank_leggings_60f7912e.yml
+  chance: 1.0
+- filename: cl_north_pole_seasonal_tank_boots_94496b1d.yml
+  chance: 1.0
+- filename: northpole_krampus_shields_04281663.yml
+  chance: 1.0
+customModel: em_ram_ravager

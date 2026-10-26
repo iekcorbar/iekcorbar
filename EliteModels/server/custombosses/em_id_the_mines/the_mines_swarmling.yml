@@ -1,0 +1,95 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: CAVE_SPIDER
+name: $normalLevel &2Swarmling
+level: dynamic # 20
+instanced: true
+healthMultiplier: 0.25
+damageMultiplier: 0.3
+powers:
+- filename: attack_blinding.yml
+  difficultyID:
+  - 2
+frozen: false
+leashRadius: 30
+followDistance: 15
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: true
+normalizedCombat: true
+dropsRandomLoot: false
+cullReinforcements: false
+eliteScript:
+  Summon:
+    Events:
+    - EliteMobDeathEvent
+    Actions:
+    - action: SUMMON_REINFORCEMENT
+      sValue: the_mines_swarmling_summon.yml
+      duration: 500
+      Target:
+        targetType: SELF
+      repeatEvery: 3
+      times: 3
+spawnLocations:
+- em_id_the_mines,235.5,26,-29.5,0.0,0.0
+- em_id_the_mines,235.5,26,-29.5,0.0,0.0
+- em_id_the_mines,242.5,24.5,-17.5,0.0,0.0:1696927334359
+- em_id_the_mines,235.5,26,-29.5,0.0,0.0
+- em_id_the_mines,226.5,24.5,-39.5,0.0,0.0:1696927353717
+- em_id_the_mines,227.5,24.5,-41.5,0.0,0.0:1696927928940
+- em_id_the_mines,235.5,26,-29.5,0.0,0.0
+- em_id_the_mines,239.5,25.5,-46.5,0.0,0.0:1696927346620
+- em_id_the_mines,244.5,24.5,-37.5,0.0,0.0:1696927851989
+- em_id_the_mines,227.5,26.5,-58.5,0.0,0.0
+- em_id_the_mines,235.5,26,-29.5,0.0,0.0
+- em_id_the_mines,226.5,32.5,-107.5,0.0,0.0
+- em_id_the_mines,237.5,32.5,-107.5,0.0,0.0
+- em_id_the_mines,240.5,32.5,-94.5,0.0,0.0
+- em_id_the_mines,245.5,35.5,-13.5,0.0,0.0:1696927567490
+- em_id_the_mines,207.5,31.5,-31.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_story_mines_swords_f5c77fe4.yml
+  chance: 1.0
+- filename: cl_story_mines_axes_23aac663.yml
+  chance: 1.0
+- filename: cl_story_mines_bows_a6d16b50.yml
+  chance: 1.0
+- filename: cl_story_mines_crossbows_bc046011.yml
+  chance: 1.0
+- filename: cl_story_mines_tridents_e00d07bd.yml
+  chance: 1.0
+- filename: cl_story_mines_hoes_94e447fa.yml
+  chance: 1.0
+- filename: cl_story_mines_maces_96b8e254.yml
+  chance: 1.0
+- filename: cl_story_mines_spears_258f1267.yml
+  chance: 1.0
+- filename: cl_story_mines_staves_9801a7fb.yml
+  chance: 1.0
+- filename: cl_story_mines_wands_88a081b9.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_helmets_d62cc6c8.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_chestplates_527dffa2.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_leggings_3c7084ec.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_boots_87c73439.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_helmets_23d0f6a6.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_chestplates_905e88bf.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_leggings_cccc8016.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_boots_e7f99614.yml
+  chance: 1.0
+- filename: cl_story_mines_shields_687daaca.yml
+  chance: 1.0
+customModel: em_lantern_cave_spider

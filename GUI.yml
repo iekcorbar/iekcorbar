@@ -1,0 +1,317 @@
+####################################################################################################
+# VotingPlugin - GUI Configuration (GUI.yml) - iekcorbar steampunk edition (2026-10-23)
+#
+# Matches the current setup:
+#   - 3 vote sites (VoteSites.yml): MinecraftServers.org, Minecraft-MP.com, PlanetMinecraft.com
+#     (the site buttons in /vote come from VoteSites.yml automatically - DisplayItem per site)
+#   - $50 per vote + lucky extras (1/10 diamond, 1/25 XP bottles, 1/100 $500)
+#   - SpecialRewards.yml: all 3 sites in a day +$150 + diamond, streaks 7/30 days,
+#     VoteParty every 50 votes, monthly top 3 ($5000 / $2500 / $1000), 1 vote point per vote
+#
+# Chest titles are drawn on the light-grey chest background -> dark colours (&8 &4 &0).
+# Item names/lore are shown on the dark tooltip -> gold/yellow are fine.
+# If you change rewards, update the lore texts below too. After editing: /av reload
+#
+# Docs: https://github.com/BenCodez/VotingPlugin/wiki
+####################################################################################################
+
+GUIMethod:
+  Today: CHEST
+  TopVoter: CHEST
+  Last: CHEST
+  Next: CHEST
+  Total: CHEST
+  # GUI for /vote
+  URL: CHEST
+  Best: CHEST
+  Streak: CHEST
+  GUI: CHEST
+
+# Enable command for last month gui (requires restart)
+LastMonthGUI: false
+
+CHEST:
+  # Main menu: /vote gui, /vgui, /votegui (items in the order listed)
+  VoteGUI:
+    URL:
+      Item:
+        Material: 'COMPASS'
+        Amount: 1
+        Name: '&6&l⚙ Vote for Iekcorbar ⚙'
+        Lore:
+        - '&7Vote on all &e3 sites &7every day.'
+        - ''
+        - '&6Every vote: &e$50'
+        - '&7+ a chance at a &bdiamond&7, &aXP bottles'
+        - '&7  or a &6$500 jackpot&7!'
+        - '&6All 3 sites in one day: &e+$150 &7+ &bdiamond'
+        - ''
+        - '&a▶ Click for the vote links'
+    Next:
+      Item:
+        Material: 'CLOCK'
+        Amount: 1
+        Name: '&6When can I vote again?'
+        Lore:
+        - '&7See the cooldown for each site.'
+    Last:
+      Item:
+        Material: 'WRITABLE_BOOK'
+        Amount: 1
+        Name: '&6Your last votes'
+        Lore:
+        - '&7When you last voted on each site.'
+    Today:
+      Item:
+        Material: 'BOOK'
+        Amount: 1
+        Name: '&6Voted today'
+        Lore:
+        - '&7Who has already voted today.'
+    Total:
+      Item:
+        Material: 'CHEST'
+        Amount: 1
+        Name: '&6Your vote totals'
+        Lore:
+        - '&7Today, this week, this month and all time.'
+        - '&7First vote ever: &e+$100'
+        - '&7Every 50 votes: &e+$1500 &7+ &920 lapis'
+    Top:
+      Item:
+        Material: 'GOLDEN_HELMET'
+        Amount: 1
+        Name: '&6Top voters'
+        Lore:
+        - '&7The top 3 voters of each month win:'
+        - '&e#1 $5000  &7·  &e#2 $2500  &7·  &e#3 $1000'
+    Shop:
+      Item:
+        Material: 'EMERALD'
+        Amount: 1
+        Name: '&6Vote Shop'
+        Lore:
+        - '&7Every vote gives &e1 vote point&7.'
+        - '&7You have &e%points% &7point(s).'
+        - '&a▶ Click to spend them'
+    Streak:
+      Item:
+        Material: 'BLAZE_POWDER'
+        Amount: 1
+        Name: '&6Voting streak'
+        Lore:
+        - '&7Vote every day to build a streak.'
+        - '&67 days: &e$750 &7+ &b2 diamond blocks'
+        - '&630 days: &e$3000 &7+ &81 netherite ingot'
+        - '&8(one missed day per week is forgiven)'
+        - '&a▶ Click to see your streak'
+      Rewards:
+        Commands:
+          Player:
+          - 'vote streak'
+    VoteParty:
+      Item:
+        Material: 'CAKE'
+        Amount: 1
+        Name: '&d&lVoteParty'
+        Lore:
+        - '&7Every &e50 &7votes on the server,'
+        - '&7everyone online gets &e$250'
+        - '&7+ &63 golden apples&7!'
+      Rewards: []
+
+  # /vote url and /vote: one button per site from VoteSites.yml
+  VoteURL:
+    Name: '&8⚙ &4&lVote for Iekcorbar &8⚙'
+    BackButton: true
+    SiteName: '&c✖ %Name% &7(already voted)'
+    SiteNameCanVote: '&a✔ %Name% &7(vote now!)'
+    SeeURL: '&e▶ Click for the vote link'
+    NextVote: '&7Vote again in: &e%Info%'
+    ViewAllUrlsButtonEnabled: true
+    AllUrlsButton:
+      RequireAllSitesVoted: true
+      AlreadyVotedItem:
+        Material: 'COPPER_BLOCK'
+        Amount: 1
+        Name: '&6All vote links'
+        Lore:
+        - '&7You voted on every site today. Thank you!'
+        - '&e▶ Click to show all links'
+      CanVoteItem:
+        Material: 'GOLD_BLOCK'
+        Amount: 1
+        Name: '&6All vote links'
+        Lore:
+        - '&7Vote on all 3 for &e+$150 &7+ &bdiamond&7!'
+        - '&e▶ Click to show all links'
+    AlreadyVotedItem:
+      Material: 'REDSTONE_BLOCK'
+      Amount: 1
+    CanVoteItem:
+      Material: 'EMERALD_BLOCK'
+      Amount: 1
+    URLText: '%VoteUrl%'
+
+  VoteLast:
+    Name: '&8Last votes: &4%player%'
+    BackButton: true
+    Line: '&6%timeSince%'
+    ClickableLinks: true
+
+  VoteNext:
+    Name: '&8Next vote: &4%player%'
+    BackButton: true
+    LoreLine: '&7%time%'
+
+  VoteToday:
+    Name: '&8Voted today'
+    Line: '&6%VoteSite% &7: &e%Time%'
+    IconTitle: '&6%player%'
+    BackButton: true
+    UseSkull: true
+    PlayerItem:
+      Material: 'PAPER'
+      Amount: 1
+
+  VoteTop:
+    Name: '&8Top voters &4%topvoter%'
+    BackButton: true
+    Item:
+      Name: '&6&l#%position% &e%player%'
+      Lore: '&7Votes: &e%votes%'
+    OpenMainGUIOnClick: true
+    CloseGUIOnClick: true
+    SwitchItem:
+      Name: '&6Switch ranking'
+      Lore: '&7Currently: &e%Top%'
+      Material: 'CLOCK'
+      Amount: 1
+      Slot: 7
+    Size: 27
+    UseSkull: true
+    PlayerItem:
+      Material: 'PAPER'
+    Customization:
+      Enabled: false
+      PlayerSlots: []
+      ExtraItems: {}
+      RemoveBottomBar: false
+      BackButtonSlot: 0
+
+  VoteTotal:
+    Name: '&8Vote totals: &4%player%'
+    BackButton: true
+    DayTotal:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6Today'
+        Lore: '&7Votes: &e%Total%'
+        Amount: 1
+    WeekTotal:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6This week'
+        Lore: '&7Votes: &e%Total%'
+        Amount: 1
+    MonthTotal:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6This month'
+        Lore: '&7Votes: &e%Total%'
+        Amount: 1
+    AllTimeTotal:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6All time'
+        Lore: '&7Votes: &e%Total%'
+        Amount: 1
+
+  VoteBest:
+    Name: '&8Best records: &4%player%'
+    BackButton: true
+    DayBest:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6Best day'
+        Lore: '&7Votes: &e%Best%'
+        Amount: 1
+    WeekBest:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6Best week'
+        Lore: '&7Votes: &e%Best%'
+        Amount: 1
+    MonthBest:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6Best month'
+        Lore: '&7Votes: &e%Best%'
+        Amount: 1
+
+  VoteStreak:
+    Name: '&8Voting streak: &4%player%'
+    BackButton: true
+    CurrentDayStreak:
+      Item:
+        Material: 'BLAZE_POWDER'
+        Name: '&6Current daily streak'
+        Lore: '&7Days: &e%Streak%'
+        Amount: 1
+    CurrentWeekStreak:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6Current weekly streak'
+        Lore: '&7Weeks: &e%Streak%'
+        Amount: 1
+    CurrentMonthStreak:
+      Item:
+        Material: 'CLOCK'
+        Name: '&6Current monthly streak'
+        Lore: '&7Months: &e%Streak%'
+        Amount: 1
+    HighestDayStreak:
+      Item:
+        Material: 'GOLD_INGOT'
+        Name: '&6Best daily streak'
+        Lore: '&7Days: &e%Streak%'
+        Amount: 1
+    HighestWeekStreak:
+      Item:
+        Material: 'GOLD_INGOT'
+        Name: '&6Best weekly streak'
+        Lore: '&7Weeks: &e%Streak%'
+        Amount: 1
+    HighestMonthStreak:
+      Item:
+        Material: 'GOLD_INGOT'
+        Name: '&6Best monthly streak'
+        Lore: '&7Months: &e%Streak%'
+        Amount: 1
+
+  VoteURLSite:
+    Name: '&8Vote site: &4%site%'
+
+  VoteGUIName: '&8⚙ &4&lVoting &8· &4%player%'
+  VoteRewardName: 'Vote rewards'
+
+  BackButton:
+    Material: 'BARRIER'
+    Amount: 1
+    Name: '&c◀ Back'
+    OpenVoteURL: false
+    EndOfGUI: false
+    Exit: false
+
+BOOK:
+  VoteURLBookGUI:
+    Title: '&4Vote for Iekcorbar'
+    CanVoteText: 'Vote now'
+    CanVoteColor: 'DARK_GREEN'
+    AlreadyVotedText: 'Voted'
+    AlreadyVotedColor: 'DARK_RED'
+    Manual: false
+    TopLayout: []
+    Layout:
+    - '&4&l%Sitename%'
+    - '[UrlText]'

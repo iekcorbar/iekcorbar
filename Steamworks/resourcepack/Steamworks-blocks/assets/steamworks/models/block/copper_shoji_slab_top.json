@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "steamworks:block/copper_shoji",
+    "top": "steamworks:block/copper_shoji",
+    "side": "steamworks:block/copper_shoji"
+  }
+}

@@ -1,0 +1,32 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: DROWNED
+mainHand: TRIDENT
+name: $eventBossLevel &kunknown
+chestplate: NETHERITE_CHESTPLATE
+leggings: NETHERITE_LEGGINGS
+boots: NETHERITE_BOOTS
+level: dynamic
+healthMultiplier: 4.5
+damageMultiplier: 1.25
+phases:
+- craftenmines_bane_p2.yml:0.45
+- craftenmines_bane_p3.yml:0.33
+powers:
+- skeleton_tracking_arrow.yml
+- plasma_blaster.yml
+- invulnerability_fire.yml
+- invulnerability_knockback.yml
+trails:
+- SMOKE_NORMAL
+movementSpeedAttribute: 0.34
+followDistance: 50
+locationMessage: '&cUnknown: $distance blocks away!'
+spawnMessage: '&cA powerful Dr. Craftenmine creation has been spotted! Be careful!'
+deathMessage: '&aDr. Craftemine''s creation was slain by $players!'
+escapeMessage: '&4Dr. Craftemine''s creation has disappeared!'
+announcementPriority: 2
+customModel: em_diver_drowned

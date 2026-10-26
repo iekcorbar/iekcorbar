@@ -1,0 +1,162 @@
+# The Brewer's Manual - covers every Sakagura step: cauldron, bottling, the Steam Still,
+# casks, quality and the garden. Given with /ibook give <player> brewers_manual,
+# found in loot.
+title: &dBrewer's Manual
+author: The Sakagura Guild
+description: Every step of a Sakagura drink, short and sweet.
+copyable: false
+loot: true
+loot-weight: 3
+model: sakura_journal
+===
+&l&dBrewer's
+&l&dManual&r
+
+&8Sakagura, from the first kettle to the five-star pour
+
+by The Sakagura Guild
+---
+&lContents&r
+
+&8The basics
+&8The cauldron
+&8Bottling
+&8The Steam Still
+&8Sake casks
+&8Quality and stars
+&8The garden
+&8Drinking
+&8First brew
+
+&7Right-click anything with an empty hand and it tells you the truth.
+---
+&lThe basics&r
+
+A drink is a recipe you followed. Every bottle remembers what went in and what you did to it.
+
+&6Three rules&r:
+&81. &7Times are real minutes. A cask keeps working while you sleep.
+&82. &7The closer to the recipe, the better the drink.
+&83. &7The bottle itself says its next step.
+---
+&lThe cauldron&r
+
+Set a cauldron, fill it with water (right-click a water bucket).
+
+&6Heat below&r = cooking. Fire, lava, magma, a campfire or a lit furnace directly under it.
+&6No heat&r = mixing.
+
+Every recipe's first step says which one it wants.
+---
+&lThe cauldron&r
+
+Right-click with each ingredient - one per click, up to 64 in the pot. The cauldron must be full of water first.
+
+Empty hand = report: what is inside and how long it has been going.
+---
+&lBottling&r
+
+Right-click with a &6glass bottle&r. One cauldron fills three bottles, and the brew's history travels with the glass.
+
+A grey &oUnfinished&r name means steps remain - the lore says exactly which: &8"Next: distill it (2x)".
+---
+&lBottling&r
+
+Done? The bottle shows its name, colour, stars and effects right in the tooltip.
+
+A brew that matches no recipe turns into a &8Murky Brew&r. One sip makes you see things. It is how you learn.
+---
+&lThe Steam Still&r
+
+Spirits like Shochu, Whiskey and Steam Whisky are distilled.
+
+Craft one: a barrel, two iron ingots, blaze powder and a glowstone dust, together in any order.
+---
+&lThe Steam Still&r
+
+Put bottles inside, add a &6glowstone dust&r, and heat the still from below like a cauldron.
+
+Every &620 seconds&r it spends one dust and gives the bottles inside (up to three stacks) one distill run.
+
+Right-click the still to ask what it is doing.
+---
+&lThe Steam Still&r
+
+The still is a real container: &6hoppers feed bottles in and take them out&r. A belt from the cauldron into the still, and the next still in line - that is a distillery.
+---
+&lSake casks&r
+
+Many drinks round off in wood. Craft: six planks around two iron nuggets, one wood per cask.
+
+Twenty real minutes is one year, &ooffline too&r. Whiskey wants eighteen; umeshu is happy with three.
+---
+&lSake casks&r
+
+Ten kinds, from honest oak to the lacquered &6copper cask&r (copper and iron). Recipes name the wood they want.
+
+Wrong-but-familiar woods (oak for dark oak) still count, just less. Hoppers work with casks too.
+---
+&lQuality&r
+
+When every step is done, the server grades how closely you followed the recipe:
+
+&640%&r ingredients &7(right ones, right amounts)&r
+&625%&r time &7(cook or mix)&r
+&615%&r distill runs
+&620%&r years + wood
+
+Harder recipes want a steadier hand.
+---
+&lQuality&r
+
+The grade is one of ten points - up to &6five stars&r - and picks the name (poor / normal / good band), the effects, and how harsh the morning after is.
+
+Check any recipe again with &o/zukan&r or the recipe book.
+---
+&lThe garden&r
+
+Eleven crops, all here for a drink: barley, hops, grapes, ume plums, yuzu, peaches, cherries, strawberries, blueberries, juniper and ginger.
+
+Bushes and dwarf trees &6regrow&r when picked; barley and ginger are dug up and replanted.
+---
+&lThe garden&r
+
+Seeds come from the fruit itself - one fruit makes a couple of seeds.
+
+Wild patches grow &6ripe&r bushes in the biomes each plant likes. Go look.
+---
+&lDrinking&r
+
+Good drinks give real effects: speed, strength, luck, night vision. Better quality, better effects, milder rough ones.
+
+Alcohol is a debt: you sway, slur, and at the limit you pass out and wake with a hangover.
+---
+&lDrinking&r
+
+Check yourself with &o/brew drunk&r.
+
+Two sneaking friends with drinks in hand will cheers - &o"Kanpai!"&r is a toast of its own.
+
+Pace yourself. The best brew is the one you remember.
+---
+&lFirst brew&r
+
+&6Nigori Sake&r in ten minutes:
+&81. &7Find steamed rice (Kitchen) or barley.
+&82. &7Cauldron, water, 5 rice + 2 sugar.
+&83. &7Fire below, cook &66 minutes&r.
+&84. &7Bottle it. Stars appear in the lore.
+---
+&lThe road onward&r
+
+&8Umeshu&r - your first mix and first cherry cask.
+&8Shochu&r - meet the Steam Still.
+&8Red Wine&r and &8Hop Ale&r - a garden vineyard and hop field, years in oak.
+&8Whiskey&r - two runs, eighteen years in spruce.
+&8Steam Whisky&r - the copper cask showpiece.
+---
+&lEnd of the manual&r
+
+&8Stuck? The bottle, the cauldron, the still or the cask will tell you what is missing - right-click them.
+
+&dKanpai, brewer.

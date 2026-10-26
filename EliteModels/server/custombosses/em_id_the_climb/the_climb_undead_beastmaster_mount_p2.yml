@@ -1,0 +1,19 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.3
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: ZOGLIN
+followDistance: 30
+frozen: false
+healthMultiplier: 12
+instanced: true
+isEnabled: true
+leashRadius: 30
+level: dynamic # 10
+name: $reinforcementLevel &dUndead Beast
+normalizedCombat: true
+classLoot: false
+customModel: em_cinder_zoglin

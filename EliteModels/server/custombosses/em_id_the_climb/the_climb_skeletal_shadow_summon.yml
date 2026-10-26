@@ -1,0 +1,19 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+entityType: SKELETON
+followDistance: 25
+healthMultiplier: 10
+isEnabled: true
+instanced: true
+leashRadius: 25
+level: dynamic # 10
+mainHand: IRON_SWORD
+name: $reinforcementLevel &fBleached Bones
+normalizedCombat: true
+classLoot: false
+customModel: em_clockwork_skeleton

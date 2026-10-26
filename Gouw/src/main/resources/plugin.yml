@@ -1,0 +1,25 @@
+name: Gouw
+version: '0.2.1'
+main: com.iekcorbar.gouw.GouwPlugin
+api-version: '26.2'
+description: Chunk land claims - the in-house successor to Lands, and it reads old Lands claims on first start.
+author: iekcorbar
+libraries:
+  - org.xerial:sqlite-jdbc:3.46.1.0
+
+commands:
+  gouw:
+    description: Claim and manage your gouw (land).
+    aliases: [g, claim]
+    usage: /gouw <claim|autoclaim <r>|unclaim [all]|trust|untrust|members|info|list|near|border|leave|admin ...>
+
+permissions:
+  gouw.claim:
+    description: Claim chunks for yourself
+    default: true
+  gouw.admin:
+    description: Unlimited chunks, delete lands, import, reload
+    default: op
+  gouw.bypass:
+    description: Walk through and build in any gouw (toggle with /gouw admin bypass)
+    default: op

@@ -1,0 +1,68 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 1.0
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Engage:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: UNTAG
+      tags:
+      - wait
+    - Target:
+        targetType: SELF
+      action: DAMAGE
+      multiplier: 0.5
+    Events:
+    - EliteMobEnterCombatEvent
+  Wait:
+    Actions:
+    - Conditions:
+        hasTags:
+        - wait
+      Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      repeatEvery: 8
+    - Conditions:
+        hasTags:
+        - wait
+      Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: true
+      repeatEvery: 20
+    - Target:
+        targetType: SELF
+      action: TAG
+      tags:
+      - wait
+    Events:
+    - EliteMobSpawnEvent
+entityType: SKELETON
+followDistance: 30
+frozen: false
+healthMultiplier: 7
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 30
+level: dynamic # 10
+mainHand: BOW
+mountedEntity: the_climb_undead_beastmaster_mount.yml
+movementSpeedAttribute: 0.38
+name: $bossLevel &cUndead Beastmaster
+normalizedCombat: true
+phases:
+- the_climb_undead_beastmaster_p2.yml:.99999
+- the_climb_undead_beastmaster_p3.yml:.75
+- the_climb_undead_beastmaster_p4.yml:.50
+spawnLocations:
+- em_id_the_climb,400.5,121.5,79.5,0.0,0.0
+classLoot: false
+customModel: em_clockwork_skeleton

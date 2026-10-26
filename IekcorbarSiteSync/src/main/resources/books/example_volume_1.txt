@@ -1,0 +1,45 @@
+# EXAMPLE BOOK - shows the file format. Copy this file, rename it and edit it.
+#
+# HEADER (everything above the === line). One "key: value" per line, # = comment.
+#   title        required. Colour codes work: &6 gold, &c red, &#ff8800 hex ...
+#   author       shown when the book is opened
+#   series       optional - books with the same series name form one collection
+#   volume       optional - volume number inside the series (1, 2, 3 ...)
+#   description  optional - one grey line in the item's tooltip
+#   id           optional - unique name used in commands (default: the file name)
+#   copyable     true/false - may players copy it in a lectern/book-and-quill? (default false)
+#   loot         true/false - can it be found in loot-table chests? (default true)
+#   loot-weight  how common it is in loot compared to other books (default 10, rare = 1-3)
+#   loot-tables  optional - only appear in these tables, e.g. minecraft:chests/stronghold_library
+#   model        optional - the book's look: lore_book, guild_tome, sakura_journal,
+#                engineers_manual, lacquer_codex, travel_journal, none (vanilla)
+#                (default: default-model in books.yml)
+#
+# BODY (below the === line): the text. A line of --- starts a new page.
+# A page that is too long is split automatically. Colour codes use & here too.
+
+title: &6The Brewer's Handbook
+author: Old Mirai
+series: The Brewer's Handbook
+volume: 1
+description: A weathered field guide.
+copyable: false
+loot: false
+===
+&l&6The Brewer's
+&l&6Handbook&r
+
+&oVolume I&r
+&8Basics of the barrel
+
+by Old Mirai
+---
+&lChapter 1&r
+&8The Barrel&r
+
+Every good brew starts with patience. Seal the barrel, mark the day, and do not open it early.
+---
+&lChapter 2&r
+&8The Water&r
+
+Clean water makes clean spirit. Boil it first, always. Cherry blossoms in the pot are said to bring luck, but luck is not a recipe.

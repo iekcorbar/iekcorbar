@@ -1,0 +1,76 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+leashRadius: 40
+followDistance: 30
+isRegionalBoss: true
+spawnCooldown: 4
+isEnabled: true
+entityType: SKELETON
+name: $normalLevel &1Lost Wanderer
+level: dynamic
+instanced: true
+powers:
+- attack_fire.yml
+- attack_blinding.yml
+mainHand: BOW
+healthMultiplier: 1
+damageMultiplier: 1
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+spawnLocations:
+- em_sewer_maze,-274.85429051831295,101.10920028083773,-113.20836350889599,-203.91418,31.950397:1611043304764
+- em_sewer_maze,-189.82911241947238,112.2777113144055,-13.799081657795542,-97.410645,30.00041:1609388165967
+- em_sewer_maze,-291.84257504653175,106.9407748054436,-111.51947181549073,-26.468262,52.350487:1611043023851
+- em_sewer_maze,-273.7394408710337,100.45340810199389,-17.689694996288285,-128.7583,31.500439:1609388225969
+- em_sewer_maze,-277.34944919356576,101.10920028083773,-110.31072956066122,-203.91418,31.950397:1611043289913
+- em_sewer_maze,-274.1260702695171,101.10920028083773,-81.5029001137539,-177.81421,24.450417:1611043272730
+- em_sewer_maze,-278.53442417852074,100.45340810199389,-13.840726004533552,-128.7583,31.500439:1609388225000
+- em_sewer_maze,-246.80010280616847,105.04231311493015,-15.69579246962514,-94.2594,-5.549567:1609387504980
+- em_sewer_maze,-213.67695513930636,112.2777113144055,-14.624356665534542,-129.65942,54.9004:1611058157229
+- em_sewer_maze,-218.0875844471336,112.2777113144055,-18.205041228608305,-129.65942,54.9004:1611058148242
+- em_sewer_maze,-274.0155353252442,101.10920028083773,-59.458404234062606,-177.81421,24.450417:1611042973494
+- em_sewer_maze,-194.7270703536492,112.2777113144055,-18.551742112377514,-246.06311,41.4004:1609388165972
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_the_sewers_tunnels_swords_585f8af9.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_axes_4f2b49e7.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_bows_b7fdc637.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_crossbows_dc0db6d5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tridents_5a34965a.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_hoes_a0c18962.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_maces_ffccc452.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_spears_f90fd53b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_staves_40482056.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_wands_712be25e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_helmets_9917a646.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_chestplates_ddb3baab.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_leggings_b55e815e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_boots_e2a3eb58.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_helmets_341bb342.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_chestplates_1f0e9b0b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_leggings_cc0387b5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_boots_e5dddda6.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_shields_fcaba11c.yml
+  chance: 1.0
+customModel: em_clockwork_skeleton

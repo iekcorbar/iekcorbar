@@ -1,0 +1,7 @@
+extends: class_trial_actor_iron_golem.yml
+isEnabled: true
+name: '&eArmored Training Effigy'
+healthMultiplier: 0.25
+damageMultiplier: 0
+ai: false
+customModel: em_boiler_golem

@@ -1,0 +1,67 @@
+# iekcorbar - custom books (see the .txt files in the books/ folder)
+#
+# Commands (permission iekcorbar.books.admin, default op):
+#   /ibook list [series]            all books, or the volumes of one series
+#   /ibook info <id>                details of one book
+#   /ibook give <player> <id> [n]   give a book
+#   /ibook giveseries <player> <series>   give every volume of a series
+#   /ibook open <id> [player]       open a book to read, without an item
+#   /ibook progress <player>        which books / series a player has read
+#   /ibook forget <player> [id|all] reset read status (for testing)
+#   /ibook reload                   re-read this file and books/*.txt
+#
+# Reading a book (right-click it, read it on a lectern, /ibook open) is
+# remembered per player; advancements.yml can use that with the requirement
+# types books_read, book_read and book_series.
+
+enabled: true
+
+# Message "New lore discovered: <title> (2/5 of <series>)" the first time a
+# player reads a book.
+discovery-message: true
+# How it is shown: toast (advancement-style popup top-right), chat, or both.
+# Missing = toast. Book advancements (advancements.yml) are checked right away
+# when a book is read, so their own popup follows immediately.
+discovery-style: toast
+
+# Look of the book items (FreeMinecraftModels display models, from
+# plugins/FreeMinecraftModels/models/steampunk_iekcorbar/books/). A book's own
+# "model:" header line wins; this is for books without one. "none" or empty =
+# the normal vanilla book. Designs: lore_book, guild_tome, sakura_journal,
+# engineers_manual, lacquer_codex, travel_journal.
+default-model: lore_book
+
+# Books that turn up in vanilla loot-table containers (chests, barrels,
+# chest minecarts ...). When a container's loot is generated (the first time
+# somebody opens it) there is ONE roll per container with the chance below; if
+# it succeeds, one book is picked among the eligible ones, weighted by each
+# book's `loot-weight` header (higher = more common).
+#
+# A book is eligible for every table listed here, unless its own header has a
+# `loot-tables:` line - then it only appears in those tables (which must still
+# be listed here with a chance). `loot: false` in a book's header keeps it out
+# of loot completely (handed out by command only).
+#
+# Chances are 0.0-1.0 (0.10 = 10% of those containers). A key ending in * is
+# a prefix match; an exact key wins over a wildcard. Plugin-made chests (e.g.
+# EliteMobs) are not loot tables and are not affected.
+loot:
+  enabled: true
+  tables:
+    "minecraft:chests/simple_dungeon": 0.12
+    "minecraft:chests/abandoned_mineshaft": 0.10
+    "minecraft:chests/desert_pyramid": 0.12
+    "minecraft:chests/jungle_temple": 0.12
+    "minecraft:chests/igloo_chest": 0.10
+    "minecraft:chests/stronghold_library": 0.30
+    "minecraft:chests/stronghold_corridor": 0.08
+    "minecraft:chests/stronghold_crossing": 0.08
+    "minecraft:chests/woodland_mansion": 0.25
+    "minecraft:chests/ancient_city": 0.15
+    "minecraft:chests/pillager_outpost": 0.15
+    "minecraft:chests/shipwreck_treasure": 0.10
+    "minecraft:chests/underwater_ruin_big": 0.08
+    "minecraft:chests/end_city_treasure": 0.12
+    "minecraft:chests/buried_treasure": 0.05
+    "minecraft:chests/village/*": 0.06
+    "minecraft:chests/trial_chambers/*": 0.06

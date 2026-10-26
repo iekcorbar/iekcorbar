@@ -1,0 +1,98 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: SLIME
+name: $normalLevel &aGel Head Villager
+level: dynamic # 20
+instanced: true
+healthMultiplier: 1
+damageMultiplier: 0.2
+powers:
+- attack_weakness.yml
+movementSpeedAttribute: 0.8
+frozen: false
+# leashRadius: 30
+followDistance: 30
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: false
+normalizedCombat: true
+dropsRandomLoot: false
+eliteScript:
+  NerfDamage:
+    Events:
+    - ZoneEnterEvent
+    - ZoneLeaveEvent
+    Zone:
+      shape: SPHERE
+      radius: 1
+      Target:
+        targetType: SELF
+    Actions:
+    - action: SET_MOB_AI
+      Target:
+        targetType: SELF
+      bValue: false
+      duration: 10
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: the_mines_gel_drop_helmet_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: the_mines_gel_drop_helmet_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: the_mines_gel_drop_helmet_tank_mythic.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: the_mines_gel_drop_leggings_tank_normal.yml
+  chance: 0.05
+  difficultyID: 0
+- filename: the_mines_gel_drop_leggings_tank_hard.yml
+  chance: 0.05
+  difficultyID: 1
+- filename: the_mines_gel_drop_leggings_tank_mythic.yml
+  chance: 0.05
+  difficultyID: 2
+- filename: cl_story_mines_swords_f5c77fe4.yml
+  chance: 1.0
+- filename: cl_story_mines_axes_23aac663.yml
+  chance: 1.0
+- filename: the_mines_gel_p2_bows_cecfa631.yml
+  chance: 1.0
+- filename: cl_story_mines_crossbows_bc046011.yml
+  chance: 1.0
+- filename: cl_story_mines_tridents_e00d07bd.yml
+  chance: 1.0
+- filename: cl_story_mines_hoes_94e447fa.yml
+  chance: 1.0
+- filename: cl_story_mines_maces_96b8e254.yml
+  chance: 1.0
+- filename: cl_story_mines_spears_258f1267.yml
+  chance: 1.0
+- filename: cl_story_mines_staves_9801a7fb.yml
+  chance: 1.0
+- filename: cl_story_mines_wands_88a081b9.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_helmets_d62cc6c8.yml
+  chance: 1.0
+- filename: the_mines_gel_p2_dps_chestplates_18623863.yml
+  chance: 1.0
+- filename: cl_story_mines_dps_leggings_3c7084ec.yml
+  chance: 1.0
+- filename: the_mines_gel_p2_dps_boots_cb0c3b4b.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_helmets_23d0f6a6.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_chestplates_905e88bf.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_leggings_cccc8016.yml
+  chance: 1.0
+- filename: cl_story_mines_tank_boots_e7f99614.yml
+  chance: 1.0
+- filename: cl_story_mines_shields_687daaca.yml
+  chance: 1.0
+customModel: em_gear_slime

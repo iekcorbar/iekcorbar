@@ -1,0 +1,87 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: STRAY
+name: $normalLevel &3Forgotten Miner
+level: dynamic # 10
+instanced: true
+healthMultiplier: 1
+damageMultiplier: 0.75
+powers:
+- invulnerability_fire.yml
+- attack_confusing.yml
+- filename: invulnerability_arrow.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: invulnerability_fire.yml
+  difficultyID:
+  - 2
+mainHand: BOW
+# leashRadius: 30
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+isRegionalBoss: true
+followDistance: 30
+normalizedCombat: true
+dropsRandomLoot: false
+spawnLocations:
+- em_id_the_climb,399.5,42.5,299.5,0.0,0.0
+- em_id_the_climb,388.5,45.5,290.5,0.0,0.0
+- em_id_the_climb,370.5,49.5,273.5,0.0,0.0
+- em_id_the_climb,357.5,53.5,266.5,0.0,0.0
+- em_id_the_climb,350.5,56.5,254.5,0.0,0.0
+- em_id_the_climb,346.5,62.5,234.5,0.0,0.0
+- em_id_the_climb,384.5,93.5,293.5,0.0,0.0
+- em_id_the_climb,356.5,111.5,65.5,0.0,0.0
+- em_id_the_climb,377.5,118.5,59.5,0.0,0.0
+- em_id_the_climb,388.5,45.5,290.5,0.0,0.0
+- em_id_the_climb,352.5,55.5,290.5,0.0,0.0
+- em_id_the_climb,354.5,66.5,232.5,0.0,0.0
+- em_id_the_climb,318.5,72.5,229.5,0.0,0.0
+- em_id_the_climb,300.5,78.5,219.5,0.0,0.0
+- em_id_the_climb,300.5,78.5,223.5,0.0,0.0
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: the_climb_frozen_remains_swords_24e127bb.yml
+  chance: 1.0
+- filename: cl_story_climb_axes_31b58f5d.yml
+  chance: 1.0
+- filename: the_climb_frozen_remains_bows_7a3aae81.yml
+  chance: 1.0
+- filename: cl_story_climb_crossbows_320c599d.yml
+  chance: 1.0
+- filename: cl_story_climb_tridents_462a95e9.yml
+  chance: 1.0
+- filename: cl_story_climb_hoes_90f57b2c.yml
+  chance: 1.0
+- filename: cl_story_climb_maces_7f63f619.yml
+  chance: 1.0
+- filename: cl_story_climb_spears_743b64fe.yml
+  chance: 1.0
+- filename: cl_story_climb_staves_3ba7efcc.yml
+  chance: 1.0
+- filename: cl_story_climb_wands_0b2088fe.yml
+  chance: 1.0
+- filename: the_climb_frozen_remains_dps_helmets_fefe5ec6.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_chestplates_ed45bf2e.yml
+  chance: 1.0
+- filename: cl_story_climb_dps_leggings_4a065545.yml
+  chance: 1.0
+- filename: the_climb_frozen_remains_dps_boots_9ed641d3.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_helmets_77716983.yml
+  chance: 1.0
+- filename: the_climb_frozen_remains_tank_chestplates_fe9b151d.yml
+  chance: 1.0
+- filename: the_climb_frozen_remains_tank_leggings_f4ac351c.yml
+  chance: 1.0
+- filename: cl_story_climb_tank_boots_0634543f.yml
+  chance: 1.0
+- filename: cl_story_climb_shields_4f3929f0.yml
+  chance: 1.0
+customModel: em_frost_stray

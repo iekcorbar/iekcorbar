@@ -1,0 +1,36 @@
+# WanderingTrades 1.9.6 trade config: the Steamworks Engineer's Manual (iekcorbar)
+#
+# Some wandering traders sell the manual. It is made from the name and lore below; the first time a player
+# right-clicks it, IekcorbarSiteSync swaps it for the real book (so keep the name "Engineer's Manual" and the
+# LAST lore line exactly "Steamworks engineer's manual"). Staff can give real ones with /ibook give <player> engineers_manual.
+
+enabled: true
+chance: 0.2
+
+randomized: false
+randomAmount: 1
+
+invincible: false
+customName: NONE
+disableHeroOfTheVillageGifts: false
+
+trades:
+  engineers_manual:
+    maxUses: 2
+    experienceReward: true
+    ingredients:
+      1:
+        customname: NONE
+        material: EMERALD
+        amount: 8
+      2:
+        customname: NONE
+        material: BOOK
+        amount: 1
+    result:
+      customname: "<gold>Engineer's Manual"
+      material: BOOK
+      amount: 1
+      lore:
+        - "<gray>Every Steamworks machine, explained."
+        - "<dark_gray>Steamworks engineer's manual"

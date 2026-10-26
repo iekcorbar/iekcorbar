@@ -1,0 +1,13 @@
+isEnabled: true
+entityType: ZOMBIE
+powers:
+- invulnerability_fire.yml
+name: $normalLevel Arena Zombie
+level: '1'
+followDistance: 60
+helmet: LEATHER_HELMET
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+classLoot: false
+customModel: em_steam_zombie

@@ -1,0 +1,54 @@
+# Chronicles of the Guild - Volume III: The Return
+# Source: Lore Library/Others/Base.docx ("The Return"). Known history only.
+# Deliberately left out: "And Shoutlander has noticed" (that belongs to Chapter 0's reveal).
+# Palette: copper &#8a4f1c | brass &#7a5a12 | ink &#2b1d0e | rust &#8b2a1a
+title: &6Chronicles of the Guild III
+model: guild_tome
+author: The Guild Archive
+series: Chronicles of the Guild
+volume: 3
+description: The Return.
+copyable: false
+loot: true
+loot-weight: 6
+===
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&#8a4f1c&lChronicles
+&#8a4f1c&lof the Guild
+
+
+&#2b1d0e&oVolume III
+&#7a5a12The Return
+
+
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&8The Guild Archive
+---
+&#8a4f1c&lThe Return
+&#7a5a12━━━━━━━━━━
+
+&#2b1d0eIn time, the Adventurers became powerful enough to stand in Shoutlander's world once again.
+---
+&#2b1d0eThey returned.
+
+And they founded a new city.
+---
+&#2b1d0eUnlike the first outpost, this city has survived.
+
+It continues to grow, as more Adventurers arrive from other worlds.
+---
+&#2b1d0eThe Adventurers who founded the Guild and rebuilt the city are legends now.
+
+Those arriving today are a new generation, joining while the work is still underway.
+---
+&#2b1d0eIf you are reading this, Adventurer, you are one of them.
+---
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&8&oHere ends the third chronicle.
+
+&8&oWhat is written here is the history as the Guild knows it.
+
+&#7a5a12⚙ ━━━━━━━ ⚙

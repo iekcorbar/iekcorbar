@@ -1,0 +1,130 @@
+{
+ "engine.chuff": {
+  "sounds": [
+   "steamworks:engine/chuff_1",
+   "steamworks:engine/chuff_2",
+   "steamworks:engine/chuff_3"
+  ],
+  "subtitle": "subtitles.steamworks.engine.chuff"
+ },
+ "boiler.hiss": {
+  "sounds": [
+   "steamworks:boiler/hiss_1",
+   "steamworks:boiler/hiss_2"
+  ],
+  "subtitle": "subtitles.steamworks.boiler.hiss"
+ },
+ "gear.clatter": {
+  "sounds": [
+   "steamworks:gear/clatter_1",
+   "steamworks:gear/clatter_2",
+   "steamworks:gear/clatter_3"
+  ],
+  "subtitle": "subtitles.steamworks.gear.clatter"
+ },
+ "millstone.grind": {
+  "sounds": [
+   "steamworks:millstone/grind_1",
+   "steamworks:millstone/grind_2"
+  ],
+  "subtitle": "subtitles.steamworks.millstone.grind"
+ },
+ "hammer.strike": {
+  "sounds": [
+   "steamworks:hammer/strike_1",
+   "steamworks:hammer/strike_2",
+   "steamworks:hammer/strike_3"
+  ],
+  "subtitle": "subtitles.steamworks.hammer.strike"
+ },
+ "fan.whoosh": {
+  "sounds": [
+   "steamworks:fan/whoosh_1",
+   "steamworks:fan/whoosh_2"
+  ],
+  "subtitle": "subtitles.steamworks.fan.whoosh"
+ },
+ "drill.grind": {
+  "sounds": [
+   "steamworks:drill/grind_1",
+   "steamworks:drill/grind_2"
+  ],
+  "subtitle": "subtitles.steamworks.drill.grind"
+ },
+ "saw.buzz": {
+  "sounds": [
+   "steamworks:saw/buzz_1",
+   "steamworks:saw/buzz_2"
+  ],
+  "subtitle": "subtitles.steamworks.saw.buzz"
+ },
+ "belt.rumble": {
+  "sounds": [
+   "steamworks:belt/rumble_1",
+   "steamworks:belt/rumble_2"
+  ],
+  "subtitle": "subtitles.steamworks.belt.rumble"
+ },
+ "pumpjack.creak": {
+  "sounds": [
+   "steamworks:pumpjack/creak_1",
+   "steamworks:pumpjack/creak_2"
+  ],
+  "subtitle": "subtitles.steamworks.pumpjack.creak"
+ },
+ "windmill.creak": {
+  "sounds": [
+   "steamworks:windmill/creak_1",
+   "steamworks:windmill/creak_2"
+  ],
+  "subtitle": "subtitles.steamworks.windmill.creak"
+ },
+ "arm.servo": {
+  "sounds": [
+   "steamworks:arm/servo_1",
+   "steamworks:arm/servo_2",
+   "steamworks:arm/servo_3"
+  ],
+  "subtitle": "subtitles.steamworks.arm.servo"
+ },
+ "train.chuff": {
+  "sounds": [
+   "steamworks:train/chuff_1",
+   "steamworks:train/chuff_2",
+   "steamworks:train/chuff_3"
+  ],
+  "subtitle": "subtitles.steamworks.train.chuff"
+ },
+ "train.whistle": {
+  "sounds": [
+   "steamworks:train/whistle_1"
+  ],
+  "subtitle": "subtitles.steamworks.train.whistle"
+ },
+ "train.brake": {
+  "sounds": [
+   "steamworks:train/brake_1"
+  ],
+  "subtitle": "subtitles.steamworks.train.brake"
+ },
+ "train.clack": {
+  "sounds": [
+   "steamworks:train/clack_1",
+   "steamworks:train/clack_2"
+  ],
+  "subtitle": "subtitles.steamworks.train.clack"
+ },
+ "station.bell": {
+  "sounds": [
+   "steamworks:station/bell_1"
+  ],
+  "subtitle": "subtitles.steamworks.station.bell"
+ },
+ "machine.hum": {
+  "sounds": [
+   "steamworks:machine/hum_1",
+   "steamworks:machine/hum_2"
+  ],
+  "subtitle": "subtitles.steamworks.machine.hum"
+ }
+}

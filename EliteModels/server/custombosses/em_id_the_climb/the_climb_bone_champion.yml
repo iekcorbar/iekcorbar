@@ -1,0 +1,65 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Engage:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: UNTAG
+      tags:
+      - wait
+    - Target:
+        targetType: SELF
+      action: DAMAGE
+      multiplier: 0.5
+    Events:
+    - EliteMobEnterCombatEvent
+  Wait:
+    Actions:
+    - Conditions:
+        hasTags:
+        - wait
+      Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      repeatEvery: 10
+    - Conditions:
+        hasTags:
+        - wait
+      Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: true
+      repeatEvery: 20
+    - Target:
+        targetType: SELF
+      action: TAG
+      tags:
+      - wait
+    Events:
+    - EliteMobSpawnEvent
+entityType: STRAY
+followDistance: 13
+frozen: false
+healthMultiplier: 4
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+level: dynamic # 10
+mainHand: NETHERITE_SWORD
+movementSpeedAttribute: 0.001
+name: $minibossLevel &bVillage Champion
+normalizedCombat: true
+offHand: DIAMOND_SWORD
+phases:
+- the_climb_bone_champion_p2.yml:.9999
+spawnLocations:
+- em_id_the_climb,270.5,78.5,235.5,0.0,0.0
+classLoot: false
+customModel: em_frost_stray

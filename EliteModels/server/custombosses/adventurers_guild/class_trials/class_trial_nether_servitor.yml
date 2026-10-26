@@ -1,0 +1,8 @@
+extends: class_trial_actor_base.yml
+isEnabled: true
+entityType: BLAZE
+name: '&cNether Servitor'
+healthMultiplier: 0.4
+damageMultiplier: 0.25
+ai: true
+customModel: em_furnace_blaze

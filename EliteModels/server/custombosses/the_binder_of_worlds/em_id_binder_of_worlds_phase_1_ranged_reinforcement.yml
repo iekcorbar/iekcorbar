@@ -1,0 +1,24 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 1.0
+dropsEliteMobsLoot: false
+entityType: SKELETON
+followDistance: 200
+healthMultiplier: 1.0
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 35
+level: 100
+mainHand: BOW
+name: $reinforcementLevel &6Reality Ruiner
+normalizedCombat: true
+powers:
+- attack_gravity.yml
+- attack_push.yml
+- skeleton_tracking_arrow.yml
+- invulnerability_knockback.yml
+- invulnerability_fire.yml
+reinforcement: true
+classLoot: false
+customModel: em_clockwork_skeleton

@@ -1,0 +1,27 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: POLAR_BEAR
+name: $eventBossLevel &dRapid Mutator
+level: dynamic
+healthMultiplier: 3.0
+damageMultiplier: 1.0
+uniqueLootList:
+- filename=rapid_mutator_drop_charm.yml:amount=1:chance=0.2
+powers:
+- arrow_rain.yml
+- attack_push.yml
+- attack_blinding.yml
+trails:
+- SMOKE_LARGE
+- SMOKE_LARGE
+- SMOKE_LARGE
+movementSpeedAttribute: 0.38
+followDistance: 80
+locationMessage: '&cRapid Mutator: $distance blocks away!'
+deathMessage: '&aThe Rapid Mutator was put to rest by $players!'
+escapeMessage: '&4The Rapid Mutator has vanished!'
+announcementPriority: 2
+customModel: em_iron_bear

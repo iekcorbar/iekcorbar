@@ -1,0 +1,122 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.01
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Buff:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 20
+      potionEffectType: SPEED
+      repeatEvery: 20
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: POTION_EFFECT
+      amplifier: 0
+      duration: 10
+      potionEffectType: ABSORPTION
+      repeatEvery: 20
+    Zone:
+      Target:
+        targetType: SELF
+      filter: ELITE
+      radius: 23
+      shape: SPHERE
+  Debuff:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: POTION_EFFECT
+      amplifier: 1
+      duration: 20
+      potionEffectType: SLOW
+      repeatEvery: 20
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+      action: POTION_EFFECT
+      amplifier: 0
+      duration: 20
+      potionEffectType: WEAKNESS
+      repeatEvery: 40
+    Zone:
+      Target:
+        targetType: SELF
+      filter: PLAYER
+      radius: 23
+      shape: SPHERE
+  Trigger:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+    - Target:
+        range: 30
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '&a[Jeffrey] &fDid I arrive in time? OK, activating the debuff barrier!'
+      wait: 20
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.6
+        targetType: ZONE_BORDER
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: GLOW
+      repeatEvery: 20
+      wait: 20
+    - action: RUN_SCRIPT
+      scripts:
+      - Debuff
+      - Buff
+      wait: 20
+    Events:
+    - EliteMobSpawnEvent
+    Zone:
+      Target:
+        targetType: SELF
+      borderRadius: 22
+      filter: PLAYER
+      radius: 23
+      shape: SPHERE
+entityType: GHAST
+followDistance: 25
+healthMultiplier: 4
+instanced: true
+isEnabled: true
+leashRadius: 25
+level: dynamic # 10
+name: $reinforcementLevel &aJeffrey
+normalizedCombat: true
+classLoot: false
+customModel: em_airship_ghast

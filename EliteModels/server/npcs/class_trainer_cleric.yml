@@ -1,0 +1,20 @@
+isEnabled: true
+name: '&6Seren'
+role: '&e<Cleric Instructor>'
+spawnLocation: em_adventurers_guild,301.5,91,221.5,90,0
+spawnLocations: []
+greetings:
+- Take heart. There is\nstrength in kindness.
+dialog:
+- Inspect your training\nand specializations.
+farewell:
+- May your light endure.
+canTalk: true
+activationRadius: 3.0
+interactionType: CLASS_TRAINER
+customModel: em_npc_trainer_cleric
+customDisguiseData: player cleric setskin {"properties":[{"name":"textures","signature":"B0dr1n8olcSQ4TrOFpfZIy7oEGLsFaIk8tBc/VOBJeNtxjWENyNQO3JD/CurAUOjwqQEB9UtoKC5sjboiABdYTd9zH/C/Vxr7SNE5lp0M5lhejnaBMOtHgiZbFeZAJF4LuG3jDXQhmrO+4cuA1yGrUiWA+k8o2SJd5NN0UQtpqN+LbQe37/yQ1ocd8IYLnolM1Wb7rT+bt9YrnvBj2wPDSvhu1JdhMdH2JeF+nGje7xbnYkQPS7+KibLwJ7JAAn63OJkfkwL+cjjnc9v4pDIphldYd36Q6ikQxqrtvk6nC+3oZe6+QITmINoQWEJq181fz3I1DiFmkULJhvLrcPNnmbAnbjxXwdCKrbD3DpQMyCWsSUNV8cTGXmxhxDycnZIS3WTCXnynQ7hRxujrNJrMgFfeAcMeztQ3/fisluQ3qgzXVdOjkfXqHUkHF7oJ6uV313SSN/YD8Dua3MDjh+rCJxZCwThgGDcEcwa6ATbhDxfs1g3cKgLSvLIdfVGCR4KShzjG9wVeXas77FHjCtDGCneIkV0Tll1ijU9c4VyCw91K1zhNql3Q5X/2yzy2XZFgXEQB6NinkhRgWWGRTGQnKh+rY90TuYBIIe9g5YezniS01fIe7pFNAzhfc0xOigXd7IbtdI181U+nOAG0lLPiF0SXGEjHpstriOPkHmn8bU=","value":"ewogICJ0aW1lc3RhbXAiIDogMTc2NjIwNDc0MjU2MCwKICAicHJvZmlsZUlkIiA6ICIzY2I3YTA3YWY3ZjM0ZWZiYTlkNGI4ODQ3NDM4Mzc0ZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJaZW4xXzAwMSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS85ZWQ4Mjc5ZjZjNDZmNDdkODQwMTZlM2U3NDhiNDg4ZTI3Y2VhMDI1NjhkODdjNDc1N2FmYTFmOWU2M2I2MjE5IiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0="}],"name":"Unknown","id":"b968d4a0-1d14-4f50-ba77-5053d9a731e1"}
+classRoot: cleric
+syncMovement: true
+scripts: []
+transportRoutes: []

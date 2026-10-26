@@ -1,0 +1,94 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+announcementPriority: 3
+bossType: BOSS
+cullReinforcements: true
+damageMultiplier: 1.75
+deathMessages:
+- '&e&l---------------------------------------------'
+- '&eSparky''s out, party''s over!'
+- '&c&l    1st Damager: $damager1name &cwith $damager1damage damage!'
+- '&6&l    2nd Damager: $damager2name &6with $damager2damage damage!'
+- '&e&l    3rd Damager: $damager3name &ewith $damager3damage damage!'
+- '&aSlayers: $players'
+- '&e&l---------------------------------------------'
+dropsEliteMobsLoot: true
+entityType: BLAZE
+followDistance: 200
+healthMultiplier: 30
+isEnabled: true
+level: dynamic # 20
+instanced: true
+name: $bossLevel &cSparky
+powers:
+- hyper_loot.yml
+- fireworks_barrage.yml
+- skeleton_tracking_arrow.yml
+- arrow_fireworks.yml
+- tracking_fireball.yml
+- filename: fireworks_phase_3_reinforcement.yml
+  inheritLevel: true
+  location: 35,0,35
+  summonType: ON_COMBAT_ENTER
+- filename: fireworks_phase_3_reinforcement.yml
+  inheritLevel: true
+  location: -35,0,35
+  summonType: ON_COMBAT_ENTER
+- filename: fireworks_phase_3_reinforcement.yml
+  inheritLevel: true
+  location: -35,0,35
+  summonType: ON_COMBAT_ENTER
+- filename: fireworks_phase_3_reinforcement.yml
+  inheritLevel: true
+  location: -35,0,-35
+  summonType: ON_COMBAT_ENTER
+spawnMessage: '&6Sparky returns to celebrate!'
+classLoot: true
+classLootRank: BOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- sparky_drop_axe.yml:0.15
+- sparky_drop_sword.yml:0.05
+- sparky_drop_shield.yml:0.15
+- sparky_drop_crossbow.yml:0.15
+- sparky_drop_mace.yml:0.15
+- sparky_drop_spear.yml:0.15
+- filename: cl_fireworks_sparky_swords_541b3f7b.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_axes_bfeffcc9.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_bows_91551680.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_crossbows_32cc667f.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_tridents_4740875a.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_hoes_0e1f9923.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_maces_a58093f0.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_spears_e68b08ac.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_staves_b332a577.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_wands_550187e7.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_dps_helmets_98f9e955.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_dps_chestplates_9070c301.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_dps_leggings_c05ba088.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_dps_boots_483b25e7.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_tank_helmets_8796af7f.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_tank_chestplates_ce9f0371.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_tank_leggings_a26d3ce2.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_tank_boots_37fe80fe.yml
+  chance: 1.0
+- filename: cl_fireworks_sparky_shields_9b79be66.yml
+  chance: 1.0
+customModel: em_furnace_blaze

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "steamworks:block/banded_plaster_wall",
+    "top": "steamworks:block/banded_plaster_wall",
+    "side": "steamworks:block/banded_plaster_wall"
+  }
+}

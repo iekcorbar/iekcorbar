@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/brass_tiles",
+    "top": "steamworks:block/brass_tiles",
+    "side": "steamworks:block/brass_tiles"
+  }
+}

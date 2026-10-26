@@ -1,0 +1,130 @@
+isEnabled: true
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+1isEnabled: true
+bossType: MINIBOSS
+damageMultiplier: 1.4
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Summon:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: POTION_EFFECT
+      amplifier: 50
+      duration: 20
+      potionEffectType: SLOW
+      wait: 60
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      sValue: entity.evoker.prepare_summon
+      wait: 60
+    - Target:
+        offset: 2,2,0
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SPELL
+      repeatEvery: 5
+      times: 6
+      wait: 60
+    - Target:
+        offset: -2,2,0
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SPELL
+      repeatEvery: 5
+      times: 6
+      wait: 60
+    - Target:
+        offset: 1,2,0
+        targetType: SELF
+      action: SUMMON_REINFORCEMENT
+      duration: 444
+      sValue: enchantment_boss_leet_summoner_eidolon_one.yml
+      wait: 80
+    - Target:
+        offset: -1,2,0
+        targetType: SELF
+      action: SUMMON_REINFORCEMENT
+      duration: 444
+      sValue: enchantment_boss_leet_summoner_eidolon_two.yml
+      wait: 80
+    Cooldowns:
+      global: 10
+      local: 200
+    Events:
+    - EliteMobEnterCombatEvent
+    - EliteMobDamagedByPlayerEvent
+entityType: EVOKER
+followDistance: 60
+frozen: false
+healthMultiplier: 4.0
+instanced: true
+isRegionalBoss: true
+leashRadius: 60
+movementSpeedAttribute: 0.5
+name: $minibossLevel &d1337 Summ0n3r
+normalizedCombat: true
+powers:
+- taze.yml
+- invulnerability_fire.yml
+spawnLocations:
+- em_id_enchantment_challenge_4,1.5,65,0.5,0,0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.25
+  difficultyID: 0
+  filename: ec_04_chestplate_normal.yml
+- chance: 0.15
+  difficultyID: 0
+  filename: ec_04_shovel_normal.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: elite_lucky_ticket.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec04_swords_b6d62054.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_axes_331fca2f.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_bows_82db668d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_crossbows_8d1d1a47.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_tridents_731c1cec.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_hoes_984ef13b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_maces_4a04e41b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_spears_e03b5835.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_staves_fecd65cb.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_wands_2b25f980.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_dps_helmets_9a500302.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_dps_chestplates_118390d6.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_dps_leggings_6a84943f.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_dps_boots_462a2b9b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_tank_helmets_e08b5370.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_tank_chestplates_482d67f9.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_tank_leggings_1115c74d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_tank_boots_cfc43ead.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec04_shields_a424f3e5.yml
+  chance: 1.0
+customModel: em_arcane_evoker

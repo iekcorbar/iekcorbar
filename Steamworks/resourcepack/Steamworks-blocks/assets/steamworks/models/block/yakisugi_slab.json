@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "steamworks:block/yakisugi",
+    "top": "steamworks:block/yakisugi",
+    "side": "steamworks:block/yakisugi"
+  }
+}

@@ -1,0 +1,823 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Dark:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 40
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 20
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 2
+      shape: SPHERE
+  Dark10:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 130
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 130
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 11
+      shape: SPHERE
+  Dark11:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 140
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 140
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 12
+      shape: SPHERE
+  Dark12:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 150
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 150
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 13
+      shape: SPHERE
+  Dark13:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 160
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 160
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 14
+      shape: SPHERE
+  Dark14:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 170
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 170
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 15
+      shape: SPHERE
+  Dark15:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 180
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 180
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 16
+      shape: SPHERE
+  Dark16:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 190
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 190
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 17
+      shape: SPHERE
+  Dark2:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 50
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 50
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 2
+      radius: 3
+      shape: SPHERE
+  Dark3:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 60
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 3
+      radius: 4
+      shape: SPHERE
+  Dark4:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 70
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 70
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 4
+      radius: 5
+      shape: SPHERE
+  Dark5:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 80
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 80
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 5
+      radius: 6
+      shape: SPHERE
+  Dark6:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 90
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 90
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 7
+      shape: SPHERE
+  Dark7:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 100
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 100
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 8
+      shape: SPHERE
+  Dark8:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 110
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 110
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 9
+      shape: SPHERE
+  Dark9:
+    Actions:
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 133
+      potionEffectType: BLINDNESS
+      wait: 120
+    - Target:
+        targetType: ZONE_FULL
+        track: true
+      action: POTION_EFFECT
+      amplifier: 3
+      duration: 133
+      potionEffectType: SLOW
+      wait: 120
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 10
+      shape: SPHERE
+  DarkVisual:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: POTION_EFFECT
+      amplifier: 20
+      duration: 200
+      potionEffectType: SLOW
+    - Target:
+        targetType: SELF
+      action: POTION_EFFECT
+      amplifier: 0
+      duration: 200
+      potionEffectType: LEVITATION
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_FULL
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 40
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      radius: 2
+      shape: SPHERE
+  DarkVisual10:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 130
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 10
+      radius: 11
+      shape: SPHERE
+  DarkVisual11:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 140
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 11
+      radius: 12
+      shape: SPHERE
+  DarkVisual12:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 150
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 12
+      radius: 13
+      shape: SPHERE
+  DarkVisual13:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 160
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 13
+      radius: 14
+      shape: SPHERE
+  DarkVisual14:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 170
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 14
+      radius: 15
+      shape: SPHERE
+  DarkVisual15:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 180
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 15
+      radius: 16
+      shape: SPHERE
+  DarkVisual16:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 190
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 16
+      radius: 17
+      shape: SPHERE
+  DarkVisual2:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 50
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 2
+      radius: 3
+      shape: SPHERE
+  DarkVisual3:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 3
+      radius: 4
+      shape: SPHERE
+  DarkVisual4:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 70
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 4
+      radius: 5
+      shape: SPHERE
+  DarkVisual5:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 80
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 5
+      radius: 6
+      shape: SPHERE
+  DarkVisual6:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 90
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 6
+      radius: 7
+      shape: SPHERE
+  DarkVisual7:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 100
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 7
+      radius: 8
+      shape: SPHERE
+  DarkVisual8:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 110
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 8
+      radius: 9
+      shape: SPHERE
+  DarkVisual9:
+    Actions:
+    - Target:
+        coverage: 0.2
+        targetType: ZONE_BORDER
+        track: true
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 5
+      times: 2
+      wait: 120
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      borderRadius: 9
+      radius: 10
+      shape: SPHERE
+  Trigger:
+    Actions:
+    - action: RUN_SCRIPT
+      onlyRunOneScript: false
+      scripts:
+      - DarkVisual
+      - Dark
+      - DarkVisual2
+      - Dark2
+      - DarkVisual3
+      - Dark3
+      - DarkVisual4
+      - Dark4
+      - DarkVisual5
+      - Dark5
+      - DarkVisual6
+      - Dark6
+      - DarkVisual7
+      - Dark7
+      - DarkVisual8
+      - Dark8
+      - DarkVisual9
+      - Dark9
+      - DarkVisual10
+      - Dark10
+      - DarkVisual11
+      - Dark11
+      - DarkVisual12
+      - Dark12
+      - DarkVisual13
+      - Dark13
+      - DarkVisual14
+      - Dark14
+      - DarkVisual15
+      - Dark15
+      - DarkVisual16
+      - Dark16
+    Cooldowns:
+      global: 20
+      local: 444
+    Events:
+    - PlayerDamagedByEliteMobEvent
+    - EliteMobDamagedByPlayerEvent
+entityType: BLAZE
+followDistance: 60
+frozen: false
+healthMultiplier: 3.0
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 60
+movementSpeedAttribute: 0.31
+name: $minibossLevel &0Dark Flame
+normalizedCombat: true
+powers:
+- attack_gravity.yml
+- invulnerability_fire.yml
+- invulnerability_arrow.yml
+spawnLocations:
+- em_id_enchantment_challenge_1,1.5,65,0.5,0,0
+trails:
+- SMOKE_LARGE
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.05
+  difficultyID: 0
+  filename: ec_01_trident_normal.yml
+- chance: 0.05
+  difficultyID: 0
+  filename: enchanted_book_arrow_fire.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec01_swords_6445b31b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_axes_67f8cce6.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_bows_9922617d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_crossbows_0d746b93.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_tridents_b2d041e4.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_hoes_dfffd0b9.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_maces_83461953.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_spears_c1520b0c.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_staves_aa01dbc3.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_wands_05161f52.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_dps_helmets_a634614f.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_dps_chestplates_529a68e0.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_dps_leggings_49d68488.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_dps_boots_d79012c9.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_tank_helmets_46a9e881.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_tank_chestplates_193a71db.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_tank_leggings_0ab7c6b3.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_tank_boots_a2ebe6ff.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec01_shields_acafd8e4.yml
+  chance: 1.0
+customModel: em_furnace_blaze

@@ -1,0 +1,224 @@
+# Steamworks Engineer's Manual - covers every Steamworks machine. Given with /ibook give <player> engineers_manual,
+# sold by wandering traders (wanderingtrades/trades/engineers_manual.yml) and found in loot.
+title: &6Engineer's Manual
+author: The Steamworks Guild
+description: Every machine of Steamworks, short and sweet.
+copyable: false
+loot: true
+loot-weight: 3
+model: engineers_manual
+===
+&l&6Engineer's
+&l&6Manual&r
+
+&8Steamworks, from the first crank to the last train
+
+by the Steamworks Guild
+---
+&lContents&r
+
+&8Power&r
+&8Moving rotation&r
+&8Processing&r
+&8Automation&r
+&8Trains&r
+&8Ores and plates&r
+&8Oil&r
+&8Building blocks&r
+
+&7Right-click any part with an empty hand to see its speed and load.
+---
+&lThe basics&r
+
+A source turns. Everything touching it turns too: shafts, cogwheels, machines.
+
+&6RPM&r = speed.
+&6Tq&r = load. Each machine adds load, each source adds capacity.
+
+Too much load and the network &cjams&r: it stops and puffs steam. Add power or remove a machine.
+---
+&lThe basics&r
+
+Faster than &c192 RPM&r and a part snaps its breaker pin.
+
+Two sources fighting each other, or gears locked in a loop, also jam.
+
+Parts are protected like blocks. Pick one up with two left-clicks.
+---
+&lPower: Hand Crank&r
+
+Against a shaft end. Hold right-click, sneak to reverse.
+
+16 RPM, 128 Tq. Makes you hungry.
+
+One crank runs 2 millstones, 1 hammer, 2 fans or 1 pumpjack.
+---
+&lPower: Water Wheel&r
+
+Needs &9flowing&r water. Each side pushed by water adds 4 RPM, to a max of 8.
+
+256 Tq and it never stops.
+
+Use one side only: water on both sides cancels out.
+---
+&lPower: Windmill&r
+
+Sails about 10 blocks wide. Place it on a block; the shaft leaves from the back. Sneak to flip.
+
+4 RPM low, 6 above Y 64, 8 above Y 100. Rain +2, storm +4.
+
+64 Tq per RPM. The sails need free air in front, or it stops.
+---
+&lPower: Steam&r
+
+&6Boiler&r: needs a water source next to it and fuel (coal, charcoal, blaze rod, lava bucket, fuel canister, or a hopper).
+
+&6Engine&r: place it on top. A shaft leaves from the side.
+
+24 RPM and 1536 Tq. Coal lasts 80 seconds.
+---
+&lMoving rotation&r
+
+&6Shaft&r carries rotation straight.
+
+&6Cogwheel&r: two small side by side turn opposite. Large next to small diagonally: the small one turns twice as fast.
+
+&6Gearbox&r sends rotation round a corner.
+---
+&lMoving rotation&r
+
+&6Clutch&r: a shaft until redstone cuts the far side off.
+
+&6Gearshift&r: with redstone the far side reverses. Good for belts.
+
+&6Chain Sprocket&r: link two with iron chains, up to 12 blocks, same axis, same plane. One chain per block.
+---
+&lGauges&r
+
+&6Speed Gauge&r shows RPM.
+&6Stress Gauge&r shows load against capacity. Needle at the end: about to jam.
+---
+&lMillstone&r
+
+Takes power from &obelow&r. Right-click items in, or a hopper on top. Empty hand takes the results.
+
+Cobblestone to gravel, gravel to sand, bone to bone meal, wool to string, wheat to flour, flowers to double dye.
+---
+&lSteam Hammer&r
+
+Presses items lying under it, one per strike. Shaft through the side.
+
+Ingots to plates, sugar cane to paper, snow block to ice, stone to cracked stone.
+
+A hopper under it collects the results.
+---
+&lBellows Fan&r
+
+Blows out of its front, 4 to 12 blocks. Put something in the stream and items behind it change after 5 s:
+
+&6Lava&r smelts
+&6Fire&r smokes
+&9Water&r washes
+&5Soul fire&r haunts
+
+Washing turns concrete powder into concrete.
+---
+&lCrushing Wheels&r
+
+Two wheels side by side, one powered. Throw items on top; results fall out between them.
+
+Ores give more than mining. Mine with Silk Touch, then crush.
+---
+&lKettle and Mixer&r
+
+Kettle holds water and ingredients. The mixer on top stirs, powered from above.
+
+Heat under the kettle: fire, campfire, lava or magma.
+
+&6Brass&r: 3 copper + 1 zinc. Also bread, cake, mud, clay, gunpowder and more.
+---
+&lDrill and Saw&r
+
+Power from behind. They break the block in front.
+
+&6Drill&r: stone in 2 s at crank speed. Never breaks chests or parts.
+&6Saw&r: cuts wood and plants, and fells the whole tree.
+
+They only break where the player who placed them is allowed.
+---
+&lConveyor Belt&r
+
+Lay pieces in a row. Power a shaft at the side. Reverse the rotation and the belt reverses.
+
+It carries items, mobs and players. At the end it feeds a chest, barrel, hopper or kettle.
+
+Under a hammer, items wait to be pressed.
+---
+&lKarakuri Arm&r
+
+A robot arm, powered from below. Fit a tool head: Gripper, Placer or Drill.
+
+Teach up to 8 points: sneak + right-click the arm, then click blocks. Sneak + click the arm again to finish.
+
+Programs come from a Book and Quill. Punch Cards copy them. Type &o/sw help&r for the guide.
+---
+&lTrains&r
+
+Normal rails. Right-click a rail with a locomotive, then click the rail behind it with a wagon.
+
+&6W&r steam, &6S&r brake, &6Jump&r whistle, &6Sneak&r get off.
+
+Fuel: coal 2 min, blaze rod 3, coal block 20, fuel canister 5.
+---
+&lTrains&r
+
+Passenger Wagon: 4 seats.
+Cargo Wagon: 27 slots.
+
+&6Station&r beside the track, name it in an anvil.
+&6Signal&r is red when a train is ahead or when it gets redstone.
+
+&6Autopilot&r: right-click the locomotive with a clock. It stops at stations and turns at the end of the line.
+---
+&lOres&r
+
+&6Zinc&r Y -48 to 72
+&6Tin&r Y -24 to 96
+&6Sulfur&r deep, and in the Nether
+
+They mine like real ores. Fortune gives more, Silk Touch gives the block. Smelt raw zinc and tin.
+---
+&lPlates&r
+
+The Steam Hammer turns iron, copper, gold and brass ingots into plates. You need them for most machines.
+
+Brass: 3 copper + 1 zinc in a heated mixer.
+Sulfur + coal in the mixer: gunpowder.
+---
+&lOil&r
+
+About 1 chunk in 12 holds oil, more in deserts, badlands and oceans. The &6Oil Dowsing Rod&r points the way.
+
+&6Pumpjack&r pumps 32 mB/s. &6Pipes&r join on their own. &6Tanks&r hold 16 buckets.
+---
+&lOil&r
+
+&6Refinery&r (heat below) makes 60% fuel and 40% chemical waste.
+
+&cGive the waste its own tank.&r If it has nowhere to go, it poisons the chunk: dead grass at 300, poison at 600.
+
+Canisters from tin carry 1000 mB.
+---
+&lBuilding blocks&r
+
+32 steampunk and Japanese blocks in four styles. Each has stairs and a slab.
+
+Craft 3 base items + 1 accent in a 2x2 square for 4 blocks.
+
+Look them up with &o/zukan&r.
+---
+&lEnd of the manual&r
+
+&8Stuck? Ask in the wiki, or right-click the part and read what it says.
+
+&7Good building, engineer.

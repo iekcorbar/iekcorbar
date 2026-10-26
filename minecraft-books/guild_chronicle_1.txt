@@ -1,0 +1,56 @@
+# Chronicles of the Guild - Volume I: The Devastation
+# Source: Lore Library/Others/Base.docx ("The Beginning"). Only the KNOWN HISTORY
+# (what Adventurers currently believe) is used - no design notes, no spoilers.
+# Palette: copper &#8a4f1c | brass &#7a5a12 | ink &#2b1d0e | rust &#8b2a1a
+title: &6Chronicles of the Guild I
+model: guild_tome
+author: The Guild Archive
+series: Chronicles of the Guild
+volume: 1
+description: The Devastation.
+copyable: false
+loot: true
+loot-weight: 10
+===
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&#8a4f1c&lChronicles
+&#8a4f1c&lof the Guild
+
+
+&#2b1d0e&oVolume I
+&#7a5a12The Devastation
+
+
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&8The Guild Archive
+---
+&#8a4f1c&lThe Devastation
+&#7a5a12━━━━━━━━━━
+
+&#2b1d0eCenturies ago, this world was laid waste by a divine being known as &#8b2a1a&lShoutlander&#2b1d0e.
+---
+&#2b1d0eCivilizations collapsed. Much of the old world was destroyed.
+
+And when the destruction ended, Shoutlander's creatures remained behind, among the ruins.
+---
+&#2b1d0eThen came several centuries of relative peace.
+
+The ruins grew quiet. The old world lay broken, waiting.
+---
+&#2b1d0eAfter those long centuries, the first &#8a4f1c&lAdventurers&#2b1d0e began to arrive.
+
+They came from other worlds.
+---
+&#2b1d0eFor the Adventurers are travellers between worlds. Each world is its own realm, and the Adventurers are able to move from one to the next.
+
+It was this gift that brought them here.
+---
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&8&oHere ends the first chronicle.
+
+&8&oWhat is written here is the history as the Guild knows it.
+
+&#7a5a12⚙ ━━━━━━━ ⚙

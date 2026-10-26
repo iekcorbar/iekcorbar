@@ -1,0 +1,15 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+entityType: GUARDIAN
+healthMultiplier: 0.25
+isEnabled: true
+isPersistent: false
+level: dynamic
+instanced: true
+name: $reinforcementLevel &2Piranha Prince
+classLoot: false
+customModel: em_submarine_guardian

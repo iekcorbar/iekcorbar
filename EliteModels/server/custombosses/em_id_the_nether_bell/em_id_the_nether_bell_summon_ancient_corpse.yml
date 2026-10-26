@@ -1,0 +1,61 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+name: $minibossLevel &eAncient Corpse
+level: dynamic # 55
+healthMultiplier: 5.0
+damageMultiplier: 0.05
+movementSpeedAttribute: 0.35
+powers:
+- em_id_the_nether_bell_void_push_dome.yml
+- filename: em_id_the_nether_bell_miniboss_ancient_aura_normal.yml
+  difficultyID:
+  - 0
+- filename: em_id_the_nether_bell_miniboss_ancient_aura_hard.yml
+  difficultyID:
+  - 1
+- filename: em_id_the_nether_bell_miniboss_ancient_aura_mythical.yml
+  difficultyID:
+  - 2
+- invulnerability_fire.yml
+- filename: invulnerability_arrow.yml
+  difficultyID:
+  - 1
+  - 2
+- filename: shield_wall.yml
+  difficultyID:
+  - 2
+instanced: true
+isRegionalBoss: true
+normalizedCombat: true
+frozen: false
+followDistance: 40
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+dropsRandomLoot: false
+eliteScript:
+  SpawnPrep:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: TAG
+      Target:
+        targetType: SELF
+      tags:
+      - Phase1
+      - AncientCorpse
+    - action: SET_MOB_AI
+      bValue: false
+      Target:
+        targetType: SELF
+    - action: MAKE_INVULNERABLE
+      wait: 1
+      Target:
+        targetType: SELF
+      invulnerable: true
+spawnLocations:
+- em_id_the_nether_bell,4.5,94.4,3.5,-60.0,0.0
+classLoot: false
+customModel: em_steam_zombie

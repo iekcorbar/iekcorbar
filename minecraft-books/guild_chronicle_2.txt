@@ -1,0 +1,57 @@
+# Chronicles of the Guild - Volume II: The First Settlement
+# Source: Lore Library/Others/Base.docx ("The First Settlement"). Known history only.
+# Palette: copper &#8a4f1c | brass &#7a5a12 | ink &#2b1d0e | rust &#8b2a1a
+title: &6Chronicles of the Guild II
+model: guild_tome
+author: The Guild Archive
+series: Chronicles of the Guild
+volume: 2
+description: The First Settlement.
+copyable: false
+loot: true
+loot-weight: 8
+===
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&#8a4f1c&lChronicles
+&#8a4f1c&lof the Guild
+
+&#2b1d0e&oVolume II
+&#7a5a12The First Settlement
+
+
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&8The Guild Archive
+---
+&#8a4f1c&lThe First Settlement
+&#7a5a12━━━━━━━━━━
+
+&#2b1d0eThe first Adventurers to reach Shoutlander's devastated world set out to build an outpost.
+---
+&#2b1d0eThey explored the ruins. They gathered resources. Stone by stone, they began to rebuild a foothold in the world.
+---
+&#2b1d0eBut in the end, Shoutlander's creatures found them.
+
+&#8b2a1a&lThe first settlement was attacked, and it was destroyed.
+---
+&#2b1d0eUnable to keep a lasting presence in the devastated world, the survivors created - or reached - another dimension, where they could live in safety.
+---
+&#2b1d0eThat world became known as:
+
+
+&#8a4f1c&l      The Guild
+---
+&#2b1d0eThe Guild became the refuge, the headquarters and the meeting place of the Adventurers.
+---
+&#2b1d0eFrom there, they kept exploring Shoutlander's world. They gathered knowledge. They grew stronger.
+
+And they prepared for the day they would return.
+---
+&#7a5a12⚙ ━━━━━━━ ⚙
+
+&8&oHere ends the second chronicle.
+
+&8&oWhat is written here is the history as the Guild knows it.
+
+&#7a5a12⚙ ━━━━━━━ ⚙

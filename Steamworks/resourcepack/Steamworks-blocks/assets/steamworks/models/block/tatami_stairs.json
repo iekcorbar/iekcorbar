@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "steamworks:block/tatami",
+    "top": "steamworks:block/tatami",
+    "side": "steamworks:block/tatami"
+  }
+}

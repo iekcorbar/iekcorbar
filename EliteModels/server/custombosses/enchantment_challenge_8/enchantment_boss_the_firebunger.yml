@@ -1,0 +1,1123 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 1.2
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  Firewall1:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  Firewall2:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: -11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  Firewall21:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  Firewall22:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: -11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  Firewall23:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 0,0,11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  Firewall24:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 0,0,-11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  Firewall3:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 0,0,11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  Firewall31:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  Firewall32:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: -11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  Firewall33:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 0,0,11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  Firewall34:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 0,0,-11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  Firewall4:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SET_ON_FIRE
+      duration: 266
+      repeatEvery: 10
+      times: 300
+      wait: 58
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.8
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: FLAME
+        speed: 0.05
+      - amount: 0
+        particle: FLAME
+        y: 50
+      repeatEvery: 5
+      times: 600
+      wait: 58
+    Zone:
+      Target:
+        offset: 0,0,-11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  FirewallVisual1:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  FirewallVisual2:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: -11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  FirewallVisual21:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  FirewallVisual22:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: -11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  FirewallVisual23:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 0,0,11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  FirewallVisual24:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 0,0,-11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  FirewallVisual3:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 0,0,11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  FirewallVisual31:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  FirewallVisual32:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: -11,0,0
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 20
+      y: 2
+      z: 1
+  FirewallVisual33:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 0,0,11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  FirewallVisual34:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 0,0,-11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  FirewallVisual4:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: PLAY_SOUND
+      repeatEvery: 10
+      sValue: entity.pillager.ambient
+      times: 3
+    - Target:
+        targetType: SELF
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+    - Target:
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SMOKE_LARGE
+      repeatEvery: 10
+      times: 3
+      wait: 28
+    - Target:
+        targetType: SELF
+      action: SET_MOB_AI
+      bValue: false
+      duration: 35
+    Zone:
+      Target:
+        offset: 0,0,-11
+        targetType: SELF
+        track: false
+      shape: CUBOID
+      x: 1
+      y: 2
+      z: 20
+  Trigger:
+    Actions:
+    - action: RUN_SCRIPT
+      onlyRunOneScript: false
+      scripts:
+      - FirewallVisual1
+      - Firewall1
+      - FirewallVisual2
+      - Firewall2
+      - FirewallVisual3
+      - Firewall3
+      - FirewallVisual4
+      - Firewall4
+    Cooldowns:
+      global: 60
+      local: 3500
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    - PlayerDamagedByEliteMobEvent
+  Trigger2:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      action: RUN_SCRIPT
+      onlyRunOneScript: false
+      scripts:
+      - FirewallVisual21
+      - Firewall21
+      - FirewallVisual22
+      - Firewall22
+      - FirewallVisual23
+      - Firewall23
+      - FirewallVisual24
+      - Firewall24
+      wait: 222
+    Cooldowns:
+      global: 60
+      local: 3500
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    - PlayerDamagedByEliteMobEvent
+  Trigger3:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      action: RUN_SCRIPT
+      onlyRunOneScript: false
+      scripts:
+      - FirewallVisual31
+      - Firewall31
+      - FirewallVisual32
+      - Firewall32
+      - FirewallVisual33
+      - Firewall33
+      - FirewallVisual34
+      - Firewall34
+      wait: 444
+    Cooldowns:
+      global: 60
+      local: 3500
+    Events:
+    - EliteMobDamagedByPlayerEvent
+    - PlayerDamagedByEliteMobEvent
+entityType: VINDICATOR
+followDistance: 60
+frozen: false
+healthMultiplier: 3.0
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 60
+mainHand: NETHERITE_AXE
+movementSpeedAttribute: 0.34
+name: $minibossLevel &4The Firebunger
+normalizedCombat: true
+offHand: NETHERITE_AXE
+powers:
+- shield_wall.yml
+- invulnerability_fire.yml
+spawnLocations:
+- em_id_enchantment_challenge_8,1.5,65,0.5,0,0
+trails:
+- FLAME
+- SMOKE_NORMAL
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.25
+  difficultyID: 0
+  filename: ec_08_chestplate_normal.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: ec_08_leggings_normal.yml
+- chance: 0.25
+  difficultyID: 0
+  filename: enchanted_book_protection_fire.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec08_swords_587fe016.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_axes_a19f6baf.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_bows_626dda4d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_crossbows_ad83d5a6.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_tridents_1409df1b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_hoes_2b8fed0e.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_maces_f7b4907b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_spears_e5db91f3.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_staves_1f75a371.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_wands_c4817236.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_dps_helmets_230b7b05.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_dps_chestplates_99dbafb7.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_dps_leggings_76a75cd2.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_dps_boots_3ef7426d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_tank_helmets_5af3769b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_tank_chestplates_aef6f61d.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_tank_leggings_a63d964a.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_tank_boots_820549af.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec08_shields_0a3b4b57.yml
+  chance: 1.0
+customModel: em_steam_vindicator

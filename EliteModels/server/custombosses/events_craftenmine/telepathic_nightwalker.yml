@@ -1,0 +1,38 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: CAVE_SPIDER
+name: $eventBossLevel &1Telepathic Nightwalker
+level: dynamic
+healthMultiplier: 3.33
+damageMultiplier: 0.8
+phases:
+- telepathic_nightwalker_p2.yml:0.45
+- telepathic_nightwalker_p3.yml:0.40
+powers:
+- attack_gravity.yml
+- invulnerability_fire.yml
+- summonType: ON_COMBAT_ENTER
+  filename: telepathic_nightwalker_summon.yml
+  spawnNearby: true
+  inheritAggro: true
+  inheritLevel: true
+  amount: 3
+  chance: 1.0
+- summonType: ON_COMBAT_ENTER
+  filename: telepathic_nightwalker_summon_1.yml
+  spawnNearby: true
+  inheritAggro: true
+  inheritLevel: true
+  amount: 2
+  chance: 1.0
+movementSpeedAttribute: 0.29
+followDistance: 50
+locationMessage: '&cTelepathic Nightwalker: $distance blocks away!'
+spawnMessage: '&cA Dr. Craftenmine side project has been sighted!'
+deathMessage: '&aThe Telepathic Nightwalker was slain by $players!'
+escapeMessage: '&4The Telepathic Nightwalker has left this place!'
+announcementPriority: 2
+customModel: em_lantern_cave_spider

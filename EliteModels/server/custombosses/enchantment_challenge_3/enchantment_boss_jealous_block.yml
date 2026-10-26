@@ -1,0 +1,824 @@
+level: dynamic
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: MINIBOSS
+damageMultiplier: 0.22
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  SlimeCrime:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 8
+      shape: CYLINDER
+  SlimeCrime10:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime11:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime12:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime13:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime2:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime3:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime4:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime5:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime6:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime7:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime8:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  SlimeCrime9:
+    Actions:
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: EXPLOSION_NORMAL
+      repeatEvery: 10
+      times: 6
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        coverage: 0.5
+        targetType: ZONE_FULL
+        track: false
+      action: SPAWN_PARTICLE
+      particles:
+      - particle: SLIME
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    - Conditions:
+        Target:
+          targetType: SELF
+        conditionType: BLOCKING
+        isAlive: true
+      Target:
+        targetType: ZONE_FULL
+        track: false
+      action: POTION_EFFECT
+      amplifier: 2
+      duration: 222
+      potionEffectType: POISON
+      repeatEvery: 10
+      times: 300
+      wait: 60
+    Zone:
+      Target:
+        targetType: SELF
+        track: true
+      height: 1
+      radius: 7
+      shape: CYLINDER
+  Trigger:
+    Actions:
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime
+      wait: 100
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime2
+      wait: 200
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime3
+      wait: 355
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime4
+      wait: 550
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime5
+      wait: 788
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime6
+      wait: 1000
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime7
+      wait: 1200
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime8
+      wait: 1400
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime9
+      wait: 1600
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime10
+      wait: 1800
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime11
+      wait: 2000
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime12
+      wait: 2200
+    - action: RUN_SCRIPT
+      scripts:
+      - SlimeCrime13
+      wait: 2400
+    Events:
+    - EliteMobSpawnEvent
+entityType: SLIME
+followDistance: 60
+frozen: false
+healthMultiplier: 3.0
+instanced: true
+isEnabled: true
+isRegionalBoss: true
+leashRadius: 60
+movementSpeedAttribute: 3.1
+name: $minibossLevel &aJealous Block
+normalizedCombat: true
+powers:
+- movement_speed.yml
+- attack_push.yml
+- invulnerability_arrow.yml
+- skeleton_tracking_arrow.yml
+spawnLocations:
+- em_id_enchantment_challenge_3,1.5,65,0.5,0,0
+classLoot: true
+classLootRank: MINIBOSS
+classLootDifficulty: AUTO
+uniqueLootList:
+- chance: 0.25
+  difficultyID: 0
+  filename: ec_03_boots_normal.yml
+- chance: 0.15
+  difficultyID: 0
+  filename: ec_03_pickaxe_normal.yml
+- chance: 0.1
+  difficultyID: 0
+  filename: enchanted_book_hunter.yml
+- filename: cl_free_enchantment_challenge_sanctums_ec03_swords_f8d3aaf1.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_axes_6de6dd6a.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_bows_53550e8f.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_crossbows_04fe42a4.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_tridents_0ac92500.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_hoes_fdcd4c8e.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_maces_145aef84.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_spears_621415f7.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_staves_f9749a54.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_wands_afc0d4ee.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_dps_helmets_6ed70a51.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_dps_chestplates_18aaf678.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_dps_leggings_79a5aa1f.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_dps_boots_281014e7.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_tank_helmets_dc4ca4f6.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_tank_chestplates_6017d67b.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_tank_leggings_b65592dc.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_tank_boots_034bfdf0.yml
+  chance: 1.0
+- filename: cl_free_enchantment_challenge_sanctums_ec03_shields_cbf71489.yml
+  chance: 1.0
+customModel: em_gear_slime

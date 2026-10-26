@@ -1,0 +1,99 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+leashRadius: 40
+followDistance: 30
+isRegionalBoss: true
+spawnCooldown: 5
+isEnabled: true
+entityType: EVOKER
+name: $normalLevel &5Spirit Whisperer
+level: dynamic
+instanced: true
+powers:
+- attack_blinding.yml
+- attack_freeze.yml
+- attack_poison.yml
+healthMultiplier: 1.0
+damageMultiplier: 1
+dropsEliteMobsLoot: true
+dropsVanillaLoot: true
+onDamageMessages:
+- A curse upon you!
+- A pox upon your family!
+- Feel the wrath of the spirits!
+onDamagedMessages:
+- You vex me so!
+- Spirits, protect me!
+spawnLocations:
+- em_sewer_maze,-216.0821730462272,112.2,-290.12365632113955,-191.80249,19.643837:1608794888274
+- em_sewer_maze,-277.65255836984403,111.2,-101.37260456237227,34.193977,-35.19641:0
+- em_sewer_maze,-165.30000001192093,133.49407684330518,-21.16018399552592,6.4923706,9.293564:1600503121992
+- em_sewer_maze,-195.64349972758896,133.49407684330518,-67.76777984877587,41.14044,37.343548:1600503001980
+- em_sewer_maze,-166.0442691587348,133.2,-177.8108461024855,77.74158,28.343485:0
+- em_sewer_maze,-238.3023053388544,111.2,-306.9683494878834,-27.552341,18.893972:1609849198203
+- em_sewer_maze,-253.4284268674184,111.2,-66.1958444447996,14.093797,81.67575:0
+- em_sewer_maze,-261.68086745695047,111.2,-134.15133619942918,12.293829,-96.66328:1600049185988
+- em_sewer_maze,-275.08428584938883,111.2,-50.46437226570544,17.54405,-127.29883:1609387984988
+- em_sewer_maze,-301.37160639452986,111.2,-86.61687073953954,62.99405,-131.94704:1611043181695
+- em_sewer_maze,-165.30000001192093,133.49407684330518,-80.91436561010038,132.19263,2.2435565:1595586781356
+- em_sewer_maze,-265.40915177733876,111.2,-63.072872057741456,35.543846,181.12566:1609388164997
+- em_sewer_maze,-182.18919218521188,133.2,-102.63522742942645,6.7964478,15.143583:1600049005987
+- em_sewer_maze,-310.0695109847869,111.2,-98.07392173710053,70.64403,-51.6985:0
+- em_sewer_maze,-196.69999998807907,133.49407684330518,-101.40213608193658,304.39008,20.243536:1600502941978
+- em_sewer_maze,-219.16055996827498,133.2,-42.09690263623718,32.249943,62.59308:1608782228276
+- em_sewer_maze,-193.25860219379095,111.2,-305.9079682028695,-57.102646,20.09386:1609849127876
+- em_sewer_maze,-182.285144563006,133.2,-147.780229646357,192.64093,4.343545:1600905707276
+- em_sewer_maze,-203.8039899526224,134.2,-65.37439523342195,28.94999,172.23926:1608701398128
+- em_sewer_maze,-253.87210367513265,111.2,-113.52956817333359,22.343987,-332.79578:0
+- em_sewer_maze,-250.22107772529023,111.2,-125.88069536687208,31.34379,-258.06384:0
+- em_sewer_maze,-263.4647701751681,112.2,-100.66066548386128,4.1940155,-3.3967896:1611043222552
+- em_sewer_maze,-291.8803220697508,111.2,-74.5196940406178,22.644062,-50.348972:1609388045038
+- em_sewer_maze,-309.86147578487254,111.2,-72.56576638934462,20.844034,-24.69852:1609387924983
+- em_sewer_maze,-166.0675780668188,133.49407684330518,-43.77380236858768,6.4923706,9.293564:1595586780706
+- em_sewer_maze,-254.5336749166421,111.2,-278.8956376064618,-173.50233,22.343967:1608795068276
+- em_sewer_maze,-252.01023878696435,111.2,-241.79957999480132,-184.30269,28.343952:1608795068278
+- em_sewer_maze,-313.7041922346768,111.2,-52.25881685358212,32.093994,-34.748512:1609387924982
+classLoot: true
+classLootRank: TRASH
+classLootDifficulty: AUTO
+uniqueLootList:
+- filename: cl_the_sewers_tunnels_swords_585f8af9.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_axes_4f2b49e7.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_bows_b7fdc637.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_crossbows_dc0db6d5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tridents_5a34965a.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_hoes_a0c18962.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_maces_ffccc452.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_spears_f90fd53b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_staves_40482056.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_wands_712be25e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_helmets_9917a646.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_chestplates_ddb3baab.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_leggings_b55e815e.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_dps_boots_e2a3eb58.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_helmets_341bb342.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_chestplates_1f0e9b0b.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_leggings_cc0387b5.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_tank_boots_e5dddda6.yml
+  chance: 1.0
+- filename: cl_the_sewers_tunnels_shields_fcaba11c.yml
+  chance: 1.0
+customModel: em_arcane_evoker

@@ -1,0 +1,46 @@
+# ==== Iekcorbar .gitignore ====
+# Dit bestand bepaalt wat er NIET in git mag. Alles hierbuiten (code, bronnen,
+# documentatie en grondstoffen) gaat in de privé-GitHub-repo.
+
+# --- bouw-zooi & dependencies: te zwaar en altijd opnieuw te maken ---
+node_modules/
+.next/
+out/
+dist/
+target/
+*.tsbuildinfo
+
+# --- kant-en-klare producten: jars en zip's (staan op de server; herbouwen = mvn package) ---
+*.jar
+*.zip
+*.war
+*.exe
+
+# --- PRIVÉ en speler-data: nooit naar internet ---
+*PRIVE*
+forgotten players/
+headdatabase/
+src/lib/db.json
+
+# --- geheimen: wachtwoorden, sleutels, tokens ---
+.env
+.env.*
+*.pem
+*.key
+id_rsa*
+
+# --- serverkopieën en tijdelijke upload-mappen ---
+pluginset-aangepast/
+upload-*/
+output_browser/
+_archief/
+
+# --- logboeken en rommel ---
+*.log
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# --- machina-specifieke instellingen ---
+.claude/settings.local.json
+mobile/.expo/

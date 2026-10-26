@@ -1,0 +1,34 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 1
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  SlowFall:
+    Actions:
+    - Target:
+        targetType: SELF
+      action: POTION_EFFECT
+      amplifier: 150
+      duration: 666
+      potionEffectType: SLOW_FALLING
+    Events:
+    - EliteMobSpawnEvent
+entityType: RABBIT
+followDistance: 30
+frozen: false
+healthMultiplier: 0.6
+instanced: true
+isEnabled: true
+isRegionalBoss: false
+level: dynamic # 20
+name: $reinforcementLevel &dFocused Thought
+normalizedCombat: true
+powers:
+- invisibility.yml
+- skeleton_tracking_arrow.yml
+- implosion.yml
+classLoot: false
+customModel: em_wind_rabbit

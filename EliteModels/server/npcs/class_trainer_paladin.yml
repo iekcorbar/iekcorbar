@@ -1,0 +1,20 @@
+isEnabled: true
+name: '&6Aldric'
+role: '&e<Paladin Instructor>'
+spawnLocation: em_adventurers_guild,297.5,91,217.5,-90,0
+spawnLocations: []
+greetings:
+- Stand firm. Others\nwill stand behind you.
+dialog:
+- Inspect your training\nand specializations.
+farewell:
+- Keep your oath.
+canTalk: true
+activationRadius: 3.0
+interactionType: CLASS_TRAINER
+customModel: em_npc_trainer_paladin
+customDisguiseData: player paladin setskin {"properties":[{"name":"textures","signature":"bbPhZk/R+KT+rxW8PqCrkE+Xe0yVCWVqHrDyd4scH31qnivy6qdAhi+FosARu+7WFVU3hhIRmCaxroJzyJ9/mST5WMIuKAb2Ebhbu/caKQ0+NoUVnaOsuHJm8gIs9qVeW4Vc28IqTufU/sxEM0wJMxcyLhja99gp/r6WUbkvEOAM+LjeKmEgKrEvuXC5CWphJDkO8WapkcmZsMPKdxuEF2EtpPH96nsus6UABBiBSG0cYw76mdGAyn2hBJJfVvtevwDkWYH3/uqLMWPsPHNnhevGKvWIVV4oQcFllYR6xIKTyehsRFK61KToWWyqhOqAUv9fQX8kgxO+h7xUZ+yGmK6cMdW9ZuQgz92A9rLEujPSAdZ0DKSAd3T9PFMvzU0MZf6ARIG9kmwnhlzeeq6TAv47GclV/5kJ2MgxUlT57wAKT3MvVaps4NPmy9YSOl06y/C38al4ziGggCqS3+IvGSiLmaQrEIcDCUWg0wO1YiAIV/v+p8NX8MqbxC1PYKxH+LIsZnzXPRme7uB2IlLp5s3KetKZkYWpej0FThxLqvLf0Im9e0QIVwmAWW6FKpqZsE6hFEsw52tIMk2t0ssnx5NPRkE/LkEPsGDZBeV9bH5b5Ta5FEGr5bSeMG2ntpqp91YUbqrFVKjqMT6G7+L4LoxSl3YqKIAryw/XX68JHpI=","value":"ewogICJ0aW1lc3RhbXAiIDogMTcwODM1ODc5NDU2NCwKICAicHJvZmlsZUlkIiA6ICI4ZGUyNDAzYTEyMjU0ZmFkOTM1OTYxYWFlYmQwNGUyOSIsCiAgInByb2ZpbGVOYW1lIiA6ICJkZXNydHB1bWEiLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjRiNjhkMTIxZGY1Y2MwNzhhYjE0MjQ4MTdiODI5NTIxNmI5MTIxODA5MWZhMzJiODQ3NDM4MDBiM2E5NmIzMiIKICAgIH0KICB9Cn0="}],"name":"Unknown","id":"06c27c63-b8c3-4215-a26c-7b98b915a8d9"}
+classRoot: paladin
+syncMovement: true
+scripts: []
+transportRoutes: []

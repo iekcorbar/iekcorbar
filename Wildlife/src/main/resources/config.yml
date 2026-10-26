@@ -1,0 +1,52 @@
+# Wildlife - new animals ADDED next to the vanilla ones (nothing vanilla is replaced or removed).
+docs-url: https://iekcorbar.com/wiki?page=wildlife
+
+spawning:
+  enabled: true
+  # every interval each player gets one try to have a group appear nearby
+  interval-seconds: 6
+  # chance (0-1) that the try happens at all - keep it low: animals are meant to be scarce
+  chance: 0.55
+  min-distance: 24
+  max-distance: 56
+  # no new animals while this many Wildlife animals are within near-radius of the player
+  max-animals-near-player: 8
+  near-radius: 64
+  # chance (0-1) that an animal is the rare colour variant
+  rare-chance: 0.025
+
+# biome soundscapes around players who are outdoors (birds, crickets, frogs, gulls, cicadas, wind);
+# played in the Ambient/Environment volume category, so players can turn them down themselves
+ambience:
+  enabled: true
+  volume: 0.6
+
+# per species: enabled (true/false) and spawn weight among the species of a biome
+species:
+  deer: {enabled: true, weight: 8}
+  bear: {enabled: true, weight: 3}
+  boar: {enabled: true, weight: 6}
+  duck: {enabled: true, weight: 8}
+  butterfly: {enabled: true, weight: 6}
+  firefly: {enabled: true, weight: 12}
+  snail: {enabled: true, weight: 4}
+  hedgehog: {enabled: true, weight: 3}
+  capybara: {enabled: true, weight: 6}
+  tortoise: {enabled: true, weight: 3}
+  lizard: {enabled: true, weight: 5}
+  crab: {enabled: true, weight: 8}
+  songbird: {enabled: true, weight: 8}
+  dragonfly: {enabled: true, weight: 5}
+  elephant: {enabled: true, weight: 3}
+  zebra: {enabled: true, weight: 7}
+
+
+# breeding: right-click an adult with its food (see /wildlife help or the wiki); two of one kind in love close together get a baby
+breeding:
+  enabled: true
+  # a baby grows up after this long (a golden dandelion keeps it small until it gets another one)
+  grow-minutes: 20
+  # an adult can breed again after this long
+  cooldown-minutes: 5
+  # no more babies while this many of the species are already within 32 blocks
+  max-near: 10

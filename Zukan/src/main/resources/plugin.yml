@@ -1,0 +1,24 @@
+name: Zukan
+version: '${project.version}'
+main: com.iekcorbar.zukan.ZukanPlugin
+api-version: '26.2'
+description: Recipe and item browser - find any item, how to make it, what it is used for. Knows every recipe of our plugins.
+author: iekcorbar
+softdepend: [Steamworks, Kitchen, Sakagura, Relics, Kura, Wildlife, Satchel]
+
+commands:
+  zukan:
+    description: Open the recipe and item browser
+    usage: /zukan [search words]
+    aliases: [recipes, jei, recipe]
+
+permissions:
+  zukan.use:
+    description: Use the recipe browser
+    default: true
+  zukan.cheat:
+    description: Cheat mode - take any item from the list
+    default: op
+  zukan.admin:
+    description: Reload the catalog
+    default: op

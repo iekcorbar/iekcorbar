@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "steamworks:block/granite_pavers",
+    "top": "steamworks:block/granite_pavers",
+    "side": "steamworks:block/granite_pavers"
+  }
+}

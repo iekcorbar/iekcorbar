@@ -1,0 +1,18 @@
+name: Kura
+version: '${project.version}'
+main: com.iekcorbar.kura.KuraPlugin
+api-version: '26.2'
+description: Storage network - one terminal over all your chests, crafting terminal, cables, filters, hoppers and wireless access.
+author: iekcorbar
+softdepend: [Steamworks, Kitchen, Sakagura]
+
+commands:
+  kura:
+    description: Kura storage commands
+    usage: /kura <help|give|giveall|list|reload>
+    aliases: [storage]
+
+permissions:
+  kura.admin:
+    description: Give items, reload the config
+    default: op

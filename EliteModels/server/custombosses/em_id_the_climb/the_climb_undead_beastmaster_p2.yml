@@ -1,0 +1,97 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: BOSS
+damageMultiplier: 1.0
+dropsEliteMobsLoot: false
+dropsRandomLoot: false
+dropsVanillaLoot: false
+eliteScript:
+  CloseArena1:
+    Actions:
+    - Conditions:
+        isAlive: true
+        locationIsAir: true
+      Target:
+        targetType: ZONE_FULL
+      action: PLACE_BLOCK
+      duration: 12000
+      material: GLASS
+      wait: 20
+    - action: RUN_SCRIPT
+      scripts:
+      - TeleportPlayers
+      - CloseArena2
+    Events:
+    - ElitePhaseSwitchEvent
+    - EliteMobEnterCombatEvent
+    Zone:
+      Target:
+        location: same_as_boss,389.5,121.0,65.5,0.0,0.0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 1
+      y: 5
+      z: 13
+  CloseArena2:
+    Actions:
+    - Target:
+        range: 15
+        targetType: NEARBY_PLAYERS
+      action: MESSAGE
+      sValue: '&c[Undead Beastmaster]&f I will not allow you to reach the mines!'
+    - Conditions:
+        isAlive: true
+        locationIsAir: true
+      Target:
+        targetType: ZONE_FULL
+      action: PLACE_BLOCK
+      duration: 12000
+      material: GLASS
+      wait: 20
+    Zone:
+      Target:
+        location: same_as_boss,387.5,121.0,79.5,0.0,0.0
+        targetType: LOCATION
+      shape: CUBOID
+      x: 1
+      y: 5
+      z: 5
+  TeleportPlayers:
+    Actions:
+    - Target:
+        range: 40
+        targetType: NEARBY_PLAYERS
+      action: POTION_EFFECT
+      amplifier: 0
+      duration: 20
+      potionEffectType: BLINDNESS
+    - FinalTarget:
+        location: same_as_boss,401.5,121.0,72.5,0.0,0.0
+        targetType: LOCATION
+      Target:
+        range: 40
+        targetType: NEARBY_PLAYERS
+      action: TELEPORT
+entityType: SKELETON
+followDistance: 30
+frozen: false
+healthMultiplier: 7
+instanced: true
+isEnabled: true
+leashRadius: 30
+level: dynamic # 10
+mainHand: BOW
+mountedEntity: the_climb_undead_beastmaster_mount_p2.yml
+name: $bossLevel &cUndead Beastmaster
+normalizedCombat: true
+powers:
+- taze.yml
+- lightning_bolts.yml
+- invulnerability_fire.yml
+- plasma_blaster.yml
+- difficultyID:
+  - 1
+  - 2
+  filename: attack_push.yml
+classLoot: false
+customModel: em_clockwork_skeleton

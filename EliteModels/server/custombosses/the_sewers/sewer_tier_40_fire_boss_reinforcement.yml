@@ -1,0 +1,14 @@
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: REINFORCEMENT
+damageMultiplier: 0.6
+dropsEliteMobsLoot: false
+dropsVanillaLoot: false
+entityType: BLAZE
+healthMultiplier: 0.25
+isEnabled: true
+level: dynamic
+instanced: true
+name: $reinforcementLevel &2Flame
+classLoot: false
+customModel: em_furnace_blaze

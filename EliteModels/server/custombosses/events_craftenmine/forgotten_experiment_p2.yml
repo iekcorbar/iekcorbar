@@ -1,0 +1,21 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIFIED_PIGLIN
+name: $eventBossLevel &5Forgotten Experiment
+level: dynamic
+healthMultiplier: 2.5
+damageMultiplier: 1.0
+powers:
+- skeleton_tracking_arrow.yml
+- bullet_hell.yml
+- taze.yml
+uniqueLootList:
+- filename=forgotten_experiment_drop_pickaxe.yml:amount=1:chance=0.01
+- filename=forgotten_experiment_drop_cursed_pickaxe.yml:amount=1:chance=0.5
+movementSpeedAttribute: 0.32
+followDistance: 80
+announcementPriority: 2
+customModel: em_gilded_zombified_piglin
