@@ -29,15 +29,18 @@ export async function POST(request) {
     const auth = await requireRole(request, ['admin']);
     if (auth.error) return auth.error;
 
-    const { takeCommand, enabled } = await request.json();
-    if (takeCommand !== undefined && (!takeCommand || !takeCommand.includes('{player}') || !takeCommand.includes('{amount}'))) {
-      return NextResponse.json({ error: "takeCommand must include both {player} and {amount} placeholders" }, { status: 400 });
+    const { takeCommand, coinsTakeCommand, enabled } = await request.json();
+    const needsPlaceholders = [[takeCommand, 'takeCommand'], [coinsTakeCommand, 'coinsTakeCommand']];
+    for (const [cmd, name] of needsPlaceholders) {
+      if (cmd !== undefined && (!cmd || !cmd.includes('{player}') || !cmd.includes('{amount}'))) {
+        return NextResponse.json({ error: `${name} must include both {player} and {amount} placeholders` }, { status: 400 });
+      }
     }
-    if (takeCommand === undefined && enabled === undefined) {
+    if (takeCommand === undefined && coinsTakeCommand === undefined && enabled === undefined) {
       return NextResponse.json({ error: "Nothing to save" }, { status: 400 });
     }
 
-    const saved = await db.saveShopSettings({ takeCommand, enabled });
+    const saved = await db.saveShopSettings({ takeCommand, coinsTakeCommand, enabled });
     if (!saved) {
       return NextResponse.json({ error: "Could not save settings (database unreachable). Please try again shortly." }, { status: 500 });
     }

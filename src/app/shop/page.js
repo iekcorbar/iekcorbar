@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useUser } from '../providers';
 import {
   ShoppingBag, Coins, Loader2, RefreshCw, Plus, Trash2, Edit, X,
-  CheckCircle2, AlertTriangle, Clock, Settings, Package, Power, Cog
+  CheckCircle2, AlertTriangle, Clock, Settings, Package, Power, Cog, Sparkles
 } from 'lucide-react';
 
 const emptyItemForm = { id: null, slug: '', name: '', description: '', price: '', giveCommand: '', imageUrl: '', active: true, currency: 'balance' };
@@ -38,6 +38,7 @@ export default function ShopPage() {
   const [shopEnabled, setShopEnabled] = useState(true);
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState(null);
+  const [coins, setCoins] = useState(null);
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [togglingShop, setTogglingShop] = useState(false);
   // Website-only "Gears" currency (see api/currency) — entirely separate
@@ -55,6 +56,7 @@ export default function ShopPage() {
   const [formError, setFormError] = useState('');
 
   const [takeCommand, setTakeCommand] = useState('');
+  const [coinsTakeCommand, setCoinsTakeCommand] = useState('');
   const [savingSettings, setSavingSettings] = useState(false);
   const [settingsFeedback, setSettingsFeedback] = useState('');
 
@@ -82,6 +84,7 @@ export default function ShopPage() {
       const res = await fetch(`/api/player-stats?username=${encodeURIComponent(user.mcUsername)}`);
       const data = await res.json();
       if (res.ok && typeof data.balance === 'number') setBalance(data.balance);
+      if (res.ok && typeof data.eliteCoins === 'number') setCoins(data.eliteCoins);
     } catch (err) {
       console.error(err);
     } finally {
@@ -127,7 +130,7 @@ export default function ShopPage() {
     try {
       const res = await fetch('/api/shop/settings');
       const data = await res.json();
-      if (res.ok) setTakeCommand(data.settings?.takeCommand || '');
+      if (res.ok) { setTakeCommand(data.settings?.takeCommand || ''); setCoinsTakeCommand(data.settings?.coinsTakeCommand || ''); }
     } catch (err) {
       console.error(err);
     }
@@ -140,7 +143,8 @@ export default function ShopPage() {
   async function handleBuy(item) {
     if (!user) return;
     const isWebsiteCurrency = item.currency === 'website';
-    if (!confirm(`Buy "${item.name}" for ${item.price}${isWebsiteCurrency ? ' Gears' : ''}?`)) return;
+    const moneyLabel = item.currency === 'website' ? ' Gears' : item.currency === 'coins' ? ' Elite coins' : '';
+    if (!confirm(`Buy "${item.name}" for ${item.price}${moneyLabel}?`)) return;
     setBuyingId(item.id);
     setPurchaseFeedback(null);
     try {
@@ -167,6 +171,7 @@ export default function ShopPage() {
         }
         setPurchaseFeedback({ type: isWebsiteCurrency || data.status === 'delivered' || data.willAutoDeliverOnJoin ? 'success' : 'warn', text: feedbackText });
         if (typeof data.newBalance === 'number') setBalance(data.newBalance);
+        if (typeof data.newCoins === 'number') setCoins(data.newCoins);
         fetchCurrency();
         fetchPurchases();
       } else {
@@ -288,7 +293,7 @@ export default function ShopPage() {
       const res = await fetch('/api/shop/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ takeCommand })
+        body: JSON.stringify({ takeCommand, coinsTakeCommand })
       });
       const data = await res.json();
       setSettingsFeedback(res.ok && data.success ? 'Saved!' : (data.error || 'Could not save.'));
@@ -338,6 +343,13 @@ export default function ShopPage() {
               </button>
             </div>
             <div className="bg-neutral-900/40 border border-sp-bronze/35 px-5 py-3 rounded-xl flex items-center gap-3">
+              <Sparkles className="w-6 h-6 text-sp-copper" />
+              <div>
+                <span className="block text-[9px] uppercase font-bold text-text-warm/40">Your Elite coins</span>
+                <span className="font-serif text-xl font-black text-white">{coins ?? '—'}</span>
+              </div>
+            </div>
+            <div className="bg-neutral-900/40 border border-sp-bronze/35 px-5 py-3 rounded-xl flex items-center gap-3">
               <Cog className="w-6 h-6 text-sp-copper" />
               <div>
                 <span className="block text-[9px] uppercase font-bold text-text-warm/40">Your Gears</span>
@@ -353,11 +365,11 @@ export default function ShopPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-text-warm/70">
           <div className="flex gap-3 items-start">
             <div className="w-7 h-7 rounded-full bg-sp-gold/15 border border-sp-gold/30 flex items-center justify-center text-sp-gold font-bold text-xs shrink-0">1</div>
-            <div><span className="block text-white font-semibold text-sm">Two currencies</span>Most items spend your normal in-game balance (play on the server to earn it). A few are website-only — those spend Gears instead, earned from achievements.</div>
+            <div><span className="block text-white font-semibold text-sm">Three currencies</span>Most items spend your normal in-game balance (play on the server to earn it). Elite-coin items spend the coins you earn fighting EliteMobs monsters — those need you online. A few are website-only — those spend Gears instead, earned from achievements.</div>
           </div>
           <div className="flex gap-3 items-start">
             <div className="w-7 h-7 rounded-full bg-sp-gold/15 border border-sp-gold/30 flex items-center justify-center text-sp-gold font-bold text-xs shrink-0">2</div>
-            <div><span className="block text-white font-semibold text-sm">Buy anytime</span>Balance items still deliver automatically the next time you join if you&apos;re offline. Gears items need the Minecraft server for nothing at all.</div>
+            <div><span className="block text-white font-semibold text-sm">Buy anytime</span>Balance and Elite-coin items still deliver automatically the next time you join if you&apos;re offline (paying in coins does need you online). Gears items need the Minecraft server for nothing at all.</div>
           </div>
           <div className="flex gap-3 items-start">
             <div className="w-7 h-7 rounded-full bg-sp-gold/15 border border-sp-gold/30 flex items-center justify-center text-sp-gold font-bold text-xs shrink-0">3</div>
@@ -419,6 +431,7 @@ export default function ShopPage() {
                 <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Currency</label>
                 <select value={itemForm.currency} onChange={e => setItemForm(f => ({ ...f, currency: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2">
                   <option value="balance">In-game balance (spends real Vault money via RCON, delivered in-game)</option>
+                  <option value="coins">Elite coins (spends EliteMobs' coins via RCON - buyer must be online, delivered in-game)</option>
                   <option value="website">Website Gears (no Minecraft server needed at all — website-only item)</option>
                 </select>
                 <p className="text-[9px] text-text-warm/40 mt-1">
@@ -480,11 +493,17 @@ export default function ShopPage() {
                 This isn&apos;t confirmed against your server&apos;s real economy plugin — adjust it here (no redeploy needed) if purchases report the balance not changing. Must include <code>{'{player}'}</code> and <code>{'{amount}'}</code>.
               </p>
               <form onSubmit={handleSaveSettings} className="flex items-center gap-2">
-                <input value={takeCommand} onChange={e => setTakeCommand(e.target.value)} className="flex-1 bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" />
+                <input value={takeCommand} onChange={e => setTakeCommand(e.target.value)} className="flex-1 bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="Vault: cmi money take {player} {amount}" />
                 <button type="submit" disabled={savingSettings} className="px-3 py-2 bg-sp-gold hover:bg-white disabled:opacity-50 text-black text-[10px] font-bold uppercase rounded cursor-pointer">
                   {savingSettings ? '...' : 'Save'}
                 </button>
               </form>
+              <div className="flex items-center gap-2">
+                <input value={coinsTakeCommand} onChange={e => setCoinsTakeCommand(e.target.value)} className="flex-1 bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="Coins: elitecoins take {player} {amount}" />
+                <button onClick={() => fetch('/api/shop/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ coinsTakeCommand }) }).then(async r => { const d = await r.json(); setSettingsFeedback(r.ok && d.success ? 'Saved!' : (d.error || 'Could not save.')); setTimeout(() => setSettingsFeedback(''), 3000); })} disabled={savingSettings} className="px-3 py-2 bg-sp-gold/80 hover:bg-white disabled:opacity-50 text-black text-[10px] font-bold uppercase rounded cursor-pointer">
+                  Save coins
+                </button>
+              </div>
               {settingsFeedback && <p className="text-[10px] text-sp-gold">{settingsFeedback}</p>}
             </div>
           )}

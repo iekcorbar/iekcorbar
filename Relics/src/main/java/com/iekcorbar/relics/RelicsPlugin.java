@@ -190,6 +190,34 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             s.sendMessage(Component.text("Removed " + n + " relic(s) within " + (int) radius + " blocks.", n > 0 ? NamedTextColor.GREEN : NamedTextColor.GRAY));
             return true;
         }
+        if (sub.equals("random")) {
+            if (denied(s, "relics.give")) return true;
+            Player target = a.length > 1 ? Bukkit.getPlayerExact(a[1]) : s instanceof Player p ? p : null;
+            if (target == null) {
+                s.sendMessage(Component.text("Player not found: " + a[1], NamedTextColor.RED));
+                return true;
+            }
+            String tier = a.length > 2 ? a[2].toLowerCase(Locale.ROOT) : "common";
+            List<String> ids = getConfig().getStringList("random." + tier);
+            if (ids.isEmpty()) ids = getConfig().getStringList("random.common");
+            List<RelicType> pool = new ArrayList<>();
+            for (String id : ids) {
+                RelicType t = RelicType.byId(id);
+                // windowed and staff-y items never come out of a dip
+                if (t != null && t.use != RelicType.Use.GIFT && t.use != RelicType.Use.CALENDAR
+                        && t != RelicType.EASTER_EGG && t != RelicType.COUNTDOWN_BOARD) pool.add(t);
+            }
+            if (pool.isEmpty()) {
+                s.sendMessage(Component.text("No relics configured for tier '" + tier + "' (config: random.).", NamedTextColor.RED));
+                return true;
+            }
+            RelicType pick = pool.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(pool.size()));
+            for (var left : target.getInventory().addItem(relics.item(pick, 1)).values()) target.getWorld().dropItemNaturally(target.getLocation(), left);
+            s.sendMessage(Component.text("Rolled " + pick.displayName + " (" + tier + ") for " + target.getName() + ".", NamedTextColor.GREEN));
+            target.sendMessage(Component.text("Lucky dip: a " + pick.displayName + " falls into your bag!", NamedTextColor.GOLD));
+            target.playSound(target.getLocation(), org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 1.2f);
+            return true;
+        }
         if (sub.equals("protect")) {
             if (denied(s, "relics.admin")) return true;
             if (!(s instanceof Player self)) {
@@ -523,7 +551,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"list", "give", "giveall", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"list", "give", "giveall", "random", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && a[0].equalsIgnoreCase("remove")) {
             if ("target".startsWith(last)) out.add("target");
         } else if (a.length == 2 && a[0].equalsIgnoreCase("where")) {

@@ -130,3 +130,47 @@ new-year:
 # Firework launchers near a board also fire (a shorter show) at the New Year of every other zone a "world" board
 # passes; false = only for the home zone and for boards fixed to a zone.
   fireworks-every-zone: true
+
+# Lucky dip: /relics random <player> [tier] rolls one decoration out of the tier's pool
+# and puts it in the player's inventory. Ids are the /relics list names; gift boxes, the
+# advent calendar, easter eggs and countdown boards are never rolled (they have a window).
+random:
+  common:
+    - ash_pile
+    - vigil_candles
+    - specimen_jar
+    - snowman
+    - toy_train
+    - string_lights
+    - kadomatsu
+    - kagami_mochi
+    - red_paper_lantern
+    - shishi_odoshi
+    - maneki_neko
+    - blossom_vase
+  rare:
+    - creature_skull
+    - torn_settlement_banner
+    - gibbet_cage
+    - hearth
+    - snow_lantern
+    - steam_lantern
+    - temple_bell
+    - confetti_cannon
+    - giant_candy_cane
+    - wagasa_stand
+    - byobu_screen
+    - pot_of_gold
+  epic:
+    - ruin_monolith
+    - warding_totem
+    - shattered_portal_shard
+    - settlers_grave
+    - christmas_tree
+    - market_stall
+    - champagne_tower
+    - torii_gate
+    - bonsai
+    - tesla_coil
+    - gramophone
+    - brass_telescope

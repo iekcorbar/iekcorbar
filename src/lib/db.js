@@ -5540,11 +5540,11 @@ export const db = {
   // single-row (id=1) shape as vote_reward_config.
   getShopSettings: async () => {
     try {
-      const rows = await query('SELECT take_command as takeCommand, enabled FROM shop_settings WHERE id = 1');
-      if (rows && rows.length > 0) return { takeCommand: rows[0].takeCommand, enabled: Boolean(rows[0].enabled) };
+      const rows = await query('SELECT take_command as takeCommand, coins_take_command as coinsTakeCommand, enabled FROM shop_settings WHERE id = 1');
+      if (rows && rows.length > 0) return { takeCommand: rows[0].takeCommand, coinsTakeCommand: rows[0].coinsTakeCommand, enabled: Boolean(rows[0].enabled) };
     } catch { /* fallback below */ }
     const fb = readFallbackJson();
-    return fb.shop_settings || { takeCommand: 'cmi money take {player} {amount}', enabled: true };
+    return fb.shop_settings || { takeCommand: 'cmi money take {player} {amount}', coinsTakeCommand: 'elitecoins take {player} {amount}', enabled: true };
   },
 
   // Merge-safe: only overwrites the fields actually passed in, so toggling
@@ -5555,12 +5555,13 @@ export const db = {
     const current = await db.getShopSettings();
     const merged = {
       takeCommand: settings.takeCommand !== undefined ? settings.takeCommand : current.takeCommand,
+      coinsTakeCommand: settings.coinsTakeCommand !== undefined ? settings.coinsTakeCommand : current.coinsTakeCommand,
       enabled: settings.enabled !== undefined ? !!settings.enabled : current.enabled
     };
     try {
       await query(
-        'INSERT INTO shop_settings (id, take_command, enabled) VALUES (1, ?, ?) ON DUPLICATE KEY UPDATE take_command = ?, enabled = ?',
-        [merged.takeCommand, merged.enabled ? 1 : 0, merged.takeCommand, merged.enabled ? 1 : 0]
+        'INSERT INTO shop_settings (id, take_command, coins_take_command, enabled) VALUES (1, ?, ?, ?) ON DUPLICATE KEY UPDATE take_command = ?, coins_take_command = ?, enabled = ?',
+        [merged.takeCommand, merged.coinsTakeCommand, merged.enabled ? 1 : 0, merged.takeCommand, merged.coinsTakeCommand, merged.enabled ? 1 : 0]
       );
       return true;
     } catch (err) {

@@ -38,6 +38,7 @@ export async function POST(request) {
     const body = await request.json();
     const { id, slug, name, description, price, giveCommand, imageUrl, active, currency } = body;
     const isWebsiteCurrency = currency === 'website';
+    const isCoinsCurrency = currency === 'coins';
 
     if (!slug || !name || price === undefined || price === null) {
       return NextResponse.json({ error: "slug, name and price are required" }, { status: 400 });
@@ -59,7 +60,7 @@ export async function POST(request) {
     const saved = await db.saveShopItem({
       id, slug, name, description, price: numericPrice, giveCommand: isWebsiteCurrency ? null : giveCommand, imageUrl,
       active: active !== undefined ? !!active : true,
-      currency: isWebsiteCurrency ? 'website' : 'balance'
+      currency: isWebsiteCurrency ? 'website' : (isCoinsCurrency ? 'coins' : 'balance')
     });
     if (!saved) {
       return NextResponse.json({ error: "Could not save item (database unreachable). Please try again shortly." }, { status: 500 });

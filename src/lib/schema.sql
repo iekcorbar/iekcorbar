@@ -800,6 +800,11 @@ CREATE TABLE IF NOT EXISTS shop_purchases (
 CREATE TABLE IF NOT EXISTS shop_settings (
   id INT PRIMARY KEY DEFAULT 1,
   take_command VARCHAR(255) DEFAULT 'cmi money take {player} {amount}',
+  -- currency='coins' items spend EliteMobs' Elite coins instead of the Vault
+  -- balance; same free-text RCON template, correctable live from the Shop
+  -- page's staff settings panel if the default guess doesn't match the
+  -- server's actual command (added 2026-10-26 with the coins currency).
+  coins_take_command VARCHAR(255) DEFAULT 'elitecoins take {player} {amount}',
   enabled BOOLEAN NOT NULL DEFAULT TRUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

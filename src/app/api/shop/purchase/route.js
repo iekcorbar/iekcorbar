@@ -41,12 +41,12 @@ async function getLiveBalance(username) {
   if (result === 'BYPASS') {
     const stats = await db.getPlayerStats(username);
     if (!stats) return { error: 'No player stats found for this account.' };
-    return { balance: stats.balance || 0 };
+    return { balance: stats.balance || 0, eliteCoins: stats.eliteCoins || 0 };
   }
   try {
     const stats = JSON.parse(result);
     if (stats && !stats.error && typeof stats.balance === 'number') {
-      return { balance: stats.balance };
+      return { balance: stats.balance, eliteCoins: typeof stats.eliteCoins === 'number' ? stats.eliteCoins : 0 };
     }
   } catch { /* fall through */ }
   return { error: 'Could not read a live balance from the server.' };
@@ -140,16 +140,26 @@ export async function POST(request) {
     // sale outright. 2026-09-06: this used to hard-block the whole purchase
     // whenever the buyer was offline, which made a website-only item like
     // Glass of Milk impossible to buy unless you happened to be logged in.
+    const useCoins = item.currency === 'coins';
+    const moneyName = useCoins ? 'Elite coins' : 'balance';
+
     const onlineCheck = await isPlayerOnline(username);
     if (onlineCheck.error) return NextResponse.json({ error: onlineCheck.error }, { status: 502 });
+    if (useCoins && !onlineCheck.online) {
+      // Elite coins live in EliteMobs' player metadata - webstats only knows
+      // them while the player is actually online (see WebStatsCommand.java),
+      // so a 0 from an offline read is never evidence of an empty purse.
+      return NextResponse.json({ error: 'Elite coins can only be spent while you are online on the server.' }, { status: 409 });
+    }
 
     const before = await getLiveBalance(username);
     if (before.error) return NextResponse.json({ error: before.error }, { status: 502 });
-    if (before.balance < item.price) {
-      return NextResponse.json({ error: `Insufficient balance. You have ${before.balance}, this costs ${item.price}.` }, { status: 402 });
+    const beforeHeld = useCoins ? before.eliteCoins : before.balance;
+    if (beforeHeld < item.price) {
+      return NextResponse.json({ error: `Not enough ${moneyName}. You have ${beforeHeld}, this costs ${item.price}.` }, { status: 402 });
     }
 
-    const takeCommand = fillTemplate(settings.takeCommand, { player: username, amount: formatAmount(item.price) });
+    const takeCommand = fillTemplate(useCoins ? (settings.coinsTakeCommand || 'elitecoins take {player} {amount}') : settings.takeCommand, { player: username, amount: formatAmount(item.price) });
 
     let takeMessage;
     try {
@@ -166,7 +176,8 @@ export async function POST(request) {
     // codebase), so its reply text alone isn't trustworthy. The only real
     // signal is the balance having actually dropped.
     const after = await getLiveBalance(username);
-    const moneyConfirmedTaken = !after.error && after.balance <= before.balance - item.price + 0.0001;
+    const afterHeld = useCoins ? after.eliteCoins : after.balance;
+    const moneyConfirmedTaken = !after.error && afterHeld <= beforeHeld - item.price + 0.0001;
     const purchaseId = crypto.randomUUID();
 
     if (!moneyConfirmedTaken) {
@@ -175,7 +186,7 @@ export async function POST(request) {
         status: 'failed', takeMessage, giveMessage: null
       });
       return NextResponse.json({
-        error: `Your balance doesn't appear to have changed, so nothing was delivered. Server replied: "${takeMessage}". Please report this to staff — the shop's money-take command may need adjusting in its Settings.`,
+        error: `Your ${moneyName} doesn't appear to have changed, so nothing was delivered. Server replied: "${takeMessage}". Please report this to staff — the shop's money-take command may need adjusting in its Settings.`,
         takeMessage
       }, { status: 502 });
     }
@@ -237,7 +248,8 @@ export async function POST(request) {
       willAutoDeliverOnJoin: status === 'queued' && !onlineCheck.online,
       takeMessage,
       giveMessage,
-      newBalance: after.error ? null : after.balance
+      newBalance: useCoins || after.error ? null : after.balance,
+      newCoins: !useCoins || after.error ? null : after.eliteCoins
     });
   } catch (err) {
     console.error("Shop purchase POST error:", err);
