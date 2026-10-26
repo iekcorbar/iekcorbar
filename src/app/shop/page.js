@@ -305,6 +305,12 @@ export default function ShopPage() {
     }
   }
 
+  // Currency helpers shared by the chips, item grid and staff form — the shop
+  // now genuinely has three currencies (balance/coins/website), so anything
+  // that used to hardcode "balance" should ask this instead.
+  const moneyName = c => (c === 'website' ? 'Gears' : c === 'coins' ? 'Elite coins' : 'balance');
+  const hasCoinsItems = items.some(i => i.active && i.currency === 'coins');
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-sp-bronze pb-5">
@@ -312,7 +318,7 @@ export default function ShopPage() {
           <h1 className="font-serif text-3xl font-bold text-sp-gold tracking-wide flex items-center gap-2 uppercase">
             <ShoppingBag className="w-8 h-8 text-sp-copper" /> Steampunk Trading Post
           </h1>
-          <p className="text-xs text-text-warm/60 mt-1">Spend your in-game balance on items delivered straight to you — no real money involved.</p>
+          <p className="text-xs text-text-warm/60 mt-1">Spend your earned in-game currencies on items delivered straight to you — no real money involved, ever.</p>
         </div>
 
         {user?.role === 'admin' && (
@@ -342,13 +348,15 @@ export default function ShopPage() {
                 <RefreshCw className="w-3.5 h-3.5" />
               </button>
             </div>
-            <div className="bg-neutral-900/40 border border-sp-bronze/35 px-5 py-3 rounded-xl flex items-center gap-3">
-              <Sparkles className="w-6 h-6 text-sp-copper" />
-              <div>
-                <span className="block text-[9px] uppercase font-bold text-text-warm/40">Your Elite coins</span>
-                <span className="font-serif text-xl font-black text-white">{coins ?? '—'}</span>
+            {hasCoinsItems && (
+              <div className="bg-neutral-900/40 border border-sp-bronze/35 px-5 py-3 rounded-xl flex items-center gap-3">
+                <Sparkles className="w-6 h-6 text-sp-copper" />
+                <div>
+                  <span className="block text-[9px] uppercase font-bold text-text-warm/40">Your Elite coins</span>
+                  <span className="font-serif text-xl font-black text-white">{coins ?? '—'}</span>
+                </div>
               </div>
-            </div>
+            )}
             <div className="bg-neutral-900/40 border border-sp-bronze/35 px-5 py-3 rounded-xl flex items-center gap-3">
               <Cog className="w-6 h-6 text-sp-copper" />
               <div>
@@ -437,12 +445,14 @@ export default function ShopPage() {
                 <p className="text-[9px] text-text-warm/40 mt-1">
                   {itemForm.currency === 'website'
                     ? "This item needs the MC server for nothing — no online check, no RCON, no in-game delivery. Good for purely cosmetic website effects."
+                    : itemForm.currency === 'coins'
+                    ? "Spends the buyer's EliteMobs coins and needs them online — still no real money, and the give command below does the delivery."
                     : 'Spends real in-game balance and needs the give command below to actually deliver something.'}
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Price ({itemForm.currency === 'website' ? 'Gears' : 'balance'})</label>
+                  <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Price ({moneyName(itemForm.currency)})</label>
                   <input type="number" min="0" step="0.01" value={itemForm.price} onChange={e => setItemForm(f => ({ ...f, price: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2" />
                 </div>
                 <div>
@@ -475,7 +485,7 @@ export default function ShopPage() {
               <div key={item.id} className="flex items-center justify-between bg-neutral-950/30 border border-sp-bronze/15 rounded-lg px-3 py-2 text-xs">
                 <div className="min-w-0">
                   <span className="font-bold text-white">{item.name}</span>
-                  <span className="text-text-warm/40 ml-2">{item.price} · {item.giveCommand}</span>
+                  <span className="text-text-warm/40 ml-2">{item.price} {moneyName(item.currency)} · {item.giveCommand}</span>
                   {!item.active && <span className="ml-2 text-[9px] uppercase text-rose-400 font-bold">Inactive</span>}
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
@@ -488,22 +498,23 @@ export default function ShopPage() {
 
           {user.role === 'admin' && (
             <div className="border-t border-sp-bronze/20 pt-4 space-y-2">
-              <h3 className="font-serif text-xs text-sp-gold uppercase tracking-wide flex items-center gap-2"><Settings className="w-3.5 h-3.5" /> Take-Money Command</h3>
+              <h3 className="font-serif text-xs text-sp-gold uppercase tracking-wide flex items-center gap-2"><Settings className="w-3.5 h-3.5" /> Money-Take Commands</h3>
               <p className="text-[9px] text-text-warm/40">
-                This isn&apos;t confirmed against your server&apos;s real economy plugin — adjust it here (no redeploy needed) if purchases report the balance not changing. Must include <code>{'{player}'}</code> and <code>{'{amount}'}</code>.
+                One RCON template per real-money-free currency. Neither is confirmed against your server&apos;s actual economy plugins — adjust here (no redeploy needed) if purchases report the money not changing. Both must include <code>{'{player}'}</code> and <code>{'{amount}'}</code>.
               </p>
-              <form onSubmit={handleSaveSettings} className="flex items-center gap-2">
-                <input value={takeCommand} onChange={e => setTakeCommand(e.target.value)} className="flex-1 bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="Vault: cmi money take {player} {amount}" />
+              <form onSubmit={handleSaveSettings} className="space-y-2">
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Vault balance</label>
+                  <input value={takeCommand} onChange={e => setTakeCommand(e.target.value)} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="cmi money take {player} {amount}" />
+                </div>
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Elite coins</label>
+                  <input value={coinsTakeCommand} onChange={e => setCoinsTakeCommand(e.target.value)} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="elitecoins take {player} {amount}" />
+                </div>
                 <button type="submit" disabled={savingSettings} className="px-3 py-2 bg-sp-gold hover:bg-white disabled:opacity-50 text-black text-[10px] font-bold uppercase rounded cursor-pointer">
                   {savingSettings ? '...' : 'Save'}
                 </button>
               </form>
-              <div className="flex items-center gap-2">
-                <input value={coinsTakeCommand} onChange={e => setCoinsTakeCommand(e.target.value)} className="flex-1 bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="Coins: elitecoins take {player} {amount}" />
-                <button onClick={() => fetch('/api/shop/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ coinsTakeCommand }) }).then(async r => { const d = await r.json(); setSettingsFeedback(r.ok && d.success ? 'Saved!' : (d.error || 'Could not save.')); setTimeout(() => setSettingsFeedback(''), 3000); })} disabled={savingSettings} className="px-3 py-2 bg-sp-gold/80 hover:bg-white disabled:opacity-50 text-black text-[10px] font-bold uppercase rounded cursor-pointer">
-                  Save coins
-                </button>
-              </div>
               {settingsFeedback && <p className="text-[10px] text-sp-gold">{settingsFeedback}</p>}
             </div>
           )}
@@ -542,8 +553,12 @@ export default function ShopPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {items.map(item => {
             const isWebsiteCurrency = item.currency === 'website';
-            const affordBalance = isWebsiteCurrency ? currency : balance;
-            const cantAfford = user && typeof affordBalance === 'number' && affordBalance < item.price;
+            const isCoinsCurrency = item.currency === 'coins';
+            // Match the wallet to the currency actually being spent — checking
+            // a coins item against the Vault balance disabled Buy buttons that
+            // shouldn't be, and vice versa.
+            const wallet = isWebsiteCurrency ? currency : isCoinsCurrency ? coins : balance;
+            const cantAfford = user && typeof wallet === 'number' && wallet < item.price;
             return (
             <div key={item.id} className="bg-sp-dark/80 border border-sp-bronze/30 rounded-xl p-4 flex flex-col gap-3 hover:border-sp-gold/40 transition-all">
               {item.imageUrl && (
@@ -555,17 +570,20 @@ export default function ShopPage() {
                   {isWebsiteCurrency && (
                     <span className="text-[8px] px-1.5 py-0.5 bg-sp-copper/15 border border-sp-copper/40 text-sp-copper rounded font-bold uppercase tracking-wide">Website Only</span>
                   )}
+                  {isCoinsCurrency && (
+                    <span className="text-[8px] px-1.5 py-0.5 bg-sp-gold/10 border border-sp-gold/40 text-sp-gold rounded font-bold uppercase tracking-wide">Online</span>
+                  )}
                 </h3>
                 {item.description && <p className="text-[11px] text-text-warm/50 mt-1">{item.description}</p>}
               </div>
               <div className="flex items-center justify-between mt-auto pt-2 border-t border-sp-bronze/15">
                 <span className="flex items-center gap-1 font-serif text-sp-gold font-bold text-sm">
-                  {isWebsiteCurrency ? <Cog className="w-4 h-4 text-sp-copper" /> : <Coins className="w-4 h-4" />} {item.price}
+                  {isWebsiteCurrency ? <Cog className="w-4 h-4 text-sp-copper" /> : isCoinsCurrency ? <Sparkles className="w-4 h-4 text-sp-copper" /> : <Coins className="w-4 h-4" />} {item.price}
                 </span>
                 <button
                   onClick={() => handleBuy(item)}
                   disabled={!user || !shopEnabled || buyingId === item.id || cantAfford}
-                  title={cantAfford ? `Not enough ${isWebsiteCurrency ? 'Gears' : 'balance'}` : undefined}
+                  title={cantAfford ? `Not enough ${moneyName(item.currency)}` : undefined}
                   className="px-3 py-1.5 bg-sp-gold hover:bg-white disabled:opacity-50 text-black text-[10px] font-bold uppercase rounded cursor-pointer transition-all"
                 >
                   {buyingId === item.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : !shopEnabled ? 'Closed' : cantAfford ? 'Too Expensive' : 'Buy'}
