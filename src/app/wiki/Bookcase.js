@@ -180,7 +180,7 @@ function EntryList({ entries, selectedPage, compact, childCount, getExcerpt, cov
     : null;
 
   return (
-    <ol className={`bk-list ${compact ? 'bk-list-compact' : ''}`}>
+    <ol className={`bk-list ${compact ? 'bk-list-compact' : ''}`} style={{ '--step': `${Math.max(8, Math.min(45, Math.floor(650 / Math.max(entries.length, 1))))}ms` }}>
       {entries.map((page, i) => {
         const kids = childCount(page);
         const cover = compact ? null : coverOf(page);
@@ -248,13 +248,19 @@ function EntryList({ entries, selectedPage, compact, childCount, getExcerpt, cov
 export function OpenBook({ category, entries, selectedPage, articleNode, onShowContents, onClose, isStaff, ...listProps }) {
   const [closing, setClosing] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // opened arrives one/two frames after mount: the browser first computes the
+  // closed pose, so the flip runs as a transition - interruptible, which is
+  // what stops a mid-open "shut" click from teleporting the book.
+  const [opened, setOpened] = useState(false);
   // Entries wait for the cover to finish swinging open the first time; once
   // the book has settled (e.g. coming back to Contents) they fade in at once.
   const [settled, setSettled] = useState(false);
   useEffect(() => {
     setMounted(true);
+    let inner = 0;
+    const outer = requestAnimationFrame(() => { inner = requestAnimationFrame(() => setOpened(true)); });
     const t = setTimeout(() => setSettled(true), 1900);
-    return () => clearTimeout(t);
+    return () => { cancelAnimationFrame(outer); cancelAnimationFrame(inner); clearTimeout(t); };
   }, []);
 
   const close = () => {
@@ -283,14 +289,14 @@ export function OpenBook({ category, entries, selectedPage, articleNode, onShowC
   if (!mounted) return null;
   return createPortal(
     <div
-      className={`bk-overlay ${closing ? 'is-closing' : ''}`}
+      className={`bk-overlay ${opened ? 'is-opened' : ''} ${closing ? 'is-closing' : ''}`}
       onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}
       role="dialog"
       aria-modal="true"
       aria-label={category}
     >
       <div className="bk-scene">
-        <div className={`bk ${closing ? 'is-closing' : ''}`}>
+        <div className={`bk ${opened ? 'is-opened' : ''} ${closing ? 'is-closing' : ''}`}>
           <div className="bk-board" />
           <div className="bk-leftbase" />
 
