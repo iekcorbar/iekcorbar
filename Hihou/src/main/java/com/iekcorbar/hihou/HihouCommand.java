@@ -191,7 +191,7 @@ final class HihouCommand implements TabExecutor {
 
     private void bw(CommandSender s, String[] a) {
         if (a.length < 2) {
-            msg(s, "/ih bw list|info|create|delete|set|team|join|leave|start|stop <...>", NamedTextColor.RED);
+            msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|start|stop <...>", NamedTextColor.RED);
             return;
         }
         String sub = a[1].toLowerCase(Locale.ROOT);
@@ -221,29 +221,47 @@ final class HihouCommand implements TabExecutor {
             }
             case "set" -> {
                 if (!admin(s) || !(s instanceof Player p)) return;
-                if (a.length < 4) { msg(s, "/ih bw set <arena> spawn|center|size <r>|min <n>|maxteam <n>", NamedTextColor.RED); return; }
+                if (a.length < 4) { msg(s, "/ih bw set <arena> spawn|spec|center|size <r>|min <n>|maxteam <n>|beds <sec>|end <sec>", NamedTextColor.RED); return; }
                 String arena = a[2].toLowerCase(Locale.ROOT), what = a[3].toLowerCase(Locale.ROOT);
                 String err = switch (what) {
                     case "spawn" -> mgr.setSpawn(p, arena);
+                    case "spec" -> mgr.setSpec(p, arena);
                     case "center" -> mgr.setCenter(p, arena);
                     case "size" -> a.length > 4 ? mgr.setSize(arena, parseInt(a[4], 0)) : "Give a radius.";
                     case "min" -> a.length > 4 ? mgr.setMin(arena, parseInt(a[4], 0)) : "Give a number.";
                     case "maxteam" -> a.length > 4 ? mgr.setMaxTeam(arena, parseInt(a[4], 0)) : "Give a number.";
+                    case "beds" -> a.length > 4 ? mgr.setBedsAt(arena, parseInt(a[4], 0)) : "Give a second.";
+                    case "end" -> a.length > 4 ? mgr.setEndAt(arena, parseInt(a[4], 0)) : "Give a second.";
                     default -> "Unknown setter.";
                 };
                 msg(s, err.isEmpty() ? "Saved." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
             }
             case "team" -> {
                 if (!admin(s) || !(s instanceof Player p)) return;
-                if (a.length < 4) { msg(s, "/ih bw team <arena> add <name> <color>|del <name>|spawn <name>", NamedTextColor.RED); return; }
+                if (a.length < 4) { msg(s, "/ih bw team <arena> add <name> <color>|del <name>|spawn <name>|bed <name>", NamedTextColor.RED); return; }
                 String arena = a[2].toLowerCase(Locale.ROOT), op = a[3].toLowerCase(Locale.ROOT);
                 String err = switch (op) {
                     case "add" -> a.length > 5 ? mgr.teamAdd(arena, a[4], a[5]) : "Give a team name and a color.";
                     case "del" -> a.length > 4 ? mgr.teamDel(arena, a[4]) : "Give a team name.";
                     case "spawn" -> a.length > 4 ? mgr.teamSetSpawn(p, arena, a[4]) : "Give a team name (stand where the team spawns).";
+                    case "bed" -> a.length > 4 ? mgr.teamSetBed(p, arena, a[4]) : "Give a team name (look at the bed).";
                     default -> "Unknown team op.";
                 };
                 msg(s, err.isEmpty() ? "Saved." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
+            case "gen" -> {
+                if (!admin(s) || !(s instanceof Player p)) return;
+                if (a.length < 5) { msg(s, "/ih bw gen <arena> add|del iron|gold <team>|diamond|emerald", NamedTextColor.RED); return; }
+                String arena = a[2].toLowerCase(Locale.ROOT), op = a[3].toLowerCase(Locale.ROOT);
+                boolean teamType = a[4].equalsIgnoreCase("iron") || a[4].equalsIgnoreCase("gold");
+                String err = switch (op) {
+                    case "add" -> a.length > 5 || !teamType
+                            ? mgr.genAdd(p, arena, a[4], teamType ? a[5] : null) : "Which team owns this iron/gold pad?";
+                    case "del" -> a.length > 5 || !teamType
+                            ? mgr.genDel(p, arena, a[4], teamType ? a[5] : null) : "Which team's iron/gold pad?";
+                    default -> "Unknown gen op.";
+                };
+                msg(s, err.isEmpty() ? "Saved (live at next start)." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
             }
             case "join" -> {
                 if (!(s instanceof Player p)) { msg(s, "Players only.", NamedTextColor.RED); return; }
@@ -254,6 +272,11 @@ final class HihouCommand implements TabExecutor {
             case "leave" -> {
                 if (!(s instanceof Player p)) { msg(s, "Players only.", NamedTextColor.RED); return; }
                 String err = mgr.leave(p);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
+            case "rejoin" -> {
+                if (!(s instanceof Player p)) { msg(s, "Players only.", NamedTextColor.RED); return; }
+                String err = mgr.rejoin(p);
                 if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
             }
             case "start" -> {
@@ -268,11 +291,12 @@ final class HihouCommand implements TabExecutor {
                 String err = mgr.stop(a[2]);
                 if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
             }
-            default -> msg(s, "/ih bw list|info|create|delete|set|team|join|leave|start|stop", NamedTextColor.RED);
+            default -> msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|start|stop", NamedTextColor.RED);
         }
     }
 
-    private static int parseInt(String s, int def) {        try {
+    private static int parseInt(String s, int def) {
+        try {
             return Math.max(1, Integer.parseInt(s));
         } catch (NumberFormatException e) {
             return def;
@@ -284,12 +308,16 @@ final class HihouCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         if (a.length == 1) out.addAll(List.of("give", "key", "edit", "remove", "map", "event", "game", "bw", "reload", "help"));
         else if (a.length == 2 && a[0].equalsIgnoreCase("game")) out.addAll(List.of("create", "set", "start", "stop", "win", "delete", "list"));
-        else if (a.length == 2 && a[0].equalsIgnoreCase("bw")) out.addAll(List.of("list", "info", "create", "delete", "set", "team", "join", "leave", "start", "stop"));
+        else if (a.length == 2 && a[0].equalsIgnoreCase("bw")) out.addAll(List.of("list", "info", "create", "delete", "set", "team", "gen", "join", "leave", "rejoin", "start", "stop"));
         else if (a.length == 3 && a[0].equalsIgnoreCase("bw")
-                && List.of("info", "delete", "set", "team", "join", "start", "stop").contains(a[1].toLowerCase(Locale.ROOT)))
+                && List.of("info", "delete", "set", "team", "gen", "join", "start", "stop").contains(a[1].toLowerCase(Locale.ROOT)))
             out.addAll(plugin.bw().names());
-        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("set")) out.addAll(List.of("spawn", "center", "size", "min", "maxteam"));
-        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team")) out.addAll(List.of("add", "del", "spawn"));
+        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("set")) out.addAll(List.of("spawn", "spec", "center", "size", "min", "maxteam", "beds", "end"));
+        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team")) out.addAll(List.of("add", "del", "spawn", "bed"));
+        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("gen")) out.addAll(List.of("add", "del"));
+        else if (a.length == 5 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("gen")) out.addAll(List.of(BwGameManager.GEN_TYPES));
+        else if (a.length == 6 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("gen")
+                && (a[4].equalsIgnoreCase("iron") || a[4].equalsIgnoreCase("gold"))) out.addAll(plugin.bw().teamNames(a[2]));
         else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("join")) out.addAll(plugin.bw().teamNames(a[2]));
         else if (a.length == 5 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team"))
             out.addAll(plugin.bw().teamNames(a[2]));

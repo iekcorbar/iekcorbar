@@ -1,7 +1,7 @@
 # Hihou - geheugen/voortgang (bijhouden TIJDENS het werk)
 
-Laatste bijgewerkt: 2026-10-26 ~session 2. Taak van deze sessie: **BedWars-port etappe
-0.3.0** uit de verkenning-hieronder - arena's + teams + join in de nieuwe bw/ module.
+Laatste bijgewerkt: 2026-10-26 ~session 3. Taak van deze sessie: **BedWars-port etappe
+0.4.0** - generators, bedden, sudden-death-tijdlijn, respawn, spectators en de ReJoin-store.
 
 ## v0.1.0 - KISTEN-KANT (klaar)
 - Vijf types, allemaal decor-prop-kit (propkit/sync.py: Hihou -> ns "hihou"):
@@ -79,7 +79,43 @@ Laatste bijgewerkt: 2026-10-26 ~session 2. Taak van deze sessie: **BedWars-port 
   start|stop|delete|list|info (+tab: arenanamen, teamnames, kleuren). DyeColor-namen (geen aqua/
   gold - Light blue/cyan; tab geeft 8 gangbare). plugin.yml usage uitgebreid; mvn groen 0.3.0.
 
-## Test-flow (in-game, na deploy Hihou-0.3.0.jar + nieuwe Iekcorbar-pack.zip)
+## v0.4.0 - BEDWARS ETAPPE 2: GENERATORS + BEDS + SUDDEN DEATH (klaar, deze sessie)
+- Specs opnieuw uit de Bron-tag 25.2 gehaald: OreGenerator (generators.yml Default: iron 2s x2
+  cap 32, gold 6s x2 cap 7, diamond 30/20/15s, emerald 70/50/30s; tier-STARTs 360/1080 en
+  720/1440; item op de grond met nearby-cap), GamePlayingTask (NextEvent-lane: DIAMOND_II,
+  DIAMOND_III, EMERALD_II, EMERALD_III, BEDS_DESTROY, ENDER_DRAGON, GAME_END - dragon-kaart
+  overgeslagen, wel: beds 25:00 + einde/dead-heat 40:00 - per arena te verkorten met
+  /ih bw set <arena> beds|end <sec> zodat Barend de sweep ook in 2 minuten kan testen),
+  respawnSessions (5s), BedWarsTeam first-spawn/respawn, checkWinner (leden-leeg = eliminated,
+  1 team over = winner).
+- BwGen (bw/): 4 types, eigen tick per seconde vanuit de arena-task; diamond/emerald op
+  block-center +1.3y en een ELECTRIC_SPARK-tint (onze energie-sound; steamworks-koppeling later).
+  Team-gens draaien alleen als het team leden heeft (original disables empty teams).
+  Positions: arenas.json teams.<t>.iron/.gold + arenas.<n>.gens.diamond/.emerald; commando's
+  /ih bw gen <arena> add|del <type> [team] (kijk-richting / dichtstbijzijnde).
+- Bedden: /ih bw team <arena> bed <team> (kijk naar bedblok, beide helften worden onthoud).
+  breakBed/sleepBed-gate: eigen team = bounced actionbar, vijand = bed destruction + broadcast,
+  buitenstaander/buiten-wedstrijd = beschermd. Explosies en pistons kunnen bedblokken niet
+  verplaatsen (blockList-removeIf bedProtected / cancel). finish() HER-PLAATST verwoeste bedden
+  (color.name()+"_BED", beide helften, alleen als air) - onze lichte map-reset.
+- Dood/respawn: PLAYING + bed heel -> 5s respawn-sessie (dodenscherm + titles), dan via
+  PlayerRespawnEvent naar team-spawn (spawnFresh) + 2s protectie (pvpDeny "just respawned").
+  Bed weg -> eliminate(): uit ledenlijst, op de stoel SPECTATOR naar spec-punt, TEAM ELIMINATED
+  bij laatste lid. checkEnd na alles: 1 team over = winnaar (END_ROD + challenge-complete +
+  server-broadcast), 0 = draw; GAME_END-timer = ook finish.
+- Spectators: /ih bw join <arena> tijdens PLAYING -> goods hand-in + SPECTATOR-gamemode +
+  tp naar spec-punt (/ih bw set <arena> spec; fallback lobby). leave/quit/finish handelt terug.
+- ReJoin-store (bw-rejoin.json): quit tijdens PLAYING = kit op de grond laten vallen, hand-in
+  als Bukkit-object Base64 op disk (ChestStore-truc), bij relog alles terug + "/ih bw rejoin"
+  zolang de wedstrijd loopt en hun team bestaat. finish/stop/delete/disable = markEnded:
+  goederen worden bij volgende login alsnog teruggegeven en het entry verdwijnt.
+- Afwijkingen t.o.v. het original (bewust, voor later): geen ender-dragon-golf, geen teamchest
+  voor uitgeworpen kits, kit-druppeling bij quit ipv vault-store, full map-snapshot-reset
+  (created-blocks-only) - en de respawn-vertraaging zit op het dodenscherm i.p.v. nms-delay.
+- mvn groen 0.4.0 (Paper 26.2 API: PlayerDeathEvent zit in event.entity, respawn via
+  p.spigot().respawn(), Attribute.MAX_HEALTH zonder GENERIC_-prefix, DyeColor heeft geen AQUA).
+
+## Test-flow (in-game, na deploy Hihou-0.4.0.jar + nieuwe Iekcorbar-pack.zip)
 1. `/ih give treasure` -> plaatsen -> `/ih edit` -> spullen erin -> sluiten.
 2. `/ih key treasure` -> klik kist zonder = rood actionbar; met = open-model +
    GUI; loot halen; opnieuw = "The chest is empty."
@@ -99,6 +135,16 @@ Laatste bijgewerkt: 2026-10-26 ~session 2. Taak van deze sessie: **BedWars-port 
    `/ih bw join test` -> 10s countdown (titel + pling) -> GO, elk team naar z'n spawn.
    `/ih bw leave` geeft alles terug (locatie/inventory). Probeer eigen team te slaan -> actionbar.
    `/ih bw start test 5` forceert als staff; `/ih bw stop test` hurkt iedereen terug.
+9. BEDWARS 0.4.0: bedden: echte bedjes plaatsen -> `/ih bw team test bed red` (kijk ernaar) ->
+   in een lopende wedstrijd: eigen team kan niet slopen/slapen; vijand sloopt = broadcast +
+   eliminate-check. Generators: `/ih bw gen test add iron red` (kijk naar pad), idem gold/blue,
+   `add diamond`/`add emerald` voor het midden; na start: 2s/6s items op de grond, caps werken.
+   Doodspel: sterft met bed heel -> 5s dodenscherm + terug op team-spawn (2s protectie);
+   bed kapot -> dood = TEAM ELIMINATED + spectator-zitplaats. Quit mid-game: kit valt, relog =
+   alles terug + `/ih bw rejoin` zolang de wedstrijd loopt. Sudden death in versnelling testen:
+   `/ih bw set test beds 60` en `/ih bw set test end 120` -> na een minuut zijn alle bedden weg
+   (broadcast + titel), na twee minuten flop je in de finish (draw of winnaar; bedden worden
+   automatisch herplaatst en builder-plaatjes + items opgeruimd als `center`/`size` gezet is).
 
 ## Open opties (overleg met Barend)
 - Wereld-spawn van treasure-kisten (config-kans per interval) - nu alleen staff-plaatsen.
@@ -136,12 +182,13 @@ Verkend (repo-sessie liep vol net voor de start - hier de brandstof):
   (3) module-structuur: Hihou/src/.../bw/ - BwArena, BwGameManager, BwTeams,
   BwGenerators, BwStore, BwListeners; (4) etappes: 0.3.0 arena+teams+join,
   0.4.0 generators+bed+suddain death, 0.5.0 shop+upgrades+kits.
-- 0.3.0 STATUS (sessie 2): (1)-(3) en arena+teams+join KLAAR. REA-JEB provider draait hier
-  niet; signatures via JDK-javap op de jar + publieke GitHub-source tag 25.2 als
-  gedragsspecificatie (GPL - dus eigen implementatie, geen kopieen). Restanten etappe 1:
-  mapreset/restarting (0.4.0), ReJoin/offline-goederen-store (0.4.0), spectators (0.4.0),
-  winnaar-detectie via bed-loot (0.4.0), sudden-death y-kill + game-timer (0.4.0),
-  generators op onze center+size-regio + steamworks-sounds (0.4.0), shop/upgrades/kits (0.5.0).
+- 0.3.0 + 0.4.0 STATUS (sessies 2-3): arena+teams+join EN generators+bed+sudden-death+
+  spectators+ReJoin KLAAR. REA-JEB provider draait hier niet; signatures via JDK-javap op de
+  jar + publieke GitHub-source tag 25.2 als gedragsspecificatie (GPL - dus eigen implementatie,
+  geen kopieen). Over van etappe 1-2: ender-dragon-golf, full map-snapshot-reset (nu alleen
+  tracked placements + item-caps + bed-herplaatsing), teamchest-berging voor quit-kits.
+  Restanten: shop (keyless Chests-GUI) + upgrades + kits = etappe 0.5.0; afterwards pas de
+  Steamworks-rpm-generators en FMM-bedmodellen uit de CLAUDE.md-backlog erbij.
 - Let op: Hihou 0.3.0 is de huidige HEAD (game-engine + bw arenas/teams/join, jar in root).
   De kist/sleutel-kant hoeft niet anders - BedWars-shop is apart.
 - Commando-toekomst: /ih bw create|join|start|... + arena's per wereld (of
