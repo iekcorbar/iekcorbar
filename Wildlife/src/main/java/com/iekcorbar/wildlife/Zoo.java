@@ -71,7 +71,7 @@ final class Zoo implements org.bukkit.event.Listener {
                 .height(2).group("zoofence").tick(1, this::staffGate)
                 .recipe(1, Material.IRON_BARS, Material.IRON_BARS, Material.IRON_INGOT, Material.TRIPWIRE_HOOK).openable());
         l.add(new DecorDef("entrance_arch", "Entrance Arch", "A wide arch to walk under. Three blocks wide.")
-                .hit(3.0f, 0.4f).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.IRON_INGOT, planks, planks, Material.GOLD_INGOT));
+                .scale(1.25f).hit(3.0f, 0.4f).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.IRON_INGOT, planks, planks, Material.GOLD_INGOT));
         // enclosures
         l.add(new DecorDef("zoo_fence", "Zoo Fence", "Tall iron fence that joins its neighbours, gates included.")
                 .height(2).connect("zoofence").recipe(4, Material.IRON_BARS, Material.IRON_BARS, Material.IRON_NUGGET));
@@ -105,7 +105,7 @@ final class Zoo implements org.bukkit.event.Listener {
         l.add(new DecorDef("trash_bin", "Animal Trash Bin", "Right-click with an item to throw it away.")
                 .use(this::bin).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.COAL));
         l.add(new DecorDef("lamp_post", "Lamp Post", "Three blocks of iron post with a lantern on top.")
-                .height(3).glow(15).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.STICK, Material.LANTERN));
+                .height(3).scale(1.5625f).glow(15).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.STICK, Material.LANTERN));
         l.add(new DecorDef("souvenir_stall", "Souvenir Stall", "A little striped stall. Decoration.")
                 .height(2).recipe(1, planks, planks, planks, Tag.WOOL, Tag.WOOL, Material.PAPER));
         statues(l);

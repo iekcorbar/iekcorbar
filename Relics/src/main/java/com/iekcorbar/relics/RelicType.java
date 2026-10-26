@@ -102,7 +102,7 @@ enum RelicType {
             Base.NONE, 1, 0, "new_year_garland", "new_year_garland", null, Effect.TWINKLE, Use.NONE, 1f),
 
     COUNTDOWN_BOARD(Collection.NEW_YEAR, "New Year Countdown Board", "A big scoreboard that counts down to the next New Year, zone by zone. Sneak + right-click (placer or staff) to change its time zone.",
-            Base.NONE, 2, 0, "countdown_board", "countdown_board_wall", null, Effect.NONE, Use.BOARD, 1f),
+            Base.NONE, 2, 0, "countdown_board", "countdown_board_wall", null, Effect.NONE, Use.BOARD, 2.7f),
 
     // ---------------------------------------------------------------- Easter
     EASTER_EGG(Collection.EASTER, "Easter Egg", "Hide it for an egg hunt: everyone can find each egg once.",

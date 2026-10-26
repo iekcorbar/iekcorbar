@@ -41,7 +41,7 @@ final class GardenDecor {
         l.add(new DecorDef("trellis", "Trellis", "Wooden lattice with climbing vines. Joins its neighbours.")
                 .height(2).connect("gardenfence").recipe(2, Material.STICK, Material.STICK, Material.STICK, Material.STICK, Material.VINE));
         l.add(new DecorDef("pergola", "Pergola", "An arch with vines to walk through. Three blocks tall.")
-                .hit(0.9f, 3.0f).recipe(1, planks, planks, Material.STICK, Material.STICK, Material.VINE));
+                .scale(1.5f).hit(0.9f, 3.0f).recipe(1, planks, planks, Material.STICK, Material.STICK, Material.VINE));
         l.add(new DecorDef("garden_bench", "Garden Bench", "A wooden bench. Right-click to sit.")
                 .seat(0.45f).hit(0.9f, 0.7f).recipe(1, planks, planks, Material.STICK, Material.STICK, Material.WHITE_DYE));
         l.add(new DecorDef("bird_bath", "Bird Bath", "A stone basin on a pedestal.")
@@ -53,7 +53,7 @@ final class GardenDecor {
         l.add(new DecorDef("garden_gnome", "Garden Gnome", "Right-click for a word of wisdom.")
                 .use(this::gnome).hit(0.5f, 0.8f).recipe(1, Material.RED_WOOL, Material.CLAY_BALL, Material.CLAY_BALL, Material.WHITE_WOOL, Material.STONE));
         l.add(new DecorDef("scarecrow", "Scarecrow", "Keeps the crows out. Two blocks tall.")
-                .height(2).recipe(1, Material.HAY_BLOCK, Material.STICK, Material.STICK, Material.CARVED_PUMPKIN));
+                .height(2).scale(1.125f).recipe(1, Material.HAY_BLOCK, Material.STICK, Material.STICK, Material.CARVED_PUMPKIN));
         l.add(new DecorDef("wheelbarrow", "Wheelbarrow", "Full of soil and seedlings.")
                 .hit(0.9f, 0.7f).recipe(1, planks, planks, Material.IRON_INGOT, Material.DIRT, Material.WHEAT_SEEDS));
         l.add(new DecorDef("stepping_stones", "Stepping Stones", "Flat stones to walk over.")

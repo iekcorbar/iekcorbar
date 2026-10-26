@@ -86,7 +86,10 @@ def fix_zfight(model):
                         area = lambda e: (e["to"][o[0]] - e["from"][o[0]]) * (e["to"][o[1]] - e["from"][o[1]])
                         t = B if area(B) <= area(A) else A
                         if hi:
-                            t["to"][ax] = round(t["to"][ax] + 0.03, 3)
+                            nv = round(t["to"][ax] + 0.03, 3)
+                            if ax == 1 and nv > 32.0:
+                                continue  # MC 26.2 refuses elements above y=32; leave the face as-is
+                            t["to"][ax] = nv
                         else:
                             t["from"][ax] = round(t["from"][ax] - 0.03, 3)
                         changed += 1
@@ -216,6 +219,61 @@ for name in list(files):
             fixed += n
             files[name] = json.dumps(m, indent=1).encode("utf-8")
 print("z-fighting faces separated:", fixed)
+
+# MC 26.2 rejects model elements outside y=-16..32 ("'to' specifier exceeds the allowed
+# boundaries"), which turned every taller-than-2-blocks prop into a purple cube. Shrink the
+# Y of oversized models so they fit (textures here are solid palette cells, so vertical UV
+# squash is invisible); the matching DecorDef/RelicType scale compensates 1/k server-side,
+# so the world size stays exactly the same. Models that share one Java scale get one forced
+# k so a single scale value fixes both.
+FIT_LIMIT = 32.0
+FIT_GROUPS = {
+    "assets/relics/models/item/countdown_board.json": 32.0 / 86.4,
+    "assets/relics/models/item/countdown_board_wall.json": 32.0 / 86.4,
+}
+
+
+def fit_scale_y(o, k):
+    if isinstance(o, dict):
+        for key, v in o.items():
+            if key in ("from", "to", "origin") and isinstance(v, list) and len(v) == 3 and all(isinstance(x, (int, float)) for x in v):
+                o[key] = [v[0], round(v[1] * k, 3), v[2]]
+            else:
+                fit_scale_y(v, k)
+    elif isinstance(o, list):
+        for v in o:
+            fit_scale_y(v, k)
+
+
+fitted = []
+for name in list(files):
+    if "/models/" not in name or not name.endswith(".json"):
+        continue
+    try:
+        m = json.loads(files[name])
+    except ValueError:
+        continue
+    els = m.get("elements")
+    if not isinstance(els, list) or not els:
+        continue
+    ys = [v for e in els for w in (e.get("from"), e.get("to")) for v in ([w[1]] if isinstance(w, list) and len(w) == 3 else [])]
+    if not ys:
+        continue
+    hi, lo = max(ys), min(ys)
+    k = FIT_GROUPS.get(name)
+    if k is None:
+        k = 1.0
+        if hi > FIT_LIMIT + 0.001:
+            k = min(k, FIT_LIMIT / hi)
+        if lo < -16.0 - 0.001:
+            k = min(k, 16.0 / abs(lo))
+    if k >= 0.999:
+        continue
+    fit_scale_y({"elements": els}, k)
+    files[name] = json.dumps(m, indent=1).encode("utf-8")
+    fitted.append((name, round(k, 4)))
+for name, k in fitted:
+    print("FIT %s -> y*%s (java scale x%.4f)" % (name, k, 1.0 / k))
 
 mcmeta = {"pack": {"description": "Iekcorbar v2 (Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items) - build 2", "pack_format": 64,
                    "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}}

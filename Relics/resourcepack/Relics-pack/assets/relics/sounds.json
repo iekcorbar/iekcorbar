@@ -264,5 +264,41 @@
    "relics:disc/we_wish_1"
   ],
   "subtitle": "subtitles.relics.disc.we_wish"
+ },
+ "disc.bountiful_barn_ballad": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_bountiful_barn_ballad",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ },
+ "disc.gears_of_christmas": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_gears_of_christmas",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ },
+ "disc.ghosts_of_the_samurai": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_ghosts_of_the_samurai",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ },
+ "disc.trick_or_treat_at_halloween": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_trick_or_treat_at_halloween",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
  }
 }
