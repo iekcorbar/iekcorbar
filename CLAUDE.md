@@ -679,7 +679,9 @@ deploy/. Propresourcepack: SteamworksAdditions/tools/make_additions_pack.py (pro
 klok + reling-mask 0..15 + rooster), ns "additions".
 
 Site/pack: merge SOURCES +Additions-pack.zip, BUILD 6 -> iekcorbar-pack-build6.zip
-(sha1 18b33f6a, 15,42 MB, 5855 files, audit 0/0 op 2365 modellen). Wiki/docs: de addon-docs (klok/
-reling/rooster + /sa commando's) zijn NOG TE SCHRIJVEN (docs/wiki-steamworks of eigen addons-folder +
-seed) - volgende klus. Steamworks-polish skill is bijgewerkt met de addon-pijplijn.
+(sha1 18b33f6a, 15,42 MB, 5855 files, audit 0/0 op 2365 modellen). Wiki/docs KLAAR (20:50): docs/wiki-additions/ (intro +
+klok + reling/vent) - seed 'additions' 10 pagina's + importknop op /wiki; addons-tab op /recipes
+(build-recipes-data.js parseert de DecorDef-*.recipe-ketens uit Additions.java, 3 recepten);
+/steamworks-pagina: sectie 'What landed on 26 October' + versie-label 0.3.18/0.1.0; site-zip
+20:49 in deploy/. npm build groen. Steamworks-polish skill is bijgewerkt met de addon-pijplijn.
 mvn groen (alle vijf). SteamworksAdditions-0.1.0.jar + pack build6 + vier herbouwde engine-jars in deploy/.

@@ -119,6 +119,16 @@ out.plugins.push({ id: 'kitchen', name: 'Kitchen', blurb: 'Farming and Japanese 
 // ---------------------------------------------------------------- Kura
 out.plugins.push({ id: 'kura', name: 'Kura', blurb: 'Storage networks.', recipes: javaCrafting('Kura/src/main/java/com/iekcorbar/kura/Items.java', 'Workbench') });
 
+// ---------------------------------------------------------------- Steamworks Additions
+// props are one DecorDef chain per prop: new DecorDef("id", "Name", "lore")...recipe(n, MATERIAL, ...);
+const addSrc = read('SteamworksAdditions/src/main/java/com/iekcorbar/additions/Additions.java');
+const addRecipes = [];
+for (const m of addSrc.matchAll(/new DecorDef\("([a-z_]+)", "([^"]+)", "[^"]*"\)[\s\S]*?\.recipe\((\d+), ([^)]*)\)/g)) {
+  const ing = m[4].split(',').map((t) => t.trim()).filter(Boolean).map((t) => ({ name: name(t), count: 1 }));
+  addRecipes.push({ result: m[2], count: Number(m[3]), type: 'shapeless', category: 'Workbench', ingredients: collapse(ing) });
+}
+out.plugins.push({ id: 'additions', name: 'Steamworks Additions', blurb: 'The Steam Clock and brass details.', recipes: addRecipes });
+
 // The java parser cannot read "new RecipeChoice.MaterialChoice(Tag.X)" and a few other forms: name them here.
 const WHO = { Station: 'Any Sign', Windmill: 'Any Wool' };
 function tidy(n, r) {

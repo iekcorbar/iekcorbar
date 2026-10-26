@@ -1,0 +1,75 @@
+{
+ "source": "docs/wiki-additions (regenerate with scripts/build-wiki-seed.py)",
+ "pages": [
+  {
+   "slug": "additions-intro",
+   "title": "Introduction",
+   "category": "Steamworks Additions",
+   "parent": null,
+   "content": "## What is this?\n\nSteamworks Additions is a small sister plugin of Steamworks: **atmosphere props** for the towns, breweries and stations. No rotation, no stress - just brass, copper and a bell that knows what time it is. It runs next to Steamworks but never needs a shaft.\n\n### The props\n\n* **Steam Clock** - a brass tower clock with a floating time plate; it strikes its bell on every in-game hour.\n* **Brass Railing** - iron posts with brass bars that join each other automatically. Queue dividers, quay edges, garden borders.\n* **Vent Grille** - a copper vent with green slats. On a wall or free-standing, it tells everyone that something steams behind this facade.\n\n### In the game\n\n* Every prop has a workbench recipe (see the [recipes page](/recipes) or `/zukan`), shows up in your recipe book, and is picked back up by left-clicking it (twice by default).\n* Staff hand them out with `/sa give <player> <prop>`; `/sa list` shows what exists.\n* The props save themselves in the chunk, exactly like Steamworks machines: reload a chunk, the prop is back on its spot.\n\n### Good to know\n\n* The clock reads the *world* clock (a Minecraft day is 20 minutes), so it strikes every 50 real-time minutes. It only makes noise and ticks while players are nearby - an empty quarter is silent and costs nothing.\n* Nothing here touches the Steamworks network. You can run Additions without a single shaft in sight (though a clock on top of a pumping station does look fantastic).\n\n[The Steam Clock](/wiki?page=additions-clock) · [Brass Railing & Vent](/wiki?page=additions-brass)\n"
+  },
+  {
+   "slug": "additions-clock",
+   "title": "The Steam Clock",
+   "category": "Steamworks Additions",
+   "parent": null,
+   "content": "## The Steam Clock\n\nA two-block brass tower: iron column, brass case with an ivory dial, two small golden bells under a dark roof and a finial on top. It tells the town what time it is - twice.\n\n\n* [What it does](/wiki?page=additions-clock-what-it-does)\n* [Good to know](/wiki?page=additions-clock-good-to-know)\n* [Crafting](/wiki?page=additions-clock-crafting)\n* [Placing and moving](/wiki?page=additions-clock-placing-and-moving)\n"
+  },
+  {
+   "slug": "additions-clock-what-it-does",
+   "title": "What it does",
+   "category": "Steamworks Additions",
+   "parent": "additions-clock",
+   "content": "* A **floating time plate** above the dial always reads the current in-game hour, e.g. `07:00`.\n* On **every in-game hour** the bell strikes: a clear brass bell tone, pitched per hour, and at **noon and midnight it rings twice**.\n* A small steam puff comes out of the top when it strikes, so you can see from across the square who is late.\n\nBack to [The Steam Clock](/wiki?page=additions-clock)\n"
+  },
+  {
+   "slug": "additions-clock-good-to-know",
+   "title": "Good to know",
+   "category": "Steamworks Additions",
+   "parent": "additions-clock",
+   "content": "* A full Minecraft day is 20 minutes, so an hour passes every 50 real-time minutes. The clock is tied to the world clock - sleep through the night and the clock jumps with it.\n* The clock only ticks and strikes **while players are within about 24 blocks**. A clock in an abandoned quarter is perfectly silent and costs the server nothing.\n* It stands free (the base block is solid, you bump into it) and needs no power at all.\n\nBack to [The Steam Clock](/wiki?page=additions-clock)\n"
+  },
+  {
+   "slug": "additions-clock-crafting",
+   "title": "Crafting",
+   "category": "Steamworks Additions",
+   "parent": "additions-clock",
+   "content": "Shapeless: **1 Clock + 2 Copper Ingots + 2 Gold Nuggets + 1 Redstone** → 1 Steam Clock.\n\nBack to [The Steam Clock](/wiki?page=additions-clock)\n"
+  },
+  {
+   "slug": "additions-clock-placing-and-moving",
+   "title": "Placing and moving",
+   "category": "Steamworks Additions",
+   "parent": "additions-clock",
+   "content": "Right-click with the clock item to place it (needs 2 blocks of air above its spot). Left-click twice to take it back; the time plate disappears with it.\n\nStaff: `/sa give <player> steam_clock`.\n\nBack to [The Steam Clock](/wiki?page=additions-clock)\n"
+  },
+  {
+   "slug": "additions-brass",
+   "title": "Brass Railing & Vent Grille",
+   "category": "Steamworks Additions",
+   "parent": null,
+   "content": "* [Brass Railing](/wiki?page=additions-brass-brass-railing)\n* [Vent Grille](/wiki?page=additions-brass-vent-grille)\n* [Taking them back](/wiki?page=additions-brass-taking-them-back)\n"
+  },
+  {
+   "slug": "additions-brass-brass-railing",
+   "title": "Brass Railing",
+   "category": "Steamworks Additions",
+   "parent": "additions-brass",
+   "content": "Iron posts with two brass bars. The railing **joins its neighbours automatically**: place a second one next to it and the bars grow into one run; corners, T-junctions and end posts pick the right piece by themselves - exactly like the garden fence, only with more brass.\n\n* Walk over it: it is low (you bump into the posts, but you can step along).\n* Craft: **3 Iron Ingots + 2 Sticks** → **4 railing pieces**.\n* Classic uses: queue lines at the station and ticket kiosk, quay edges, the brewery terrace, keeping the horses out of the flower beds.\n\nBack to [Brass Railing & Vent Grille](/wiki?page=additions-brass)\n"
+  },
+  {
+   "slug": "additions-brass-vent-grille",
+   "title": "Vent Grille",
+   "category": "Steamworks Additions",
+   "parent": "additions-brass",
+   "content": "A copper frame with three green-brass slats over a dark opening, with bolts in the corners.\n\n* **Mounts on any wall** - right-click a wall face with the item and it hangs flat, facing outward. On the ground it leans against the block you placed it on.\n* Craft: **2 Copper Ingots + 2 Iron Nuggets** → 1 grille.\n* It is decoration that tells a story: put one above a kettle line, on a boiler wall or along the brewery's back street, and everyone knows where the steam comes from. (It does not connect to real pipes - that would be too easy.)\n\nBack to [Brass Railing & Vent Grille](/wiki?page=additions-brass)\n"
+  },
+  {
+   "slug": "additions-brass-taking-them-back",
+   "title": "Taking them back",
+   "category": "Steamworks Additions",
+   "parent": "additions-brass",
+   "content": "Left-click twice like every prop. Railing sections come apart per piece: take one from the middle and the neighbours re-shape themselves the next time they load.\n\nStaff: `/sa give <player> brass_railing|vent_grille`.\n\nBack to [Brass Railing & Vent Grille](/wiki?page=additions-brass)\n"
+  }
+ ]
+}

@@ -472,6 +472,24 @@ export default function SteamworksExplainedPage() {
         </div>
       </Section>
 
+      {/* ---------- fresh ---------- */}
+      <Section id="fresh" icon={Cog} kicker="Fresh from the foundry" title="What landed on 26 October">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Card title="Create-true crafting" stat="alloy → casing → everything">
+            <p>The whole recipe tree now matches <b>Create 6</b> itself: andesite with nuggets becomes <b>Andesite Alloy</b>, alloy over a stripped log makes <b>Casings</b>, and the gear train, gauges and machines follow Create's exact grids. Brass is mixed 1 copper + 1 zinc in the kettle again. Your old habits from the mod translate one on one.</p>
+          </Card>
+          <Card title="7 new machines" stat="logistics & fluids">
+            <p><b>Chute</b> and <b>Funnel</b> move and suck items, the <b>Depot</b> holds parcels for the <b>Weighted Ejector</b> (it really throws), the <b>Mechanical Pump</b> fills canisters straight from the pipe network and the <b>Fluid Valve</b> cuts the line when it stops turning. Plus a <b>Steam Whistle</b> for the joy of it - right-click.</p>
+          </Card>
+          <Card title="The Engineer's Manual" stat="/sw manual">
+            <p>A living guide in your inventory: <b>clickable contents</b>, a <b>recipe button</b> for every part (jumps into /zukan), hands-on tips per chapter and <b>your own progress</b> - the manual notices what you placed, what you saw spin and what you crafted.</p>
+          </Card>
+          <Card title="New: Steamworks Additions" stat="atmosphere, no shafts needed">
+            <p>The sister plugin: a <b>Steam Clock</b> that strikes its bell every in-game hour (with a floating time plate), a self-joining <b>Brass Railing</b> and a <b>Vent Grille</b> for every brewery facade. See <Link href="/wiki?page=additions-intro" className="text-sp-gold underline">Additions in the wiki</Link>.</p>
+          </Card>
+        </div>
+      </Section>
+
       {/* ---------- faq ---------- */}
       <Section id="faq" icon={Lightbulb} kicker="When it misbehaves" title="FAQ & good to know">
         <ul className="space-y-3 text-sm text-text-warm/80">
@@ -487,7 +505,7 @@ export default function SteamworksExplainedPage() {
           <Link href="/wiki?page=steamworks" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Steamworks Wiki (quick reference)</Link>
           <Link href="/recipes" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><Wrench className="w-4 h-4" /> All Recipes</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.12`}). For exact per-machine stats, always right-click the part in-game.</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.18`} + Steamworks Additions {`0.1.0`}). For exact per-machine stats, always right-click the part in-game.</p>
       </Section>
     </div>
   );
