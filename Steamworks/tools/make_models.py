@@ -9,7 +9,11 @@ Usage: python make_models.py <out folder>"""
 import base64, json, math, os, random, struct, sys, uuid, zlib
 
 RES = 32
-U = lambda: str(uuid.uuid4())
+# deterministic ids: uuid4 made every regeneration a byte-diff of all 100+ files; uuid5 from a
+# counter keeps the git history clean (same source -> same files, always)
+import itertools as _it
+_c = _it.count()
+U = lambda: str(uuid.uuid5(uuid.NAMESPACE_URL, "iekcorbar-steamworks-%d" % next(_c)))
 
 # ---------------------------------------------------------------- texture (32x32, 8x8 swatches)
 random.seed(26)
@@ -1054,6 +1058,55 @@ def flour_sack():
     return m
 
 
+def whisk():
+    # mixer rod: darkwood grip, brass ferrule, four copper wire loops bent into an egg
+    m = Model("sw_whisk", 1.25)
+    m.cube("grip", (-0.8, -7.0, -0.8), (0.8, -3.2, 0.8), "darkwood")
+    m.cube("ferrule", (-1.1, -7.6, -1.1), (1.1, -6.6, 1.1), "brass")
+    m.cube("wire_e", (3.4, -3.2, -0.4), (4.2, 4.4, 0.4), "copper", (0, 0, -22.5), (0, 0, 0))
+    m.cube("wire_w", (-4.2, -3.2, -0.4), (-3.4, 4.4, 0.4), "copper", (0, 0, 22.5), (0, 0, 0))
+    m.cube("wire_n", (-0.4, -3.2, 3.4), (0.4, 4.4, 4.2), "copper", (22.5, 0, 0), (0, 0, 0))
+    m.cube("wire_s", (-0.4, -3.2, -4.2), (0.4, 4.4, -3.4), "copper", (-22.5, 0, 0), (0, 0, 0))
+    m.cube("bind", (-1.0, -3.6, -1.0), (1.0, -2.2, 1.0), "steel")
+    return m
+
+
+def propeller():
+    m = Model("sw_propeller", 1.3)
+    m.cube("hub", (-1.6, -1.6, -2.6), (1.6, 1.6, 2.6), "steel")
+    m.cube("blade_a", (-6.0, -0.5, 1.0), (6.0, 0.5, 2.4), "copper", (22.5, 0, 0), (0, 0, 0))
+    m.cube("blade_b", (-6.0, -0.5, -2.4), (6.0, 0.5, -1.0), "copper", (-22.5, 0, 0), (0, 0, 0))
+    m.cube("nut", (-0.9, -2.2, -0.9), (0.9, -1.5, 0.9), "brass")
+    return m
+
+
+def casing(name, band):
+    # Create's gear housing: a log cube banded in metal with a shaft stub on top
+    m = Model(name, 1.15)
+    m.cube("log", (-5.5, -5.5, -5.5), (5.5, 5.5, 5.5), "wood")
+    m.cube("band_a", (-6.0, -1.6, -6.0), (6.0, -0.2, 6.0), band)
+    m.cube("band_b", (-6.0, 0.2, -6.0), (6.0, 1.6, 6.0), band)
+    m.cube("cap", (-4.2, 5.5, -4.2), (4.2, 6.6, 4.2), "darkwood")
+    m.cube("stub", (-1.2, 6.6, -1.2), (1.2, 8.0, 1.2), "steel")
+    return m
+
+
+def alloy_lump():
+    # speckled andesite-zinc blob
+    m = raw_lump("sw_andesite_alloy", "stone")
+    m.cube("sparkle1", (-2.6, 1.2, -2.2), (-1.2, 2.4, -0.8), "steel")
+    m.cube("sparkle2", (1.2, -0.8, 1.4), (2.6, 0.4, 2.8), "steel")
+    return m
+
+
+def zinc_nugget():
+    m = Model("sw_zinc_nugget", 1.5)
+    m.cube("n1", (-2.6, -1.4, -1.0), (0.0, 0.8, 1.6), "dial")
+    m.cube("n2", (0.2, -1.0, -1.8), (2.8, 1.2, 0.4), "dial")
+    m.cube("n3", (-1.2, 0.6, -0.6), (1.4, 2.6, 1.4), "dial")
+    return m
+
+
 def build():
     parts = [shaft(), cogwheel(), large_cogwheel(), gearbox(), hand_crank(), water_wheel(),
              gauge_body("sw_speed_gauge_body", "brass"), gauge_body("sw_stress_gauge_body", "copper"),
@@ -1078,6 +1131,8 @@ def build():
              tool_item("sw_arm_drill", "drill"), punch_card(), sprocket(), chain_span(),
              windmill_sails(), windmill_bearing(), steam_boiler("sw_steam_boiler", False), steam_boiler("sw_steam_boiler_lit", True),
              steam_engine(), steam_engine_flywheel(), crushing_wheel(), flour_sack(),
+             alloy_lump(), casing("sw_andesite_casing", "stone"), casing("sw_brass_casing", "brass"),
+             whisk(), propeller(), zinc_nugget(),
              track_straight(), track_slope(), track_curve()]
     for part, metal, frame in (("clutch", "steel", "brass"), ("gearshift", "darkwood", "copper")):
         parts.append(switch_casing(f"sw_{part}_casing", metal, frame, False))

@@ -614,3 +614,24 @@ wood.chime, veger: grass.break), ~1x/4 min per pop, alleen bij spelers binnen 24
 bij perken vol displays, (10) community "Guild Hall"-project met Kura/Steamworks/fontein. Niets hiervan is gebouwd;
 wacht op keus van de user.
 
+
+### Steamworks 0.3.16 - crafting 1-op-1 uit Create 6.0.10 (2026-10-26, nacht)
+
+
+User: "ik mis veel crafting recipes, gebruik dezelfde als Create" + letterlijk dezelfde grondstoffen.
+Bron = de recept-JSONs uit de Create-jar zelf (data/create/recipe/crafting/, gedumpt met een script).
+Nieuwe basisketen als MaterialType + FMM-modellen (make_models.py, 12 bestanden naar
+deploy/fmm-steamworks/): ANDESITE_ALLOY (2x2-diamant andesite + 2 iron-of-zinc nuggets), ZINC_NUGGET
+(ingot 1->9), ANDESITE_CASING / BRASS_CASING (Create smeert het in-world op een gestripte stam; bij
+ons tafel-recept alloy/brass-ingot + stripped log), WHISK (alloy + 5 iron plates), PROPELLER (alloy +
+3 iron plates). Alle 30 PartType-recepten naar Create-patronen (shaft A/A x8, cogs als kolom,
+gearbox-kruis, gauges compass + stress-conversie van de speed-gauge, millstone/press/mixer/fan S-C-I
+kolommen, kettle=Create basin 5 alloy, pipe SCS x4, tank plaat/vat/plaat, drill A-I-C, saw plate-I-C,
+sprocket=casing+3 nuggets, windmill wool/slab/shaft, steam engine gold_plate/alloy/copper_block,
+crushing wheel 3x3-vertaling van de 5x5 assembly). Eigen blijft met commentaar: STATION/SIGNAL/
+PUMPJACK/REFINERY/ARM/BELT (geen tafel-recept in Create)/STEAM_BOILER/locomotief+wagens.
+machines.yml brass naar Create 1:1 (servers met eigen machines.yml moeten die regel zelf bijwerken).
+make_models.py: uuid4 -> deterministische uuid5 - bbmodels one-time changed, daarna byte-stabiel.
+Site recipes-data.json geregeneerd (steamworks 168). mvn groen; jar + 12 FMM-bestanden in deploy/ +
+TE-DEPLOYEN.txt. Batch 2 (sugges, niet gekozen): chute/funnel/weighted ejector/mechanical pump/
+fluid valve/stoomfluit met Create-recepten + eigen modellen.

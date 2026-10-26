@@ -25,7 +25,13 @@ public enum MaterialType {
     ARM_DRILL("Drill Head", "Tool head for a Karakuri Arm:", "BREAK blocks at its points."),
     PUNCH_CARD("Punch Card", "Right-click a Karakuri Arm: copies its program", "onto a blank card, or loads a punched one.",
             "Programming guide: on the iekcorbar website (/sw help)."),
-    WRENCH("Steam Wrench", "Right-click a part: it turns clockwise", "around the face you clicked. Sneak:", "turns it back into an item in your", "inventory, quietly disconnected.");
+    WRENCH("Steam Wrench", "Right-click a part: it turns clockwise", "around the face you clicked. Sneak:", "turns it back into an item in your", "inventory, quietly disconnected."),
+    ANDESITE_ALLOY("Andesite Alloy", "Hammered andesite with metal speckles -", "the base of every casing."),
+    ANDESITE_CASING("Andesite Casing", "A stripped log shrunk around a shaft stub.", "The heart of most machine recipes."),
+    BRASS_CASING("Brass Casing", "The smooth, golden cousin of the andesite casing."),
+    WHISK("Whisk", "Bends the Mixer's turning into stirring."),
+    PROPELLER("Propeller", "Two copper blades on a steel hub - what makes a Fan blow."),
+    ZINC_NUGGET("Zinc Nugget", "Nine to a zinc ingot; with andesite it makes alloy.");
 
     public final String displayName;
     public final String[] lore;

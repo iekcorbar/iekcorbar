@@ -220,40 +220,60 @@ final class PartItems {
 
     void registerRecipes() {
         RecipeChoice planks = new RecipeChoice.MaterialChoice(Tag.PLANKS);
-        // {amount, shape, char, ingredient, ...}; a PartType/MaterialType ingredient = a paper slot checked in validCraft
+        RecipeChoice stones = new RecipeChoice.MaterialChoice(Material.STONE, Material.COBBLESTONE, Material.ANDESITE,
+                Material.DIORITE, Material.GRANITE, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE);
+        RecipeChoice slabs = new RecipeChoice.MaterialChoice(Material.OAK_SLAB, Material.SPRUCE_SLAB, Material.BIRCH_SLAB,
+                Material.JUNGLE_SLAB, Material.ACACIA_SLAB, Material.DARK_OAK_SLAB, Material.MANGROVE_SLAB, Material.CHERRY_SLAB);
+        RecipeChoice strippedLogs = new RecipeChoice.MaterialChoice(Material.STRIPPED_OAK_LOG, Material.STRIPPED_SPRUCE_LOG,
+                Material.STRIPPED_BIRCH_LOG, Material.STRIPPED_JUNGLE_LOG, Material.STRIPPED_ACACIA_LOG,
+                Material.STRIPPED_DARK_OAK_LOG, Material.STRIPPED_MANGROVE_LOG, Material.STRIPPED_CHERRY_LOG);
+        // {amount, shape, char, ingredient, ...}; a PartType/MaterialType ingredient = a paper slot checked in validCraft.
+        // Shapes/ingredients follow Create 6.0.10's own recipe JSONs (data/create/recipe/crafting/*) one-on-one;
+        // where Create applies an item to a block in-world (casing on a stripped log) we craft it on the table instead.
         Map<PartType, Object[]> r = new EnumMap<>(PartType.class);
-        r.put(PartType.SHAFT, new Object[]{4, new String[]{"C", "C"}, 'C', Material.COPPER_INGOT});
-        r.put(PartType.COGWHEEL, new Object[]{1, new String[]{" P ", "PSP", " P "}, 'P', planks, 'S', PartType.SHAFT});
-        r.put(PartType.LARGE_COGWHEEL, new Object[]{1, new String[]{"P P", " C ", "P P"}, 'P', planks, 'C', PartType.COGWHEEL});
-        r.put(PartType.GEARBOX, new Object[]{1, new String[]{"I I", " C ", "I I"}, 'I', Material.COPPER_INGOT, 'C', PartType.COGWHEEL});
-        r.put(PartType.HAND_CRANK, new Object[]{1, new String[]{"PPP", "  S"}, 'P', planks, 'S', PartType.SHAFT});
-        r.put(PartType.WATER_WHEEL, new Object[]{1, new String[]{"PPP", "PSP", "PPP"}, 'P', planks, 'S', PartType.SHAFT});
-        r.put(PartType.SPEED_GAUGE, new Object[]{1, new String[]{"K", "S"}, 'K', Material.COMPASS, 'S', PartType.SHAFT});
-        r.put(PartType.STRESS_GAUGE, new Object[]{1, new String[]{"K", "S"}, 'K', Material.CLOCK, 'S', PartType.SHAFT});
-        r.put(PartType.MILLSTONE, new Object[]{1, new String[]{" P ", "TCT", "TTT"}, 'P', planks, 'C', PartType.COGWHEEL, 'T', Material.STONE});
-        r.put(PartType.STEAM_HAMMER, new Object[]{1, new String[]{"ISI", " P ", " B "}, 'I', Material.IRON_INGOT, 'S', PartType.SHAFT, 'P', Material.PISTON, 'B', Material.IRON_BLOCK});
-        r.put(PartType.CLUTCH, new Object[]{1, new String[]{"I", "S", "R"}, 'I', MaterialType.IRON_PLATE, 'S', PartType.SHAFT, 'R', Material.REDSTONE});
-        r.put(PartType.BELLOWS_FAN, new Object[]{1, new String[]{" C ", "PSP", " C "}, 'C', MaterialType.COPPER_PLATE, 'P', Material.PAPER, 'S', PartType.SHAFT});
-        r.put(PartType.KETTLE, new Object[]{1, new String[]{"P", "K"}, 'P', MaterialType.IRON_PLATE, 'K', Material.CAULDRON});
-        r.put(PartType.MIXER, new Object[]{1, new String[]{" S ", "PCP", " B "}, 'S', PartType.SHAFT, 'P', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL, 'B', Material.IRON_BARS});
+        r.put(PartType.SHAFT, new Object[]{8, new String[]{"A", "A"}, 'A', MaterialType.ANDESITE_ALLOY});
+        r.put(PartType.COGWHEEL, new Object[]{1, new String[]{"P", "S"}, 'P', planks, 'S', PartType.SHAFT});
+        r.put(PartType.LARGE_COGWHEEL, new Object[]{1, new String[]{"P", "P", "S"}, 'P', planks, 'S', PartType.SHAFT});
+        r.put(PartType.GEARBOX, new Object[]{1, new String[]{" C ", "CBC", " C "}, 'C', PartType.COGWHEEL, 'B', MaterialType.ANDESITE_CASING});
+        r.put(PartType.HAND_CRANK, new Object[]{1, new String[]{"CCC", "  A"}, 'C', planks, 'A', MaterialType.ANDESITE_ALLOY});
+        r.put(PartType.WATER_WHEEL, new Object[]{1, new String[]{"SSS", "SCS", "SSS"}, 'S', planks, 'C', PartType.SHAFT});
+        r.put(PartType.SPEED_GAUGE, new Object[]{1, new String[]{"C", "A"}, 'C', Material.COMPASS, 'A', MaterialType.ANDESITE_CASING});
+        r.put(PartType.STRESS_GAUGE, new Object[]{1, new String[]{"S"}, 'S', PartType.SPEED_GAUGE}); // Create: stressometer = converted speedometer
+        r.put(PartType.MILLSTONE, new Object[]{1, new String[]{"C", "S", "I"}, 'C', PartType.COGWHEEL, 'S', MaterialType.ANDESITE_CASING, 'I', stones});
+        r.put(PartType.STEAM_HAMMER, new Object[]{1, new String[]{"S", "C", "I"}, 'S', PartType.SHAFT, 'C', MaterialType.ANDESITE_CASING, 'I', Material.IRON_BLOCK});
+        r.put(PartType.CLUTCH, new Object[]{1, new String[]{"C", "S", "R"}, 'C', MaterialType.ANDESITE_CASING, 'S', PartType.SHAFT, 'R', Material.REDSTONE});
+        r.put(PartType.GEARSHIFT, new Object[]{1, new String[]{"C", "S", "R"}, 'C', MaterialType.ANDESITE_CASING, 'S', PartType.COGWHEEL, 'R', Material.REDSTONE});
+        r.put(PartType.BELLOWS_FAN, new Object[]{1, new String[]{"S", "C", "P"}, 'S', PartType.SHAFT, 'C', MaterialType.ANDESITE_CASING, 'P', MaterialType.PROPELLER});
+        r.put(PartType.KETTLE, new Object[]{1, new String[]{"A A", "AAA"}, 'A', MaterialType.ANDESITE_ALLOY}); // Create's basin
+        r.put(PartType.MIXER, new Object[]{1, new String[]{"S", "C", "I"}, 'S', PartType.COGWHEEL, 'C', MaterialType.ANDESITE_CASING, 'I', MaterialType.WHISK});
         r.put(PartType.STATION, new Object[]{1, new String[]{"LBL", " T ", " T "}, 'L', Material.LANTERN, 'B', new RecipeChoice.MaterialChoice(Tag.ITEMS_SIGNS), 'T', Material.STICK});
         r.put(PartType.SIGNAL, new Object[]{1, new String[]{"L", "P", "B"}, 'L', Material.REDSTONE_LAMP, 'P', MaterialType.IRON_PLATE, 'B', Material.IRON_BARS});
         r.put(PartType.PUMPJACK, new Object[]{1, new String[]{"BPB", "ISI", "I I"}, 'B', MaterialType.BRASS_PLATE, 'P', Material.PISTON, 'I', MaterialType.IRON_PLATE, 'S', PartType.SHAFT});
-        r.put(PartType.PIPE, new Object[]{6, new String[]{"CCC"}, 'C', MaterialType.COPPER_PLATE});
-        r.put(PartType.TANK, new Object[]{1, new String[]{"IPI", "G G", "IPI"}, 'I', MaterialType.IRON_PLATE, 'P', PartType.PIPE, 'G', Material.GLASS});
+        r.put(PartType.PIPE, new Object[]{4, new String[]{"SCS"}, 'S', MaterialType.COPPER_PLATE, 'C', Material.COPPER_INGOT}); // Create's fluid pipe
+        r.put(PartType.TANK, new Object[]{1, new String[]{"B", "C", "B"}, 'B', MaterialType.COPPER_PLATE, 'C', Material.BARREL}); // Create's fluid tank
         r.put(PartType.REFINERY, new Object[]{1, new String[]{"PTP", "BKB", "BFB"}, 'P', PartType.PIPE, 'T', PartType.TANK, 'B', MaterialType.BRASS_PLATE, 'K', PartType.KETTLE, 'F', Material.BLAST_FURNACE});
-        r.put(PartType.DRILL, new Object[]{1, new String[]{" I ", "IBI", " S "}, 'I', Material.IRON_INGOT, 'B', MaterialType.IRON_PLATE, 'S', PartType.SHAFT});
-        r.put(PartType.SAW, new Object[]{1, new String[]{"III", "IBI", " S "}, 'I', Material.IRON_NUGGET, 'B', MaterialType.IRON_PLATE, 'S', PartType.SHAFT});
-        r.put(PartType.BELT, new Object[]{4, new String[]{"KKK", "ISI"}, 'K', Material.DRIED_KELP, 'I', Material.IRON_INGOT, 'S', PartType.SHAFT});
+        r.put(PartType.DRILL, new Object[]{1, new String[]{" A ", "AIA", " C "}, 'A', MaterialType.ANDESITE_ALLOY, 'I', Material.IRON_INGOT, 'C', MaterialType.ANDESITE_CASING});
+        r.put(PartType.SAW, new Object[]{1, new String[]{" A ", "AIA", " C "}, 'A', MaterialType.IRON_PLATE, 'I', Material.IRON_INGOT, 'C', MaterialType.ANDESITE_CASING});
+        r.put(PartType.BELT, new Object[]{4, new String[]{"KKK", "ISI"}, 'K', Material.DRIED_KELP, 'I', Material.IRON_INGOT, 'S', PartType.SHAFT}); // Create has no table recipe for the belt (glue + connector); ours stays
         r.put(PartType.ARM, new Object[]{1, new String[]{"BCB", " S ", "III"}, 'B', MaterialType.BRASS_PLATE, 'C', PartType.COGWHEEL, 'S', PartType.SHAFT, 'I', MaterialType.IRON_PLATE});
-        r.put(PartType.SPROCKET, new Object[]{2, new String[]{" N ", "NSN", " N "}, 'N', Material.IRON_NUGGET, 'S', PartType.SHAFT});
-        r.put(PartType.WINDMILL, new Object[]{1, new String[]{"WPW", "PSP", "WPW"}, 'W', new RecipeChoice.MaterialChoice(Tag.WOOL), 'P', planks, 'S', PartType.SHAFT});
-        r.put(PartType.STEAM_BOILER, new Object[]{1, new String[]{"CTC", "CFC", "CCC"}, 'C', MaterialType.COPPER_PLATE, 'T', PartType.TANK, 'F', Material.BLAST_FURNACE});
-        r.put(PartType.STEAM_ENGINE, new Object[]{1, new String[]{"BPB", "BSB", "III"}, 'B', MaterialType.BRASS_PLATE, 'P', Material.PISTON, 'S', PartType.LARGE_COGWHEEL, 'I', Material.IRON_BLOCK});
-        r.put(PartType.CRUSHING_WHEEL, new Object[]{2, new String[]{"TOT", "OSO", "TOT"}, 'T', Material.STONE, 'O', Material.OBSIDIAN, 'S', PartType.LARGE_COGWHEEL});
-        r.put(PartType.GEARSHIFT, new Object[]{1, new String[]{"C", "S", "R"}, 'C', MaterialType.COPPER_PLATE, 'S', PartType.SHAFT, 'R', Material.REDSTONE});
+        r.put(PartType.SPROCKET, new Object[]{1, new String[]{"CN", "NN"}, 'C', MaterialType.ANDESITE_CASING, 'N', Material.IRON_NUGGET}); // Create's encased chain drive: casing + 3 nuggets
+        r.put(PartType.WINDMILL, new Object[]{1, new String[]{"W", "S", "I"}, 'W', new RecipeChoice.MaterialChoice(Tag.WOOL), 'S', slabs, 'I', PartType.SHAFT}); // Create's windmill bearing + a sail
+        r.put(PartType.STEAM_BOILER, new Object[]{1, new String[]{"CTC", "CFC", "CCC"}, 'C', MaterialType.COPPER_PLATE, 'T', PartType.TANK, 'F', Material.BLAST_FURNACE}); // ours (Create burns under the engine directly)
+        r.put(PartType.STEAM_ENGINE, new Object[]{1, new String[]{"P", "A", "C"}, 'P', MaterialType.GOLDEN_PLATE, 'A', MaterialType.ANDESITE_ALLOY, 'C', Material.COPPER_BLOCK});
+        r.put(PartType.CRUSHING_WHEEL, new Object[]{2, new String[]{"AAA", "ASP", "AAA"}, 'A', MaterialType.ANDESITE_ALLOY, 'S', stones, 'P', planks}); // Create builds these on a 5x5 assembly table
 
         for (Map.Entry<PartType, Object[]> e : r.entrySet()) addRecipe(e.getKey().id(), create(e.getKey(), (int) e.getValue()[0]), e.getValue());
+        addRecipe("large_cogwheel_from_little", create(PartType.LARGE_COGWHEEL, 1), new Object[]{1, new String[]{"P", "C"}, 'P', planks, 'C', PartType.COGWHEEL});
+        addRecipe("speed_gauge_from_stress", create(PartType.SPEED_GAUGE, 1), new Object[]{1, new String[]{"S"}, 'S', PartType.STRESS_GAUGE});
+
+        // Create's base chain: nuggets and alloy first, then the casings, whisk and propeller built from them
+        addRecipe("andesite_alloy", createMaterial(MaterialType.ANDESITE_ALLOY, 1), new Object[]{1, new String[]{"BA", "AB"}, 'B', Material.IRON_NUGGET, 'A', Material.ANDESITE});
+        addRecipe("andesite_alloy_from_zinc", createMaterial(MaterialType.ANDESITE_ALLOY, 1), new Object[]{1, new String[]{"BA", "AB"}, 'B', MaterialType.ZINC_NUGGET, 'A', Material.ANDESITE});
+        addRecipe("zinc_nugget", createMaterial(MaterialType.ZINC_NUGGET, 9), new Object[]{9, new String[]{"I"}, 'I', MaterialType.ZINC_INGOT});
+        addRecipe("andesite_casing", createMaterial(MaterialType.ANDESITE_CASING, 1), new Object[]{1, new String[]{"A", "L"}, 'A', MaterialType.ANDESITE_ALLOY, 'L', strippedLogs});
+        addRecipe("brass_casing", createMaterial(MaterialType.BRASS_CASING, 1), new Object[]{1, new String[]{"B", "L"}, 'B', MaterialType.BRASS_INGOT, 'L', strippedLogs});
+        addRecipe("whisk", createMaterial(MaterialType.WHISK, 1), new Object[]{1, new String[]{" C ", "SCS", "SSS"}, 'C', MaterialType.ANDESITE_ALLOY, 'S', MaterialType.IRON_PLATE});
+        addRecipe("propeller", createMaterial(MaterialType.PROPELLER, 1), new Object[]{1, new String[]{" S ", "SCS", " S "}, 'C', MaterialType.ANDESITE_ALLOY, 'S', MaterialType.IRON_PLATE});
 
         // train cars: brass plates (mixer + hammer) for the locomotive
         addRecipe("locomotive", createCar(CarType.LOCOMOTIVE, 1), new Object[]{1, new String[]{"BCB", "BFB", " M "},

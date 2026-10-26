@@ -137,7 +137,7 @@ fan_haunting:
 # water:  quarter buckets used (a bucket = 4); heat: needs fire/campfire/lava/magma under the kettle
 # time:   mixing work, like the millstone (200 = 10 s at 12 RPM)
 mixer:
-  - {inputs: [COPPER_INGOT 3, sw:zinc_ingot 1], heat: true, time: 240, output: [sw:brass_ingot 4]}
+  - {inputs: [COPPER_INGOT 1, sw:zinc_ingot 1], heat: true, time: 100, output: [sw:brass_ingot 1]}   # Create's mixing ratio 1:1
   - {inputs: [sw:sulfur 2, CHARCOAL 1], time: 120, output: [GUNPOWDER 2]}
   - {inputs: [sw:sulfur 2, COAL 1], time: 120, output: [GUNPOWDER 2]}
   # chemical waste canister -> neutralized (empty canister back + a little sulfur)
