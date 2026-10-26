@@ -3,3 +3,18 @@
 props:
   # Left-clicks needed to take a prop back in survival.
   break-hits: 2
+
+sounds:
+  # The Steam Clock's hourly strike: bell + steam puff. Off = the tower keeps showing the time,
+  # but nobody hears it. (Right-clicking a clock always works, bell or not.)
+  clock-bell: true
+  # true = no bell between 23:00 and 04:59; the town sleeps through the night.
+  clock-night-rest: false
+
+clock:
+  # real = the wall clock (one strike per real hour, plate matches your watch)
+  # game = the Minecraft world clock (an in-game hour passes every 50 seconds)
+  time-source: real
+  # IANA zone for real mode, e.g. Europe/Amsterdam or America/New_York.
+  # Blank = whatever the server machine's own time is.
+  timezone: ""

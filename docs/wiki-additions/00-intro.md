@@ -10,7 +10,7 @@ Steamworks Additions is a small sister plugin of Steamworks: **atmosphere props*
 
 ### The props
 
-* **Steam Clock** - a brass tower clock with a floating time plate; it strikes its bell on every in-game hour.
+* **Steam Clock** - a brass tower clock with a floating time plate that reads the real wall clock and strikes its bell on every hour.
 * **Brass Railing** - iron posts with brass bars that join each other automatically. Queue dividers, quay edges, garden borders.
 * **Vent Grille** - a copper vent with green slats. On a wall or free-standing, it tells everyone that something steams behind this facade.
 

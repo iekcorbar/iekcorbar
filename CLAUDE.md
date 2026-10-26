@@ -695,8 +695,11 @@ Gebruiker deployde 0.3.18/0.1.0/build6 en meldde vier bugs + een nieuwe wens. Al
    (soft)depend op een andere provider is automatisch ADDON davon: items vallen onder @parent én
    tonen de lijn "Add-on content of <parent>". Echte PluginDescriptionFile.getSoftDepend() heet met
    hoofdletter D; getRegistrations() geeft Collection (geen List).
-2. **Additions 0.1.1**: eigen ZukanData (Supplier-service, alle decor.allItems()) - props verschijnen
-   nu in Zukan onder @steamworks (softdepend ontdekt) met addon-vermelding.
+2. **Additions 0.1.2**: eigen ZukanData (Supplier-service, alle decor.allItems()) - props verschijnen
+   nu in Zukan onder @steamworks (softdepend ontdekt) met addon-vermelding. Plus klok-functioneel
+   gemaakt: HH:MM-plaat op ECHTE tijd (config clock.time-source real|game, clock.timezone), rechtsklik
+   = tijd+volgende slag+lucht via .use(), sounds.clock-bell en clock-night-rest schakelaars,
+   /sa reload, eigen advancement-tab (3 props hidden "Hear The Bell" + challenge alle drie).
 3. **Windmolen**: nextInt(8) + volume 0.22 (was 2/0.45 per 30t); nieuwe config sounds.machine-volume
    (schaalt álle machinegeluiden incl. de direct afgespielde mill/hammer/crusher/engine/arm, 0 = uit).
 4. **Millstone**: output die geen zijcontainer vindt valt naast de steen op de grond (was: onzichtbaar
@@ -720,3 +723,20 @@ Huidige aflever-lijn blijft: assets apart via deploy/ (fmm-steamworks-map + pack
 Assets-in-jar (onLoad-extractor met versiestempel, pack.auto-install, release-bundel, machines.yml-
 migratie) is wél het plan en staat op de lijst voor EIND-productie (1.0.0-release-batch). Tot die tijd
 gewoon doorgaan als altijd - geen tussentijdse helft-overstappen.
+
+Verkoop-model (26-10 nacht, gebruiker - BELANGRIJK): de gratis/premium-grens (basis = gratis voor
+andere server-eigenaren, addons = betaald) geldt ALLEEN bij uitlevering naar buiten. Op de iekcorbar-
+server zelf draait het HELE pakket - daar is geen koop-systeem. Concrete regels: (1) de basis-code mag
+nooit een addon nodig hebben (runtime-scheiding blijft, anders breekt de vrije release), (2) wél mag
+de basis addon-content laten zien wanneer die plugin toevallig loaded is (Bukkit.getPluginManager()
+.getPlugin("SteamworksAdditions") != null - runtime-check, geen compile-afhankelijkheid), (3) zet geen
+kunstige drempels in de plugins zelf uit angst dat iemand gratis stuff krijgt - de verdeling zit in de
+release-bundels, niet in de code. (4) Het verkoop-model zelf NOOIT noemen op de website, in de wiki,
+in de manual of in game-teksten: publieke pagina's beschrijven alleen wat iets dóet, nooit dat iets
+gratis/betaald is of dat addons "premium extra's" zijn. Ook geen zinnen als "losse addon" die de
+gedachte losweken - gewoon "Steamworks Additions toegevoegd: klok, reling, rooster".
+(5) Gebruikerswish 26-10 nacht: een BRIEVENBUS met echte post tussen spelers - "voor ons wel, in
+productie niet". Publicatie-richting: de publieke addon-levert alleen de decoratieve bus (open/dicht),
+het mail-systeem komt in onze interne variants (config-gate, NOT ON in de publieke config.yml en NOOIT
+beschreven op site/wiki/manual). Als de bus eenmaal bestaat: mail-data in plugins/SteamworksAdditions/,
+ontvangst op PlayerJoinEvent, GUI-boek bij rechtsklik.

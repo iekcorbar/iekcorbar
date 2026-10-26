@@ -63,7 +63,18 @@ final class AdditionsCommand implements TabExecutor {
             s.sendMessage(Component.text("Gave " + def.name + " to " + target.getName() + ".", NamedTextColor.GREEN));
             return true;
         }
-        s.sendMessage(Component.text("/" + label + " list | give <player> <prop> [amount]", NamedTextColor.GOLD));
+        if (sub.equals("reload")) {
+            if (!s.hasPermission("additions.admin")) {
+                s.sendMessage(Component.text("No permission.", NamedTextColor.RED));
+                return true;
+            }
+            plugin.reloadConfig();
+            s.sendMessage(Component.text("Config reloaded - bell " + (plugin.bellEnabled() ? "on" : "off")
+                    + ", night rest " + (plugin.nightRest() ? "on" : "off")
+                    + ", time " + (plugin.realClock() ? "real (" + plugin.zone() + ")" : "in-game") + ".", NamedTextColor.GREEN));
+            return true;
+        }
+        s.sendMessage(Component.text("/" + label + " list | give <player> <prop> [amount] | reload", NamedTextColor.GOLD));
         return true;
     }
 
@@ -72,7 +83,7 @@ final class AdditionsCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String w = a.length == 0 ? "" : a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String o : List.of("list", "give")) if (o.startsWith(w)) out.add(o);
+            for (String o : List.of("list", "give", "reload")) if (o.startsWith(w)) out.add(o);
         } else if (a.length == 2 && a[0].equalsIgnoreCase("give")) {
             for (Player p : plugin.getServer().getOnlinePlayers())
                 if (p.getName().toLowerCase(Locale.ROOT).startsWith(w)) out.add(p.getName());
