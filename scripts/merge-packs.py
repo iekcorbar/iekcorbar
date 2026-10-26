@@ -40,7 +40,10 @@ SOURCES = [
     "Hihou/resourcepack/Hihou-pack.zip",
     "IekcorbarSiteSync/resourcepack/Mmo-pack.zip",
 ]
-OUT = "iekcorbar-packv2.zip"
+OUT_DIR = "deploy"
+BUILD = 4  # bump this EVERY rebuild: the pack name, the in-game description stamp and the
+           # old-file cleanup all follow it, so there is never a nameless pile of twins.
+OUT = os.path.join(OUT_DIR, "iekcorbar-pack-build%d.zip" % BUILD)
 FIXED = (2026, 1, 1, 0, 0, 0)
 
 # Server-mixer copies of the plugin-owned packs (EliteMobs, FMM, TechCore, ValhallaMMO,
@@ -304,19 +307,27 @@ for name in list(files):
         clamped += 1
 print("boundary clamp (-16..32) applied to", clamped, "models")
 
-mcmeta = {"pack": {"description": "Iekcorbar v2 (Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items) - build 4", "pack_format": 64,
+mcmeta = {"pack": {"description": "Iekcorbar v2 (Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items) - build %d" % BUILD, "pack_format": 64,
                    "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}}
 files["pack.mcmeta"] = json.dumps(mcmeta, indent=1).encode("utf-8")
 icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pack-icon.png")  # scripts/make-pack-icon.py
 if os.path.exists(icon):
     files["pack.png"] = open(icon, "rb").read()
 
+os.makedirs(OUT_DIR, exist_ok=True)
 with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
     for name in sorted(files):
         info = zipfile.ZipInfo(name, FIXED)
         info.compress_type = zipfile.ZIP_DEFLATED
         info.external_attr = 0o644 << 16
         z.writestr(info, files[name])
+
+# housekeeping (user rule 26-10): one output folder, one name per build - sweep away every
+# older pack, under either naming scheme, so no stale twin can ever be uploaded again.
+for stale in glob.glob("iekcorbar-packv*.zip") + glob.glob(os.path.join(OUT_DIR, "*.zip")):
+    if os.path.abspath(stale) != os.path.abspath(OUT):
+        os.remove(stale)
+        print("removed stale:", stale)
 
 digest = hashlib.sha1(open(OUT, "rb").read()).hexdigest()
 print(f"{OUT}: {len(files)} files from {len(found)} packs, {os.path.getsize(OUT) / 1e6:.2f} MB, sha1 {digest}")

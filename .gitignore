@@ -44,3 +44,5 @@ Desktop.ini
 # --- machina-specifieke instellingen ---
 .claude/settings.local.json
 mobile/.expo/
+
+deploy/

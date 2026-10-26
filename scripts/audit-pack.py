@@ -9,11 +9,15 @@
    one renders as a magenta cube (the crop bug of 26-10);
 5. every items/*.json definition must reference an existing model.
 
-Usage (repo root): python -I scripts/audit-pack.py [iekcorbar-packv2.zip]
+Usage (repo root): python -I scripts/audit-pack.py   -> newest deploy/iekcorbar-pack-build*.zip
 """
-import json, sys, zipfile, hashlib
+import glob, json, os, sys, zipfile, hashlib
 
-path = sys.argv[1] if len(sys.argv) > 1 else "iekcorbar-packv2.zip"
+if len(sys.argv) > 1:
+    path = sys.argv[1]
+else:  # newest build in the single deploy output folder
+    cands = sorted(glob.glob(os.path.join("deploy", "iekcorbar-pack-build*.zip")))
+    path = cands[-1] if cands else sys.exit("no deploy/iekcorbar-pack-build*.zip found")
 print("sha1", hashlib.sha1(open(path, "rb").read()).hexdigest()[:12])
 z = zipfile.ZipFile(path)
 names = set(z.namelist())

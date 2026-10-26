@@ -31,6 +31,8 @@ The site is deployed to Plesk via Node.js/Passenger, not `next start` directly. 
 
 The various `*.zip`/`*.tar.gz` files at the repo root are build artifacts from past deploys (most predate these fixes and still bundle `node_modules` or use the older filename); they aren't source and don't need to be kept in sync with anything.
 
+**`deploy/` is the ONE output folder (user rule, 2026-10-26 evening).** Every finished artifact goes there and nowhere else: the merged pack, freshly built plugin jars (copy `\<Plugin>/target/\<Plugin>-<version>.jar` there after a green `mvn package`), site zips from `make-zip.js`. Nothing gets copied to the repo root or the Desktop anymore; older text in this file saying "jar in root" predates the rule. The pack is named **`iekcorbar-pack-build<N>.zip`**, and `N` comes from the single `BUILD` constant in `scripts/merge-packs.py` - bump it with every rebuild, because it also writes the number into the in-game pack description, so the filename, the mixer file and what the client shows can never disagree again (the confusion of 26-10: three different `iekcorbar-packv2.zip` files with the same "build 2" stamp). `scripts/merge-packs.py` sweeps older packs out of `deploy/` by itself; jars and site zips get removed by hand once the user confirms they're live. `deploy/` is gitignored.
+
 ## Architecture
 
 ### Data layer: MySQL-first with a JSON fallback
