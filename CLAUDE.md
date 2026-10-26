@@ -454,6 +454,36 @@ om bestaande geplaatste relics alsnog te claimen/losgave - handig want alles vó
 /remove (radius EN target) breekt wél door - is immers staff-only. Explosions/pistons konden de barrier-basis
 al niet raken. mvn groen, Relics-0.3.6.jar in de root.
 
+### Shop-valuta + doneer + legal + Gouw-wiki + site-zip (2026-10-26, "goede plan uitwerken")
+
+- **Derde shop-valuta "Elite coins"** (EliteMobs' coins) naast balance/Gears. `shop_settings.coins_take_command`
+  (default `elitecoins take {player} {amount}`, staff-editbaar in het Shop-settingspaneel); coins-payment
+  vereist de koper ONLINE (eliteCoins is alleen online uitleesbaar via webstats - offline-read is geen bewijs
+  van lege beurs, dus coins-koop weigert offline). Koop-verificatie `before/after`-lezen werkt nu voor beide
+  valuta's. Bestanden: src/lib/schema.sql, db.js (getShopSettings/saveShopSettings), api/shop/{settings,items,
+  purchase}, src/app/shop/page.js (coins-chip + coins-take-command-input + "Three currencies"-legenda), Sparkles-import.
+- **Migratie `shop-coins-migration.sql`** live gedraaid: de live `shop_settings`-tabel was heter dan het schema
+  (mist cols `enabled` én mogelijk `coins_take_command`) → eerst #1054 op `enabled`; daarna zelfhelende versie
+  (CREATE IF NOT EXISTS + 3 conditionele ALTERs via information_schema + INSERT IGNORE). Hierdoor persisted het
+  Shop-instellingenpaneel voor het eerst écht naar MySQL (vóór deze fix zweg het weg in de db.json-fallback).
+- **";;" geketende give_commands**: één shop-item kan nu meerdere console-commando's geven (pack = kit + relic
+  -roll). Koop-route splitst en stuurt per RCON-verzoek één commando (allereerste deel faalt → queued, latere
+  alleen in de receipt, want re-run op join zou wat WEL lukte dubbel geven); SiteSync 1.15.1
+  (processQueuedShopPurchases) splitst `;;` ook voor offline→join-bezorging. Shop-UI toelichting + docs/shop-packs.md
+  (4 packs common→epic + losse Lucky Dip, prijs-set, giveCommand-templates, CMI-kit-instructies; prijzen/pools
+  later aanpasbaar, geen deploy nodig). mvn groen, IekcorbarSiteSync-1.15.1.jar + Relics-0.3.7.jar in de root.
+- **Doneer-sectie** `/donate`: vrijwillige PayPal-gift, géén tegenprestatie (om geen koop/dienst te zijn → geen
+  herroepingsrecht); PayPal.me-link is een staff-instelling `donate_paypal_url` (General Settings, leeg = knop
+  verbergen). Homepagina-melding (privéproject, geen KvK/BTW, shop = alleen in-game-valuta, donatie vrijwillig).
+  Terms uitgebreid (secties "Who we are" + "Donations", hergenummerd naar 9), Privacy + footer-modal
+  gesynchroniseerd (PayPal-gegevens), datums verzet.
+- **Gouw wiki-pagina's**: docs/wiki-gouw/{00-intro,01-gouw,02-commands}.md → seed via scripts/build-wiki-seed.py
+  (3 pagina's), registered in import_seed-route + staff "Gouw Land Claims"-Importknop. Na deploy: staff drukt de
+  Import-knop op /wiki (vervangt de oude 'Lands'-categorie-pagina's handmatig).
+- **Site-zip** iekcorbar_iekje_barend.zip (20MB, 2907 bestanden) gebouwd met node make-zip.js: bevat donate-pagina,
+  gouw-seed, SiteSync-1.15.1.jar, Relics-0.3.7.jar (root), .env.local (zodat de live-server de DB-gegevens via de
+  zip krijgt - de enige plek waar ze staan), db.json uitgesloten. Plesk: unzip → NPM install → npm run build → restart.
+
 ### Backlog / later (gebruikersnotities, nooit vergeten)
 
 - **BedWars-plugin** (2026-10-26, gebruiker: "let op voor later: bedwars plugin - uitgebreid
