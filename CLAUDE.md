@@ -714,3 +714,9 @@ Gebruiker deployde 0.3.18/0.1.0/build6 en meldde vier bugs + een nieuwe wens. Al
    site-zip 22:03 in deploy/. FMM: 10 dust-bestanden naar deploy/fmm-steamworks/ (36 totaal).
    ! machines.yml op de server moet weg/ververst voor de crusher-regels - in TE-DEPLOYEN gezet.
 mvn groen (Steamworks/Zukan/Additions); jars 0.3.19 + 0.2.7 + 0.1.1 in deploy/ (0.3.18-1.0-buildjes weg).
+
+Besluit productievorm (26-10, gebruiker): FMM-modellen + pack worden NU NOG NIET in de jar gebundeld.
+Huidige aflever-lijn blijft: assets apart via deploy/ (fmm-steamworks-map + pack in de mixer).
+Assets-in-jar (onLoad-extractor met versiestempel, pack.auto-install, release-bundel, machines.yml-
+migratie) is wél het plan en staat op de lijst voor EIND-productie (1.0.0-release-batch). Tot die tijd
+gewoon doorgaan als altijd - geen tussentijdse helft-overstappen.
