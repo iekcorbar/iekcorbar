@@ -1,12 +1,14 @@
 # IekcorbarSiteSync Configuration
 
-# ReviveNode / MySQL Database Configuration
-# Fill in your ReviveNode MySQL connection details below:
+# MySQL Database Configuration (Plesk MariaDB op de VPS)
+# Let op: de server draait in een Docker-container — MySQL is íets bereikbaar via de
+# docker-gateway (172.18.0.1), NIET via het publieke IP (3306 is van buitenaf dicht).
+# zelfde database als BetonQuest gebruikt (plugins/BetonQuest/config.yml: mysql.host).
 database:
   enabled: true
-  host: "TODO-server-ip"         # Plesk web server IP (where MySQL actually lives) — NOT this Minecraft server's own IP
+  host: "172.18.0.1"           # docker-gateway van de VPS; zelfde adres als in werkende plugins
   port: 3306                   # MySQL Port (default 3306)
-  name: "iekcorbar"            # Database Name
+  name: "s30266_iekcorbar_player_data"  # Database Name
   username: "TODO"             # Database Username  - LET OP: de echte gegevens staan ALLEEN op de server
   password: "TODO"             # Database Password  - in plugins/IekcorbarSiteSync/config.yml, nooit in git
   ssl: false                   # Enable SSL if required by your provider
