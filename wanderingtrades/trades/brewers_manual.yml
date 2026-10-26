@@ -1,0 +1,37 @@
+# WanderingTrades 1.9.6 trade config: the Sakagura Brewer's Manual (iekcorbar)
+#
+# Some wandering traders sell the manual. It is made from the name and lore below; the first time a player
+# right-clicks it, IekcorbarSiteSync swaps it for the real book (so keep the name "Brewer's Manual" and the
+# LAST lore line exactly "Sakagura brewer's manual" — BookManager.TRADER_BOOK_MARKERS matches on it).
+# Staff can give real ones with /ibook give <player> brewers_manual.
+
+enabled: true
+chance: 0.2
+
+randomized: false
+randomAmount: 1
+
+invincible: false
+customName: NONE
+disableHeroOfTheVillageGifts: false
+
+trades:
+  brewers_manual:
+    maxUses: 2
+    experienceReward: true
+    ingredients:
+      1:
+        customname: NONE
+        material: EMERALD
+        amount: 8
+      2:
+        customname: NONE
+        material: BOOK
+        amount: 1
+    result:
+      customname: "<gold>Brewer's Manual"
+      material: BOOK
+      amount: 1
+      lore:
+        - "<gray>Every step of a Sakagura drink, short and sweet."
+        - "<dark_gray>Sakagura brewer's manual"

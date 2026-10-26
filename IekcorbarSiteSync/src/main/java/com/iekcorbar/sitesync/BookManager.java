@@ -422,17 +422,24 @@ public class BookManager implements Listener, TabExecutor {
     }
 
     /**
-     * Wandering Trades cannot set the book's data, so the trader sells a plain BOOK named "Engineer's Manual" whose
-     * LAST lore line is "Steamworks engineer's manual"; the first right-click swaps it for the real book and opens it.
+     * WanderingTrades cannot set book NBT, so traders sell a plain BOOK whose LAST lore line is a
+     * marker from this map; the first right-click swaps it for the real SiteSync book and opens it
+     * (wanderingtrades/trades/engineers_manual.yml + brewers_manual.yml carry these exact markers).
+     * Add a line here + a trade yml to let traders sell any other book.
      */
+    private static final Map<String, String> TRADER_BOOK_MARKERS = Map.of(
+            "Steamworks engineer's manual", "engineers_manual",
+            "Sakagura brewer's manual", "brewers_manual");
+
     private boolean swapTraderBook(Player p, PlayerInteractEvent e) {
         ItemStack item = e.getItem();
         if (item == null || item.getType() != Material.BOOK || !item.hasItemMeta()) return false;
         List<Component> lore = item.getItemMeta().lore();
         if (lore == null || lore.isEmpty()) return false;
         String last = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(lore.get(lore.size() - 1));
-        if (!last.equals("Steamworks engineer's manual")) return false;
-        BookDef def = books.get("engineers_manual");
+        String bookId = TRADER_BOOK_MARKERS.get(last);
+        if (bookId == null) return false;
+        BookDef def = books.get(bookId);
         if (def == null) return false;
         ItemStack real = createItem(def);
         if (item.getAmount() > 1) {
@@ -443,7 +450,7 @@ public class BookManager implements Listener, TabExecutor {
         }
         e.setCancelled(true);
         p.openBook(real);
-        markRead(p, "engineers_manual");
+        markRead(p, bookId);
         return true;
     }
 

@@ -80,8 +80,20 @@ niets waard, alleen build + uitlegbaar ontwerp).
 - [x] mvn package groen, jar **0.2.8** in repo-root
 - [x] Cauldrons spook-pot fix (dead pots worden opgeruimd in tick)
 - [x] CLAUDE.md sectie + dag-entry aangepast
-- [ ] IN-HET-SPILL: server draait nog op 0.2.7! Upload: Sakagura-0.2.8.jar + Iekcorbar-pack.zip
-      (of Sakagura-pack.zip in de RPM-mixer), dan herstart. Testflow: cauldron → still → cask.
+- [x] IN-HET-SPILL: Sakagura 0.2.8 + laters 0.3.0 gedeployed (gebruiker "alles gedaan", 26 okt).
+- [ ] EEN TESTKAART nog door Barend in-game te draaien (26 okt):
+      1. cauldron stoken → 3 flessen draw → still plaatsen (BARREL ≠ gewoon vat:
+         recipe barrel+2×iron+blaze+glowstone; right-click = vat-GUI + statusregel)
+      2. flessen + glowstone dust in still, VUUR eronder → elke 20 s: 1 dust op,
+         fles-stacks distills++ (max 3/turn), druppels + deeltjes; `distilling.debug: true`
+         logt wat de still ziet
+      3. vat-rijping + drinken (kwaliteit/dronkenheid) → /ibook give <jij> brewers_manual:
+         boek opent, "New lore"-advancement bij eerste lezing
+      4. WANDERER-TEST (nieuw, SiteSync 1.15.2): plugins/WanderingTrades/trades/ =
+         brewers_manual.yml uploaden + /wanderingtrades reload (of restart) → trader die
+         het boek verkoopt: 8×emerald + 1 book → plain boek met lore-lijn
+         "Sakagura brewer's manual" → eerste right-click = echte boek + open
+      5. Gouw-import console-regels + /sakagura-sitepagina + wiki-seed (15 pagina's) checken
 
 ## Andere opdrachten van de gebruiker (25 okt, na de repair)
 - [x] **Sitepagina voor brouwen als /steamworks** — KLAAR: /sakagura (server component, 11 secties,
@@ -92,7 +104,10 @@ niets waard, alleen build + uitlegbaar ontwerp).
       KLAAR: books/brewers_manual.txt (model sakura_journal, loot-weight 3), BookManager seeding-regel,
       versie 1.14.5, build OK, jar in repo-root (21:04). Server: nieuwe SiteSync-jar + herstart; boek
       verschijnt dan automatisch in plugins/IekcorbarSiteSync/books/. Test: /ibook give <jouw> brewers_manual.
-      Optie (niet gedaan): verkopen via een wanderer-trades yaml zoals engineers_manual.yml.
+      - [x] Optie alsnog uitgevoerd (26 okt): verkopen via wanderer-trades —
+      wanderingtrades/trades/brewers_manual.yml (marker-lore "Sakagura brewer's manual") +
+      SiteSync 1.15.2: BookManager.swapTraderBook gemeneraliseerd naar
+      TRADER_BOOK_MARKERS-map (engineers én brewers; uitbreidbaar per boek).
 - [x] **PDF van alle easter-eggs van deze week — PRIVÉ.** — KLAAR:
       `EasterEggs-PRIVE-2026-10-25.pdf` in repo-root (3 pagina's, rood PRIVÉ-kopblok op élke pagina).
       Generator: `C:\Users\baaye\AppData\Local\Temp\opencode\make_easter_eggs_pdf.py` (buiten de repo;
