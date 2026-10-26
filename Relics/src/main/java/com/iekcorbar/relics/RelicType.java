@@ -152,7 +152,33 @@ enum RelicType {
     BYOBU_SCREEN(Collection.CURIO, "Byobu Screen", "A folding paper screen.",
             Base.NONE, 1, 0, "byobu_screen", null, null, Effect.NONE, Use.NONE, 1f),
     WAGASA_STAND(Collection.CURIO, "Wagasa Stand", "Paper umbrellas, ready for the rain.",
-            Base.NONE, 1, 0, "wagasa_stand", null, null, Effect.NONE, Use.NONE, 1f);
+            Base.NONE, 1, 0, "wagasa_stand", null, null, Effect.NONE, Use.NONE, 1f),
+
+    // ---------------------------------------------------------------- Brewery & wooden helpers (0.3.9, shop/event stock: NOT craftable by default)
+    SUGI_DAMA(Collection.CURIO, "Sugidama", "The cedar ball of a sakagura: hung up, the new brew is ready.",
+            Base.NONE, 1, 0, "sugi_dama", null, null, Effect.NONE, Use.NONE, 1f, false),
+    KOJI_CROCK(Collection.CURIO, "Koji Crock", "Where the rice meets the mould and the magic starts.",
+            Base.SOLID, 1, 0, "koji_crock", null, null, Effect.NONE, Use.NONE, 1f, false),
+    BOTTLING_CRATE(Collection.CURIO, "Bottling Crate", "Fresh bottles, packed in straw and ready for the shop.",
+            Base.SOLID, 1, 0, "bottling_crate", null, null, Effect.NONE, Use.NONE, 1f, false),
+    BARREL_STACK(Collection.CURIO, "Barrel Stack", "Two lying, one standing - a brewer's pyramid.",
+            Base.NONE, 1, 0, "barrel_stack", null, null, Effect.NONE, Use.NONE, 1f, false),
+    STEAM_PIPE(Collection.CURIO, "Loose Steam Pipe", "A spare line from the still. It was never quite shut off.",
+            Base.NONE, 1, 0, "steam_pipe", null, null, Effect.STEAM, Use.NONE, 1f, false),
+    TASTING_COUNTER(Collection.CURIO, "Tasting Counter", "Three cups, one opinion, no argument.",
+            Base.NONE, 1, 0, "tasting_counter", null, null, Effect.NONE, Use.NONE, 1f, false),
+    NOREN(Collection.CURIO, "Noren", "The brewery's cloth gate. Under it, you are a guest.",
+            Base.NONE, 1, 0, "noren", null, null, Effect.SWAY, Use.NONE, 1f, false),
+    BREW_KETTLE(Collection.CURIO, "Brew Kettle", "Charcoal under copper - tea for the distilling crew.",
+            Base.LIGHT, 1, 9, "brew_kettle", null, null, Effect.HEARTH, Use.NONE, 1f, false),
+    BOTTLE_RACK(Collection.CURIO, "Bottle Rack", "Tokkuri at attention, waiting to be filled.",
+            Base.NONE, 1, 0, "bottle_rack", null, null, Effect.NONE, Use.NONE, 1f, false),
+    DRUNKARD_BARREL(Collection.CURIO, "Drunkard in a Barrel", "He meant to guard the stock. Right-click to change his pose.",
+            Base.NONE, 1, 0, "drunkard_barrel", null, null, Effect.NONE, Use.POSE, 1f, false),
+    GREETER_DOLL(Collection.CURIO, "Greeter Doll", "The friendliest staff you will ever have. Right-click to change his pose.",
+            Base.NONE, 1, 0, "greeter_doll", null, null, Effect.NONE, Use.POSE, 1f, false),
+    SWEEPER_DOLL(Collection.CURIO, "Sweeper Doll", "Still sweeping at closing time. Right-click to change his pose.",
+            Base.NONE, 1, 0, "sweeper_doll", null, null, Effect.NONE, Use.POSE, 1f, false);
 
     enum Collection {
         SHADOW("Shoutlander's Shadow"), XMAS("Xmas Town"), NEW_YEAR("New Year"), EASTER("Easter"), PATRICK("St. Patrick's Day"),
@@ -186,8 +212,8 @@ enum RelicType {
 
     enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, RAINBOW, SWAP, SPARK, SHISHI }
 
-    /** What a right-click does (NONE = show the lore line). */
-    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD }
+    /** What a right-click does (NONE = show the lore line). POSE = wooden dolls swap their pose model. */
+    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE }
 
     final Collection collection;
     final String displayName, lore;
@@ -198,13 +224,20 @@ enum RelicType {
     final Use use;
     /** The model is drawn this much bigger (models can't be taller than two blocks; the tree is built small). */
     final float scale;
+    /** Default for config "crafting.<id>": false = shop/event stock, no recipe is registered unless the config says otherwise. */
+    final boolean craftableByDefault;
 
     RelicType(String displayName, String lore, Base base, int height, int light, String floor, String wall, String ceiling, Effect effect) {
-        this(Collection.SHADOW, displayName, lore, base, height, light, floor, wall, ceiling, effect, Use.NONE, 1f);
+        this(Collection.SHADOW, displayName, lore, base, height, light, floor, wall, ceiling, effect, Use.NONE, 1f, true);
     }
 
     RelicType(Collection collection, String displayName, String lore, Base base, int height, int light, String floor, String wall,
               String ceiling, Effect effect, Use use, float scale) {
+        this(collection, displayName, lore, base, height, light, floor, wall, ceiling, effect, use, scale, true);
+    }
+
+    RelicType(Collection collection, String displayName, String lore, Base base, int height, int light, String floor, String wall,
+              String ceiling, Effect effect, Use use, float scale, boolean craftableByDefault) {
         this.collection = collection;
         this.displayName = displayName;
         this.lore = lore;
@@ -217,6 +250,7 @@ enum RelicType {
         this.effect = effect;
         this.use = use;
         this.scale = scale;
+        this.craftableByDefault = craftableByDefault;
     }
 
     String id() {

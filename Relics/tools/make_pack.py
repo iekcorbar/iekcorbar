@@ -37,6 +37,7 @@ BASE = {
     "rainbow_g": (70, 190, 80), "rainbow_b": (60, 120, 220), "rainbow_v": (140, 70, 200), "hat_green": (40, 120, 50),
     "torii": (200, 50, 36), "lacquer_black": (28, 26, 28), "cat_white": (248, 246, 240), "bonsai_pot": (90, 110, 130),
     "xblue": (40, 96, 196), "xpink": (240, 120, 172), "spark": (180, 220, 255), "coil": (200, 120, 60), "washi": (240, 230, 200), "umbrella_red": (200, 40, 50), "umbrella_blue": (40, 80, 160),
+    "indigo": (40, 56, 112), "tokkuri": (232, 232, 238), "clay_pot": (148, 96, 66),
 }
 PALETTE = {}
 for k, (r, g, b) in BASE.items():
@@ -912,6 +913,200 @@ MORE = {
     "shishi_odoshi": lambda: shishi_odoshi(False), "shishi_odoshi_b": lambda: shishi_odoshi(True), "bonsai": bonsai, "byobu_screen": byobu, "wagasa_stand": wagasa_stand,
 }
 
+# ------------------------------------------------------------------ brewery & wooden helpers (0.3.9)
+
+def sugi_dama():
+    es = [box(7.2, 21, 7.2, 8.8, 24, 8.8, "chain"),                       # cord
+          box(1.5, 11, 1.5, 14.5, 19, 14.5, "pine"),
+          box(3.5, 19, 3.5, 12.5, 20.8, 12.5, "pine"),
+          box(3.5, 9.2, 3.5, 12.5, 11, 12.5, "pine"),
+          box(0.6, 13.5, 3.5, 1.5, 16.5, 12.5, "pine"),
+          box(14.5, 13.5, 3.5, 15.4, 16.5, 12.5, "pine"),
+          box(3.5, 13.5, 0.6, 12.5, 16.5, 1.5, "pine"),
+          box(3.5, 13.5, 14.5, 12.5, 16.5, 15.4, "pine"),
+          box(1.5, 13.6, 7.7, 14.5, 16.4, 8.3, "straw"),                   # straw seams
+          box(7.7, 13.6, 1.5, 8.3, 16.4, 14.5, "straw"),
+          box(7.3, 8.6, 7.3, 8.7, 9.4, 8.7, "straw")]
+    return es
+
+
+def koji_crock():
+    return [box(3.5, 0, 3.5, 12.5, 8, 12.5, "clay_pot"),
+            box(3, 8, 3, 13, 9.5, 13, "clay_pot"),
+            box(2.6, 9.5, 2.6, 13.4, 10.6, 13.4, "wood_old"),
+            box(3.6, 10.6, 3.6, 12.4, 11.4, 12.4, "washi"),
+            box(3.2, 11.2, 3.2, 12.8, 11.9, 12.8, "straw")]
+
+
+def bottling_crate():
+    es = [box(1, 0, 1, 15, 1, 15, "wood_char"),
+          box(1, 1, 1, 15, 7, 2, "wood_old"), box(1, 1, 14, 15, 7, 15, "wood_old"),
+          box(1, 1, 2, 2, 7, 14, "wood_old"), box(14, 1, 2, 15, 7, 14, "wood_old"),
+          box(1, 4, 1.2, 15, 5, 1.9, "wood_warm"), box(1, 4, 14.1, 15, 5, 14.8, "wood_warm")]
+    for x, z in ((3.5, 3.5), (3.5, 9.5), (9.5, 3.5), (9.5, 9.5), (6.5, 6.5)):
+        es += [box(x, 7, z, x + 2, 9.6, z + 2, "glass"),
+               box(x + 0.6, 9.6, z + 0.6, x + 1.4, 11.4, z + 1.4, "glass"),
+               box(x + 0.5, 11.4, z + 0.5, x + 1.5, 11.9, z + 1.5, "gold")]
+    es.append(box(2.5, 6.4, 6.5, 3.8, 7.8, 7.8, "straw"))
+    return es
+
+
+def barrel_stack():
+    es = []
+    for ox in (0, 8):
+        es += [box(ox + 1, 1, 3.5, ox + 7, 7, 9.5, "wood_warm"),
+               box(ox + 0.8, 1.8, 3.3, ox + 7.2, 2.6, 9.7, "brass"),
+               box(ox + 0.8, 5.4, 3.3, ox + 7.2, 6.2, 9.7, "brass"),
+               box(ox + 0.6, 2.4, 3.6, ox + 1, 5.6, 9.4, "wood_old"),
+               box(ox + 6.9, 2.4, 3.6, ox + 7.3, 5.6, 9.4, "wood_old")]
+    es += [box(4.5, 7, 4.5, 11.5, 15, 11.5, "wood_warm"),
+           box(4.2, 7.8, 4.2, 11.8, 8.6, 11.8, "brass"),
+           box(4.2, 13.4, 4.2, 11.8, 14.2, 11.8, "brass"),
+           box(5.2, 15, 5.2, 10.8, 15.7, 10.8, "wood_old")]
+    return es
+
+
+def steam_pipe():
+    return [box(5, 0, 5, 11, 1.4, 11, "iron"),
+            box(6, 1.4, 6, 10, 14, 10, "copper"),
+            box(6, 14, 6, 8, 18, 8, "copper"),
+            box(5.6, 17.6, 5.6, 8.4, 18.4, 8.4, "iron"),
+            box(7.6, 7.8, 5.4, 8.4, 8.6, 6.2, "iron"),
+            box(5.2, 7.5, 5, 10.8, 8.5, 5.6, "brass"),
+            box(7.4, 5.6, 5, 8.6, 10.6, 5.6, "brass"),
+            box(7.3, 7.5, 4.6, 8.7, 8.7, 5.2, "iron"),
+            box(10, 10.4, 6.8, 11.2, 11.6, 9.2, "dial"),
+            box(10.8, 10.8, 7.4, 11.4, 11.2, 7.8, "glow_red")]
+
+
+def tasting_counter():
+    es = [box(0, 0, 5, 16, 8, 11, "wood_warm"),
+          box(0, 8, 4.4, 16, 9.4, 11.6, "wood_old"),
+          box(1, 2, 4.7, 15, 3, 5.2, "wood_char"),
+          box(1, 5, 4.7, 15, 6, 5.2, "wood_char")]
+    for x in (2.5, 6, 9.5):
+        es += [box(x, 9.4, 6.4, x + 1.7, 10.9, 7.9, "tokkuri"),
+               box(x + 0.35, 10.6, 6.75, x + 1.35, 11.05, 7.55, "fluid")]
+    es += [box(12.6, 9.4, 6, 14.6, 12.6, 8, "tokkuri"),
+           box(13.1, 12.6, 6.5, 14.1, 13.8, 7.5, "tokkuri"),
+           box(13.2, 13.8, 6.6, 14, 14.3, 7.4, "gold")]
+    return es
+
+
+def noren():
+    return [box(0, 0, 7.6, 1, 16, 8.6, "wood_char"), box(15, 0, 7.6, 16, 16, 8.6, "wood_char"),
+            box(0, 14.8, 6.8, 16, 16, 9.4, "wood_warm"),
+            box(0.8, 2.5, 7.7, 8, 15, 8.5, "indigo"), box(8, 2.5, 7.7, 15.2, 15, 8.5, "indigo"),
+            box(3.2, 8, 7.4, 5.2, 10.5, 8.8, "washi"), box(10.8, 8, 7.4, 12.8, 10.5, 8.8, "washi")]
+
+
+def brew_kettle():
+    return [box(3, 0, 3, 13, 3.5, 13, "brick"),
+            box(4, 3.5, 4, 12, 4.2, 12, "char"),
+            box(5, 3.9, 5, 11, 4.6, 11, "ember"),
+            box(3.5, 4.6, 3.5, 12.5, 11, 12.5, "copper"),
+            box(3.3, 6.5, 3.3, 12.7, 7.5, 12.7, "brass"),
+            box(5, 11, 5, 11, 12, 11, "iron"),
+            box(7.2, 12, 7.2, 8.8, 12.9, 8.8, "gold"),
+            box(12.5, 7, 6.8, 14.8, 8.4, 9.2, "copper")]
+
+
+def bottle_rack():
+    es = [box(1, 0, 7.2, 15, 12.6, 7.8, "wood_char"),
+          box(0.5, 0.9, 6.8, 15.5, 1.7, 9.6, "wood_old"),
+          box(0.5, 7.4, 6.8, 15.5, 8.2, 9.6, "wood_old")]
+    for i, x in enumerate((2, 5.2, 8.4, 11.6)):
+        for shelf in (1.7, 8.2):
+            es += [box(x, shelf, 7.7, x + 2, shelf + 4, 9.7, "tokkuri"),
+                   box(x + 0.6, shelf + 4, 8.2, x + 1.4, shelf + 4.9, 9, "tokkuri")]
+            if i % 2:
+                es.append(box(x + 0.1, shelf + 1.2, 7.6, x + 1.9, shelf + 2.2, 9.8, "indigo"))
+            else:
+                es.append(box(x + 0.6, shelf + 4.9, 8.1, x + 1.4, shelf + 5.3, 9.1, "gold"))
+    return es
+
+
+def _doll_head(es):
+    es += [box(6, 5.5, 6.2, 10, 11, 9.8, "wood_warm"),
+           box(6.6, 11.6, 6.6, 9.4, 14.4, 9.4, "wood_warm"),
+           box(7.1, 12.5, 6.2, 7.5, 13, 6.7, "coal"),
+           box(8.5, 12.5, 6.2, 8.9, 13, 6.7, "coal"),
+           box(6.4, 14, 6.3, 9.6, 15, 9.7, "xred")]
+    return es
+
+
+def _doll_legs(es):
+    return es + [box(5.5, 0, 5.5, 10.5, 1, 10.5, "wood_old"),
+                 box(6.6, 1, 6.7, 7.8, 5.5, 7.9, "wood_warm"),
+                 box(8.2, 1, 6.7, 9.4, 5.5, 7.9, "wood_warm"),
+                 box(7, 4.8, 6, 9, 5.6, 10, "wood_old")]
+
+
+def greeter_doll(pose):
+    es = _doll_legs([])
+    es = _doll_head(es)
+    es.append(box(4.8, 6.5, 7.4, 5.8, 10.6, 8.4, "wood_warm"))          # left arm down
+    if pose == "a":
+        es += [box(10.2, 9.6, 7.4, 13.6, 10.6, 8.4, "wood_warm"),       # right arm out, forearm up
+               box(12.8, 10.4, 7.4, 13.8, 13, 8.4, "wood_warm"),
+               box(12.6, 13, 7.2, 14, 13.8, 8.6, "cream")]
+    else:
+        es += [box(10.2, 9.6, 7.4, 11.2, 14, 8.4, "wood_warm"),         # right arm straight up (wave)
+               box(10.2, 14, 7.2, 11.6, 14.9, 8.6, "cream"),
+               box(4.6, 6.7, 7.2, 5.6, 8, 8.2, "wood_warm")]
+    return es
+
+
+def sweeper_doll(pose):
+    es = _doll_legs([])
+    es = _doll_head(es)
+    if pose == "a":
+        broom = [box(1.4, 0, 3.6, 4, 1.7, 6.2, "straw"),               # brush west
+                 box(2.4, 1.6, 4.5, 3.2, 8.6, 5.3, "wood_old"),
+                 box(3.1, 8.2, 4.8, 3.9, 11.6, 5.6, "wood_old")]
+        arms = [box(4.8, 6.6, 6.8, 5.8, 10.7, 7.8, "wood_warm"),
+                box(5.5, 8.4, 5.2, 7.2, 9.4, 7, "wood_warm")]          # hands on the handle
+    else:
+        broom = shift([box(1.4, 0, 3.6, 4, 1.7, 6.2, "straw"),
+                       box(2.4, 1.6, 4.5, 3.2, 8.6, 5.3, "wood_old"),
+                       box(3.1, 8.2, 4.8, 3.9, 11.6, 5.6, "wood_old")], dx=11.8)
+        arms = [box(10.2, 6.6, 6.8, 11.2, 10.7, 7.8, "wood_warm"),
+                box(8.8, 8.4, 5.2, 10.5, 9.4, 7, "wood_warm")]
+    return es + broom + arms
+
+
+def drunkard_barrel(pose):
+    es = [box(3.5, 0, 3.5, 12.5, 7, 12.5, "wood_warm"),
+          box(3.2, 0.8, 3.2, 12.8, 1.8, 12.8, "brass"),
+          box(3.2, 5.2, 3.2, 12.8, 6.2, 12.8, "brass"),
+          box(4.3, 7, 4.3, 11.7, 7.7, 11.7, "wood_old"),
+          box(6, 7.7, 5.4, 9.6, 11.2, 9, "wood_warm"),                 # head
+          box(6.5, 9.3, 5.1, 6.9, 9.8, 5.5, "coal"),
+          box(8.5, 9.3, 5.1, 8.9, 9.8, 5.5, "coal"),
+          box(6.2, 8.3, 5.1, 6.6, 8.9, 5.5, "xred"),
+          box(8.8, 8.3, 5.1, 9.2, 8.9, 5.5, "xred"),
+          box(2.6, 6.3, 7, 6.2, 7.3, 8.4, "wood_warm")]                # arm over the west rim
+    if pose == "a":
+        es += [box(10.8, 7.7, 7.3, 12.2, 10.3, 8.7, "glass"),          # standing bottle on the rim
+               box(10.9, 7.9, 7.4, 12.1, 9.5, 8.6, "fluid"),
+               box(11.3, 10.3, 7.7, 11.7, 11, 8.1, "glass")]
+    else:
+        es += [box(10, 6.8, 7.4, 14, 7.8, 8.4, "wood_warm"),           # arm raised, cup aloft
+               box(13.2, 7.6, 7, 14, 9.2, 8.8, "wood_warm"),
+               box(12.9, 9.2, 6.8, 14.3, 10.4, 8.2, "tokkuri"),
+               box(13.1, 9.9, 7, 14.1, 10.5, 8, "fluid")]
+    return es
+
+
+BREWERY = {
+    "sugi_dama": lambda: shift(sugi_dama(), dy=-8), "koji_crock": koji_crock, "bottling_crate": bottling_crate,
+    "barrel_stack": barrel_stack, "steam_pipe": steam_pipe, "tasting_counter": tasting_counter,
+    "noren": noren, "brew_kettle": brew_kettle, "bottle_rack": bottle_rack,
+    "greeter_doll": lambda: greeter_doll("a"), "greeter_doll_b": lambda: greeter_doll("b"),
+    "sweeper_doll": lambda: sweeper_doll("a"), "sweeper_doll_b": lambda: sweeper_doll("b"),
+    "drunkard_barrel": lambda: drunkard_barrel("a"), "drunkard_barrel_b": lambda: drunkard_barrel("b"),
+}
+
 MODELS = {
     "creature_skull": skull, "creature_skull_wall": skull_wall, "creature_ribcage": ribcage,
     "torn_settlement_banner": banner, "torn_settlement_banner_wall": banner_wall,
@@ -924,6 +1119,7 @@ MODELS = {
 MODELS.update(XMAS)
 MODELS.update(NEWYEAR)
 MODELS.update(MORE)
+MODELS.update(BREWERY)
 
 
 

@@ -37,6 +37,14 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     long tick;
     /** Time zone for Advent, the advent calendar and the New Year countdown (config: timezone). */
     static java.time.ZoneId zone = java.time.ZoneId.systemDefault();
+
+    /**
+     * Is this relic craftable at a workbench? Config "crafting.<id>" wins; without that key the type's
+     * own default applies (the brewery set of 0.3.9 defaults to false: shop/event/reward stock).
+     */
+    boolean craftable(RelicType t) {
+        return getConfig().getBoolean("crafting." + t.id(), t.craftableByDefault);
+    }
     private Relics relics;
     private Treats treats;
     private Discs discs;

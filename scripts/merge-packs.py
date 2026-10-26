@@ -41,7 +41,7 @@ SOURCES = [
     "IekcorbarSiteSync/resourcepack/Mmo-pack.zip",
 ]
 OUT_DIR = "deploy"
-BUILD = 4  # bump this EVERY rebuild: the pack name, the in-game description stamp and the
+BUILD = 5  # bump this EVERY rebuild: the pack name, the in-game description stamp and the
            # old-file cleanup all follow it, so there is never a nameless pile of twins.
 OUT = os.path.join(OUT_DIR, "iekcorbar-pack-build%d.zip" % BUILD)
 FIXED = (2026, 1, 1, 0, 0, 0)
@@ -324,7 +324,9 @@ with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
 
 # housekeeping (user rule 26-10): one output folder, one name per build - sweep away every
 # older pack, under either naming scheme, so no stale twin can ever be uploaded again.
-for stale in glob.glob("iekcorbar-packv*.zip") + glob.glob(os.path.join(OUT_DIR, "*.zip")):
+# Site zips (iekcorbar_iekje_barend.zip and friends) are NOT touched by this sweep.
+for stale in (glob.glob("iekcorbar-packv*.zip") + glob.glob(os.path.join(OUT_DIR, "iekcorbar-packv*.zip"))
+              + glob.glob(os.path.join(OUT_DIR, "iekcorbar-pack-build*.zip"))):
     if os.path.abspath(stale) != os.path.abspath(OUT):
         os.remove(stale)
         print("removed stale:", stale)

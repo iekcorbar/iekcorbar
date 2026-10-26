@@ -120,7 +120,8 @@ final class Relics implements Listener {
             if ((type == RelicType.GIFT_BOX || type == RelicType.EASTER_EGG || type == RelicType.GIANT_CANDY_CANE) && !variant.isEmpty()) m = variant;
             if (type == RelicType.COOKIE_PLATE) m = count > 3 ? "cookie_plate" : count > 0 ? "cookie_plate_3" : "cookie_plate_0";
             if (type == RelicType.CHAMPAGNE_TOWER) m = count > 6 ? "champagne_tower" : count > 0 ? "champagne_tower_half" : "champagne_tower_empty";
-            if ((type.effect == RelicType.Effect.TWINKLE || type.effect == RelicType.Effect.SWAP || type.effect == RelicType.Effect.SHISHI) && twinkle) m += "_b";
+            if (((type.effect == RelicType.Effect.TWINKLE || type.effect == RelicType.Effect.SWAP || type.effect == RelicType.Effect.SHISHI) && twinkle)
+                    || (type.use == RelicType.Use.POSE && twinkle)) m += "_b";
             return m;
         }
 
@@ -331,12 +332,26 @@ final class Relics implements Listener {
         recipe(RelicType.BONSAI, 1, Material.FLOWER_POT, Tag.SAPLINGS);
         recipe(RelicType.BYOBU_SCREEN, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.PAPER, Tag.PLANKS, Tag.PLANKS, Material.BLACK_DYE);
         recipe(RelicType.WAGASA_STAND, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.STICK, Material.STICK, Material.STICK, Material.RED_DYE);
+        // Brewery & wooden helpers (Curiosities) - NOT craftable unless config crafting.<id> says true (shop/event stock)
+        recipe(RelicType.SUGI_DAMA, 1, Material.SPRUCE_LEAVES, Material.SPRUCE_LEAVES, Material.HAY_BLOCK, Material.STRING);
+        recipe(RelicType.KOJI_CROCK, 1, Material.CLAY_BALL, Material.CLAY_BALL, Material.CLAY_BALL, Material.HAY_BLOCK);
+        recipe(RelicType.BOTTLING_CRATE, 1, Tag.PLANKS, Tag.PLANKS, Tag.PLANKS, Material.GLASS_BOTTLE, Material.GLASS_BOTTLE, Material.HAY_BLOCK);
+        recipe(RelicType.BARREL_STACK, 1, Material.BARREL, Material.BARREL, Material.BARREL);
+        recipe(RelicType.STEAM_PIPE, 1, Material.COPPER_INGOT, Material.COPPER_INGOT, Material.IRON_INGOT, Material.LEVER);
+        recipe(RelicType.TASTING_COUNTER, 1, Tag.PLANKS, Tag.PLANKS, Tag.PLANKS, Material.GLASS, Material.GOLD_NUGGET);
+        recipe(RelicType.NOREN, 1, Material.WHITE_WOOL, Material.WHITE_WOOL, Material.WHITE_WOOL, Material.BLUE_DYE, Material.BLUE_DYE, Material.STICK);
+        recipe(RelicType.BREW_KETTLE, 1, Material.CAULDRON, Material.COPPER_INGOT, Material.COAL, Material.GOLD_NUGGET);
+        recipe(RelicType.BOTTLE_RACK, 1, Tag.PLANKS, Tag.PLANKS, Material.GLASS_BOTTLE, Material.GLASS_BOTTLE, Material.GLASS_BOTTLE);
+        recipe(RelicType.DRUNKARD_BARREL, 1, Material.BARREL, Material.STICK, Material.STICK, Material.GLASS_BOTTLE);
+        recipe(RelicType.GREETER_DOLL, 1, Material.STICK, Material.STICK, Material.STICK, Tag.PLANKS, Material.PAPER);
+        recipe(RelicType.SWEEPER_DOLL, 1, Material.STICK, Material.STICK, Material.STICK, Material.HAY_BLOCK, Tag.PLANKS);
         plugin.treats().registerRecipes(recipeKeys);
         for (Player p : Bukkit.getOnlinePlayers()) p.discoverRecipes(recipeKeys);
     }
 
     @SuppressWarnings("unchecked")
     private void recipe(RelicType t, int amount, Object... ing) {
+        if (!plugin.craftable(t)) return;   // shop/event stock: config crafting.<id> = false (or the type's default)
         NamespacedKey k = new NamespacedKey(plugin, t.id());
         Bukkit.removeRecipe(k, false);
         ShapelessRecipe r = new ShapelessRecipe(k, item(t, amount));
@@ -771,6 +786,7 @@ final class Relics implements Listener {
                     r.variant = f[6].equals("-") ? "" : f[6];
                     r.count = Integer.parseInt(f[7]);
                     if (Relic.remembersTune(r.type)) r.tune = Math.max(0, r.count);
+                    if (r.type.use == RelicType.Use.POSE) r.twinkle = r.count == 1;   // the dolls keep their pose across reloads
                     r.owner = f[8].equals("-") ? null : UUID.fromString(f[8]);
                     r.readGift(f[9]);
                 }
@@ -1054,6 +1070,13 @@ final class Relics implements Listener {
                 markDirty(r);
             }
             case GIFT -> giftBoxes.use(r, p);
+            case POSE -> {
+                r.twinkle = !r.twinkle;
+                r.count = r.twinkle ? 1 : 0;   // persisted in the line's count column
+                r.display.setItemStack(look(r.model()));
+                r.world.playSound(r.center(), "minecraft:block.wood.place", 0.7f, r.twinkle ? 1.3f : 0.9f);
+                markDirty(r);
+            }
             case CALENDAR -> advent(p);
             case MUSIC, BONES, HARP, GRAMOPHONE -> jukebox.use(r, p);
             case GLOBE -> {

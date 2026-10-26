@@ -15,6 +15,23 @@ music-radius: 64
 # month, "any" is always open - handy to test the whole secret santa flow outside December). Default: Christmas.
 gift-window: "12-24 to 12-26"
 
+# Which relics are craftable at a workbench. A key per relic id; false = no recipe is registered, so the item
+# only comes from the shop, an event or staff (/relics give). Keys you leave out fall back to the shipped
+# default: everything is craftable EXCEPT the 0.3.9 brewery set below (listed here so you can flip them).
+crafting:
+  sugi_dama: false
+  koji_crock: false
+  bottling_crate: false
+  barrel_stack: false
+  steam_pipe: false
+  tasting_counter: false
+  noren: false
+  brew_kettle: false
+  bottle_rack: false
+  drunkard_barrel: false
+  greeter_doll: false
+  sweeper_doll: false
+
 # Music discs: the custom discs that play in a jukebox (a paper disc with a jukebox_playable component).
 # The list lives HERE in the plugin config file (on the server: plugins/Relics/config.yml) - not in a generated
 # file - so adding a disc is just adding an entry below. tools/make_discs.py <ffmpeg> fills the generated entries
