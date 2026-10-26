@@ -271,6 +271,9 @@ def main():
             tex = f"{name}_stage{st}"
             write(f"assets/sakagura/textures/block/{tex}.png", sprite(name, col, st))
             write(f"assets/sakagura/models/block/{tex}.json", {"parent": "minecraft:block/crop", "textures": {"crop": f"sakagura:block/{tex}"}})
+            # items/ definition for every block model - without it the 26.2 client shows magenta
+            # cubes for the Garden.java displays (same fix as Kitchen's crop stages).
+            write(f"assets/sakagura/items/block/{tex}.json", {"model": {"type": "minecraft:model", "model": f"sakagura:block/{tex}"}})
     add_sounds(ROOT, "sakagura")
     zpath = os.path.join(out, "Sakagura-pack.zip")
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:

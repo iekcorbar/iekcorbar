@@ -304,7 +304,7 @@ for name in list(files):
         clamped += 1
 print("boundary clamp (-16..32) applied to", clamped, "models")
 
-mcmeta = {"pack": {"description": "Iekcorbar v2 (Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items) - build 3", "pack_format": 64,
+mcmeta = {"pack": {"description": "Iekcorbar v2 (Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items) - build 4", "pack_format": 64,
                    "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}}
 files["pack.mcmeta"] = json.dumps(mcmeta, indent=1).encode("utf-8")
 icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pack-icon.png")  # scripts/make-pack-icon.py

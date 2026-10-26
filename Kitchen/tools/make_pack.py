@@ -566,6 +566,9 @@ def main():
             tex = f"{crop}_{'wild' if s == 4 else 'stage' + str(s)}"
             write(f"assets/kitchen/textures/block/{tex}.png", sprite(crop, min(s, 3), s == 4))
             write(f"assets/kitchen/models/block/{tex}.json", {"parent": "minecraft:block/crop", "textures": {"crop": f"kitchen:block/{tex}"}})
+            # 26.2 resolves the ITEM_MODEL component through an items/ definition - without this
+            # file every crop display renders as a magenta cube on the client.
+            write(f"assets/kitchen/items/block/{tex}.json", {"model": {"type": "minecraft:model", "model": f"kitchen:block/{tex}"}})
     add_sounds(ROOT, "kitchen")
     # Java side checks: every KItem, prop and meal piece needs a model
     zpath = os.path.join(out, "Kitchen-pack.zip")
