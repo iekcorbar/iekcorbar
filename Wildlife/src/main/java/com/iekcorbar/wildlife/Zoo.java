@@ -435,6 +435,59 @@ final class Zoo implements org.bukkit.event.Listener {
         return "";
     }
 
+    /** The kiosk the player looks at, or their nearest one within 32 blocks (the bind radius). Null if none. */
+    Decor.Prop kioskNear(Player p) {
+        var hit = p.rayTraceBlocks(6);
+        if (hit != null && hit.getHitBlock() != null) {
+            Decor.Prop q = decor.at(hit.getHitBlock());
+            if (q != null && q.def.id.equals("ticket_kiosk")) return q;
+        }
+        Decor.Prop best = null;
+        double bd = 32 * 32;
+        for (Decor.Prop k : decor.near(p.getLocation(), 32)) {
+            if (!k.def.id.equals("ticket_kiosk") || k.world != p.getWorld()) continue;
+            double d = k.center().distanceSquared(p.getLocation());
+            if (d < bd) {
+                bd = d;
+                best = k;
+            }
+        }
+        return best;
+    }
+
+    /** /zoo info - the zoo you look at or stand near. Money stats stay staff/owner-only (see settings()). */
+    void info(Player p) {
+        Decor.Prop k = kioskNear(p);
+        if (k == null) {
+            p.sendMessage(Component.text("No Ticket Kiosk found - look at one or stand near one.", NamedTextColor.RED));
+            return;
+        }
+        if (isStaff(p, k)) {
+            settings(p, kiosk(k));
+            return;
+        }
+        String[] f = kiosk(k);
+        String owner = k.owner == null ? "?" : Bukkit.getOfflinePlayer(k.owner).getName();
+        p.sendMessage(Component.text("--- " + f[0] + " by " + owner + " ---", NamedTextColor.GOLD));
+        p.sendMessage(Component.text("Ticket: " + money(Double.parseDouble(f[1])) + " for "
+                + (Integer.parseInt(f[2]) <= 0 ? "one entry" : f[2] + " minutes"), NamedTextColor.GRAY));
+        p.sendMessage(Component.text(f[5].equals("1") ? "Open now." : "Closed right now - come back later.",
+                f[5].equals("1") ? NamedTextColor.GREEN : NamedTextColor.RED));
+    }
+
+    /** /zoo ticket [player] [minutes] - a free ticket from the nearest kiosk. Returns error text, "" when given. */
+    String giveTicket(Player from, Player to, Integer minutes) {
+        Decor.Prop k = kioskNear(from);
+        if (k == null) return "Look at a Ticket Kiosk or stand near one.";
+        if (!isStaff(from, k)) return "This is not your kiosk.";
+        String[] f = kiosk(k);
+        int min = minutes == null ? Integer.parseInt(f[2]) : minutes;
+        if (min < 0 || min > 10_080) return "Pick 0 (one entry) up to 10080 minutes.";
+        ItemStack t = ticket(f[0], System.currentTimeMillis() + min * 60_000L, min <= 0);
+        for (ItemStack left : to.getInventory().addItem(t).values()) to.getWorld().dropItemNaturally(to.getLocation(), left);
+        return "";
+    }
+
     // ------------------------------------------------------------ gates
 
     /** A gate takes its zoo name from the nearest kiosk of the same owner when placed (see data); show it when used. */

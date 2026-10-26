@@ -14,8 +14,8 @@ commands:
     aliases: [wl]
 
   zoo:
-    description: Zoo settings and items
-    usage: /zoo <set|give|info|help>
+    description: Zoo settings, items, tickets and gates
+    usage: /zoo <set|give|list|info|ticket|gate|help>
 
 permissions:
   wildlife.zoo.staff:

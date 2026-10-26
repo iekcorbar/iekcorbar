@@ -133,20 +133,21 @@ def build(out):
     pk.model("exit_turnstile", turnstile("green", False)); pk.model("exit_turnstile_open", turnstile("green", True), item=False)
 
     # ------------------------------------------------------------ gates (2 tall; leaf across x, swings to the north side when open)
+    # posts are slim (2.4 wide) so the swinging leaf fills 11.2/16 px of the block - asked wider by the user.
     def gate(col, stripe, open_):
-        es = [b(0, 0, 6, 3, 32, 10, col), b(13, 0, 6, 16, 32, 10, col), b(0, 32, 5.5, 3, 33, 10.5, stripe), b(13, 32, 5.5, 16, 33, 10.5, stripe)]
+        es = [b(0, 0, 6, 2.4, 30, 10, col), b(13.6, 0, 6, 16, 30, 10, col), b(0, 30, 5.5, 2.4, 31, 10.5, stripe), b(13.6, 30, 5.5, 16, 31, 10.5, stripe)]
         if not open_:
-            es += [b(3, 3, 7.4, 13, 5, 8.6, "iron"), b(3, 25, 7.4, 13, 27, 8.6, "iron"), b(3, 5, 7.4, 4.2, 25, 8.6, "iron"), b(11.8, 5, 7.4, 13, 25, 8.6, "iron")]
-            for x in (5.5, 7.5, 9.5):
-                es.append(b(x, 5, 7.6, x + 1, 25, 8.4, "iron_dark"))
-            es.append(b(3, 14, 7.4, 13, 15.2, 8.6, stripe))
-            es.append(b(7, 27, 7, 9, 31, 9, "lantern"))
+            es += [b(2.4, 3, 7.4, 13.6, 5, 8.6, "iron"), b(2.4, 23, 7.4, 13.6, 25, 8.6, "iron"), b(2.4, 5, 7.4, 3.4, 23, 8.6, "iron"), b(12.6, 5, 7.4, 13.6, 23, 8.6, "iron")]
+            for x in (5, 7, 9, 11):
+                es.append(b(x, 5, 7.6, x + 1, 23, 8.4, "iron_dark"))
+            es.append(b(2.4, 13, 7.4, 13.6, 14.2, 8.6, stripe))
+            es.append(b(7, 25, 7, 9, 29, 9, "lantern"))
         else:
-            es += [b(3, 3, 3, 4.2, 5, 6, "iron"), b(3, 25, 3, 4.2, 27, 6, "iron"), b(3, 5, 0.5, 4.2, 25, 6, "iron")]
-            es += [b(3, 3, 0.5, 4.2, 5, 3, "iron"), b(3, 25, 0.5, 4.2, 27, 3, "iron")]
+            es += [b(2.4, 3, 3, 3.4, 5, 6, "iron"), b(2.4, 23, 3, 3.4, 25, 6, "iron"), b(2.4, 5, 0.5, 3.4, 23, 6, "iron")]
+            es += [b(2.4, 3, 0.5, 3.4, 5, 3, "iron"), b(2.4, 25, 0.5, 3.4, 25 + 2, 3, "iron")]
             for z in (1.5, 3, 4.5):
-                es.append(b(3.2, 5, z, 3.9, 25, z + 0.7, "iron_dark"))
-            es.append(b(7, 27, 7, 9, 31, 9, "lantern"))
+                es.append(b(2.5, 5, z, 3.3, 23, z + 0.7, "iron_dark"))
+            es.append(b(7, 25, 7, 9, 29, 9, "lantern"))
         return es
     pk.model("zoo_gate", gate("iron_dark", "gold", False)); pk.model("zoo_gate_open", gate("iron_dark", "gold", True), item=False)
     pk.model("staff_gate", gate("black", "yellow", False)); pk.model("staff_gate_open", gate("black", "yellow", True), item=False)
