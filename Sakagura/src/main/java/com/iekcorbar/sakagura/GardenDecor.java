@@ -46,8 +46,8 @@ final class GardenDecor {
                 .seat(0.45f).hit(0.9f, 0.7f).recipe(1, planks, planks, Material.STICK, Material.STICK, Material.WHITE_DYE));
         l.add(new DecorDef("bird_bath", "Bird Bath", "A stone basin on a pedestal.")
                 .hit(0.7f, 1.0f).tick(2, this::splash).recipe(1, Material.STONE, Material.STONE, Material.STONE_SLAB, Material.WATER_BUCKET));
-        l.add(new DecorDef("fountain", "Garden Fountain", "A big tiered stone fountain, three times life-size, with running water.")
-                .height(2).scale(3f).tick(1, this::fountain).recipe(1, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICK_SLAB, Material.WATER_BUCKET));
+        l.add(new DecorDef("fountain", "Garden Fountain", "A big tiered stone fountain, one and a half times life-size, with running water.")
+                .height(2).scale(1.5f).tick(1, this::fountain).recipe(1, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICKS, Material.STONE_BRICK_SLAB, Material.WATER_BUCKET));
         l.add(new DecorDef("garden_lamp", "Garden Lamp", "A little lantern on a post.")
                 .height(2).glow(13).recipe(1, Material.IRON_NUGGET, Material.STICK, Material.STICK, Material.LANTERN));
         l.add(new DecorDef("garden_gnome", "Garden Gnome", "Right-click for a word of wisdom.")
@@ -87,8 +87,9 @@ final class GardenDecor {
     }
 
     private void fountain(Decor d, Decor.Prop p, long tick) {
-        p.world.spawnParticle(Particle.FALLING_WATER, p.x + 0.5, p.y + 5.4, p.z + 0.5, 20, 0.75, 0.05, 0.75, 0);
-        p.world.spawnParticle(Particle.SPLASH, p.x + 0.5, p.y + 2.7, p.z + 0.5, 14, 1.2, 0.02, 1.2, 0);
+        float k = p.def.scale / 3f; // the heights below were tuned for scale 3, so they follow def.scale
+        p.world.spawnParticle(Particle.FALLING_WATER, p.x + 0.5, p.y + 5.4 * k, p.z + 0.5, 20, 0.75 * k, 0.05 * k, 0.75 * k, 0);
+        p.world.spawnParticle(Particle.SPLASH, p.x + 0.5, p.y + 2.7 * k, p.z + 0.5, 14, 1.2 * k, 0.02 * k, 1.2 * k, 0);
         if (ThreadLocalRandom.current().nextInt(4) == 0) p.world.playSound(p.center(), "minecraft:block.water.ambient", 1.2f, 0.9f);
     }
 

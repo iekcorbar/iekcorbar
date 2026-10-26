@@ -587,3 +587,7 @@ an/uit via Settings > Tips (permission settings_tips).
 
 Hihou 0.2.0: Game-Island-automatisering - Games.java met 3 modi (race=drukplaat-finish aanwijzen per kijk, last=midden+straal-cirkel met start-gelockte participanten, manual=staff-winner), registry games.json, prijs per spel (none|key|chest -> victory key + teleport naar Victory-kist), GO/win/expire broadcasts, /ih game create|set|start|stop|win|delete|list + tab. mvn groen, jar 0.2.0 in root, HIHOU-DEV-NOTES compleet (testflow + open opties). Eerdere 0.1.0-kistenkant blijft zoals beschreven.
 
+### Garden Fountain 1,5x (2026-10-26, Sakagura 0.3.2)
+
+User-screenshot bevestigde: de fontein laadt perfect (pack klopt), maar op `.scale(3f)` is-ie 3 blokken breed × ~5,8 hoog - te grof naar zin. `GardenDecor` fonteindef nu `.scale(1.5f)` (1,5 breed × ~2,9 hoog, lore "one and a half times life-size"). `fountain()` deeltjes-offsets (y+5.4 / y+2.7, spread 0.75/1.2) waren handmatig op 3x afgestemd - volgen nu zelf `p.def.scale / 3f`, dus een volgende formaatwijziging is één getal in de def. mvn groen, Sakagura-0.3.2.jar in root. Deploy: jar vervangen + herstart; bestaande geplaatste fonteinen hoeven niet weg (transform wordt bij respawn herberekend uit de def). Zie ook "Pack build status" hierboven: build-3-pack (sha1 a3b92cd0) lost de paarse countdown-borden op; check na herstart van de client of het bord een loopbaar board met poten wordt.
+
