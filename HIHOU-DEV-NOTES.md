@@ -69,3 +69,34 @@ Laatste bijgewerkt: 2026-10-26 ~09:10. Taak van de gebruiker: nieuwe plugin voor
 ## Regels (zoals altijd)
 - Nooit live-DB benaderen; mvn groen + in-game-check door Barend is het bewijs.
 - Na elke afronding: commit + push via git-beheer; jar in root (buiten git).
+
+## BEDWARS-PORT VERKENNING (2026-10-26 - taak voor VOLGENDE sessie, UNIEK hier!)
+Gebruiker: "C:\Users\baaye\Downloads\bedwars-plugin-25.2.jar rea-eden en aan Hihou
+toevoegen. Zo uitgebreid mogelijk." (dit is de oude BedWars-backlog-notitie uit
+CLAUDE.md in andere vorm - nu via RE van een bestaande plugin).
+
+Verkend (repo-sessie liep vol net voor de start - hier de brandstof):
+- Jar: 2,4 MB, 1391 entries. plugin.yml: naam **BedWars1058** v25.2, author
+  andrei1058, main com.andrei1058.bedwars.BedWars, api-version 1.13, softdepend:
+  Vault, PlaceholderAPI, Citizens, Parties, SlimeWorldManager, VipFeatures, ...
+  Code in com/ (527+) + io/ (41 - Likely lib package, check of dat MineSuperFacility
+  /andrei1058-shared lib is). Geen assets/rein resources bundles.
+- Dit is de gekende OPEN-SOURCE plugin (github.com/andrei1058/BedWars1058) -
+  REA-decompilatie klopt dus met publiek bekende architectuur: arenas (yml's),
+  teams, spawns, store, generators (iron/gold/diamond...), beds + protection,
+  game-status tick-loop, listener-brij, spawners/respawn, kits, upgrades
+  (trap/enderchest/multishot/sharpness/protection), helpers (Vault-economie,
+  Partij-API).
+- VOLGENDE SESSIE PLAN: (1) REA-skill + decompile via rea-tools van de jar
+  (packages: com.andrei1058.bedwars.* -> map features); (2) beslissen wat
+  "Hihou-ified" wordt: arena-data in eigen games.json-achtig format, teams
+  via eigen state (GEEN Party-API), generators met onze sounds/deeltjes,
+  bed-detectie via eigen prop-systeem (barrier+ItemDisplay kist als 'bed'?),
+  shop = Chests-keyless GUI, upgrades = items met eigen modellen uit onze pack;
+  (3) module-structuur: Hihou/src/.../bw/ - BwArena, BwGameManager, BwTeams,
+  BwGenerators, BwStore, BwListeners; (4) etappes: 0.3.0 arena+teams+join,
+  0.4.0 generators+bed+suddain death, 0.5.0 shop+upgrades+kits.
+- Let op: Hihou 0.2.0 is de huidige HEAD (game-engine races/last-manual,
+  jar in root). De kist/sleutel-kant hoeft niet anders - BedWars-shop is apart.
+- Commando-toekomst: /ih bw create|join|start|... + arena's per wereld (of
+  regionbox uit onze center+size-regio-primitieven - die zijn er al!).
