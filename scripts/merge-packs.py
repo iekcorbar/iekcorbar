@@ -275,6 +275,35 @@ for name in list(files):
 for name, k in fitted:
     print("FIT %s -> y*%s (java scale x%.4f)" % (name, k, 1.0 / k))
 
+# The FIT pass only watches Y (that is what needs the java scale compensation), but 26.2
+# clamps EVERY axis to -16..32: the wide countdown boards ended up 0.06 units out on X
+# after scaling (-16.06). Clamp any remaining out-of-range coordinate to the boundary -
+# a sub-0.1-unit shave nobody sees, and it keeps java scales untouched.
+clamped = 0
+for name in list(files):
+    if "/models/" not in name or not name.endswith(".json"):
+        continue
+    try:
+        m = json.loads(files[name])
+    except ValueError:
+        continue
+    els = m.get("elements")
+    if not isinstance(els, list) or not els:
+        continue
+    touched = False
+    for e in els:
+        for key in ("from", "to"):
+            v = e.get(key)
+            if isinstance(v, list) and len(v) == 3 and all(isinstance(x, (int, float)) for x in v):
+                nv = [max(-16.0, min(32.0, float(x))) for x in v]
+                if nv != [float(x) for x in v]:
+                    e[key] = nv
+                    touched = True
+    if touched:
+        files[name] = json.dumps(m, indent=1).encode("utf-8")
+        clamped += 1
+print("boundary clamp (-16..32) applied to", clamped, "models")
+
 mcmeta = {"pack": {"description": "Iekcorbar v2 (Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items) - build 2", "pack_format": 64,
                    "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}}
 files["pack.mcmeta"] = json.dumps(mcmeta, indent=1).encode("utf-8")
