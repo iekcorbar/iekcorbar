@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/shinobi/shinobi_50_ancient_dryad_tear"
+  }
+}

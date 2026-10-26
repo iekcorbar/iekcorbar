@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/crafter/crafter_40_synthetic_diamond_tip"
+  }
+}

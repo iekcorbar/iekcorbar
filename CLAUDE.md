@@ -492,3 +492,38 @@ al niet raken. mvn groen, Relics-0.3.6.jar in de root.
   generators op Steamworks-rpm's (energie-thema past bij de server), team-shop via SiteSync/Gouw-
   claims, FMM-modellen (koffers, bed-framework, generators), RPM-/wildlife-thema's voor de eilanden.
   Nog NIET begonnen; alleen deze notitie.
+
+### MMOItems: alle custom items eigen 3D-model + pack in repo (2026-10-26)
+
+-Gebruikerswish: 'lees de huidige mmoitems uit de backup. alle mmoitems krijgen eigen
+models' + 'vergeet geen particles' + 'laat de vanilla items zoals ze horen' +
+'beter als die referentie in iekcorbarsitesync plugin komt' + 'miners pickaxe etc..
+en al dat soort custom items'. Eersterichting was ValhallaMMO/ItemJoin, uiteindelijke
+doel: de ~1079 MMOItems-plugin items (pluginset backup MMOItems/item/*.yml).
+- Aangetroffen: 653 unieke 'model: mmoitems:...' referenties, waarvan 652 gedekt
+door mmopackNew_rework.zip (stond alleen als losse zip in RPM mixer op de server,
+NOOIT in git) + 1 typo (fish/Noptuna -> fish/Nuptuna, item had per ongeluk dubbel-o).
+- Pack in repo gehaald: IekcorbarSiteSync/resourcepack/mmo/ (729 models + 729
+items-defs + 766 textures). Nieuwe zip-bouwer IekcorbarSiteSync/tools/make_pack.py
+-> resourcepack/Mmo-pack.zip; merge-packs.py SOURCES uitgebreid (12e pack) ->
+Iekcorbar-pack.zip bevat nu alles, sha1 vast. Deploy: deze pack.zip in mixer,
+de LOSSE mmopackNew_rework.zip uit mixer halen (anders dubbelingen).
+- Generator IekcorbarSiteSync/tools/make_mmo_models.py (DRAAIT MET PIL, dus ZONDER
+python -I): voor elke van de 413 items zonder model: 16x16 procedural pixel-art
+(PIL, archetype uit bestandsstam+naam: zwaard/dolk/bijl/korte/hammer/mace/staf/
+tome/lute/schild/ring/gem/ingot/dust/vial/scroll/food/book/vissen/4 armor-slots)
+en een geëxtrudeerd voxel-model per opaque pixel (dus GEEN 256 onzichtbare
+elementen; transparency-skip), display-transform voor vastgehouden items,
+gui_light front, EN elke textures-particle-verwijzing naar z'n eigen textuur
+(brek-/hitdeeltjes = juist item). Palette uit KEY_PAL-woordgrenzen op naam+ID
+(silver/molten/frozen/bone/thor/santa/RED_GEM-...) + MAT_PAL + md5-jitter per
+id, dus elk item uniek. Credit 'iekcorbar procedural' markeren de files;
+personele orphans (farmer_80_primordial_seed, Nuptuna, shinobi/woodcutter
+primordial) worden NU vast aan hun item geknoopt (exacte id-stam).
+- Patched configs naar pluginset-aangepast/MMOItems/item/ (model: regels + Nuptuna
+fix; upload-map -> plugins/MMOItems/item/, daarna MMOItems herstart).
+- NOT done: meerweapon_2..41 losse textures (38 ongebruikte wapenmodellen zonder
+naam-info) staan ongebruikt mee in de pack; later eventueel handmatig koppelen.
+- NPC/Lands-sporen op spawn: ONDERZOEK OPEN (gebruiker: er hangt mogelijk een
+Citizens-NPC of hologram die /lands-commando's gebruikt -> moet naar /gouw;
+referentie: E:/backups server/pluginset).

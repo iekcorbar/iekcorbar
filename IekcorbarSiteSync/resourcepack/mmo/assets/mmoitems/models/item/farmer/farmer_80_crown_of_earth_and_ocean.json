@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/farmer/farmer_80_crown_of_earth_and_ocean"
+  }
+}

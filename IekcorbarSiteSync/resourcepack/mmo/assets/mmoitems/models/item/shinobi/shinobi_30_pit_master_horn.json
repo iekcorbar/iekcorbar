@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/shinobi/shinobi_30_pit_master_horn"
+  }
+}

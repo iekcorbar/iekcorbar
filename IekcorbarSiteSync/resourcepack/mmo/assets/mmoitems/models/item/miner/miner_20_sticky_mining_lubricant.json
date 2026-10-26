@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/miner/miner_20_sticky_mining_lubricant"
+  }
+}

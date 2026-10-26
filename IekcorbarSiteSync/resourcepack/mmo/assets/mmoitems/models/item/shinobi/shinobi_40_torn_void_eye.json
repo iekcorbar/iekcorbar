@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/shinobi/shinobi_40_torn_void_eye"
+  }
+}

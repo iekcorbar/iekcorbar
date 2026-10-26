@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/farmer/farmer_15_sunflower_seeds"
+  }
+}

@@ -30,6 +30,7 @@ SOURCES = [
     "Sakagura/resourcepack/Garden-pack.zip",
     "Kitchen/resourcepack/Kitchendecor-pack.zip",
     "Satchel/resourcepack/Satchel-pack.zip",
+    "IekcorbarSiteSync/resourcepack/Mmo-pack.zip",
 ]
 OUT = "Iekcorbar-pack.zip"
 FIXED = (2026, 1, 1, 0, 0, 0)
@@ -103,7 +104,7 @@ for name in list(files):
             files[name] = json.dumps(m, indent=1).encode("utf-8")
 print("z-fighting faces separated:", fixed)
 
-mcmeta = {"pack": {"description": "Iekcorbar (Steamworks, Kitchen, Sakagura, Relics, Kura, Wildlife, Zukan)", "pack_format": 64,
+mcmeta = {"pack": {"description": "Iekcorbar (Steamworks, Kitchen, Sakagura, Relics, Kura, Wildlife, Zukan, MMO items)", "pack_format": 64,
                    "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}}
 files["pack.mcmeta"] = json.dumps(mcmeta, indent=1).encode("utf-8")
 icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pack-icon.png")  # scripts/make-pack-icon.py

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/hunter/hunter_40_infernal_blaze_stinger"
+  }
+}

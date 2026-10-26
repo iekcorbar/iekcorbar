@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/miner/miner_10_mineral_absorption_wand"
+  }
+}

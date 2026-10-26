@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/shinobi/shinobi_5_lesser_elite_trace"
+  }
+}

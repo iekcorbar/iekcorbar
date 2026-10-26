@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/brewler/brewler_15_photosynthetic_elixir"
+  }
+}

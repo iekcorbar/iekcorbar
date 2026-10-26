@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "minecraft:heavy"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "minecraft:heavy"
+      }
+    ]
+  }
+}

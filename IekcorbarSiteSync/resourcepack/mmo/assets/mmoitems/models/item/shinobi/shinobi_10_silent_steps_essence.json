@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/shinobi/shinobi_10_silent_steps_essence"
+  }
+}

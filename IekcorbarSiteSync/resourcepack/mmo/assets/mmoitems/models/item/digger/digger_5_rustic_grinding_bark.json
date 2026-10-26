@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/digger/digger_5_rustic_grinding_bark"
+  }
+}

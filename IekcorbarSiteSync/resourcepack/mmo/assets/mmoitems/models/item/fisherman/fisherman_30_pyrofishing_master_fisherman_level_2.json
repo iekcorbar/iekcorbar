@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/fisherman/fisherman_30_pyrofishing_master_fisherman_level_2"
+  }
+}

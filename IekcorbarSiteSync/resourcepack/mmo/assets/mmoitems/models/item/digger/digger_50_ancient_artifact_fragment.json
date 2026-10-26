@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/digger/digger_50_ancient_artifact_fragment"
+  }
+}

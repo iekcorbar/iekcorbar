@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "down": "block/custom/bottom_table",
+        "up": "block/custom/brewler_top",
+        "north": "block/custom/side_table",
+        "south": "block/custom/side_table",
+        "west": "block/custom/side_table",
+        "east": "block/custom/side_table",
+        "particle": "block/custom/bottom_table"
+    }
+}

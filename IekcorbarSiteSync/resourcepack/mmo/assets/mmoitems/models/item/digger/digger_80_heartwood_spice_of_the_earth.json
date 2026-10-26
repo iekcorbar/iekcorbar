@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/digger/digger_80_heartwood_spice_of_the_earth"
+  }
+}

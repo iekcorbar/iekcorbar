@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mmoitems:item/hunter/hunter_30_torn_ghost_wings"
+  }
+}
