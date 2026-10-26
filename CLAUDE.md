@@ -718,6 +718,75 @@ Gebruiker deployde 0.3.18/0.1.0/build6 en meldde vier bugs + een nieuwe wens. Al
    ! machines.yml op de server moet weg/ververst voor de crusher-regels - in TE-DEPLOYEN gezet.
 mvn groen (Steamworks/Zukan/Additions); jars 0.3.19 + 0.2.7 + 0.1.1 in deploy/ (0.3.18-1.0-buildjes weg).
 
+### Steamworks Power 0.1.0 - machine-API in de basis + tweede addon (26-10 late in de nacht)
+
+Gebruiker: "basis = volledig gratis-product, addons = extra's". Derde Maven-module `SteamworksPower/`
+(com.iekcorbar.power, jar-afhankelijk van Steamworks' publieke API, geen kopieerwerk).
+**De API (in de gratis basis, commit b8238ce):** package com.iekcorbar.steamworks.api met
+CustomPart (id/lore/ports/portFactor/rotatable/initialAxis/capacity/impact/generatedSpeed/visuals/
+interact/tick/onPlace/onRemove/saveState/loadState) + CustomNode-view (geen KNode-lek) +
+CustomPartRegistry (register/byId/partOf/item/steamworksItem("material|part/<id>")/unregister).
+Basis-kant: PartType.CUSTOM als doorgeef-luik; ExtParts (registry, items via displayItem) + ExtNode;
+Kinetics (customs-set, ports/portFactor/canRotate/capacity/impact-afslagen, tickCustoms per tick met
+gegenereerde-snelheidsverversing per 20 t), Visuals (custom rollen SPIN/STATIC via visuals()),
+NodeStorage ("CUSTOM:<id>" + extKey-blob, onbekende addon = node netjes overgeslagen + waarschuwing),
+PartListener (placeExt incl. BlockPlaceEvent, interact-ketting, pick-block), steamworksItem/unregister,
+plugin.whenModelsReady() publiek (addon-recepten registreren pas als FMM ze kent), onRemove bij
+breakNode én unloadChunk; alle PartType.values()-lussen (give/list/Zukan/models/trader) filteren CUSTOM.
+**De machines:** WaterTurbine (water langs de zijkanten = 12-15 RPM x 64 Tq, doorstroom-regel),
+MechanicalPress (plaat bovenop, stampt config-recepten: 9 zinc_nugget->ingot, honingfles->fles+raat,
+klei->4 baksteen, hooi->leer, 4 sneeuw->2 packed ijs; rotatie van onder), StockTicker (pure container-
+lezer, zwevend TextDisplay met de twee grootste hopen, alleen bij spelers in de buurt, onRemove ruimt op).
+**Modellen:** SteamworksPower/tools/make_models.py IMPORTEREET de core-helpers en herovert alleen de
+uuid-teller (mm._c = count(90000)) - core-bestanden blijven byte-stabiel; 3 x json+bbmodel naar
+deploy/fmm-steamworks/ (42 bestanden), preview3d-.sheet bekeken en goedgekeurd.
+**Site/wiki:** build-recipes-data.js krijgt een power-parser (shaped()-regex op PowerPlugin.java + press-
+blok uit config.yml -> 8 recepten, tab "Steamworks Power" verschijnt automatisch via data.plugins);
+preview3d-render naar public/recipes/power/ (3 png's) + power toegevoegd aan de pics-lijst van
+make-recipe-icons.py; docs/wiki-power/ (intro/turbine/pers+ticker) -> seed 10 pagina's + importknop +
+route-seed; /steamworks-pagina: Power-kaart + versie-label 0.3.19 + Additions 0.1.2 + Power 0.1.0.
+__pycache__/ opgenomen in .gitignore. mvn groen (core + power); jar + site-zip 23:26 in deploy/.
+
+### Blockbench-MCP + FMM-sweep + Wildlife-loopfix (26→27 okt, nacht — gebruiker sliep, onbeheerd)
+
+**Blockbench-MCP reconnect.** De `blockbench` MCP (remote, `localhost:3000/bb-mcp`, Blockbench-plugin
+mcp.js v1.10.1) faalde gisteravond met ECONNREFUSED: OpenCode probeerde om 23:37, de plugin ging pas
+23:39 aan; `blockbench-headless` (npx uit github:jasonjgardner/blockbench-mcp-plugin) liep bij de
+allereerste start tegen de timeout aan (download te traag). Na een herstart van OpenCode (met
+Blockbench draaiend) connecten ze allebei. De headless `--root` is verzet van `fmm-models` naar de
+PROJECTROOT zelf, zodat één sweep alle bomen reikt (Steamworks/, SteamworksPower/, Wildlife/ én de
+root-verzameling). Let op: poort 3000 is ook de Next-dev-poort - never `npm run dev` met open
+Blockbench-MCP. De root-verzameling `fmm-models\` (803 bbmodels: 599 decor-varianten + 71 elitemobs +
+133 wildlife) bevat inhoudelijk dezelfde dieren als `Wildlife/fmm-models` maar dan uuid-verschoven.
+
+**Groene sweep (254 + 670 modellen, via bbmodel_validate/info/animations).** Steamworks(118)+Power(3)+
+Wildlife(133): 0 fouten, 105 helemaal schoon; alle 121 ge-exporteerde sw/pow-jsons netjes binnen
+-16..32 (de enige bron-bbmodel die de grens raakte - windmill_sails ±23 - exporteert als -15..31,
+klopt dus). Decor(599)+EliteMobs(71): 0 fouten; de 281 waarschuwingen (interpenetration/floating/
+degenerate) zijn stijl-laag (dunne ogen, elkaar snijdende blokstukken) - niet aangepakt.
+EliteMobs blijft links liggen voor bewerking (derde-handsbron, geen generator hier).
+
+**Echte bug gevonden en gefixt - verbroken walk-loops (40 keys buiten clip):**
+1. `stilt_walk` (kraan 1,5 s, struisvogel 0,85 s): de right-step begon op halve periode maar liep
+   door tot 1,5× de clip - de poot werd NOOIT neergezet binnen de loop en klapte bij elke
+   lus-herstart terug (de kraan "liep raar"). Now: elke poot krijgt eigen halve cyclus (lift-houd-
+   plaats-rust in 0,5P), body dip bij beide landingen, kop-knik over de hele cyclus. Bewezen met
+   sample_pose: OUD stond poot_r op -14,4° bij 1,45 s (midden in de lucht bij de naad), NIEUW 0°.
+2. Olifant-oren in walk: `wave(8, 3.0, 6)` tegen een clip van 2,0 s - de laatste derde van elke
+   oorslag werd nooit afgespeeld en de oren sprongen per stap naar voren. Nu meebewegen binnen de
+   clip (golf over 2,0 s, rechts een kwartslag uit fase - een olifantensloeg klopt nooit synchroon).
+3. `make_animals.py` uuid4 → uuid5-teller (zelfde trick als Steamworks' make_models.py): éénmalige
+   churn over alle 133 modellen in beide bomen, daarna is elke herbouw byte-stabiel en blijven de
+   Wildlife/ en fmm-models/ bomen identiek. Determinisme bewezen: twee runs byte-gelijk.
+
+Beide bomen gegenereerd (`python -I tools\make_animals.py fmm-models\wildlife` en datzelfde pad
+`..\fmm-models\wildlife`), keycheck 0 keys-buiten-clip over ALLE 1078 bbmodels,
+bbmodel_validate_animations over de zes aangepaste families: keyframe_timing overal weg (rest:
+losse sub-pixel ground_sink in death/idle, bewust niet aangepast - dat is de beenderen-draai van
+90° bij sterven, geen loop-breuk). Echte inhoud: precies 12 modellen (kraan/struisvogel/olifant
+× zeldzaam/baby); 121 overige alleen uuid-churn. Artefact: `deploy/fmm-wildlife/` (136 bestanden,
+naar `plugins/FreeMinecraftModels/models/wildlife/` + /fmm reload).
+
 Besluit productievorm (26-10, gebruiker): FMM-modellen + pack worden NU NOG NIET in de jar gebundeld.
 Huidige aflever-lijn blijft: assets apart via deploy/ (fmm-steamworks-map + pack in de mixer).
 Assets-in-jar (onLoad-extractor met versiestempel, pack.auto-install, release-bundel, machines.yml-
