@@ -1,0 +1,12 @@
+location: iekcorbarSeason2:2961.636:68.880:-574.073
+enabled: true
+display-range: 48
+update-range: 48
+update-interval: 20
+facing: 0.0
+down-origin: false
+pages:
+- lines:
+  - content: Gouw Menu
+    height: 0.4
+  actions: {}

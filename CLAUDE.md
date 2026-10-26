@@ -527,3 +527,24 @@ naam-info) staan ongebruikt mee in de pack; later eventueel handmatig koppelen.
 - NPC/Lands-sporen op spawn: ONDERZOEK OPEN (gebruiker: er hangt mogelijk een
 Citizens-NPC of hologram die /lands-commando's gebruikt -> moet naar /gouw;
 referentie: E:/backups server/pluginset).
+
+### Lands-sporen gevonden + Tips-of-the-day gezaaid (2026-10-26, zelfde sessie)
+
+- Scan hele pluginset-backup op 'lands/claim/lands': GEEN enkele Citizens-NPC
+draait /lands (saves.yml bevat alleen warp-commando's). Wel twee echte resten:
+ItemJoin items.yml item 'Pyro_plugins' (NETHERITE_HOE 'Lands Menu' in elke
+crafting-grid, 'op: lands' -> onbekend commando sinds Lands van de server is)
+en DecentHolograms hologram 'Land_claim.yml' (spawn, pure tekst 'Land Claim
+Shop', geen acties). Fixes -> docs/pluginset-fixes/ (pluginset-aangepast/ is
+gitignore!): item heet nu '&eGouw Menu' + 'op: gouw menu', hologram-tekst
+'Gouw Menu'. Deploy: bestanden over de originals + /itemjoin reload +
+/decentholograms reload (of gewone restart).
+- tips-seed.sql (idempotent, loop via Plesk zoals shop-coins-migration.sql):
+14 tips uit EIGEN plugins + site in daily_tips (Gouw claim/trust/border, Kura
+netwerk, Kitchen snijplank/pot, Sakagura vaten+kwaliteit, Steamworks
+cinetiek, Wildlife+Field Journal+/zoo, Zukan /zukan=receptbrowser incl.
+/recipes op-site, Satchel 6 tiers+upgrades, Relics lore+giftboxen,
+achievements, app/push, News&Upcoming, journal) + UPDATE die de oude
+Lands-rollen-tip naar Gouw vertaalt. Bestaande 18 db.json-tips blijven staan.
+- Tips-draait: dag-van-jaar-modulo actieve tips (api/tips GET), staff beheert
+an/uit via Settings > Tips (permission settings_tips).
