@@ -439,8 +439,9 @@ zelf gedownload, URLClassLoader, geen shade), (2) leest backpacks-tabel, mapt ol
 copper/iron/diamond (groeit naar netherite als het niet past, rest items los mee), (3) online direct geven,
 offline via pending-import.json + join-outgifte, (4) idempotent: geimporteerde rij-id's in
 backpackplus-imported.txt. Oude db wordt ALLEEN gelezen - terugdraaien = BackpackPlus terugzetten. mvn groen,
-Satchel-0.3.0.jar in de root. Gebruiker: jar uploaden, herstart (met Gouw 0.2.1 + Relics 0.3.5 erbij), in
-game /satchel importbackpacks draaien, dan plugins/BackpackPlus naar archive/ (backpack.db bewaren).
+Satchel-0.3.0.jar in de root. **2026-10-26 UITGEVOERD**: import op de server draaid, database met succes
+gemigreerd (4 rugzakken terug als Satchel-bags) en BackpackPlus van de server af - plugin definitief
+vervangen door eigen Satchel. Commando/code blijft zitten (idempotent, geen schade bij vaker draaien).
 
 ### Backlog / later (gebruikersnotities, nooit vergeten)
 
