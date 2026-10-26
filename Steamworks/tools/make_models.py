@@ -1109,6 +1109,17 @@ def zinc_nugget():
     return m
 
 
+def dust(id, mat):
+    # a low pile of powder with a few speckles beside it (Create's crushed-ore look)
+    m = Model("sw_%s_dust" % id, 1.5)
+    m.cube("base", (-4.0, -2.0, -3.4), (4.0, -1.2, 3.2), mat)
+    m.cube("mid", (-2.6, -1.2, -2.2), (2.8, -0.4, 1.8), mat)
+    m.cube("peak", (-1.2, -0.4, -1.0), (1.0, 0.2, 0.8), mat)
+    m.cube("spk1", (-4.6, -2.0, 2.2), (-3.8, -1.4, 3.0), mat)
+    m.cube("spk2", (3.4, -2.0, -3.0), (4.2, -1.4, -2.2), mat)
+    return m
+
+
 # ---------------------------------------------------------------- batch 2: item logistics + fluid parts (26-10 night)
 
 def chute():
@@ -1276,6 +1287,9 @@ def build():
         g.merge(by[f"sw_{part}_casing"])
         axle(g)
         parts.append(g)
+    # metal dusts (crusher output, smelts to ingots) - last so all UUID counters above stay put
+    parts += [dust("iron", "dark"), dust("copper", "copper"), dust("gold", "gold"),
+              dust("zinc", "steel"), dust("tin", "stone")]
     return parts
 
 

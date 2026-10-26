@@ -291,6 +291,7 @@ export default function SteamworksExplainedPage() {
           </Card>
           <Card img="crushing_wheel" title="Crushing Wheels" stat="double ore yield · 8 Tq/RPM per wheel">
             <p>Two wheels facing each other on one axle. Throw ores on top: iron/gold ore → 2-3 raw, copper → 7-10, diamond → 1-2. Mine with <b>Silk Touch</b> and crush - it beats Fortune.</p>
+            <p>Then crush the raw ore itself: 1 raw → <b>2 metal dust</b> (iron, copper, gold, zinc, tin), and every dust smelts to <b>one ingot</b>. That is Create's doubling: two ingots from one raw ore.</p>
             <p className="text-xs text-text-warm/60">Results fall out underneath; put a hopper there.</p>
           </Card>
           <Card img="bellows_fan" title="Bellows Fan" stat="processes in the breeze">
@@ -476,7 +477,7 @@ export default function SteamworksExplainedPage() {
       <Section id="fresh" icon={Cog} kicker="Fresh from the foundry" title="What landed on 26 October">
         <div className="grid sm:grid-cols-2 gap-4">
           <Card title="Create-true crafting" stat="alloy → casing → everything">
-            <p>The whole recipe tree now matches <b>Create 6</b> itself: andesite with nuggets becomes <b>Andesite Alloy</b>, alloy over a stripped log makes <b>Casings</b>, and the gear train, gauges and machines follow Create's exact grids. Brass is mixed 1 copper + 1 zinc in the kettle again. Your old habits from the mod translate one on one.</p>
+            <p>The whole recipe tree now matches <b>Create 6</b> itself: andesite with nuggets becomes <b>Andesite Alloy</b>, alloy over a stripped log makes <b>Casings</b>, and the gear train, gauges and machines follow Create's exact grids. Brass is mixed 1 copper + 1 zinc in the kettle again. And the crushing wheels now double like Create's: raw ore → <b>metal dust</b> → twice the ingots. Your old habits from the mod translate one on one.</p>
           </Card>
           <Card title="7 new machines" stat="logistics & fluids">
             <p><b>Chute</b> and <b>Funnel</b> move and suck items, the <b>Depot</b> holds parcels for the <b>Weighted Ejector</b> (it really throws), the <b>Mechanical Pump</b> fills canisters straight from the pipe network and the <b>Fluid Valve</b> cuts the line when it stops turning. Plus a <b>Steam Whistle</b> for the joy of it - right-click.</p>
@@ -505,7 +506,7 @@ export default function SteamworksExplainedPage() {
           <Link href="/wiki?page=steamworks" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Steamworks Wiki (quick reference)</Link>
           <Link href="/recipes" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><Wrench className="w-4 h-4" /> All Recipes</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.18`} + Steamworks Additions {`0.1.0`}). For exact per-machine stats, always right-click the part in-game.</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.19`} + Steamworks Additions {`0.1.1`}). For exact per-machine stats, always right-click the part in-game.</p>
       </Section>
     </div>
   );

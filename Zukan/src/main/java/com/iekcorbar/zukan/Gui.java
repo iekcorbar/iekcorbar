@@ -255,7 +255,13 @@ final class Gui implements Listener {
             for (String w : words) {
                 if (w.isEmpty()) continue;
                 if (w.startsWith("#")) ok = inTag(e.stack().getType(), w.substring(1));
-                else if (w.startsWith("@")) ok = e.ns().startsWith(w.substring(1));
+                else if (w.startsWith("@")) {
+                    String q = w.substring(1);
+                    // plugin namespace (steamworks: blocks), the plugin that supplied the item, or the plugin
+                    // an add-on belongs to ("steamworksadditions" answers to @steamworks AND @additions - no fixed names)
+                    ok = e.ns().startsWith(q) || e.origin() != null
+                            && (e.origin().contains(q) || e.addonOf() != null && e.addonOf().toLowerCase(java.util.Locale.ROOT).contains(q));
+                }
                 else ok = e.name().contains(w);
                 if (!ok) break;
             }
@@ -280,7 +286,8 @@ final class Gui implements Listener {
             Catalog.Entry e = v.filtered.get(idx);
             v.slotItems[i] = e.stack();
             String hint = v.cheat ? "Click: take stack  Right: take one  Shift: recipes / uses" : "Click: recipes  Right: uses  Shift: bookmark";
-            v.inv.setItem(i, shown(e.stack(), counts(e.stack()), hint));
+            String addon = e.addonOf() == null ? "" : "Add-on content of " + e.addonOf();
+            v.inv.setItem(i, shown(e.stack(), counts(e.stack()), addon, hint));
         }
         if (!steampunk()) {
             ItemStack pane = pane();
@@ -289,7 +296,7 @@ final class Gui implements Listener {
         if (v.page > 0) v.inv.setItem(PREV, button(Material.ARROW, "Previous page", "Page " + v.page + " of " + pages));
         if (v.page < pages - 1) v.inv.setItem(NEXT, button(Material.ARROW, "Next page", "Page " + (v.page + 2) + " of " + pages));
         v.inv.setItem(SEARCH, button(Material.COMPASS, v.query.isEmpty() ? "Search" : "Search: " + v.query,
-                "Click to type.", "Words: item name.  #logs: item group.", "@steamworks: items of one plugin."));
+                "Click to type.", "Words: item name.  #logs: item group.", "@steamworks: items of one plugin (its add-ons too)."));
         if (!v.query.isEmpty()) v.inv.setItem(CLEAR, button(Material.BARRIER, "Clear search"));
         v.inv.setItem(NS, button(Material.NAME_TAG, "Show: " + (v.ns.isEmpty() ? "everything" : v.ns), "Click to switch between", "vanilla and each plugin."));
         v.inv.setItem(INFO, button(Material.BOOK, "Zukan", v.filtered.size() + " items", plugin.catalog().recipeCount + " recipes known"));

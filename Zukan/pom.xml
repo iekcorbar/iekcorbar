@@ -8,7 +8,7 @@
     <artifactId>Zukan</artifactId>
     <!-- Zukan: recipe + item browser (JEI-style) for vanilla and all our plugins.
          Behaviour inspired by the MIT-licensed JEI mod; own code. -->
-    <version>0.2.6</version>
+    <version>0.2.7</version>
     <packaging>jar</packaging>
 
     <name>Zukan</name>

@@ -1,8 +1,10 @@
 # Zukan - recipe + item browser. Guide: docs-url
 docs-url: https://iekcorbar.com/wiki?page=zukan
 
-# Plugins whose recipes and items Zukan asks for (they register a small data service when installed).
-providers: ["Steamworks", "Kitchen", "Sakagura", "Relics", "Kura", "Wildlife", "Satchel"]
+# Elk plugin dat zich aanmeldt met de Supplier-service wordt GEVRAAGD - naam en versie doen er niet
+# toe, nieuwe plugins (addons) hoeven hier niets te krijgen. Alleen om een plugin expliciet buiten
+# te sluiten zet je hem hier op, bij zijn plugin.yml-naam.
+excluded-providers: []
 
 # Recipe namespaces (and items tagged by those plugins) Zukan never lists. MMOItems has its own item browser.
 ignored-namespaces: ["mmoitems"]

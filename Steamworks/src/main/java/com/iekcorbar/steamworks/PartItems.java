@@ -308,15 +308,29 @@ final class PartItems {
         // raw ore -> ingot in furnaces and blast furnaces (exact match on our raw item)
         smelt("zinc_ingot", MaterialType.RAW_ZINC, MaterialType.ZINC_INGOT);
         smelt("tin_ingot", MaterialType.RAW_TIN, MaterialType.TIN_INGOT);
+        // crushed dust smelts like ore: one dust, one ingot (two raw crushed -> two ingots, Create's doubling)
+        smelt("iron_from_dust", MaterialType.IRON_DUST, Material.IRON_INGOT);
+        smelt("copper_from_dust", MaterialType.COPPER_DUST, Material.COPPER_INGOT);
+        smelt("gold_from_dust", MaterialType.GOLD_DUST, Material.GOLD_INGOT);
+        smelt("zinc_from_dust", MaterialType.ZINC_DUST, MaterialType.ZINC_INGOT);
+        smelt("tin_from_dust", MaterialType.TIN_DUST, MaterialType.TIN_INGOT);
     }
 
     private void smelt(String id, MaterialType in, MaterialType out) {
+        smeltResult(id, in, createMaterial(out, 1));
+    }
+
+    private void smelt(String id, MaterialType in, Material out) {
+        smeltResult(id, in, new ItemStack(out));
+    }
+
+    private void smeltResult(String id, MaterialType in, ItemStack result) {
         RecipeChoice choice = new RecipeChoice.ExactChoice(createMaterial(in, 1));
         NamespacedKey furnace = new NamespacedKey(plugin, "smelt_" + id), blast = new NamespacedKey(plugin, "blast_" + id);
         Bukkit.removeRecipe(furnace, false);
         Bukkit.removeRecipe(blast, false);
-        Bukkit.addRecipe(new org.bukkit.inventory.FurnaceRecipe(furnace, createMaterial(out, 1), choice, 0.7f, 200));
-        Bukkit.addRecipe(new org.bukkit.inventory.BlastingRecipe(blast, createMaterial(out, 1), choice, 0.7f, 100));
+        Bukkit.addRecipe(new org.bukkit.inventory.FurnaceRecipe(furnace, result, choice, 0.7f, 200));
+        Bukkit.addRecipe(new org.bukkit.inventory.BlastingRecipe(blast, result, choice, 0.7f, 100));
         recipeKeys.add(furnace);
         recipeKeys.add(blast);
     }

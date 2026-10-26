@@ -28,6 +28,7 @@ final class Settings {
     final double armImpact, armMoveTicksAt16;
     final int armRange;
     final String docsUrl;
+    final float machineVolume;
     final double windCapacity, windRpmLow, windRpmMid, windRpmHigh, windRainBonus, windStormBonus;
     final int windRadius;
     final double engineRpm, engineCapacity, crusherImpact, crusherDivisor;
@@ -97,6 +98,7 @@ final class Settings {
         armMoveTicksAt16 = Math.max(2, c.getDouble("parts.arm.move-ticks-at-16-rpm", 12));
         armRange = Math.max(1, Math.min(8, c.getInt("parts.arm.range", 4)));
         docsUrl = c.getString("docs-url", "https://iekcorbar.com/steamworks");
+        machineVolume = (float) Math.max(0, Math.min(2, c.getDouble("sounds.machine-volume", 1.0)));
         windCapacity = c.getDouble("parts.windmill.capacity", 64);
         windRpmLow = c.getDouble("parts.windmill.rpm-below-64", 4);
         windRpmMid = c.getDouble("parts.windmill.rpm-64-to-100", 6);

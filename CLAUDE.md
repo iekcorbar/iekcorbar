@@ -685,3 +685,32 @@ klok + reling/vent) - seed 'additions' 10 pagina's + importknop op /wiki; addons
 /steamworks-pagina: sectie 'What landed on 26 October' + versie-label 0.3.18/0.1.0; site-zip
 20:49 in deploy/. npm build groen. Steamworks-polish skill is bijgewerkt met de addon-pijplijn.
 mvn groen (alle vijf). SteamworksAdditions-0.1.0.jar + pack build6 + vier herbouwde engine-jars in deploy/.
+
+### Eerste-deploy-bugfixes + dust-keten: Steamworks 0.3.19, Zukan 0.2.7, Additions 0.1.1 (26-10 diep in de nacht)
+
+Gebruiker deployde 0.3.18/0.1.0/build6 en meldde vier bugs + een nieuwe wens. Alles in één batch (0.3.19 was nog niet live):
+1. **Zukan generiek (0.2.7)**: 'providers'-allowlijst VERVANGEN door "registratie ís de opt-in" - élke
+   Supplier-aanmelder wordt gevraagd, ongeacht naam/versie (config: excluded-providers, opt-OUT).
+   Entry krijgt origin + addonOf; `@stoom` matcht nu ns, herkomst-PLUGNA en ouder. Een provider die
+   (soft)depend op een andere provider is automatisch ADDON davon: items vallen onder @parent én
+   tonen de lijn "Add-on content of <parent>". Echte PluginDescriptionFile.getSoftDepend() heet met
+   hoofdletter D; getRegistrations() geeft Collection (geen List).
+2. **Additions 0.1.1**: eigen ZukanData (Supplier-service, alle decor.allItems()) - props verschijnen
+   nu in Zukan onder @steamworks (softdepend ontdekt) met addon-vermelding.
+3. **Windmolen**: nextInt(8) + volume 0.22 (was 2/0.45 per 30t); nieuwe config sounds.machine-volume
+   (schaalt álle machinegeluiden incl. de direct afgespielde mill/hammer/crusher/engine/arm, 0 = uit).
+4. **Millstone**: output die geen zijcontainer vindt valt naast de steen op de grond (was: onzichtbaar
+   opgeslagen tot 9 stacks); vastgelopen niet-maalbare inputs (uit oude saves) worden uitgespuwd;
+   Belts.deliver duwt alleen nog maalbare items erin (plugin.millstones().find-check).
+5. **Opstart-stotter**: de waitForModels-sweep (alle chunks + entities in één tick) is nu een batch
+   van 8 chunks/tick met eigen timer; entity-cleanup en trains.load() blijven in de eerste tik.
+6. **DUST-keten (wens gebruiker, Create-doublering)**: 5 nieuwe MaterialTypes (iron/copper/gold/
+   zinc/tin_dust, stofhopen in make_models.py, helemaal onderaan build() zodat alle uuid-counters
+   byte-stabiel blijven --preview3d audited), crusher-regels raw->2 dust in machines.yml,
+   smelt(dust)->ingot furnace+blast (PartItems smelt-herbouw met Material-out overload).
+   Site: build-recipes-data.js parseert nu ook de smelt(...) calls (195 steamworks-recepten,
+   +5 crusher +7 smelt); wiki 03-processing + 06-ores bijgewerkt (incl. fix: fan smelt geen eigen
+   items); 08 + seed 59 pagina's; /steamworks pagina: crushing-card + Create-true-card + label 0.3.19/0.1.1.
+   site-zip 22:03 in deploy/. FMM: 10 dust-bestanden naar deploy/fmm-steamworks/ (36 totaal).
+   ! machines.yml op de server moet weg/ververst voor de crusher-regels - in TE-DEPLOYEN gezet.
+mvn groen (Steamworks/Zukan/Additions); jars 0.3.19 + 0.2.7 + 0.1.1 in deploy/ (0.3.18-1.0-buildjes weg).

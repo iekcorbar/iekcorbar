@@ -69,10 +69,12 @@ Place **two** crushing wheels side by side on the same axis and power one of the
 | Nether Gold Ore | 10 gold nuggets |
 | Zinc / Tin ore (Silk Touch blocks) | 2-3 raw zinc / raw tin |
 | Sulfur ore | 5-7 sulfur |
+| **Any raw ore** (iron, copper, gold, zinc, tin) | **2 dust** — smelt each dust into an ingot, so crushing **doubles** your ore |
 | Wheat | 2-3 Flour |
 | Cobblestone, gravel, bone, wool, blaze rod | like the millstone, but faster |
 
 > Mine ores with **Silk Touch** and crush them for more than Fortune gives.
+> The full doubling chain: ore block → crush → 2-3 raw → crush → 4-6 dust → smelt → 4-6 ingots.
 
 ## Kettle and Mixer
 The **Kettle** holds ingredients and water; the **Mixer** on top of it stirs them. Power the mixer **from above**.

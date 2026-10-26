@@ -37,14 +37,15 @@ import java.util.function.Supplier;
 
 /**
  * Everything Zukan knows: every item, and every recipe of vanilla and of our plugins.
- * Other plugins register a {@code Supplier<Map<String,Object>>} service (plain JDK
- * types, so nobody needs a shared API jar); Zukan only calls those of the plugins
- * named in its config. The map holds "items" (List of ItemStack) and "recipes" (List of
- * Map with category, icon, station, inputs, outputs, info, grid, shapeless).
+ * Other plugins register a {@code Supplier<Map<String,Object>>} service (plain JDK types,
+ * so nobody needs a shared API jar) - Zukan asks every registration it finds, whatever the
+ * plugin is called or which version it runs; {@code excluded-providers} in the config is the
+ * opt-out. The map holds "items" (List of ItemStack) and "recipes" (List of Map with
+ * category, icon, station, inputs, outputs, info, grid, shapeless).
  */
 final class Catalog {
-    /** One entry in the item list. */
-    record Entry(ItemStack stack, String key, String name, String ns, int order) { }
+    /** One entry in the item list. origin = providing plugin; addonOf = the plugin that provider is an add-on of. */
+    record Entry(ItemStack stack, String key, String name, String ns, int order, String origin, String addonOf) { }
 
     private final ZukanPlugin plugin;
     final List<Entry> entries = new ArrayList<>();
@@ -57,6 +58,8 @@ final class Catalog {
     /** Plugins that list their own crafting recipes: their Bukkit versions (generic paper/note block slots) are skipped. */
     private final Set<String> skipNs = new HashSet<>();
     private final Map<String, Map<?, ?>> collected = new LinkedHashMap<>();
+    /** provider plugin (lowercase) -> the plugin it declares itself an add-on of, read from its depend/softdepend. */
+    private final Map<String, String> addonOf = new HashMap<>();
 
     Catalog(ZukanPlugin plugin) {
         this.plugin = plugin;
@@ -152,10 +155,15 @@ final class Catalog {
     }
 
     private void addEntry(ItemStack it, int order) {
+        addEntry(it, order, null, null);
+    }
+
+    /** origin = the plugin that listed this item through its provider (null: vanilla or a recipe output). */
+    private void addEntry(ItemStack it, int order, String origin, String addon) {
         ItemStack one = it.asOne();
         String key = keyOf(one);
         if (byKey.containsKey(key)) return;
-        Entry e = new Entry(one, key, nameOf(one), nsOf(one), order);
+        Entry e = new Entry(one, key, nameOf(one), nsOf(one), order, origin, addon);
         byKey.put(key, e);
         entries.add(e);
     }
@@ -322,16 +330,34 @@ final class Catalog {
 
     // ------------------------------------------------------------ plugin providers
 
-    /** Asks every allowed provider plugin for its data once (before the vanilla pass, which skips what they replace). */
+    /**
+     * Asks every plugin that registered the Supplier service for its data once (before the vanilla pass,
+     * which skips what they replace). There is no allow list: registration IS the opt-in, so a plugin of
+     * any name or version is read as soon as it is installed - only excluded-providers keeps one out.
+     * A provider whose plugin.yml depends (or softdepends) on another provider is treated as an add-on
+     * of it: its content is found under @parent too and shown with an "Addon of parent" note.
+     */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void collect() {
-        Set<String> allowed = new HashSet<>();
-        for (String s : plugin.getConfig().getStringList("providers")) allowed.add(s.toLowerCase(Locale.ROOT));
-        // our own plugins are always asked, even when an older config.yml on the server does not list them yet
-        for (String s : new String[]{"steamworks", "kitchen", "sakagura", "relics", "kura", "wildlife", "satchel"}) allowed.add(s);
-        for (RegisteredServiceProvider<Supplier> reg : Bukkit.getServicesManager().getRegistrations(Supplier.class)) {
+        Set<String> excluded = new HashSet<>();
+        for (String s : plugin.getConfig().getStringList("excluded-providers")) excluded.add(s.toLowerCase(Locale.ROOT));
+        java.util.Collection<RegisteredServiceProvider<Supplier>> regs = Bukkit.getServicesManager().getRegistrations(Supplier.class);
+        Set<String> providers = new HashSet<>();
+        for (RegisteredServiceProvider<Supplier> reg : regs) providers.add(reg.getPlugin().getName().toLowerCase(Locale.ROOT));
+        for (RegisteredServiceProvider<Supplier> reg : regs) {
             String owner = reg.getPlugin().getName();
-            if (!allowed.contains(owner.toLowerCase(Locale.ROOT))) continue;
+            String key = owner.toLowerCase(Locale.ROOT);
+            if (excluded.contains(key)) continue;
+            for (String dep : reg.getPlugin().getDescription().getDepend()) {
+                String p = dep.toLowerCase(Locale.ROOT);
+                if (!p.equals(key) && providers.contains(p)) { addonOf.put(key, dep); break; }
+            }
+            if (!addonOf.containsKey(key)) {   // add-ons usually softdepend: same rule for those
+                for (String dep : reg.getPlugin().getDescription().getSoftDepend()) {
+                    String p = dep.toLowerCase(Locale.ROOT);
+                    if (!p.equals(key) && providers.contains(p)) { addonOf.put(key, dep); break; }
+                }
+            }
             Object data;
             try {
                 data = reg.getProvider().get();
@@ -351,7 +377,9 @@ final class Catalog {
             String owner = en.getKey();
             Map<?, ?> map = en.getValue();
             if (map.get("items") instanceof List<?> items) {
-                for (Object o : items) if (o instanceof ItemStack s && !s.isEmpty()) addEntry(s, 50_000 + entries.size());
+                String origin = owner.toLowerCase(java.util.Locale.ROOT);
+                String parent = addonOf.get(origin);
+                for (Object o : items) if (o instanceof ItemStack s && !s.isEmpty()) addEntry(s, 50_000 + entries.size(), origin, parent);
             }
             if (map.get("recipes") instanceof List<?> recipes) {
                 int before = recipeCount;

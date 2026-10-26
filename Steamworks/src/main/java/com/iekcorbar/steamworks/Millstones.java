@@ -57,11 +57,20 @@ final class Millstones {
             double speed = Math.abs(n.speed());
             if (speed <= 0 || n.millInput == null) continue;
             MachineRecipes.Recipe r = find(n.millInput);
-            if (r == null || n.millOutput.size() >= MAX_OUTPUT_STACKS) continue;
+            if (r == null) {
+                // an item that cannot be ground got in here (a belt/funnel pushed one before 0.3.19,
+                // or an old save): spit it back out beside the stone, otherwise it blocks forever
+                n.world.dropItemNaturally(n.center().add(0, 0.3, 0), n.millInput);
+                n.millInput = null;
+                n.millProgress = 0;
+                plugin.saveSoon(n);
+                continue;
+            }
+            if (n.millOutput.size() >= MAX_OUTPUT_STACKS) continue;
             n.millProgress += 5 * Math.max(cfg.millMinRate, Math.min(cfg.millMaxRate, speed / cfg.millDivisor));
             Location top = n.center().add(0, 0.55, 0);
             n.world.spawnParticle(Particle.ITEM, top, 3, 0.2, 0.05, 0.2, 0.02, n.millInput.asOne());
-            if (tick % 20 == 0) n.world.playSound(top, "steamworks:millstone.grind", 0.45f, 1f);
+            if (tick % 20 == 0 && cfg.machineVolume > 0) n.world.playSound(top, "steamworks:millstone.grind", 0.45f * cfg.machineVolume, 1f);
             while (n.millProgress >= r.time() && n.millInput != null) {
                 n.millProgress -= r.time();
                 n.millInput.setAmount(n.millInput.getAmount() - 1);
@@ -89,7 +98,7 @@ final class Millstones {
         n.millOutput.add(item);
     }
 
-    /** Results go into a chest/barrel/hopper on one of the four sides. */
+    /** Results go into a chest/barrel/hopper on one of the four sides; what is left falls out beside the stone. */
     private void pushOut(KNode n) {
         if (n.millOutput.isEmpty()) return;
         for (BlockFace f : new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST}) {
@@ -101,6 +110,13 @@ final class Millstones {
             n.millOutput.clear();
             n.millOutput.addAll(left);
             if (n.millOutput.isEmpty()) return;
+        }
+        // no side container took it: drop it beside the stone (like Create) so grinding never stalls
+        if (!n.millOutput.isEmpty()) {
+            Location beside = n.center().add(0, 0.2, 0);
+            for (ItemStack s : new ArrayList<>(n.millOutput)) n.world.dropItemNaturally(beside, s);
+            n.millOutput.clear();
+            plugin.saveSoon(n);
         }
     }
 

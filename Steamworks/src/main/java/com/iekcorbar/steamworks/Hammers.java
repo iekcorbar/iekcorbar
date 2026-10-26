@@ -97,7 +97,8 @@ final class Hammers {
         Location top = n.center().add(0, 0.45, 0);
         n.world.spawnParticle(Particle.ITEM, drop.clone().add(0, 0.1, 0), 8, 0.15, 0.05, 0.15, 0.08, one);
         n.world.spawnParticle(Particle.CLOUD, top, 3, 0.2, 0.05, 0.2, 0.01);
-        n.world.playSound(drop, "steamworks:hammer.strike", 0.7f, 1f);
+        if (plugin.settings().machineVolume > 0)
+            n.world.playSound(drop, "steamworks:hammer.strike", 0.7f * plugin.settings().machineVolume, 1f);
         
     }
 

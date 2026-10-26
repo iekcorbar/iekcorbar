@@ -103,6 +103,18 @@ for (const [key, title] of Object.entries(machineTitles)) {
     });
   }
 }
+// Furnace recipes for our own items (the smelt(...) calls in PartItems): the dust -> ingot
+// half of the crushing chain, so the site shows the complete raw -> dust -> ingot doubling.
+for (const m of read('Steamworks/src/main/java/com/iekcorbar/steamworks/PartItems.java')
+    .matchAll(/smelt\("\w+", MaterialType\.(\w+), (?:MaterialType|Material)\.(\w+)\)/g)) {
+  swRecipes.push({
+    category: 'Smelting', type: 'machine',
+    ingredients: [spec(m[1])],
+    outputs: [spec(m[2])],
+    time: 10, water: 0, heat: false,
+    note: 'Furnace 10 s, blast furnace 5 s. One dust, one ingot - so one raw ore pays double.',
+  });
+}
 out.plugins.push({ id: 'steamworks', name: 'Steamworks', blurb: 'Kinetic machines, ores, oil and trains.', recipes: swRecipes });
 
 // ---------------------------------------------------------------- Kitchen

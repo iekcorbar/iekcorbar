@@ -16,7 +16,8 @@ parent: steamworks
 * They mine like real ores: a better pickaxe and Efficiency are faster, the wrong tool is very slow and drops nothing.
 * **Fortune** gives more, **Silk Touch** gives the ore block itself (you can place it again).
 * Veins also appear in areas that already existed, the first time a chunk loads after the update.
-* Smelt **Raw Zinc** and **Raw Tin** in a furnace or blast furnace (or a bellows fan over lava).
+* Smelt **Raw Zinc** and **Raw Tin** in a furnace or blast furnace.
+* Or crush any raw ore on the **Crushing Wheels** first: one raw becomes two **dust**, and every dust smelts to one ingot. That is where the real money is.
 
 ## Materials
 
@@ -27,4 +28,5 @@ parent: steamworks
 | Brass Plate | Steam Hammer | locomotive, Karakuri Arm, tool heads, pumpjack, refinery |
 | Zinc Ingot | smelting Raw Zinc | brass |
 | Tin Ingot | smelting Raw Tin | canisters |
+| Iron / Copper / Gold / Zinc / Tin Dust | Crushing Wheels, from raw ore | smelt one dust → one ingot (doubling) |
 | Sulfur | sulfur ore | gunpowder (mixer) |

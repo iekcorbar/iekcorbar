@@ -111,13 +111,25 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
                 for (Entity e : w.getEntities()) {
                     if (e.getPersistentDataContainer().has(visuals.tag, PersistentDataType.BYTE)) e.remove();
                 }
-                for (Chunk c : w.getLoadedChunks()) {
-                    loadChunk(c);
-                    shapes.loadChunk(c);
-                }
             }
             trains.load();
             for (Player p : getServer().getOnlinePlayers()) p.discoverRecipes(items.recipeKeys);
+            // Rebuild the machines chunk by chunk, a few chunks per tick: reading and spawning
+            // every loaded chunk in one go is what made the server stutter for seconds at startup.
+            java.util.List<Chunk> queue = new java.util.ArrayList<>();
+            for (World w : getServer().getWorlds()) queue.addAll(java.util.Arrays.asList(w.getLoadedChunks()));
+            int[] at = {0};
+            getServer().getScheduler().runTaskTimer(this, t -> {
+                int end = Math.min(queue.size(), at[0] + 8);
+                for (; at[0] < end; at[0]++) {
+                    Chunk c = queue.get(at[0]);
+                    if (c.isLoaded()) {
+                        loadChunk(c);
+                        shapes.loadChunk(c);
+                    }
+                }
+                if (at[0] >= queue.size()) t.cancel();
+            }, 1L, 1L);
         }), 40L);
 
         getServer().getScheduler().runTaskTimer(this, () -> {
@@ -153,6 +165,8 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
 
     /** Running machines make their own sounds when someone is close enough to hear them. */
     private void machineSounds() {
+        float scale = settings.machineVolume;
+        if (scale <= 0f) return;
         java.util.concurrent.ThreadLocalRandom r = java.util.concurrent.ThreadLocalRandom.current();
         for (KNode n : kinetics.all()) {
             boolean running = n.speed() != 0 || (n.type == PartType.STEAM_BOILER && n.burnTicks > 0);
@@ -168,12 +182,12 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
                 }
                 case BELT -> { if (r.nextInt(3) != 0) continue; key = "belt.rumble"; vol = 0.2f; }
                 case PUMPJACK -> { key = "pumpjack.creak"; vol = 0.4f; }
-                case WINDMILL -> { if (r.nextInt(2) != 0) continue; key = "windmill.creak"; vol = 0.45f; }
+                case WINDMILL -> { if (r.nextInt(8) != 0) continue; key = "windmill.creak"; vol = 0.22f; }
                 case GEARBOX -> { if (r.nextInt(4) != 0) continue; key = "gear.clatter"; vol = 0.15f; }
                 case STEAM_BOILER -> { key = "boiler.hiss"; vol = 0.3f; }
                 default -> { continue; }
             }
-            n.world.playSound(n.center(), "steamworks:" + key, vol, 0.9f + r.nextFloat() * 0.2f);
+            n.world.playSound(n.center(), "steamworks:" + key, vol * scale, 0.9f + r.nextFloat() * 0.2f);
         }
     }
 

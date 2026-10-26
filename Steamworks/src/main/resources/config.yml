@@ -19,6 +19,11 @@ max-network-size: 512
 speed-levels:
   medium: 24
   fast: 80
+# Running-machine sounds (windmill creaks, drills, belts, millstones, engines, hammers, arms):
+# a loudness multiplier for all of them. 0 turns machine noise off entirely.
+sounds:
+  machine-volume: 1.0
+
 # Left-clicks needed to pick a part up in survival (within one second).
 survival-break-hits: 2
 

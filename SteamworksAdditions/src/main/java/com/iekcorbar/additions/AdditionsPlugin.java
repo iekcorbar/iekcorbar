@@ -17,6 +17,7 @@ public final class AdditionsPlugin extends JavaPlugin {
         additions = new Additions(this);
         getServer().getPluginManager().registerEvents(additions.decor, this);
         additions.decor.registerRecipes();
+        getServer().getServicesManager().register(java.util.function.Supplier.class, new ZukanData(additions), this, org.bukkit.plugin.ServicePriority.Normal); // recipe viewer (Zukan)
         for (org.bukkit.World w : getServer().getWorlds())
             for (org.bukkit.Chunk c : w.getLoadedChunks()) additions.decor.loadChunk(c);
         AdditionsCommand cmd = new AdditionsCommand(this);

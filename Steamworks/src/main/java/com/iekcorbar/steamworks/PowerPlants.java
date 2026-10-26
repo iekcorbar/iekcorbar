@@ -60,7 +60,8 @@ final class PowerPlants {
                     if (n.generated != 0 && n.speed() != 0 && tick % 12 == 0) {
                         Location top = n.center().add(0, 0.7, 0);
                         n.world.spawnParticle(Particle.CLOUD, top, 2, 0.1, 0.05, 0.1, 0.03);
-                        n.world.playSound(top, "steamworks:engine.chuff", 0.5f, (float) Math.min(1.4, 0.8 + Math.abs(n.speed()) / 64));
+                        if (cfg.machineVolume > 0)
+                            n.world.playSound(top, "steamworks:engine.chuff", 0.5f * cfg.machineVolume, (float) Math.min(1.4, 0.8 + Math.abs(n.speed()) / 64));
                     }
                 }
                 default -> { }

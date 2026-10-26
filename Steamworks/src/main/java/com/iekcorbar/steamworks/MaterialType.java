@@ -31,7 +31,12 @@ public enum MaterialType {
     BRASS_CASING("Brass Casing", "The smooth, golden cousin of the andesite casing."),
     WHISK("Whisk", "Bends the Mixer's turning into stirring."),
     PROPELLER("Propeller", "Two copper blades on a steel hub - what makes a Fan blow."),
-    ZINC_NUGGET("Zinc Nugget", "Nine to a zinc ingot; with andesite it makes alloy.");
+    ZINC_NUGGET("Zinc Nugget", "Nine to a zinc ingot; with andesite it makes alloy."),
+    IRON_DUST("Iron Dust", "Crushed from raw iron by the crushing wheels.", "Smelt one into one iron ingot."),
+    COPPER_DUST("Copper Dust", "Crushed from raw copper by the crushing wheels.", "Smelt one into one copper ingot."),
+    GOLD_DUST("Gold Dust", "Crushed from raw gold by the crushing wheels.", "Smelt one into one gold ingot."),
+    ZINC_DUST("Zinc Dust", "Crushed from raw zinc by the crushing wheels.", "Smelt one into one zinc ingot."),
+    TIN_DUST("Tin Dust", "Crushed from raw tin by the crushing wheels.", "Smelt one into one tin ingot.");
 
     public final String displayName;
     public final String[] lore;

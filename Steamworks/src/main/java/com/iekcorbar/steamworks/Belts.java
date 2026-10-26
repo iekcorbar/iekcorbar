@@ -98,7 +98,7 @@ final class Belts {
             plugin.saveSoon(next);
             return finish(item, stack, left);
         }
-        if (next != null && next.type == PartType.MILLSTONE && next.millInput == null) {
+        if (next != null && next.type == PartType.MILLSTONE && next.millInput == null && plugin.millstones().find(stack) != null) {
             next.millInput = stack.clone();   // the millstone's own tick shows and grinds it
             plugin.saveSoon(next);
             item.remove();

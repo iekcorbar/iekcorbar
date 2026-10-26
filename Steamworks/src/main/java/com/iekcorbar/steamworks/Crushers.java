@@ -88,7 +88,8 @@ final class Crushers {
                 Item drop = n.world.dropItem(out, o.create(plugin.items()));
                 drop.setVelocity(new Vector(0, -0.1, 0));
             }
-            n.world.playSound(gap, "steamworks:millstone.grind", 0.6f, 0.75f);
+            if (plugin.settings().machineVolume > 0)
+                n.world.playSound(gap, "steamworks:millstone.grind", 0.6f * plugin.settings().machineVolume, 0.75f);
             n.world.spawnParticle(Particle.BLOCK, gap.clone().add(0, 0.5, 0), 10, 0.3, 0.1, 0.3,
                     stack.getType().isBlock() ? stack.getType().createBlockData() : org.bukkit.Material.STONE.createBlockData());
         }

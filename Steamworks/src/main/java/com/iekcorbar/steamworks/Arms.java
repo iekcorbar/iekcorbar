@@ -248,7 +248,8 @@ final class Arms implements Listener {
         if (dx == 0 && dz == 0) return;
         n.beamPhase = Math.atan2(dx, dz);
         plugin.visuals().armTurn(n, (float) n.beamPhase, Math.max(2, duration / 2));
-        n.world.playSound(n.center(), "steamworks:arm.servo", 0.35f, 1f);
+        if (plugin.settings().machineVolume > 0)
+            n.world.playSound(n.center(), "steamworks:arm.servo", 0.35f * plugin.settings().machineVolume, 1f);
     }
 
     // ------------------------------------------------------------ what is at a point

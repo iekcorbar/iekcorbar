@@ -191,6 +191,12 @@ crusher:
   - {input: ore:sulfur_ore, time: 100, output: [sw:sulfur 5, sw:sulfur 2 50%]}
   - {input: ore:deepslate_sulfur_ore, time: 120, output: [sw:sulfur 5, sw:sulfur 2 50%]}
   - {input: ore:nether_sulfur_ore, time: 80, output: [sw:sulfur 5, sw:sulfur 2 50%]}
+  # raw ore -> dust: one raw becomes two dust, each dust smelts to one ingot (the Create doubling)
+  - {input: RAW_IRON, time: 80, output: [sw:iron_dust 2]}
+  - {input: RAW_COPPER, time: 80, output: [sw:copper_dust 2]}
+  - {input: RAW_GOLD, time: 80, output: [sw:gold_dust 2]}
+  - {input: sw:raw_zinc, time: 80, output: [sw:zinc_dust 2]}
+  - {input: sw:raw_tin, time: 80, output: [sw:tin_dust 2]}
   # quicker versions of millstone work
   - {input: COBBLESTONE, time: 60, output: [GRAVEL]}
   - {input: GRAVEL, time: 60, output: [SAND, FLINT 1 25%]}
