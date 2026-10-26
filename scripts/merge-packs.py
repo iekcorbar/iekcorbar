@@ -1,29 +1,27 @@
-"""Merges ALL resource packs into ONE reproducible zip: iekcorbar-packv2.zip.
+"""Merges all our own resource packs into ONE reproducible zip: iekcorbar-packv2.zip.
 
 Why: ResourcePackManager mixes every zip in plugins/ResourcePackManager/mixer/ into one pack and
 re-sends it to players whenever the mix changes. Six small zips of ours meant six inputs that could
 each trigger a re-mix, and every build wrote new timestamps, so the bytes (and hash) changed even
 when nothing had. This script writes one zip with fixed timestamps and sorted entries: the same
 content always gives the same bytes. Since 2026-10-26 this single file is named
-iekcorbar-packv2.zip - ONE zip in the mixer, nothing else; it replaced the old Iekcorbar-pack.zip
-because garden/brewery models on the server had drifted out of sync (stale per-plugin copies in
-the mixer fighting the merged copy).
+iekcorbar-packv2.zip - ONE zip in the mixer for everything of OURS; it replaced the old
+Iekcorbar-pack.zip because garden/brewery models on the server had drifted out of sync (stale
+per-plugin copies in the mixer fighting the merged copy).
 
-Inputs, part 1 - our own packs (built by each plugin's tools/make_pack.py first):
+Inputs - our own packs (built by each plugin's tools/make_pack.py first):
   Steamworks/resourcepack/Steamworks-blocks.zip, Kitchen/resourcepack/Kitchen-pack.zip,
   Sakagura/resourcepack/Sakagura-pack.zip, Relics/resourcepack/Relics-pack.zip,
   Kura/resourcepack/Kura-pack.zip, Wildlife/resourcepack/Wildlife-sounds.zip (any that exist)
-Inputs, part 2 - third-party exports currently served from the mixer, read from the local backup
-"E:\\backups server\\rspm mixer": EliteMobs, FreeMinecraftModels (+shared), TechCore,
-ValhallaMMO (default+resource), BackpackPlus and ResourcePackManager's own two. Our sources are
-processed first: when a third-party zip ships the same path with different bytes our version WINS
-and the overwrite is printed (currently the two groups share zero paths - verified 2026-10-26).
-If one of those plugins later re-exports a newer pack, drop the new zip in that backup folder and
-re-run this script, then upload the new iekcorbar-packv2.zip to the mixer.
+The packs use separate namespaces; the only shared paths are pack.mcmeta (identical) and, if two
+packs ever ship the same file with different content, this script stops with an error.
 
-Usage (repo root): python -I scripts/merge-packs.py   ->  iekcorbar-packv2.zip
-Then put ONLY that file in plugins/ResourcePackManager/mixer/ (delete old Iekcorbar-pack.zip,
-the per-plugin zips that used to live there AND the third-party zips - they are inside now).
+Third-party plugin packs (EliteMobs, FMM, TechCore, ValhallaMMO, BackpackPlus, RPM) deliberately
+stay OUT - see THIRD_SOURCES at the bottom for the failed 68 MB experiment of 2026-10-26.
+
+Usage (repo root): python -I scripts/merge-packs.py   ->  iekcorbar-packv2.zip (~15 MB)
+Put this file in plugins/ResourcePackManager/mixer/ (and remove any old per-plugin copies of OUR
+packs from there - the third-party zips keep living beside this one).
 """
 import glob, hashlib, json, os, sys, zipfile
 
@@ -45,20 +43,21 @@ SOURCES = [
 OUT = "iekcorbar-packv2.zip"
 FIXED = (2026, 1, 1, 0, 0, 0)
 
-# Server-mixer copies of the plugin-owned packs (measured 2026-10-26 from the backup at E:\.
-# Garden/Sakagura/Relics are NOT here: their authoritative build is our SOURCES above.
-# Empty plugin zips are skipped at runtime. Refresh these copies after a plugin update and rerun.
+# Server-mixer copies of the plugin-owned packs (EliteMobs, FMM, TechCore, ValhallaMMO,
+# BackpackPlus, RPM). TRIED AND REVERTED 2026-10-26: baking them into v2 made one 68 MB file
+# and clients answered "1 out of 2 resource packs failed to download". They keep their own
+# zips in the mixer (RPM manages + re-mixes those itself, they auto-update on plugin export);
+# v2 stays our-own ~15 MB and loads fine. Re-fill this list (from E:\backups server\rspm
+# mixer) only if you really want a single file and know the client can take it.
 THIRD_DIR = r"E:\backups server\rspm mixer"
 THIRD_SOURCES = [
-    "BackpackPlus_resource_pack.zip",
-    "EliteMobs_resource_pack.zip",
-    "FreeMinecraftModels_resource_pack.zip",
-    "FreeMinecraftModels_shared_resource_pack.zip",
-    "ResourcePackManager_resource_pack.zip",
-    "ResourcePackManager_shared_resource_pack.zip",
-    "TechCore_resource_pack.zip",
-    "ValhallaMMO_default.zip",
-    "ValhallaMMO_resource_pack.zip",
+    # "BackpackPlus_resource_pack.zip",
+    # "EliteMobs_resource_pack.zip",
+    # "FreeMinecraftModels_resource_pack.zip",
+    # "FreeMinecraftModels_shared_resource_pack.zip",
+    # "ResourcePackManager_resource_pack.zip",
+    # "TechCore_resource_pack.zip",
+    # "ValhallaMMO_default.zip",
 ]
 
 FACES = {"north": (2, 0), "south": (2, 1), "west": (0, 0), "east": (0, 1), "down": (1, 0), "up": (1, 1)}
@@ -218,7 +217,7 @@ for name in list(files):
             files[name] = json.dumps(m, indent=1).encode("utf-8")
 print("z-fighting faces separated:", fixed)
 
-mcmeta = {"pack": {"description": "Iekcorbar v2 - alles in één: Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items + EliteMobs, FMM, TechCore, ValhallaMMO, BackpackPlus", "pack_format": 64,
+mcmeta = {"pack": {"description": "Iekcorbar v2 (Steamworks, Kitchen+decor, Sakagura+garden, Relics, Kura, Wildlife+Zoo, Zukan, Satchel, Hihou, MMO items)", "pack_format": 64,
                    "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}}
 files["pack.mcmeta"] = json.dumps(mcmeta, indent=1).encode("utf-8")
 icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pack-icon.png")  # scripts/make-pack-icon.py

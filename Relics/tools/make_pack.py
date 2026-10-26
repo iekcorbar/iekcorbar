@@ -578,35 +578,36 @@ def countdown_clock():
 
 
 def countdown_board(wall):
-    """Big steampunk scoreboard, 3 blocks wide (x -1..2) and ~2 tall: brass frame round a black panel, gears in
-    the corners, pipes with valves on top, two lamps. Wall version hangs flush on the back (z = 1); the floor
+    """Big steampunk scoreboard, 3 blocks wide and ~2 tall: brass frame round a black panel, gears in
+    the corners, pipes with valves on top, two lamps. Wall version hangs flush on the back (z = 16); the floor
     version stands tall on two legs so players can walk underneath it, like the torii gate. The plugin lays three
     text lines on the panel (see NewYearBoards; the floor lines ride 2.6 blocks higher with the panel).
 
-    Coordinates are in blocks (the plugin draws the relic model with scale 1 - "the tree is built small", see
-    RelicType.scale), not in design pixels: an earlier version wrote them 16x too big, which made the board
-    48 blocks wide and far too big for Minecraft to load and place."""
-    zb = 1.0 if wall else 0.75
-    e = [box(-1, 0, zb - 0.3, 2, 0.24, zb, "brass"),            # bottom rail
-         box(-1, 1.76, zb - 0.3, 2, 1.88, zb, "brass"),        # top rail
-         box(-1, 0.24, zb - 0.3, -0.6, 1.88, zb, "brass"),    # left frame column
-         box(1.8, 0.24, zb - 0.3, 2, 1.88, zb, "brass"),       # right frame column
-         box(-0.75, 0.24, zb - 0.36, 1.75, 1.76, zb - 0.08, "lacquer_black"),  # black panel
-         box(-0.95, 0.8, zb - 0.2, -0.6, 1.45, zb, "copper"),   # gears in the four corners
-         box(-0.95, 0.15, zb - 0.2, -0.6, 0.6, zb, "copper"),
-         box(1.8, 0.8, zb - 0.2, 2, 1.45, zb, "copper"),
-         box(1.8, 0.15, zb - 0.2, 2, 0.6, zb, "copper"),
-         box(-0.7, 1.88, zb - 0.15, 0, 2.25, zb, "copper_d"),   # pipe along the top with a valve
-         box(0.3, 1.88, zb - 0.15, 0.6, 2.25, zb, "copper_d"),
-         box(0.4, 2.25, zb - 0.15, 0.7, 2.6, zb, "brass"),
-         box(0.45, 2.5, zb - 0.15, 0.65, 2.8, zb, "dial"),
-         box(-1.0, 0.2, zb - 0.15, -0.7, 0.7, zb, "flame_core"),  # lamps either side of the panel
-         box(1.7, 0.2, zb - 0.15, 2.0, 0.7, zb, "flame_core")]
+    Coordinates are in VANILLA MODEL UNITS (16 = 1 block), like every other relic. History: the first
+    version wrote block-sized numbers into unit fields (rendered ~48 blocks wide), the 0.3.4 'fix'
+    then multiplied by 1 in the wrong direction and shrank everything (rendered 0.2 blocks). This is
+    the same frame as before, honestly in units: 48 wide x ~30 panel, legs to 2.6 blocks, total ~5.4."""
+    zb = 16.0 if wall else 12.0
+    e = [box(-16, 0, zb - 4.8, 32, 3.84, zb, "brass"),           # bottom rail
+         box(-16, 28.16, zb - 4.8, 32, 30.08, zb, "brass"),      # top rail
+         box(-16, 3.84, zb - 4.8, -9.6, 30.08, zb, "brass"),     # left frame column
+         box(28.8, 3.84, zb - 4.8, 32, 30.08, zb, "brass"),      # right frame column
+         box(-12, 3.84, zb - 5.76, 28, 28.16, zb - 1.28, "lacquer_black"),   # black panel
+         box(-15.2, 12.8, zb - 3.2, -9.6, 23.2, zb, "copper"),   # gears in the four corners
+         box(-15.2, 2.4, zb - 3.2, -9.6, 9.6, zb, "copper"),
+         box(28.8, 12.8, zb - 3.2, 32, 23.2, zb, "copper"),
+         box(28.8, 2.4, zb - 3.2, 32, 9.6, zb, "copper"),
+         box(-11.2, 30.08, zb - 2.4, 0, 36, zb, "copper_d"),     # pipe along the top with a valve
+         box(4.8, 30.08, zb - 2.4, 9.6, 36, zb, "copper_d"),
+         box(6.4, 36, zb - 2.4, 11.2, 41.6, zb, "brass"),
+         box(7.2, 40, zb - 2.4, 10.4, 44.8, zb, "dial"),
+         box(-16, 3.2, zb - 2.4, -11.2, 11.2, zb, "flame_core"),  # lamps either side of the panel
+         box(27.2, 3.2, zb - 2.4, 32, 11.2, zb, "flame_core")]
     if wall:
         return e
-    e = shift(e, 0, 2.6)   # stand it tall on two legs so players can walk underneath, like the torii gate
-    return e + [box(-0.85, 0, 0.75, -0.65, 2.62, 0.95, "wood_warm_d"),  # the two legs
-                box(1.65, 0, 0.75, 1.85, 2.62, 0.95, "wood_warm_d")]
+    e = shift(e, 0, 41.6)   # stand it tall on two legs (2.6 blocks) so players can walk underneath
+    return e + [box(-13.6, 0, 12, -10.4, 41.92, 15.2, "wood_warm_d"),  # the two legs
+                box(26.4, 0, 12, 29.6, 41.92, 15.2, "wood_warm_d")]
 
 
 def temple_bell():
@@ -650,14 +651,20 @@ def confetti_cannon():
 
 
 def champagne_tower(full):
-    e = [box(2, 0, 2, 14, 0.6, 14, "brass")]
+    """Cider pyramid. Built at S=1.75 so the whole tower reads as a real centrepiece (~1.4 blocks
+    tall); the raw glass rows below are in the original 12.6-unit design. The plugin counts taken
+    glasses and swaps to _half (6) / _empty (0)."""
+    S = 1.75
+    def sc(x1, y1, z1, x2, y2, z2, t):
+        return box(8 + (x1 - 8) * S, y1 * S, 8 + (z1 - 8) * S, 8 + (x2 - 8) * S, y2 * S, 8 + (z2 - 8) * S, t)
+    e = [sc(2, 0, 2, 14, 0.6, 14, "brass")]
     rows = [(3, 0.6, [(4, 4), (8, 4), (12, 4), (4, 8), (8, 8), (12, 8), (4, 12), (8, 12), (12, 12)]), (2, 4.6, [(6, 6), (10, 6), (6, 10), (10, 10)]), (1, 8.6, [(8, 8)])]
     k = 0
     for _, y, spots in rows:
         for x, z in spots:
-            e += [box(x - 0.3, y, z - 0.3, x + 0.3, y + 2, z + 0.3, "glass"), box(x - 1.2, y + 2, z - 1.2, x + 1.2, y + 4, z + 1.2, "glass")]
+            e += [sc(x - 0.3, y, z - 0.3, x + 0.3, y + 2, z + 0.3, "glass"), sc(x - 1.2, y + 2, z - 1.2, x + 1.2, y + 4, z + 1.2, "glass")]
             if k < full:
-                e.append(box(x - 1.0, y + 2.2, z - 1.0, x + 1.0, y + 3.6, z + 1.0, "fizz"))
+                e.append(sc(x - 1.0, y + 2.2, z - 1.0, x + 1.0, y + 3.6, z + 1.0, "fizz"))
             k += 1
     return e
 
@@ -871,11 +878,13 @@ def bonsai():
 
 
 def byobu():
+    """Folding paper screen - a ROOM DIVIDER, so it has to hide a standing player: four panels of
+    8 units wide, 26 tall (= 2.0 x 1.63 blocks). Was 6x18 (1.5 x 1.13) which read as a low table."""
     e = []
-    for i, x in enumerate((-4, 2, 8, 14)):
+    for i, x in enumerate((-4, 4, 12, 20)):
         z = 7 if i % 2 == 0 else 9
-        e += [box(x, 0, z, x + 6, 18, z + 0.6, "lacquer_black"), box(x + 0.6, 0.6, z - 0.05, x + 5.4, 17.4, z + 0.65, "washi")]
-    e += [box(-2, 9, 6.9, 3, 13, 7, "blossom"), box(8.5, 4, 6.9, 13, 9, 7, "shamrock_d"), box(15, 11, 8.9, 19, 15, 9, "gold")]
+        e += [box(x, 0, z, x + 8, 26, z + 0.6, "lacquer_black"), box(x + 0.8, 0.8, z - 0.05, x + 7.2, 25, z + 0.65, "washi")]
+    e += [box(-2, 13, 6.9, 4, 19, 7, "blossom"), box(9, 6, 6.9, 15, 13, 7, "shamrock_d"), box(16, 16, 8.9, 22, 22, 9, "gold")]
     return e
 
 
