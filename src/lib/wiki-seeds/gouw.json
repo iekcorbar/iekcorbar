@@ -1,0 +1,26 @@
+{
+ "source": "docs/wiki-gouw (regenerate with scripts/build-wiki-seed.py)",
+ "pages": [
+  {
+   "slug": "gouw-intro",
+   "title": "Introduction",
+   "category": "Gouw Land Claims",
+   "parent": null,
+   "content": "## What is a gouw?\n\nA **gouw** (Dutch for \"county\") is a piece of land you claim on the server — one chunk at a time. Inside your gouw, only you and the people you trust can build, open containers or fight. Gouw is the in-house replacement for the old Lands plugin, and every Lands claim was carried over automatically the first time Gouw started.\n\nHead over to [Gouw — Land Claims](/wiki?page=gouw) to see how protection works, or check the [Commands](/wiki?page=gouw-commands) page to get started with `/gouw claim`.\n"
+  },
+  {
+   "slug": "gouw",
+   "title": "Gouw — Land Claims",
+   "category": "Gouw Land Claims",
+   "parent": null,
+   "content": "Gouw claims **chunks** (16×16 blocks). Stand in a chunk and run `/gouw claim` and it's yours: the action bar tells you, and a particle outline can show you its border with `/gouw border`.\n\n**What a gouw protects.** Inside your gouw, outsiders can't break or place blocks, can't empty or fill buckets, and can't open chests, doors, buttons or any other interactive block. They can't attack your animals or mobs living there, and they can't fight other players in it either. Even explosions — creeper or TNT — won't chew holes in claimed ground. Pistons pushing into a gouw are stopped as well. Staff with the bypass toggle are always allowed through.\n\n**Trust.** `/gouw trust <name>` adds someone; `/gouw untrust <name>` removes them again. Trusted members get build, open, mob-attack and pvp rights by default — the gouw menu (just `/gouw` with no arguments) has four toggle buttons (Build, Open, Mobs, Players) that loosen or tighten those rights for *all* members at once. `/gouw members` lists who's in.\n\n**Limits.** Every player may claim **16 chunks** (server default; staff can change it in the config). `/gouw autoclaim 2` claims a 2-chunk radius around you in one go, which is the quickest way to lay out a base plot. `/gouw unclaim` gives the chunk you're standing in back; `/gouw unclaim all` gives up everything you own.\n\n**Finding your way.** `/gouw info` shows the gouw under your feet, `/gouw list` shows all of yours, and `/gouw near` shows gouws close to you. Inactive claims can be released automatically if the server enables `expire-inactive-days` — on iekcorbar that's currently off (0), so claims stay yours.\n\nOld Lands claims were imported on Gouw's first start and are stored as plain JSON (`plugins/Gouw/claims.json`) — if a claim from the Lands days looks off, tell staff; they can inspect and fix it with `/gouw admin` tools.\n\n[Back to the Introduction](/wiki?page=gouw-intro) · [Commands reference](/wiki?page=gouw-commands)\n"
+  },
+  {
+   "slug": "gouw-commands",
+   "title": "Gouw Commands",
+   "category": "Gouw Land Claims",
+   "parent": null,
+   "content": "All gouw commands live under one command — `/gouw` (short: `/g`, aliases also work: `/claim`). Typing it with no arguments opens the **gouw menu**, a clickable inventory screen for everything below.\n\n* `/gouw claim` — claim the chunk you're standing in. Costs nothing; limited by your chunk quota (default 16).\n* `/gouw autoclaim <radius>` — claim every chunk within <radius> chunks of where you stand, in one go. radius 1 = 3×3, radius 2 = 5×5.\n* `/gouw unclaim` — give back the chunk under your feet. `/gouw unclaim all` releases your whole gouw at once.\n* `/gouw trust <name>` / `/gouw untrust <name>` — add or remove a member of your gouw.\n* `/gouw members` — list everyone you've trusted (and who trusted you).\n* `/gouw leave` — step out of someone else's gouw you were trusted in.\n* `/gouw rename <name>` — give your gouw a personal name (shown in enter messages).\n* `/gouw info` — details of the gouw you're standing in: owner, size, members.\n* `/gouw list` — every chunk you own, with coordinates.\n* `/gouw near` — gouws around you, so you know where you can still build.\n* `/gouw border` — a particle outline shows the edges of the gouw under your feet for a moment.\n\nStaff (permission `gouw.admin`):\n\n* `/gouw admin delete <name>` — remove a player's claims (e.g. after a confirmed request).\n* `/gouw admin import` — re-run the old Lands import; `/gouw admin reload` re-reads the config.\n* `/gouw admin bypass` — toggle walking through and building in *any* gouw while you inspect.\n\nThe menu also has a staff page with the same tools as buttons, for admins who prefer clicking over typing.\n"
+  }
+ ]
+}
