@@ -156,20 +156,55 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                 if (!admin) return deny(s);
                 Player t = a.length > 1 ? Bukkit.getPlayerExact(a[1]) : null;
                 if (t == null || a.length < 3) {
-                    s.sendMessage(Component.text("/" + label + " give <player> <drink|item|cask_<wood>> [quality 1-10 | amount]", NamedTextColor.RED));
+                    s.sendMessage(Component.text("/" + label + " give <player> <drink|item|cask_<wood>> [quality 1-10] [amount]", NamedTextColor.RED));
                     return true;
                 }
-                ItemStack it = null;
+                int amount = 1, amount2 = 1;
+                try {
+                    if (a.length > 3) amount = Integer.parseInt(a[3]);
+                    if (a.length > 4) amount2 = Integer.parseInt(a[4]);
+                } catch (NumberFormatException e) {
+                    s.sendMessage(Component.text("Quality and amount have to be numbers.", NamedTextColor.RED));
+                    return true;
+                }
                 Recipe r = recipes.get(a[2].toLowerCase(Locale.ROOT));
-                if (r != null) it = goods.bottle(perfect(r, a.length > 3 ? Integer.parseInt(a[3]) : 10), 1);
-                else if (a[2].startsWith("cask_") && Woods.byId(a[2].substring(5)) != null) it = goods.cask(Woods.byId(a[2].substring(5)), 1);
-                else if (Fruit.byId(a[2]) != null || Fruit.byPlantItem(a[2]) != null) it = goods.item(a[2], a.length > 3 ? Integer.parseInt(a[3]) : 1);
-                if (it == null) {
+                Woods wood = a[2].startsWith("cask_") ? Woods.byId(a[2].substring(5)) : null;
+                if (r == null && wood == null && Fruit.byId(a[2]) == null && Fruit.byPlantItem(a[2]) == null) {
                     s.sendMessage(Component.text("Unknown drink/item - see /" + label + " recipes", NamedTextColor.RED));
                     return true;
                 }
-                t.getInventory().addItem(it);
-                s.sendMessage(Component.text("Gave " + a[2] + " to " + t.getName(), NamedTextColor.GREEN));
+                if (r != null) {
+                    // After a DRINK the first number was always the quality, and 1-10 still is (one
+                    // bottle, as before). Anything above 10 can only mean an amount (a quality of 64
+                    // makes no sense), and "... bloody_mary 8 64" gives quality AND amount explicitly.
+                    // Drinks are potions - they never stack - so every bottle is its own item; a full
+                    // backpack that can't take them drops the rest at the receiver's feet.
+                    int quality = 10, total = 1;
+                    if (a.length > 3) {
+                        if (amount >= 1 && amount <= 10) quality = amount;
+                        else total = Math.max(1, Math.min(576, amount));
+                    }
+                    if (a.length > 4) {
+                        quality = Math.max(1, Math.min(10, amount));
+                        total = Math.max(1, Math.min(576, amount2));
+                    }
+                    Brew br = perfect(r, quality);
+                    for (int i = 0; i < total; i++)
+                        for (ItemStack left : t.getInventory().addItem(goods.bottle(br, 1)).values())
+                            t.getWorld().dropItemNaturally(t.getLocation(), left);
+                    s.sendMessage(Component.text("Gave " + total + " x " + a[2] + " (quality " + quality + ") to " + t.getName(), NamedTextColor.GREEN));
+                } else {
+                    // Casks (barrels) and garden items do stack: hand them out per full stack.
+                    int total = Math.max(1, Math.min(2304, a.length > 4 ? amount2 : amount));
+                    for (int left = total; left > 0; ) {
+                        int chunk = Math.min(64, left);
+                        left -= chunk;
+                        ItemStack it = wood != null ? goods.cask(wood, chunk) : goods.item(a[2].toLowerCase(Locale.ROOT), chunk);
+                        for (ItemStack over : t.getInventory().addItem(it).values())
+                            t.getWorld().dropItemNaturally(t.getLocation(), over);
+                    }
+                    s.sendMessage(Component.text("Gave " + total + " x " + a[2] + " to " + t.getName(), NamedTextColor.GREEN));
+                }
             }
             case "take" -> {
                 if (!admin) return deny(s);

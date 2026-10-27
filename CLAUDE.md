@@ -1230,3 +1230,29 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - **Let op UUID-churn**: make_models.py's uuid5-teller schoof op door de nieuwe elementen, dus alle
   ~110 .bbmodel-bestanden veranderden van inhoud - de FMM-modellenmap moet in het geheel naar
   plugins/FreeMinecraftModels/models/steamworks/ gekopieerd worden (punt 11-3 van de deploy-lijst).
+
+### Ambient-kikker, music box-Samurai en /brew give-aantallen (27-10 late avond)
+
+- **Wildlife-ambient op melding van de eigenaar** ("rare/lage irriterende geluidjes"): de
+  frog-croaker was een vierkante golf van 130-170 Hz die door write_wav's normalize op volle luidheid
+  werd gezet - een dreunende buzz. Nu: sinus + verzachte octaaf-toevoeging, korte pitch-dip (de
+  "krok"), mildere tremolo; de RNG-aanroepvolgorde is behouden (uniform, randint, uniform per kikker)
+  zodat alle andere clips in de seeded stream byte-for-byte hetzelfde gegenereerd worden.
+  jungle_bird (die de eigenaar verdacht) is deterministisch gebleven en ruislozer/helderer gemaakt op
+  z'n eigen lokale Random(1971). Nadeel van herbouwen: de ffmpeg-9-codering verschilt van de
+  destijds committed ogg's, dus alle ambient-.ogg's in Wildlife/resourcepack zijn van bytes veranderd
+  (verwachte ruis, inhoud bij andere clips gelijk).
+- **Music box kreeg "Ghosts of the Samurai"** als vierde liedje: tools/make_discs.py heeft nu een
+  MUSIC_BOX-set die voor die id's een extra sounds.json-event schrijft
+  (music_box.<id> -> zelfde relics:disc/u_<id>.ogg, stream=True; make_pack zet de subtitle erbij) en
+  Jukebox.MUSIC kreeg de vierde tune (4160 ticks). Eén audiobestand, geen dubbele disc.
+- **Relics 0.4.2 -> 0.4.3** (alleen resourcepack-werk + deze tunes; geen config-wijziging).
+- **Sakagura 0.3.5 -> 0.3.6 - /brew give met aantal** (eigenaar: "64 bloody mary kan niet"):
+  na een DRANK is een getal 1-10 nog steeds kwaliteit (oud gedrag, 1 fles), meer dan 10 is nu het
+  aantal (kwaliteit 10), en "<kwaliteit> <aantal>" kan expliciet. Flessen = potions = niet-stackend:
+  lussen langs addItem, rest valt voor de voeten. Vaten/tuinitems: hele stapels van 64. Take had
+  al aantallen en is onaangeroerd.
+- Pack: merge-packs BUILD 10 -> **11** (musicbox-event + halloween-ogg + nieuwe ambient-ogg's),
+  audit 0 problemen (build11 sha1 1b01eeb8). Servermeting van zoeven vóór deze batch nog: Relics
+  0.4.1 + build8 live, Sakagura 0.3.4 live - punten 12/13 van TE-DEPLOYEN dekken alle drie de
+  jarren (Steamworks 0.3.24 + pack + models staan er ook in).
