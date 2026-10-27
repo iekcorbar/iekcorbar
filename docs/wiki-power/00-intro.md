@@ -18,7 +18,7 @@ Steamworks Power is the industry add-on of Steamworks: three machines that make 
 
 * All three craft at the workbench and show up in `/zukan` and the [recipes page](/recipes).
 * They need rotation, not fuel: hook a turbine or steam engine up to the network and the press works while the network runs.
-* Staff hand out parts with `/power give <player> <machine>`; `/power list` shows what exists.
+* Staff hand out parts with `/swpower give <player> <machine>`; `/swpower list` shows what exists.
 
 ### Good to know
 

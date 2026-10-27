@@ -30,4 +30,4 @@ The propeller is the expensive bit: two copper plates around a steel hub, and St
 
 Right-click a shaft end to place it, sneak right-click to pull it back (like any network part). Sneak-right-click with a wrench to turn it into your hand. The turbine itself does not store items or fluids.
 
-Staff: `/power give <player> pow_water_turbine`.
+Staff: `/swpower give <player> pow_water_turbine`.

@@ -8,7 +8,7 @@
     <artifactId>SteamworksPower</artifactId>
     <!-- Power add-on for Steamworks: water turbine, mechanical press and stock ticker.
          Joins the rotation network through Steamworks' public CustomPart API. -->
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <packaging>jar</packaging>
 
     <name>SteamworksPower</name>

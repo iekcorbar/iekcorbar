@@ -9,10 +9,10 @@ description: Water turbine, mechanical press and stock ticker for the Steamworks
 author: iekcorbar
 
 commands:
-  power:
+  swpower:
     description: Steamworks Power commands
-    usage: /power <list|give|reload>
-    aliases: [pwr]
+    usage: /swpower <list|give|reload>
+    aliases: [pwr, swp]
 
 permissions:
   power.admin:

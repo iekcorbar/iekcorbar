@@ -10,7 +10,7 @@ A brass arch over a heavy ram. Items that lie **on top** of the press get stampe
 
 * Needs rotation from below: a shaft enters through the bottom, like a millstone.
 * Work speed depends on the network (full speed ≈ 3 s per item at 12 RPM).
-* The recipe list lives in the plugin's `config.yml` under `press:` - server owners add their own compacting recipes; `/power reload` applies them.
+* The recipe list lives in the plugin's `config.yml` under `press:` - server owners add their own compacting recipes; `/swpower reload` applies them.
 
 Defaults:
 
@@ -24,7 +24,7 @@ Defaults:
 
 Craft: **iron plates** over an andesite casing, piston and two iron ingots as the legs.
 
-Staff: `/power give <player> pow_mechanical_press`.
+Staff: `/swpower give <player> pow_mechanical_press`.
 
 ## Stock Ticker
 
@@ -34,7 +34,7 @@ A copper box with two little dials that **counts the container it leans against*
 * Right-click: a one-line summary of the container in your action bar.
 * Craft: glass panes around a comparator, on a brass casing.
 
-Staff: `/power give <player> pow_stock_ticker`.
+Staff: `/swpower give <player> pow_stock_ticker`.
 
 ## Taking them back
 

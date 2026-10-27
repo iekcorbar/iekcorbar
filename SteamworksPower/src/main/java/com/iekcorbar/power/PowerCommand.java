@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/** /power list | give <player> <machine> [amount] | reload */
+/** /swpower list | give <player> <machine> [amount] | reload (aliases pwr, swp - the name /power belongs to other plugins, e.g. ValhallaMMO) */
 final class PowerCommand implements TabExecutor {
     private final PowerPlugin plugin;
 

@@ -34,8 +34,8 @@ public final class PowerPlugin extends JavaPlugin {
         reg.register(ticker);
         getServer().getServicesManager().register(java.util.function.Supplier.class, new ZukanData(this), this, org.bukkit.plugin.ServicePriority.Normal); // recipe viewer (Zukan)
         PowerCommand cmd = new PowerCommand(this);
-        getCommand("power").setExecutor(cmd);
-        getCommand("power").setTabCompleter(cmd);
+        getCommand("swpower").setExecutor(cmd);
+        getCommand("swpower").setTabCompleter(cmd);
         // recipes reference the machines' models, so wait until FreeMinecraftModels knows them
         sw.whenModelsReady(this::registerRecipes);
         getServer().getPluginManager().registerEvents(new org.bukkit.event.Listener() {
