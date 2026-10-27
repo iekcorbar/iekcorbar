@@ -1022,6 +1022,18 @@ markDirty bestond niet). Nu afgemaakt:
 - **Groen**: mvn core + power, KineticsTest ALLE PASSED, npm build, jarren + 6
   modelbestanden in deploy/, TE-DEPLOYEN-punten 3 en 4 in-place opgevolgd (0.3.21/0.1.2
   zijn nooit live geweest en reizen mee).
+- **LIVE + BEVESTIGD** (27-10 middag): de gebruiker stopte de server en de agent
+  doet de volledige bestandwissel zelf via SSH (eerste keer dat de wisseltruc niet
+  handmatig hoefde): alle 12 artefacten gekopieerd met sha1-controle TER PLAATSE
+  (gelijk aan de lokale builds - kan alleen omdat de server stil staat; de TechCore-
+  injector draait immers in de levende server), eigenaars/rechten overgenomen, de
+  vier oude jars + build6 uit de mixer verwijderd, FMM-modellen 242 -> 246. De
+  herstart (15:13 servertijd) bevestigt het: 0.3.22 enabled, Power 0.2.0 enabled met
+  vijf machines + 5 recepten-logregel, Relics 0.4.1 en Sakagura 0.3.3 enabled,
+  "rejected advancement" 0 hits (sprocket-fix werkt), enige WARN = de bekende
+  TechCore-ActionBar/PacketEvents-melding (niet van ons). Restanten: site-zip met
+  de nieuwe wiki/recipes + 0.3.22-labels (gebruiker bouwt die zelf), dan de
+  wiki-importknop op /wiki.
 - Valkuil om te onthouden: **elk CustomPart-model tekent met Y als as** (net als shaft/
   crushing wheel via de mm-helpers) en Z omhoog bij liggende machines - preview3d tekent
   het model in rauwe modelruimte, dus een verkeerde as (tuimelende drum) is op het sheet
