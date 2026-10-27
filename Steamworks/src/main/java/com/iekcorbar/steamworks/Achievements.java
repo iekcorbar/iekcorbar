@@ -14,7 +14,9 @@ final class Achievements {
         a.add("cogwheel", "shaft", "iron_nugget", "In Gear", "Get a Cogwheel.", "task");
         a.add("large_cogwheel", "cogwheel", "iron_ingot", "Big Teeth", "Get a Large Cogwheel.", "task");
         a.add("gearbox", "cogwheel", "dispenser", "Gearhead", "Get a Gearbox.", "task");
-        a.add("sprocket", "gearbox", "chain", "Chain Reaction", "Get a Chain Sprocket.", "task");
+        // the icon is "iron_chain" since 26.2 renamed the plain chain item (CLAUDE.md bouw-artefacten:
+        // een onbestaande icoon-item laat Minecraft de hele advancement verwerpen - zie log 27-10).
+        a.add("sprocket", "gearbox", "iron_chain", "Chain Reaction", "Get a Chain Sprocket.", "task");
         a.add("shift", "gearbox", "repeater", "Shifting Gears", "Get a Clutch or a Gearshift.", "task");
         a.add("gauge", "cogwheel", "clock", "Measure Twice", "Get a Speed or a Stress Gauge.", "task");
         // power

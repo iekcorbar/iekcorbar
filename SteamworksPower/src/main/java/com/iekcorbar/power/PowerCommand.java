@@ -50,6 +50,9 @@ final class PowerCommand implements TabExecutor {
                 return true;
             }
             Player target = plugin.getServer().getPlayerExact(a[1]);
+            if (target == null) // Bukkit's getPlayerExact is case-sensitive; tab-completion shows the real name
+                for (Player on : plugin.getServer().getOnlinePlayers())
+                    if (on.getName().equalsIgnoreCase(a[1])) { target = on; break; }
             if (target == null) {
                 s.sendMessage(Component.text("Player not online.", NamedTextColor.RED));
                 return true;

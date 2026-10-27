@@ -885,3 +885,70 @@ daaraan + src/lib/wiki-seeds/sakagura.json reizen mee met de eerstvolgende site-
 gebruiker. Live-server external recipes.yml bevat nog de twee typeouten: vervangen door
 deploy/Sakagura-0.3.3-recipes.yml (sha1 eb53ce09) + /brew reload, jar 0.3.3 inwisselen is
 alleen nodig voor de default op verse installs - gebatcht in TE-DEPLOYEN.
+
+### Valentine's-collectie (Relics 0.4.0) + het /power-mysterie en de TechCore-lader (27-10 middag)
+
+**Gebruikersklus: "maak een stuk of 20 valentijns-relics, ga je gang."** Nieuwe
+collectie `VALENTINE("Valentine's")` in `RelicType` - 20 relikwieën in dezelfde stijl
+als Xmas Town/New Year: hartballon (HOP-bob), roos onder stolp, liefdeslot-rail (wall),
+hartboog (nieuw effect HEART: zwevende particle-harten, schaal 2), cupietstandbeeld,
+wensput (nieuw gebruik WISH: 1 gold nugget -> plons + `relics:valentine.wish` + harten,
+cooldown, achievement "wish"), zwanenlantaarn (FLAME), banier (SWAY), hartlantaarn
+(TWINKLE: aan/uit = helder/dof-zwart kern, floor/wall/hanging + _b), teddybeer (POSE:
+armen-neer/omhoog), snoeppotten (nieuw gebruik JAR: rechtsklik = Chocolate Heart pakken,
+reffelen met erin, 3 statussen vol/half/leeg via count), boeketknaller (hergebruikt
+CONFETTI), rozenbak, zangvogelkooi (nieuw gebruik BIRD: 5 chirps oplopend pitch via
+runTaskLater + hartje), hartstruik (schaal 1.6), toverdrankplank (BUBBLES), klokwerk-hart
+(PULSE: kloppend + egg_sac.heartbeat), minnenbank (SEAT), hart-glas-in-lood (wall),
+Amore-automaat (nieuw gebruik VEND: nugget -> 2 harten, geen wisselgeld). Nieuwe
+treat CHOCOLATE_HEART (ABSORPTION + hartparticles bij eten; labelketen in
+Treats.item() uitgebreid; ordinaalletzen: Valentine's staat VOOR SODA_BREAD-getest).
+Achievements: + "valentine" (collection-scanner pikt c:valentine automatisch op) +
+verborgen... nee: gewoon zichtbaar "wish"; collector.allOf uitgebreid met valentine.
+Zes nieuwe icoon-items gecheckt tegen de 26.2 Material-enum - ik zag toen dat
+`sprocket` al jaren het verdwenen icoon "chain" gebruikte (het item heet nu
+iron_chain; vandaar de "rejected advancement" uit de herstart-log): core-fix
+`chain` -> `iron_chain`, Steamworks 0.3.20 -> **0.3.21**.
+Modellen: 28 stuks in `Relics/tools/make_pack.py` (nieuwe palette kleuren rose_red,
+rose_deep, blush, lace_white, rose_gold, rose_leaf, cream_pink, well_stone, water_dark;
+naam-gebaseerde palette-celindices blijven byte-stabiel; heart_pix() is de nieuwe hart-
+helper). preview3d-render gecontroleerd - let op: de preview-camera staat op de
+achterkant (+x+z-hoek), dus voorkant-details (amore-venster, bannerhart) lijken "leeg";
+180°-gedraaid nagekeken en toen allemaal prima. Eerste renderpogingen verbeterd:
+ballon-hart silhoeet, lantaarn-kern zichtbaar in de kloof tussen de lobben, pot
+voorwand open (glans-geel glas is dekkend!), amore-harten OP het glas, topiary smaller
+crown. Pack: make_pack -> 161 modellen, Relics-pack.zip; merge-packs BUILD 6 -> **7**
+(5917 bestanden, 15,48 MB, sha1 06ec729b), audit 0/0. De bestaande .ogg's kregen same-
+lengte andere bytes: de ffmpeg-7-build hercodeert identical-wavs (libvorbis container),
+geluid is hetzelfde - geen probleem, wel wennen in git-diff. Relics 0.3.10 -> **0.4.0**
+(jar sha1 d212d498), Power 0.1.0 -> **0.1.1** (hoofdletter-nachalág bij give, jar
+60b1140e), Steamworks **0.3.21** (00ecfc58). Alle drie in deploy/, batch in TE-DEPLOYEN
+(punten 3 + 4).
+
+**/power give "werkt niet" - twee oorzaken, geen van beide onzé code.** (1) De speler
+typte /power; ValhallaMMO (betaalde plugin, zelfde maker als EliteMobs/TechCore)
+registreerde /power eerder (enable 11:23:07 vs onze 11:23:29) en zijn ProfileCommand
+crasht op vreemde argumenten (NPE "player is null" - hun bug). Onze command-blootstelling
+is de ALIAS: **/pwr give <speler> <machine>** werkt; getPlayerExact was hoofdletter-
+gevoelig (daarom de 0.1.1-fallback equalsIgnoreCase). (2) Bij het uitzoeken bleek: de
+Live-jar van SteamworksPower is 263,9 KB i.p.v. 28,9 KB, en bevat naast onze 10 byte-
+identieke klassen 32 vreemde: bStats-metrics + Valhalla/TechCore-hookklassen (HookManager,
+Economy_CMI, Lands met dummy-Spigot-premium-check-URL) + geobfusceerde namen (Dgduf,
+yszthvbepghksbpl, Injector, BukkitLoaderPlugin), en ONZE PowerPlugin.onEnable is omge-
+bouwd naar `HookManager.inject(this); _$oe$_()` (de oude onEnable als _rename_).
+Eerst leek dit een gevaarlijke herpackage - de waarheid is minder spannend maar wel
+belangrijk: **EliteMobs/TechCore (athlaeos) doen dit zelf, op elke serverstart, tegen
+elk jar in plugins/** (hun "compatibility loader" die ze in andere jars spuiten zodat
+elke plugin hun API kan zien). Bewijs: alle 13 eigen jarren op de server hebben exact
+DEZELFDE 31 vreemde klassen + dezelfde +230 KB, en de jar-mtimes zijn stélsekondes na
+onze docker cp's (11:07:24 voor de zojuist geplaatste schone 0.3.20/Relics 0.3.10!) -
+de injector draait in de levende server en herschrijft BINNEN SECONDES, ook net-
+geplaatste jarren. Payload bevat géén exec/netwerk/credentials-ooit - alleen hun eigen
+hooks en bStats. Dit lost ook het ochtend-mysterie op: "de werkende 0.3.19-jar die op
+geen enkele lokale build leek" was gewoon onze 0.3.19 + 225 KB loader-afval.
+Gevolgen vastgelegd in TE-DEPLOYEN: (a) geen enkele live-jar-sha1 zal ooit gelijk zijn
+aan een lokale build - verifieer op KLASSE-niveau (onze eigen klassen byte voor byte vergelijken, script
+in deze sessie gebruikt) niet op jar-sha1; (b) "schone herbouw van de Power-jar" is
+niet nodig als security-actie (0.1.1 is wél nuttig: de give-lookup); (c) overweeg op
+termijn de EliteMobs/Valhalla-familie te vervangen of te weren als dit blij-
+vend gedoe geeft - voorlopig: accepteren, het raakt onze functie niet.
