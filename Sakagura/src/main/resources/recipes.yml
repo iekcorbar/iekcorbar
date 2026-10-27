@@ -458,6 +458,291 @@ recipes:
     effects: ["ABSORPTION/0/120-240", "REGENERATION/0/10-30"]
     steps:
       - {type: mix, time: 3, ingredients: ["Milk Bucket/1", "Cocoa Beans/2", "Sugar/2", "relics:chocolate_heart/1"]}
+  wasabi_fire:
+    names: ["Watery Burn", "Wasabi Fire", "Dragon's Nostrils"]
+    color: "ff6a00"
+    difficulty: 7
+    alcohol: 22
+    lore: ["<red>Clears the head. Both nostrils."]
+    effects: ["SPEED/0-1/60-120", "NAUSEA/0/3-8"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["kitchen:chili/2", "kitchen:daikon_slices/3", "Sugar/2"]}
+      - {type: distill, runs: 2}
+  miso_martini:
+    names: ["Cloudy Martini", "Miso Martini", "Umami Silk"]
+    color: "efe3c2"
+    difficulty: 4
+    alcohol: 17
+    lore: ["<gray>The savoury side of the bar"]
+    effects: ["ABSORPTION/0/60-120", "SATURATION/0/5"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["kitchen:miso/2", "Shochu/1", "Milk Bucket/1"]}
+      - {type: age, years: 1, wood: "any"}
+  blank_slate:
+    names: ["Brackish Cup", "Charcoal Cleanse", "The Blank Slate"]
+    color: "1a1a1e"
+    difficulty: 2
+    alcohol: 0
+    lore: ["<gray>It tastes like nothing at all. That is the point."]
+    effects: []
+    steps:
+      - {type: mix, time: 2, ingredients: ["Ink Sac/1", "sakagura:mikan/3", "Sugar/2"]}
+  molten_face:
+    names: ["Pale Sweat", "Ghost Pepper Cider", "Molten Face"]
+    color: "ff4500"
+    difficulty: 7
+    alcohol: 12
+    lore: ["<gold>Apple cider. Probably not chili."]
+    effects: ["FIRE_RESISTANCE/0/120-240", "NAUSEA/0/2-6"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["kitchen:chili/3", "Apple/4", "Sugar/3"]}
+      - {type: distill, runs: 1}
+  blightcap_bock:
+    names: ["Toadspill", "Mushroom Bock", "Blightcap Bock"]
+    color: "9b7653"
+    difficulty: 5
+    alcohol: 9
+    lore: ["<gray>Two mushrooms walk into a barrel..."]
+    effects: ["NIGHT_VISION/0/90-240", "NAUSEA/0/3-9"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["Brown Mushroom/3", "Red Mushroom/2", "Honey Bottle/2"]}
+      - {type: age, years: 2, wood: "oak"}
+  glow_grog:
+    names: ["Dim Grog", "Glow Grog", "Lantern Light"]
+    color: "8ffe9a"
+    difficulty: 6
+    alcohol: 20
+    lore: ["<green>You will be the lighthouse"]
+    effects: ["NIGHT_VISION/0-1/120-240", "GLOWING/0/10-30"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["Glow Berries/4", "Dried Kelp/2", "Juniper Gin/1"]}
+  dragon_breath_tea:
+    names: ["Lukewarm Leaf", "Dragon Breath Tea", "Fire-Eater's Cup"]
+    color: "d8a13c"
+    difficulty: 3
+    alcohol: 5
+    lore: ["<gray>Green tea with a dark side"]
+    effects: ["SPEED/0/120-240", "FIRE_RESISTANCE/0/30-60"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["kitchen:green_tea/1", "kitchen:chili/1", "Sugar/2", "sakagura:yuzu/1"]}
+  midnight_stout:
+    names: ["Dusk Water", "Midnight Stout", "Eclipse Reserve"]
+    color: "1c1208"
+    difficulty: 7
+    alcohol: 11
+    lore: ["<dark_gray>Breakfast of the night shift"]
+    effects: ["NIGHT_VISION/0/180-300", "RESISTANCE/0/60-120"]
+    steps:
+      - {type: cook, time: 8, ingredients: ["sakagura:barley/8", "Cocoa Beans/3", "Sugar/2"]}
+      - {type: distill, runs: 1}
+      - {type: age, years: 3, wood: "oak"}
+  pear_greyhound:
+    names: ["Wobbly Pear", "Pear Greyhound", "Silver Pear"]
+    color: "dfe8cf"
+    difficulty: 4
+    alcohol: 16
+    lore: ["<gray>Bon appétit, good luck"]
+    effects: ["LUCK/0/60-120"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["sakagura:pear/4", "Juniper Gin/1", "Sugar/1"]}
+  fool_gold:
+    names: ["Tin Foil", "Midas Wash", "Sunstone Liqueur"]
+    color: "ffb75e"
+    difficulty: 6
+    alcohol: 22
+    lore: ["+++<gold>The gold was a garnish. You ate it. Good"]
+    effects: ["ABSORPTION/0-1/120-240", "REGENERATION/0/5-15"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["sakagura:apricot/5", "Sugar/3", "Gold Nugget/1"]}
+      - {type: distill, runs: 1}
+      - {type: age, years: 2, wood: "cherry"}
+  sunrise_reserve:
+    names: ["Weak Sunrise", "Mikan Screwdriver", "Sunrise Reserve"]
+    color: "ff8c1a"
+    difficulty: 3
+    alcohol: 14
+    lore: ["<yellow>A whole sunrise in a glass"]
+    effects: ["SATURATION/0/2", "SPEED/0/60-120"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["sakagura:mikan/5", "Shochu/1"]}
+  hanabi_bomb:
+    names: ["Fizzle", "Cherry Bomb", "Hanabi Bomb"]
+    color: "dc143c"
+    difficulty: 6
+    alcohol: 25
+    lore: ["<red>Counts double in a shootout"]
+    effects: ["STRENGTH/0/10-30", "NAUSEA/0/2-5"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["sakagura:cherry/6", "Sugar/2", "Gunpowder/1"]}
+      - {type: distill, runs: 1}
+  lagoon_colada:
+    names: ["Grey Slush", "Kiwi Colada", "Lagoon Colada"]
+    color: "9fe870"
+    difficulty: 3
+    alcohol: 8
+    lore: ["<aqua>Tastes like a beach you will visit later"]
+    effects: ["WATER_BREATHING/0/60-180", "SATURATION/0/4"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["sakagura:kiwi/4", "Milk Bucket/1", "Sugar/2", "Snowball/2"]}
+  cedar_smoke:
+    names: ["Flat Highball", "Ume Highball", "Cedar Smoke Highball"]
+    color: "d98a4a"
+    difficulty: 4
+    alcohol: 10
+    lore: ["<gray>Pine needles optional, but traditional"]
+    effects: ["SPEED/0/60-120", "FIRE_RESISTANCE/0/15-40"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["sakagura:ume/3", "Sake/1", "Snowball/2", "Spruce Leaves/1"]}
+  sunday_golden:
+    names: ["Watery Posset", "Golden Posset", "Sunday's Golden"]
+    color: "edc94f"
+    difficulty: 3
+    alcohol: 6
+    lore: ["<yellow>Grandmother's recipe, grandmother's nap"]
+    effects: ["REGENERATION/0-1/40-80", "SATURATION/0/3"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["Dandelion/2", "Poppy/1", "Milk Bucket/1", "Honey Bottle/1"]}
+  sable_silk:
+    names: ["Greywash", "Black Sesame Latte", "Sable Silk"]
+    color: "2a2422"
+    difficulty: 3
+    alcohol: 0
+    lore: ["<gray>Midnight for breakfast"]
+    effects: ["NIGHT_VISION/0/60-180", "SATURATION/0/6"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["kitchen:sesame_seeds/4", "Milk Bucket/1", "Sugar/2"]}
+  firehouse_ginger:
+    names: ["Slack Shandy", "Ginger Beer", "Firehouse Ginger"]
+    color: "c46f17"
+    difficulty: 4
+    alcohol: 5
+    lore: ["<gold>The first sip is the last calm one"]
+    effects: ["SPEED/0/60-150", "WEAKNESS/0/2-8"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["sakagura:ginger/3", "Sugar/3", "Wheat/2"]}
+      - {type: age, years: 1, wood: "any"}
+  gazpacho_grande:
+    names: ["Tomato Water", "Bisque Broth", "Gazpacho Grande"]
+    color: "e35d3a"
+    difficulty: 3
+    alcohol: 10
+    lore: ["<gray>A salad that went to the wrong party"]
+    effects: ["SATURATION/0/8", "RESISTANCE/0/30-60"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["kitchen:tomato/3", "kitchen:chopped_green_onion/1", "Sugar/1", "Shochu/1"]}
+  zen_garden:
+    names: ["Bean Water", "Edamame Martini", "Zen Garden"]
+    color: "88c46a"
+    difficulty: 5
+    alcohol: 18
+    lore: ["<green>One mouthful, one breath, no worries"]
+    effects: ["LUCK/0/120-240", "SLOW_FALLING/0/30-90"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["kitchen:edamame/3", "Shochu/1", "Sugar/1"]}
+  wartshine:
+    names: ["Hag's Juice", "Wartshine", "Crimson Lightning"]
+    color: "8a2c2c"
+    difficulty: 8
+    alcohol: 40
+    lore: ["<dark_red>Nether in name only. And in colour."]
+    effects: ["STRENGTH/0-1/30-90", "POISON/0/3-8"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["Nether Wart/4", "Sugar/4"]}
+      - {type: distill, runs: 3}
+  harvest_flip:
+    names: ["Pale Nog", "Sweet Potato Flip", "Harvest Flip"]
+    color: "e8a87a"
+    difficulty: 4
+    alcohol: 7
+    lore: ["<gray>Autumn that stayed for seconds"]
+    effects: ["SATURATION/0/8", "REGENERATION/0/10-30"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["Potato/3", "Egg/1", "Milk Bucket/1", "Sugar/2"]}
+  kogen_mule:
+    names: ["Cloudy Mule", "Matcha Mule", "Kogen Mule"]
+    color: "a4c86a"
+    difficulty: 4
+    alcohol: 12
+    lore: ["<green>Green, fizzy, polite"]
+    effects: ["SPEED/0/60-120", "SATURATION/0/2"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["kitchen:tea_leaves/3", "sakagura:ginger/1", "Sugar/2", "Sake/1"]}
+  stone_gold:
+    names: ["Cloudy Leaf", "Amber Rocks", "Stone-Gold Oolong"]
+    color: "c9a05a"
+    difficulty: 5
+    alcohol: 0
+    lore: ["<gray>Tea with boulders. Fancy."]
+    effects: ["HASTE/0/60-120", "FIRE_RESISTANCE/0/15-45"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["kitchen:tea_leaves/4", "Snowball/3"]}
+      - {type: age, years: 1, wood: "any"}
+  scorched_silk:
+    names: ["Squeaker", "Burnt Butter Bourbon", "Scorched Silk"]
+    color: "b87333"
+    difficulty: 7
+    alcohol: 30
+    lore: ["<gold>Butter first, apology later"]
+    effects: ["ABSORPTION/0-1/120-180", "RESISTANCE/0/30-60"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["Milk Bucket/1", "Sugar/3", "sakagura:barley/5"]}
+      - {type: distill, runs: 2}
+      - {type: age, years: 4, wood: "oak"}
+  prickly_paradise:
+    names: ["Gutrot", "Cactus Cooler", "Prickly Paradise"]
+    color: "4f9d6b"
+    difficulty: 4
+    alcohol: 6
+    lore: ["<green>Desert island, one glass wide"]
+    effects: ["FIRE_RESISTANCE/0/60-120", "SATURATION/0/5"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["Cactus/3", "Sugar/2", "sakagura:yuzu/2", "Snowball/2"]}
+  crimson_elixir:
+    names: ["Dishwater", "Beetroot Blood", "Crimson Elixir"]
+    color: "8e1b3a"
+    difficulty: 5
+    alcohol: 12
+    lore: ["<dark_red>Iron will, beetroot body"]
+    effects: ["REGENERATION/0-1/40-90", "STRENGTH/0/15-45"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["Beetroot/4", "Sugar/3", "Red Wine/1"]}
+  sleepweave:
+    names: ["Bed of Nettle", "Honey Lavender", "Sleepweave"]
+    color: "b57edc"
+    difficulty: 3
+    alcohol: 5
+    lore: ["<light_purple>Sip, then nap"]
+    effects: ["SLOWNESS/0/20-60", "REGENERATION/0/20-60", "SATURATION/0/4"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["Honey Bottle/2", "Lilac/2", "Sugar/2"]}
+      - {type: age, years: 1, wood: "birch"}
+  grove_bitter:
+    names: ["Grass Water", "Bamboo Bitter", "Grove Bitter"]
+    color: "9caf88"
+    difficulty: 5
+    alcohol: 18
+    lore: ["<gray>Bitters: the medicine you take on purpose"]
+    effects: ["RESISTANCE/0/60-120", "WEAKNESS/0/2-6"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["Bamboo/3", "sakagura:juniper/3", "Sugar/2", "Shochu/1"]}
+  pounders_punch:
+    names: ["Soggy Punch", "Pounder's Punch", "Mochi Marvel"]
+    color: "ffd9e0"
+    difficulty: 4
+    alcohol: 8
+    lore: ["<pink>Pounded, pounded, pounded"]
+    effects: ["JUMP_BOOST/0-1/90-180", "SATURATION/0/6"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["kitchen:mochi/1", "sakagura:strawberry/3", "Sugar/2", "Milk Bucket/1"]}
+  stone_brewed:
+    names: ["Gravel Water", "Rock Tea", "Stone-Brewed Comfort"]
+    color: "6b6b70"
+    difficulty: 8
+    alcohol: 3
+    lore: ["<gray>You chewed it anyway."]
+    effects: ["RESISTANCE/0-1/120-300", "SLOWNESS/0/5-15"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["Cobbled Deepslate/2", "kitchen:tea_leaves/2", "Sugar/1"]}
   amazake:
     names: ["Thin Amazake", "Amazake", "Rich Amazake"]
     color: "f6efe0"

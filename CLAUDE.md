@@ -1247,6 +1247,15 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   (music_box.<id> -> zelfde relics:disc/u_<id>.ogg, stream=True; make_pack zet de subtitle erbij) en
   Jukebox.MUSIC kreeg de vierde tune (4160 ticks). Eén audiobestand, geen dubbele disc.
 - **Relics 0.4.2 -> 0.4.3** (alleen resourcepack-werk + deze tunes; geen config-wijziging).
+- **Sakagura open-bar-set: 30 nieuwe drankjes** (eigenaar: "meer drankjes, creatief, effecten
+  zelf bedenken, 30 stuks"). In make_recipes.py een nieuw blok "# ---- open bar": van wasabi-
+  sinus-clearers tot rots-thee met resistance, van glow-grog (je gaat zelf gloeien) tot de
+  alcohol-vrije Blank Slate (toevoeging aan de lijst: geen effect = ook een effect). Totaal 80
+  drankjes; alle ingredient-tokens bestaand (kitchen:/sakagura:/vanilla/drank-op-naam), effecten
+  = registry-namen. RecipeTest 80/80 groen. Maken: recipes.yml + docs-wiki + wiki-seed +
+  recipes-data.json (site-tab) zijn allemaal mee-gegenereerd; site-zip herbouwd (nieuwe sha in
+  de lijst, punt 10). Sakagura-jar 0.3.7: server kan recipes.yml NU al overnemen + /brew
+  reload (drankjes meteen brouwbaar); hitbox + give-kwantiteit komen met de jar-herstart.
 - **Sakagura 0.3.5 -> 0.3.6 - /brew give met aantal** (eigenaar: "64 bloody mary kan niet"):
   na een DRANK is een getal 1-10 nog steeds kwaliteit (oud gedrag, 1 fles), meer dan 10 is nu het
   aantal (kwaliteit 10), en "<kwaliteit> <aantal>" kan expliciet. Flessen = potions = niet-stackend:

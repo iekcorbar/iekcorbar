@@ -56,6 +56,36 @@ Follow a recipe closely for the best quality (up to 5 stars). Cooking needs heat
 | Petal Pilsner | Cook 5 min: 2 Torchflower Seeds, 5 Barley, 2 Hops, 2 Pink Petals -> Age 1 years (birch cask) | 6% |
 | Bunny Bounce | Cook 4 min: 4 Wheat, 3 Barley, 1 Rabbit Foot, 1 Sugar -> Distill 1x | 7% |
 | Cocoa Heart Flip | Mix (no heat) 3 min: 1 Milk Bucket, 2 Cocoa Beans, 2 Sugar, 1 Chocolate Heart | 13% |
+| Wasabi Fire | Cook 4 min: 2 Chili, 3 Daikon Slices, 2 Sugar -> Distill 2x | 22% |
+| Miso Martini | Mix (no heat) 3 min: 2 Miso, 1 Shochu, 1 Milk Bucket -> Age 1 years | 17% |
+| Charcoal Cleanse | Mix (no heat) 2 min: 1 Ink Sac, 3 Mikan, 2 Sugar | - |
+| Ghost Pepper Cider | Cook 5 min: 3 Chili, 4 Apple, 3 Sugar -> Distill 1x | 12% |
+| Mushroom Bock | Cook 6 min: 3 Brown Mushroom, 2 Red Mushroom, 2 Honey Bottle -> Age 2 years (oak cask) | 9% |
+| Glow Grog | Cook 4 min: 4 Glow Berries, 2 Dried Kelp, 1 Juniper Gin | 20% |
+| Dragon Breath Tea | Mix (no heat) 2 min: 1 Green Tea, 1 Chili, 2 Sugar, 1 Yuzu | 5% |
+| Midnight Stout | Cook 8 min: 8 Barley, 3 Cocoa Beans, 2 Sugar -> Distill 1x -> Age 3 years (oak cask) | 11% |
+| Pear Greyhound | Mix (no heat) 3 min: 4 Pear, 1 Juniper Gin, 1 Sugar | 16% |
+| Midas Wash | Cook 5 min: 5 Apricot, 3 Sugar, 1 Gold Nugget -> Distill 1x -> Age 2 years (cherry cask) | 22% |
+| Mikan Screwdriver | Mix (no heat) 2 min: 5 Mikan, 1 Shochu | 14% |
+| Cherry Bomb | Cook 4 min: 6 Cherry, 2 Sugar, 1 Gunpowder -> Distill 1x | 25% |
+| Kiwi Colada | Cook 3 min: 4 Kiwi, 1 Milk Bucket, 2 Sugar, 2 Snowball | 8% |
+| Ume Highball | Mix (no heat) 2 min: 3 Ume, 1 Sake, 2 Snowball, 1 Spruce Leaves | 10% |
+| Golden Posset | Cook 4 min: 2 Dandelion, 1 Poppy, 1 Milk Bucket, 1 Honey Bottle | 6% |
+| Black Sesame Latte | Cook 3 min: 4 Sesame Seeds, 1 Milk Bucket, 2 Sugar | - |
+| Ginger Beer | Cook 5 min: 3 Ginger, 3 Sugar, 2 Wheat -> Age 1 years | 5% |
+| Bisque Broth | Mix (no heat) 3 min: 3 Tomato, 1 Chopped Green Onion, 1 Sugar, 1 Shochu | 10% |
+| Edamame Martini | Mix (no heat) 2 min: 3 Edamame, 1 Shochu, 1 Sugar | 18% |
+| Wartshine | Cook 6 min: 4 Nether Wart, 4 Sugar -> Distill 3x | 40% |
+| Sweet Potato Flip | Cook 4 min: 3 Potato, 1 Egg, 1 Milk Bucket, 2 Sugar | 7% |
+| Matcha Mule | Mix (no heat) 2 min: 3 Tea Leaves, 1 Ginger, 2 Sugar, 1 Sake | 12% |
+| Amber Rocks | Cook 4 min: 4 Tea Leaves, 3 Snowball -> Age 1 years | - |
+| Burnt Butter Bourbon | Cook 5 min: 1 Milk Bucket, 3 Sugar, 5 Barley -> Distill 2x -> Age 4 years (oak cask) | 30% |
+| Cactus Cooler | Mix (no heat) 3 min: 3 Cactus, 2 Sugar, 2 Yuzu, 2 Snowball | 6% |
+| Beetroot Blood | Cook 4 min: 4 Beetroot, 3 Sugar, 1 Red Wine | 12% |
+| Honey Lavender | Cook 3 min: 2 Honey Bottle, 2 Lilac, 2 Sugar -> Age 1 years (birch cask) | 5% |
+| Bamboo Bitter | Mix (no heat) 3 min: 3 Bamboo, 3 Juniper, 2 Sugar, 1 Shochu | 18% |
+| Pounder's Punch | Cook 4 min: 1 Mochi, 3 Strawberry, 2 Sugar, 1 Milk Bucket | 8% |
+| Rock Tea | Cook 6 min: 2 Cobbled Deepslate, 2 Tea Leaves, 1 Sugar | 3% |
 | Amazake | Cook 4 min: 3 Steamed Rice, 1 Ginger | - |
 | Matcha Latte | Cook 2 min: 3 Tea Leaves, 1 Milk Bucket, 1 Sugar | - |
 | Mugicha | Mix (no heat) 2 min: 3 Barley, 2 Snowball | - |
