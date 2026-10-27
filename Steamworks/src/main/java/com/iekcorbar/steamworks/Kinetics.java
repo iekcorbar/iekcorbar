@@ -204,9 +204,9 @@ final class Kinetics {
         return switch (n.type) {
             case SHAFT, COGWHEEL, LARGE_COGWHEEL, GEARBOX, CLUTCH, GEARSHIFT, SPROCKET, CRUSHING_WHEEL,
                     SPEED_GAUGE, STRESS_GAUGE, STEAM_ENGINE, HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL,
-                    BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL -> true;
+                    BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL, MILLSTONE -> true;
             case CUSTOM -> n.ext != null && n.ext.rotatable();
-            default -> false;   // pure-Y machines (millstone, kettle, mixer, arm, boiler, depot, whistle) and fluid parts
+            default -> false;   // pure-Y machines (kettle, mixer, arm, boiler, depot, whistle) and fluid parts
         };
     }
 
@@ -249,7 +249,7 @@ final class Kinetics {
                     n.axis = axisOf(f) == Axis.X ? Axis.Z : Axis.X;
                 return true;
             }
-            case STEAM_ENGINE -> {                                       // stays horizontal too
+            case STEAM_ENGINE, MILLSTONE -> {                                      // stays horizontal too
                 BlockFace f = clockwise(positive(n.axis), a);
                 if (f == positive(n.axis) || axisOf(f) == Axis.Y) return false;
                 n.axis = axisOf(f);
@@ -304,7 +304,6 @@ final class Kinetics {
                 for (BlockFace f : FACES) if (axisOf(f) != n.axis) out.add(f);
             }
             case HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL, EJECTOR -> out.add(n.facing.getOppositeFace());
-            case MILLSTONE -> out.add(BlockFace.DOWN);
             case MIXER -> out.add(BlockFace.UP);
             case ARM -> out.add(BlockFace.DOWN);
             case KETTLE, STATION, SIGNAL, PIPE, TANK, REFINERY, STEAM_BOILER, DEPOT, WHISTLE -> { } // not kinetic

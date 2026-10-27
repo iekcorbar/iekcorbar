@@ -295,19 +295,34 @@ def gauge_needle():
 
 
 def millstone_base():
+    # the side-driven millstone (0.3.24): an upright frame with the stone wheel standing
+    # between two wooden cheeks, brass bearing caps on the axle ends where the shaft plugs
+    # in, and a top hood whose open slot shows the wheel rim - grain is fed in there.
+    # Frame convention: model X = the drive axle, model Y = up (the steam hammer frame one).
     m = Model("sw_millstone_base")
-    box(m, "base", -8, -8, -8, 8, 8, -1.5, "darkstone")
-    box(m, "band", -8.2, -8.2, -6.4, 8.2, 8.2, -4.6, "darkwood")
-    box(m, "trough", -7.2, -7.2, -1.5, 7.2, 7.2, -0.8, "stone")
-    box(m, "spout", -1.4, 8.0, -4.0, 1.4, 10.0, -2.6, "darkwood")
+    for s in (-1, 1):
+        box(m, f"cheek{s}", 2.9 if s > 0 else -4.3, -5.6, -6.3, 4.3 if s > 0 else -2.9, 5.6, 5.9, "darkwood")
+        box(m, f"cap{s}", 4.3 if s > 0 else -5.6, -1.4, -1.4, 5.6 if s > 0 else -4.3, 1.4, 1.4, "brass")
+        box(m, f"hood{s}", -4.3, 2.2 if s > 0 else -5.5, 5.9, 4.3, 5.5 if s > 0 else -2.2, 7.3, "darkwood")
+        box(m, f"lip{s}", -4.3, 1.8 if s > 0 else -2.2, 7.3, 4.3, 2.2 if s > 0 else -1.8, 7.9, "gold")
+        box(m, f"spout{s}", -1.3, 5.6 if s > 0 else -7.4, -7.2, 1.3, 7.4 if s > 0 else -5.6, -6.2, "brass")
+    m.cube("axle", (-5.4, -0.6, -0.6), (5.4, 0.6, 0.6), "steel")
+    box(m, "sill", -6.2, -5.2, -8.0, 6.2, 5.2, -6.8, "steel")
     return m
 
 
 def millstone_runner():
+    # the turning stone drum, axle on model Y (the display turns it like a shaft): paddles
+    # on both faces reach past the rim, so the turning reads from every side, and the brass
+    # hub caps show where the shaft couples in.
     m = Model("sw_millstone_runner")
-    disk(m, "stone", 7.0, -0.8, 5.0, "stone")
-    rod(m, "eye", 1.6, 5.0, 5.3, "black")
-    box(m, "peg", -0.8, 4.4, 5.0, 0.8, 6.0, 8.0, "darkwood")  # shows the turning
+    disk(m, "stone", 5.6, -2.2, 2.2, "stone")
+    for k in range(4):
+        radial(m, f"paddle_t{k}", k * 45, 1.5, 6.3, 0.6, 2.2, 2.9, "darkwood")
+        radial(m, f"paddle_b{k}", k * 45, 1.5, 6.3, 0.6, -2.9, -2.2, "darkwood")
+    disk(m, "hub", 2.0, 2.2, 3.2, "brass")
+    disk(m, "hub_b", 2.0, -3.2, -2.2, "brass")
+    m.cube("peg", (3.1, 3.2, -0.55), (4.2, 4.6, 0.55), "brass")
     return m
 
 
@@ -1138,13 +1153,24 @@ def chute():
 
 
 def funnel():
+    # a real hopper funnel on the chute bed (redone 0.3.24): brass walls slope up to a
+    # square gold-rimmed mouth above the trough, a sieve crosses the mouth and a black
+    # throat decal on the floor shows where items drop in. Frame like the chute:
+    # model Y = up, model Z = facing (items ride towards +Z).
     m = Model("sw_funnel")
     es = chute().elements
-    m.elements = [dict(e) for e in es if not e["name"].startswith("brace")]  # trough without braces (same uuids as the chute is fine: separate file)
-    m.cube("hood_back", (-6.0, 9.4, 3.6), (6.0, 13.0, 7.2), "darkwood")
-    m.cube("hood_lid", (-6.2, 12.6, -1.0), (6.2, 13.6, 7.4), "steel")
-    m.cube("hood_brow", (-6.4, 12.4, -1.8), (6.4, 13.2, -0.6), "brass")
-    m.cube("mouth_rim", (-6.0, 9.4, -2.0), (6.0, 10.4, -1.2), "brass")
+    m.elements = [dict(e) for e in es if not e["name"].startswith("brace")]  # the full trough, minus the braces
+    for s in (-1, 1):  # sloped hopper walls: upright plates tilted 45 deg, top edge outwards
+        m.cube(f"wall_z{s}", (-5.4, 6.57, s * 3.75 - 0.45), (5.4, 12.93, s * 3.75 + 0.45), "brass",
+               rot=(45 * s, 0, 0), origin=(0, 9.75, s * 3.75))
+        m.cube(f"wall_x{s}", (s * 3.75 - 0.45, 6.57, -5.4), (s * 3.75 + 0.45, 12.93, 5.4), "brass",
+               rot=(0, 0, -45 * s), origin=(s * 3.75, 9.75, 0))
+    for s in (-1, 1):  # gold rim + sieve bars across the mouth
+        m.cube(f"rim_z{s}", (-6.3, 11.5, s * 6.3), (6.3, 12.7, s * 5.5), "gold")
+        m.cube(f"rim_x{s}", (s * 6.3, 11.5, -6.3), (s * 5.5, 12.7, 6.3), "gold")
+    for k in (-2.6, -0.35, 2.9):
+        m.cube(f"sieve{k}", (k - 0.35, 11.9, -5.2), (k + 0.35, 12.3, 5.2), "steel")
+    m.cube("throat", (-1.7, 7.02, -1.7), (1.7, 7.08, 1.7), "black")  # the hole items drop through
     return m
 
 
@@ -1250,7 +1276,14 @@ def build():
         g.merge(by[f"sw_{kind}_gauge_body"]).merge(by["sw_gauge_needle"]).merge(shaft())
         parts.append(g)
     ms = Model("sw_millstone", 1.0)
-    parts.append(ms.merge(by["sw_millstone_base"]).merge(by["sw_millstone_runner"]))
+    ms.merge(by["sw_millstone_base"])
+    # the runner carries its axle on model Y; for the item look the drum is turned into the
+    # frame's X-axle world (a plain coordinate swap: (x,y,z) -> (y,z,x), rotations follow)
+    for e in by["sw_millstone_runner"].elements:
+        t = lambda v: [v[1], v[2], v[0]]
+        ms.elements.append(dict(e, uuid=U(), **{"from": t(e["from"]), "to": t(e["to"]), "origin": t(e["origin"]),
+                                                "rotation": [e["rotation"][1], e["rotation"][2], e["rotation"][0]]}))
+    parts.append(ms)
     sh = Model("sw_steam_hammer", 1.0)
     sh.merge(by["sw_steam_hammer_frame"]).merge(by["sw_steam_hammer_head"])
     sh.cube("axle", (-8, -1.8, -1.8), (8, 1.8, 1.8), "steel")  # the cam shaft, along model X

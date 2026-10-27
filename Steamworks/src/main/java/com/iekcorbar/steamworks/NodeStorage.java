@@ -136,6 +136,9 @@ final class NodeStorage {
                     continue;
                 }
                 KNode n = new KNode(chunk.getWorld(), x, y, z, type, Axis.valueOf(p[4]), BlockFace.valueOf(p[5]));
+                if (type == PartType.MILLSTONE && n.axis == Axis.Y)
+                    n.axis = Axis.X;   // 0.3.24: the millstone became side-driven - an old vertical
+                                       // axle from below is turned sideways; rewire the shaft to a side
                 if (p.length > 6) n.owner = java.util.UUID.fromString(p[6]);
                 if (ext != null) {
                     n.ext = ext;

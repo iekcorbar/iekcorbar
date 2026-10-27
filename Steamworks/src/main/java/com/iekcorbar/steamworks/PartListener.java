@@ -37,8 +37,19 @@ import org.bukkit.util.BoundingBox;
 final class PartListener implements Listener {
     private final SteamworksPlugin plugin;
     /** Last place(): same target twice in a row = the creative double event, not two clicks. */
-    private long lastPlaceNano;
-    private long lastPlaceTarget;
+    /**
+     * Last successful placement per player (nanoTime). The server fires a second
+     * interaction event for one click (this is the "one click, several parts"
+     * report the off-hand guard above already covers); deduping on the TARGET
+     * alone wasn't enough: when the first event turns the clicked block itself
+     * (grass, snow, any replaceable) into a node, the duplicate event now sees a
+     * NODE under the crosshair and takes the other branch - placing against
+     * b.getRelative(face), i.e. one block further along. Same click, two
+     * different targets, two shafts stacked, two items consumed. Dedupe on the
+     * PLAYER instead: one click can only ever cost one placement, no matter
+     * which branch it enters. 40 ms - well under any real second click. (fix 0.3.24)
+     */
+    private final java.util.Map<java.util.UUID, Long> lastPlaceNano = new java.util.HashMap<>();
 
     PartListener(SteamworksPlugin plugin) {
         this.plugin = plugin;
@@ -163,9 +174,9 @@ final class PartListener implements Listener {
     /** Placement of an add-on machine: same barrier-block protocol, orientation asked from the part. */
     private void placeExt(Player p, ItemStack hand, com.iekcorbar.steamworks.api.CustomPart part, Block target, Block against, BlockFace face) {
         if (!target.isReplaceable() || plugin.kinetics().at(target) != null) return;
-        long tk = KNode.key(target.getX(), target.getY(), target.getZ());
         long now = System.nanoTime();
-        if (tk == lastPlaceTarget && now - lastPlaceNano < 40_000_000L) return;   // second event for one click
+        Long last = lastPlaceNano.get(p.getUniqueId());
+        if (last != null && now - last < 40_000_000L) return;   // second event for one click
         org.bukkit.util.BoundingBox box = org.bukkit.util.BoundingBox.of(target);
         if (!target.getWorld().getNearbyEntities(box, en -> en instanceof LivingEntity && !(en instanceof ArmorStand)).isEmpty()) return;
         org.bukkit.Axis axis = part.initialAxis(face, p);
@@ -179,8 +190,7 @@ final class PartListener implements Listener {
         n.owner = p.getUniqueId();
         plugin.addNode(n);
         part.onPlace(ExtParts.view(n), p);
-        lastPlaceTarget = tk;
-        lastPlaceNano = now;
+        lastPlaceNano.put(p.getUniqueId(), now);
         plugin.adv().grant(p, "placed");
     }
 
@@ -210,9 +220,9 @@ final class PartListener implements Listener {
 
     private void place(Player p, ItemStack hand, PartType type, Block target, Block against, BlockFace face) {
         if (!target.isReplaceable() || plugin.kinetics().at(target) != null) return;
-        long tk = KNode.key(target.getX(), target.getY(), target.getZ());
         long now = System.nanoTime();
-        if (tk == lastPlaceTarget && now - lastPlaceNano < 40_000_000L) return;   // second event for one click
+        Long last = lastPlaceNano.get(p.getUniqueId());
+        if (last != null && now - last < 40_000_000L) return;   // second event for one click
         BoundingBox box = BoundingBox.of(target);
         if (!target.getWorld().getNearbyEntities(box, en -> en instanceof LivingEntity && !(en instanceof ArmorStand)).isEmpty()) return;
 
@@ -227,13 +237,13 @@ final class PartListener implements Listener {
                         && beside.axis != faceAxis) axis = beside.axis;
             }
             case GEARBOX -> axis = faceAxis == Axis.Y ? Kinetics.axisOf(p.getFacing()) : Axis.Y;
-            case MILLSTONE, KETTLE, MIXER, PIPE, TANK, REFINERY, ARM, STEAM_BOILER, DEPOT, WHISTLE -> axis = Axis.Y;
+            case KETTLE, MIXER, PIPE, TANK, REFINERY, ARM, STEAM_BOILER, DEPOT, WHISTLE -> axis = Axis.Y;
             case STATION, SIGNAL -> {
                 axis = Axis.Y;
                 facing = p.getFacing().getOppositeFace(); // the board faces the player
             }
             // shaft runs sideways: in line with what it was placed against, else left-right as the player sees it
-            case STEAM_HAMMER, PUMPJACK, STEAM_ENGINE, CRUSHING_WHEEL -> axis = faceAxis != Axis.Y ? faceAxis
+            case STEAM_HAMMER, PUMPJACK, STEAM_ENGINE, CRUSHING_WHEEL, MILLSTONE -> axis = faceAxis != Axis.Y ? faceAxis
                     : Kinetics.axisOf(p.getFacing()) == Axis.X ? Axis.Z : Axis.X;
             // blows away from what it was placed against (shaft behind it); sneak = blow toward it
             case BELT, CHUTE, FUNNEL -> {
@@ -264,8 +274,7 @@ final class PartListener implements Listener {
         if (type == PartType.STATION) n.label = plugin.items().customName(hand, type.displayName);
         n.owner = p.getUniqueId();
         plugin.addNode(n);
-        lastPlaceTarget = tk;
-        lastPlaceNano = now;
+        lastPlaceNano.put(p.getUniqueId(), now);
         plugin.adv().grant(p, "placed");
         plugin.manual().markPlaced(p, type);
         if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);

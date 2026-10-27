@@ -49,10 +49,6 @@ final class Visuals {
                 up = n.facing;
                 front = Kinetics.axisOf(up) == Axis.Y ? BlockFace.SOUTH : BlockFace.UP;
             }
-            case MILLSTONE -> {
-                up = BlockFace.UP;
-                front = BlockFace.SOUTH;
-            }
             case STATION, SIGNAL -> {
                 up = BlockFace.UP;
                 front = n.facing;
@@ -71,7 +67,11 @@ final class Visuals {
                 add(n, "sw_gauge_needle", Role.NEEDLE, orient, sign);
             }
             case MILLSTONE -> {
-                add(n, "sw_millstone_base", Role.STATIC, orient, sign);
+                // the stone wheel stands upright in its frame and the drive shaft plugs into the
+                // axle on either side: the frame stays world-upright (model X along the axle, like
+                // the steam hammer frame), the runner turns with the axle (model Y convention).
+                Quaternionf frame = orientation(BlockFace.UP, n.axis == Axis.X ? BlockFace.SOUTH : BlockFace.EAST);
+                add(n, "sw_millstone_base", Role.STATIC, frame, 1);
                 add(n, "sw_millstone_runner", Role.SPIN, orient, sign);
             }
             case STEAM_HAMMER -> {

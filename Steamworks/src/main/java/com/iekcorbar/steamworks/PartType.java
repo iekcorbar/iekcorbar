@@ -24,7 +24,7 @@ public enum PartType {
     STRESS_GAUGE("Stress Gauge", Material.COPPER_BLOCK, Kind.METAL,
             "Shows how much of the network's power is used.", "Right-click it for the exact numbers."),
     MILLSTONE("Millstone", Material.STONE, Kind.STONE,
-            "Grinds items. Power it from below.", "Right-click to put items in or take results out."),
+            "Grinds items. Power the wheel from the side.", "Right-click to put items in or take results out."),
     STEAM_HAMMER("Steam Hammer", Material.IRON_BLOCK, Kind.METAL,
             "Presses items lying in the block under it.", "Power it with a shaft from the side."),
     CLUTCH("Clutch", Material.IRON_BLOCK, Kind.METAL,

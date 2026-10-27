@@ -282,7 +282,7 @@ export default function SteamworksExplainedPage() {
       <Section id="machines" icon={Wrench} kicker="Spend the rotation" title="Processing machines: the factory floor">
         <p className="text-sm text-text-warm/80">These do the actual work. Every one takes items in and gives results out - by hand, by hopper, or by belt.</p>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Card img="millstone" title="Millstone" stat="grinds · 4 Tq/RPM · power from below">
+          <Card img="millstone" title="Millstone" stat="grinds · 4 Tq/RPM · power from the side">
             <p>Wheat → <b>flour</b> (the Kitchen starts here), cobble → gravel → sand, bones → meal, wool → string, sugar cane → sugar, glowstone → dust, blaze rod → powder.</p>
             <p className="text-xs text-text-warm/60">Right-click items in, empty hand out. A hopper on top feeds it; a chest beside it collects.</p>
           </Card>
