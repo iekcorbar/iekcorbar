@@ -1038,3 +1038,33 @@ markDirty bestond niet). Nu afgemaakt:
   crushing wheel via de mm-helpers) en Z omhoog bij liggende machines - preview3d tekent
   het model in rauwe modelruimte, dus een verkeerde as (tuimelende drum) is op het sheet
   NIET te zien; check de as-conventie altijd tegen Visuals' corient.
+
+### Sakagura 0.3.4 - feestdagen-set: twaalf drankjes voor Patrick, pompoen, kerst en paas (27-10 avond)
+
+Gebruiker vroeg om ~10 suggesties "binnen wat Minecraft kan, out of the box" en na
+het zien daarvan: "maak dit maar in de recipes.yml". Twaalf ideeën geworden (elf binnen de
+bestaande engine + één met een zetje), allemaal door de eigen generator (OWN in
+tools/make_recipes.py) - dus meekleurend bij élke herbouw en het wiki-receptenblad
+schrijft ze automatisch mee (50 drankjes op 03-recipes.md, seed 20 pagina's).
+- St Patrick's: Shamrock Shake (LUCK + GLOWING - je verraadt jezelf), Crock O' Gold
+  (aardappeldistillaat met een goudklompje meegekookt), Bog-Kelp Collins (Sake + kelp +
+  sea pickle = WATER_BREATHING). Halloween: Head of the Hollow (pompoen + buskruit,
+  FIRE_RESISTANCE), Widow's Kiss (spinnoog, INVISIBILITY), Sculk Swill (sculk-sensor als
+  ingrediënt, moeilijkheid 9/5%, SLOW_FALLING). Kerst: Yule Log Reserve (rode wijn +
+  cacao + sparrentak), Reindeer Run (4%, SPEED, kerstochtend), Bishop's Knog (eggnog van
+  schildpad-eitjes + juniper gin). Pasen: Torchflower Spritz (torchflower-zaden, HASTE +
+  LUCK), Warren Weizen (hasenpoot - als item gewoon "Rabbit Foot", want de Material-naam
+  heeft geen apostrophe: "Rabbit's Foot" matcht niet en wordt een name:-waarschuwing).
+- Valentine's Chocolate Heart Flip: hét eerste drankje dat een snoepje VAN EEN ANDERE
+  PLUGIN gebruikt. Daarvoor was één lijn nodig, geen afhankelijkheid: Sakagura's
+  Ingredients.java kent nu ook het PDC-slot "relics:treat" (net als kitchen:item en
+  steamworks:material al) -> "relics:chocolate_heart/1" als ingrediënt, ABsorption als
+  effect (zelfde deugd als de Relics-treat). Relics hoeft niets te weten van Sakagura -
+  zuiver lezen van een item-key, dus de gratis/premium-scheiding blijft schoon.
+- Groen: RecipeTest ALLE PASSED op de 50 (van de twaalf nieuwe: 30 checks), mvn 0.3.4
+  (ingebedde default = hetzelfde bestand), sha1 cea48c2e. site-zip herbouwd (de vanmiddag-versie stond nog in deploy; nu
+  herbouwd als punt 6, sha1 e0a7bc64) en de recipes.yml staat klaar als deploy-bestand
+  (punt 5: overschrijven + /brew reload, ZONDER herstart; jar wisselt bij de eerst-
+  volgende herstart mee - doet hier verder niets). Let op: zonder de nieuwe jar herkent
+  de live-server het chocolate_heart niet in de ketel (oude Ingredients) - de andere
+  elf drankjes kunnen dan al wél.

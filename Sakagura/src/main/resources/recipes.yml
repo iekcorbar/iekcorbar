@@ -344,6 +344,120 @@ recipes:
     effects: ["SATURATION/1/4"]
     steps:
       - {type: cook, time: 12, ingredients: ["kitchen:steamed_rice/5", "Sugar/2"]}
+  shamrock_shake:
+    names: ["Flat Clover", "Shamrock Shake", "Emerald Isle"]
+    color: "7cfc00"
+    difficulty: 4
+    alcohol: 9
+    lore: ["<green>Lucky to be drunk"]
+    effects: ["LUCK/0/120-240", "GLOWING/0/20-60"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["sakagura:barley/4", "Milk Bucket/1", "Glow Berries/1", "Sugar/2"]}
+  crock_o_gold:
+    names: ["Fool's Gold", "Potato Gold", "Crock O' Gold"]
+    color: "f2c14e"
+    difficulty: 6
+    alcohol: 22
+    lore: ["<gold>Aged with a treasure. Still tastes like potato"]
+    effects: ["RESISTANCE/0-1/60-120"]
+    steps:
+      - {type: cook, time: 8, ingredients: ["Potato/8", "sakagura:barley/4", "Gold Nugget/1"]}
+      - {type: distill, runs: 3}
+  bog_kelp_collins:
+    names: ["Pondwater", "Bog-Kelp Collins", "Sea's Green Secret"]
+    color: "3fd66e"
+    difficulty: 3
+    alcohol: 11
+    lore: ["<aqua>Gills included"]
+    effects: ["WATER_BREATHING/0/60-240"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["Sake/1", "Dried Kelp/4", "Sea Pickle/1", "Sugar/1"]}
+  pumpkin_hollow:
+    names: ["Gloom Juice", "Pumpkin Gloom", "Head of the Hollow"]
+    color: "e87a1a"
+    difficulty: 6
+    alcohol: 18
+    lore: ["<dark_purple>The candle inside is still lit"]
+    effects: ["FIRE_RESISTANCE/0/60-120"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["Pumpkin/4", "Sugar/2", "Gunpowder/1"]}
+      - {type: age, years: 1, wood: "oak"}
+  widows_kiss:
+    names: ["Crawler Cider", "Spider Sour", "Widow's Kiss"]
+    color: "4a1e5c"
+    difficulty: 7
+    alcohol: 16
+    lore: ["<light_purple>The spider that does not bite"]
+    effects: ["INVISIBILITY/0/15-30", "SATURATION/0/2"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["Spider Eye/3", "Apple/3", "Sugar/2"]}
+      - {type: age, years: 2, wood: "cherry"}
+  sculk_swill:
+    names: ["Graveyard Dregs", "Midnight Vine", "Sculk Swill"]
+    color: "0d1f2b"
+    difficulty: 9
+    alcohol: 5
+    lore: ["<dark_aqua>Lighter than a gravestone"]
+    effects: ["SLOW_FALLING/0/60-120"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["Sculk Sensor/1", "sakagura:blueberry/4"]}
+      - {type: age, years: 3, wood: "any"}
+  yule_log_reserve:
+    names: ["Sooty Sip", "Mulled Mirth", "Yule Log Reserve"]
+    color: "8c2f2f"
+    difficulty: 4
+    alcohol: 14
+    lore: ["<red>Mulled with cocoa and a sprig of fir"]
+    effects: ["REGENERATION/0/20-60", "FIRE_RESISTANCE/0/30-60"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["Red Wine/1", "Cocoa Beans/2", "Sugar/2", "Spruce Leaves/1"]}
+  reindeer_run:
+    names: ["Dasher's Draught", "Reindeer Run", "Santa's Reserve"]
+    color: "f8c894"
+    difficulty: 2
+    alcohol: 4
+    lore: ["<gray>Faster than the sleigh bell"]
+    effects: ["SPEED/0/120-240", "SATURATION/0/2"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["Carrot/3", "Golden Carrot/1", "Milk Bucket/1", "Sugar/2"]}
+  bishops_knog:
+    names: ["Bland Knog", "Fir Knog", "Bishop's Eggnog"]
+    color: "f5e6c8"
+    difficulty: 5
+    alcohol: 12
+    lore: ["<yellow>From the wrong kind of egg"]
+    effects: ["HEALTH_BOOST/0-1/60-120"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["Turtle Egg/2", "Milk Bucket/1", "Sugar/2", "Juniper Gin/1"]}
+  torchflower_spritz:
+    names: ["Wilted Spritz", "Petal Pilsner", "Torchflower Spritz"]
+    color: "ffc0cb"
+    difficulty: 4
+    alcohol: 6
+    lore: ["<pink>The first bloom of spring"]
+    effects: ["HASTE/0/60-120", "LUCK/0/60-120"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["Torchflower Seeds/2", "sakagura:barley/5", "sakagura:hops/2", "Pink Petals/2"]}
+      - {type: age, years: 1, wood: "birch"}
+  warren_weizen:
+    names: ["Hutch Water", "Bunny Bounce", "Warren Weizen"]
+    color: "f5e6b8"
+    difficulty: 3
+    alcohol: 7
+    lore: ["<gold>Concours de saut"]
+    effects: ["JUMP_BOOST/0/120-240", "SPEED/0/60-120"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["Wheat/4", "sakagura:barley/3", "Rabbit Foot/1", "Sugar/1"]}
+      - {type: distill, runs: 1}
+  chocolate_heart_flip:
+    names: ["Tangled Flip", "Cocoa Heart Flip", "Valentine's Flip"]
+    color: "b3687a"
+    difficulty: 6
+    alcohol: 13
+    lore: ["<red>A Relics heart, melted into Sakagura foam"]
+    effects: ["ABSORPTION/0/120-240", "REGENERATION/0/10-30"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["Milk Bucket/1", "Cocoa Beans/2", "Sugar/2", "relics:chocolate_heart/1"]}
   amazake:
     names: ["Thin Amazake", "Amazake", "Rich Amazake"]
     color: "f6efe0"

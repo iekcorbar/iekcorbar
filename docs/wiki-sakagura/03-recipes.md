@@ -44,6 +44,18 @@ Follow a recipe closely for the best quality (up to 5 stars). Cooking needs heat
 | Apple Liquor | Cook 5 min: 6 Apple, 2 Sugar -> Distill 2x | 25% |
 | Bloody Mary | Cook 3 min: 15 Red Dye, 12 Potato -> Distill 8x | 42% |
 | Zombie Zeste Zinger | Cook 12 min: 5 Steamed Rice, 2 Sugar | 80% |
+| Shamrock Shake | Cook 4 min: 4 Barley, 1 Milk Bucket, 1 Glow Berries, 2 Sugar | 9% |
+| Potato Gold | Cook 8 min: 8 Potato, 4 Barley, 1 Gold Nugget -> Distill 3x | 22% |
+| Bog-Kelp Collins | Mix (no heat) 3 min: 1 Sake, 4 Dried Kelp, 1 Sea Pickle, 1 Sugar | 11% |
+| Pumpkin Gloom | Cook 6 min: 4 Pumpkin, 2 Sugar, 1 Gunpowder -> Age 1 years (oak cask) | 18% |
+| Spider Sour | Cook 5 min: 3 Spider Eye, 3 Apple, 2 Sugar -> Age 2 years (cherry cask) | 16% |
+| Midnight Vine | Cook 4 min: 1 Sculk Sensor, 4 Blueberry -> Age 3 years | 5% |
+| Mulled Mirth | Mix (no heat) 3 min: 1 Red Wine, 2 Cocoa Beans, 2 Sugar, 1 Spruce Leaves | 14% |
+| Reindeer Run | Mix (no heat) 2 min: 3 Carrot, 1 Golden Carrot, 1 Milk Bucket, 2 Sugar | 4% |
+| Fir Knog | Mix (no heat) 3 min: 2 Turtle Egg, 1 Milk Bucket, 2 Sugar, 1 Juniper Gin | 12% |
+| Petal Pilsner | Cook 5 min: 2 Torchflower Seeds, 5 Barley, 2 Hops, 2 Pink Petals -> Age 1 years (birch cask) | 6% |
+| Bunny Bounce | Cook 4 min: 4 Wheat, 3 Barley, 1 Rabbit Foot, 1 Sugar -> Distill 1x | 7% |
+| Cocoa Heart Flip | Mix (no heat) 3 min: 1 Milk Bucket, 2 Cocoa Beans, 2 Sugar, 1 Chocolate Heart | 13% |
 | Amazake | Cook 4 min: 3 Steamed Rice, 1 Ginger | - |
 | Matcha Latte | Cook 2 min: 3 Tea Leaves, 1 Milk Bucket, 1 Sugar | - |
 | Mugicha | Mix (no heat) 2 min: 3 Barley, 2 Snowball | - |
