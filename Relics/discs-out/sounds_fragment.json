@@ -26,6 +26,15 @@
   ],
   "subtitle": "subtitles.relics.disc"
  },
+ "music_box.ghosts_of_the_samurai": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_ghosts_of_the_samurai",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.music_box.ghosts_of_the_samurai"
+ },
  "disc.halloween_in_iekcorbar": {
   "sounds": [
    {

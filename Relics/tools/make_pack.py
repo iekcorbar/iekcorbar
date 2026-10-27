@@ -1520,6 +1520,9 @@ def add_discs():
         if os.path.exists(lp):
             lang = json.load(open(lp, encoding="utf-8"))
             lang["subtitles.relics.disc"] = "Music disc plays"
+            for ev in json.load(open(frag, encoding="utf-8")):  # music-box aliases (make_discs MUSIC_BOX)
+                if ev.startswith("music_box."):
+                    lang.setdefault("subtitles.relics." + ev, "Music box plays")
             json.dump(lang, open(lp, "w", encoding="utf-8"), indent=1)
 
 

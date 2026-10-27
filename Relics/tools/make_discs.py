@@ -33,6 +33,13 @@ def seconds(ffmpeg, path):
 MARK_BEGIN = "  # BEGIN:generated"
 MARK_END = "  # END:generated"
 
+# Custom discs whose song ALSO plays on the Relics music-box prop (Jukebox.MUSIC). The music
+# box plays "relics:music_box.<id>" events, so one extra fragment entry per id aliases that
+# event onto the disc's own ogg - no duplicated audio, and make_pack.py merges both the disc
+# and this alias into the pack's sounds.json. Add the id to Jukebox.MUSIC (ids/names/ticks)
+# when a new one appears here.
+MUSIC_BOX = {"ghosts_of_the_samurai"}
+
 
 def entry_lines(did, title, seconds, event, recipe, colour):
     return [
@@ -94,8 +101,11 @@ def main():
                         "-c:a", "libvorbis", "-q:a", "4", target], check=True)
         event = "disc." + did
         fragment[event] = {"sounds": [{"name": "relics:disc/u_" + did, "stream": True}], "subtitle": "subtitles.relics.disc"}
+        if did in MUSIC_BOX:  # same song on the music box prop: event alias, same ogg, no duplicated audio
+            fragment["music_box." + did] = {"sounds": [{"name": "relics:disc/u_" + did, "stream": True}],
+                                             "subtitle": "subtitles.relics.music_box." + did}
         rows.append((did, title, seconds(ffmpeg, target), event, recipe, len(rows) % 6))
-        print("disc:", did, "-", title, f"({rows[-1][2]} s)")
+        print("disc:", did, "-", title, f"({rows[-1][2]} s)" + (" [music box]" if did in MUSIC_BOX else ""))
     if fragment:
         json.dump(fragment, open(os.path.join(out, "sounds_fragment.json"), "w", encoding="utf-8"), indent=1)
     res = os.path.join(ROOT, "src", "main", "resources", "config.yml")

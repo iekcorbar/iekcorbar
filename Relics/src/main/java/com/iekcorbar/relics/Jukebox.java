@@ -35,8 +35,10 @@ final class Jukebox implements Listener {
     private record Tunes(String prefix, String[] ids, String[] names, int[] ticks, Material icon, String title) {
     }
 
-    private static final Tunes MUSIC = new Tunes("music_box", new String[]{"jingle_bells", "deck_the_halls", "we_wish"},
-            new String[]{"Jingle Bells", "Deck the Halls", "We Wish You a Merry Christmas"}, new int[]{360, 220, 200}, Material.NOTE_BLOCK, "Music Box");
+    private static final Tunes MUSIC = new Tunes("music_box", new String[]{"jingle_bells", "deck_the_halls", "we_wish", "ghosts_of_the_samurai"},
+            new String[]{"Jingle Bells", "Deck the Halls", "We Wish You a Merry Christmas", "Ghosts of the Samurai"},
+            new int[]{360, 220, 200, 4160}, Material.NOTE_BLOCK, "Music Box");  // ghosts_of_the_samurai = the real disc track (4160 t = 208 s),
+    // its music_box.<id> event is an alias onto the disc ogg - see tools/make_discs.py MUSIC_BOX.
     private static final Tunes HARP = new Tunes("harp", new String[]{"minstrel_boy", "londonderry_air", "molly_malone", "county_down", "fair_moved"},
             new String[]{"The Minstrel Boy", "Londonderry Air", "Molly Malone", "The Star of the County Down", "She Moved Through the Fair"},
             new int[]{300, 600, 365, 305, 360}, Material.NOTE_BLOCK, "Celtic Harp");
