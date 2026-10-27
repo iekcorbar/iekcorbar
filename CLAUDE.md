@@ -819,10 +819,10 @@ deploy-lijst punt 5): SiteSync/config.yml had 3-spaties indent onder `database:`
 "Cannot load" bij élke start sinds 26-10, DB-sync draaide op defaults; Sakagura/
 recipes.yml had een half kapot staff-recept "bloody _mary" -> heel bestand onleesbaar.
 Beide syntax-fouten minimaal hersteld (sha1-verified teruggeplaatst, wachtwoord/wp's
- intact; parse-getest met PyYAML; 38 recepten laden nu). De twee staff-drankjes
-(bloody_mary, zombiezestzinger) bestaan NIET in tools/make_recipes.py ->promote-besluit
-aan gebruiker. Actie te goeder ure: nog ONE korte herstart (SiteSync-config) of
-/brew reload (Sakagura).
+ intact; parse-getest met PyYAML). Herstart 27-10 11:22 maakt het rond: log geen
+"Cannot load" meer, SiteSync enabled op echte config, Sakagura "Loaded 38 recipe(s)".
+De twee staff-drankjes (bloody_mary, zombiezestzinger) bestaan NIET in
+tools/make_recipes.py -> promote-besluit nog aan gebruiker.
 
 Besluit productievorm (26-10, gebruiker): FMM-modellen + pack worden NU NOG NIET in de jar gebundeld.
 Huidige aflever-lijn blijft: assets apart via deploy/ (fmm-steamworks-map + pack in de mixer).
