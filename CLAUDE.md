@@ -1265,3 +1265,25 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   audit 0 problemen (build11 sha1 1b01eeb8). Servermeting van zoeven vóór deze batch nog: Relics
   0.4.1 + build8 live, Sakagura 0.3.4 live - punten 12/13 van TE-DEPLOYEN dekken alle drie de
   jarren (Steamworks 0.3.24 + pack + models staan er ook in).
+
+### Trailer-aankondiging: site-berichten + Discord-post live (27-10 laat op de avond)
+
+- **Nieuws**: er wordt een cinematische **server-trailer** gemaakt door een content creator
+  (naam bekend bij de eigenaar; wordt bewust NOOIT in enige publieke tekst genoemd - ook
+  de site- en Discord-teksten houden het op "a content creator"). Geen releasedatum.
+- **Site-berichten klaar voor de eigenaar** (agent raakt de website-DB niet): uitgebreide
+  News-post "We're Making a Trailer — And It's in Good Hands" + korte Upcoming-regel
+  "Server Trailer — In Production". Teksten staan in de chat (plakken via Staff Panel >
+  News & Upcoming Manager) én als `deploy/trailer-news.sql` (phpMyAdmin-import; vaste ID's,
+  dubbel importeren = nette dubbele-sleutelfout). Let op: NewsClient rendert LOOS inline
+  `**bold**` in alinea's NIET - de definitieve teksten gebruiken alleen `### ` kopjes,
+  `* **vet** ...` bullets en kale regel-paragrafen. Geen site-zip nodig (pure DB-content).
+  TE-DEPLOYEN punt 14.
+- **Discord GEPOST op expliciet verzoek van de eigenaar** ("ik wil het bericht over de
+  trailer toch maar pushen", "staff en speler") - de eerdere regel "wacht op toestemming
+  van de maker" is hiermee door de eigenaar zelf opgeheven. Lange aankondiging -> changelog
+  (publiek), korte zakelijke heads-up incl. "noem de maker niet tot hij/zij okay zegt" ->
+  staff. Beide webhooks via skill discord-post; drafts in
+  `%TEMP%\opencode\trailer-discord.md` + `-staff.md`.
+- **Open**: de website-berichten zelf plakken/importeren (punt 14) en de vanavond-batch
+  deployen staan bij de eigenaar; Wildlife-dierenbatch (animaties/drops) nog op stapel.
