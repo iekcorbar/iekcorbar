@@ -17,6 +17,17 @@ database:
 # Automatically sync all player statistics (playtime, kills, deaths, mob kills, blocks mined, balance, elite coins, lands, jobs)
 sync-player-stats: true
 
+# Deep sync for Staff Panel > Player Data: vanilla statistics and advancement
+# progress live in the server's save files, so a slow drip-fed cycle loads each
+# player through Paper (offline-safe) and writes stats_json + advancements_json
+# into player_stats. Never-synced rows go first and quitting bumps you up the
+# queue. Costs nothing during play - it all runs async, batch by batch.
+deep-sync:
+  enabled: true
+  every-seconds: 30      # how often the cycle runs
+  batch-size: 5          # players per cycle (5 / 30 s = ~10 per minute)
+  refresh-minutes: 15    # re-check a player after this long even when nothing changed
+
 # Generic PlaceholderAPI bridge — lets the website show data from ANY plugin
 # that registers PlaceholderAPI placeholders (Lands, ValhallaMMO, ValhallaRaces,
 # etc.) without needing a code change/plugin rebuild every time you want a new

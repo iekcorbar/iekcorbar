@@ -70,6 +70,11 @@ public class MySQLSync {
         closer.start();
     }
 
+    /** Shared JDBC access for DeepSync — the same pooled connection, reached the same safe way. */
+    synchronized Connection sharedConnection() throws Exception {
+        return getConnection();
+    }
+
     private synchronized Connection getConnection() throws Exception {
         if (connection != null && !connection.isClosed() && connection.isValid(2)) {
             return connection;

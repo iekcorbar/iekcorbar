@@ -19,7 +19,7 @@ export async function GET(request) {
       return NextResponse.json({ error: 'Provide a valid Minecraft username.' }, { status: 400 });
     }
 
-    const profile = await db.getCombatProfile(name);
+    const profile = await db.getPlayerDataBundle(name);
     if (profile.error === 'db-unreachable') {
       return NextResponse.json({ error: 'The plugin database is unreachable right now.' }, { status: 503 });
     }

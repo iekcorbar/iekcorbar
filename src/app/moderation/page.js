@@ -66,6 +66,10 @@ import {
   BarChart3,
   ScrollText,
   Swords,
+  Activity,
+  Trophy,
+  Flame,
+  Wine,
 } from 'lucide-react';
 import { renderMarkdown } from '@/lib/markdown';
 import AnalyticsTab from '@/components/AnalyticsTab';
@@ -5280,7 +5284,7 @@ function ModerationContent() {
           <div className="flex items-start gap-2.5 bg-amber-950/30 border border-amber-700/30 rounded-lg p-3">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
             <p className="text-[11px] text-amber-300/80 leading-relaxed">
-              Live plugin-database lookup (EliteMobs combat record + MMOCore progression) — staff-only, read-only, and never shown on any public page. Nothing loads until you search a username.
+              Live plugin-database dossier — SiteSync webstats, deep-synced advancements &amp; vanilla stats, EliteMobs, MMOCore, ValhallaMMO, BetonQuest and the Sakagura brew log. Staff-only, read-only, and never shown on any public page. Nothing loads until you search a username.
             </p>
           </div>
 
@@ -5312,37 +5316,115 @@ function ModerationContent() {
             </div>
           )}
 
-          {pdResult && pdResult.found && (
+          {pdResult && pdResult.found && (() => {
+            const STAT_LABELS = {
+              deaths: 'Deaths', player_kills: 'Player kills', mob_kills: 'Mob kills', total_kills: 'Total kills',
+              animals_bred: 'Animals bred', fish_caught: 'Fish caught', trades: 'Villager trades',
+              sleep_in_bed: 'Nights slept', jump: 'Jumps', best_kill_streak: 'Best kill streak', multikill: 'Multikill',
+              walk_one_cm: 'Walked', sprint_one_cm: 'Sprinted', crouch_one_cm: 'Crouched', swim_one_cm: 'Swum',
+              climb_one_cm: 'Climbed', dive_one_cm: 'Dived', fly_one_cm: 'Flew', aviate_one_cm: 'Elytra',
+              minecart_one_cm: 'Minecart', boat_one_cm: 'Boat', horse_one_cm: 'Horse', pig_one_cm: 'Pig',
+              strider_one_cm: 'Strider', saddle_one_cm: 'Saddled', damage_dealt: 'Damage dealt', damage_taken: 'Damage taken',
+              healed: 'Healed', drop: 'Dropped', pickup: 'Picked up', mined_block: 'Blocks mined', break_item: 'Tools broken',
+              use_item: 'Items used', craft_item: 'Items crafted', item_enchanted: 'Items enchanted', enchant_item: 'Items enchanted',
+              chest_opened: 'Chests opened', play_record: 'Records played', fills_cauldron: 'Cauldrons filled',
+              tiered_elytra: 'Elytra upgrades', raid: 'Raids won', interact_with_lectern: 'Lecterns used'
+            };
+            const statLabel = (k) => STAT_LABELS[k] || k.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+            const statVal = (k, v) => k.endsWith('_one_cm')
+              ? (v >= 100000 ? (v / 100000).toFixed(1) + ' km' : Math.round(v / 100) + ' m')
+              : (k.startsWith('damage') ? (v / 2).toLocaleString() + '\u2665' : Number(v).toLocaleString());
+            const TILE = 'bg-neutral-950/40 border border-sp-bronze/20 rounded-lg py-3 px-2 text-center';
+            const CHIP = 'px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20 text-[10px] text-text-warm/70';
+            const CAT_ICON = { adventure: '\u{1F9BA}', nether: '\u{1F525}', end: '\u{1F409}', husbandry: '\u{1F40E}', recipes: '\u{1F4D6}', misc: '\u{2728}' };
+            const web = pdResult.web, adv = web && web.advancements, dstats = web && web.stats;
+            return (
             <div className="space-y-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 <PlayerAvatar mcUsername={pdResult.name} size={32} className="rounded-lg" />
-                <div>
+                <div className="mr-auto">
                   <p className="font-serif text-lg text-white font-bold leading-tight">{pdResult.name}</p>
                   <p className="text-[10px] text-text-warm/40 uppercase tracking-wider">read just now from the plugin database</p>
                 </div>
+                {pdResult.discord && <span className={CHIP}>Discord: {pdResult.discord}</span>}
+                {pdResult.mmoitems && <span className={CHIP}>MMOItems data present</span>}
+                {pdResult.uuid && <span className={CHIP + ' font-mono'}>{pdResult.uuid}</span>}
               </div>
 
-              {pdResult.rpg && (
+              {web && (
                 <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-3">
-                  <h4 className="text-xs font-bold text-sp-gold uppercase tracking-wide flex items-center gap-2"><Swords className="w-3.5 h-3.5" /> MMOCore progression</h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-                    {[
-                      ['Level', pdResult.rpg.level],
-                      ['Experience', Math.round(Number(pdResult.rpg.xp || 0)).toLocaleString()],
-                      ['Class', pdResult.rpg.class || '—'],
-                      ['Guild', pdResult.rpg.guild || '—'],
-                    ].map(([k, v]) => (
-                      <div key={k} className="bg-neutral-950/40 border border-sp-bronze/20 rounded-lg py-3 px-2">
-                        <p className="text-lg font-bold text-sp-gold">{v}</p>
-                        <p className="text-[9px] uppercase tracking-wider text-text-warm/40">{k}</p>
-                      </div>
+                  <h4 className="text-xs font-bold text-sp-gold uppercase tracking-wide flex items-center gap-2"><Activity className="w-3.5 h-3.5" /> SiteSync webstats</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {[['Playtime', web.playtimeHours + ' h'], ['Balance', '\u20AC' + Number(web.balance).toFixed(2)], ['Mob kills', Number(web.mobKills).toLocaleString()], ['Deaths', Number(web.deaths).toLocaleString()], ['Blocks mined', Number(web.blocksMined).toLocaleString()], ['Claims', web.landsClaimed], ['Elite coins', Number(web.eliteCoins).toLocaleString()], ['Online', web.online ? 'yes' : 'no']].map(([k, v]) => (
+                      <div key={k} className={TILE}><p className="text-sm font-bold text-white">{v}</p><p className="text-[9px] uppercase tracking-wider text-text-warm/40">{k}</p></div>
                     ))}
                   </div>
-                  <div className="flex flex-wrap gap-2 text-[10px] text-text-warm/60">
-                    <span className="px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20">Class points: {pdResult.rpg.classPoints ?? 0}</span>
-                    <span className="px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20">Skill points: {pdResult.rpg.skillPoints ?? 0}</span>
-                    <span className="px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20">Attribute points: {pdResult.rpg.attributePoints ?? 0}</span>
-                  </div>
+                  {web.placeholders && Object.keys(web.placeholders).length > 0 && (
+                    <div className="flex flex-wrap gap-2">{Object.entries(web.placeholders).map(([k, v]) => <span key={k} className={CHIP}>{k.replace(/_/g, ' ')}: <b className="text-white">{v}</b></span>)}</div>
+                  )}
+                  {web.jobs && web.jobs.length > 0 && (
+                    <div className="flex flex-wrap gap-2">{web.jobs.map((j) => <span key={j.name} className={CHIP}>{j.name} <b className="text-white">Lv {j.level}</b></span>)}</div>
+                  )}
+                </div>
+              )}
+
+              <div className="grid lg:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-2">
+                  <h4 className="text-xs font-bold text-sp-gold uppercase tracking-wide flex items-center gap-2"><Trophy className="w-3.5 h-3.5" /> Advancements</h4>
+                  {adv ? (
+                    <>
+                      <p className="text-sm text-white"><b>{adv.total}</b> complete{adv.list_full === false ? ' (list capped at 400)' : ''} · <span className="text-text-warm/50 text-[10px]">as of {web && web.deepUpdated ? new Date(web.deepUpdated).toLocaleString() : 'last sync'}</span></p>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(adv.by || {}).map(([cat, c]) => (
+                          <span key={cat} className={CHIP}>{CAT_ICON[cat] || '\u{1F3C1}'} {cat} <b className="text-white">{c[0]}/{c[2]}</b>{c[1] > 0 ? <span className="text-sp-copper"> +{c[1]}</span> : null}</span>
+                        ))}
+                      </div>
+                      {adv.done && adv.done.length > 0 && (
+                        <div className="flex flex-wrap gap-1 max-h-28 overflow-y-auto pt-1">
+                          {adv.done.slice(0, 60).map((k) => <span key={k} className="text-[9px] px-1.5 py-0.5 rounded bg-sp-gold/10 border border-sp-gold/20 text-sp-gold/80">{k.replace(/^minecraft:/, '')}</span>)}
+                          {adv.done.length > 60 && <span className="text-[9px] text-text-warm/40 self-center">+{adv.done.length - 60} more</span>}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-[11px] text-text-warm/40">Not synced yet — SiteSync reads advancements while a player is online (and once at logout). Have them log in and out once.</p>
+                  )}
+                </div>
+
+                <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-2">
+                  <h4 className="text-xs font-bold text-sp-gold uppercase tracking-wide flex items-center gap-2"><Activity className="w-3.5 h-3.5" /> Vanilla stats</h4>
+                  {dstats && Object.keys(dstats).length > 0 ? (
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {Object.entries(dstats).map(([k, v]) => (
+                        <div key={k} className="flex items-baseline justify-between gap-2 border-b border-sp-bronze/10 pb-0.5">
+                          <span className="text-[10px] text-text-warm/50 truncate">{statLabel(k)}</span>
+                          <span className="text-[11px] font-bold text-white whitespace-nowrap">{statVal(k, v)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-[11px] text-text-warm/40">{web && web.deepUpdated ? 'No vanilla stats recorded for this player yet.' : 'Not deep-synced yet (see advancements card).'}</p>
+                  )}
+                  {web && web.deepUpdated && <p className="text-[9px] text-text-warm/35 pt-1">deep sync: {new Date(web.deepUpdated).toLocaleString()} · refreshes while online + at logout</p>}
+                </div>
+              </div>
+
+              {(pdResult.rpg || (pdResult.forms && pdResult.forms.length) || (pdResult.skills && pdResult.skills.length)) && (
+                <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-3">
+                  <h4 className="text-xs font-bold text-purple-300 uppercase tracking-wide flex items-center gap-2"><Swords className="w-3.5 h-3.5" /> RPG progression</h4>
+                  {pdResult.rpg && (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {[['MMO Level', pdResult.rpg.level], ['MMO XP', Math.round(Number(pdResult.rpg.xp || 0)).toLocaleString()], ['Class', pdResult.rpg.class || '\u2014'], ['Guild', pdResult.rpg.guild || '\u2014']].map(([k, v]) => (
+                        <div key={k} className={TILE}><p className="text-lg font-bold text-purple-200">{v}</p><p className="text-[9px] uppercase tracking-wider text-text-warm/40">{k}</p></div>
+                      ))}
+                    </div>
+                  )}
+                  {pdResult.skills && pdResult.skills.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">{pdResult.skills.map((s) => <span key={s.skill} className={CHIP}>{s.skill.replace(/_/g, ' ')} <b className="text-white">Lv {s.level}</b></span>)}</div>
+                  )}
+                  {pdResult.forms && pdResult.forms.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">{pdResult.forms.slice(0, 8).map((f) => <span key={f.form} className={CHIP}>{f.form.replace(/_/g, ' ')} <b className="text-white">{Number(f.xp).toLocaleString()} xp</b>{f.challenge ? ' \u2713' : ''}</span>)}</div>
+                  )}
                 </div>
               )}
 
@@ -5359,10 +5441,7 @@ function ModerationContent() {
                       ['Dungeons', pdResult.elite.dungeons ?? 0],
                       ['Elite coins', Number(pdResult.elite.coins || 0).toLocaleString(undefined, { maximumFractionDigits: 2 })],
                     ].map(([k, v]) => (
-                      <div key={k} className="bg-neutral-950/40 border border-sp-bronze/20 rounded-lg py-3 px-2">
-                        <p className="text-lg font-bold text-rose-200">{v}</p>
-                        <p className="text-[9px] uppercase tracking-wider text-text-warm/40">{k}</p>
-                      </div>
+                      <div key={k} className={TILE}><p className="text-lg font-bold text-rose-200">{v}</p><p className="text-[9px] uppercase tracking-wider text-text-warm/40">{k}</p></div>
                     ))}
                   </div>
                   <div>
@@ -5379,15 +5458,43 @@ function ModerationContent() {
                 </div>
               )}
 
-              {(!pdResult.rpg || !pdResult.elite) && (
-                <p className="text-[11px] text-text-warm/40">
-                  {pdResult.rpg && !pdResult.elite
-                    ? 'MMOCore progression found, but no EliteMobs combat row yet — this player has never fought an elite mob.'
-                    : 'EliteMobs combat record found, but no MMOCore progression row — the RPG plugin has not saved this player yet.'}
-                </p>
+              {pdResult.quest && (
+                <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-2">
+                  <h4 className="text-xs font-bold text-emerald-300 uppercase tracking-wide flex items-center gap-2"><BookOpen className="w-3.5 h-3.5" /> BetonQuest</h4>
+                  {pdResult.quest.points && pdResult.quest.points.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">{pdResult.quest.points.map((p) => <span key={p.category} className={CHIP}>{p.category} <b className="text-white">{p.count}</b></span>)}</div>
+                  )}
+                  {pdResult.quest.journal && pdResult.quest.journal.length > 0 && (
+                    <div className="space-y-1 max-h-32 overflow-y-auto">
+                      {pdResult.quest.journal.map((j, i) => (
+                        <p key={i} className="text-[10px] text-text-warm/60 flex justify-between gap-3 border-b border-sp-bronze/10 pb-0.5">
+                          <span className="truncate">{j.pointer}</span>
+                          <span className="text-text-warm/35 whitespace-nowrap">{j.date ? new Date(j.date).toLocaleDateString() : ''}</span>
+                        </p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {pdResult.brew && (
+                <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-2">
+                  <h4 className="text-xs font-bold text-pink-300 uppercase tracking-wide flex items-center gap-2"><Flame className="w-3.5 h-3.5" /> Sakagura brew log</h4>
+                  <p className="text-[11px] text-text-warm/60">{pdResult.brew.recipes.length} recipes completed{pdResult.brew.views ? ` \u00b7 ${pdResult.brew.views.toLocaleString()} recipe peeks in the journal` : ''}</p>
+                  {pdResult.brew.recipes.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {pdResult.brew.recipes.map((b) => <span key={b.recipe} className={CHIP}>{b.recipe.replace(/_/g, ' ')} <b className="text-white">{Math.round((b.score || 0) * (b.score <= 1 ? 100 : 1))}%</b></span>)}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {(!pdResult.web && !pdResult.rpg && !pdResult.elite) && (
+                <p className="text-[11px] text-text-warm/40">Only fragments found — this player may have moved on or renamed since.</p>
               )}
             </div>
-          )}
+            );
+          })()}
         </div>
       )}
 

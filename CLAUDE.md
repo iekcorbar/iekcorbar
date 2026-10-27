@@ -1141,3 +1141,39 @@ EliteMobs-stats (level, XP, etc.) - pas zichtbaar NA zoeken op spelernaam.
 - Groen: next build; zip herbouwd (sha1 ebab7f60, punt 6 van de lijst - morgen samen met
   de 0.3.23-jar). Test-na-live: tab openen -> zoeken -> stats; role zonder vinkje krijgt
   403.
+
+### Player Data wordt een volledig spelerdossier (27-10 avond)
+
+Opdracht: "die sectie uitbreiden met alle speler stats uit alle plugins, neem ook
+advancement mee en vanilla player stats". Twee kanten, één batch:
+- **SiteSync 1.15.4 -> 1.16.0, nieuwe DeepSync-dienst.** Advance- en statistiekdata
+  leven in de savefiles, niet in tabellen. Eerst geprobeerd via Paper's
+  OfflinePlayer#load() — in deze API (26.2.build.135) bestáát die niet: javap op de
+  geresolverde paper-api-jar leerde dat advancements alleen op een lévende Player
+  leesbaar zijn (getAdvancementProgress per advancement), terwijl
+  OfflinePlayer#getStatistic wél offline werkt. Design daarna: cyclus van 30 s met
+  batch 5 (stats altijd; advancements van de online spelers), en de quit-event schrijft
+  het complete finale snapshot van de vertrekkende speler (hoofdthread leest, async
+  thread schrijft). Speler is dus nooit ouder dan één cyclus data. De vier nieuwe
+  player_stats-kolommen (uuid, stats_json, advancements_json, deep_updated) zet de
+  plugin zelf met een information_schema-check + ALTER (portabel, geen handmatige SQL);
+  de bestaande upsert van MySQLSync raakt die kolommen niet (COALESCE op
+  advancements_json bij latere cycles). Config: deep-sync-section.
+  MySQLSync kreeg een sharedConnection()-accessor (zelfde pooled verbinding, same rules).
+- **Website: getPlayerDataBundle(name) in db.js** (vervangt de jonge getCombatProfile):
+  één zoekactie -> webstats-rij (incl. deep-kolommen + jobs + placeholders), elite, rpg,
+  ValhallaMMO-vormen + de 14 profiles_*-skillrijen (één UNION-query, owner-genormaliseerd
+  op dashed/undashed), BetonQuest (uuid -> active_profile -> journal + punten),
+  Sakagura-brouwlog (binary(16)-kolom! UNHEX van de dashloze hex) + journaal-blikken,
+  DiscordSRV-link en MMOItems-aanwezigheid. Alles faalt soft naar null: plugin niet
+  aanwezig = kaart niet zichtbaar.
+- **UI**: de player_data-tab groeide van twee naar zeven kaarten (webstats, advancements
+  met per-categorie done/inprogress/totaal + lijst met cap, vanilla stats met
+  cm->m/km- en halve-harten-formatting, RPG-samenvoegkaart MMOCore+Valhalla, EliteMobs,
+  BetonQuest, Sakagura) plus uuid/discord/MMOItems-chips bovenaan. Info-box en
+  tab-beschrijving meegeupdated; imports aangevuld (Activity/Trophy/Flame/Wine).
+  Let op: de tab-UI-checks staan serverside (requirePermission 'player_data') — UI
+  verbergen is never the gate.
+- **Groen**: mvn SiteSync (jar 97fc6d17), npm build, zip 15806745. Lijst: punt 9 nieuw
+  (SiteSync-jar bij de herstart van punt 8), punt 6-sha ververst. Server niet
+  aangekeken; deployen doet de eigenaar morgen.

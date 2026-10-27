@@ -4524,41 +4524,88 @@ export const db = {
     }
   },
 
-  // 2026-10-27 (Staff Panel > Player Data): one player's combat record, read
-  // straight from the plugin DB's own tables — EliteMobs' PlayerData (kills,
-  // deaths, score, quests, dungeons, elite coins, per-weapon SkillXP) plus
-  // MMOCore's mmocore_playerdata (level, XP, class, guild, unspent points).
-  // The elite row is looked up by DisplayName first and by whitelisted_players'
-  // uuid second, so a name change or a non-whitelisted account still resolves
-  // where it can. uuid formats differ between the tables (dashes or not) — the
-  // mmocore lookup strips them on both sides. Read-only like every other
-  // pluginDataQuery use; staff-panel data only, never exposed publicly.
-  getCombatProfile: async (username) => {
+  // 2026-10-27 (Staff Panel > Player Data): one username in, the whole player
+  // back — everything read from the plugin DB (read-only, same discipline as
+  // every other pluginDataQuery use). Sources: the SiteSync webstats row
+  // player_stats (now incl. the 1.16.0 deep-sync columns stats_json /
+  // advancements_json), EliteMobs' PlayerData, MMOCore's progression row,
+  // ValhallaMMO's class forms + the fourteen profiles_* skill rows, the
+  // BetonQuest journal, Sakagura's completed brews, the DiscordSRV link and a
+  // presence check for MMOItems. Every query fails soft to null, so a plugin
+  // that is not on some server simply does not show up in the bundle.
+  getPlayerDataBundle: async (username) => {
     const name = String(username || '').trim();
     if (!/^[A-Za-z0-9_]{2,16}$/.test(name)) return { name, found: false, error: 'invalid-name' };
+    const strip = (u) => String(u).replace(/-/g, '').toLowerCase();
+    const J = (s) => { try { return s ? JSON.parse(s) : null; } catch { return null; } };
+    const q = async (sql, params = []) => { try { return await pluginDataQuery(sql, params); } catch { return null; } };
     try {
-      const [eliteRows, wlRows] = await Promise.all([
-        pluginDataQuery('SELECT PlayerUUID AS uuid, DisplayName AS name, Kills AS kills, Deaths AS deaths, Score AS score, QuestsCompleted AS quests, DungeonsCompleted AS dungeons, HighestLevelKilled AS highestMobLevel, COALESCE(CurrencyCents / 100, CurrencyV2) AS coins, SkillXP_ARMOR AS armor, SkillXP_SWORDS AS swords, SkillXP_AXES AS axes, SkillXP_BOWS AS bows, SkillXP_CROSSBOWS AS crossbows, SkillXP_TRIDENTS AS tridents, SkillXP_HOES AS hoes, SkillXP_MACES AS maces, SkillXP_SPEARS AS spears, SkillXP_STAVES AS staves, SkillXP_WANDS AS wands FROM PlayerData WHERE LOWER(DisplayName) = LOWER(?) LIMIT 1', [name]),
-        pluginDataQuery('SELECT uuid FROM whitelisted_players WHERE LOWER(username) = LOWER(?) LIMIT 1', [name])
+      const [eliteRows, wlRows, webRows] = await Promise.all([
+        q('SELECT PlayerUUID AS uuid, DisplayName AS name, Kills AS kills, Deaths AS deaths, Score AS score, QuestsCompleted AS quests, DungeonsCompleted AS dungeons, HighestLevelKilled AS highestMobLevel, COALESCE(CurrencyCents / 100, CurrencyV2) AS coins, SkillXP_ARMOR AS armor, SkillXP_SWORDS AS swords, SkillXP_AXES AS axes, SkillXP_BOWS AS bows, SkillXP_CROSSBOWS AS crossbows, SkillXP_TRIDENTS AS tridents, SkillXP_HOES AS hoes, SkillXP_MACES AS maces, SkillXP_SPEARS AS spears, SkillXP_STAVES AS staves, SkillXP_WANDS AS wands FROM PlayerData WHERE LOWER(DisplayName) = LOWER(?) LIMIT 1', [name]),
+        q('SELECT uuid FROM whitelisted_players WHERE LOWER(username) = LOWER(?) LIMIT 1', [name]),
+        q('SELECT * FROM player_stats WHERE LOWER(username) = LOWER(?) LIMIT 1', [name])
       ]);
       let elite = eliteRows && eliteRows.length ? eliteRows[0] : null;
-      let resolvedName = elite ? (elite.name || name) : name;
-      const uuid = (elite && elite.uuid) || (wlRows && wlRows.length ? wlRows[0].uuid : null);
-      let rpg = null;
-      if (uuid) {
-        const stripped = String(uuid).replace(/-/g, '');
-        const rpgRows = await pluginDataQuery("SELECT level, experience AS xp, class, guild, class_points AS classPoints, skill_points AS skillPoints, attribute_points AS attributePoints FROM mmocore_playerdata WHERE REPLACE(uuid, '-', '') = ? LIMIT 1", [stripped]);
-        rpg = rpgRows && rpgRows.length ? rpgRows[0] : null;
-      }
-      if (!elite && uuid) {
-        // name unknown to EliteMobs' DisplayName but the uuid was on the whitelist —
-        // one follow-up by uuid so renamed accounts still surface
-        const byUuid = await pluginDataQuery("SELECT DisplayName AS name, Kills AS kills, Deaths AS deaths, Score AS score, QuestsCompleted AS quests, DungeonsCompleted AS dungeons, HighestLevelKilled AS highestMobLevel, COALESCE(CurrencyCents / 100, CurrencyV2) AS coins, SkillXP_ARMOR AS armor, SkillXP_SWORDS AS swords, SkillXP_AXES AS axes, SkillXP_BOWS AS bows, SkillXP_CROSSBOWS AS crossbows, SkillXP_TRIDENTS AS tridents, SkillXP_HOES AS hoes, SkillXP_MACES AS maces, SkillXP_SPEARS AS spears, SkillXP_STAVES AS staves, SkillXP_WANDS AS wands FROM PlayerData WHERE REPLACE(PlayerUUID, '-', '') = ? LIMIT 1", [String(uuid).replace(/-/g, '')]);
+      const webRow = webRows && webRows.length ? webRows[0] : null;
+      let resolvedName = (elite && elite.name) || name;
+      const uuid = (elite && elite.uuid) || (webRow && webRow.uuid) || (wlRows && wlRows.length ? wlRows[0].uuid : null);
+      const suuid = uuid ? strip(uuid) : null;
+
+      if (!elite && suuid) {
+        const byUuid = await q("SELECT DisplayName AS name, Kills AS kills, Deaths AS deaths, Score AS score, QuestsCompleted AS quests, DungeonsCompleted AS dungeons, HighestLevelKilled AS highestMobLevel, COALESCE(CurrencyCents / 100, CurrencyV2) AS coins, SkillXP_ARMOR AS armor, SkillXP_SWORDS AS swords, SkillXP_AXES AS axes, SkillXP_BOWS AS bows, SkillXP_CROSSBOWS AS crossbows, SkillXP_TRIDENTS AS tridents, SkillXP_HOES AS hoes, SkillXP_MACES AS maces, SkillXP_SPEARS AS spears, SkillXP_STAVES AS staves, SkillXP_WANDS AS wands FROM PlayerData WHERE REPLACE(PlayerUUID, '-', '') = ? LIMIT 1", [suuid]);
         if (byUuid && byUuid.length) { elite = byUuid[0]; resolvedName = elite.name || name; }
       }
-      return { name: resolvedName, found: !!(elite || rpg), elite, rpg };
+
+      let rpg = null, forms = null, skills = null, quest = null, brew = null, discord = null, mmoitems = false;
+      if (suuid) {
+        const SKILLS = ['alchemy', 'archery', 'digging', 'enchanting', 'farming', 'fishing', 'heavy_armor', 'heavy_weapons', 'light_armor', 'light_weapons', 'mining', 'power', 'smithing', 'woodcutting'];
+        const [rpgRows, formRows, skillRows, bqRows, brewRows, viewRows, dcRows, mmiRows] = await Promise.all([
+          q("SELECT level, experience AS xp, class, guild, class_points AS classPoints, skill_points AS skillPoints, attribute_points AS attributePoints FROM mmocore_playerdata WHERE REPLACE(uuid, '-', '') = ? LIMIT 1", [suuid]),
+          q('SELECT FormId AS form, XP AS xp, ChallengeCompleted AS challenge FROM PlayerClassProgress WHERE REPLACE(PlayerUUID, \'-\', \'\') = ? ORDER BY XP DESC LIMIT 12', [suuid]),
+          q(SKILLS.map((t) => `SELECT '${t}' AS skill, level, exp, exp_total AS expTotal FROM profiles_${t} WHERE REPLACE(owner, '-', '') = ?`).join(' UNION ALL '), SKILLS.map(() => suuid)),
+          q('SELECT active_profile FROM betonquest_player WHERE REPLACE(playerID, \'-\', \'\') = ? LIMIT 1', [suuid]),
+          null, null,
+          q('SELECT discord FROM discordsrv_accounts WHERE REPLACE(uuid, \'-\', \'\') = ? LIMIT 1', [suuid]),
+          q('SELECT uuid FROM mmoitems_playerdata WHERE REPLACE(uuid, \'-\', \'\') = ? LIMIT 1', [suuid])
+        ]);
+        rpg = rpgRows && rpgRows.length ? rpgRows[0] : null;
+        forms = formRows && formRows.length ? formRows : null;
+        skills = skillRows && skillRows.length ? skillRows : null;
+        discord = dcRows && dcRows.length ? dcRows[0].discord : null;
+        mmoitems = !!(mmiRows && mmiRows.length);
+        if (bqRows && bqRows.length && bqRows[0].active_profile) {
+          const prof = bqRows[0].active_profile;
+          const [journal, points] = await Promise.all([
+            q('SELECT pointer, date FROM betonquest_journal WHERE profileID = ? ORDER BY date DESC LIMIT 25', [prof]),
+            q('SELECT category, count FROM betonquest_points WHERE profileID = ? ORDER BY count DESC LIMIT 20', [prof])
+          ]);
+          if ((journal && journal.length) || (points && points.length)) quest = { journal: journal || [], points: points || [] };
+        }
+        const [doneBrews, views] = await Promise.all([
+          q('SELECT recipe_key AS recipe, score FROM brew_completed_recipe WHERE player_uuid = UNHEX(?) ORDER BY recipe_key LIMIT 80', [suuid]),
+          q('SELECT COUNT(*) AS views FROM brew_recipe_view WHERE player_uuid = UNHEX(?)', [suuid])
+        ]);
+        if (doneBrews || views) brew = { recipes: doneBrews || [], views: views && views.length ? Number(views[0].views) : 0 };
+      }
+
+      const web = webRow ? {
+        online: !!webRow.online,
+        playtimeHours: webRow.playtime_hours ?? 0,
+        kills: webRow.kills ?? 0, deaths: webRow.deaths ?? 0,
+        mobKills: webRow.mob_kills ?? 0, blocksMined: webRow.blocks_mined ?? 0,
+        balance: webRow.balance ?? 0, eliteCoins: webRow.elite_coins ?? 0,
+        landsClaimed: webRow.lands_claimed ?? 0,
+        jobs: J(webRow.jobs_json),
+        placeholders: J(webRow.plugin_placeholders_json),
+        stats: J(webRow.stats_json),
+        advancements: J(webRow.advancements_json),
+        lastUpdated: webRow.last_updated ?? null,
+        deepUpdated: webRow.deep_updated ?? null
+      } : null;
+
+      return { name: resolvedName, uuid: uuid || null, found: !!(elite || rpg || web || forms), elite, rpg, web, forms, skills, quest, brew, discord, mmoitems };
     } catch (err) {
-      console.error('Failed to read combat profile from plugin DB:', err);
+      console.error('Failed to read player data bundle from plugin DB:', err);
       return { name, found: false, error: 'db-unreachable' };
     }
   },

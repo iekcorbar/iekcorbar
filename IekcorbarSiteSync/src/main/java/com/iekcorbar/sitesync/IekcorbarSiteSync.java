@@ -13,6 +13,7 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
     private static IekcorbarSiteSync instance;
     private Economy economy = null;
     private MySQLSync mysqlSync;
+    private DeepSync deepSync;
     private AdvancementManager advancementManager;
     private BookManager bookManager;
     private CreativeHeadsManager creativeHeadsManager;
@@ -45,6 +46,9 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
         if (getConfig().getBoolean("database.enabled", getConfig().getBoolean("mysql.enabled", true))) {
             mysqlSync = new MySQLSync(this);
             mysqlSync.start();
+            // Deep sync (vanilla stats + advancements → player_stats) rides the same connection.
+            deepSync = new DeepSync(this, mysqlSync);
+            deepSync.start();
         }
 
         // Real vote verification (VoteSpeed's built-in NuVotifier receiver,
@@ -86,6 +90,9 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
         }
         if (mysqlSync != null) {
             mysqlSync.stop();
+        }
+        if (deepSync != null) {
+            deepSync.stop();
         }
         getLogger().info("IekcorbarSiteSync has been disabled.");
     }

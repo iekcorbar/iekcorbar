@@ -37,7 +37,7 @@
           1.15.2 (2026-10-26): trader-book swap generalized to a marker map
           (BookManager.TRADER_BOOK_MARKERS) - the Sakagura Brewer's Manual can now
           be sold by wandering traders too (wanderingtrades/trades/brewers_manual.yml). -->
-    <version>1.15.4</version>
+    <version>1.16.0</version>
     <packaging>jar</packaging>
 
     <name>IekcorbarSiteSync</name>
