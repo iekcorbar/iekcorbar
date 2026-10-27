@@ -22,6 +22,10 @@ STONE = (125, 125, 128)
 DEEP = (70, 72, 78)
 WOOD = (170, 130, 80)
 
+# Drinks on the Sakagura tab get a bottle in their own recipe colour (filled from
+# recipes-data.json below; keys are lower-case result names).
+HEX = {}
+
 
 def shade(c, f):
     return tuple(max(0, min(255, int(v * f))) for v in c)
@@ -204,6 +208,14 @@ def knife(im, c):
     im.px(3, 12, (110, 75, 40)); im.px(4, 12, (110, 75, 40)); im.px(3, 11, (110, 75, 40))
 
 
+def bottle(im, c):
+    im.rect(7, 2, 8, 4, (150, 95, 50))                       # cork
+    im.rect(7, 4, 8, 6, shade(c, 1.25))                      # neck
+    im.rect(5, 6, 10, 14, c)                                 # body
+    im.rect(5, 6, 10, 6, shade(c, 0.75)); im.rect(5, 14, 10, 14, shade(c, 0.7))
+    im.px(6, 8, (255, 255, 255)); im.px(6, 9, shade(c, 1.4))  # glass shine
+
+
 def bowl(im, content):
     im.rect(3, 8, 12, 9, (150, 120, 85))
     im.rect(4, 10, 11, 12, (130, 100, 70))
@@ -256,7 +268,9 @@ def draw(name):
         low2 = low[4:]
     else:
         low2 = low
-    if "concrete powder" in low:
+    if low in HEX:
+        bottle(im, HEX[low])
+    elif "concrete powder" in low:
         tile(im, name, shade(col, 1.1), 0.22, False)
     elif "concrete" in low:
         tile(im, name, col, 0.04)
@@ -358,6 +372,10 @@ def ident(name):
 
 
 data = json.load(open("src/lib/recipes-data.json", encoding="utf-8"))
+for p in data["plugins"]:
+    for r in p["recipes"]:
+        if r.get("hex") and re.fullmatch(r"#[0-9a-fA-F]{6}", r["hex"]):
+            HEX[r["result"].lower()] = tuple(int(r["hex"][i:i + 2], 16) for i in (1, 3, 5))
 names = set()
 for p in data["plugins"]:
     for r in p["recipes"]:
@@ -380,7 +398,7 @@ print(len(set(ids)), "icons")
 
 # which plugin folders hold a rendered model picture (public/recipes/<plugin>/<id>.png)
 pics = {}
-for d in ("kura", "kitchen", "steamworks", "power"):
+for d in ("kura", "kitchen", "sakagura", "steamworks", "power"):
     path = f"public/recipes/{d}"
     pics[d] = sorted(f[:-4] for f in os.listdir(path) if f.endswith(".png")) if os.path.isdir(path) else []
 json.dump(pics, open("src/lib/recipe-pictures.json", "w"))

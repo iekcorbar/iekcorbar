@@ -1068,3 +1068,32 @@ schrijft ze automatisch mee (50 drankjes op 03-recipes.md, seed 20 pagina's).
   volgende herstart mee - doet hier verder niets). Let op: zonder de nieuwe jar herkent
   de live-server het chocolate_heart niet in de ketel (oude Ingredients) - de andere
   elf drankjes kunnen dan al wél.
+
+### Website toont het barmenu en de Brewer's Manual wordt levend (27-10 avond)
+
+Opmerking van de gebruiker: "op de website los van de wiki staat nergens de nieuwe
+recepten" + "the brewers manual moet altijd de actieve recepten tonen". Twee dingen
+gebouwd, één batch:
+- **/recipes-tab "Sakagura"**: scripts/build-recipes-data.js leest nu rechtstreeks
+  Sakagura/src/main/resources/recipes.yml (de generator zelf is de bron - kan nooit
+  verouderen). 50 machine-kaarten: cook/mix-grondstoffen in, drank uit, stappenketen +
+  alcohol% + effecten als note; categorieën Bar + vijf feestdagen. Nieuw in de
+  icoonmaker: een drank met hex-kleur in de data wordt een fles in eigen kleur (kurk,
+  hals, glans) - 79 nieuwe icoontjes, en de pics-scan is uitgebreid met map sakagura
+  zodat barley/vaten/stills echte kunst tonen (28 stuks). /sakagura-pagina: sectie "The
+  seasonal shelf" (twaalf feestdrankjes; expliciet: de tuin blijft elf gewassen,
+  zee-augurk/glansbessen/schildpad-eieren/hasenpoot komen uit de wereld) + het stale
+  versie-label 0.2.8 → 0.3.4.
+- **Brewer's Manual = live menu** (IekcorbarSiteSync 1.15.3 → **1.15.4**, jar sha1
+  d5b662e8): BookManager.createItem bouwt pagina's nu via resolvePages - een magic page
+  "%%LIVE_RECIPES%%" wordt bij élke uitgifte (/ibook give, loot, zwervende-handelaar-
+  ruil) ingevuld uit plugins/Sakagura/recipes.yml: "&6Naam&8 — cook 8m, distill x3 ·
+  25%" per drank, in de volgorde van de bar, automatisch gepagineerd. Omdat de
+  server-txt nooit overschreven wordt, herkent brewers_manual de lijst ook zónder
+  marker: hij gaat vóór de eindpagina. Geen Sakagura of kapotte yaml → eerlijke
+  mededeling in plaats van lege pagina's. Offline gecheckt met een LiveListCheck: 50
+  drankjes, 8 pagina's, Ramune als laatste. Repository-txt kreeg de marker + TOC-regel.
+- **Groen**: SiteSync mvn (d5b662e8), node-data (50), iconen (471), npm build, zip
+  herbouwd (b0e51bfc, nu incl. SiteSync-jar 1.15.4 voor verse installs), TE-DEPLOYEN
+  punten 6 + 7 (jar bij eerstvolgende herstart; /ibook give als test). De zip van
+  vanmiddag (e0a7bc64) is in-place opgevolgd - die stond nog nergens.

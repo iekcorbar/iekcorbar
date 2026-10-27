@@ -27,6 +27,7 @@ by The Sakagura Guild
 &8The garden
 &8Drinking
 &8First brew
+&8The live list
 
 &7Right-click anything with an empty hand and it tells you the truth.
 ---
@@ -154,6 +155,8 @@ Pace yourself. The best brew is the one you remember.
 &8Red Wine&r and &8Hop Ale&r - a garden vineyard and hop field, years in oak.
 &8Whiskey&r - two runs, eighteen years in spruce.
 &8Steam Whisky&r - the copper cask showpiece.
+---
+%%LIVE_RECIPES%%
 ---
 &lEnd of the manual&r
 

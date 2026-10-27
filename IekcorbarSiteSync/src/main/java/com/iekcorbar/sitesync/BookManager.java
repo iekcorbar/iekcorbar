@@ -241,6 +241,10 @@ public class BookManager implements Listener, TabExecutor {
         if (!page.toString().isBlank()) pages.add(page.toString().strip());
     }
 
+    private static Object or(Object v, int fallback) {
+        return v == null ? fallback : v;
+    }
+
     /** Length as shown in the book — colour/format codes take no space. */
     private static int visible(String s) {
         return s.replaceAll("&(#[0-9a-fA-F]{6}|[0-9a-fk-orA-FK-OR])", "").length();
@@ -274,12 +278,90 @@ public class BookManager implements Listener, TabExecutor {
         }
         if (!lore.isEmpty()) meta.lore(lore);
 
-        for (String page : def.pages()) meta.addPages(LEGACY.deserialize(page));
+        for (String page : resolvePages(def)) meta.addPages(LEGACY.deserialize(page));
         if (!def.copyable()) meta.setGeneration(BookMeta.Generation.TATTERED); // vanilla: cannot be copied
         meta.getPersistentDataContainer().set(idKey, PersistentDataType.STRING, def.id());
         item.setItemMeta(meta);
         applyModel(item, def);
         return item;
+    }
+
+    /**
+     * The pages as the player will read them. The magic page "%%LIVE_RECIPES%%" is
+     * replaced by the Sakagura bar as it stands right now - the book is built fresh
+     * on every /ibook give, loot roll and trader swap, so the manual can never show
+     * a drink that is not on the menu. A brewers_manual whose (possibly hand-edited)
+     * txt lost the magic page gets the list before its end page anyway.
+     */
+    private List<String> resolvePages(BookDef def) {
+        List<String> out = new ArrayList<>(def.pages().size() + 6);
+        boolean markerSeen = false;
+        for (String page : def.pages()) {
+            if (page.strip().equals("%%LIVE_RECIPES%%")) {
+                markerSeen = true;
+                addPage(out, new StringBuilder(liveRecipes()), def.id());
+            } else {
+                out.add(page);
+            }
+        }
+        if (!markerSeen && def.id().equals("brewers_manual")) {
+            int at = out.size();
+            for (int i = 0; i < out.size(); i++) if (out.get(i).startsWith("&lEnd of the manual")) { at = i; break; }
+            List<String> with = new ArrayList<>(out.size() + 6);
+            with.addAll(out.subList(0, at));
+            addPage(with, new StringBuilder(liveRecipes()), def.id());
+            with.addAll(out.subList(at, out.size()));
+            return with;
+        }
+        return out;
+    }
+
+    /** Every recipe in plugins/Sakagura/recipes.yml, in the file's own order: name, steps, alcohol. */
+    private String liveRecipes() {
+        File f = new File(plugin.getDataFolder().getParentFile(), "Sakagura" + File.separator + "recipes.yml");
+        ConfigurationSection sec = null;
+        if (f.isFile()) {
+            try {
+                sec = YamlConfiguration.loadConfiguration(f).getConfigurationSection("recipes");
+            } catch (Exception e) {
+                plugin.getLogger().warning("[Books] Cannot read the Sakagura recipe book: " + e.getMessage());
+            }
+        }
+        if (sec == null || sec.getKeys(false).isEmpty()) {
+            return "&lThe live list&r\n\n&7The bar keeps its recipes in its own book, and that book is not in the plugins folder right now.";
+        }
+        StringBuilder sb = new StringBuilder("&lThe live list&r\n\n&7Today's whole menu (").append(sec.getKeys(false).size()).append(" drinks):\n");
+        for (String slug : sec.getKeys(false)) {
+            ConfigurationSection r = sec.getConfigurationSection(slug);
+            if (r == null) continue;
+            List<String> names = r.getStringList("names");
+            String name = names.isEmpty() ? slug : names.get(Math.min(1, names.size() - 1));
+            StringBuilder steps = new StringBuilder();
+            for (Map<?, ?> st : r.getMapList("steps")) {
+                String one = switch (String.valueOf(st.get("type"))) {
+                    case "cook" -> "cook " + or(st.get("time"), 1) + "m";
+                    case "mix" -> "mix " + or(st.get("time"), 1) + "m";
+                    case "distill" -> "distill x" + or(st.get("runs"), 1);
+                    case "age" -> {
+                        StringBuilder a = new StringBuilder("age ").append(or(st.get("years"), 1)).append("y");
+                        Object wood = st.get("wood");
+                        if (wood != null && !"any".equals(String.valueOf(wood))) a.append(' ').append(wood);
+                        yield a.toString();
+                    }
+                    default -> "";
+                };
+                if (one.isEmpty()) continue;
+                if (!steps.isEmpty()) steps.append(", ");
+                steps.append(one);
+            }
+            sb.append("&6").append(name).append("&8 — ").append(steps);
+            int alc = r.getInt("alcohol");
+            if (alc > 0) sb.append(" &8· &f").append(alc).append("%");
+            sb.append('\n');
+        }
+        sb.setLength(sb.length() - 1);
+        sb.append("\n\n&7Exact amounts and order: &o/zukan&r&7 or the wiki recipes page.");
+        return sb.toString();
     }
 
     /** The book's own look: its model: line, else books.yml default-model; "none" = vanilla book. */

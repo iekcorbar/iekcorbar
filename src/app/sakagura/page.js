@@ -74,6 +74,7 @@ const NAV = [
   ['#garden', 'Garden'],
   ['#drinking', 'Drinking'],
   ['#first', 'First brew'],
+  ['#seasonal', 'Seasonal'],
   ['#faq', 'FAQ'],
 ];
 
@@ -342,6 +343,37 @@ export default function SakaguraExplainedPage() {
         </div>
       </Section>
 
+      {/* ---------- seasonal shelf ---------- */}
+      <Section id="seasonal" icon={Sparkles} kicker="Twelve times a year" title="The seasonal shelf">
+        <p className="text-sm text-text-warm/80">
+          Since late October the bar keeps a <b>seasonal shelf</b>: twelve holiday brews that join the
+          regular menu. And no, the garden did not grow — it stays at its eleven crops. Everything else
+          these drinks ask for comes from the world as it is: <b>glow berries</b> from caves, a <b>sea
+          pickle</b> from warm reefs, <b>turtle eggs</b> from the beach, the odd rabbit&apos;s foot after
+          a lucky hunt, and one Relics treat used for the very first time in a cauldron.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {[
+            ['🍀', "St. Patrick's", "Shamrock Shake (lucky, and you glow while it lasts) · Crock O' Gold (a gold nugget distilled into potato gold) · Bog-Kelp Collins (gills included)"],
+            ['🎃', 'Halloween', "Head of the Hollow (fire resistance from the inside) · Widow's Kiss (drink it and the spiders never see you) · Sculk Swill (aged in silence — and you float a little)"],
+            ['🎄', 'Christmas', "Yule Log Reserve (mulled red wine with cocoa and fir) · Reindeer Run (four percent, all sugar and speed) · Bishop's Knog (eggnog from the wrong kind of egg)"],
+            ['🐰', 'Easter', "Torchflower Spritz (the spring's first bloom, pickable and bitter-fresh) · Warren Weizen (a rabbit's foot in the mash — hop high)"],
+            ['💘', "Valentine's", 'Chocolate Heart Flip — a Relics chocolate heart melted into the foam. Absorption for whoever drinks it; the recipe to the heart is the point.'],
+          ].map(([emoji, name, drinks]) => (
+            <div key={name} className="rounded-xl border border-sp-bronze/30 bg-black/40 p-4 space-y-1.5">
+              <p className="font-serif text-lg text-sp-gold leading-tight">{emoji} {name}</p>
+              <p className="text-sm text-text-warm/80">{drinks}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm text-text-warm/80">
+          The whole live menu — all fifty drinks with steps and alcohol — is on the{' '}
+          <Link href="/recipes" className="text-sp-gold underline">recipes page</Link> under the{' '}
+          <b>Sakagura</b> tab, and your in-game <b>Brewer&apos;s Manual</b> always carries the same list,
+          rebuilt fresh every time a copy leaves the shelf.
+        </p>
+      </Section>
+
       {/* ---------- faq ---------- */}
       <Section id="faq" icon={Lightbulb} kicker="When it misbehaves" title="FAQ & good to know">
         <ul className="space-y-3 text-sm text-text-warm/80">
@@ -356,7 +388,7 @@ export default function SakaguraExplainedPage() {
           <Link href="/wiki?page=sakagura" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Sakagura Wiki (quick reference)</Link>
           <Link href="/recipes" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><BookOpen className="w-4 h-4" /> All Recipes</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Sakagura {`0.2.8`}). Exact times are always shown in-game: right-click anything, or use /zukan.</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Sakagura {`0.3.4`}). Exact times are always shown in-game: right-click anything, or use /zukan.</p>
       </Section>
     </div>
   );

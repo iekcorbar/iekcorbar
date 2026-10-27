@@ -174,6 +174,47 @@ for (const r of pw.press.recipes || []) {
 }
 out.plugins.push({ id: 'power', name: 'Steamworks Power', blurb: 'Water turbine, press, ticker, flywheel and sieve funnel for the network.', recipes: pwRecipes });
 
+// ---------------------------------------------------------------- Sakagura bar
+// the whole drinks menu, straight from the plugin's own recipes.yml (the generator's output) -
+// so the website can never show a drink the bar does not serve. Each brew is a 'machine' card:
+// its cook/mix ingredients in, the drink out, and the step chain as note.
+const sak = yaml.load(read('Sakagura/src/main/resources/recipes.yml')).recipes;
+const SEASON = {
+  shamrock_shake: "St. Patrick's", crock_o_gold: "St. Patrick's", bog_kelp_collins: "St. Patrick's",
+  pumpkin_hollow: 'Halloween', widows_kiss: 'Halloween', sculk_swill: 'Halloween',
+  yule_log_reserve: 'Christmas', reindeer_run: 'Christmas', bishops_knog: 'Christmas',
+  torchflower_spritz: 'Easter', warren_weizen: 'Easter',
+  chocolate_heart_flip: "Valentine's",
+};
+const sakRecipes = [];
+for (const [slug, r] of Object.entries(sak)) {
+  const ins = [], parts = [];
+  let heat = false;
+  for (const st of r.steps || []) {
+    if (st.type === 'cook' || st.type === 'mix') {
+      if (st.type === 'cook') heat = true;
+      parts.push(`${st.type === 'cook' ? 'Cook' : 'Mix'} ${st.time || 1} min`);
+      for (const tok of st.ingredients || []) {
+        const [n, c] = String(tok).split('/');
+        const label = pretty(String(n).trim().replace(/^(kitchen|sw|sakagura|relics):/, ''));
+        const found = ins.find((i) => i.name === label);
+        if (found) found.count += Number(c || 1); else ins.push({ name: label, count: Number(c || 1) });
+      }
+    } else if (st.type === 'distill') parts.push(`Distill ×${st.runs || 1}`);
+    else if (st.type === 'age') parts.push(`Age ${st.years || 1} y${st.wood && st.wood !== 'any' ? ` in ${pretty(st.wood)} cask` : ''}`);
+  }
+  const fx = (r.effects || []).map((e) => pretty(String(e).split('/')[0]));
+  const result = r.names[Math.min(1, r.names.length - 1)];
+  const alc = r.alcohol || 0;
+  sakRecipes.push({
+    result, count: 1, type: 'machine', category: SEASON[slug] || 'Bar',
+    ingredients: ins, outputs: [{ name: result, count: 1 }], heat,
+    ...(/^#?[0-9a-fA-F]{6}$/.test(String(r.color || '')) ? { hex: '#' + String(r.color).toLowerCase().replace(/^#/, '') } : {}),
+    note: parts.join(' → ') + `${alc ? ` · ${alc}% alcohol` : ' · alcohol-free'}${fx.length ? ` · ${fx.join(', ')}` : ''}.`,
+  });
+}
+out.plugins.push({ id: 'sakagura', name: 'Sakagura', blurb: 'The whole drinks menu, live from the bar — seasonal shelf included.', recipes: sakRecipes });
+
 // The java parser cannot read "new RecipeChoice.MaterialChoice(Tag.X)" and a few other forms: name them here.
 const WHO = { Station: 'Any Sign', Windmill: 'Any Wool' };
 function tidy(n, r) {
