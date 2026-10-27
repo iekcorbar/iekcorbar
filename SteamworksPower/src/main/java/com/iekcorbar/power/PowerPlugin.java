@@ -12,14 +12,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Steamworks Power - the machines-and-muscle add-on. A Water Turbine that runs on river current,
- * a Mechanical Press that compacts what the furnace can't, and a Stock Ticker that counts your
- * chests. All three join the Steamworks rotation network through its public CustomPart API.
+ * a Mechanical Press that compacts what the furnace can't, a Stock Ticker that counts your chests,
+ * a Brass Flywheel that coasts the line through a dip and a Sieve Funnel that filters what the
+ * belts deliver. All five join the Steamworks rotation network through its public CustomPart API.
  */
 public final class PowerPlugin extends JavaPlugin {
-    private SteamworksPlugin sw;
+    SteamworksPlugin sw;
     WaterTurbine turbine;
     MechanicalPress press;
     StockTicker ticker;
+    Flywheel flywheel;
+    SieveFunnel sieve;
 
     @Override
     public void onEnable() {
@@ -29,9 +32,13 @@ public final class PowerPlugin extends JavaPlugin {
         turbine = new WaterTurbine(this);
         press = new MechanicalPress(this);
         ticker = new StockTicker(this);
+        flywheel = new Flywheel(this);
+        sieve = new SieveFunnel(this);
         reg.register(turbine);
         reg.register(press);
         reg.register(ticker);
+        reg.register(flywheel);
+        reg.register(sieve);
         getServer().getServicesManager().register(java.util.function.Supplier.class, new ZukanData(this), this, org.bukkit.plugin.ServicePriority.Normal); // recipe viewer (Zukan)
         PowerCommand cmd = new PowerCommand(this);
         getCommand("swpower").setExecutor(cmd);
@@ -74,9 +81,18 @@ public final class PowerPlugin extends JavaPlugin {
         ItemStack tickerItem = reg.item(ticker, 1);
         shaped("stock_ticker", tickerItem, new String[]{" G ", "GCG", " B "},
                 'G', new ItemStack(Material.GLASS_PANE), 'C', new ItemStack(Material.COMPARATOR), 'B', swItem("material/brass_casing"));
+        // Brass flywheel: a heavy wheel - four plates bolted around a casing hub. Create builds
+        // its flywheel from polished stone slabs; brass is our heavier, steamier translation.
+        ItemStack flywheelItem = reg.item(flywheel, 1);
+        shaped("brass_flywheel", flywheelItem, new String[]{" P ", "PCP", " P "},
+                'P', swItem("material/brass_plate"), 'C', swItem("material/brass_casing"));
+        // Sieve funnel: the belt funnel under a brass-bolted mesh of plates and one good string.
+        ItemStack sieveItem = reg.item(sieve, 1);
+        shaped("sieve_funnel", sieveItem, new String[]{"PSP", " F "},
+                'P', swItem("material/iron_plate"), 'S', new ItemStack(Material.STRING), 'F', swItem("part/funnel"));
         for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers())
             for (NamespacedKey k : recipeKeys) p.discoverRecipe(k);
-        getLogger().info("Registered 3 workbench recipes for the add-on machines.");
+        getLogger().info("Registered 5 workbench recipes for the add-on machines.");
     }
 
     private void shaped(String id, ItemStack result, String[] shape, Object... pairs) {

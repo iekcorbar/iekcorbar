@@ -1,4 +1,4 @@
-# Steamworks Power - water turbine, mechanical press, stock ticker.
+# Steamworks Power - water turbine, mechanical press, stock ticker, brass flywheel and sieve funnel.
 
 turbine:
   # RPM a water turbine delivers while current runs through it.
@@ -24,3 +24,17 @@ ticker:
   # How many stock tickers one player may have counting in the same chunk (the plates cost nothing,
   # but a wall of 40 tickers is hard to read). 0 = no limit.
   max-per-chunk: 6
+
+flywheel:
+  # Torque per RPM the wheel carries into the line while it coasts (a flywheel holds speed,
+  # not raw muscle - the turbine has 64, the encased engine 64 too).
+  capacity: 32
+  # Torque per RPM drawn while turning with the line.
+  impact: 2
+  # Charge units: it stores this much coasting; at the settings below that is ~10 s of buffer.
+  buffer: 120
+  # The line must run at least this fast for the wheel to wind up.
+  min-rpm: 3
+  # Charge gained per second while wound, and spent per second while feeding the line.
+  charge-per-second: 12
+  drain-per-second: 6

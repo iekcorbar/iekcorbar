@@ -6,9 +6,9 @@
 
     <groupId>com.iekcorbar</groupId>
     <artifactId>SteamworksPower</artifactId>
-    <!-- Power add-on for Steamworks: water turbine, mechanical press and stock ticker.
-         Joins the rotation network through Steamworks' public CustomPart API. -->
-    <version>0.1.2</version>
+    <!-- Power add-on for Steamworks: water turbine, mechanical press, stock ticker, flywheel
+         and sieve funnel. Joins the rotation network through Steamworks' public CustomPart API. -->
+    <version>0.2.0</version>
     <packaging>jar</packaging>
 
     <name>SteamworksPower</name>
@@ -39,9 +39,9 @@
         <dependency>
             <groupId>com.iekcorbar</groupId>
             <artifactId>Steamworks</artifactId>
-            <version>0.3.19</version>
+            <version>0.3.22</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../Steamworks/target/Steamworks-0.3.19.jar</systemPath>
+            <systemPath>${project.basedir}/../Steamworks/target/Steamworks-0.3.22.jar</systemPath>
         </dependency>
         <!-- pinned to the version already in the local repo (paper-api pulls a newer one transitively) -->
         <dependency>

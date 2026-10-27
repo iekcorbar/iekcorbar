@@ -976,3 +976,53 @@ gecheckt (voorzijde via tijdelijke 90°-draai) en fraai leesbaar. CLAUDE.md:
 verkoopmodel-paragraaf (5) herschreven - mailsysteem-van-tafel, publieke addon
 levert dus ook geen bus. Alle jarren + pack staan in deploy/, TE-DEPLOYEN is de
 eerlijke staat van zaken.
+
+### Steamworks 0.3.22 + Power 0.2.0 - vliegwiel, zeeftrechter en de as-ruzie in CustomPart-land (27-10 middag)
+
+De vorige sessie liet een half afgemaakte, ONCOMPILEEBARE batch na (uncommitted): de
+`CustomPart.handleItem`-hook + de Belts-aanroep ervan stonden in de core, de klassen
+`Flywheel` en `SieveFunnel` in Power - maar nergens geregistreerd en met twee aanroepen
+naar core-code die een addon niet mag zien (`Kinetics` is package-private; een publieke
+markDirty bestond niet). Nu afgemaakt:
+- **API-afmaking**: nieuwe publieke `SteamworksPlugin.markDirty(Block)` - add-ons melden
+  daarmee dat hun CustomNode.data veranderde; de chunk gaat in de saveQueue en saveState()
+  draait binnen een seconde opnieuw (filter/charge overleeft zo een restart). Het
+  belt-lijnhook bleef zoals voorgesteld: `deliver()` vraagt CUSTOM-einden eerst, null =
+  niet hun zaak.
+- **SieveFunnel gerepareerd**: kaats-vector zelf berekend uit `CustomPart.positive(axis)`
+  (nooit door de API-hek naar Kinetics), `plugin.sw.markDirty(n.block())`, 5 regels lore
+  zoals de house-stijl. Gedrag: rechtsklik met item = filter (signature = materiaal +
+  item-model, dus onze plaatitems verschillen van vanilla), rechtsklik leeg = tonen,
+  shift = openen; matching items zakken naar de container onder de zeef, rest wordt
+  zijwaarts weggekaatst (grindstone-rythme), geen container = wachten op de lijn.
+- **Flywheel** zoals ontworpen: windt op boven 3 RPM (bron-onafhankelijk), neemt over als
+  de lijn stilvalt, hold-snelheid daalt met de lading (laatste stretch sputtert op 15%),
+  rechtsklik toont %-lading + modus; state in de 17-byte saveState-blob.
+- **Registratie**: PowerPlugin registreert er nu vijf (vliegwiel + zeef erbij), twee
+  nieuwe werkbankrecepten (4 brass platen + casing; 2 iron platen + string + funnel),
+  log "Registered 5", config.yml vliegwiel-sectie, plugin.yml/pom/pom-systemPath (0.3.19
+  -> 0.3.22!) meegenomen.
+- **Echte bug gevonden tijdens de model-audit**: de custom-visualsconventie is model Y =
+  asrichting en model Z = omhoog (corient = orientation(positive(axis), UP)) - de core-
+  modellen gebruiken orientation(UP, facing), een ANDERE convention. De waterturbine-drum
+  was rond model X gebouwd: in het spel zou die om de as tuimelen in plaats van meedraaien -
+  opgemerkt is dat nooit, want de turbine stond nog nergens. Drum herbouwd rond Y
+  (zelfde 15 cubes, dus de pers/ticker-uuids bleven byte-stable); bestanden mee in
+  deploy/fmm-steamworks. Nieuwe modellen: `brass_flywheel()` (31 cubes, mm-helpers rond Y)
+  en `sieve_funnel()` (19 cubes: messing eindmuren, darkwood zijkanten, mesh-grid bovenop,
+  koperen snavel onderkant); preview3d gecheckt (zeef-icoon via Y/Z-swapt json, want raw
+  modelleren staat de liggende zeef op z'n kant).
+- **Site**: power-parser in build-recipes-data.js kon alleen `material/`-ingrediënten -
+  uitgebreid naar `part/` (anders TypeError op het funnel-recept) + naamtabel/boodschap;
+  5 werkbank + 5 persrecepten in recipes-data; iconen brass_flywheel/sieve_funnel +
+  herbouwde water_turbine gerenderd; make-recipe-icons liep weer byte-stable; wiki
+  00-intro (vijf machines + good-to-know's) en 02-machines (vliegwiel + zeef, titel
+  "Press, Ticker, Flywheel & Sieve") + seed regenerated 12 pagina's; /steamworks-page:
+  Power-kaart uitgebreid en het stale versie-label (0.3.19/0.1.0) naar 0.3.22/0.2.0.
+- **Groen**: mvn core + power, KineticsTest ALLE PASSED, npm build, jarren + 6
+  modelbestanden in deploy/, TE-DEPLOYEN-punten 3 en 4 in-place opgevolgd (0.3.21/0.1.2
+  zijn nooit live geweest en reizen mee).
+- Valkuil om te onthouden: **elk CustomPart-model tekent met Y als as** (net als shaft/
+  crushing wheel via de mm-helpers) en Z omhoog bij liggende machines - preview3d tekent
+  het model in rauwe modelruimte, dus een verkeerde as (tuimelende drum) is op het sheet
+  NIET te zien; check de as-conventie altijd tegen Visuals' corient.

@@ -13,18 +13,20 @@ mm._c = itertools.count(90000)    # pow_* uuids never touch the base's counter r
 
 
 def water_turbine():
+    # drum AROUND THE SHAFT (model Y): eight copper segments, hub and four blades inside.
+    # (This was once built around model X - but the SPIN display turns around model Y, so the
+    # drum tumbled sideways on the shaft. Model Y is always the shaft axis for custom parts.)
     m = mm.Model("pow_water_turbine", 1.0)
-    # drum around the X axis: eight brass segments, hub and four blades inside
     ring = [(5.2, 0), (3.7, 3.7), (0, 5.2), (-3.7, 3.7), (-5.2, 0), (-3.7, -3.7), (0, -5.2), (3.7, -3.7)]
-    for i, (y, z) in enumerate(ring):
-        m.cube(f"seg{i}", (-3.4, y - 1.4, z - 1.4), (3.4, y + 1.4, z + 1.4), "copper")
-    m.cube("hub", (-3.6, -1.2, -1.2), (3.6, 1.2, 1.2), "steel")
-    m.cube("bN", (-2.2, 0.8, -0.7), (2.2, 4.4, 0.7), "brass")
-    m.cube("bS", (-2.2, -4.4, -0.7), (2.2, -0.8, 0.7), "brass")
-    m.cube("bE", (-2.2, -0.7, 0.8), (2.2, 0.7, 4.4), "brass")
-    m.cube("bW", (-2.2, -0.7, -4.4), (2.2, 0.7, -0.8), "brass")
-    m.cube("cap+", (3.4, -1.8, -1.8), (4.2, 1.8, 1.8), "darkstone")
-    m.cube("cap-", (-4.2, -1.8, -1.8), (-3.4, 1.8, 1.8), "darkstone")
+    for i, (x, z) in enumerate(ring):                      # segments at (x,z), thickness along Y
+        m.cube(f"seg{i}", (x - 1.4, -3.4, z - 1.4), (x + 1.4, 3.4, z + 1.4), "copper")
+    m.cube("hub", (-1.2, -3.6, -1.2), (1.2, 3.6, 1.2), "steel")
+    m.cube("bX+", (0.8, -2.2, -0.7), (4.4, 2.2, 0.7), "brass")
+    m.cube("bX-", (-4.4, -2.2, -0.7), (-0.8, 2.2, 0.7), "brass")
+    m.cube("bZ+", (-0.7, -2.2, 0.8), (0.7, 2.2, 4.4), "brass")
+    m.cube("bZ-", (-0.7, -2.2, -4.4), (0.7, 2.2, -0.8), "brass")
+    m.cube("cap+", (-1.8, 3.4, -1.8), (1.8, 4.2, 1.8), "darkstone")
+    m.cube("cap-", (-1.8, -4.2, -1.8), (1.8, -3.4, 1.8), "darkstone")
     return m
 
 
@@ -53,10 +55,44 @@ def stock_ticker():
     return m
 
 
+def brass_flywheel():
+    # a heavy wheel AROUND the shaft (model Y): brass rim, six steel spokes, brass hub
+    m = mm.Model("pow_brass_flywheel", 1.0)
+    mm.axle(m)
+    mm.ring(m, "rim", 6.9, 1.8, -1.1, 1.1, "brass")
+    for k in range(6):
+        mm.radial(m, f"spoke{k}", k * 60, 1.6, 6.2, 0.5, -0.55, 0.55, "steel")
+    mm.rod(m, "hub", 2.2, -1.3, 1.3, "brass")
+    return m
+
+
+def sieve_funnel():
+    # a funnel with a mesh tray. Custom parts stand with model Y along the shaft (belt direction)
+    # and model Z up: the mesh is the tray top at belt height, the belt line enters at both Y ends
+    # through brass end-walls. Legs carry it, a copper spout hints where the sifted items go.
+    m = mm.Model("pow_sieve_funnel", 1.0)
+    for sx in (-1, 1):
+        for sz in (-1, 1):
+            m.cube(f"leg{sx}{sz}", (sx * 5.8 - 0.5, sz * 5.8 - 0.5, -8.0),
+                   (sx * 5.8 + 0.5, sz * 5.8 + 0.5, 2.4), "steel")
+    for sy in (-1, 1):
+        m.cube(f"wall{sy}", (-6.4, sy * 6.4 - 0.6, 2.4), (6.4, sy * 6.4 + 0.6, 5.0), "brass")
+    for sx in (-1, 1):
+        m.cube(f"side{sx}", (sx * 6.4 - 0.6, -6.4, 2.4), (sx * 6.4 + 0.6, 6.4, 5.0), "darkwood")
+    for x in (-3.2, 0.0, 3.2):
+        m.cube(f"mesh_x{x}", (x - 0.5, -5.8, 4.9), (x + 0.5, 5.8, 5.3), "dial")
+    for y in (-3.2, 0.0, 3.2):
+        m.cube(f"mesh_y{y}", (-5.8, y - 0.5, 5.1), (5.8, y + 0.5, 5.5), "steel")
+    m.cube("spout", (-1.4, -1.4, -4.6), (1.4, 1.4, -2.4), "copper")
+    for k, (bx, by) in enumerate([(-6.4, -6.4), (6.4, -6.4), (-6.4, 6.4), (6.4, 6.4)]):
+        m.cube(f"bolt{k}", (bx - 0.5, by - 0.5, 5.0), (bx + 0.5, by + 0.5, 5.8), "brass")
+    return m
+
+
 if __name__ == "__main__":
     out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(__file__), "..", "fmm-models")
     os.makedirs(out, exist_ok=True)
-    for m in (water_turbine(), mechanical_press(), stock_ticker()):
+    for m in (water_turbine(), mechanical_press(), stock_ticker(), brass_flywheel(), sieve_funnel()):
         for e in m.elements:                       # vanilla model bounds (26.2 client rule)
             assert all(-16 <= c + 8 <= 32 for c in e["from"] + e["to"]), (m.name, e["name"])
         json.dump(m.bbmodel(), open(os.path.join(out, m.name + ".bbmodel"), "w", encoding="utf-8"), separators=(",", ":"))

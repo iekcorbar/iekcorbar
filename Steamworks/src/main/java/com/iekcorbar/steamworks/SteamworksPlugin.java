@@ -206,6 +206,16 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         items.waitForModels(then);
     }
 
+    /**
+     * Add-on machines call this after changing their own state ({@code CustomNode.data()}): the
+     * chunk goes into the save queue, so {@code saveState()} runs again within a second and the
+     * change survives a restart even if nobody touches the chunk itself.
+     */
+    public void markDirty(org.bukkit.block.Block at) {
+        KNode n = kinetics.at(at);
+        if (n != null && n.alive) saveSoon(n);
+    }
+
     @Override
     public void onDisable() {
         if (kinetics == null) return;

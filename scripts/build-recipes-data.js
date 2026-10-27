@@ -146,12 +146,12 @@ out.plugins.push({ id: 'additions', name: 'Steamworks Additions', blurb: 'The St
 // plus the press's work list from SteamworksPower/config.yml.
 const pwSrc = read('SteamworksPower/src/main/java/com/iekcorbar/power/PowerPlugin.java');
 const pwRecipes = [];
-const pwNames = { water_turbine: 'Water Turbine', mechanical_press: 'Mechanical Press', stock_ticker: 'Stock Ticker' };
+const pwNames = { water_turbine: 'Water Turbine', mechanical_press: 'Mechanical Press', stock_ticker: 'Stock Ticker', brass_flywheel: 'Brass Flywheel', sieve_funnel: 'Sieve Funnel' };
 const swName = (t) => t.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 for (const m of pwSrc.matchAll(/shaped\("(\w+)",[^,]+,\s*new String\[\]\{([^}]*)\},\s*([\s\S]*?)\);\s*\n/g)) {
   const [, id, rowsBody, pairs] = m;
   const ingMap = {};
-  for (const p of pairs.matchAll(/'(\w)',\s*(?:new ItemStack\(Material\.(\w+)\)|swItem\("material\/(\w+)"\))/g)) {
+  for (const p of pairs.matchAll(/'(\w)',\s*(?:new ItemStack\(Material\.(\w+)\)|swItem\("(?:material|part)\/(\w+)"\))/g)) {
     const name = pretty(p[2] || p[3]);
     ingMap[p[1]] = { name, count: 1 };
   }
@@ -172,7 +172,7 @@ for (const r of pw.press.recipes || []) {
     note: 'Items lie on top of the press while its shaft turns.',
   });
 }
-out.plugins.push({ id: 'power', name: 'Steamworks Power', blurb: 'Water turbine, mechanical press and stock ticker.', recipes: pwRecipes });
+out.plugins.push({ id: 'power', name: 'Steamworks Power', blurb: 'Water turbine, press, ticker, flywheel and sieve funnel for the network.', recipes: pwRecipes });
 
 // The java parser cannot read "new RecipeChoice.MaterialChoice(Tag.X)" and a few other forms: name them here.
 const WHO = { Station: 'Any Sign', Windmill: 'Any Wool' };

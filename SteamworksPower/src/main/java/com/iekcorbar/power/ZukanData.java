@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * What the recipe viewer (Zukan plugin) asks for: the three machines as items, and the press's
+ * What the recipe viewer (Zukan plugin) asks for: the machines as items, and the press's
  * workbench list from config (the workbench recipes themselves are normal Bukkit recipes).
  * Zukan sees the depend in plugin.yml and lists everything under @steamworks as add-on content.
  */

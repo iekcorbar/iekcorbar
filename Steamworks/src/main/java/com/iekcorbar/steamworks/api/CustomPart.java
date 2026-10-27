@@ -105,6 +105,17 @@ public interface CustomPart {
         return false;
     }
 
+    /**
+     * The end of a belt line runs into this machine. Return null and Steamworks handles the
+     * item as if you were not there; return the leftover stack (empty when all of it went
+     * through) and your machine has taken what it took - you do the storing yourself, the
+     * belt item is removed. The stock funnel never calls this for its own kind: it is a
+     * hook for add-on machines like a sieve.
+     */
+    default ItemStack handleItem(CustomNode n, ItemStack incoming) {
+        return null;
+    }
+
     /** Your work: called every game tick while the chunk is loaded (guard your own interval). */
     default void tick(CustomNode n, long tick) {
     }

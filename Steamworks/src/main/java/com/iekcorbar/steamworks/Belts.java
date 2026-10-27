@@ -92,6 +92,11 @@ final class Belts {
     /** Into a container or kettle at the end of the line. True if the item entity is gone. */
     private boolean deliver(Item item, Block ahead, KNode next) {
         ItemStack stack = item.getItemStack();
+        if (next != null && next.type == PartType.CUSTOM && next.ext != null) {
+            // an add-on machine (a sieve funnel) may take the item over: null = not its business
+            ItemStack rest = next.ext.handleItem(ExtParts.view(next), stack);
+            if (rest != null) return finish(item, stack, rest.getAmount());
+        }
         if (next != null && next.type == PartType.KETTLE && plugin.mixers().accepts(stack)) {
             int left = Mixers.addTo(next.kettleItems, stack.clone());
             plugin.visuals().updateKettle(next);
