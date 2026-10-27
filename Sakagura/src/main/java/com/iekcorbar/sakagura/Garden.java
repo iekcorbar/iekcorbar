@@ -1,6 +1,7 @@
 package com.iekcorbar.sakagura;
 
 import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
@@ -15,6 +16,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,6 +32,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -60,6 +64,8 @@ final class Garden implements Listener {
     private static final int POS_MASK = (1 << 17) - 1, TYPE_SHIFT = 17, STAGE_SHIFT = 25;
     /** tune here if the plant model floats or sinks in the ground */
     static final float DISPLAY_SCALE = 1f, DISPLAY_Y = 0.5f;
+    /** the clickable box over the plant's block (see show()) - a touch smaller than the block */
+    static final float HIT_W = 0.9f, HIT_H = 0.95f;
 
     record Info(Fruit fruit, int stage) {
         boolean ripe() {
@@ -71,6 +77,7 @@ final class Garden implements Listener {
         Fruit fruit;
         int stage;
         ItemDisplay display;
+        Interaction hitbox;
 
         Entry(Fruit fruit, int stage) {
             this.fruit = fruit;
@@ -83,7 +90,7 @@ final class Garden implements Listener {
     }
 
     private final Sakagura plugin;
-    private final NamespacedKey posKey, wildKey, tagKey;
+    private final NamespacedKey posKey, wildKey, tagKey, hitKey;
     private final Map<UUID, Map<Long, Map<Integer, Entry>>> plants = new HashMap<>();
     private final Map<UUID, Set<Long>> dirty = new HashMap<>();
     private double wildChance;
@@ -93,6 +100,7 @@ final class Garden implements Listener {
         posKey = new NamespacedKey(plugin, "crops");
         wildKey = new NamespacedKey(plugin, "wild_v1");
         tagKey = new NamespacedKey(plugin, "garden_display");
+        hitKey = new NamespacedKey(plugin, "garden_hitbox");
         wildChance = plugin.getConfig().getDouble("garden.wild-chance-per-chunk", 0.1);
     }
 
@@ -181,12 +189,19 @@ final class Garden implements Listener {
         Map<Long, Map<Integer, Entry>> w = plants.get(c.getWorld().getUID());
         if (w == null) return;
         Map<Integer, Entry> map = w.remove(c.getChunkKey());
-        if (map != null) for (Entry e : map.values()) if (e.display != null) e.display.remove();
+        if (map != null) for (Entry e : map.values()) clear(e);
     }
 
     @EventHandler
     public void onUnload(ChunkUnloadEvent e) {
         unloadChunk(e.getChunk());
+    }
+
+    private static void clear(Entry e) {
+        if (e.display != null) e.display.remove();
+        if (e.hitbox != null) e.hitbox.remove();
+        e.display = null;
+        e.hitbox = null;
     }
 
     private void save(Chunk c) {
@@ -218,10 +233,7 @@ final class Garden implements Listener {
         for (Map<Long, Map<Integer, Entry>> w : plants.values())
             for (Map<Integer, Entry> m : w.values())
                 for (Entry e : m.values())
-                    if (e.display != null) {
-                        e.display.remove();
-                        e.display = null;
-                    }
+                    clear(e);
     }
 
     // ------------------------------------------------------------ the plant you see
@@ -235,17 +247,32 @@ final class Garden implements Listener {
     private void show(Block b, Entry e) {
         if (e.display != null && e.display.isValid()) {
             e.display.setItemStack(look(e));
-            return;
+        } else {
+            Location at = b.getLocation().add(0.5, DISPLAY_Y, 0.5);
+            e.display = b.getWorld().spawn(at, ItemDisplay.class, d -> {
+                d.setPersistent(false);
+                d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
+                d.setItemStack(look(e));
+                d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
+                d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(DISPLAY_SCALE, DISPLAY_SCALE, DISPLAY_SCALE), new Quaternionf()));
+                d.setBrightness(new Display.Brightness(Math.max(b.getLightFromBlocks(), 4), b.getLightFromSky()));
+            });
         }
-        Location at = b.getLocation().add(0.5, DISPLAY_Y, 0.5);
-        e.display = b.getWorld().spawn(at, ItemDisplay.class, d -> {
-            d.setPersistent(false);
-            d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
-            d.setItemStack(look(e));
-            d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
-            d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(DISPLAY_SCALE, DISPLAY_SCALE, DISPLAY_SCALE), new Quaternionf()));
-            d.setBrightness(new Display.Brightness(Math.max(b.getLightFromBlocks(), 4), b.getLightFromSky()));
-        });
+        // The plant you SEE is only an ItemDisplay and the structure void it marks has no
+        // outline of its own, so without a hitbox the only way to click a plant is the farmland
+        // under it - aim at the plant's face and the ray travels past it to whatever block
+        // stands behind. One Interaction over the plant's block makes the plant itself
+        // clickable (bone meal / harvest) and punchable (break), like the walkable props
+        // in Decor do.
+        if (e.hitbox == null || !e.hitbox.isValid()) {
+            e.hitbox = b.getWorld().spawn(new Location(b.getWorld(), b.getX() + 0.5, b.getY(), b.getZ() + 0.5), Interaction.class, i -> {
+                i.setPersistent(false);
+                i.getPersistentDataContainer().set(hitKey, PersistentDataType.BYTE, (byte) 1);
+                i.setInteractionWidth(HIT_W);
+                i.setInteractionHeight(HIT_H);
+                i.setResponsive(true);
+            });
+        }
     }
 
     private void setStage(Block b, Entry e, int stage) {
@@ -276,7 +303,7 @@ final class Garden implements Listener {
                     Entry e = pe.getValue();
                     if (b.getType() != Material.STRUCTURE_VOID) {
                         it.remove();
-                        if (e.display != null) e.display.remove();
+                        clear(e);
                         dirty.computeIfAbsent(w.getUID(), k -> new HashSet<>()).add(ck);
                         continue;
                     }
@@ -318,6 +345,61 @@ final class Garden implements Listener {
         return out;
     }
 
+    /**
+     * Bone-meal or harvest the plant in this structure void. Reached from two clicks:
+     * right-clicking the farmland under a plant (as always) and, since 0.3.5, right-
+     * clicking the plant's own Interaction hitbox - players aim at the plant they see,
+     * not at the soil two blocks further down the ray.
+     */
+    private void pick(Block b, Player p, ItemStack hand) {
+        Map<Integer, Entry> m = entries(b);
+        Entry en = m == null ? null : m.get(pack(b));
+        if (en == null) return;
+        Info info = en.info();
+        if (hand != null && hand.getType() == Material.BONE_MEAL && !info.ripe()) {
+            setStage(b, en, en.stage + 1);
+            if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+            b.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, b.getLocation().add(0.5, 0.4, 0.5), 8, 0.3, 0.2, 0.3);
+            b.getWorld().playSound(b.getLocation(), "minecraft:item.bone_meal.use", 1f, 1f);
+        } else if (info.ripe()) {
+            if (!plugin.canBreak(p, b.getRelative(BlockFace.DOWN))) return;
+            Location at = b.getLocation().add(0.5, 0.3, 0.5);
+            for (ItemStack it : drops(info)) b.getWorld().dropItemNaturally(at, it);
+            plugin.adv().grant(p, "harvest");
+            setStage(b, en, en.fruit.regrows ? 1 : 0);
+            b.getWorld().playSound(at, "minecraft:block.sweet_berry_bush.pick_berries", 1f, 1f);
+        }
+        p.swingMainHand();
+    }
+
+    /** The plant block an Interaction hitbox spawned by show() stands in, or null. */
+    private Block plantAt(Entity en) {
+        if (!(en instanceof Interaction) || !en.getPersistentDataContainer().has(hitKey, PersistentDataType.BYTE)) return null;
+        Block b = en.getWorld().getBlockAt(en.getLocation());
+        return info(b) == null ? null : b;
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onHitboxUse(PlayerInteractEntityEvent e) {
+        Block b = plantAt(e.getRightClicked());
+        if (b == null) return;
+        e.setCancelled(true);                                        // never also use the hand item on it
+        if (e.getHand() != EquipmentSlot.HAND) return;
+        Player p = e.getPlayer();
+        pick(b, p, p.getInventory().getItemInMainHand());
+    }
+
+    /** Punch the plant = break it (drop it), like a vanilla crop; protects via the soil probe. */
+    @EventHandler(ignoreCancelled = true)
+    public void onHitboxPunch(PrePlayerAttackEntityEvent e) {
+        Block b = plantAt(e.getAttacked());
+        if (b == null) return;
+        e.setCancelled(true);
+        Player p = e.getPlayer();
+        if (p.getGameMode() == GameMode.CREATIVE || plugin.canBreak(p, b.getRelative(BlockFace.DOWN)))
+            breakPlant(b, p.getGameMode() != GameMode.CREATIVE);
+    }
+
     @EventHandler(priority = EventPriority.LOW)
     public void onInteract(PlayerInteractEvent e) {
         Block soil = e.getClickedBlock();
@@ -329,21 +411,7 @@ final class Garden implements Listener {
         if (info != null) {
             e.setCancelled(true);
             if (e.getHand() != EquipmentSlot.HAND) return;
-            Entry en = entries(b).get(pack(b));
-            if (hand != null && hand.getType() == Material.BONE_MEAL && !info.ripe()) {
-                setStage(b, en, en.stage + 1);
-                if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
-                b.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, b.getLocation().add(0.5, 0.4, 0.5), 8, 0.3, 0.2, 0.3);
-                b.getWorld().playSound(b.getLocation(), "minecraft:item.bone_meal.use", 1f, 1f);
-            } else if (info.ripe()) {
-                if (!plugin.canBreak(p, soil)) return;
-                Location at = b.getLocation().add(0.5, 0.3, 0.5);
-                for (ItemStack it : drops(info)) b.getWorld().dropItemNaturally(at, it);
-                plugin.adv().grant(p, "harvest");
-                setStage(b, en, en.fruit.regrows ? 1 : 0);
-                b.getWorld().playSound(at, "minecraft:block.sweet_berry_bush.pick_berries", 1f, 1f);
-            }
-            p.swingMainHand();
+            pick(b, p, hand);
             return;
         }
         if (e.getHand() != EquipmentSlot.HAND || e.getBlockFace() != BlockFace.UP || soil.getType() != Material.FARMLAND) return;
@@ -385,7 +453,7 @@ final class Garden implements Listener {
         if (i == null) return;
         Map<Integer, Entry> m = entries(b);
         Entry e = m == null ? null : m.remove(pack(b));
-        if (e != null && e.display != null) e.display.remove();
+        if (e != null) clear(e);
         dirty.computeIfAbsent(b.getWorld().getUID(), k -> new HashSet<>())
                 .add(Chunk.getChunkKey(b.getX() >> 4, b.getZ() >> 4));
         b.setType(Material.AIR, false);
