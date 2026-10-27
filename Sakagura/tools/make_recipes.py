@@ -40,6 +40,18 @@ OWN = [
      [{"type": "cook", "time": 5, "ingredients": ["sakagura:blueberry/4", "sakagura:strawberry/4", "Sugar/2"]}, {"type": "age", "years": 2, "wood": "birch"}]),
     ("apple_liquor", ["Weak Apple Liquor", "Apple Liquor", "Fine Apple Liquor"], "e8b04a", 5, 25, ["<gray>Needed for a good sangria"], [],
      [{"type": "cook", "time": 5, "ingredients": ["Apple/6", "Sugar/2"]}, {"type": "distill", "runs": 2}]),
+    # staff drinks, promoted 27-10 from the hand-edited server config into the generator so they
+    # survive every rebuild. Two repairs on the way in: zombiezestzinger's colour "00800" was a
+    # five-digit typo (the parser reads it as neither hex nor a name and silently falls back to
+    # WHITE) and now says 008000; its lore tag <00800> is not valid MiniMessage and shows as
+    # literal garbage, now <dark_green>. Bloody Mary's colour "RED" is NOT a typo: named colours
+    # are house style (absinthe/vodka/hot_choc use GREEN/WHITE/DARK_RED on the website too).
+    ("bloody_mary", ["Poor Bloody Mary", "Bloody Mary", "Strong Bloody Mary"], "RED", 2, 42,
+     ["+++<dark_red>A hair of the dog"], ["POISON/15-25"],
+     [{"type": "cook", "time": 3, "ingredients": ["Red Dye/15", "Potato/12"]}, {"type": "distill", "runs": 8}]),
+    ("zombiezestzinger", ["Rotten Zombie Zeste Zinger", "Zombie Zeste Zinger", "Gulping Zombie Zeste Zinger"], "008000", 8, 80,
+     ["<dark_green>Cloudy and unfiltered"], ["SATURATION/1/4"],
+     [{"type": "cook", "time": 12, "ingredients": ["kitchen:steamed_rice/5", "Sugar/2"]}]),
     # non-alcoholic
     ("amazake", ["Thin Amazake", "Amazake", "Rich Amazake"], "f6efe0", 2, 0, ["<gray>Sweet rice drink, no alcohol"], ["SATURATION/0/3"],
      [{"type": "cook", "time": 4, "ingredients": ["kitchen:steamed_rice/3", "sakagura:ginger/1"]}]),
@@ -151,34 +163,6 @@ os.makedirs(docs, exist_ok=True)
 open(os.path.join(docs, "03-recipes.md"), "w", encoding="utf-8").write(chr(10).join(md) + chr(10))
 print("wrote the wiki recipe page with", len(rows), "drinks")
 
-
-# ---- the website seed (src/lib/brewing-seeds/sakagura.json): our own recipes in the website's format, for the
-#      staff "Import Sakagura recipes" button on /brewing (adds only recipes the website doesn't have yet)
-FRUIT_NAMES = {"barley": "Barley", "hops": "Hops", "grape": "Grapes", "ume": "Ume Plums", "yuzu": "Yuzu", "peach": "Peaches",
-               "cherry": "Cherries", "strawberry": "Strawberries", "blueberry": "Blueberries", "juniper": "Juniper Berries", "ginger": "Ginger"}
-
-
-def site_ingredient(token):
-    name, _, count = token.partition("/")
-    low = name.lower()
-    if low.startswith("sakagura:"):
-        name = FRUIT_NAMES.get(low[9:], low[9:].replace("_", " ").title())
-    elif low.startswith("kitchen:"):
-        name = low[8:].replace("_", " ").title()
-    return {"name": name, "count": int(count or 1)}
-
-
-def site_step(st):
-    if st["type"] in ("cook", "mix"):
-        return {"type": st["type"], "time": st.get("time", 1), "ingredients": [site_ingredient(i) for i in st["ingredients"]]}
-    if st["type"] == "distill":
-        return {"type": "distill", "runs": st.get("runs", 1)}
-    return {"type": "age", "years": st.get("years", 1), "barrel": st.get("wood", "any")}
-
-
-seed = [{"slug": o[0], "names": o[1], "color": o[2], "difficulty": o[3], "alcohol": o[4] or None, "lore": o[5], "effects": o[6],
-         "steps": [site_step(st) for st in o[7]]} for o in OWN]
-seed_dir = os.path.join(HERE, "..", "..", "src", "lib", "brewing-seeds")
-os.makedirs(seed_dir, exist_ok=True)
-json.dump({"source": "Sakagura/tools/make_recipes.py", "recipes": seed}, open(os.path.join(seed_dir, "sakagura.json"), "w", encoding="utf-8"), indent=1)
-print("wrote the website seed with", len(seed), "recipes")
+# De voormalige "website seed" voor de importknop op /brewing is verwijderd (27-10): de
+# website-brewingpagina is op 25-10 uit de repo gehaald (zie SAKAGURA-DEV-NOTES) en het
+# wiki-receptenblad (03-recipes.md, hierboven gegenereerd) is de levende receptenlijst.

@@ -325,6 +325,25 @@ recipes:
     steps:
       - {type: cook, time: 5, ingredients: ["Apple/6", "Sugar/2"]}
       - {type: distill, runs: 2}
+  bloody_mary:
+    names: ["Poor Bloody Mary", "Bloody Mary", "Strong Bloody Mary"]
+    color: "RED"
+    difficulty: 2
+    alcohol: 42
+    lore: ["+++<dark_red>A hair of the dog"]
+    effects: ["POISON/15-25"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["Red Dye/15", "Potato/12"]}
+      - {type: distill, runs: 8}
+  zombiezestzinger:
+    names: ["Rotten Zombie Zeste Zinger", "Zombie Zeste Zinger", "Gulping Zombie Zeste Zinger"]
+    color: "008000"
+    difficulty: 8
+    alcohol: 80
+    lore: ["<dark_green>Cloudy and unfiltered"]
+    effects: ["SATURATION/1/4"]
+    steps:
+      - {type: cook, time: 12, ingredients: ["kitchen:steamed_rice/5", "Sugar/2"]}
   amazake:
     names: ["Thin Amazake", "Amazake", "Rich Amazake"]
     color: "f6efe0"

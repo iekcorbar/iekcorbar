@@ -42,6 +42,8 @@ Follow a recipe closely for the best quality (up to 5 stars). Cooking needs heat
 | Juniper Gin | Cook 5 min: 6 Juniper, 1 Ginger, 3 Wheat -> Distill 3x | 30% |
 | Berry Wine | Cook 5 min: 4 Blueberry, 4 Strawberry, 2 Sugar -> Age 2 years (birch cask) | 10% |
 | Apple Liquor | Cook 5 min: 6 Apple, 2 Sugar -> Distill 2x | 25% |
+| Bloody Mary | Cook 3 min: 15 Red Dye, 12 Potato -> Distill 8x | 42% |
+| Zombie Zeste Zinger | Cook 12 min: 5 Steamed Rice, 2 Sugar | 80% |
 | Amazake | Cook 4 min: 3 Steamed Rice, 1 Ginger | - |
 | Matcha Latte | Cook 2 min: 3 Tea Leaves, 1 Milk Bucket, 1 Sugar | - |
 | Mugicha | Mix (no heat) 2 min: 3 Barley, 2 Snowball | - |
