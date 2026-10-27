@@ -82,13 +82,20 @@ discs:
     event: disc.ghosts_of_the_samurai
     recipe: ""
     colour: 0
+  halloween_in_iekcorbar:
+    title: Halloween in Iekcorbar
+    seconds: 133
+    event: disc.halloween_in_iekcorbar
+    recipe: ""
+    colour: 1
   trick_or_treat_at_halloween:
     title: Trick Or Treat At Halloween
     seconds: 108
     event: disc.trick_or_treat_at_halloween
     recipe: ""
-    colour: 1
+    colour: 2
   # END:generated
+
 
 
 # Xmas Town advent calendar: what each door gives (1-24 December, 25 = Christmas Day).

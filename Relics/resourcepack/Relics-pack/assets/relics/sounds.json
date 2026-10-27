@@ -306,6 +306,15 @@
   ],
   "subtitle": "subtitles.relics.disc"
  },
+ "disc.halloween_in_iekcorbar": {
+  "sounds": [
+   {
+    "name": "relics:disc/u_halloween_in_iekcorbar",
+    "stream": true
+   }
+  ],
+  "subtitle": "subtitles.relics.disc"
+ },
  "disc.trick_or_treat_at_halloween": {
   "sounds": [
    {
