@@ -44,7 +44,8 @@ import {
   ShieldCheck,
   Bell,
   LayoutGrid,
-  Palette
+  Palette,
+  BarChart3
 } from 'lucide-react';
 import { humanizePluginStatKey } from '@/lib/plugin-stats';
 import { BUG_CATEGORIES, BUG_STATUS_LABELS, bugCategoryLabel } from '@/lib/bug-categories';
@@ -52,6 +53,7 @@ import { roleTextClass, roleBadgeClass } from '@/lib/staff-tabs';
 import ProfileHero, { ProfileTabs } from '@/components/ProfileHero';
 import ProfileCustomize from '@/components/ProfileCustomize';
 import BlockedMembersCard from '@/components/BlockedMembersCard';
+import StatsPopup from '@/components/StatsPopup';
 
 export default function ProfilePage() {
   const { user, setUser, setIsLoginOpen, handleLogout } = useUser();
@@ -143,6 +145,8 @@ export default function ProfilePage() {
   // In-Game Stats
   const [gameStats, setGameStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(true);
+  // "My Live Stats" button (hero + Overview teaser) opens the full deck in a popup.
+  const [statsOpen, setStatsOpen] = useState(false);
 
   // Steampunk Logbook (Journal) states
   const [journalEntries, setJournalEntries] = useState([]);
@@ -195,6 +199,23 @@ export default function ProfilePage() {
     }
   }, []);
 
+  // Re-runnable stats fetch: the page load above and the popup's refresh button
+  // both go through here. The server caches per-player for 60 s, so hammering
+  // the refresh is harmless.
+  async function refetchStats() {
+    if (!user?.mcUsername) return;
+    setStatsLoading(true);
+    try {
+      const res = await fetch(`/api/player-stats?username=${encodeURIComponent(user.mcUsername)}`);
+      const data = await res.json();
+      if (!data.error) setGameStats(data);
+    } catch {
+      /* offline: the popup shows the amber warning and keeps any previous data */
+    } finally {
+      setStatsLoading(false);
+    }
+  }
+
   // Sync state with user IGN
   useEffect(() => {
     if (user) {
@@ -207,13 +228,7 @@ export default function ProfilePage() {
       fetchMyStaffApplication();
 
       // Fetch in-game stats
-      fetch(`/api/player-stats?username=${encodeURIComponent(user.mcUsername)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (!data.error) setGameStats(data);
-        })
-        .catch(() => {})
-        .finally(() => setStatsLoading(false));
+      refetchStats();
 
       fetch('/api/newsletter/preference')
         .then(res => res.json())
@@ -1003,12 +1018,21 @@ export default function ProfilePage() {
           ...(gameStats?.cmi?.rank ? [{ icon: <Sparkles />, label: 'Rank', value: gameStats.cmi.rank }] : [])
         ]}
         actions={user.mcUsername ? (
-          <Link
-            href={`/members/${encodeURIComponent(user.mcUsername)}`}
-            className="w-full py-2.5 px-4 border border-sp-gold/50 hover:bg-sp-gold hover:text-black text-sp-gold text-[10px] font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 transition-all"
-          >
-            View public profile
-          </Link>
+          <>
+            <button
+              type="button"
+              onClick={() => setStatsOpen(true)}
+              className="w-full py-2.5 px-4 bg-sp-gold hover:bg-white text-black text-[10px] font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-md"
+            >
+              <BarChart3 className="w-3.5 h-3.5" /> My Live Stats
+            </button>
+            <Link
+              href={`/members/${encodeURIComponent(user.mcUsername)}`}
+              className="w-full py-2.5 px-4 border border-sp-gold/50 hover:bg-sp-gold hover:text-black text-sp-gold text-[10px] font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 transition-all"
+            >
+              View public profile
+            </Link>
+          </>
         ) : null}
       />
 
@@ -1566,94 +1590,34 @@ export default function ProfilePage() {
                 </p>
               </div>
             ) : (
-              <>
-                {/* Economy row */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-neutral-950/30 p-3 rounded-lg border border-sp-bronze/10 text-left">
-                    <span className="block text-[8px] uppercase font-bold text-text-warm/40">Yen Balance</span>
-                    <span className="font-serif text-base font-black text-sp-gold flex items-center gap-1">
-                      <DollarSign className="w-3.5 h-3.5" /> {(gameStats.balance ?? 0).toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="bg-neutral-950/30 p-3 rounded-lg border border-sp-bronze/10 text-left">
-                    <span className="block text-[8px] uppercase font-bold text-text-warm/40">Elite Coins</span>
-                    <span className="font-serif text-base font-black text-amber-400 flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5" /> {(gameStats.eliteCoins ?? 0).toLocaleString()}
-                    </span>
-                  </div>
+              // Compact teaser only - the full deck (K/D, mined blocks, jobs,
+              // Adventurer's Ledger and the animated model) opens in StatsPopup.
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-neutral-950/30 p-3 rounded-lg border border-sp-bronze/10 text-left">
+                  <span className="block text-[8px] uppercase font-bold text-text-warm/40">Yen Balance</span>
+                  <span className="font-serif text-base font-black text-sp-gold flex items-center gap-1">
+                    <DollarSign className="w-3.5 h-3.5" /> {(gameStats.balance ?? 0).toLocaleString()}
+                  </span>
                 </div>
-
-                {/* Quick stats row */}
-                <div className="grid grid-cols-4 gap-2">
-                  <div className="bg-neutral-950/20 p-2 rounded-lg border border-sp-bronze/10 text-center">
-                    <span className="block text-[7px] uppercase font-bold text-text-warm/40">Playtime</span>
-                    <span className="text-xs font-bold text-white">{gameStats.playtimeHours ?? 0}h</span>
-                  </div>
-                  <div className="bg-neutral-950/20 p-2 rounded-lg border border-sp-bronze/10 text-center">
-                    <span className="block text-[7px] uppercase font-bold text-text-warm/40">Kills</span>
-                    <span className="text-xs font-bold text-white">{gameStats.kills ?? 0}</span>
-                  </div>
-                  <div className="bg-neutral-950/20 p-2 rounded-lg border border-sp-bronze/10 text-center">
-                    <span className="block text-[7px] uppercase font-bold text-text-warm/40">Deaths</span>
-                    <span className="text-xs font-bold text-white">{gameStats.deaths ?? 0}</span>
-                  </div>
-                  <div className="bg-neutral-950/20 p-2 rounded-lg border border-sp-bronze/10 text-center">
-                    <span className="block text-[7px] uppercase font-bold text-text-warm/40">Lands</span>
-                    <span className="text-xs font-bold text-white">{gameStats.landsClaimed ?? 0}</span>
-                  </div>
-                  {/* Real CMI-only data — see src/lib/cmi-db.js. Only shown
-                      when that DB was reachable, so this quietly disappears
-                      instead of showing a broken/zero value if it isn't. */}
-                  {gameStats.cmi && (
-                    <div className="bg-neutral-950/20 p-2 rounded-lg border border-sp-bronze/10 text-center">
-                      <span className="block text-[7px] uppercase font-bold text-text-warm/40">Homes Set</span>
-                      <span className="text-xs font-bold text-white">{gameStats.cmi.homesCount}</span>
-                    </div>
-                  )}
+                <div className="bg-neutral-950/30 p-3 rounded-lg border border-sp-bronze/10 text-left">
+                  <span className="block text-[8px] uppercase font-bold text-text-warm/40">Playtime</span>
+                  <span className="font-serif text-base font-black text-white flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5 text-sp-copper" /> {gameStats.playtimeHours ?? 0} h
+                  </span>
                 </div>
-
-                {/* Jobs */}
-                {gameStats.jobs && gameStats.jobs.length > 0 && (
-                  <div className="space-y-2">
-                    <span className="block text-[9px] uppercase font-bold text-text-warm/40 tracking-wider">Active Jobs</span>
-                    {gameStats.jobs.map(job => {
-                      const hasXp = typeof job.experience === 'number' && typeof job.maxExperience === 'number' && job.maxExperience > 0;
-                      const xpPct = hasXp ? Math.max(0, Math.min(100, (job.experience / job.maxExperience) * 100)) : null;
-                      return (
-                        <div key={job.name} className="bg-neutral-950/20 px-3 py-1.5 rounded-lg border border-sp-bronze/10 text-xs space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-text-warm/80 font-mono">{job.name}</span>
-                            <span className="text-sp-gold font-bold font-serif">Lvl {job.level}</span>
-                          </div>
-                          {hasXp && (
-                            <div className="h-1 bg-neutral-900 rounded-full overflow-hidden" title={`${Math.round(job.experience)} / ${job.maxExperience} XP`}>
-                              <div className="h-full bg-sp-gold/70" style={{ width: `${xpPct}%` }} />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-
-                {/* Generic plugin stats (Lands/ValhallaMMO/ValhallaRaces/... —
-                    whatever staff configured under placeholder-sync in the
-                    sync plugin's config.yml) */}
-                {gameStats.pluginStats && Object.keys(gameStats.pluginStats).length > 0 && (
-                  <div className="space-y-2">
-                    <span className="block text-[9px] uppercase font-bold text-text-warm/40 tracking-wider">Adventurer&apos;s Ledger</span>
-                    <div className="grid grid-cols-2 gap-2">
-                      {Object.entries(gameStats.pluginStats).map(([key, value]) => (
-                        <div key={key} className="bg-neutral-950/20 px-3 py-1.5 rounded-lg border border-sp-bronze/10 text-xs flex items-center justify-between gap-2">
-                          <span className="text-text-warm/50 uppercase text-[9px] tracking-wide truncate">{humanizePluginStatKey(key)}</span>
-                          <span className="text-white font-bold truncate">{value}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </>
+              </div>
             )}
+
+            <button
+              type="button"
+              onClick={() => setStatsOpen(true)}
+              className="w-full py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider text-black bg-sp-gold hover:bg-white transition-all cursor-pointer font-serif flex items-center justify-center gap-2 shadow-md"
+            >
+              <BarChart3 className="w-4 h-4" /> Open My Statistics
+            </button>
+            <p className="text-[9px] text-text-warm/35 uppercase tracking-wider">
+              Every account sees its own deck here - staff included. Click beside the window to close it.
+            </p>
           </div>
           
           {/* Card: Registered Events */}
@@ -2106,6 +2070,20 @@ export default function ProfilePage() {
           </div>
 
       </div>
+
+      {/* "My Live Stats" deck - opens from the hero button and the Overview
+          teaser; closes on backdrop click, X or Escape. Own profile only,
+          every role (staff included) sees their own numbers here. */}
+      <StatsPopup
+        open={statsOpen}
+        onClose={() => setStatsOpen(false)}
+        username={user.mcUsername || 'Steve'}
+        roleLabel={user.roleLabel || user.role}
+        rank={gameStats?.cmi?.rank}
+        gameStats={gameStats}
+        statsLoading={statsLoading}
+        onRefresh={refetchStats}
+      />
 
     </div>
   );

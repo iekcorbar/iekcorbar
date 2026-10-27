@@ -1177,3 +1177,56 @@ advancement mee en vanilla player stats". Twee kanten, één batch:
 - **Groen**: mvn SiteSync (jar 97fc6d17), npm build, zip 15806745. Lijst: punt 9 nieuw
   (SiteSync-jar bij de herstart van punt 8), punt 6-sha ververst. Server niet
   aangekeken; deployen doet de eigenaar morgen.
+
+### Molensteen zijkant-aandrijving + trechter, Sakagura-hitboxen, profiel-stats-popup, Halloween-schijf (27-10 avond)
+
+Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (lijst punten 10-13):
+- **Create-modellen: wel kijken, niet kopieren.** De eigenaar opperde Create's modellen te gebruiken met
+  een iets aangepaste textuur. In de jar staat LICENSE.md_create-1.21.1: **assets/ (modellen en textures)
+  is "All Rights Reserved"**, alleen de code is MIT - pixels aanpassen op gekopieerde geometrie blijft een
+  afgeleid werk, dus dat mag niet. Wel als referentie bestudeerd (millstone block.json: boxframe 0-6 +
+  draaitrommel 6-12 + cap 12-16, as van onder; funnel: -22.5 graad gekantelde schot-plaat). De nieuwe
+  eigen modellen zijn daarna zelf opgebouwd in make_models.py, met hun afmetingen-gevoel (hoek-wanden op
+  45 graden, messing randen) maar eigen vormtaal.
+- **Steamworks 0.3.24**:
+  1. Dubbel-plaatsen (de "twee shafts voor een klik / heel irritant"-melding): de oude dedupe in
+     PartListener keek of het TARGET-blok hetzelfde was; bij klikken op VERVANGBAAR terrein (gras,
+     sneeuw) maakte event 1 van het geklikte blok zelf een knooppunt, zag event 2 daardoor een knooppunt
+     en plaatste via de n!=null-tak een blok verder (ander target, dedupe miste). Nu: per speler
+     ontdubbelen (40 ms). Off-hand-guard en middle-click-fix (0.3.23) blijven erboven liggen.
+  2. Molensteen op zijkant-aandrijving (eigenaar: "moet via zijkanten, boven en onder niet"): poorten =
+     as-einden (geen DOWN meer), NodeStorage zet oude as-Y-stenen automatisch op X om (de schacht ONDER
+     een bestaande molensteen doet het dus niet meer - herbekabelen naar de zijkant), wrench draait hem
+     horizontaal (groep van STEAM_ENGINE, stays-horizontal), PartType-text en site-teksten mee:
+     steamworks.json millstone-pagina + power.json pers-vergelijking + /steamworks-kaart. Visuals: frame
+     tekent als de hammer (orientation(UP, SOUTH/EAST), model X = as), runner houdt de model-Y-as
+     conventie. Nieuwe modellen: verticaal rad (stenen schijf r5.6 + 8 peddels r6.3 + hub-caps + peg) in
+     frame met wangen/kap/voeder-sleuf + koperen as-doppen; GUI-icon sw_millstone bakt de runner via
+     (x,y,z)->(y,z,x) in het frame.
+  3. Trechter "stom model" -> echte hopper: goot blijft, kuip van vier 45-graden-gekantelde koperen
+     wanden + gouden rand + zeefstaven + zwart-gat-decal op de vloer (model-kader: Y=up, Z=facing).
+  KineticsTest 70/70 groen na de poortwijziging; make_models.py heeft eigen -16..32 grens-asserts.
+- **Sakagura 0.3.5**: tuinplanten kregen een eigen Interaction-hitbox (0.9x0.95 op het plantblok,
+  responsive, PDC-tag garden_hitbox) - rechtsklik de plant = oogsten/bemesten, klap = breken, beide via
+  dezelfde canBreak-ground-probe; de oude "klik de aarde eronder"-route blijft werken. Display en
+  hitbox leven en sterven samen (clear() helper in show/unload/tick/breakPlant/removeAll).
+- **Website - playerprofile stats-knop + popup** (oorspronkelijke vraag "op het playerprofile incl
+  staff, eigen stats zichtbaar, knop met mooie popup, sluit als ernaast geklikt, model ernaast met
+  animatie"): nieuwe src/components/StatsPopup.js - overlay als de chat/login-modals (klik ernaast
+  sluit, Esc ook), steampunk-border + sp-* tokens. Links een display-case met het skin-body-render
+  (mc-heads, zelfde als de hero) dat bob-en-sway doet (nieuw in globals @theme: modal-pop, fade-in,
+  model-bob, model-sway) tussen draaiende SVG-tandwielen + steam-rise damp en een bronzen sokkel met
+  online-lampje; rechts de volle cijfers uit /api/player-stats (Yen, coins, speeltijd incl. CMI-uur,
+  K/D, mobs, mined, claims, homes, jobs met XP-balken, pluginStats-ledger) met refresh ->
+  refetchStats(). /profile: hero kreeg de gouden "My Live Stats"-knop, de overview-kaart werd een
+  Yen+tijd-teaser + "Open My Statistics". Werkt voor elke rol (de pagina was al role-neutraal; eigen
+  stats zijn er alleen voor de ingelogde gebruiker zelf).
+- **Relics 0.4.2 - "Halloween in Iekcorbar"-schijf**: mp3 uit Downloads in Relics/discs/ + discs.txt
+  (bestandsnaam | titel | recipe) -> python -I tools/make_discs.py (met de winget-ffmpeg) maakt mono-ogg
+  (133 s) + discs-blok in de default config; make_pack + merge-packs BUILD 8->9 (audit 0 problemen,
+  build9 16,7 MB sha1 65f461f7). Serverwerk blijft: de config-entry handmatig in
+  plugins/Relics/config.yml (saveResource overschrijft nooit) + twee herstarts voor het
+  relics_discs-datapack (lijst punt 13).
+- **Let op UUID-churn**: make_models.py's uuid5-teller schoof op door de nieuwe elementen, dus alle
+  ~110 .bbmodel-bestanden veranderden van inhoud - de FMM-modellenmap moet in het geheel naar
+  plugins/FreeMinecraftModels/models/steamworks/ gekopieerd worden (punt 11-3 van de deploy-lijst).

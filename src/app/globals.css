@@ -35,6 +35,10 @@
   --animate-sakura-fall-3: sakura-fall-3 18s linear infinite;
   --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
   --animate-steam-rise: steam-rise 4s ease-out infinite;
+  --animate-modal-pop: modal-pop 0.28s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+  --animate-fade-in: fade-in 0.2s ease both;
+  --animate-model-bob: model-bob 4.6s ease-in-out infinite;
+  --animate-model-sway: model-sway 7s ease-in-out infinite;
 
   @keyframes spin-gear-cw {
     0% { transform: rotate(0deg); }
@@ -89,9 +93,31 @@
     50% { opacity: 0.4; }
     100% { transform: translateY(-30px) scale(1.3); opacity: 0; }
   }
+  /* Live Telemetry popup (src/components/StatsPopup.js): panel springs in over a
+     fading backdrop; inside the display case the skin model bobs and sways on its
+     brass pedestal like a hologram off a steam-driven projector. */
+  @keyframes modal-pop {
+    from { opacity: 0; transform: scale(0.92) translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes model-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+  @keyframes model-sway {
+    0%, 100% { transform: rotateY(-14deg); }
+    50% { transform: rotateY(14deg); }
+  }
 }
 
 /* Custom Steampunk Styles */
+@media (prefers-reduced-motion: reduce) {
+  .stats-case .animate-model-bob, .stats-case .animate-model-sway, .stats-case .sp-steam, .stats-case svg { animation: none !important; }
+}
 body {
   background-color: var(--background);
   color: var(--foreground);
