@@ -304,12 +304,19 @@ def owl(rnd):
 
 
 def frog(rnd):
+    # 27-10: was a raw 130-170 Hz square wave full-normalised - a LOUD low buzz that
+    # carried through walls and drove players mad. Now a warm croak: sine with a soft
+    # beating octave, quick pitch drop for the "krok", tremolo kept mild. The rnd call
+    # order is unchanged (uniform, randint, uniform per croak) so every sound after it
+    # in the seeded stream stays byte-identical.
     out = []
     f = rnd.uniform(130, 170)
     for k in range(rnd.randint(2, 4)):
-        c = lowpass(osc(const(f, 0.18), "square"), 900)
-        c = am(c, rnd.uniform(35, 50), 0.9)
-        place(out, env(bandpass(c, f * 4, 2.5), 0.01, 0.05, 0.7, 0.05), k * 0.26)
+        base = const(f, 0.16)
+        c = osc([x * (1 + 0.6 * math.exp(-i / max(1, n(0.035)))) for i, x in enumerate(base)])
+        c = mix(c, gain(osc([x * 2.01 for x in base]), 0.3))
+        c = am(c, rnd.uniform(35, 50), 0.45)
+        place(out, env(bandpass(lowpass(c, 1400), f * 4, 2.0), 0.008, 0.05, 0.7, 0.05), k * 0.26)
     return out
 
 
@@ -337,9 +344,15 @@ def wind(rnd, sec=4.0):
 
 
 def jungle_bird(rnd):
+    # 27-10: the old one was a muffled 900-1600 Hz whoop. Now a bright two-note
+    # tropical whistle with a little air. Uses its OWN Random - the shared seeded
+    # stream stays untouched, so no other sound changes.
+    local = random.Random(1971)
     out = []
     for k in range(2):
-        place(out, env(osc(vibrato(glide(900, 1600, 0.25, 2) + glide(1600, 1200, 0.15), 8, 40)), 0.02, 0.05, 0.8, 0.08), k * 0.5)
+        f = vibrato(glide(1500, 2300, 0.12, 1.4) + glide(2300, 1900, 0.09), 9, 30)
+        s = mix(osc(f), gain(bandpass(noise(0.21, local), 2800, 1.5), 0.1))
+        place(out, env(s, 0.01, 0.04, 0.8, 0.05), k * 0.42)
     return out
 
 # ------------------------------------------------------------------ steamworks
