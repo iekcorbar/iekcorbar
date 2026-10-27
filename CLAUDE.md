@@ -6,6 +6,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The website for **iekcorbar**, a Minecraft server (steampunk/sakura themed: wiki, events, member profiles, staff moderation, community projects, voting, chat). It's a Next.js 16 (App Router) site backed by MySQL, with a companion Spigot/Paper plugin (`IekcorbarSiteSync/`) that syncs live player data from the Minecraft server into the same database and exposes an in-game RCON command the website calls, and a companion Expo/React Native app (`mobile/`) that talks to this site's `/api/**` routes directly and adds push notifications.
 
+## People (server-rollen, vastgelegd 27-10 door eigenaar)
+
+| spelernaam | rol |
+|---|---|
+| `antimatter87` | **owner** (de gebruiker zelf - SSH/deploy/alle goedkeuringen lopen via hem) |
+| `iekjebr36` | staff |
+| `kooyer` | staff |
+| `afriendlystomach` | staff |
+| `greyarts` | staff - spelling door eigenaar nóg niet bevestigd ("weet ik niet zeker") |
+
+Gebruik deze namen voor tests/scenario's (denk aan `/power give <owner> ...`, permissies,
+Discord-links). De lijst komt van de eigenaar zelf; verifieer onbekende namen nooit door
+spelerbestanden op de server door te spitten (identiteitsregel) - vraag het, of laat hem
+het in het spel zelf checken.
+
 ## Commands
 
 ``
