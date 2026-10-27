@@ -787,6 +787,32 @@ losse sub-pixel ground_sink in death/idle, bewust niet aangepast - dat is de bee
 × zeldzaam/baby); 121 overige alleen uuid-churn. Artefact: `deploy/fmm-wildlife/` (136 bestanden,
 naar `plugins/FreeMinecraftModels/models/wildlife/` + /fmm reload).
 
+### SSH-toegang VPS + eerste live-versiecheck: Steamworks 0.3.20 geforceerd (27-10 middag)
+
+Gebruiker gaf root-SSH-toegang tot de VPS (82.165.250.99, Pterodactyl-container) voor
+versiechecks/logs/configs - regels vastgelegd in nieuwe skill `server-toegang` (niks
+verwijderen/herstarten/zonder approval, DB lezen mag maar altijd melden, geen
+speler-identiteit, optimalisaties alleen als voorstel). Toegang ingericht via eenmalige
+paramiko-bootstrap (pip) die een ed25519-sleutel (`~/.ssh/iekcorbar_server`) in
+authorized_keys zette; wachtwoord-bestand uit TEMP verwijderd; gebruiker geadviseerd het
+root-wachtwoord te roteren. Container-ID's zijn vluchtig: de skill zoekt hem op de
+aanwezigheid van de eigen jar.
+
+**Wat de check opleverde (realiteit ≠ "alles live"):**
+1. Negen "open" jars van 26-10: Gouw/Hihou/SiteSync/Kitchen/Kura/Sakagura/Satchel/Wildlife
+   + Zukan/Additions allen correct live, modellen 242+136 op hun plek, pack build6 in de
+   mixer, machines.yml VERS (5 dust-regels), site extern OK (Power-tab, 195 recepten).
+2. **Relics draait 0.3.8** - de 0.3.10 uit deploy is nooit overgezet.
+3. **SteamworksPower laadt NOOIT** (log 09:43:13: NoClassDefFoundError CustomPart): de
+   werkende Steamworks-0.3.19-jar (563.552 B, sha1 f0bb8b55) komt met GEEN enkele lokale
+   build overeen en mist de api-package. De the "oude 0.3.19" (21:56) vs de api-build
+   (23:19) deelden één versienummer - precies de bouw-artefactenregel die dit verbied.
+   Herstel: pom 0.3.19->**0.3.20**, mvn groen, jar verifyd (4 api-classes, sha1 586a3687)
+   -> deploy/Steamworks-0.3.20.jar + TE-DEPLOYEN-regel [J] (jar-wissel + herstart =
+   wacht op gebruikers-approval; agent herstart/verwijdert níets zelf).
+Ook geregistreerd uit de log: "Minecraft rejected advancement steamworks/sprocket"
+(onschuldig want Zukan-catalogus draait door, maar volgt bij eerstvolgende sw-klus).
+
 Besluit productievorm (26-10, gebruiker): FMM-modellen + pack worden NU NOG NIET in de jar gebundeld.
 Huidige aflever-lijn blijft: assets apart via deploy/ (fmm-steamworks-map + pack in de mixer).
 Assets-in-jar (onLoad-extractor met versiestempel, pack.auto-install, release-bundel, machines.yml-
