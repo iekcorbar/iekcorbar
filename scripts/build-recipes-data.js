@@ -210,7 +210,8 @@ for (const [slug, r] of Object.entries(sak)) {
     result, count: 1, type: 'machine', category: SEASON[slug] || 'Bar',
     ingredients: ins, outputs: [{ name: result, count: 1 }], heat,
     ...(/^#?[0-9a-fA-F]{6}$/.test(String(r.color || '')) ? { hex: '#' + String(r.color).toLowerCase().replace(/^#/, '') } : {}),
-    note: parts.join(' → ') + `${alc ? ` · ${alc}% alcohol` : ' · alcohol-free'}${fx.length ? ` · ${fx.join(', ')}` : ''}.`,
+    note: parts.join(' → ') + `${alc ? ` · ${alc}% alcohol` : ' · alcohol-free'}${fx.length ? ` · ${fx.join(', ')}` : ''}` +
+      `${(r.names || []).length > 1 ? ` · bands: ${r.names.join(' / ')} (poor → good)` : ''}.`,
   });
 }
 out.plugins.push({ id: 'sakagura', name: 'Sakagura', blurb: 'The whole drinks menu, live from the bar — seasonal shelf included.', recipes: sakRecipes });

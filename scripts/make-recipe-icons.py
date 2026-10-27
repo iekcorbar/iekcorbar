@@ -216,6 +216,62 @@ def bottle(im, c):
     im.px(6, 8, (255, 255, 255)); im.px(6, 9, shade(c, 1.4))  # glass shine
 
 
+def apple(im):
+    im.disc(8, 10, 5, (200, 45, 40))
+    im.px(8, 4, (110, 70, 40)); im.px(9, 3, (110, 70, 40))
+    im.rect(9, 4, 11, 5, (90, 160, 70))
+    im.px(6, 8, (250, 120, 110))
+
+
+def carrot(im, c):
+    for y in range(5, 12):
+        d = (y - 5) // 2
+        im.rect(6 + d, y, 10 - d, y, shade(c, 1 - (y - 5) * 0.05))
+    im.rect(7, 3, 7, 5, (80, 150, 60)); im.rect(9, 3, 9, 5, (80, 150, 60)); im.rect(8, 2, 8, 4, (100, 180, 80))
+
+
+def bucket(im, c):
+    im.rect(7, 2, 8, 4, (110, 115, 125))                    # handle
+    im.rect(4, 4, 11, 5, (140, 145, 155))                   # rim
+    im.rect(5, 5, 10, 5, c)                                 # milk top
+    im.rect(5, 6, 10, 13, (170, 175, 185))                  # body
+
+
+def berries(im, c):
+    im.disc(6, 10, 3, c); im.disc(10, 10, 3, shade(c, 0.8)); im.disc(8, 7, 3, shade(c, 1.15))
+    im.rect(7, 2, 9, 4, (80, 150, 60))
+    im.px(5, 9, (255, 255, 255))
+
+
+def heart(im, c):
+    im.rect(4, 5, 6, 7, c); im.rect(8, 5, 10, 7, c)
+    im.rect(3, 6, 11, 8, c); im.rect(4, 9, 10, 10, c); im.rect(5, 11, 9, 11, c); im.rect(6, 12, 8, 12, c); im.rect(7, 13, 7, 13, c)
+    im.px(5, 6, (255, 255, 255))
+
+
+def sculk(im):
+    im.rect(7, 2, 8, 4, (60, 160, 170))
+    im.disc(8, 9, 6, (25, 60, 70)); im.disc(8, 9, 4, (35, 100, 110)); im.disc(8, 9, 2, (90, 220, 230))
+    im.px(4, 5, (60, 160, 170)); im.px(11, 5, (60, 160, 170)); im.px(3, 9, (60, 160, 170)); im.px(12, 9, (60, 160, 170))
+
+
+def pickle(im):
+    im.rect(6, 3, 9, 13, (60, 140, 60))
+    for (x, y) in ((6, 4), (9, 7), (6, 10), (9, 12), (7, 2), (8, 14)):
+        im.px(x, y, (90, 175, 80))
+    im.px(7, 6, (120, 195, 110))
+
+
+def foot(im):
+    im.rect(5, 8, 10, 12, (150, 110, 75))
+    im.rect(5, 4, 6, 7, (170, 130, 95)); im.rect(8, 4, 9, 7, (170, 130, 95)); im.rect(10, 5, 11, 7, (170, 130, 95))
+
+
+def blades(im):
+    for x, h, f in ((4, 4, 1.0), (6, 7, 0.9), (8, 5, 1.1), (10, 8, 0.85), (12, 4, 1.05)):
+        im.rect(x, 13 - h, x, 13, shade((80, 150, 60), f))
+
+
 def bowl(im, content):
     im.rect(3, 8, 12, 9, (150, 120, 85))
     im.rect(4, 10, 11, 12, (130, 100, 70))
@@ -270,6 +326,55 @@ def draw(name):
         low2 = low
     if low in HEX:
         bottle(im, HEX[low])
+    elif low == "apple":
+        apple(im)
+    elif low == "carrot":
+        carrot(im, (235, 130, 45))
+    elif low == "golden carrot":
+        carrot(im, (250, 205, 60))
+    elif low == "milk bucket":
+        bucket(im, (245, 245, 240))
+    elif low == "snowball":
+        ball(im, (240, 248, 250))
+    elif low == "turtle egg":
+        im.disc(8, 9, 5, (235, 225, 200))
+        im.px(6, 8, (170, 150, 120)); im.px(9, 11, (170, 150, 120)); im.px(8, 5, (170, 150, 120))
+    elif low == "rabbit foot":
+        foot(im)
+    elif low == "sculk sensor":
+        sculk(im)
+    elif low == "sea pickle":
+        pickle(im)
+    elif low == "glow berries":
+        berries(im, (250, 200, 60))
+    elif low == "sweet berries":
+        berries(im, (200, 40, 45))
+    elif low == "chocolate heart":
+        heart(im, (120, 70, 45))
+    elif low in ("grass", "short grass"):
+        blades(im)
+    elif low == "spruce leaves":
+        blades(im)
+        im.rect(4, 13, 11, 13, shade((80, 150, 60), 0.7))
+    elif low == "dried kelp":
+        im.rect(4, 4, 6, 12, (70, 130, 60)); im.rect(8, 5, 10, 13, (55, 115, 50))
+        im.px(5, 6, (110, 175, 90)); im.px(9, 8, (110, 175, 90))
+    elif low == "cactus":
+        im.rect(6, 4, 9, 13, (60, 150, 60)); im.rect(3, 7, 5, 9, (60, 150, 60)); im.rect(10, 5, 12, 7, (60, 150, 60))
+        im.px(7, 6, (110, 195, 100)); im.px(8, 10, (45, 115, 45))
+    elif low == "cookie":
+        im.disc(8, 8, 6, (190, 140, 80))
+        for (x, y) in ((6, 6), (9, 7), (7, 10), (11, 9), (5, 9)):
+            im.px(x, y, (90, 55, 30))
+    elif low == "torchflower seeds":
+        im.rect(6, 10, 9, 13, (150, 110, 60)); im.rect(5, 9, 10, 9, (120, 85, 45))
+        for (x, y) in ((7, 6), (8, 4), (6, 5), (9, 5), (8, 6)):
+            im.px(x, y, (245, 245, 235))
+        im.px(8, 7, (240, 200, 80))
+    elif low == "wheat":
+        for x, h in ((5, 7), (8, 9), (11, 7)):
+            im.rect(x, 13 - h, x, 13, (200, 170, 60))
+            im.rect(x - 1, 13 - h + 1, x + 1, 13 - h + 3, (225, 195, 85))
     elif "concrete powder" in low:
         tile(im, name, shade(col, 1.1), 0.22, False)
     elif "concrete" in low:

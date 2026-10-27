@@ -365,7 +365,7 @@ placed with one click. Code truth: `KNode.axis`/`facing` were **final** and set 
     "Soms een barrier" in creative had two real causes, both fixed: (a) creative middle-click pick
     on a part handed out the raw BARRIER marker item (no pack hides barrier) - new
     PartListener.onPick cancels Paper's PlayerPickBlockEvent and puts the proper part item in
-    getTargetSlot() instead; (b) place() set BARRIER **before** the synthetic BlockPlaceEvent, so a
+    getTargetSlot() instead — since 0.3.23 CREATIVE ONLY: Paper fires the event in every game mode and leaves the check to the handler, so survival could otherwise dupe parts; (b) place() set BARRIER **before** the synthetic BlockPlaceEvent, so a
     cancelled/throwing listener left a ghost barrier without a node - the event now fires FIRST and
     the world is only touched after approval. Keep the ProbeBreakEvent guard at the top of onBreak.
 4. PartType lore for SHAFT/GEARBOX mentions the wrench; docs/wiki-steamworks/02-power.md got a
@@ -1097,3 +1097,20 @@ gebouwd, één batch:
   herbouwd (b0e51bfc, nu incl. SiteSync-jar 1.15.4 voor verse installs), TE-DEPLOYEN
   punten 6 + 7 (jar bij eerstvolgende herstart; /ibook give als test). De zip van
   vanmiddag (e0a7bc64) is in-place opgevolgd - die stond nog nergens.
+
+### Steamworks 0.3.23 - dupliceerbare onderdelen via midden-klik (27-10 avond, offline)
+
+Gebruiksvondst van de eigenaar: in SURVIVAL kon een middle-click op een geplaatst
+onderdeel (o.a. de molensteen) het item in je inventory toveren - een echte dupe.
+Oorzaak: PartListener.onPick (bedoeld als de Creative-fix tegen het "barrier op je
+hand"-probleem) controleert zelf niet op gamemode; Paper vuurt PlayerPickBlockEvent
+in élke game-mode en laat die check bij de handler. Reparaties: gamemode-guard
+vooraan (alleen CREATIVE; daarbuiten doet de handler niets en pakt vanilla zelf al
+niets), javadoc + CLAUDE.md-beschrijving aangepast. Eén handler voor álle onderdelen
+èn de addon-machines, en verder nergens in de pluginset een PlayerPickBlockEvent -
+dit was de enige plek. pom 0.3.22 -> **0.3.23** (jar sha1 8e7d4bc5; geen
+API-wijziging, Power 0.2.0 hoeft niet herbouwd). Site-label naar 0.3.23 en de zip
+opnieuw gebouwd (bbea9f14 - bevat ook de dranknamen-in-de-kaartkop, de nieuwe
+grondstof-icoontjes en de verwijderde dubbel-knop "Sakagura drinks ->"). Jar + zip
+staan op de TE-DEPLOYEN-lijst (punt 8 resp. bijgewerkt punt 6); de server is deze
+keer expres niet aangekeken - afleveren doet de eigenaar morgen.

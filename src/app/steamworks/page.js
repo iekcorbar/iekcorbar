@@ -509,7 +509,7 @@ export default function SteamworksExplainedPage() {
           <Link href="/wiki?page=steamworks" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Steamworks Wiki (quick reference)</Link>
           <Link href="/recipes" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><Wrench className="w-4 h-4" /> All Recipes</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.22`} + Additions {`0.1.2`} + Power {`0.2.0`}). For exact per-machine stats, always right-click the part in-game.</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.23`} + Additions {`0.1.2`} + Power {`0.2.0`}). For exact per-machine stats, always right-click the part in-game.</p>
       </Section>
     </div>
   );

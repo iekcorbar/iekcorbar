@@ -1,6 +1,5 @@
 'use client';
 import React, { useMemo, useState } from 'react';
-import Link from 'next/link';
 import { BookOpen, Search, Hammer, Compass } from 'lucide-react';
 import data from '@/lib/recipes-data.json';
 import iconIds from '@/lib/recipe-icons.json';
@@ -53,7 +52,10 @@ function RecipeCard({ r }) {
     <div className="bg-neutral-900/60 border border-sp-bronze/30 rounded-xl p-4 space-y-3 steampunk-glass">
       <div className="flex items-center justify-between gap-2">
         <span className="text-[11px] uppercase tracking-wide text-sp-copper font-bold">{r.category}</span>
-        {r.time ? <span className="text-[11px] text-text-warm/60">{r.time} {r.category === 'Cooking Pot' ? 's' : 's at full speed'}</span> : null}
+        <span className="flex items-baseline gap-2 min-w-0">
+          {r.result ? <span className="font-serif text-base text-sp-gold leading-tight truncate">{r.count > 1 ? `${r.count}× ` : ''}{r.result}</span> : null}
+          {r.time ? <span className="text-[11px] text-text-warm/60 whitespace-nowrap">{r.time} {r.category === 'Cooking Pot' ? 's' : 's at full speed'}</span> : null}
+        </span>
       </div>
       {r.type === 'shaped' && (
         <div className="flex items-center gap-3 flex-wrap">
@@ -110,7 +112,6 @@ function Browser() {
             {p.name}
           </button>
         ))}
-        <Link href="/sakagura" className="px-4 py-2 rounded-lg text-sm font-bold border border-sp-bronze/40 text-text-warm/70 hover:text-sp-gold">Sakagura drinks →</Link>
       </div>
       <p className="text-sm text-text-warm/70">{current.blurb}</p>
       <div className="flex flex-wrap gap-3 items-center">

@@ -282,9 +282,14 @@ final class PartListener implements Listener {
         plugin.breakNode(n, e.getPlayer(), false);
     }
 
-    /** Creative middle-click on a part used to hand out the raw BARRIER it is built on. */
+    /**
+     * Middle-click on a part hands out the proper part item - Creative only. Paper fires
+     * PlayerPickBlockEvent in every game mode and leaves the creative check to the handler;
+     * without the guard below, survival could duplicate parts out of thin air (fix 0.3.23).
+     */
     @EventHandler(ignoreCancelled = true)
     public void onPick(io.papermc.paper.event.player.PlayerPickBlockEvent e) {
+        if (e.getPlayer().getGameMode() != GameMode.CREATIVE) return;   // vanilla refuses picking outside creative - so do we
         KNode n = plugin.kinetics().at(e.getBlock());
         if (n == null) return;
         e.setCancelled(true);
