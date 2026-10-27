@@ -15,6 +15,8 @@ final class Achievements {
         a.add("new_year", "first", "firework_rocket", "New Year", "Get a New Year relic.", "task");
         a.add("easter", "first", "egg", "Easter", "Get an Easter relic.", "task");
         a.add("patrick", "first", "lime_dye", "Luck of the Irish", "Get a St. Patrick's Day relic.", "task");
+        a.add("valentine", "first", "pink_dye", "Valentine's", "Get a Valentine's relic.", "task");
+        a.add("wish", "valentine", "gold_nugget", "Wish Upon a Heart", "Drop a coin in the wishing well.", "task");
         a.add("curio", "first", "spyglass", "Curiosities", "Get a curiosity.", "task");
         a.add("halloween", "first", "jack_o_lantern", "Spooky Season", "Get a Halloween Party relic.", "task");
         a.add("treat", "first", "cookie", "Sweet Tooth", "Eat or drink a treat.", "task");
@@ -33,7 +35,7 @@ final class Achievements {
         a.add("umbrella", "curio", "lightning_rod", "Rain or Shine", "Stand next to a tesla coil holding a wagasa stand.", "task").hidden();
         a.add("lucky_paw", "curio", "gold_ingot", "Lucky Paw", "Click the maneki-neko seven times.", "task").hidden();
         a.add("collector", "first", "nether_star", "Collector", "Get relics from all collections.", "challenge")
-                .allOf("shadow", "xmas", "new_year", "easter", "patrick", "curio", "halloween").glint();
+                .allOf("shadow", "xmas", "new_year", "easter", "patrick", "valentine", "curio", "halloween").glint();
 
         a.scanner(it -> {
             RelicType t = plugin.relics().typeOf(it);
@@ -58,6 +60,7 @@ final class Achievements {
             case TELESCOPE -> "telescope";
             case LAUNCH -> "firework";
             case BELL -> "bell";
+            case WISH -> "wish";
             default -> null;
         };
         if (id != null) adv.grant(p, id);

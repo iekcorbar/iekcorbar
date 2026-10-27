@@ -962,6 +962,24 @@ def silent_night_disc(rnd):
     return out
 
 
+def songbird_sings(rnd):
+    """Love Songbird: a few bright rising chirps with tiny gaps."""
+    out, t = [], 0.0
+    for k in range(rnd.randint(3, 5)):
+        place(out, gain(chirp(rnd), 0.85), t)
+        t += rnd.uniform(0.09, 0.18)
+    place(out, gain(chirp(rnd), 0.55), t)
+    return out
+
+
+def wish_coin(rnd):
+    """Wishing Well: coin plops into dark water, then one soft high bell for the wish."""
+    splash = env(bandpass(noise(0.35, rnd), glide(1500, 500, 0.35), 1.5), 0.005, 0.06, 0.3, 0.2)
+    out = gain(splash, 0.7)
+    place(out, ring([(1046, 0.5), (1568, 0.35), (2093, 0.25)], 1.2, 0.5), 0.3)
+    return out[:n(1.8)]
+
+
 EXTRA = {
     "wildlife": {
         "elephant.ambient": (elephant_rumble, 2, "Elephant rumbles"), "elephant.hurt": (elephant_trumpet, 2, "Elephant trumpets"),
@@ -972,6 +990,8 @@ EXTRA = {
         "disc.jingle_bells": (lambda r: carol_disc(JINGLE_BELLS, 0.3, 2), 1, "Music disc plays"),
         "disc.deck_the_halls": (lambda r: carol_disc(DECK_THE_HALLS, 0.3, 4), 1, "Music disc plays"),
         "disc.we_wish": (lambda r: carol_disc(WE_WISH, 0.3, 4), 1, "Music disc plays"),
+        # Valentine's (27-10): appended last so every sound before it stays byte-identical.
+        "valentine.chirp": (songbird_sings, 2, "Songbird sings"), "valentine.wish": (wish_coin, 2, "Wish lands in the well"),
     },
 }
 

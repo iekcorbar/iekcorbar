@@ -43,7 +43,8 @@ final class Treats implements Listener {
         HOT_CROSS_BUN("Hot Cross Bun", "Spiced and sweet.", 5, 5f, false, false),
         GREEN_GINGER_ALE("Green Ginger Ale", "Bubbly, gingery and very green.", 2, 2f, true, true),
         SODA_BREAD("Soda Bread", "Crusty Irish bread.", 6, 7f, false, false),
-        SHAMROCK_COOKIE("Shamrock Cookie", "A little extra luck.", 2, 1.2f, false, false);
+        SHAMROCK_COOKIE("Shamrock Cookie", "A little extra luck.", 2, 1.2f, false, false),
+        CHOCOLATE_HEART("Chocolate Heart", "Half bitter, half sweet - and a beat after eating, something extra.", 3, 1.2f, false, false);
 
         final String displayName, lore;
         final int nutrition;
@@ -76,7 +77,8 @@ final class Treats implements Listener {
         ItemStack it = new ItemStack(Material.PAPER, Math.max(1, amount));
         ItemMeta m = it.getItemMeta();
         m.displayName(Component.text(t.displayName, NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
-        String label = t.ordinal() >= Treat.SODA_BREAD.ordinal() || t == Treat.GREEN_GINGER_ALE ? "St. Patrick's Day"
+        String label = t.ordinal() >= Treat.CHOCOLATE_HEART.ordinal() ? "Valentine's"
+                : t.ordinal() >= Treat.SODA_BREAD.ordinal() || t == Treat.GREEN_GINGER_ALE ? "St. Patrick's Day"
                 : t.ordinal() >= Treat.CHOCOLATE_BUNNY.ordinal() ? "Easter"
                 : t.ordinal() >= Treat.SPARKLING_CIDER.ordinal() ? "New Year" : "Xmas Town";
         m.lore(List.of(Component.text(t.lore, NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, true),
@@ -128,6 +130,10 @@ final class Treats implements Listener {
             case CHOCOLATE_BUNNY -> p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 300, 0));
             case GREEN_GINGER_ALE -> p.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 6000, 0));
             case SHAMROCK_COOKIE -> p.addPotionEffect(new PotionEffect(PotionEffectType.LUCK, 1200, 0));
+            case CHOCOLATE_HEART -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 600, 0));
+                p.getWorld().spawnParticle(org.bukkit.Particle.HEART, p.getEyeLocation().add(0, 0.6, 0), 3, 0.3, 0.15, 0.3, 0.02);
+            }
             default -> { }
         }
     }
@@ -147,6 +153,7 @@ final class Treats implements Listener {
         add(keys, Treat.GREEN_GINGER_ALE, 1, Material.SUGAR, Material.LIME_DYE, Material.GLASS_BOTTLE);
         add(keys, Treat.SODA_BREAD, 2, Material.WHEAT, Material.WHEAT, Material.WHEAT, Material.MILK_BUCKET);
         add(keys, Treat.SHAMROCK_COOKIE, 8, Material.WHEAT, Material.WHEAT, Material.SUGAR, Material.LIME_DYE);
+        add(keys, Treat.CHOCOLATE_HEART, 4, Material.COCOA_BEANS, Material.COCOA_BEANS, Material.SUGAR, Material.SUGAR, Material.MILK_BUCKET);
     }
 
     private void add(List<NamespacedKey> keys, Treat t, int amount, Material... ing) {

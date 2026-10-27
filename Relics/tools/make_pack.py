@@ -38,6 +38,10 @@ BASE = {
     "torii": (200, 50, 36), "lacquer_black": (28, 26, 28), "cat_white": (248, 246, 240), "bonsai_pot": (90, 110, 130),
     "xblue": (40, 96, 196), "xpink": (240, 120, 172), "spark": (180, 220, 255), "coil": (200, 120, 60), "washi": (240, 230, 200), "umbrella_red": (200, 40, 50), "umbrella_blue": (40, 80, 160),
     "indigo": (40, 56, 112), "tokkuri": (232, 232, 238), "clay_pot": (148, 96, 66),
+    # Valentine's
+    "rose_red": (204, 44, 74), "rose_deep": (142, 24, 52), "blush": (246, 170, 190), "lace_white": (250, 238, 242),
+    "rose_gold": (228, 160, 120), "rose_leaf": (52, 110, 66), "cream_pink": (252, 220, 216),
+    "well_stone": (130, 126, 128), "water_dark": (36, 74, 108),
 }
 PALETTE = {}
 for k, (r, g, b) in BASE.items():
@@ -1107,6 +1111,295 @@ BREWERY = {
     "drunkard_barrel": lambda: drunkard_barrel("a"), "drunkard_barrel_b": lambda: drunkard_barrel("b"),
 }
 
+# ------------------------------------------------------------------ Valentine's (collection 4)
+
+
+def heart_pix(x, y, z, s, col, d=2.0):
+    """A little flat heart facing north at (x, y, z), s = half-width in units."""
+    return [box(x - s, y, z, x - s / 2.6, y + s * 1.1, z + d, col), box(x + s / 2.6, y, z, x + s, y + s * 1.1, z + d, col),
+            box(x - s * 0.72, y - s * 0.55, z, x + s * 0.72, y + s * 0.55, z + d, col),
+            box(x - s * 0.3, y - s * 0.95, z, x + s * 0.3, y - s * 0.4, z + d, col)]
+
+
+def heart_balloon():
+    return [box(4.2, 9.4, 5.8, 7.4, 12.4, 10.2, "rose_red"), box(8.6, 9.4, 5.8, 11.8, 12.4, 10.2, "rose_red"),
+            box(4.9, 7.6, 6.1, 11.1, 9.8, 9.9, "rose_red"),
+            box(6.2, 6.4, 6.5, 9.8, 7.8, 9.5, "rose_deep"), box(7.2, 5.4, 6.9, 8.8, 6.6, 9.1, "rose_deep"),
+            box(7.55, 4.6, 7.15, 8.45, 5.5, 8.85, "rose_deep"),
+            box(4.6, 11.4, 5.5, 6, 12.4, 5.9, "blush"),
+            box(7.5, 4, 7.1, 8.5, 4.8, 8.9, "gold"),
+            box(7.8, 0, 7.8, 8.2, 4.2, 8.2, "lace_white")]
+
+
+def rose_bell():
+    e = [box(3, 0, 3, 13, 1.4, 13, "brass"), box(3.5, 1.4, 3.5, 12.5, 1.9, 12.5, "rose_gold"),
+         box(7.5, 1.9, 7.5, 8.5, 6.6, 8.5, "rose_leaf"), box(8.5, 3.6, 7.4, 10.4, 4.4, 8.6, "rose_leaf"),
+         box(6.6, 6.4, 6.6, 9.4, 9, 9.4, "rose_deep"), box(6.9, 9, 6.9, 9.1, 10, 9.1, "rose_red"),
+         box(4.1, 1.9, 4, 11.9, 10.2, 4.5, "glass"), box(4.1, 1.9, 11.5, 11.9, 10.2, 12, "glass"),
+         box(4, 1.9, 4.5, 4.5, 10.2, 11.5, "glass"), box(11.5, 1.9, 4.5, 12, 10.2, 11.5, "glass"),
+         box(5.6, 10.2, 5.6, 10.4, 10.9, 10.4, "glass"), box(7, 10.9, 7, 9, 11.6, 9, "glass"),
+         box(7.4, 11.6, 7.4, 8.6, 12.8, 8.6, "rose_gold")]
+    return e
+
+
+def love_lock_rail():
+    e = [box(1, 1, 14.6, 15, 15, 15.6, "iron_d"),
+         box(2.6, 1, 14.1, 3.4, 15, 14.7, "iron"), box(7.6, 1, 14.1, 8.4, 15, 14.7, "iron"),
+         box(12.6, 1, 14.1, 13.4, 15, 14.7, "iron"), box(1, 7.2, 14.1, 15, 8, 14.7, "iron")]
+
+    def lock(x, y, col):
+        return [box(x, y, 13.4, x + 2.6, y + 2.4, 14.4, col), box(x + 0.6, y + 2.4, 13.7, x + 2, y + 3.5, 14.1, "iron")]
+    e += lock(3.4, 3.4, "brass") + lock(9.2, 4.4, "rose_gold") + lock(5.6, 9.4, "copper") + lock(10.4, 9.9, "gold")
+    e += heart_pix(4.7, 6.6, 13.15, 0.9, "rose_red")                                    # one heart-shaped lock
+    return e
+
+
+def heart_arch():
+    e = [box(1, 0, 1, 3, 15.5, 3, "wood_warm"), box(1, 0, 13, 3, 15.5, 15, "wood_warm"),
+         box(13, 0, 1, 15, 15.5, 3, "wood_warm"), box(13, 0, 13, 15, 15.5, 15, "wood_warm"),
+         box(1, 15.5, 1, 15, 16.6, 3, "wood_warm_d"), box(1, 15.5, 13, 15, 16.6, 15, "wood_warm_d"),
+         box(1, 15.5, 3, 3, 16.6, 13, "wood_warm_d"), box(13, 15.5, 3, 15, 16.6, 13, "wood_warm_d"),
+         box(7.6, 16.6, 7.4, 8.4, 17.8, 8.2, "rose_leaf")]                              # vine holding the heart
+    e += heart_pix(8, 20.2, 6.8, 2.6, "rose_red", d=2.6)
+    for x, y in ((3.4, 14), (12.6, 13), (2.2, 8), (13.8, 6)):                            # roses climbing the posts
+        e += [box(x, y, 1.6, x + 1.4, y + 1.3, 2.6, "rose_red"), box(x + 0.2, y + 1.3, 1.8, x + 1.1, y + 1.8, 2.4, "blush")]
+    return e
+
+
+def cupid_statue():
+    e = [box(5, 0, 5, 11, 2.4, 11, "stone"), box(5.5, 2.4, 5.5, 10.5, 3.2, 10.5, "stone_l"),
+         box(6.8, 3.2, 6.8, 9.2, 8, 9, "bone"), box(7, 8, 7, 9, 10.2, 8.8, "bone"),
+         box(4.6, 4.8, 8.6, 6.4, 8.4, 9.6, "bone_l"), box(9.6, 4.8, 8.6, 11.4, 8.4, 9.6, "bone_l"),
+         box(5, 5.6, 5.8, 6.8, 6.4, 7, "bone"),                                          # left arm at the bow
+         box(4.3, 3.8, 5.9, 4.8, 7.6, 6.4, "wood_warm"), box(4.4, 5.6, 6, 4.7, 5.9, 6.3, "lace_white"),
+         box(8.8, 5.4, 6.8, 9.6, 6.2, 8, "bone"),                                        # right arm drawing
+         box(9.5, 3.8, 9.2, 10.8, 7.4, 10.2, "wood_old"), box(9.7, 7.4, 9.4, 10.6, 8, 10, "iron")]  # quiver
+    return e
+
+
+def wishing_well():
+    e = [box(2, 0, 2, 14, 5, 4.2, "well_stone"), box(2, 0, 11.8, 14, 5, 14, "well_stone"),
+         box(2, 0, 4.2, 4.2, 5, 11.8, "well_stone"), box(11.8, 0, 4.2, 14, 5, 11.8, "well_stone"),
+         box(1.6, 5, 1.6, 14.4, 5.9, 14.4, "stone"), box(4.2, 0.8, 4.2, 11.8, 2.2, 11.8, "water_dark"),
+         box(5.6, 2.3, 6.4, 7, 2.6, 7.8, "gold_l"), box(8, 2.3, 8.4, 9.4, 2.6, 9.8, "gold"),
+         box(2.6, 5.9, 2.6, 3.8, 13.4, 3.8, "wood_old"), box(12.2, 5.9, 2.6, 13.4, 12.2, 3.8, "wood_old"),
+         box(2.6, 5.9, 12.2, 3.8, 13.4, 13.4, "wood_old"), box(12.2, 5.9, 12.2, 13.4, 13.4, 13.4, "wood_old"),
+         box(1, 13.4, 1, 15, 14.6, 8.4, "wood_warm_d"), box(1, 14.6, 8.4, 15, 15.4, 15, "wood_warm"),
+         box(7.6, 13, 7.6, 8.4, 13.4, 8.4, "lace_white"), box(6.8, 11, 6.8, 9.2, 12.8, 9.2, "wood_warm"),
+         box(7.1, 11.3, 7.1, 8.9, 12.4, 8.9, "coal")]
+    return e
+
+
+def swan_lantern():
+    """Two swans facing each other across a brass lamp post (mirror x around 8)."""
+    def swan2(mirror):
+        def X(x):
+            return 16 - x if mirror else x
+        return [box(min(X(3.4), X(7.6)), 0.6, 5.6, max(X(3.4), X(7.6)), 2.8, 9.4, "bone_l"),
+                box(min(X(2.6), X(4.6)), 2.2, 6.8, max(X(2.6), X(4.6)), 4.8, 8.2, "lace_white"),
+                box(min(X(6.2), X(7)), 2.8, 7.1, max(X(6.2), X(7)), 6.6, 7.9, "bone_l"),
+                box(min(X(5.4), X(7.2)), 6.4, 6.9, max(X(5.4), X(7.2)), 7.8, 8.3, "bone_l"),
+                box(min(X(4.4), X(5.6)), 6.9, 7.3, max(X(4.4), X(5.6)), 7.5, 7.9, "carrot"),
+                box(min(X(6.4), X(6.8)), 7.2, 7.12, max(X(6.4), X(6.8)), 7.6, 7.5, "coal")]
+    e = [box(1.5, 0, 1.5, 14.5, 0.7, 14.5, "water_dark")] + swan2(False) + swan2(True)
+    e += [box(7.5, 0.7, 12, 8.5, 8.6, 13, "iron"), box(6.6, 8.6, 11.1, 9.4, 9.2, 13.9, "brass"),
+          box(6.8, 5.6, 11.3, 9.2, 8.8, 13.7, "glass"), box(7.4, 6.2, 11.9, 8.6, 7.8, 13.1, "flame_core"),
+          box(6.8, 4.8, 11.3, 9.2, 5.6, 13.7, "brass"), box(7.4, 9.2, 11.9, 8.6, 10.2, 13.1, "brass_d")]
+    return e
+
+
+def valentine_banner():
+    e = [box(0.6, 14, 14.4, 15.4, 15, 15.4, "iron"), box(1.4, 13.4, 14.2, 2.2, 15.4, 15, "iron_d"),
+         box(13.8, 13.4, 14.2, 14.6, 15.4, 15, "iron_d"), box(2.6, 3.6, 14.1, 13.4, 14, 14.9, "rose_deep"),
+         box(2.6, 3.6, 14.3, 13.4, 4.4, 14.7, "gold")]                                  # fringe
+    e += heart_pix(8, 9.6, 13.85, 2.1, "blush", d=0.6)
+    e += [box(3.4, 2, 14.3, 4.4, 3.6, 14.8, "gold"), box(11.6, 2, 14.3, 12.6, 3.6, 14.8, "gold")]
+    return e
+
+
+def heart_lantern(on=True, mount="floor"):
+    shell = "rose_red" if on else "rose_deep"
+    body = [box(5.2, 6.2, 5.8, 7.5, 8.8, 10.2, shell), box(8.5, 6.2, 5.8, 10.8, 8.8, 10.2, shell),
+            box(6.0, 4.6, 6, 10.0, 6.6, 10, shell), box(7.0, 3.4, 6.4, 9.0, 4.9, 9.6, shell)]
+    glow = box(7.55, 6.4, 6.3, 8.45, 8.6, 9.7, "flame_core")        # flame seen in the valley between the lobes
+    shine = [box(5.6, 8.5, 6, 7.1, 8.9, 10, "blush")] if on else [box(5.6, 8.5, 6, 7.1, 8.9, 10, "soot")]
+    frame = [box(6, 9, 6, 10, 10, 10, "brass"), box(6.4, 2.8, 6.4, 9.6, 3.6, 9.6, "brass"),
+             box(5.7, 10, 6.3, 6.3, 10.4, 9.7, "brass_d"), box(9.7, 10, 6.3, 10.3, 10.4, 9.7, "brass_d")]
+    if mount == "wall":
+        plate = [box(7.4, 10.4, 13.4, 8.6, 15, 14.2, "iron")]
+        return shift(body + [glow] + shine + frame + plate, dz=6.4)
+    if mount == "hang":
+        rope = [box(7.6, 10.4, 7.6, 8.4, 16, 8.4, "chain")]
+        return body + [glow] + shine + frame + rope
+    stand = [box(7, 0, 7, 9, 2.8, 9, "brass_d"), box(6.4, 0, 6.4, 9.6, 0.7, 9.6, "brass")]
+    return body + [glow] + shine + frame + stand
+
+
+def teddy_bear(pose):
+    e = [box(4.6, 0, 6.4, 7, 2.4, 9.4, "cocoa"), box(9, 0, 6.4, 11.4, 2.4, 9.4, "cocoa"),
+         box(6.4, 0, 5.8, 9.6, 0.8, 7, "cocoa_l"),
+         box(5.2, 2, 5.6, 10.8, 8, 9.4, "cocoa"), box(6.8, 2.8, 5.3, 9.2, 6.4, 5.7, "cream_pink"),
+         box(5.6, 8, 5.4, 10.4, 11.8, 9, "cocoa"), box(6.6, 8.8, 4.9, 9.4, 10.4, 5.5, "cream_pink"),
+         box(7.5, 9.9, 4.7, 8.5, 10.6, 5, "coal"), box(6.3, 11.2, 5.8, 7.5, 12.4, 7, "cocoa"),
+         box(8.5, 11.2, 5.8, 9.7, 12.4, 7, "cocoa"), box(6.7, 11.6, 5.9, 7.3, 12.2, 6.4, "blush"),
+         box(8.9, 11.6, 5.9, 9.5, 12.2, 6.4, "blush"), box(6.4, 10.2, 5.15, 6.9, 10.7, 5.35, "coal"),
+         box(9.3, 10.2, 5.15, 9.8, 10.7, 5.35, "coal"), box(7, 7.4, 5.3, 9, 8.2, 9.2, "rose_red")]  # ribbon
+    if pose == "a":
+        e += [box(3.8, 3.4, 6.2, 5.2, 6.6, 8.4, "cocoa"), box(10.8, 3.4, 6.2, 12.2, 6.6, 8.4, "cocoa")]
+    else:
+        e += [box(3.6, 5.4, 6.2, 5, 9.6, 8.4, "cocoa"), box(11, 5.4, 6.2, 12.4, 9.6, 8.4, "cocoa"),
+              box(3.6, 9.4, 6, 5.2, 10.4, 8.6, "cocoa_l"), box(10.8, 9.4, 6, 12.4, 10.4, 8.6, "cocoa_l")]
+    return e
+
+
+def heart_rows(n):
+    """n rows of candy hearts in the jar (bottom first), stacked against the open front."""
+    e = []
+    cols = ("blush", "rose_red", "cream_pink")
+    for row in range(n):
+        y = 1.0 + row * 1.8
+        for i, (x, z) in enumerate(((4.8, 4.6), (7.4, 4.4), (9.6, 4.9), (5.6, 7.2), (8.6, 7.6), (6, 9.6), (9.4, 9.8))):
+            e += heart_pix(x + 1, y + 1.2, z, 0.95, cols[(row + i) % 3], d=1.5)
+    return e
+
+
+def candy_heart_jar(full):
+    e = [box(4, 0, 4, 12, 0.7, 12, "lace_white"),
+         box(4, 0.7, 11.4, 12, 10, 12, "glass"), box(4, 0.7, 4.6, 4.6, 10, 11.4, "glass"),
+         box(11.4, 0.7, 4.6, 12, 10, 11.4, "glass"), box(4, 0.7, 4, 12, 1.6, 4.6, "glass"),
+         box(4.4, 10, 4.4, 11.6, 11.4, 11.6, "brass"), box(6.6, 11.4, 6.6, 9.4, 12.1, 9.4, "rose_gold"),
+         box(3.9, 9.7, 3.9, 12.1, 10.2, 12.1, "rose_gold")]
+    return e + (heart_rows(4) if full == 2 else heart_rows(2) if full == 1 else [])
+
+
+def bouquet_popper():
+    e = [box(5.4, 0, 5.4, 10.6, 1.6, 10.6, "rose_gold"), box(6.2, 1.6, 6.2, 9.8, 3.6, 9.8, "rose_gold_l"),
+         box(7, 3.6, 7, 9, 5.2, 9, "lace_white"), box(6.2, 0.4, 6.2, 9.8, 1.2, 9.8, "rose_deep"),
+         box(7.9, 5.4, 7.9, 8.1, 8.2, 8.1, "rose_leaf")]
+    for x, y, z, c in ((5.6, 7.6, 5.6, "blush"), (10.2, 8.2, 6, "rose_red"), (6, 9.4, 10.2, "blossom"),
+                       (10.6, 7, 10.4, "blush"), (8, 9.8, 8, "rose_red"), (5, 8.8, 8, "cream_pink"),
+                       (11.4, 9.2, 8, "blossom"), (8, 8.4, 5, "cream_pink")):
+        e += [box(x, y, z, x + 1.6, y + 1.6, z + 1.6, c)]
+    return e
+
+
+def rose_planter():
+    e = [box(1, 0, 3, 15, 3.4, 12, "wood_warm"), box(1, 3, 3, 15, 3.9, 3.5, "wood_warm_d"),
+         box(1, 3, 11.5, 15, 3.9, 12, "wood_warm_d"), box(1.6, 1.2, 3.5, 14.4, 3, 11.5, "dirt")]
+    for x, z, h in ((3.6, 5.6, 5.8), (7.4, 8.8, 6.6), (11.4, 5.8, 5.4), (5.6, 9.6, 4.8), (9.6, 4.4, 5.2)):
+        e += [box(x, 3.2, z, x + 2.2, h, z + 2.2, "rose_leaf")]
+        e += heart_pix(x + 1.1, h + 1.1, z + 0.4, 1, "rose_red", d=1.5)
+    return e
+
+
+def love_songbird():
+    e = [box(4, 0, 4, 12, 0.9, 12, "brass"), box(4.6, 0.9, 4.6, 5.2, 9, 5.2, "brass_l"),
+         box(10.8, 0.9, 4.6, 11.4, 9, 5.2, "brass_l"), box(4.6, 0.9, 10.8, 5.2, 9, 11.4, "brass_l"),
+         box(10.8, 0.9, 10.8, 11.4, 9, 11.4, "brass_l"), box(4, 9, 4, 12, 9.8, 12, "brass"),
+         box(5.6, 9.8, 5.6, 10.4, 10.8, 10.4, "brass_l"), box(7.4, 10.8, 7.4, 8.6, 11.6, 8.6, "iron"),
+         box(5.6, 2.6, 7.6, 10.4, 3.1, 8.4, "wood_warm"),                                # perch
+         box(6.4, 3.2, 6.4, 9, 5.8, 9.6, "blush"), box(8.6, 3.8, 6, 9.4, 5.4, 7.6, "rose_deep"),
+         box(6.8, 4.6, 6.8, 8.4, 5.6, 8.2, "rose_deep"), box(8.8, 5.4, 6.4, 10, 6.6, 8.4, "blush"),
+         box(9.8, 5.6, 7, 10.4, 6.2, 7.8, "gold"), box(9.2, 5.9, 6.9, 9.5, 6.2, 7.1, "coal"),
+         box(4.8, 6, 4.9, 6.4, 7.4, 5.3, "rose_red")]                                   # little heart on the bars
+    return e
+
+
+def sweetheart_topiary():
+    e = [box(4.6, 0, 4.6, 11.4, 3, 11.4, "clay_pot"), box(4.2, 3, 4.2, 11.8, 3.8, 11.8, "clay_pot_l"),
+         box(7.2, 3.8, 7.2, 8.8, 8.6, 8.8, "wood_old"),
+         box(3.8, 9.4, 6.2, 7.2, 13.6, 9.8, "moss"), box(8.8, 9.4, 6.2, 12.2, 13.6, 9.8, "moss"),
+         box(4.8, 7.2, 6.4, 11.2, 10.4, 9.6, "moss"), box(6.2, 5.6, 6.5, 9.8, 8, 9.5, "moss"),
+         box(7.1, 4.2, 6.7, 8.9, 5.9, 9.3, "moss_d")]
+    for x, y, z in ((4.8, 12.6, 6), (10.8, 12.6, 9.2), (7.9, 5.4, 6.6), (6, 11.2, 8.8), (10, 11, 6.4)):
+        e += [box(x, y, z, x + 1.1, y + 1.1, z + 1.1, "blossom")]
+    return e
+
+
+def love_potion_shelf():
+    e = [box(2, 1, 14, 14, 1.9, 15.6, "wood_old"), box(2, 8.4, 14, 14, 9.2, 15.6, "wood_old"),
+         box(2.4, 0, 14.6, 3.2, 1, 15.4, "iron"), box(12.8, 0, 14.6, 13.6, 1, 15.4, "iron"),
+         box(2.4, 9.2, 14.6, 3.2, 10.2, 15.4, "iron"), box(12.8, 9.2, 14.6, 13.6, 10.2, 15.4, "iron")]
+
+    def bottle(x, y, col, h=4):
+        return [box(x, y, 14.2, x + 2, y + h, 15.6, "glass"), box(x + 0.3, y + 0.4, 14.4, x + 1.7, y + h - 1.4, 15.4, col),
+                box(x + 0.6, y + h, 14.5, x + 1.4, y + h + 0.9, 15.3, "wood_warm")]
+    e += bottle(3.4, 1.9, "rose_deep") + bottle(7, 1.9, "indigo", 3.4) + bottle(10.6, 1.9, "blush")
+    e += bottle(4.6, 9.2, "cream_pink", 3.2) + bottle(8.6, 9.2, "rose_red", 3.6)
+    return e
+
+
+def clockwork_heart():
+    e = [box(2.4, 0, 4.6, 13.6, 1, 11.4, "brass_d"), box(3, 1, 5.2, 13, 1.6, 10.8, "brass"),
+         box(3.4, 1.6, 5.6, 4.4, 8.8, 10.4, "brass"), box(11.6, 1.6, 5.6, 12.6, 8.8, 10.4, "brass"),
+         box(3.4, 8.4, 5.6, 12.6, 9.2, 10.4, "brass")]
+    e += heart_pix(8, 6.4, 6.6, 2.4, "rose_deep", d=2.8)                                # the brass heart, wound between the uprights
+    e += heart_pix(8, 6.2, 6.2, 1.5, "rose_red", d=3.6)                                 # glass heart core, catches the light
+    e += [box(7.4, 8.9, 7.4, 8.6, 11.4, 8.6, "iron"), box(6.2, 11.4, 7.5, 9.8, 12.2, 8.5, "copper"),
+          box(6.6, 12.2, 7.7, 9.4, 12.9, 8.3, "copper_d"),
+          box(2, 3, 7.2, 3.2, 4.2, 8.4, "copper_d"), box(12.8, 3, 7.2, 14, 4.2, 8.4, "copper_d")]  # side gears
+    return e
+
+
+def lovers_bench():
+    e = [box(1, 3.4, 3.8, 15, 4.4, 9.6, "wood_warm"), box(1.4, 4.4, 8.6, 14.6, 10.6, 9.6, "wood_old"),
+         box(1.4, 4.9, 8.3, 14.6, 6.1, 8.7, "wood_warm"), box(1.4, 7.4, 8.3, 14.6, 8.6, 8.7, "wood_warm"),
+         box(1.8, 0, 4.2, 3, 3.4, 5.4, "iron"), box(1.8, 0, 8, 3, 3.4, 9.2, "iron"),
+         box(13, 0, 4.2, 14.2, 3.4, 5.4, "iron"), box(13, 0, 8, 14.2, 3.4, 9.2, "iron"),
+         box(1, 4.4, 3.8, 1.8, 8, 9.6, "iron"), box(14.2, 4.4, 3.8, 15, 8, 9.6, "iron")]
+    e += heart_pix(8, 9.8, 8.1, 1.1, "rose_red", d=0.8)                                 # carved in the top rail
+    return e
+
+
+def heart_window():
+    e = [box(1, 0.6, 14.6, 15, 1.6, 15.6, "wood_old"), box(1, 14, 14.6, 15, 15, 15.6, "wood_old"),
+         box(1, 1.6, 14.7, 2.1, 14, 15.5, "wood_old"), box(13.9, 1.6, 14.7, 14.9, 14, 15.5, "wood_old"),
+         box(2.1, 2.1, 14.9, 13.9, 13.5, 15.3, "glass"), box(7.7, 2.1, 14.8, 8.3, 13.5, 15.4, "iron"),
+         box(2.1, 7.5, 14.8, 13.9, 8.1, 15.4, "iron")]
+    e += heart_pix(5.1, 5.4, 14.75, 1.5, "rose_deep", d=0.5)
+    e += heart_pix(10.9, 10.5, 14.75, 1.5, "rose_deep", d=0.5)
+    e += [box(4.2, 11.2, 14.75, 5.6, 12.6, 15.25, "blush"), box(10.4, 3.2, 14.75, 11.8, 4.6, 15.25, "blush")]
+    return e
+
+
+def amore_machine():
+    e = [box(2.6, 0, 3.6, 13.4, 12.6, 10.4, "rose_deep"), box(2.2, 12.6, 3.2, 13.8, 13.6, 10.8, "rose_gold"),
+         box(3.4, 3.2, 3.2, 10.6, 10.6, 3.7, "glass")]
+    for row, y in enumerate((4.2, 6.6, 9)):                                             # three rows of candy hearts, on the glass
+        for i, x in enumerate((4.6, 6.9, 9.2)):
+            e += heart_pix(x, y, 2.75, 0.8, ("blush", "rose_red", "cream_pink")[(row + i) % 3], d=0.4)
+    e += [box(11, 4.4, 3.2, 12.8, 9.4, 3.9, "brass"), box(11.5, 7.4, 3.1, 12.3, 8.2, 3.3, "coal"),
+          box(11.4, 5, 3.1, 12.4, 6, 3.3, "gold"), box(3.4, 0.7, 3.3, 9, 2.6, 3.9, "iron_d"),
+          box(4, 1.2, 3.5, 8.4, 2.1, 3.8, "rose_gold"), box(6.8, 10.8, 3.15, 8, 12, 3.5, "rose_red"),
+          box(8, 10.8, 3.15, 9.2, 12, 3.5, "rose_red"), box(7.4, 10, 3.15, 8.6, 11.1, 3.5, "rose_red"),
+          box(2.8, 0, 4, 3.4, 0.4, 10, "iron"), box(12.6, 0, 4, 13.2, 0.4, 10, "iron")]
+    return e
+
+
+def chocolate_heart():
+    """Treat: a bite-sized chocolate heart lying flat, dusted sugar on top."""
+    e = heart_pix(8, 3.6, 6.4, 2.2, "chocolate", d=1.4)
+    e += [box(6.2, 4.9, 6.7, 7.4, 5.1, 7.9, "cream"), box(8.6, 4.9, 7.2, 9.8, 5.1, 8.4, "cream")]
+    return e
+
+
+VALENTINE = {
+    "heart_balloon": heart_balloon, "rose_bell": rose_bell, "love_lock_rail_wall": love_lock_rail,
+    "chocolate_heart": chocolate_heart,
+    "heart_arch": heart_arch, "cupid_statue": cupid_statue, "wishing_well": wishing_well,
+    "swan_lantern": swan_lantern, "valentine_banner_wall": valentine_banner,
+    "heart_lantern": lambda: heart_lantern(True, "floor"), "heart_lantern_b": lambda: heart_lantern(False, "floor"),
+    "heart_lantern_wall": lambda: heart_lantern(True, "wall"), "heart_lantern_wall_b": lambda: heart_lantern(False, "wall"),
+    "heart_lantern_hanging": lambda: heart_lantern(True, "hang"), "heart_lantern_hanging_b": lambda: heart_lantern(False, "hang"),
+    "teddy_bear": lambda: teddy_bear("a"), "teddy_bear_b": lambda: teddy_bear("b"),
+    "candy_heart_jar": lambda: candy_heart_jar(2), "candy_heart_jar_half": lambda: candy_heart_jar(1),
+    "candy_heart_jar_empty": lambda: candy_heart_jar(0), "bouquet_popper": bouquet_popper,
+    "rose_planter": rose_planter, "love_songbird": love_songbird, "sweetheart_topiary": sweetheart_topiary,
+    "love_potion_shelf": love_potion_shelf, "clockwork_heart": clockwork_heart, "lovers_bench": lovers_bench,
+    "heart_window": heart_window, "amore_machine": amore_machine,
+}
+
+
 MODELS = {
     "creature_skull": skull, "creature_skull_wall": skull_wall, "creature_ribcage": ribcage,
     "torn_settlement_banner": banner, "torn_settlement_banner_wall": banner_wall,
@@ -1120,6 +1413,7 @@ MODELS.update(XMAS)
 MODELS.update(NEWYEAR)
 MODELS.update(MORE)
 MODELS.update(BREWERY)
+MODELS.update(VALENTINE)
 
 
 

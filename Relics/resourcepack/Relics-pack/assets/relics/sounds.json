@@ -265,6 +265,20 @@
   ],
   "subtitle": "subtitles.relics.disc.we_wish"
  },
+ "valentine.chirp": {
+  "sounds": [
+   "relics:valentine/chirp_1",
+   "relics:valentine/chirp_2"
+  ],
+  "subtitle": "subtitles.relics.valentine.chirp"
+ },
+ "valentine.wish": {
+  "sounds": [
+   "relics:valentine/wish_1",
+   "relics:valentine/wish_2"
+  ],
+  "subtitle": "subtitles.relics.valentine.wish"
+ },
  "disc.bountiful_barn_ballad": {
   "sounds": [
    {

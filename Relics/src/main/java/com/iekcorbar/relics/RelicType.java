@@ -13,6 +13,8 @@ import java.util.Locale;
  *   <li>"Xmas Town" (Christmas 2026, for the Xmas Town region): a cosy Christmas village with
  *   steampunk and Japanese touches, with working pieces (presents, advent calendar, music box,
  *   snow globe, cookie plate, sleigh to sit in).</li>
+ *   <li>"Valentine's" (14 February): the town in rose and brass - wishing well, heart arch,
+ *   love locks, candy jar and a clockwork heart that keeps beating.</li>
  * </ul>
  * Models: relics:&lt;id&gt; (+ _wall / _ceiling / _hanging variants) from tools/make_pack.py.
  */
@@ -101,6 +103,48 @@ enum RelicType {
     NEW_YEAR_GARLAND(Collection.NEW_YEAR, "New Year Garland", "Gold stars and streamers for the wall.",
             Base.NONE, 1, 0, "new_year_garland", "new_year_garland", null, Effect.TWINKLE, Use.NONE, 1f),
 
+    // ---------------------------------------------------------------- Valentine's
+    HEART_BALLOON(Collection.VALENTINE, "Heart Balloon", "One balloon redder than the sky it floats under. It bobs, but never leaves.",
+            Base.NONE, 1, 0, "heart_balloon", null, null, Effect.HOP, Use.NONE, 1f),
+    ROSE_UNDER_BELL(Collection.VALENTINE, "Rose Under a Bell", "A single rose under brass and glass. Someone is trying very hard.",
+            Base.SOLID, 1, 0, "rose_bell", null, null, Effect.NONE, Use.NONE, 1f),
+    LOVE_LOCK_RAIL(Collection.VALENTINE, "Love Lock Rail", "Clip a padlock on, drop the key in the well, walk on.",
+            Base.NONE, 1, 0, "love_lock_rail_wall", "love_lock_rail_wall", null, Effect.NONE, Use.NONE, 1f),
+    HEART_ARCH(Collection.VALENTINE, "Heart Arch", "Walk through it together and the town counts it official.",
+            Base.NONE, 2, 0, "heart_arch", null, null, Effect.HEART, Use.NONE, 2f),
+    CUPID_STATUE(Collection.VALENTINE, "Cupid Statue", "His marble arrow has never hit anyone. People still dodge.",
+            Base.SOLID, 1, 0, "cupid_statue", null, null, Effect.NONE, Use.NONE, 1.3f),
+    WISHING_WELL(Collection.VALENTINE, "Wishing Well", "Right-click with a gold nugget: one coin, one wish, five seconds of believing.",
+            Base.SOLID, 1, 0, "wishing_well", null, null, Effect.NONE, Use.WISH, 1f),
+    SWAN_LANTERN(Collection.VALENTINE, "Twin Swan Lantern", "Two swans, one lamp. They pair for life - the lamp knows it.",
+            Base.LIGHT, 1, 12, "swan_lantern", null, null, Effect.FLAME, Use.NONE, 1f),
+    VALENTINE_BANNER(Collection.VALENTINE, "Valentine Banner", "Deep rose velvet with a stitched heart. The seamstress sewed it twice.",
+            Base.NONE, 1, 0, "valentine_banner_wall", "valentine_banner_wall", null, Effect.SWAY, Use.NONE, 1f),
+    HEART_LANTERN(Collection.VALENTINE, "Heart Lantern", "A paper lantern with a heart cut in. On the tenth of February the town is all glow.",
+            Base.LIGHT, 1, 13, "heart_lantern", "heart_lantern_wall", "heart_lantern_hanging", Effect.TWINKLE, Use.NONE, 1f),
+    TEDDY_BEAR(Collection.VALENTINE, "Teddy Bear", "Button eyes, stitched smile. Right-click to change his pose - arms up means hug.",
+            Base.NONE, 1, 0, "teddy_bear", null, null, Effect.NONE, Use.POSE, 1f),
+    CANDY_HEART_JAR(Collection.VALENTINE, "Candy Heart Jar", "Take one with a right-click; refill it with Chocolate Hearts.",
+            Base.NONE, 1, 0, "candy_heart_jar", null, null, Effect.NONE, Use.JAR, 1f),
+    BOUQUET_POPPER(Collection.VALENTINE, "Bouquet Popper", "Right-click and step back - it is confetti AND petals.",
+            Base.NONE, 1, 0, "bouquet_popper", null, null, Effect.NONE, Use.CONFETTI, 1f),
+    ROSE_PLANTER(Collection.VALENTINE, "Rose Planter", "A trough of roses for the bench to look at.",
+            Base.NONE, 1, 0, "rose_planter", null, null, Effect.NONE, Use.NONE, 1f),
+    LOVE_SONGBIRD(Collection.VALENTINE, "Love Songbird", "Right-click and it sings. A brass heart goes along with every verse.",
+            Base.NONE, 1, 0, "love_songbird", null, null, Effect.NONE, Use.BIRD, 1f),
+    SWEETHEART_TOPIARY(Collection.VALENTINE, "Sweetheart Topiary", "Years of shearing until the bush holds its shape - a heart holds better.",
+            Base.SOLID, 2, 0, "sweetheart_topiary", null, null, Effect.NONE, Use.NONE, 1.6f),
+    LOVE_POTION_SHELF(Collection.VALENTINE, "Love Potion Shelf", "Three bottles, no labels. The brewery swears they are only fizz.",
+            Base.NONE, 1, 0, "love_potion_shelf", "love_potion_shelf", null, Effect.BUBBLES, Use.NONE, 1f),
+    CLOCKWORK_HEART(Collection.VALENTINE, "Clockwork Heart", "Brass, glass and a steady beat. The inventor kept it for herself.",
+            Base.SOLID, 1, 0, "clockwork_heart", null, null, Effect.PULSE, Use.NONE, 1f),
+    LOVERS_BENCH(Collection.VALENTINE, "Lovers' Bench", "Wide enough for two, warm enough for one. Right-click to sit.",
+            Base.NONE, 1, 0, "lovers_bench", null, null, Effect.NONE, Use.SEAT, 1f),
+    HEART_WINDOW(Collection.VALENTINE, "Heart Window", "Stained glass that only shows its heart when the sun is behind it.",
+            Base.LIGHT, 1, 6, "heart_window", "heart_window", null, Effect.NONE, Use.NONE, 1f),
+    AMORE_MACHINE(Collection.VALENTINE, "Amore Automatron", "Right-click with a gold nugget: two chocolate hearts for one coin. It never makes change.",
+            Base.SOLID, 1, 0, "amore_machine", null, null, Effect.NONE, Use.VEND, 1f),
+
     COUNTDOWN_BOARD(Collection.NEW_YEAR, "New Year Countdown Board", "A big scoreboard that counts down to the next New Year, zone by zone. Sneak + right-click (placer or staff) to change its time zone.",
             Base.NONE, 2, 0, "countdown_board", "countdown_board_wall", null, Effect.NONE, Use.BOARD, 2.7f),
 
@@ -182,7 +226,7 @@ enum RelicType {
 
     enum Collection {
         SHADOW("Shoutlander's Shadow"), XMAS("Xmas Town"), NEW_YEAR("New Year"), EASTER("Easter"), PATRICK("St. Patrick's Day"),
-        CURIO("Curiosities"), HALLOWEEN("Halloween Party");
+        VALENTINE("Valentine's"), CURIO("Curiosities"), HALLOWEEN("Halloween Party");
 
         final String title;
 
@@ -210,10 +254,10 @@ enum RelicType {
     /** SOLID = barrier (you bump into it); LIGHT = invisible light block; NONE = nothing (walk through). */
     enum Base { SOLID, LIGHT, NONE }
 
-    enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, RAINBOW, SWAP, SPARK, SHISHI, DOLL }
+    enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, HEART, RAINBOW, SWAP, SPARK, SHISHI, DOLL }
 
     /** What a right-click does (NONE = show the lore line). POSE = wooden dolls swap their pose model. */
-    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE }
+    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE, WISH, JAR, BIRD, VEND }
 
     final Collection collection;
     final String displayName, lore;

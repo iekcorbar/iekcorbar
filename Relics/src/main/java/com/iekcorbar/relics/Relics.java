@@ -120,6 +120,7 @@ final class Relics implements Listener {
             if ((type == RelicType.GIFT_BOX || type == RelicType.EASTER_EGG || type == RelicType.GIANT_CANDY_CANE) && !variant.isEmpty()) m = variant;
             if (type == RelicType.COOKIE_PLATE) m = count > 3 ? "cookie_plate" : count > 0 ? "cookie_plate_3" : "cookie_plate_0";
             if (type == RelicType.CHAMPAGNE_TOWER) m = count > 6 ? "champagne_tower" : count > 0 ? "champagne_tower_half" : "champagne_tower_empty";
+            if (type == RelicType.CANDY_HEART_JAR) m = count > 4 ? "candy_heart_jar" : count > 0 ? "candy_heart_jar_half" : "candy_heart_jar_empty";
             if (((type.effect == RelicType.Effect.TWINKLE || type.effect == RelicType.Effect.SWAP || type.effect == RelicType.Effect.SHISHI) && twinkle)
                     || (type.use == RelicType.Use.POSE && twinkle)) m += "_b";
             return m;
@@ -320,6 +321,27 @@ final class Relics implements Listener {
         recipe(RelicType.LEPRECHAUN_HAT, 1, Material.GREEN_WOOL, Material.GREEN_WOOL, Material.GOLD_NUGGET, Material.BLACK_DYE);
         recipe(RelicType.CELTIC_HARP, 1, Tag.PLANKS, Tag.PLANKS, Material.STRING, Material.STRING, Material.STRING, Material.GOLD_INGOT);
         recipe(RelicType.GREEN_ALE_KEG, 1, Material.BARREL, Material.GREEN_DYE, Material.IRON_INGOT);
+        // Valentine's
+        recipe(RelicType.HEART_BALLOON, 2, Material.RED_WOOL, Material.STRING);
+        recipe(RelicType.ROSE_UNDER_BELL, 1, Material.GLASS, Material.RED_TULIP, Material.GOLD_NUGGET);
+        recipe(RelicType.LOVE_LOCK_RAIL, 2, Material.IRON_INGOT, Material.IRON_NUGGET, Material.GOLD_NUGGET);
+        recipe(RelicType.HEART_ARCH, 1, Tag.PLANKS, Tag.PLANKS, Material.PINK_PETALS, Material.PINK_PETALS, Material.GOLD_NUGGET);
+        recipe(RelicType.CUPID_STATUE, 1, Material.STONE, Material.STONE, Material.FEATHER, Material.BOW);
+        recipe(RelicType.WISHING_WELL, 1, Material.COBBLESTONE, Material.COBBLESTONE, Tag.PLANKS, Tag.PLANKS);
+        recipe(RelicType.SWAN_LANTERN, 1, Material.WHITE_WOOL, Material.WHITE_WOOL, Material.GLOWSTONE_DUST, Material.IRON_NUGGET);
+        recipe(RelicType.VALENTINE_BANNER, 2, Material.PINK_WOOL, Material.STRING, Material.GOLD_NUGGET);
+        recipe(RelicType.HEART_LANTERN, 2, Material.PAPER, Material.PAPER, Material.PINK_DYE, Material.TORCH);
+        recipe(RelicType.TEDDY_BEAR, 1, Material.BROWN_WOOL, Material.BROWN_WOOL, Material.STRING, Material.RED_WOOL);
+        recipe(RelicType.CANDY_HEART_JAR, 1, Material.GLASS, Material.SUGAR, Material.PINK_DYE, Material.RED_DYE);
+        recipe(RelicType.BOUQUET_POPPER, 1, Material.PAPER, Material.GUNPOWDER, Material.PINK_DYE, Material.PINK_PETALS);
+        recipe(RelicType.ROSE_PLANTER, 1, Tag.PLANKS, Material.DIRT, Material.PINK_PETALS, Material.PINK_PETALS);
+        recipe(RelicType.LOVE_SONGBIRD, 1, Material.GOLD_NUGGET, Material.IRON_INGOT, Material.FEATHER, Material.GLASS_PANE);
+        recipe(RelicType.SWEETHEART_TOPIARY, 1, Material.OAK_LEAVES, Material.OAK_LEAVES, Material.PINK_PETALS, Tag.PLANKS);
+        recipe(RelicType.LOVE_POTION_SHELF, 1, Tag.PLANKS, Material.GLASS_BOTTLE, Material.REDSTONE, Material.PINK_DYE);
+        recipe(RelicType.CLOCKWORK_HEART, 1, Material.GOLD_NUGGET, Material.COPPER_INGOT, Material.REDSTONE, Material.CLOCK);
+        recipe(RelicType.LOVERS_BENCH, 1, Tag.PLANKS, Tag.PLANKS, Tag.PLANKS, Material.IRON_INGOT);
+        recipe(RelicType.HEART_WINDOW, 1, Material.GLASS, Material.GLASS, Material.RED_DYE, Material.PINK_DYE, Material.IRON_NUGGET);
+        recipe(RelicType.AMORE_MACHINE, 1, Material.COPPER_INGOT, Material.IRON_INGOT, Material.GLASS, Material.PINK_DYE, Material.REDSTONE);
         // Curiosities
         recipe(RelicType.BRASS_TELESCOPE, 1, Material.SPYGLASS, Material.GOLD_INGOT, Material.GOLD_INGOT);
         recipe(RelicType.STEAM_GAUGE_PANEL, 1, Material.CLOCK, Material.COPPER_INGOT, Material.COPPER_INGOT, Tag.PLANKS);
@@ -969,6 +991,11 @@ final class Relics implements Listener {
                         r.display.setTransformation(new Transformation(new Vector3f(0, phase == 0 ? 0.15f : 0f, 0), tr.getLeftRotation(), tr.getScale(), tr.getRightRotation()));
                     }
                 }
+                case HEART -> {
+                    if (rnd.nextInt(6) == 0)
+                        r.world.spawnParticle(Particle.HEART, c.clone().add(rnd.nextDouble() - 0.5, 0.9 + rnd.nextDouble() * 0.6, rnd.nextDouble() - 0.5),
+                                1, 0.1, 0.05, 0.1, 0.02);
+                }
                 case RAINBOW -> {
                     if (rnd.nextInt(3) == 0) {
                         Color[] rb = {Color.RED, Color.ORANGE, Color.YELLOW, Color.LIME, Color.BLUE, Color.PURPLE};
@@ -1117,6 +1144,65 @@ final class Relics implements Listener {
                 }
                 r.display.setItemStack(look(r.model()));
                 markDirty(r);
+            }
+            case JAR -> {
+                Treats.Treat held = plugin.treats().typeOf(hand);
+                if (held == Treats.Treat.CHOCOLATE_HEART && r.count < 8) {
+                    int add = Math.min(8 - r.count, hand.getAmount());
+                    if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - add);
+                    r.count += add;
+                } else if (r.count > 0) {
+                    r.count--;
+                    for (ItemStack left : p.getInventory().addItem(plugin.treats().item(Treats.Treat.CHOCOLATE_HEART, 1)).values())
+                        p.getWorld().dropItemNaturally(p.getLocation(), left);
+                    r.world.playSound(r.center(), "minecraft:entity.item.pickup", 0.5f, 1.3f);
+                } else {
+                    p.sendActionBar(Component.text("The jar is empty - refill it with Chocolate Hearts.", NamedTextColor.GRAY));
+                    return;
+                }
+                r.display.setItemStack(look(r.model()));
+                markDirty(r);
+            }
+            case WISH -> {
+                if (plugin.tick < r.busyUntil) return;
+                if (hand == null || hand.getType() != Material.GOLD_NUGGET) {
+                    p.sendActionBar(Component.text("A wish costs one gold nugget.", NamedTextColor.GRAY));
+                    return;
+                }
+                if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+                r.busyUntil = plugin.tick + 60;
+                r.world.playSound(r.center(), "minecraft:entity.generic.splash", 0.8f, 1.1f);
+                r.world.playSound(r.center(), "relics:valentine.wish", 0.7f, 1f);
+                for (int k = 0; k < 4; k++)
+                    r.world.spawnParticle(Particle.HEART, r.center().add(0, 0.6, 0), 1, 0.25, 0.1, 0.25, 0.04);
+                p.sendActionBar(Component.text("Wish cast. The well keeps everything.", NamedTextColor.LIGHT_PURPLE));
+                plugin.adv().grant(p, "wish");
+            }
+            case BIRD -> {
+                if (plugin.tick < r.busyUntil) return;
+                r.busyUntil = plugin.tick + 100;
+                float[] pitch = {1.4f, 1.8f, 1.2f, 2.0f, 1.6f};
+                for (int k = 0; k < pitch.length; k++) {
+                    final int kk = k;
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        r.world.playSound(r.center(), "relics:valentine.chirp", 0.8f, pitch[kk]);
+                        r.world.spawnParticle(Particle.HEART, r.center().add(0, 0.7, 0), 1, 0.15, 0.1, 0.15, 0.02);
+                    }, k * 6L);
+                }
+            }
+            case VEND -> {
+                if (plugin.tick < r.busyUntil) return;
+                if (hand == null || hand.getType() != Material.GOLD_NUGGET) {
+                    p.sendActionBar(Component.text("One gold nugget, two chocolate hearts. No change.", NamedTextColor.GRAY));
+                    return;
+                }
+                r.busyUntil = plugin.tick + 40;
+                if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+                r.world.playSound(r.center(), "relics:gift.open", 0.7f, 1.2f);
+                r.world.spawnParticle(Particle.POOF, r.center().add(0, -0.2, 0.4), 6, 0.1, 0.05, 0.05, 0.01);
+                for (ItemStack left : p.getInventory().addItem(plugin.treats().item(Treats.Treat.CHOCOLATE_HEART, 2)).values())
+                    p.getWorld().dropItemNaturally(p.getLocation(), left);
+                p.sendActionBar(Component.text("CLUNK. Two hearts, no change.", NamedTextColor.LIGHT_PURPLE));
             }
             case LAUNCH -> {
                 if (plugin.tick < r.busyUntil) {

@@ -165,6 +165,8 @@ random:
     - shishi_odoshi
     - maneki_neko
     - blossom_vase
+    - heart_balloon
+    - rose_planter
   rare:
     - creature_skull
     - torn_settlement_banner
@@ -178,6 +180,9 @@ random:
     - wagasa_stand
     - byobu_screen
     - pot_of_gold
+    - teddy_bear
+    - swan_lantern
+    - heart_lantern
   epic:
     - ruin_monolith
     - warding_totem
@@ -191,3 +196,6 @@ random:
     - tesla_coil
     - gramophone
     - brass_telescope
+    - heart_arch
+    - clockwork_heart
+    - amore_machine
