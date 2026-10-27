@@ -354,6 +354,7 @@ final class Relics implements Listener {
         recipe(RelicType.BONSAI, 1, Material.FLOWER_POT, Tag.SAPLINGS);
         recipe(RelicType.BYOBU_SCREEN, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.PAPER, Tag.PLANKS, Tag.PLANKS, Material.BLACK_DYE);
         recipe(RelicType.WAGASA_STAND, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.STICK, Material.STICK, Material.STICK, Material.RED_DYE);
+        recipe(RelicType.PILLAR_BOX, 1, Material.IRON_INGOT, Material.RED_DYE, Material.RED_DYE, Material.COPPER_INGOT, Material.GOLD_NUGGET, Material.REDSTONE);
         // Brewery & wooden helpers (Curiosities) - NOT craftable unless config crafting.<id> says true (shop/event stock)
         recipe(RelicType.SUGI_DAMA, 1, Material.SPRUCE_LEAVES, Material.SPRUCE_LEAVES, Material.HAY_BLOCK, Material.STRING);
         recipe(RelicType.KOJI_CROCK, 1, Material.CLAY_BALL, Material.CLAY_BALL, Material.CLAY_BALL, Material.HAY_BLOCK);
@@ -972,7 +973,9 @@ final class Relics implements Listener {
                     if (r.candles > 0 && rnd.nextInt(4) == 0) r.world.spawnParticle(Particle.SMALL_FLAME, c.clone().add(0, -0.05, 0), 1, 0.25, 0, 0.25, 0);
                 }
                 case STEAM -> {
-                    if (rnd.nextInt(20) == 0) r.world.spawnParticle(Particle.CLOUD, c.clone().add(0, 0.3, 0), 1, 0.05, 0.05, 0.05, 0.01);
+                    // the Pillar Box leaks from its side vent: puff at vent height, not block centre
+                    Location puff = r.type == RelicType.PILLAR_BOX ? front.clone().add(0, 1.3, 0) : c.clone().add(0, 0.3, 0);
+                    if (rnd.nextInt(20) == 0) r.world.spawnParticle(Particle.CLOUD, puff, 1, 0.05, 0.05, 0.05, 0.01);
                 }
                 case HEARTH -> {
                     if (rnd.nextInt(2) == 0) r.world.spawnParticle(Particle.FLAME, front.clone().add(0, -0.25, 0), 1, 0.15, 0.05, 0.05, 0.005);

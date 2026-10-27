@@ -856,11 +856,13 @@ release-bundels, niet in de code. (4) Het verkoop-model zelf NOOIT noemen op de 
 in de manual of in game-teksten: publieke pagina's beschrijven alleen wat iets dóet, nooit dat iets
 gratis/betaald is of dat addons "premium extra's" zijn. Ook geen zinnen als "losse addon" die de
 gedachte losweken - gewoon "Steamworks Additions toegevoegd: klok, reling, rooster".
-(5) Gebruikerswish 26-10 nacht: een BRIEVENBUS met echte post tussen spelers - "voor ons wel, in
-productie niet". Publicatie-richting: de publieke addon-levert alleen de decoratieve bus (open/dicht),
-het mail-systeem komt in onze interne variants (config-gate, NOT ON in de publieke config.yml en NOOIT
-beschreven op site/wiki/manual). Als de bus eenmaal bestaat: mail-data in plugins/SteamworksAdditions/,
-ontvangst op PlayerJoinEvent, GUI-boek bij rechtsklik.
+(5) Gebruikerswish 26-10 nacht: een BRIEVENBUS met echte post tussen spelers. UPDATE 27-10
+middag, eigenaar BESLIST: er komt GEEN mailsysteem, ook voor onszelf niet. De wens is
+ingevuld als zuiver decoratief Relic: de "Pillar Box" (Curiosities) - een Engse rode
+zuilbrievenbus in steam-stijl (klokwerk drukmeter, zacht stoompend zijventiel), zonder
+elke functionaliteit. Het eerdere plan (publieke decor-bus + interne mail-variant met
+config-gate, mail-data in plugins/SteamworksAdditions/) is van tafel; de addon levert dus
+ook geen bus.
 
 ### Staff-drankjes gepromoveerd naar de generator + dode website-seed verwijderd (27-10 middag)
 
@@ -952,3 +954,25 @@ in deze sessie gebruikt) niet op jar-sha1; (b) "schone herbouw van de Power-jar"
 niet nodig als security-actie (0.1.1 is wél nuttig: de give-lookup); (c) overweeg op
 termijn de EliteMobs/Valhalla-familie te vervangen of te weren als dit blij-
 vend gedoe geeft - voorlopig: accepteren, het raakt onze functie niet.
+
+### Besluiten: /swpower-hernoeming + de Pillar Box in plaats van het mailsysteem (27-10 middag)
+
+Gebruiker besloot (terwijl hij in het tuincentrum was) twee losse draden: (1) geen
+overlappende commandonamen - SteamworksPower 0.1.1 -> **0.1.2**: primary commando
+`/power` -> **`/swpower`** (aliassen `/pwr`, `/swp`; plugin.yml, `getCommand` en de
+wiki-docs/seed aangepast - `/power` blijft van ValhallaMMO, dat lost de crashes op).
+(2) De brievenbus-wens wordt **geen** mailsysteem, ook intern niet: gewoon een
+decoratief Relic. Nieuw: **PILLAR_BOX** (Curiosities, "Pillar Box") - een Britse rode
+zuilbrievenbus (engine-rode cilinder, zwarte sokkel, gouden banden, koepel met finial,
+brass briefsleuf + collectiedeurtje) met steampunk-gadgets: drukmeter en koperen
+zijklep; STEAM-effect speciaal voor hem op ventiel-hoogte (front + 1.3 blok, de
+gewone STEAM-puffers blijven op blokcentrum). Craftbaar (IJZER/RODE_VERF x2/KOPER/
+GOUD-KLOMP/REDSTONE), opnam in de random-pool (zeldzaam). Modellen: `pillar_box()` + de
+`chocolate_heart`-treatmodel die eerder nog ONTBRAK (de treat had anders een
+onbestaand item-model - fix van diezelfde slag als de 26.2-defvalkuil). Relics
+0.4.0 -> **0.4.1** (nooit live geweest, dus in-place opgevolgd; sha1 c03a7c33),
+pack BUILD 7 -> **8** (5919 bestanden, audit 0/0, sha1 6f0a4f0d). Preview3d-render
+gecheckt (voorzijde via tijdelijke 90°-draai) en fraai leesbaar. CLAUDE.md:
+verkoopmodel-paragraaf (5) herschreven - mailsysteem-van-tafel, publieke addon
+levert dus ook geen bus. Alle jarren + pack staan in deploy/, TE-DEPLOYEN is de
+eerlijke staat van zaken.

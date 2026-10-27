@@ -197,6 +197,8 @@ enum RelicType {
             Base.NONE, 1, 0, "byobu_screen", null, null, Effect.NONE, Use.NONE, 1f),
     WAGASA_STAND(Collection.CURIO, "Wagasa Stand", "Paper umbrellas, ready for the rain.",
             Base.NONE, 1, 0, "wagasa_stand", null, null, Effect.NONE, Use.NONE, 1f),
+    PILLAR_BOX(Collection.CURIO, "Pillar Box", "A British pillar box in engine red, re-riveted in brass. Nobody has seen a postman - yet it is always empty.",
+            Base.SOLID, 2, 0, "pillar_box", null, null, Effect.STEAM, Use.NONE, 1f),
 
     // ---------------------------------------------------------------- Brewery & wooden helpers (0.3.9, shop/event stock: NOT craftable by default)
     SUGI_DAMA(Collection.CURIO, "Sugidama", "The cedar ball of a sakagura: hung up, the new brew is ready.",

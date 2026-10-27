@@ -1383,6 +1383,35 @@ def chocolate_heart():
     return e
 
 
+def pillar_box():
+    """A British pillar box in engine red, re-riveted by the Guild: black plinth, gold banding,
+    dome with finial, brass slit + collection door, and a steam pressure gauge with side vent."""
+    e = [box(2.8, 0, 2.8, 13.2, 1.2, 13.2, "coal"), box(3.4, 1.2, 3.4, 12.6, 1.8, 12.6, "coal_l"),
+         box(4, 1.8, 4, 12, 21.5, 12, "xred"),
+         box(4, 1.8, 4, 5, 21.5, 5, "xred_d"), box(11, 1.8, 4, 12, 21.5, 5, "xred_d"),       # round shading
+         box(3.9, 2.2, 3.9, 12.1, 2.6, 12.1, "gold"), box(3.9, 20.9, 3.9, 12.1, 21.3, 12.1, "gold"),
+         box(3.4, 21.5, 3.4, 12.6, 22.4, 12.6, "xred_d"),
+         box(4.6, 22.4, 4.6, 11.4, 24.6, 11.4, "xred"), box(6, 24.6, 6, 10, 25.8, 10, "xred"),
+         box(7, 25.8, 7, 9, 26.6, 9, "xred_d"),
+         box(6.8, 26.6, 6.8, 9.2, 27.4, 9.2, "brass"), box(7.1, 27.4, 7.1, 8.9, 28.8, 8.9, "brass"),
+         box(7.5, 28.8, 7.5, 8.5, 29.6, 8.5, "gold")]
+    e += [box(5.2, 16.6, 3.8, 10.8, 19.4, 4.2, "brass"), box(6, 17.8, 3.7, 10, 18.5, 3.95, "char"),
+          box(5.9, 17.4, 3.65, 10.1, 17.9, 4.25, "brass_d")]                                # letter slit
+    e += [box(6.6, 14, 3.85, 9.4, 15.4, 4.15, "char"), box(7, 14.3, 3.75, 7.6, 15.1, 4.25, "gold"),
+          box(8.4, 14.3, 3.75, 9, 15.1, 4.25, "gold")]                                      # cypher plate
+    e += [box(5.6, 6, 3.8, 10.4, 12.6, 4.2, "xred_d"), box(5.5, 7, 3.75, 5.9, 8.2, 4.3, "iron"),
+          box(5.5, 10.4, 3.75, 5.9, 11.6, 4.3, "iron"), box(9.7, 8.8, 3.7, 10.3, 9.9, 4.3, "gold")]  # door + hinges + lock
+    e += [box(10.9, 12.9, 3.7, 12.1, 14.1, 4.3, "brass"), box(11.1, 13.1, 3.65, 11.9, 13.9, 4.35, "dial"),
+          box(11.4, 13.3, 3.6, 11.6, 13.7, 4.4, "coal")]                                    # pressure gauge
+    e += [box(2.6, 19.6, 7, 4.2, 20.8, 9, "copper"), box(2.2, 20.8, 6.7, 3.4, 21.4, 9.3, "brass"),
+          box(12, 2.4, 4.5, 12.6, 3, 5.1, "brass"), box(12, 2.4, 10.9, 12.6, 3, 11.5, "brass")]  # rivets
+    return e
+
+
+# Relics.java special-cases PILLAR_BOX in the STEAM effect: the cloud puffs escape at the vent's
+# height (front of the block, one block up) instead of the block centre.
+
+
 VALENTINE = {
     "heart_balloon": heart_balloon, "rose_bell": rose_bell, "love_lock_rail_wall": love_lock_rail,
     "chocolate_heart": chocolate_heart,
@@ -1414,6 +1443,7 @@ MODELS.update(NEWYEAR)
 MODELS.update(MORE)
 MODELS.update(BREWERY)
 MODELS.update(VALENTINE)
+MODELS["pillar_box"] = pillar_box  # Curiosities (year-round): the steam-pillar post box
 
 
 
