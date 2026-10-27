@@ -805,13 +805,24 @@ aanwezigheid van de eigen jar.
 2. **Relics draait 0.3.8** - de 0.3.10 uit deploy is nooit overgezet.
 3. **SteamworksPower laadt NOOIT** (log 09:43:13: NoClassDefFoundError CustomPart): de
    werkende Steamworks-0.3.19-jar (563.552 B, sha1 f0bb8b55) komt met GEEN enkele lokale
-   build overeen en mist de api-package. De the "oude 0.3.19" (21:56) vs de api-build
+   build overeen en mist de api-package. De "oude 0.3.19" (21:56) vs de api-build
    (23:19) deelden één versienummer - precies de bouw-artefactenregel die dit verbied.
    Herstel: pom 0.3.19->**0.3.20**, mvn groen, jar verifyd (4 api-classes, sha1 586a3687)
-   -> deploy/Steamworks-0.3.20.jar + TE-DEPLOYEN-regel [J] (jar-wissel + herstart =
-   wacht op gebruikers-approval; agent herstart/verwijdert níets zelf).
+    -> deploy/. Gebruiker goedgekeurd: beide jars via scp+docker cp geplaatst (sha1's
+    aan beide kanten gelijk), de verkeerde 0.3.19 + Relics-0.3.8 van de server af, en de
+    herstart (11:07) bevestigt het: Steamworks v0.3.20 enabled, Relics v0.3.10 enabled en
+    **SteamworksPower v0.1.0 enabled** - de addon draait nu eindelijk echt.
 Ook geregistreerd uit de log: "Minecraft rejected advancement steamworks/sprocket"
 (onschuldig want Zukan-catalogus draait door, maar volgt bij eerstvolgende sw-klus).
+En twee bij-effect-vondsten die de restart-log blootlegde (agent-reparaties, gemeld op
+deploy-lijst punt 5): SiteSync/config.yml had 3-spaties indent onder `database:` ->
+"Cannot load" bij élke start sinds 26-10, DB-sync draaide op defaults; Sakagura/
+recipes.yml had een half kapot staff-recept "bloody _mary" -> heel bestand onleesbaar.
+Beide syntax-fouten minimaal hersteld (sha1-verified teruggeplaatst, wachtwoord/wp's
+ intact; parse-getest met PyYAML; 38 recepten laden nu). De twee staff-drankjes
+(bloody_mary, zombiezestzinger) bestaan NIET in tools/make_recipes.py ->promote-besluit
+aan gebruiker. Actie te goeder ure: nog ONE korte herstart (SiteSync-config) of
+/brew reload (Sakagura).
 
 Besluit productievorm (26-10, gebruiker): FMM-modellen + pack worden NU NOG NIET in de jar gebundeld.
 Huidige aflever-lijn blijft: assets apart via deploy/ (fmm-steamworks-map + pack in de mixer).
