@@ -4524,6 +4524,45 @@ export const db = {
     }
   },
 
+  // 2026-10-27 (Staff Panel > Player Data): one player's combat record, read
+  // straight from the plugin DB's own tables — EliteMobs' PlayerData (kills,
+  // deaths, score, quests, dungeons, elite coins, per-weapon SkillXP) plus
+  // MMOCore's mmocore_playerdata (level, XP, class, guild, unspent points).
+  // The elite row is looked up by DisplayName first and by whitelisted_players'
+  // uuid second, so a name change or a non-whitelisted account still resolves
+  // where it can. uuid formats differ between the tables (dashes or not) — the
+  // mmocore lookup strips them on both sides. Read-only like every other
+  // pluginDataQuery use; staff-panel data only, never exposed publicly.
+  getCombatProfile: async (username) => {
+    const name = String(username || '').trim();
+    if (!/^[A-Za-z0-9_]{2,16}$/.test(name)) return { name, found: false, error: 'invalid-name' };
+    try {
+      const [eliteRows, wlRows] = await Promise.all([
+        pluginDataQuery('SELECT PlayerUUID AS uuid, DisplayName AS name, Kills AS kills, Deaths AS deaths, Score AS score, QuestsCompleted AS quests, DungeonsCompleted AS dungeons, HighestLevelKilled AS highestMobLevel, COALESCE(CurrencyCents / 100, CurrencyV2) AS coins, SkillXP_ARMOR AS armor, SkillXP_SWORDS AS swords, SkillXP_AXES AS axes, SkillXP_BOWS AS bows, SkillXP_CROSSBOWS AS crossbows, SkillXP_TRIDENTS AS tridents, SkillXP_HOES AS hoes, SkillXP_MACES AS maces, SkillXP_SPEARS AS spears, SkillXP_STAVES AS staves, SkillXP_WANDS AS wands FROM PlayerData WHERE LOWER(DisplayName) = LOWER(?) LIMIT 1', [name]),
+        pluginDataQuery('SELECT uuid FROM whitelisted_players WHERE LOWER(username) = LOWER(?) LIMIT 1', [name])
+      ]);
+      let elite = eliteRows && eliteRows.length ? eliteRows[0] : null;
+      let resolvedName = elite ? (elite.name || name) : name;
+      const uuid = (elite && elite.uuid) || (wlRows && wlRows.length ? wlRows[0].uuid : null);
+      let rpg = null;
+      if (uuid) {
+        const stripped = String(uuid).replace(/-/g, '');
+        const rpgRows = await pluginDataQuery("SELECT level, experience AS xp, class, guild, class_points AS classPoints, skill_points AS skillPoints, attribute_points AS attributePoints FROM mmocore_playerdata WHERE REPLACE(uuid, '-', '') = ? LIMIT 1", [stripped]);
+        rpg = rpgRows && rpgRows.length ? rpgRows[0] : null;
+      }
+      if (!elite && uuid) {
+        // name unknown to EliteMobs' DisplayName but the uuid was on the whitelist —
+        // one follow-up by uuid so renamed accounts still surface
+        const byUuid = await pluginDataQuery("SELECT DisplayName AS name, Kills AS kills, Deaths AS deaths, Score AS score, QuestsCompleted AS quests, DungeonsCompleted AS dungeons, HighestLevelKilled AS highestMobLevel, COALESCE(CurrencyCents / 100, CurrencyV2) AS coins, SkillXP_ARMOR AS armor, SkillXP_SWORDS AS swords, SkillXP_AXES AS axes, SkillXP_BOWS AS bows, SkillXP_CROSSBOWS AS crossbows, SkillXP_TRIDENTS AS tridents, SkillXP_HOES AS hoes, SkillXP_MACES AS maces, SkillXP_SPEARS AS spears, SkillXP_STAVES AS staves, SkillXP_WANDS AS wands FROM PlayerData WHERE REPLACE(PlayerUUID, '-', '') = ? LIMIT 1", [String(uuid).replace(/-/g, '')]);
+        if (byUuid && byUuid.length) { elite = byUuid[0]; resolvedName = elite.name || name; }
+      }
+      return { name: resolvedName, found: !!(elite || rpg), elite, rpg };
+    } catch (err) {
+      console.error('Failed to read combat profile from plugin DB:', err);
+      return { name, found: false, error: 'db-unreachable' };
+    }
+  },
+
   // Whitelisted IGNs with no matching website account — e.g. someone
   // whitelisted mid-registration who never finished, or added manually by
   // staff outside the site's own registration flow. Used to be a single

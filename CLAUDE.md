@@ -1114,3 +1114,30 @@ opnieuw gebouwd (bbea9f14 - bevat ook de dranknamen-in-de-kaartkop, de nieuwe
 grondstof-icoontjes en de verwijderde dubbel-knop "Sakagura drinks ->"). Jar + zip
 staan op de TE-DEPLOYEN-lijst (punt 8 resp. bijgewerkt punt 6); de server is deze
 keer expres niet aangekeken - afleveren doet de eigenaar morgen.
+
+### Staff Panel > Player Data - EliteMobs/MMOCore-lookup in de plugin-DB (27-10 avond)
+
+Gebruikerswens: een staff-only sectie op de website met databasegegevens - specifiek
+EliteMobs-stats (level, XP, etc.) - pas zichtbaar NA zoeken op spelernaam.
+- Schema eerst geprobeerd via de site-zelfde pluginDataQuery (laptop -> sql1.revivenode.com
+  = connect-timeout; de DB laat alleen de server door). Daarom via SSH op de VPS met de
+  mysql-cli uit de SiteSync-config: tabellenlijst + information_schema-kolommen opgevraagd
+  (alleen metadata, geen rijen, geen spelersdata, geen wachtwoorden geprint). Vond:
+  EliteMobs = PlayerData (Kills/Deaths/Score/QuestsCompleted/DungeonsCompleted/
+  HighestLevelKilled/CurrencyCents|V2 + elf SkillXP_-kolommen; let op de typo STAVES)
+  en MMOCore = mmocore_playerdata (level, experience, class, guild, class/skill/
+  attribute_points).
+- src/lib/db.js: getCombatProfile(username) - zoekt EliteMobs op DisplayName,
+  whitelisted_players op uuid als vangnet (naamswijzigingen), uuid-streepjes
+  genormaliseerd met REPLACE(uuid,'-','') omdat de tabellen verschilden formaat.
+  Foutafhandeling: ongeldige naam / DB onbereikbaar = nette json, geen stack.
+- src/app/api/admin/player-data/route.js: GET ?name=, requirePermission('player_data')
+  - server-side afgeschermd, niet alleen UI-verbergen. Naam moet 2-16 [A-Za-z0-9_] zijn.
+- staff-tabs.js: tab 'player_data' (Administration) - Role Manager toont hem automatisch
+  als vinkje; admin heeft alle tabs, andere rollen moeten 'm krijgen. moderation/page.js:
+  icoon Swords, hub 'Server' uitgebreid, zoekformulier + twee kaartjes (MMOCore level/XP/
+  class/points, EliteMobs gevechtsstaat + skill-XP-rooster) - staat allemaal al leeg tot
+  er gezocht wordt, exact zoals gevraagd.
+- Groen: next build; zip herbouwd (sha1 ebab7f60, punt 6 van de lijst - morgen samen met
+  de 0.3.23-jar). Test-na-live: tab openen -> zoeken -> stats; role zonder vinkje krijgt
+  403.

@@ -65,6 +65,7 @@ import {
   Download,
   BarChart3,
   ScrollText,
+  Swords,
 } from 'lucide-react';
 import { renderMarkdown } from '@/lib/markdown';
 import AnalyticsTab from '@/components/AnalyticsTab';
@@ -83,7 +84,7 @@ import { bugCategoryLabel, BUG_STATUS_LABELS, BUG_CATEGORIES, isBugReportArchive
 // neither an icon nor a color means anything).
 const TAB_ICONS = {
   moderation: UserX, reports: Flag, bugs: Bug, events: Calendar, wiki: BookOpen,
-  updates: RefreshCw, news: Newspaper, polls: ThumbsUp, story: ScrollText, applications: ShieldCheck, access: Shield, analytics: BarChart3, console: Terminal, settings: Settings
+  updates: RefreshCw, news: Newspaper, polls: ThumbsUp, story: ScrollText, applications: ShieldCheck, access: Shield, analytics: BarChart3, console: Terminal, settings: Settings, player_data: Swords
 };
 const CRIMSON_TABS = new Set(['reports', 'bugs', 'access', 'console']);
 
@@ -95,7 +96,7 @@ const NAV_HUBS = [
   { key: 'hub-moderation', label: 'Moderation', Icon: Shield, description: 'Sanctions and staff notes, player reports, and the server ban list / whitelist.', tabs: ['moderation', 'reports', 'access'] },
   { key: 'hub-community', label: 'Community', Icon: Users, description: 'Bug reports, staff applications, events and polls.', tabs: ['bugs', 'applications', 'events', 'polls'] },
   { key: 'hub-content', label: 'Content', Icon: BookOpen, description: 'Wiki, updates, news and the Story Room.', tabs: ['wiki', 'updates', 'news', 'story'] },
-  { key: 'hub-server', label: 'Server', Icon: Terminal, description: 'RCON console and website/app analytics.', tabs: ['console', 'analytics'] }
+  { key: 'hub-server', label: 'Server', Icon: Terminal, description: 'RCON console, website/app analytics, and the EliteMobs/MMOCore player database lookup.', tabs: ['console', 'analytics', 'player_data'] }
 ];
 
 const SETTINGS_TAB_ICONS = {
@@ -324,6 +325,12 @@ function ModerationContent() {
   const [duplicateTarget, setDuplicateTarget] = useState(null); // { id, subject } or null
   const [duplicateOfId, setDuplicateOfId] = useState('');
   const [accessList, setAccessList] = useState({ banned: [], whitelistedUnregistered: [], whitelistedTotal: 0 });
+  // Player Data tab (staff-only EliteMobs/MMOCore lookup): deliberately starts
+  // empty — no stats are fetched, or even renderable, until staff searches a name.
+  const [pdInput, setPdInput] = useState('');
+  const [pdResult, setPdResult] = useState(null);
+  const [pdLoading, setPdLoading] = useState(false);
+  const [pdError, setPdError] = useState('');
   const [settingsJavaVersion, setSettingsJavaVersion] = useState('');
   const [settingsMapUrl, setSettingsMapUrl] = useState('');
   const [settingsServerAddress, setSettingsServerAddress] = useState('');
@@ -1303,6 +1310,20 @@ function ModerationContent() {
       const data = await res.json();
       if (res.ok) setAccessList({ banned: data.banned || [], whitelistedUnregistered: data.whitelistedUnregistered || [], whitelistedTotal: data.whitelistedTotal || 0 });
     } catch (err) { console.error("Failed to load access list", err); }
+  }
+
+  async function fetchPlayerData(e) {
+    e.preventDefault();
+    const name = pdInput.trim();
+    if (!/^[A-Za-z0-9_]{2,16}$/.test(name)) { setPdError('Enter a valid Minecraft username (2-16 letters, digits or underscore).'); setPdResult(null); return; }
+    setPdLoading(true); setPdError(''); setPdResult(null);
+    try {
+      const res = await fetch('/api/admin/player-data?name=' + encodeURIComponent(name));
+      const data = await res.json();
+      if (!res.ok) { setPdError(data.error || 'Lookup failed.'); }
+      else setPdResult(data);
+    } catch (err) { console.error('Player data lookup failed', err); setPdError('Could not reach the site server.'); }
+    finally { setPdLoading(false); }
   }
 
   async function fetchConsoleLog() {
@@ -5246,6 +5267,127 @@ function ModerationContent() {
           </div>
 
           {consoleError && <p className="text-xs text-rose-400">{consoleError}</p>}
+        </div>
+      )}
+
+      {/* ======= PLAYER DATA TAB ======= */}
+      {effectiveTab === 'player_data' && (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between border-b border-sp-bronze/25 pb-3">
+            <h3 className="font-serif text-lg text-sp-gold uppercase tracking-wide flex items-center gap-2"><Swords className="w-5 h-5 text-sp-copper" /> Player Data</h3>
+          </div>
+
+          <div className="flex items-start gap-2.5 bg-amber-950/30 border border-amber-700/30 rounded-lg p-3">
+            <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] text-amber-300/80 leading-relaxed">
+              Live plugin-database lookup (EliteMobs combat record + MMOCore progression) — staff-only, read-only, and never shown on any public page. Nothing loads until you search a username.
+            </p>
+          </div>
+
+          <form onSubmit={fetchPlayerData} className="flex gap-2 max-w-md">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-warm/40" />
+              <input
+                value={pdInput}
+                onChange={e => setPdInput(e.target.value)}
+                placeholder="Minecraft username…"
+                maxLength={16}
+                className="w-full bg-neutral-950 border border-sp-bronze/40 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder:text-text-warm/30 focus:border-sp-gold focus:outline-none"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={pdLoading || !pdInput.trim()}
+              className="px-4 py-2 bg-sp-gold/15 hover:bg-sp-gold/25 border border-sp-gold/50 rounded-lg text-[11px] uppercase font-bold text-sp-gold transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {pdLoading ? 'Searching…' : 'Search'}
+            </button>
+          </form>
+
+          {pdError && <p className="text-xs text-rose-400">{pdError}</p>}
+
+          {pdResult && !pdResult.found && !pdError && (
+            <div className="text-center py-8 text-text-warm/30 border border-dashed border-sp-bronze/30 rounded-xl text-xs">
+              No EliteMobs or MMOCore record for “{pdResult.name}” — the name may be misspelled, renamed, or that player has never fought.
+            </div>
+          )}
+
+          {pdResult && pdResult.found && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <PlayerAvatar mcUsername={pdResult.name} size={32} className="rounded-lg" />
+                <div>
+                  <p className="font-serif text-lg text-white font-bold leading-tight">{pdResult.name}</p>
+                  <p className="text-[10px] text-text-warm/40 uppercase tracking-wider">read just now from the plugin database</p>
+                </div>
+              </div>
+
+              {pdResult.rpg && (
+                <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-3">
+                  <h4 className="text-xs font-bold text-sp-gold uppercase tracking-wide flex items-center gap-2"><Swords className="w-3.5 h-3.5" /> MMOCore progression</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    {[
+                      ['Level', pdResult.rpg.level],
+                      ['Experience', Math.round(Number(pdResult.rpg.xp || 0)).toLocaleString()],
+                      ['Class', pdResult.rpg.class || '—'],
+                      ['Guild', pdResult.rpg.guild || '—'],
+                    ].map(([k, v]) => (
+                      <div key={k} className="bg-neutral-950/40 border border-sp-bronze/20 rounded-lg py-3 px-2">
+                        <p className="text-lg font-bold text-sp-gold">{v}</p>
+                        <p className="text-[9px] uppercase tracking-wider text-text-warm/40">{k}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2 text-[10px] text-text-warm/60">
+                    <span className="px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20">Class points: {pdResult.rpg.classPoints ?? 0}</span>
+                    <span className="px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20">Skill points: {pdResult.rpg.skillPoints ?? 0}</span>
+                    <span className="px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20">Attribute points: {pdResult.rpg.attributePoints ?? 0}</span>
+                  </div>
+                </div>
+              )}
+
+              {pdResult.elite && (
+                <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-3">
+                  <h4 className="text-xs font-bold text-rose-300 uppercase tracking-wide flex items-center gap-2"><Flag className="w-3.5 h-3.5 text-crimson" /> EliteMobs combat record</h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                    {[
+                      ['Kills', Number(pdResult.elite.kills || 0).toLocaleString()],
+                      ['Deaths', Number(pdResult.elite.deaths || 0).toLocaleString()],
+                      ['Score', Number(pdResult.elite.score || 0).toLocaleString()],
+                      ['Highest mob', pdResult.elite.highestMobLevel ?? 0],
+                      ['Quests', pdResult.elite.quests ?? 0],
+                      ['Dungeons', pdResult.elite.dungeons ?? 0],
+                      ['Elite coins', Number(pdResult.elite.coins || 0).toLocaleString(undefined, { maximumFractionDigits: 2 })],
+                    ].map(([k, v]) => (
+                      <div key={k} className="bg-neutral-950/40 border border-sp-bronze/20 rounded-lg py-3 px-2">
+                        <p className="text-lg font-bold text-rose-200">{v}</p>
+                        <p className="text-[9px] uppercase tracking-wider text-text-warm/40">{k}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-text-warm/40 mb-1.5">Weapon &amp; skill XP</p>
+                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+                      {[['armor', 'Armor'], ['swords', 'Swords'], ['axes', 'Axes'], ['bows', 'Bows'], ['crossbows', 'Crossbows'], ['tridents', 'Tridents'], ['hoes', 'Farming'], ['maces', 'Maces'], ['spears', 'Spears'], ['staves', 'Staves'], ['wands', 'Wands']].map(([k, label]) => (
+                        <div key={k} className="bg-neutral-950/40 border border-sp-bronze/20 rounded px-2 py-1.5 text-center">
+                          <p className="text-[11px] font-bold text-white">{Number(pdResult.elite[k] || 0).toLocaleString()}</p>
+                          <p className="text-[8px] uppercase tracking-wide text-text-warm/40">{label}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {(!pdResult.rpg || !pdResult.elite) && (
+                <p className="text-[11px] text-text-warm/40">
+                  {pdResult.rpg && !pdResult.elite
+                    ? 'MMOCore progression found, but no EliteMobs combat row yet — this player has never fought an elite mob.'
+                    : 'EliteMobs combat record found, but no MMOCore progression row — the RPG plugin has not saved this player yet.'}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
 
