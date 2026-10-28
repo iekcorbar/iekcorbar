@@ -69,6 +69,18 @@ function migrate(d) {
     created INTEGER NOT NULL
   );
   CREATE INDEX IF NOT EXISTS ix_com_node ON comments(node);
+  -- Vertaalde varianten van een handleiding, per taal één rij. Bewust een losse
+  -- tabel: de pages-tabel blijft de originele tekst (de bron van waarheid), een
+  -- vertaling is afgeleid en mag opnieuw gemaakt worden.
+  -- (Geen backticks in dit SQL-blok: dat sluit de JS-template-literal.)
+  CREATE TABLE IF NOT EXISTS vertalingen(
+    node INTEGER NOT NULL,
+    lang TEXT NOT NULL,
+    html TEXT NOT NULL,
+    who INTEGER,
+    updated INTEGER NOT NULL,
+    PRIMARY KEY(node, lang)
+  );
   CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT);
   `);
   // Twee kolommen die pas later bedacht zijn: bestaande bakken (de VPS draait er
@@ -168,6 +180,7 @@ export function deleteNodeTree(id) {
   for (const c of d.prepare('SELECT id FROM nodes WHERE parent = ?').all(id)) deleteNodeTree(c.id);
   d.prepare('DELETE FROM comments WHERE node = ?').run(id);
   d.prepare('DELETE FROM pages WHERE node = ?').run(id);
+  d.prepare('DELETE FROM vertalingen WHERE node = ?').run(id);
   d.prepare('DELETE FROM versions WHERE node = ?').run(id);
   d.prepare('DELETE FROM nodes WHERE id = ?').run(id);
 }
