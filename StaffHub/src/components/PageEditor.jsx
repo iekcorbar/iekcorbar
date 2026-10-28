@@ -8,10 +8,12 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { useEffect, useRef, useState } from 'react';
 import { Bold, Italic, Strikethrough, Heading1, Heading2, Heading3, List, ListOrdered, Quote, Code, Undo, Redo, Link2, ImagePlus, Save } from 'lucide-react';
+import { useLang } from '@/lib/i18n';
 
 const BTN = 'p-1.5 rounded hover:bg-white/10 text-parch/70';
 
 export default function PageEditor({ node, onRenamed }) {
+  const { t, locale } = useLang();
   const [dirty, setDirty] = useState(false);
   const [savedAt, setSavedAt] = useState(null);
   const [err, setErr] = useState('');
@@ -40,7 +42,7 @@ export default function PageEditor({ node, onRenamed }) {
       await fetch('/api/page/' + node.id, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ html: editor.getHTML() }) });
       setDirty(false); setSavedAt(new Date()); setErr('');
       onRenamed?.();
-    } catch (e) { setErr('Opslaan mislukt: ' + e.message); }
+    } catch (e) { setErr(t('ed.err_save') + ': ' + e.message); }
   }
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function PageEditor({ node, onRenamed }) {
 
   function addLink() {
     const prev = editor.getAttributes('link').href;
-    const url = window.prompt('Link', prev || 'https://');
+    const url = window.prompt(t('ed.link'), prev || 'https://');
     if (url === null) return;
     if (url === '') { editor.chain().focus().extendMarkRange('link').unsetLink().run(); return; }
     editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
@@ -74,7 +76,7 @@ export default function PageEditor({ node, onRenamed }) {
       <div className="px-3 pt-3 flex items-center gap-2">
         <h3 className="text-sm font-bold text-gold truncate flex-1">{node.name}</h3>
         <button onClick={save} className={`flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold ${dirty ? 'bg-gold/90 text-ink' : 'bg-white/5 text-parch/50 border border-bronze/30'}`}>
-          <Save className="size-3.5" /> {dirty ? 'opslaan' : 'opgeslagen'}
+          <Save className="size-3.5" /> {dirty ? t('ed.save') : t('ed.saved')}
         </button>
       </div>
       <div className="px-3 pt-2 flex flex-wrap gap-0.5 border-b border-bronze/20">
@@ -102,7 +104,7 @@ export default function PageEditor({ node, onRenamed }) {
       <div className="flex-1 overflow-auto px-3 py-2">
         <EditorContent editor={editor} className="prose-hub min-h-full" />
       </div>
-      <p className="text-[9px] text-parch/30 px-3 pb-2">{savedAt ? 'laatst opgeslagen ' + savedAt.toLocaleTimeString('nl-NL') : 'bewerken… (Ctrl+S)'} · Ctrl+S werkt ook</p>
+      <p className="text-[9px] text-parch/30 px-3 pb-2">{savedAt ? t('ed.foot_saved', { time: savedAt.toLocaleTimeString(locale) }) : t('ed.foot_edit')}{t('ed.foot_hint')}</p>
     </div>
   );
 }
