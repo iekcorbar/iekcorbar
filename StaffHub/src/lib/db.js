@@ -82,6 +82,27 @@ function migrate(d) {
     PRIMARY KEY(node, lang)
   );
   CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT);
+  -- Inlogbegrenzing: vijf foute wachtwoorden per account binnen een kwartier
+  -- geeft een tijdelijke slot. In de bak, want een containerherstart mag een
+  -- lopende blokkade niet wegtoveren.
+  CREATE TABLE IF NOT EXISTS loginwacht(
+    username TEXT PRIMARY KEY,
+    pogingen INTEGER NOT NULL DEFAULT 0,
+    laatste INTEGER NOT NULL DEFAULT 0,
+    slot INTEGER NOT NULL DEFAULT 0
+  );
+  -- Eenvoudige audit-log: wie logde in, waar ging het mis, vanaf welk adres.
+  -- Vóór dit bestand was er geen spoor van mislukte pogingen.
+  CREATE TABLE IF NOT EXISTS audit(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    at INTEGER NOT NULL,
+    area TEXT NOT NULL,
+    actie TEXT NOT NULL,
+    wie TEXT,
+    detail TEXT,
+    ip TEXT
+  );
+  CREATE INDEX IF NOT EXISTS ix_audit_at ON audit(at DESC);
   `);
   // Twee kolommen die pas later bedacht zijn: bestaande bakken (de VPS draait er
   // al op) krijgen ze bij het openen, precies zoals SiteSync dat met zijn
@@ -102,6 +123,23 @@ export function getDb() {
   db.exec('PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;');
   migrate(db);
   return db;
+}
+
+/**
+ * Regel in de audit-log. `req` mag nul zijn. Bewust GEEN wachtwoorden of tokens
+ * in `detail`, en alleen het IP voor zover nodig om een aanval te herkennen.
+ * De log wordt na 90 dunnen: een staff-tool heeft geen eeuwen administratie nodig.
+ */
+let auditsSinds = 0;
+export function logAudit(req, { area, actie, wie = null, detail = null }) {
+  try {
+    const h = req?.headers;
+    const ip = String(h?.get('x-real-ip') || h?.get('x-forwarded-for')?.split(',')[0]?.trim() || '').slice(0, 45) || null;
+    const d = getDb();
+    d.prepare('INSERT INTO audit(at,area,actie,wie,detail,ip) VALUES(?,?,?,?,?,?)')
+      .run(Date.now(), String(area), String(actie), wie ? String(wie).slice(0, 24) : null, detail ? String(detail).slice(0, 200) : null, ip);
+    if (++auditsSinds % 50 === 0) d.prepare('DELETE FROM audit WHERE at < ?').run(Date.now() - 90 * 86400000);
+  } catch { /* logging mag nooit de route onderbreken */ }
 }
 
 // ---------------------------------------------------------------- blobs

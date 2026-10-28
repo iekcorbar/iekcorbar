@@ -1,7 +1,26 @@
 // PATCH: hernoemen / verplaatsen / zichtbaarheid; DELETE: rekursief.
-import { getDb, clean, uniqueName, findChild, now, deleteNodeTree, gcBlobs } from '@/lib/db';
+// GET: één node opvragen - nodig voor een gedeelde link (?open=<id>), want die
+// begint buiten elke map en de hub moet dan weten wát het is en waar het woont.
+import { getDb, clean, uniqueName, findChild, now, deleteNodeTree, gcBlobs, latestVersion } from '@/lib/db';
 import { me } from '@/lib/auth';
 import { canSee, canWrite, effectiveVis } from '@/lib/acl';
+
+export const dynamic = 'force-dynamic';
+
+/**
+ * Eén node, zelfde vorm als een regel uit /api/tree, dus de deeplink-links
+ * dezelfde selecties als een klik in de lijst. Rechten: canSee, verder niets.
+ */
+export async function GET(req, { params }) {
+  const u = await me();
+  if (!u) return Response.json({ error: 'login' }, { status: 401 });
+  const { id } = await params;
+  const n = getDb().prepare('SELECT * FROM nodes WHERE id = ?').get(Number(id));
+  if (!n || !canSee(u, n)) return Response.json({ error: 'not found' }, { status: 404 });
+  const out = { id: n.id, name: n.name, type: n.type, parent: n.parent, vis: n.vis, team: n.team, owner: n.owner, updated: n.updated };
+  if (n.type === 'file') { const v = latestVersion(n.id); if (v) out.size = v.size; }
+  return Response.json({ node: out });
+}
 
 export async function PATCH(req, { params }) {
   const u = await me();

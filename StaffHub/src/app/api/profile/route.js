@@ -23,7 +23,13 @@ export async function GET() {
   const rij = d.prepare('SELECT id, username, role, team, created, prefs FROM users WHERE id = ?').get(u.id);
   // Alleen rowid + wat voor toestel het is: een sessie-token verlaat NOOIT de
   // server, ook niet naar de eigenaar - anders kan hij gekopieerd worden.
-  const eigen = d.prepare('SELECT rowid AS id, agent, expires FROM sessions WHERE user = ? ORDER BY expires DESC').all(u.id);
+  // `nu` markeert hét toestel waar dit verzoek vandaan komt: de UI mag alleen
+  // ándere toestellen een intrek-knop geven, "dit blad uitschrijven" doet je
+  // meglio met de gewone uitlogknop (en is via rowid onmogelijk zonder het
+  // token zelf mee te geven, en dát blijft binnen de server).
+  const huidigToken = (await cookies()).get(SID)?.value;
+  const rijen = d.prepare('SELECT rowid AS id, token, agent, expires FROM sessions WHERE user = ? ORDER BY expires DESC').all(u.id);
+  const eigen = rijen.map((s) => ({ id: s.id, agent: s.agent || 'onbekend toestel', tot: s.expires, nu: !!huidigToken && s.token === huidigToken }));
   const gemaakt = d.prepare('SELECT count(*) AS n FROM nodes WHERE owner = ?').get(u.id).n;
   return Response.json({
     user: {
@@ -75,4 +81,25 @@ export async function PATCH(req) {
   }
 
   return Response.json({ error: 'niets te doen' }, { status: 400 });
+}
+
+/**
+ * Eén eigen toestel uitschrijven (rowid uit /api/profile). Alleen sessies van
+ * deze vrager - een staff-lid kan geen ander account raken, en de admin-ruimte
+ * is apart voor de owner. De WHERE-clausule dubbel-checkt op `user`: een geraden
+ * rij-id van iemand anders raakt hier dus niets.
+ *
+ * "Dit toestel zelf" mag ook: de rij verdwijnt, het blaadje merkt bij het
+ * volgende verzoek dat `me()` niets meer vindt en valt netjes terug op het
+ * inlogscherm. Er is geen cookie weg te halen op serverniveau zonder het token
+ * zelf in de UI te laten roundtripp'en, en dát blijven we juist buiten.
+ */
+export async function DELETE(req) {
+  const u = await me();
+  if (!u) return Response.json({ error: 'login' }, { status: 401 });
+  const id = Number(new URL(req.url).searchParams.get('sessie'));
+  if (!id) return Response.json({ error: 'niets opgegeven' }, { status: 400 });
+  const c = getDb().prepare('DELETE FROM sessions WHERE rowid = ? AND user = ?').run(id, u.id).changes;
+  if (!c) return Response.json({ error: 'not found' }, { status: 404 });
+  return Response.json({ ok: true });
 }

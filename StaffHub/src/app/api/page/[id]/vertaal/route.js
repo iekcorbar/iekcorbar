@@ -1,4 +1,4 @@
-// Handleiding vertalen naar en/it (of opnieuw, als de Nederlandse tekst is
+// Handleiding vertalen naar en/it/fi (of opnieuw, als de Nederlandse tekst is
 // gewijzigd). Alleen voor wie het document ook mag lezen; het resultaat gaat in
 // `vertalingen` en wordt door de pagina-GESelf meegestuurd, zodat een vertaling
 // één keer kosten heeft en daarna gewoon meeleest.

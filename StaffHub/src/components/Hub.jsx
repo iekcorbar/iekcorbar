@@ -42,6 +42,29 @@ export default function Hub({ me, onLogout }) {
   }, [t]);
   useEffect(() => { load(parent); }, [parent, load]);
 
+  // Gedeelde link: ?open=<id> opent één handleiding direct, ook voor iemand die
+  // net inlogt en geen idee heeft in welke map iets staat. Vóór dit stukje was
+  // "kijk eens in de deploy-gids" alleen te zeggen als iemand ook rondklikte.
+  // Het blad wordt hierna schoongeveegd met replaceState, zodat een herladen
+  // niet eindeloos hetzelfde venster terugzet.
+  useEffect(() => {
+    const id = Number(new URLSearchParams(window.location.search).get('open'));
+    if (!id) return;
+    (async () => {
+      try {
+        const r = await fetch('/api/nodes/' + id);
+        if (r.ok) {
+          const n = (await r.json()).node;
+          if (n.type === 'folder') setParent(n.id);
+          else { if (n.parent != null) setParent(n.parent); setSel(n); }
+        }
+      } catch { /* kapotte link: gewoon de hub zoals altijd */ }
+      const p = new URLSearchParams(window.location.search);
+      p.delete('open');
+      window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p : ''));
+    })();
+  }, []);
+
   async function refresh() { await load(parent); }
 
   // ---------- uploaden (knop + drag&drop, ook met mappen) ----------
@@ -458,7 +481,11 @@ function TokensModal({ onClose }) {
   const dt = useDt();
   const [tokens, setTokens] = useState([]);
   const [fresh, setFresh] = useState('');
-  useEffect(() => { fetch('/api/tokens').then((r) => r.json()).then((j) => setTokens(j.tokens || [])); }, []);
+  const [sessies, setSessies] = useState([]);
+  useEffect(() => {
+    fetch('/api/tokens').then((r) => r.json()).then((j) => setTokens(j.tokens || []));
+    fetch('/api/profile').then((r) => (r.ok ? r.json() : {})).then((j) => setSessies(j.sessies || [])).catch(() => { });
+  }, []);
   async function create() {
     const label = window.prompt(t('tok.prompt')) || 'token';
     const j = await jsend('/api/tokens', 'POST', { label });
@@ -466,6 +493,17 @@ function TokensModal({ onClose }) {
     setTokens(await (await fetch('/api/tokens')).json().then((x) => x.tokens || []));
   }
   async function del(tk) { await jsend('/api/tokens?token=' + encodeURIComponent(tk), 'DELETE'); setTokens(await (await fetch('/api/tokens')).json().then((j) => j.tokens || [])); }
+  // Eén toestel uitschrijven. Intrekken van HET EIGEN blad is ook toegestaan:
+  // de sessierij verdwijnt en het volgende verzoek valt terug op inloggen -
+  // dus sluiten we hierna direct het venster, anders hangt er een dode modal.
+  async function trekSessie(s) {
+    try {
+      await jsend('/api/profile?sessie=' + s.id, 'DELETE');
+      if (s.nu) { onClose(); return; }
+      const rest = await fetch('/api/profile').then((r) => (r.ok ? r.json() : {}));
+      setSessies(rest.sessies || []);
+    } catch (e) { window.alert(e.message); }
+  }
   return (
     <Modal title={t('tip.tokens')} onClose={onClose}>
       <p className="text-xs text-parch/60 mb-2">{t('tok.intro')}</p>
@@ -479,6 +517,19 @@ function TokensModal({ onClose }) {
         ))}
       </div>
       <button onClick={create} className="w-full bg-gold/90 text-ink rounded-lg py-1.5 font-bold text-xs">{t('tok.new')}</button>
+
+      <h4 className="text-gold font-bold text-xs mt-4 mb-1">{t('tok.sessies')}</h4>
+      <div className="space-y-1.5 text-xs">
+        {sessies.map((s) => (
+          <div key={s.id} className="flex items-center gap-2 bg-black/30 border border-bronze/20 rounded px-2 py-1.5">
+            <span className="truncate flex-1" title={s.agent}>{s.agent}</span>
+            {s.nu && <span className="text-emerald-300/80 text-[10px] shrink-0">{t('tok.nu')}</span>}
+            <span className="text-parch/40 shrink-0">{dt(s.tot)}</span>
+            <button onClick={() => trekSessie(s)} title={t('tip.remove')} aria-label={t('tip.remove')} className="hover:text-red-300 shrink-0"><X className="size-3.5" /></button>
+          </div>
+        ))}
+        {sessies.length === 0 && <p className="text-parch/40">…</p>}
+      </div>
     </Modal>
   );
 }

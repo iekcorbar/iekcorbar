@@ -19,7 +19,7 @@ function systeem(bronnen) {
     'Noem bij elk feit welke gids het zegt (de naam uit de kopregel van dat stuk).',
     'IS DE VRAAG TE BREED, MEERDUIDIG OF ONVOLLEDIG: vraag eerst door. Eén korte vraag, met de concrete keuzes erbij - niet drie vragen tegelijk.',
     'Ligt het antwoord niet in het pakket: zeg dat eerlijk en stel voor welke gids aangevuld moet worden.',
-    'Gebruik de taal van de vraag (nl/en/it). Beknopt, met kopjes en lijstjes waar het leest.',
+    'Gebruik de taal van de vraag (nl/en/it/fi, of welke taal er ook getypt wordt). Beknopt, met kopjes en lijstjes waar het leest.',
     'Voer niets uit en verander niets; je bent alleen een lezer.',
     'EINDIG ELK ANTWOORD met een regel "VRAGEN:" en daaronder maximaal 3 korte vervolgvragen (één per regel) die een staff-lid zelf níét zou bedenken. Laat die regel weg als er niets zinnigs te vragen is.',
     `Bronnen staan bekend als [id] PAD :: NAAM. Bekende id's: ${bronnen || 'geen'}.`,

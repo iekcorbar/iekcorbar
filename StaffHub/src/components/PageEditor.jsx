@@ -30,6 +30,7 @@ export default function PageEditor({ node, onRenamed }) {
   const [varianten, setVarianten] = useState([]);
   const [taal, setTaal] = useState(null);
   const [vertaald, setVertaald] = useState('');
+  const [deeld, setDeeld] = useState(false);   // korte bevestiging na een deel-link
 
   const editor = useEditor({
     extensions: [StarterKit, Link.configure({ openOnClick: false }), Image],
@@ -124,6 +125,26 @@ export default function PageEditor({ node, onRenamed }) {
   if (!editor) return null;
   const I = ({ icon: Ic, ...p }) => <button type="button" {...p}><Ic className="size-4" /></button>;
 
+  // Deel-knopje: plakt ?open=<id>-link van DIT document op het klembord. Een
+  // handleiding had geen eigen URL - "kijk eens in de deploy-gids" was toen een
+  // rondklik-workout. De link werkt voor iedereen met rechten; ACL checkt de
+  // server, niet de link.
+  async function deelLink() {
+    const url = window.location.origin + window.location.pathname + '?open=' + node.id;
+    try { await navigator.clipboard.writeText(url); }
+    catch {
+      const t = window.prompt('URL', url);      // klembord dicht (http, old webkit): handmatig
+      if (t === null) return;
+    }
+    setDeeld(true); setTimeout(() => setDeeld(false), 2500);
+  }
+  const deelKnop = (
+    <button onClick={deelLink} title={t('tok.copy')} aria-label={t('tok.copy')}
+      className="p-1.5 rounded hover:bg-white/10 text-parch/60 shrink-0">
+      {deeld ? <span className="text-[10px] text-emerald-300 font-bold px-1">✓</span> : <Link2 className="size-4" />}
+    </button>
+  );
+
   // Tabstrip: potlood = de bron (bewerkbaar), taalcodes = een bestaande
   // vertaling (alleen lezen). ⚠ = het origineel is later nog bewerkt.
   const tabbalk = varianten.length > 0 && (
@@ -147,6 +168,7 @@ export default function PageEditor({ node, onRenamed }) {
       <div className="px-3 pt-3 flex items-center gap-2">
         <h3 className="text-sm font-bold text-gold truncate flex-1">{node.name}</h3>
         <span className="text-[10px] text-parch/45">{taal.toUpperCase()}</span>
+        {deelKnop}
       </div>
       {tabbalk}
       <div className="flex-1 overflow-auto px-3 py-2">
@@ -159,6 +181,7 @@ export default function PageEditor({ node, onRenamed }) {
     <div className="flex flex-col h-full">
       <div className="px-3 pt-3 flex items-center gap-2">
         <h3 className="text-sm font-bold text-gold truncate flex-1">{node.name}</h3>
+        {deelKnop}
         <button onClick={save} className={`flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold ${dirty ? 'bg-gold/90 text-ink' : 'bg-white/5 text-parch/50 border border-bronze/30'}`}>
           <Save className="size-3.5" /> {dirty ? t('ed.save') : t('ed.saved')}
         </button>

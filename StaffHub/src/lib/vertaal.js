@@ -12,7 +12,9 @@ import { getDb, now } from './db.js';
 import { beurt, nieuweSessie } from './aikit.js';
 import { htmlToMd, mdToHtml } from './docconv.js';
 
-export const TALEN = { nl: 'Nederlands', en: 'English', it: 'Italiano' };
+// Finse staff? Ook vertalen kan inmiddels naar het Fins: één regel in deze kaart
+// maakt de knop, de controle én de tabbalk af - de rest van de pijplijn is taal-blind.
+export const TALEN = { nl: 'Nederlands', en: 'English', it: 'Italiano', fi: 'Fins (suomi)' };
 
 /** Markdown in stukken van ±omvang tekens, op kop- of blanco-regelgrenzen. */
 export function chunks(md, omvang = 5200) {
