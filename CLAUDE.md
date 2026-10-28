@@ -1287,3 +1287,30 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   `%TEMP%\opencode\trailer-discord.md` + `-staff.md`.
 - **Open**: de website-berichten zelf plakken/importeren (punt 14) en de vanavond-batch
   deployen staan bij de eigenaar; Wildlife-dierenbatch (animaties/drops) nog op stapel.
+
+### Wildlife 0.6.2 - de dierenbatch: beer vaalt, vlinders bestuiven, jachttrofee (28-10 ochtend)
+
+- Sluit het open-staatje van 27-10 ("Wildlife-dierenbatch nog op stapel"). Drie gedragingen,
+  nul nieuwe models/textures: alles wordt hergebruikt (beer-"eat"-animatie, bestaande
+  zoo-statue-modellen) - dus GEEN pack-build en GEEN models-zip nodig, alleen de jar.
+- **Beer vissen** (`Animals.fishResult`/`startFishing` + `waterNear`): kalme beer overdag
+  binnen 5 blokken water gaat 3 s vissen (pad naar de waterkant, kop-duik via de eat-anim,
+  splash-geluid); 65% vangst = eet-animatie + salmon-flop, anders ontsnapt de vis. Getuigen
+  binnen 16 m krijgen de verborgen advance "Fishing Bear". Alles via de bestaande
+  busyUntil-timer (na bessen 30 s verzadigd, na een vangst 5 s rust) - slapen/eten/vissen
+  overlappen nooit.
+- **Bestuiving** (`Animals.pollinate`): vlinder boven tarwe/peen/aardappel/biet schuift het
+  gewas 1 groeistap op (gemiddeld 1x per 4 s per dier); Tag.FLOWERS: de bronbloem plant zichzelf op
+  kale grond met grasblok binnen 2 blokken; happy-villager-deeltjes; verborgen advance
+  "Butterfly Garden" (pop't bij ~1 op 4 nudges, niet bij elke rit).
+- **Jachttrofee** (`onDeath`): een adult die geveld wordt door een speler die de soort eerder met
+  de spyglass recordde -> 10% (gewoon) / 30% (zeldzaam) kans op het statue-item van die soort
+  (`animal_<id>[_rare]`, direct uit `zoo.decor.defs`) + verborgen advance "Hunter's Trophy".
+  Voorwaarde bewust op seen(false): een soort-record telt, zeldzaam-zien hoeft niet.
+- Achievements: drie nieuwe entries in `Achievements.create` (fisher/pollinator/trophy,
+  verborgen); Species-beernotitie en Facts (salmon-run-feit) aangepast; wiki
+  `01-wildlife.md` aangevuld met de drie Behavioral-teksten.
+- mvn clean package groen; `Wildlife-0.6.2.jar` sha1
+  9574313d7f98ae60f6973811a0ce2696b0e8d9bd, TE-DEPLOYEN punt 15 (alleen jar-wissel +
+  herstart). Not live-tested: vissende beer naast een rivier, vlinders boven onrijpe tarwe
+  en trofee-val op een recorded soort moeten nog in het spel gezien worden.

@@ -1,11 +1,13 @@
 package com.iekcorbar.wildlife;
 
 import com.destroystokyo.paper.event.entity.TurtleLayEggEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -43,6 +45,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +67,7 @@ final class Animals implements Listener {
         final boolean rare;
         final String model;
         final boolean baby;
-        boolean attached, curled, sleeping, hiding, waving, frozen;
+        boolean attached, curled, sleeping, hiding, waving, frozen, fishing;
         long busyUntil, tailBack, rideUntil, awakeAt, panicUntil, fleeUntil;
         /** Babies: world time they grow up, and how long was left when a golden dandelion froze them. Adults: love mode (plugin tick) and next breeding (world time). */
         long growAt, frozenLeft, loveUntil, breedAfter;
@@ -352,6 +355,13 @@ final class Animals implements Listener {
                         wake(a);
                     }
                     if (!a.sleeping && r.nextInt(40) == 0) eatBerries(a, tick);
+                    // Bear fishing: sits at the water's edge and comes up with a salmon (sometimes)
+                    if (a.fishing) {
+                        if (tick >= a.busyUntil) fishResult(a, tick);
+                    } else if (calm && !a.sleeping && !night && tick >= a.busyUntil && r.nextInt(30) == 0) {
+                        Location water = waterNear(e, 5);
+                        if (water != null) startFishing(a, water, tick);
+                    }
                 }
                 case KOALA -> {
                     // koalas nap in the sun and wake on their own (or when something happens)
@@ -421,6 +431,7 @@ final class Animals implements Listener {
                         }
                     }
                 }
+                case BUTTERFLY -> pollinate(a, r);
                 default -> { }
             }
             if (e instanceof Bee bee && bee.getAnger() > 0) bee.setAnger(0);
@@ -449,6 +460,96 @@ final class Animals implements Listener {
                 }
             }
         }
+    }
+
+    /** The nearest water block within {@code radius} of the animal (its bank included), or null. */
+    private static Location waterNear(LivingEntity e, int radius) {
+        Location c = e.getLocation();
+        World w = c.getWorld();
+        int bx = c.getBlockX(), by = c.getBlockY(), bz = c.getBlockZ();
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dz = -radius; dz <= radius; dz++) {
+                if (Math.hypot(dx, dz) > radius) continue;
+                for (int dy = 1; dy >= -1; dy--) {
+                    Block b = w.getBlockAt(bx + dx, by + dy, bz + dz);
+                    if (b.getType() == Material.WATER) return b.getLocation();
+                }
+            }
+        }
+        return null;
+    }
+
+    /** Bear fishing: it settles at the water's edge, paws dip in (the eat anim), and a few seconds later it has caught a salmon. */
+    private void startFishing(Animal a, Location water, long tick) {
+        if (!(a.entity instanceof Mob m)) return;
+        Location spot = water.clone().add(0.5, 1.0, 0.5);
+        Vector to = spot.toVector().subtract(a.entity.getLocation().toVector());
+        a.entity.setRotation((float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ())), 0);
+        m.getPathfinder().moveTo(spot.clone().subtract(to.clone().normalize().multiply(1.2)), 1.0);
+        a.fishing = true;
+        a.busyUntil = tick + 60;
+        a.entity.getWorld().playSound(spot, "entity.generic.splash", 0.5f, 1.1f);
+        plugin.fmm().play(a.entity, "eat", false);
+    }
+
+    /** The catch: water particles, a splash, a salmon flopping onto the bank - and a witness gets a hidden advancement. */
+    private void fishResult(Animal a, long tick) {
+        a.fishing = false;
+        a.busyUntil = tick + 100;
+        Location at = a.entity.getLocation();
+        World w = at.getWorld();
+        if (ThreadLocalRandom.current().nextInt(100) < 65) {
+            w.spawnParticle(Particle.SPLASH, at.clone().add(0, 0.4, 0), 14, 0.25, 0.15, 0.25, 0.2);
+            w.playSound(at, "entity.salmon.flop", 0.7f, 0.9f);
+            plugin.fmm().play(a.entity, "eat", false);
+            w.dropItem(at.clone().add(0, 0.5, 0), new ItemStack(Material.SALMON));
+            for (Player p : w.getNearbyPlayers(at, 16)) plugin.adv().grant(p, "fisher");
+        }
+    }
+
+    /**
+     * Butterfly pollination: a monarch that rests on a flower nudges the crops below it a growth stage
+     * further and sometimes drops a new flower seed on the grass beside it. Fields with butterflies ripen
+     * visibly faster - the naturalist's best friend.
+     */
+    private void pollinate(Animal a, ThreadLocalRandom r) {
+        if (r.nextInt(8) != 0) return;   // one nudge per animal every four seconds on average, near flowers
+        Location c = a.entity.getLocation();
+        World w = c.getWorld();
+        int bx = c.getBlockX(), by = c.getBlockY(), bz = c.getBlockZ();
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                Block soil = w.getBlockAt(bx + dx, by - 1, bz + dz);
+                Material t = soil.getType();
+                // a ripening crop under the butterfly gets one growth stage
+                if ((t == Material.WHEAT || t == Material.CARROTS || t == Material.POTATOES || t == Material.BEETROOTS)
+                        && soil.getBlockData() instanceof Ageable ag && ag.getAge() < ag.getMaximumAge()) {
+                    ag.setAge(ag.getAge() + 1);
+                    soil.setBlockData(ag);
+                    pollinated(soil, r);
+                    return;
+                }
+                // flower the butterfly sits on spreads itself to bare grass nearby
+                if (Tag.FLOWERS.isTagged(t) && r.nextInt(3) == 0) {
+                    for (int i = 0; i < 4; i++) {
+                        Block g = w.getBlockAt(bx + dx + r.nextInt(3) - 1, by - 1, bz + dz + r.nextInt(3) - 1);
+                        Block air = g.getRelative(0, 1, 0);
+                        if (g.getType() == Material.GRASS_BLOCK && air.getType() == Material.AIR && Tag.FLOWERS.isTagged(t)) {
+                            air.setType(t);
+                            w.spawnParticle(Particle.HAPPY_VILLAGER, air.getLocation().add(0.5, 0.6, 0.5), 4, 0.2, 0.1, 0.2, 0);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void pollinated(Block crop, ThreadLocalRandom r) {
+        Location c = crop.getLocation().add(0.5, 1.1, 0.5);
+        crop.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, c, 3, 0.15, 0.1, 0.15, 0);
+        if (r.nextInt(4) != 0) return;   // the advancement only pops sometimes, not on every nudge
+        for (Player p : crop.getWorld().getNearbyPlayers(c, 12)) plugin.adv().grant(p, "pollinator");
     }
 
     private static void flee(LivingEntity e, Player from, double speed) {
@@ -585,6 +686,16 @@ final class Animals implements Listener {
             case CRANE -> add(d, Material.FEATHER, 1 + r.nextInt(2));
             case TANUKI, MACAQUE -> { }   // foragers, not farms: they drop nothing
             default -> { }
+        }
+        // Hunter's trophy (0.6.2): whoever recorded an animal in the Field Journal and then brings one down
+        // may take its statue home - common 10 %, rare 30 %. Observing first is the naturalist's deal.
+        Player killer = e.getEntity().getKiller();
+        if (killer != null && r.nextInt(100) < (a.rare ? 30 : 10) && plugin.journal().seen(killer, false).contains(a.species.id())) {
+            DecorDef trophy = plugin.zoo().decor.defs.get("animal_" + a.species.id() + (a.rare ? "_rare" : ""));
+            if (trophy != null) {
+                d.add(plugin.zoo().decor.item(trophy, 1));
+                plugin.adv().grant(killer, "trophy");
+            }
         }
         boolean tiny = a.species.habitat == Species.Habitat.AIR || a.species == Species.SNAIL || a.species == Species.HEDGEHOG || a.species.habitat == Species.Habitat.POND;
         e.setDroppedExp(tiny ? 0 : 1 + r.nextInt(3));

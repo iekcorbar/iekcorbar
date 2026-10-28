@@ -28,8 +28,10 @@ Open the advancement screen and look for the **Wildlife** tab: one advancement p
 
 * **Deer and lizards** run when you come close - sneak to get near.
 * **Hedgehogs and snails** curl up or hide in their shell; **tortoises** pull in their head and legs.
-* **Brown bears** are calm until you hurt them, sleep at night and eat sweet berries.
+* **Brown bears** are calm until you hurt them, sleep at night, eat sweet berries - and by day you may see one sit at the riverbank, fish a **salmon** out of the water and eat it on the spot.
 * **Wild boars** charge when they feel cornered.
+* **Butterflies** pollinate: they flutter over your wheat, carrots, potatoes and beetroots and ripen them a step faster, and flower patches near them spread themselves to bare grass. A field with butterflies visibly outgrows one without.
+* **Hunter's trophy**: an animal you have **recorded in your Field Journal first** sometimes leaves its own **statue** as a trophy when you take it down (rarer animals, bigger chance). The naturalist's deal: observe, then hunt.
 * **Capybaras** sometimes give a duck or a songbird a ride.
 * **Lizards** can drop their tail when hit (it grows back). **Crabs** sometimes drop a claw: hold a **Crab Claw** in your off hand to reach one block further.
 * A **name tag** keeps an animal around; unnamed wildlife wanders off when nobody is near. So does a **lead**: an animal you put on a lead stays.

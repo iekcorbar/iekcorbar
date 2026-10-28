@@ -21,7 +21,7 @@ enum Species {
             "wildlife:deer.ambient", "wildlife:deer.snort", "wildlife:deer.snort", 1f),
     BEAR("Brown Bear", EntityType.POLAR_BEAR, 1.15, 30, 0.055, Habitat.LAND, Time.ANY, 1, 1, 3,
             List.of("taiga", "old_growth", "dark_forest", "grove"), "sweet_berries",
-            "Strong and usually calm - unless you hurt it. Sleeps at night and loves berries.", "Deep in old taiga forests.",
+            "Strong and usually calm - unless you hurt it. Sleeps at night, fishes the riverbank and loves berries.", "Deep in old taiga forests.",
             "wildlife:bear.ambient", "wildlife:bear.hurt", "wildlife:bear.hurt", 1f),
     BOAR("Wild Boar", EntityType.GOAT, 1.2, 14, 0.18, Habitat.LAND, Time.ANY, 1, 3, 6,
             List.of("forest", "dark_forest", "wooded_badlands", "savanna_plateau"), "porkchop",

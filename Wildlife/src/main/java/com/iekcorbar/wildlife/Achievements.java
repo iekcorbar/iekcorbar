@@ -22,6 +22,9 @@ final class Achievements {
         a.add("zoo_prop", "statue", "oak_fence", "Zookeeper", "Get a zoo prop.", "task");
         a.add("kiosk", "zoo_prop", "oak_sign", "Open for Business", "Place a Ticket Kiosk.", "goal");
         a.add("ticket", "kiosk", "paper", "Admit One", "Buy a zoo ticket.", "task");
+        a.add("fisher", "root", "salmon", "Fishing Bear", "Watch a bear catch a fish at the riverbank.", "task").hidden();
+        a.add("pollinator", "root", "wheat", "Butterfly Garden", "See a butterfly ripen your crops.", "task").hidden();
+        a.add("trophy", "root", "armor_stand", "Hunter's Trophy", "Take a statue home from an animal you had recorded first.", "goal").hidden();
 
         NamespacedKey decor = new NamespacedKey(plugin, "decor");
         a.scanner(it -> {
