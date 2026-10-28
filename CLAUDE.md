@@ -1314,3 +1314,18 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   9574313d7f98ae60f6973811a0ce2696b0e8d9bd, TE-DEPLOYEN punt 15 (alleen jar-wissel +
   herstart). Not live-tested: vissende beer naast een rivier, vlinders boven onrijpe tarwe
   en trofee-val op een recorded soort moeten nog in het spel gezien worden.
+
+### Staff Panel: advancements-kaart compakt gemaakt (28-10 ochtend)
+
+- Eigenaarsklus: "Player Data toont ALLE advancements, er zijn er zoveel".
+  Frontend-only (`src/app/moderation/page.js`): de Advancements-kaart renderde een
+  muur van gouden chips (done.slice(0,60) + scroll). Nieuw component
+  `AdvancementsCard`: één progress-rij per tab (eigen plugin-tabs vet vooraan,
+  vanilla-categorieën daarna), balk + "x/y" + "+N bezig"; de namen openen pas als
+  je een rij aanklikt (max-h-28 scroll). Groepering gebeurt client-side met
+  dezelfde categoryOf-regel als DeepSync.java (pad-segment vóór de eerste '/' →
+  wildlife: "wildlife", minecraft: "adventure", zonder '/' → "misc") - de
+  SiteSync-jar hoeft dus NIET gewisseld, de json is al genoeg.
+- Bouw: `npm run build` groen (113 pagina's); site-zip via make-zip.js →
+  `deploy\iekcorbar_iekje_barend.zip` (34,0 MB, sha1 816f16de6fdc65be5bca4c54ba6b9d2bd08cb284),
+  TE-DEPLOYEN punt 16 (Plesk: unzip + npm install + build + restart).

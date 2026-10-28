@@ -109,6 +109,54 @@ const SETTINGS_TAB_ICONS = {
   settings_projects: Hammer, settings_content: Tag, settings_cleanup: UserCheck
 };
 
+// Advancements card (Player Data): one compact progress row per tab - the name list only
+// opens when a row is clicked. Our plugin tabs come first (bold), vanilla categories after.
+function AdvancementsCard({ adv, web }) {
+  const [open, setOpen] = useState(null);
+  const VANILLA = { adventure: ['\u{1F9BA}', 'Adventure'], nether: ['\u{1F525}', 'The Nether'], end: ['\u{1F409}', 'The End'], husbandry: ['\u{1F40E}', 'Husbandry'], recipes: ['\u{1F4D6}', 'Recipes'], story: ['\u{1F4DA}', 'Story'], misc: ['\u{2728}', 'Other'] };
+  const TAB_ICON = { wildlife: '\u{1F98C}', steamworks: '\u2699\uFE0F', kitchen: '\u{1F373}', brew: '\u{1F376}', sakagura: '\u{1F376}', relics: '\u{1F3FA}', satchel: '\u{1F392}', kura: '\u{1F5C4}\uFE0F', zukan: '\u{1F4DA}', hihou: '\u{1F48E}', achievements: '\u{1F3C6}' };
+  // the server groups by the path segment before the first '/' (DeepSync.categoryOf)
+  const catOf = (k) => { const c = k.indexOf(':'); const p = c >= 0 ? k.slice(c + 1) : k; const s = p.indexOf('/'); return s > 0 ? p.slice(0, s) : 'misc'; };
+  const doneBy = {};
+  for (const k of adv.done || []) {
+    const cat = catOf(k);
+    (doneBy[cat] = doneBy[cat] || []).push(k.replace(/^[^:]+:/, '').replace(/^[^/]+\//, ''));
+  }
+  const cats = Object.entries(adv.by || {}).filter(([, c]) => c[2] > 0);
+  cats.sort((a, b) => (VANILLA[a[0]] === VANILLA[b[0]] ? a[0].localeCompare(b[0]) : VANILLA[a[0]] ? 1 : -1));
+  return (
+    <>
+      <p className="text-sm text-white"><b>{adv.total}</b> complete{adv.list_full === false ? ' (list capped at 400)' : ''} · <span className="text-text-warm/50 text-[10px]">as of {web && web.deepUpdated ? new Date(web.deepUpdated).toLocaleString() : 'last sync'}</span></p>
+      <div className="space-y-1">
+        {cats.map(([cat, c]) => {
+          const vanilla = !!VANILLA[cat];
+          const pct = c[2] ? Math.round((c[0] / c[2]) * 100) : 0;
+          const isOpen = open === cat;
+          const names = doneBy[cat] || [];
+          return (
+            <div key={cat}>
+              <button type="button" onClick={() => setOpen(isOpen ? null : cat)} className="w-full flex items-center gap-2 text-left">
+                <span className="w-5 text-center shrink-0">{vanilla ? VANILLA[cat][0] : (TAB_ICON[cat] || '\u{1F3F4}')}</span>
+                <span className={`text-[11px] w-24 shrink-0 truncate ${vanilla ? 'text-text-warm/60' : 'text-white font-bold'}`}>{vanilla ? VANILLA[cat][1] : cat.charAt(0).toUpperCase() + cat.slice(1)}</span>
+                <span className="flex-1 h-1.5 rounded-full bg-neutral-950/60 border border-sp-bronze/20 overflow-hidden"><span className="block h-full bg-sp-gold/70" style={{ width: pct + '%' }} /></span>
+                <span className="text-[10px] text-text-warm/50 w-16 shrink-0 text-right"><b className="text-white">{c[0]}</b>/{c[2]}{c[1] > 0 ? <span className="text-sp-copper"> +{c[1]}</span> : null}</span>
+              </button>
+              {isOpen && (names.length > 0 ? (
+                <div className="flex flex-wrap gap-1 pl-7 pr-1 py-1.5 max-h-28 overflow-y-auto">
+                  {names.map((k) => <span key={k} className="text-[9px] px-1.5 py-0.5 rounded bg-sp-gold/10 border border-sp-gold/20 text-sp-gold/80">{k}</span>)}
+                </div>
+              ) : (
+                <p className="text-[10px] text-text-warm/40 pl-7 py-1">None recorded in this tab yet.</p>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+      <p className="text-[9px] text-text-warm/35">Bold = our own plugin tabs, listed first. Click a row to see which advancements were made; +N in progress.</p>
+    </>
+  );
+}
+
 function ModerationContent() {
   const { user, setIsLoginOpen } = useUser();
   const siteContent = useSiteContent();
@@ -5336,7 +5384,6 @@ function ModerationContent() {
               : (k.startsWith('damage') ? (v / 2).toLocaleString() + '\u2665' : Number(v).toLocaleString());
             const TILE = 'bg-neutral-950/40 border border-sp-bronze/20 rounded-lg py-3 px-2 text-center';
             const CHIP = 'px-2 py-1 rounded bg-neutral-950/40 border border-sp-bronze/20 text-[10px] text-text-warm/70';
-            const CAT_ICON = { adventure: '\u{1F9BA}', nether: '\u{1F525}', end: '\u{1F409}', husbandry: '\u{1F40E}', recipes: '\u{1F4D6}', misc: '\u{2728}' };
             const web = pdResult.web, adv = web && web.advancements, dstats = web && web.stats;
             return (
             <div className="space-y-4">
@@ -5371,22 +5418,7 @@ function ModerationContent() {
               <div className="grid lg:grid-cols-2 gap-4">
                 <div className="rounded-xl border border-sp-bronze/30 bg-black/30 p-4 space-y-2">
                   <h4 className="text-xs font-bold text-sp-gold uppercase tracking-wide flex items-center gap-2"><Trophy className="w-3.5 h-3.5" /> Advancements</h4>
-                  {adv ? (
-                    <>
-                      <p className="text-sm text-white"><b>{adv.total}</b> complete{adv.list_full === false ? ' (list capped at 400)' : ''} · <span className="text-text-warm/50 text-[10px]">as of {web && web.deepUpdated ? new Date(web.deepUpdated).toLocaleString() : 'last sync'}</span></p>
-                      <div className="flex flex-wrap gap-2">
-                        {Object.entries(adv.by || {}).map(([cat, c]) => (
-                          <span key={cat} className={CHIP}>{CAT_ICON[cat] || '\u{1F3C1}'} {cat} <b className="text-white">{c[0]}/{c[2]}</b>{c[1] > 0 ? <span className="text-sp-copper"> +{c[1]}</span> : null}</span>
-                        ))}
-                      </div>
-                      {adv.done && adv.done.length > 0 && (
-                        <div className="flex flex-wrap gap-1 max-h-28 overflow-y-auto pt-1">
-                          {adv.done.slice(0, 60).map((k) => <span key={k} className="text-[9px] px-1.5 py-0.5 rounded bg-sp-gold/10 border border-sp-gold/20 text-sp-gold/80">{k.replace(/^minecraft:/, '')}</span>)}
-                          {adv.done.length > 60 && <span className="text-[9px] text-text-warm/40 self-center">+{adv.done.length - 60} more</span>}
-                        </div>
-                      )}
-                    </>
-                  ) : (
+                  {adv ? <AdvancementsCard adv={adv} web={web} /> : (
                     <p className="text-[11px] text-text-warm/40">Not synced yet — SiteSync reads advancements while a player is online (and once at logout). Have them log in and out once.</p>
                   )}
                 </div>
