@@ -7,6 +7,7 @@ export async function POST(req) {
   if (!u || !checkPass(String(password || ''), u.pass)) {
     return Response.json({ error: 'Onjuze gebruikersnaam of wachtwoord' }, { status: 401 });
   }
-  await setSessionCookie(createSession(u.id));
+  // Het apparaat meezetten: de admin-ruimte laat anders alleen kale tokens zien.
+  await setSessionCookie(createSession(u.id, req.headers.get('user-agent') || ''));
   return Response.json({ ok: true });
 }

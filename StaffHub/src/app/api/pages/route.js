@@ -6,7 +6,7 @@ import { canSee, canWrite } from '@/lib/acl';
 export async function POST(req) {
   const u = await me();
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
-  const { parent, name } = await req.json().catch(() => ({}));
+  const { parent, name, html } = await req.json().catch(() => ({}));
   const d = getDb();
   const nm = clean(name) || 'Nieuwe handleiding';
   let pid = null;
@@ -20,6 +20,9 @@ export async function POST(req) {
   if (existing && existing.type === 'page') return Response.json({ id: existing.id, name: existing.name, existing: true });
   const id = Number(d.prepare('INSERT INTO nodes(parent,name,type,owner,created,updated) VALUES(?,?,?,?,?,?)')
     .run(pid, uniqueName(pid, nm), 'page', u.id, now(), now()).lastInsertRowid);
-  d.prepare('INSERT INTO pages(node,html,who,updated) VALUES(?,?,?,?)').run(id, '', u.id, now());
+  // Nieuw: een lege pagina óf één met meegeleverde inhoud (upload vanuit een
+  // .md/.txt/-html-bestand; de client converteert en POST't die hier).
+  d.prepare('INSERT INTO pages(node,html,who,updated) VALUES(?,?,?,?)')
+    .run(id, String(html || '').slice(0, 2_000_000), u.id, now());
   return Response.json({ id, name: d.prepare('SELECT name FROM nodes WHERE id = ?').get(id).name });
 }

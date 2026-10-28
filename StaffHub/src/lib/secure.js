@@ -19,10 +19,16 @@ export function checkPass(pw, stored) {
   } catch { return false; }
 }
 
-export function createSession(userId) {
+/**
+ * Een sessie openen. `agent` is de user-agent van de browser die inlogde: hij
+ * gaat MEET in de sessierij, zodat de owner bij "wie is er ingelogd" niet naar
+ * een anoniem rijtje tokens kijkt maar naar "Windows / Firefox".
+ */
+export function createSession(userId, agent = '') {
   const tok = crypto.randomBytes(24).toString('hex');
   const d = getDb();
-  d.prepare('INSERT INTO sessions(token,user,expires) VALUES(?,?,?)').run(tok, userId, now() + 1000 * 3600 * 24 * 30);
+  d.prepare('INSERT INTO sessions(token,user,expires,agent) VALUES(?,?,?,?)')
+    .run(tok, userId, now() + 1000 * 3600 * 24 * 30, String(agent || '').slice(0, 120));
   d.prepare('DELETE FROM sessions WHERE expires < ?').run(now());
   return tok;
 }
@@ -32,8 +38,12 @@ export function userFromSid(token) {
   const d = getDb();
   const s = d.prepare('SELECT * FROM sessions WHERE token = ? AND expires > ?').get(token, now());
   if (!s) return null;
-  const u = d.prepare('SELECT id,username,role,team FROM users WHERE id = ?').get(s.user);
-  return u || null;
+  const u = d.prepare('SELECT id,username,role,team,prefs FROM users WHERE id = ?').get(s.user);
+  if (!u) return null;
+  let prefs = null;
+  try { prefs = u.prefs ? JSON.parse(u.prefs) : null; } catch { prefs = null; }
+  const { prefs: _weg, ...rest } = u;
+  return { ...rest, prefs };
 }
 
 /** Basic-auth (wachtwoord óf WebDAV-token) voor /dav. */

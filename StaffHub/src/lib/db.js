@@ -71,6 +71,16 @@ function migrate(d) {
   CREATE INDEX IF NOT EXISTS ix_com_node ON comments(node);
   CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT);
   `);
+  // Twee kolommen die pas later bedacht zijn: bestaande bakken (de VPS draait er
+  // al op) krijgen ze bij het openen, precies zoals SiteSync dat met zijn
+  // deep-sync-kolommen doet. hasColumn() is hier want SQLite kent geen
+  // "ADD COLUMN IF NOT EXISTS".
+  if (!hasColumn(d, 'users', 'prefs')) d.exec('ALTER TABLE users ADD COLUMN prefs TEXT');
+  if (!hasColumn(d, 'sessions', 'agent')) d.exec('ALTER TABLE sessions ADD COLUMN agent TEXT');
+}
+
+function hasColumn(d, table, col) {
+  return d.prepare(`PRAGMA table_info(${table})`).all().some((c) => c.name === col);
 }
 
 export function getDb() {
