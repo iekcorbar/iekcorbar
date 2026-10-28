@@ -1417,3 +1417,20 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   `src/app/globals.css`.
 - Niet code-signed (geen cert) → SmartScreen kan bij eerste start "Toch uitvoeren"
   vragen; normaal voor een eigen build.
+
+### StaffHub 0.3.2 - live + 17 staff-gidsen in de hub (28-10 middag)
+
+- 0.3.2 is uitgerold (goedkeuring eigenaar 'rol jij maar uit'): talen NL/EN/IT,
+  Assistent-zoekknop en Boord-AI-knop draaien live op staff.iekcorbar.com.
+- Boord-AI = opencode-agent in sandbox-container (bash/edit deny, alleen intern
+  netwerk, basic-auth) op het gratis Go-model beam-free. Model-login staat in
+  /opt/opencode-ai/data/auth.json (nooit in de repo). Let op: de Go-sleutel is
+  ooit in een chatsessie geplakt - overwegen te rouleren.
+- **17 Engelstalige staff-gidsen staan in StaffHub: map Guides/Plugins (13 plugins
+  op live-versies) + Guides/Operations (server-setup, databases, deploy & packs,
+  staffhub-usage).** Ze zijn geschreven vanuit pom/plugin.yml/CLAUDE.md/docs-wiki's.
+  Eén correctie: Gouw = chunk land-claims (opvolger Lands), géén food/shop-plugin.
+- Sync-valkuil: de Boord-AI leest StaffHub-zelf NOG NIET - hij draait op copies in
+  /opt/opencode-ai/workspace/guides/*.html. Een gids die hier in de hub wordt
+  aangepast moet daar opnieuw overhezet worden (of straks: repo-clone + export).
+- Hulpmap .tmp-guides/ is weer weg; upload-/testscriptjes zijn weg.
