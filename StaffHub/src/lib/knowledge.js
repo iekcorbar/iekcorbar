@@ -69,10 +69,20 @@ export function knowledgeFor(user, question, { maxPages = 6, maxChars = 14000 } 
     used += text.length;
     parts.push(`--- [${s.n.id}] ${trail(d, s.n)} :: ${s.n.name} ---\n${text}`);
   }
+  // Wát is er wel, zodat het board bij een missers ook iets klikbaars kan
+  // voorstellen in plaats van alleen "niks gevonden" te tonen.
+  const bekende = [];
+  for (const p of rows) {
+    if (!canSee(user, p)) continue;
+    bekende.push(p.name);
+    if (bekende.length >= 2) break;
+  }
+
   return {
     block: parts.join('\n\n'),
     sources: top.map((s) => ({ id: s.n.id, name: s.n.name, trail: trail(d, s.n), score: s.score })),
     scanned: rows.length,
+    bekende,
   };
 }
 

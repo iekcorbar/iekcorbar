@@ -39,6 +39,21 @@ export async function sessieLeeft(sid) {
 }
 
 /**
+ * Echte proef of de sandbox bereikbaar is én de sleutel klopt. Zonder deze
+ * functie zou het board "aan" zeggen terwijl de sleutel verkeerd is.
+ */
+export async function status() {
+  if (!ingeschakeld()) return { on: false, reden: 'niet-ingesteld' };
+  try {
+    const r = await roep('/session', { headers: headers() }, 9_000);
+    if (r.ok) return { on: true, model: modelnaam() };
+    return { on: false, reden: r.status === 401 ? 'verkeerde-sleutel' : 'sandbox-fout', code: r.status };
+  } catch (e) {
+    return { on: false, reden: e?.name === 'AbortError' ? 'time-out' : 'sandbox-bereikt-niet' };
+  }
+}
+
+/**
  * Eén beurt: systeemtekst + gebruikersdeel, platte tekst terug.
  * { sid, text, system, ms } -> { ok, answer, sid, error }
  */

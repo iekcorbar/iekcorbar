@@ -1,90 +1,170 @@
 'use client';
 
-// Chat-paneel voor de boord-assistent. Twee modi:
-//  zoek: /api/assistant  - keyword-zoeken in eigen content (gratis, instant)
-//  ai:   /api/ai         - doorlussen naar de opencode-agent in de sandbox
-import { useRef, useState } from 'react';
-import { Bot, ChevronDown, ChevronRight, Search, Sparkles, FileText, Folder, File as FileIcon } from 'lucide-react';
-import { useLang } from '@/lib/i18n';
+// Het AI-boord. Twee modi met elkaars eigen belofte:
+//   Zoeken   /api/assistant  - keyword vindplaatsen in eigen content, gratis, direct
+//   Boord-AI /api/ai          - model-dat-alleen-de-hub-leest, met klikbare bronnen
+//
+// Wat hier bewust in zit, omdat het board zonder deze dingen "net niks" voelde:
+//  - een statuslampje: je ZIET of de Boord-AI aan staat en zo nee waarom, in
+//    plaats van dat pas na een vraag te ontdekken;
+//  - een oplopende teller bij het denken: een model van acht seconden is geen
+//    hangende pagina, maar dat moet je wel zien;
+//  - vervolgvragen als chips: het model mag terugvragen, en doorvragen mag geen
+//    typwerk kosten;
+//  - bronnen als chips: een antwoord zonder aanwijsbare gids is hier niets waard;
+//  - geschiedenis in localStorage: een herladen wisste het hele gesprek.
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Bot, ChevronDown, ChevronRight, Search, Sparkles, FileText, Folder, File as FileIcon, RefreshCw } from 'lucide-react';
+import { useLang, trServer } from '@/lib/i18n';
+import { mdNaarJSX } from '@/lib/mdLite';
 
 const ICONS = { folder: Folder, page: FileText, file: FileIcon };
+const SLEUTEL = 'staffhub_board';
 
 export default function Assistant({ onOpen }) {
-  const { t, tr } = useLang();
+  const { t } = useLang();
   const [open, setOpen] = useState(true);
-  const [mode, setMode] = useState('zoek'); // 'zoek' | 'ai'
+  const [mode, setMode] = useState('zoek');
   const [q, setQ] = useState('');
-  const [log, setLog] = useState([]); // { ask, mode, hits?, answer?, error? }
+  const [log, setLog] = useState([]);
   const [busy, setBusy] = useState(false);
-  const sidRef = useRef(''); // opencode-sessie van dit gesprek
+  const [sec, setSec] = useState(0);
+  const [st, setSt] = useState(null);            // { on, model, reden }
+  const sid = useRef('');
   const endRef = useRef();
+  const tik = useRef();
 
-  async function ask(e) {
-    e?.preventDefault();
-    const query = q.trim();
-    if (!query || busy) return;
+  // Gesprek per toestel terugzetten (nooit tijdens server-render: localStorage).
+  useEffect(() => {
+    try {
+      const oud = JSON.parse(localStorage.getItem(SLEUTEL) || 'null');
+      if (Array.isArray(oud) && oud.length) setLog(oud);
+      sid.current = String(localStorage.getItem(SLEUTEL + ':sid') || '');
+    } catch { /* prullenbak van een vorige versie mag het never breken */ }
+    fetch('/api/ai').then((r) => r.json()).then(setSt).catch(() => setSt({ on: false, reden: 'time-out' }));
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem(SLEUTEL, JSON.stringify(log.slice(-24)));
+      localStorage.setItem(SLEUTEL + ':sid', sid.current);
+    } catch { }
+  }, [log]);
+
+  const vraag = useCallback(async (tekst) => {
+    const vraagTekst = String(tekst ?? q ?? '').trim();
+    if (!vraagTekst || busy) return;
     const m = mode;
-    setBusy(true); setQ('');
+    setBusy(true); setSec(0); setQ('');
+    tik.current = setInterval(() => setSec((s) => s + 1), 1000);
     try {
       if (m === 'ai') {
-        const r = await fetch('/api/ai', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: query, session: sidRef.current }) });
+        const r = await fetch('/api/ai', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: vraagTekst, session: sid.current }) });
         const j = await r.json().catch(() => ({}));
         if (!r.ok || j.error) {
-          if (String(j.error || '').startsWith('ai-uit')) sidRef.current = '';
-          setLog((l) => [...l, { ask: query, mode: m, error: String(j.error || '').startsWith('ai-uit') ? t('ai.off') : String(j.error || '').startsWith('ai-modelfout') ? t('ai.modelerr') : tr(j.error || 'mislukt') }]);
+          if (String(j.error || '') === 'ai-uit') setSt({ on: false, reden: 'sandbox-bereikt-niet' });
+          setLog((l) => [...l, {
+            ask: vraagTekst, mode: m,
+            error: String(j.error || '') === 'ai-uit' ? t('ai.off') : trServer(j.error || 'mislukt'),
+            next: j.volgende || [],
+          }]);
         } else {
-          sidRef.current = j.session || sidRef.current;
-          setLog((l) => [...l, { ask: query, mode: m, answer: j.answer || '' }]);
+          sid.current = j.session || sid.current;
+          setLog((l) => [...l, { ask: vraagTekst, mode: m, answer: j.answer || '', bronnen: j.bronnen || [], next: j.volgende || [] }]);
         }
       } else {
-        const j = await (await fetch('/api/assistant?q=' + encodeURIComponent(query))).json();
-        if (j.error) setLog((l) => [...l, { ask: query, mode: m, error: tr(j.error) }]);
-        else setLog((l) => [...l, { ask: query, mode: m, hits: j.hits || [] }]);
+        const j = await (await fetch('/api/assistant?q=' + encodeURIComponent(vraagTekst))).json().catch(() => ({}));
+        if (j.error) setLog((l) => [...l, { ask: vraagTekst, mode: m, error: trServer(j.error) }]);
+        else setLog((l) => [...l, { ask: vraagTekst, mode: m, hits: j.hits || [] }]);
       }
-    } catch (err) {
-      setLog((l) => [...l, { ask: query, mode: m, error: String(err?.message || err) }]);
+    } catch (e) {
+      setLog((l) => [...l, { ask: vraagTekst, mode: m, error: String(e?.message || e) }]);
     } finally {
+      clearInterval(tik.current);
       setBusy(false);
       setTimeout(() => endRef.current?.scrollIntoView({ block: 'nearest' }), 30);
     }
+  }, [q, busy, mode, t]);
+
+  function wissen() {
+    setLog([]); sid.current = '';
+    try { localStorage.removeItem(SLEUTEL); localStorage.removeItem(SLEUTEL + ':sid'); } catch { }
   }
+
+  const lamp = !st ? 'bg-parch/30' : st.on ? 'bg-emerald-400' : 'bg-red-400';
+  const lampTekst = !st ? t('ai.check') : st.on ? `${t('ai.aan')} · ${st.model || ''}` : `${t('ai.uit')} · ${trServer(st.reden || '')}`;
 
   return (
     <div className="border-b border-bronze/20 bg-black/10">
+      {/* kop */}
       <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-white/5">
-        <Bot className="size-4 text-gold" />
-        <b className="text-gold">{t('ai.title')}</b>
-        <span className="text-parch/40 truncate">{mode === 'ai' ? t('ai.deep_hint') : t('ai.hint')}</span>
-        {open ? <ChevronDown className="size-3.5 ml-auto text-parch/50 shrink-0" /> : <ChevronRight className="size-3.5 ml-auto text-parch/50 shrink-0" />}
+        <Bot className="size-4 text-gold shrink-0" />
+        <b className="text-gold shrink-0">{t('ai.title')}</b>
+        <span className={`size-2 rounded-full shrink-0 ${lamp}`} title={lampTekst} />
+        <span className="text-parch/40 truncate">{lampTekst}</span>
+        {log.length > 0 && (
+          <span onClick={(e) => { e.stopPropagation(); wissen(); }} title={t('ai.nieuw')} className="ml-auto shrink-0 p-1 rounded hover:bg-white/10"><RefreshCw className="size-3.5" /></span>
+        )}
+        {open ? <ChevronDown className={`size-3.5 ${log.length ? '' : 'ml-auto'} text-parch/50 shrink-0`} /> : <ChevronRight className={`size-3.5 ${log.length ? '' : 'ml-auto'} text-parch/50 shrink-0`} />}
       </button>
 
       {open && (
         <div className="px-3 pb-3">
-          {/* modus-schakelaar */}
+          {/* modus */}
           <div className="flex gap-1 mb-2">
-            <button onClick={() => setMode('zoek')} className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] border ${mode === 'zoek' ? 'bg-gold/20 border-gold/50 text-gold' : 'bg-white/5 border-bronze/30 text-parch/60'}`}>
+            <button onClick={() => setMode('zoek')} title={t('ai.hint')} className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] border ${mode === 'zoek' ? 'bg-gold/20 border-gold/50 text-gold' : 'bg-white/5 border-bronze/30 text-parch/60'}`}>
               <Search className="size-3" /> {t('ai.mode_zoek')}
             </button>
-            <button onClick={() => setMode('ai')} className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] border ${mode === 'ai' ? 'bg-gold/20 border-gold/50 text-gold' : 'bg-white/5 border-bronze/30 text-parch/60'}`}>
+            <button onClick={() => setMode('ai')} title={t('ai.deep_hint')} className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] border ${mode === 'ai' ? 'bg-gold/20 border-gold/50 text-gold' : 'bg-white/5 border-bronze/30 text-parch/60'}`}>
               <Sparkles className="size-3" /> {t('ai.mode_ai')}
             </button>
           </div>
+          {mode === 'ai' && st && !st.on && (
+            <p className="text-[10px] text-amber-300/80 border border-amber-500/30 bg-amber-900/20 rounded px-2 py-1 mb-2">
+              {t('ai.uit')} · {trServer(st.reden || '')} — {t('ai.gebruik_zoek')}
+            </p>
+          )}
 
-          {log.length > 0 && (
-            <div className="space-y-2 max-h-64 overflow-auto mb-2">
+          {/* gesprek */}
+          {log.length === 0 ? (
+            <div className="mb-2">
+              <p className="text-[10px] text-parch/40 mb-1">{t(mode === 'ai' ? 'ai.leeg_ai' : 'ai.leeg_zoek')}</p>
+              <div className="flex flex-wrap gap-1">
+                {['ai.v1', 'ai.v2', 'ai.v3'].map((k) => (
+                  <button key={k} onClick={() => vraag(t(k))} className="text-[10px] bg-white/5 border border-bronze/30 rounded-full px-2 py-0.5 hover:border-gold/60 hover:text-gold">{t(k)}</button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2 max-h-[40vh] overflow-auto mb-2 pr-1">
               {log.map((m, i) => (
                 <div key={i}>
                   <div className="bg-gold/10 border border-gold/25 rounded-lg px-2.5 py-1.5 text-xs text-parch/90">{m.ask}</div>
-                  {m.error ? (
-                    <p className="text-red-300 text-[11px] mt-1 px-1">{m.error}</p>
-                  ) : m.mode === 'ai' ? (
-                    <>
-                      <p className="text-[11px] text-parch/80 mt-1 px-1 whitespace-pre-wrap">{m.answer}</p>
-                      <p className="text-[9px] text-parch/40 mt-0.5 px-1">{t('ai.disclaimer')}</p>
-                    </>
-                  ) : (m.hits || []).length === 0 ? (
-                    <p className="text-parch/50 text-[11px] mt-1 px-1">{t('ai.answer_none')}</p>
-                  ) : (
+
+                  {m.error && <p className="text-red-300 text-[11px] mt-1 px-1 whitespace-pre-wrap">{m.error}</p>}
+
+                  {m.answer && (
+                    <div className="mt-1 px-1 text-[11px] text-parch/85 space-y-1 [&_p]:leading-relaxed">{mdNaarJSX(m.answer)}</div>
+                  )}
+                  {m.answer && <p className="text-[9px] text-parch/40 mt-0.5 px-1">{t('ai.disclaimer')}</p>}
+
+                  {!!m.bronnen?.length && (
+                    <div className="mt-1 px-1">
+                      <p className="text-[9px] text-parch/45 mb-0.5">{t('ai.bronnen')}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {m.bronnen.map((b) => {
+                          const I = ICONS.page;
+                          return (
+                            <button key={b.id} onClick={() => onOpen({ id: b.id, name: b.name, type: 'page' })}
+                              title={b.trail} className="flex items-center gap-1 text-[10px] bg-black/30 border border-bronze/25 rounded-full px-2 py-0.5 hover:border-gold/60">
+                              <I className="size-3 text-gold/70" /><span className="truncate max-w-32">{b.name}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {!!m.hits?.length && (
                     <div className="mt-1 space-y-1">
                       <p className="text-[10px] text-parch/50 px-1">{t('ai.answer_found', { n: m.hits.length })}</p>
                       {m.hits.map((h) => {
@@ -103,19 +183,33 @@ export default function Assistant({ onOpen }) {
                       })}
                     </div>
                   )}
+                  {m.hits?.length === 0 && <p className="text-parch/50 text-[11px] mt-1 px-1">{t('ai.answer_none')}</p>}
+
+                  {!!m.next?.length && (
+                    <div className="mt-1 px-1">
+                      <p className="text-[9px] text-parch/45 mb-0.5">{t('ai.verder')}</p>
+                      <div className="flex flex-col gap-1">
+                        {m.next.map((v, n) => (
+                          <button key={n} onClick={() => vraag(v)} className="text-left text-[10px] border border-bronze/30 bg-white/5 rounded-lg px-2 py-1 hover:border-gold/60 hover:text-gold">→ {v}</button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
+              {busy && <p className="text-[11px] text-gold/80 px-1 animate-pulse">{t('ai.denkt')} {sec}s…</p>}
               <div ref={endRef} />
             </div>
           )}
-          <form onSubmit={ask} className="flex gap-1">
+
+          <form onSubmit={(e) => { e.preventDefault(); vraag(); }} className="flex gap-1">
             <div className="relative flex-1">
               <Search className="absolute left-2 top-2 size-3.5 text-parch/40" />
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={mode === 'ai' ? t('ai.ph_ai') : t('ai.ph')}
                 className="w-full bg-black/40 border border-bronze/30 rounded-lg pl-7 pr-2 py-1.5 text-xs outline-none focus:border-gold" />
             </div>
             <button disabled={busy || !q.trim()} className="flex items-center gap-1 bg-gold/90 text-ink rounded-lg px-2.5 text-xs font-bold hover:bg-gold disabled:opacity-40">
-              {busy ? '…' : t(mode === 'ai' ? 'ai.think' : 'ai.ask')}
+              {busy ? sec + 's' : t(mode === 'ai' ? 'ai.think' : 'ai.ask')}
             </button>
           </form>
         </div>
