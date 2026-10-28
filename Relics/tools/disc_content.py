@@ -16,7 +16,10 @@ import array
 
 FFMPEG = r"C:\Users\baaye\AppData\Local\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-9.0.2-full_build\bin\ffmpeg.exe"
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # uit Relics/tools naar repo-root
-PAK = os.path.join(ROOT, "deploy", "iekcorbar-pack-build13.zip")
+import glob as _glob
+_paks = sorted(_glob.glob(os.path.join(ROOT, "deploy", "iekcorbar-pack-build*.zip")),
+               key=lambda p: int("".join(c for c in os.path.basename(p) if c.isdigit())))
+PAK = _paks[-1]  # nieuwste build
 TMP = os.path.join(os.environ["TEMP"], "opencode", "discwave")
 os.makedirs(TMP, exist_ok=True)
 
@@ -63,21 +66,22 @@ for n in z.namelist():
         open(p, "wb").write(z.read(n))
         ogg[b[2:-4]] = pcm8k(p)
 
-# 2) decodeer de bronnen
+# 2) decodeer de bronnen (.oud meenemen als OLD-controle)
 bron = {}
 d_dir = os.path.join(ROOT, "Relics", "discs")
-for f in os.listdir(d_dir):
-    if f.lower().endswith((".mp3", ".wav", ".m4a", ".ogg")):
+for f in sorted(os.listdir(d_dir)):
+    laage = f.lower()
+    if laage.endswith((".mp3", ".wav", ".m4a", ".ogg")):
         stem = os.path.splitext(f)[0].lower().replace(" ", "_").replace("(1)", "").strip("_")
         bron[stem] = pcm8k(os.path.join(d_dir, f))
+    elif laage.endswith(".oud"):
+        stem = os.path.splitext(os.path.splitext(f)[0])[0].lower().replace(" ", "_") + "_OUD"
+        bron[stem] = pcm8k(os.path.join(d_dir, f))
 
-print("ogg (pack)                     <-> beste bron match          score")
+print("ogg (pack)                     <-> top-2-match                  score")
 for oid, oa in sorted(ogg.items()):
     r = sorted(((beste_match(oa, ba), bid) for bid, ba in bron.items()), reverse=True)
-    top = r[0]
-    alt = r[1] if len(r) > 1 else (0.0, "-")
-    if top[1] == oid:
-        vlag = "OK"
-    else:
-        vlag = ">>> VERKEERD: disc [{}] bevat [{}] (score {:.2f}, juist-{} had {:.2f})".format(oid, top[1], top[0], oid, alt[0])
-    print("  u_{:30s} -> {:32s} {:5.2f}   {}".format(oid, top[1], top[0], vlag))
+    top, alt = r[0], (r[1] if len(r) > 1 else (0.0, "-"))
+    vlag = "OK" if top[1] == oid else ">>> VERKEERD: bevat [{}]".format(top[1])
+    print("  u_{:30s} 1e:{:28s} {:.2f} | 2e:{:28s} {:.2f}   {}".format(
+        oid, top[1], top[0], alt[1], alt[0], vlag))
