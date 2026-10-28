@@ -54,6 +54,12 @@ const nl = {
   'why.reactie': 'reactie',
   'tip.disk': 'Server-schijf koppelen',
   'tip.tokens': 'WebDAV-tokens',
+  'tip.profile': 'Profiel',
+  'pf.titel': 'Profiel',
+  'pf.taal': 'Weergavetaal',
+  'pf.hint': 'Deze keuze hoort bij je account: op élk toestel waarop je inlogt staat de hub in deze taal, en de Boord-AI antwoordt erin.',
+  'pf.leesbaar': 'Leesbare tekst',
+  'pf.leesbaar_hint': 'Rustiger lettertype met meer ruimte tussen letters, woorden en regels. Iedereen die veel leest merkt verschil; de instelling is privé en volgt je account.',
   'tip.accounts': 'Accounts',
   'tip.lang': 'Taal wisselen',
   'tip.logout': 'Uitloggen',
@@ -254,6 +260,12 @@ const en = {
   'why.reactie': 'comment',
   'tip.disk': 'Mount network disk',
   'tip.tokens': 'WebDAV tokens',
+  'tip.profile': 'Profile',
+  'pf.titel': 'Profile',
+  'pf.taal': 'Display language',
+  'pf.hint': 'This choice belongs to your account: on any device you sign in on, the hub shows this language - and the Ship AI answers in it.',
+  'pf.leesbaar': 'Readable text',
+  'pf.leesbaar_hint': 'Calmer letterforms with more space between letters, words and lines. Anyone who reads a lot will notice the difference; the setting is private and follows your account.',
   'tip.accounts': 'Accounts',
   'tip.lang': 'Switch language',
   'tip.logout': 'Log out',
@@ -454,6 +466,12 @@ const it = {
   'why.reactie': 'commento',
   'tip.disk': 'Collega disco di rete',
   'tip.tokens': 'Token WebDAV',
+  'tip.profile': 'Profilo',
+  'pf.titel': 'Profilo',
+  'pf.taal': 'Lingua dell’interfaccia',
+  'pf.hint': 'Questa scelta appartiene al tuo account: su qualsiasi dispositivo ti colleghi, la hub è in questa lingua e l’IA di bordo risponde nella stessa lingua.',
+  'pf.leesbaar': 'Testo leggibile',
+  'pf.leesbaar_hint': 'Caratteri più calmi con più spazio tra lettere, parole e righe. Chi legge molto nota la differenza; l’impostazione è privata e segue il tuo account.',
   'tip.accounts': 'Accounts',
   'tip.lang': 'Cambia lingua',
   'tip.logout': 'Esci',
@@ -659,6 +677,12 @@ const fi = {
   'why.reactie': 'kommentti',
   'tip.disk': 'Kytke palvelinlevy',
   'tip.tokens': 'WebDAV-avaimet',
+  'tip.profile': 'Profiili',
+  'pf.titel': 'Profiili',
+  'pf.taal': 'Käyttöliittymän kieli',
+  'pf.hint': 'Tämä valinta kuuluu tilillesi: millä tahansa laitteella kirjaudut, hub näkyy tällä kielellä ja Laiva-AI vastaa samalla kielellä.',
+  'pf.leesbaar': 'Helppolukuinen teksti',
+  'pf.leesbaar_hint': 'Rauhallisemmat kirjaimet ja enemmän tilaa kirjainten, sanojen ja rivien välissä. Paljon lukeva huomaa eron; asetus on yksityinen ja seuraa tiliäsi.',
   'tip.accounts': 'Tilit',
   'tip.lang': 'Vaihda kieltä',
   'tip.logout': 'Kirjaudu ulos',
@@ -858,6 +882,19 @@ const API_MSG = {
   'ai-geen-kennis': 'ai.geen_kennis',
 };
 
+const LEESBAAR_KEY = 'staffhub_leesbaar';
+
+/** Individuele voorkeur: rustiger lettertype met meer ruimte. Hoe je op de
+ *  hub leest is privé - de instelling staat op je eigen account en nergens
+ *  anders zichtbaar. Deze twee helpers schakelen de CSS-stand op <html>. */
+export function setLeesbaar(aan) {
+  try { localStorage.setItem(LEESBAAR_KEY, aan ? '1' : '0'); } catch { }
+  try { document.documentElement.classList.toggle('leesbaar', !!aan); } catch { }
+}
+export function leesbaarStand() {
+  try { return localStorage.getItem(LEESBAAR_KEY) === '1'; } catch { return false; }
+}
+
 const Ctx = createContext(null);
 
 function readLang() {
@@ -882,7 +919,7 @@ export function trServer(msg) {
 
 export function LangProvider({ children }) {
   const [lang, setLangState] = useState('nl');
-  useEffect(() => { setLangState(readLang()); }, []);
+  useEffect(() => { setLangState(readLang()); setLeesbaar(leesbaarStand()); }, []);
   useEffect(() => { try { document.documentElement.lang = lang; } catch { } }, [lang]);
   const setLang = useCallback((l) => {
     try { localStorage.setItem(STORE_KEY, l); } catch { }
@@ -924,11 +961,17 @@ export function useDt() {
   }, [locale]);
 }
 
-/** Klein NL→EN→IT→FI-wisseler-knopgetje, te gebruiken in header en login. */
-export function LangToggle({ className }) {
+/** Klein NL→EN→IT→FI-wisseler-knopgetje, te gebruiken in header en login.
+ *  Met `vast` (async functie) schrijft de keuze ook naar het account - de hub-
+ *  header geeft die mee; het inlogscherm (nog geen account) laat hem weg. */
+export function LangToggle({ className, vast }) {
   const { lang, setLang, t } = useLang();
+  function wissel() {
+    const volgende = LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length];
+    if (vast) vast(volgende); else setLang(volgende);
+  }
   return (
-    <button title={t('tip.lang')} onClick={() => setLang(LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length])}
+    <button title={t('tip.lang')} onClick={wissel}
       className={className || 'px-1.5 py-1 rounded hover:bg-white/10 text-[10px] font-bold text-parch/70 border border-bronze/30'}>
       {lang.toUpperCase()}
     </button>

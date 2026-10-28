@@ -19,16 +19,17 @@ export async function GET(req, { params }) {
   const p = d.prepare('SELECT * FROM pages WHERE node = ?').get(n.id);
   let html = p ? p.html : '';
 
-  // ?lang=it = de VERTALING van dit document opvragen, niet het origineel: de
-  // brontaal is de bron van waarheid en staat als één rij in `pages`. Zonder deze
-  // regel was een gemaakte vertaling alleen in het AI-bord te zien, en verdween
-  // hij uit het oog zodra je de handleiding zelf opende.
+  // ?lang=xx levert de VERTALING van dit document. Gemaakte talen: en/it/fi én
+  // nl - want een gids kan in het Engels of Fins geschreven zijn, en dan wil
+  // een ander lid hem juist in het Nederlands lezen. Bestaat er geen variant
+  // van de gevraagde taal: voor nl vallen we terug op de bron (die ís meestal
+  // Nederlands), voor de rest is "nog niet vertaald" eerlijker dan stilzwijgen.
   const gevraagd = String(new URL(req.url).searchParams.get('lang') || '').toLowerCase();
   let gekozen = null;
-  if (gevraagd && gevraagd !== 'nl') {
+  if (gevraagd) {
     const v = d.prepare('SELECT html, updated FROM vertalingen WHERE node = ? AND lang = ?').get(n.id, gevraagd);
-    if (!v) return Response.json({ error: 'nog niet vertaald' }, { status: 404 });
-    html = v.html; gekozen = gevraagd;
+    if (v) { html = v.html; gekozen = gevraagd; }
+    else if (gevraagd !== 'nl') return Response.json({ error: 'nog niet vertaald' }, { status: 404 });
   }
 
   // ?fmt=md of ?fmt=html = DOWNLOADEN: een handleiding is niet alleen iets om in

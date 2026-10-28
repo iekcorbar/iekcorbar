@@ -12,14 +12,23 @@ import { ingeschakeld, beurt, status } from '@/lib/aikit';
 
 export const dynamic = 'force-dynamic';
 
-function systeem(bronnen) {
+const INTERFACE_TAAL = { nl: 'Nederlands', en: 'English', it: 'Italiano', fi: 'Fins (suomi)' };
+
+function systeem(bronnen, taal) {
+  // De interface-taal van de vrager wint van de taal van de vraag: een Fin die
+  // per ongeluk Nederlands typt krijgt Fins terug - hij heeft die taal immers
+  // zelf in de hub gekozen. Zonder opgegeven taal: oud gedrag, taal van de vraag aan.
+  const taalregel = INTERFACE_TAAL[taal]
+    ? `Je antwoordt ALTIJD in het ${INTERFACE_TAAL[taal]}: dat is de interface-taal die de vrager in de hub heeft gekozen, ook als zijn vraag in een andere taal is gesteld. Zet ook de vervolgvragen onder VRAGEN: in het ${INTERFACE_TAAL[taal]}.`
+    : 'Gebruik de taal van de vraag (nl/en/it/fi, of welke taal er ook getypt wordt).';
   return [
     'Je bent de Boord-AI van iekcorbar: een rustige, zakelijke assistent voor het staffteam.',
     'Je antwoordt ALLEEN uit het kennispakket hieronder - dat is de actualiteit van de eigen StaffHub. Bedenk niets erbij.',
     'Noem bij elk feit welke gids het zegt (de naam uit de kopregel van dat stuk).',
     'IS DE VRAAG TE BREED, MEERDUIDIG OF ONVOLLEDIG: vraag eerst door. Eén korte vraag, met de concrete keuzes erbij - niet drie vragen tegelijk.',
     'Ligt het antwoord niet in het pakket: zeg dat eerlijk en stel voor welke gids aangevuld moet worden.',
-    'Gebruik de taal van de vraag (nl/en/it/fi, of welke taal er ook getypt wordt). Beknopt, met kopjes en lijstjes waar het leest.',
+    taalregel,
+    'Beknopt, met kopjes en lijstjes waar het leest.',
     'Voer niets uit en verander niets; je bent alleen een lezer.',
     'EINDIG ELK ANTWOORD met een regel "VRAGEN:" en daaronder maximaal 3 korte vervolgvragen (één per regel) die een staff-lid zelf níét zou bedenken. Laat die regel weg als er niets zinnigs te vragen is.',
     `Bronnen staan bekend als [id] PAD :: NAAM. Bekende id's: ${bronnen || 'geen'}.`,
@@ -37,7 +46,8 @@ export async function POST(req) {
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
   if (!ingeschakeld()) return Response.json({ error: 'ai-uit' }, { status: 503 });
 
-  const { question, session } = await req.json().catch(() => ({}));
+  const { question, session, lang } = await req.json().catch(() => ({}));
+  const taal = String(lang || '').toLowerCase();
   const q = String(question || '').trim();
   if (q.length < 3) return Response.json({ error: 'leeg' }, { status: 400 });
   if (q.length > 4000) return Response.json({ error: 'te lang (max 4000)' }, { status: 400 });
@@ -57,7 +67,7 @@ export async function POST(req) {
     `KENNISPAKKET uit StaffHub (${kn.sources.length} gid(s), alleen wat ${u.username} mag zien):\n\n${kn.block}\n\n---\n` +
     `VRAAG van staff-lid ${u.username} (${u.team ? 'team ' + u.team + ', ' : ''}rol ${u.role}): ${q}`;
 
-  const r = await beurt({ sid: String(session || ''), system: systeem(kop), text: vraagTekst, ms: 200_000 });
+  const r = await beurt({ sid: String(session || ''), system: systeem(kop, INTERFACE_TAAL[taal] ? taal : ''), text: vraagTekst, ms: 200_000 });
   if (!r.ok) return Response.json({ error: r.error }, { status: r.error === 'ai-uit' ? 503 : 502 });
 
   // Het VRAGEN:-staartje eraf halen en als klikbare chips teruggeven.

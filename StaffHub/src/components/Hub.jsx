@@ -4,12 +4,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Anchor, Folder, FolderPlus, FileText, File as FileIcon, Image as ImageIcon, Download, Trash2,
   Pencil, MoveRight, Search, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
-  RefreshCw, Eye, EyeOff, Plus, X,
+  RefreshCw, Eye, EyeOff, Plus, X, UserCog,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
 import Assistant from '@/components/Assistant';
 import Vertaal from '@/components/Vertaal';
-import { useLang, useDt, trServer, LangToggle } from '@/lib/i18n';
+import { useLang, useDt, trServer, LangToggle, LANGS, setLeesbaar, leesbaarStand } from '@/lib/i18n';
 
 const fmt = (n) => n == null ? '' : n > 1e9 ? (n / 1e9).toFixed(1) + ' GB' : n > 1e6 ? (n / 1e6).toFixed(1) + ' MB' : n > 1000 ? (n / 1000).toFixed(0) + ' KB' : n + ' B';
 
@@ -19,7 +19,7 @@ async function jsend(url, method, body) { const r = await fetch(url, { method, h
 const ICONS = { folder: Folder, page: FileText, file: FileIcon };
 
 export default function Hub({ me, onLogout }) {
-  const { t } = useLang();
+  const { t, lang, setLang } = useLang();
   const dt = useDt();
   const [parent, setParent] = useState(null);
   const [trail, setTrail] = useState([]);
@@ -67,6 +67,32 @@ export default function Hub({ me, onLogout }) {
   }, []);
 
   async function refresh() { await load(parent); }
+
+  // ---------- taal = accountvoorzetting ----------
+  // De keus hoort bij de persoon, niet bij de browser: opslaan in users.prefs
+  // en bij het openen van de hub terughalen. Zo ziet een staff-lid op élk
+  // toestel dezelfde taal - en het AI-bord volgt diezelfde voorkeur.
+  async function kiesTaal(l) {
+    setLang(l);
+    try { await jsend('/api/profile', 'PATCH', { prefs: { taal: l } }); } catch { }
+  }
+  // Leesbare tekst: dezelfde accountvoorzetting, andere knop. De reden houdt
+  // iedereen voor zich - het staat alleen als 'leesbaar' in de rij.
+  async function kiesLeesbaar(aan) {
+    setLeesbaar(aan);
+    try { await jsend('/api/profile', 'PATCH', { prefs: { leesbaar: aan } }); } catch { }
+  }
+  useEffect(() => {
+    fetch('/api/profile').then((r) => (r.ok ? r.json() : {}))
+      .then((j) => {
+        const p = j?.user?.prefs?.taal;
+        if (p && LANGS.includes(p) && p !== lang) setLang(p);
+        const lb = j?.user?.prefs?.leesbaar;
+        if (typeof lb === 'boolean' && lb !== leesbaarStand()) setLeesbaar(lb);
+      })
+      .catch(() => { });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ---------- uploaden (knop + drag&drop, ook met mappen) ----------
   // Eén los .zip-archief is geen gewoon bestand: dan toont de hub eerst een
@@ -231,7 +257,7 @@ export default function Hub({ me, onLogout }) {
     <div className="h-screen flex flex-col">
       {/* topbalk */}
       <header className="flex items-center gap-3 px-4 py-2 border-b border-bronze/30 bg-panel">
-        <span className="size-8 grid place-items-center rounded-lg bg-gold/10 border border-gold/30"><Anchor className="size-4 text-gold" /></span>
+        <img src="/icon-192.png" width="32" height="32" alt="" className="size-8 rounded-lg" />
         <h1 className="font-bold text-parch mr-2 tracking-tight">Staff<span className="text-gold">Hub</span></h1>
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-2.5 top-2 size-4 text-parch/40" />
@@ -252,7 +278,8 @@ export default function Hub({ me, onLogout }) {
         </div>
         <div className="ml-auto flex items-center gap-2 text-xs">
           <span className="hidden sm:inline rounded-full bg-white/5 border border-bronze/30 px-2.5 py-1 text-parch/70">{me.username}{me.team ? ` · ${me.team}` : ''}</span>
-          <LangToggle />
+          <LangToggle vast={kiesTaal} />
+          <button title={t('tip.profile')} onClick={() => setModal('profiel')} className="p-1.5 rounded hover:bg-white/10"><UserCog className="size-4" /></button>
           <button title={t('tip.desktop')} onClick={() => setModal('desktop')} className="p-1.5 rounded hover:bg-white/10"><Download className="size-4" /></button>
           <button title={t('tip.disk')} onClick={() => setModal('dav')} className="p-1.5 rounded hover:bg-white/10"><Server className="size-4" /></button>
           <button title={t('tip.tokens')} onClick={() => setModal('tokens')} className="p-1.5 rounded hover:bg-white/10"><KeyRound className="size-4" /></button>
@@ -369,6 +396,7 @@ export default function Hub({ me, onLogout }) {
       {archief && <ArchiveModal archief={archief} sluit={() => setArchief(null)} ververst={refresh} bewaar={arBewaar} />}
       {modal === 'dav' && <DavModal onClose={() => setModal(null)} />}
       {modal === 'desktop' && <DesktopModal onClose={() => setModal(null)} />}
+      {modal === 'profiel' && <ProfiModal me={me} sluit={() => setModal(null)} kiesTaal={kiesTaal} kiesLeesbaar={kiesLeesbaar} />}
     </div>
   );
 }
@@ -639,6 +667,54 @@ function ArchiveModal({ archief, sluit, ververst, bewaar }) {
           {t('dt.close')}
         </button>
       </div>
+    </Modal>
+  );
+}
+
+// Het profielvenster: de account-keuzes van een staff-lid. Taal is voor nu de
+// hoofdzakelijke: die volgt het persoon naar élk toestel (users.prefs) en het
+// AI-bord antwoordt erin. Wachtwoord en toestellen hebben straks ook hier hun
+// plek; toestellen intrekken staat nu al in het tokenscherm.
+function ProfiModal({ me, sluit, kiesTaal, kiesLeesbaar }) {
+  const { t, lang } = useLang();
+  const [klaar, setKlaar] = useState('');
+  const [leesbaarAan, zetLeesbaarAan] = useState(() => leesbaarStand());
+  const INHEEMS = { nl: 'Nederlands', en: 'English', it: 'Italiano', fi: 'Suomi' };
+  async function kiezen(l) {
+    if (l === lang) return;
+    await kiesTaal(l);
+    setKlaar(l); setTimeout(() => setKlaar(''), 2200);
+  }
+  async function zetLeesbaar() {
+    const aan = !leesbaarAan;
+    zetLeesbaarAan(aan);        // knopstand meteen, de provider-regel doet kiesLeesbaar hieronder
+    await kiesLeesbaar(aan);
+  }
+  return (
+    <Modal title={t('pf.titel')} onClose={sluit}>
+      <div className="flex items-center gap-2 text-xs mb-4">
+        <UserCog className="size-5 text-gold" />
+        <b className="text-parch">{me.username}</b>
+        <span className="text-parch/50">{me.role}{me.team ? ' · ' + me.team : ''}</span>
+      </div>
+      <h4 className="text-gold font-bold text-xs mb-2">{t('pf.taal')}</h4>
+      <div className="grid grid-cols-2 gap-2 mb-3">
+        {LANGS.map((l) => (
+          <button key={l} onClick={() => kiezen(l)}
+            className={`rounded-lg border px-3 py-2 text-left text-xs transition-colors ${lang === l ? 'bg-gold/15 border-gold/60 text-parch' : 'bg-black/30 border-bronze/30 text-parch/70 hover:border-gold/50'}`}>
+            <b>{INHEEMS[l] || l.toUpperCase()}</b>
+            <span className="block text-[10px] text-parch/45">{l.toUpperCase()}{lang === l && (klaar === l ? ' · ✓ ' + t('ed.saved') : ' · ✓')}</span>
+          </button>
+        ))}
+      </div>
+      <button onClick={zetLeesbaar} className={`mt-5 w-full rounded-lg border px-3 py-2 text-left text-xs transition-colors ${leesbaarAan ? 'bg-gold/15 border-gold/60 text-parch' : 'bg-black/30 border-bronze/30 text-parch/70 hover:border-gold/50'}`}>
+        <span className="flex items-center gap-2">
+          <span className={`size-4 rounded grid place-items-center text-[10px] font-bold ${leesbaarAan ? 'bg-gold text-ink' : 'border border-bronze/50 text-transparent'}`}>✓</span>
+          <b>{t('pf.leesbaar')}</b>
+        </span>
+        <span className="block text-[10px] text-parch/45 mt-1">{t('pf.leesbaar_hint')}</span>
+      </button>
+      <p className="text-[11px] text-parch/50 mt-3">{t('pf.hint')}</p>
     </Modal>
   );
 }

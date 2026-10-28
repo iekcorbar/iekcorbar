@@ -27,6 +27,26 @@ body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; 
 
 ::selection { background: #5b9dd966; }
 
+/* Leesbare-tekststand (profiel > Leesbare tekst). Atkinson Hyperlegible is bij
+   het Braille-Institute ontworpen voor slecht-zittende ogen: wie 't niet nodig
+   heeft merkt niets op, wie 't nodig heeft leest opeens makkelijker. */
+@font-face {
+  font-family: 'Atkinson Hyperlegible'; font-style: normal; font-weight: 400;
+  font-display: swap; src: url('/fonts/atkinson-hyperlegible-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Atkinson Hyperlegible'; font-style: normal; font-weight: 700;
+  font-display: swap; src: url('/fonts/atkinson-hyperlegible-700.woff2') format('woff2');
+}
+html.leesbaar body { font-family: 'Atkinson Hyperlegible', ui-sans-serif, system-ui, sans-serif; }
+html.leesbaar { letter-spacing: 0.02em; word-spacing: 0.12em; }
+html.leesbaar body { line-height: 1.65; }
+html.leesbaar .prose-hub { font-size: 1.05rem; }
+html.leesbaar .prose-hub p, html.leesbaar .prose-hub li { line-height: 1.85; }
+html.leesbaar .prose-hub ul, html.leesbaar .prose-hub ol { padding-left: 1.7em; }
+html.leesbaar .prose-hub li + li { margin-top: 0.3em; }
+html.leesbaar em, html.leesbaar i { font-style: normal; text-decoration: underline; text-decoration-color: #6fae9b; }
+
 /* TipTap-bewerker: kale content een beetje adem geven */
 .prose-hub :is(h1, h2, h3) { color: var(--color-parch); font-weight: 650; margin: 0.9em 0 0.35em; letter-spacing: -0.01em; }
 .prose-hub h1 { font-size: 1.5rem; border-bottom: 1px solid #33414f; padding-bottom: 0.25em; }

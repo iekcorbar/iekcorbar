@@ -22,7 +22,7 @@ const ICONS = { folder: Folder, page: FileText, file: FileIcon };
 const SLEUTEL = 'staffhub_board';
 
 export default function Assistant({ onOpen }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [open, setOpen] = useState(true);
   const [mode, setMode] = useState('zoek');
   const [q, setQ] = useState('');
@@ -58,7 +58,7 @@ export default function Assistant({ onOpen }) {
     tik.current = setInterval(() => setSec((s) => s + 1), 1000);
     try {
       if (m === 'ai') {
-        const r = await fetch('/api/ai', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: vraagTekst, session: sid.current }) });
+        const r = await fetch('/api/ai', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ question: vraagTekst, session: sid.current, lang }) });
         const j = await r.json().catch(() => ({}));
         if (!r.ok || j.error) {
           if (String(j.error || '') === 'ai-uit') setSt({ on: false, reden: 'sandbox-bereikt-niet' });

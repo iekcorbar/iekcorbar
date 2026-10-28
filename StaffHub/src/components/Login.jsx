@@ -32,9 +32,9 @@ export default function Login({ needsSetup, onDone }) {
         <div className="flex justify-end mb-1"><LangToggle /></div>
         <form onSubmit={submit} className="w-full bg-panel border border-bronze/40 rounded-2xl p-6 space-y-4 shadow-2xl">
         <div className="flex items-center gap-3">
-          <span className="size-10 grid place-items-center rounded-full bg-gold/10 border border-gold/40"><Anchor className="size-5 text-gold" /></span>
+          <img src="/icon-192.png" width="40" height="40" alt="" className="size-10 rounded-xl" />
           <div>
-            <h1 className="text-lg font-bold text-gold leading-tight">StaffHub</h1>
+            <h1 className="text-lg font-bold text-parch leading-tight">Staff<span className="text-gold">Hub</span></h1>
             <p className="text-[11px] text-parch/50">{needsSetup ? t('login.setup_sub') : t('login.crew_sub')}</p>
           </div>
         </div>

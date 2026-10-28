@@ -44,6 +44,7 @@ function systeem(maal) {
     'Vertaal VOLLEDIG: niet samenvatten, niet weglaten, niet toevoegen, geen commentaar, geen voorwoord. Geef uitsluitend de vertaalde markdown terug, zonder ```-omwalling.',
     "Laat commando's, bestandsnamen, plugin-namen, items en minecraft:-id's onvertaald; vertaal alleen de gewone zinnen eromheen.",
     'Houd terminology consistent met de eerdere stukken van hetzelfde document.',
+    'Schrijf kort en helder: voorkeur voor korte zinnen en waar het mag een lijstje boven een lap tekst.',
   ].join('\n');
 }
 
@@ -68,7 +69,7 @@ function tel(md) {
  */
 export async function vertaalPagina(node, naar, { wie = null, opnieuw = false } = {}) {
   const d = getDb();
-  if (!TALEN[naar] || naar === 'nl') return { ok: false, fout: 'onbekende taal' };
+  if (!TALEN[naar]) return { ok: false, fout: 'onbekende taal' };
   const bron = d.prepare('SELECT html FROM pages WHERE node = ?').get(node);
   if (!bron) return { ok: false, fout: 'geen document' };
   const bestaand = d.prepare('SELECT html, updated FROM vertalingen WHERE node = ? AND lang = ?').get(node, naar);

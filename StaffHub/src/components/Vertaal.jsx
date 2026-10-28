@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { Languages, Download, FileText } from 'lucide-react';
 import { useLang, trServer } from '@/lib/i18n';
 
-const TAALNAAM = { en: 'EN', it: 'IT', fi: 'FI' };
+const TAALNAAM = { nl: 'NL', en: 'EN', it: 'IT', fi: 'FI' };
 
 /**
  * Een handleiding-HTML zoals die in de hub staat, puur lezen. Zelfde opmaak voor

@@ -13,8 +13,8 @@ export default function manifest() {
     scope: '/',
     display: 'standalone',
     orientation: 'any',
-    background_color: '#0d0a07',
-    theme_color: '#0d0a07',
+    background_color: '#0c1117',
+    theme_color: '#0c1117',
     icons: [
       { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
       { src: '/icon-384.png', sizes: '384x384', type: 'image/png', purpose: 'any' },
