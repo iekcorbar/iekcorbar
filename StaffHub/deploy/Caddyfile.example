@@ -1,0 +1,7 @@
+# Caddy voorbeeld - voeg dit toe aan de bestaande Caddyfile op de VPS
+staff.iekcorbar.com {
+	encode gzip zstd
+	reverse_proxy 127.0.0.1:3120 {
+		request_body 600MB
+	}
+}

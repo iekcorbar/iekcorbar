@@ -1,0 +1,17 @@
+services:
+  staffhub:
+    build: .
+    container_name: staffhub
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3120:3120"       # alleen lokaal; Caddy/Traefik doet de voordeur
+    environment:
+      STAFFHUB_BOOTSTRAP: ${STAFFHUB_BOOTSTRAP}
+      COOKIE_SECURE: "1"
+    volumes:
+      - ./data:/app/data            # sqlite + bestanden: dit IS de NAS-bak
+    mem_limit: 512m                 # de Minecraft-server mag never knocken
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }

@@ -1,0 +1,10 @@
+# StaffHub - wat de Docker-build NIET mag zien (zie ook README: bron zonder
+# node_modules/data naar de VPS kopiëren)
+node_modules/
+.next/
+data/
+desktop/
+backups/
+.env
+.env.*
+*.log

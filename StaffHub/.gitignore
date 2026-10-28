@@ -1,0 +1,8 @@
+# StaffHub - bouwrommel en opslag nooit in git
+node_modules/
+.next/
+out/
+dist/
+data/
+*.local
+.env

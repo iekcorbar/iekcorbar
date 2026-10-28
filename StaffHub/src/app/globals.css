@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0d0a07;
+  --color-panel: #171210;
+  --color-bronze: #8a6a45;
+  --color-gold: #c9a55a;
+  --color-copper: #b87333;
+  --color-parch: #e8dcc8;
+}
+
+/* TipTap-bewerker: kale content een beetje adem geven */
+.prose-hub :is(h1, h2, h3) { color: var(--color-gold); font-weight: 700; margin: 0.8em 0 0.3em; }
+.prose-hub h1 { font-size: 1.5rem; }
+.prose-hub h2 { font-size: 1.2rem; }
+.prose-hub h3 { font-size: 1.05rem; }
+.prose-hub p { margin: 0.4em 0; }
+.prose-hub ul { list-style: disc; padding-left: 1.4em; margin: 0.4em 0; }
+.prose-hub ol { list-style: decimal; padding-left: 1.4em; margin: 0.4em 0; }
+.prose-hub blockquote { border-left: 3px solid var(--color-copper); padding-left: 0.8em; color: #cbb896; margin: 0.5em 0; }
+.prose-hub code { background: #00000066; padding: 1px 5px; border-radius: 4px; font-size: 0.85em; }
+.prose-hub pre { background: #00000088; padding: 0.7em; border-radius: 8px; overflow-x: auto; }
+.prose-hub pre code { background: transparent; padding: 0; }
+.prose-hub img { max-width: 100%; border-radius: 8px; margin: 0.5em 0; }
+.prose-hub a { color: var(--color-gold); text-decoration: underline; }
+.prose-hub table { border-collapse: collapse; }
+.prose-hub td, .prose-hub th { border: 1px solid #8a6a4555; padding: 4px 8px; }
+.prose-hub :is(h1, h2, h3, p, ul, ol):first-child { margin-top: 0; }

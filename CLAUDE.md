@@ -1329,3 +1329,30 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Bouw: `npm run build` groen (113 pagina's); site-zip via make-zip.js →
   `deploy\iekcorbar_iekje_barend.zip` (34,0 MB, sha1 816f16de6fdc65be5bca4c54ba6b9d2bd08cb284),
   TE-DEPLOYEN punt 16 (Plesk: unzip + npm install + build + restart).
+
+### StaffHub 0.1.0 - nieuw deelproject in deze repo (28-10 ochtend)
+
+- NIEUWE MAP `StaffHub/`: losstaande webapp + WebDAV-schijf + Electron-shell waarmee
+  staff handleidingen en bestanden deelt (Next 16 + node:sqlite + content-addressed
+  blobs, géén MySQL/Plesk). Bouw vanochtend klaar gezet en groen getest: setup→owner,
+  login/me, map+upload, pagina's, zoeken, WebDAV PROPFIND/PUT/GET, token-logins -
+  alles 200/207/201 via een rooktest op de echte prod-server. WebDAV-login is
+  gebruikersnaam + token als WACHTWOORD (UI legt dat uit; DavModal/TokensModal).
+- Valkuil 1 (Next + monorepo-achtige structuur): StaffHub zit IN deze repo en de repo-root
+  heeft zélf een package-lock.json + Next-site. Next raadt daardoor de PARENT als
+  workspace-root en bouwde stilletjes de site-`src/instrumentation.js` + reminders/MySQL-code
+  in StaffHub's `.next` mee (elke opstart: "ECONNREFUSED 127.0.0.1:3306"). Fix: in
+  `StaffHub/next.config.mjs` `turbopack.root` én `outputFileTracingRoot` pinnen op de
+  eigen map. Herkenning: chunk-bestand `src_lib_reminders_*` in StaffHub/.next.
+- Valkuil 2 (custom server): `handle(req,res,new URL(...))` gaf in prod een 308-zelflus op
+  IEDER request (ook `GET /`). Fix: `parse(req.url, true)` uit node:url + `next({dev,hostname,port})`
+  zoals in de Next-docs. `node server.js` (dev) en `NODE_ENV=production node server.js` draaien nu.
+- Root `.gitignore` kende twee valkuilen voor StaffHub: `deploy/` en `.env.*` grepen ook
+  in `StaffHub/` → re-include-regels toegevoegd (`!StaffHub/deploy/`, `!StaffHub/.env.example`).
+- Docker: `.dockerignore` toegevoegd (host-`node_modules`/`.next`/`data`/`desktop` blijven
+  buiten de image) en `npm ci --omit=dev=false` vereenvoudigd naar `npm ci` (er zijn geen
+  devDependencies).
+- Aflevering: `deploy\staffhub-0.1.0.zip` (60 KB, sha1 989321f88172531f0513a8d482df0974eebffdf0,
+  44 bronbestanden) + TE-DEPLOYEN punt 17 (VPS-host, geen container: /opt/staffhub, docker
+  compose, Caddy staff.iekcorbar.com, DNS-A-record nog aanmaken, bootstrap-code, backup-cron).
+  Electron-app (`desktop/`) is nog níet gebouwd - alleen de bron.
