@@ -1356,3 +1356,29 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   44 bronbestanden) + TE-DEPLOYEN punt 17 (VPS-host, geen container: /opt/staffhub, docker
   compose, Caddy staff.iekcorbar.com, DNS-A-record nog aanmaken, bootstrap-code, backup-cron).
   Electron-app (`desktop/`) is nog níet gebouwd - alleen de bron.
+
+### StaffHub 0.1.1 - DNS gezet, voordeur wordt nginx (28-10 middag)
+
+- Eigenaar maakte de A-record `staff.iekcorbar.com` bij Hostnet; er stond een los teken
+  achter het IP, dat heeft hij weggehaald en de record opnieuw gezet. Nagemet via 1.1.1.1
+  én 8.8.8.8: `staff.iekcorbar.com` → **82.165.250.99** (de VPS). De apex
+  `iekcorbar.com` → 195.20.225.109 (de site-host) en `www` idem — dat klopt zo.
+- **Caddy-plan was onuitvoerbaar.** Agent-check op de VPS (alleen gelezen): er draait
+  géén Caddy (`caddy` not-found, inactive), maar **nginx 1.24 bezet al 0.0.0.0:80/443**
+  met certbot-certificaten voor `map.iekcorbar.com` (proxy → 82.165.250.99:2243, de
+  BlueMap-haven van de MC-container) en `node1.iekcorbar.com`. Caddy ernaast had die
+  havens moeten stelen en BlueMap van de kaart af geschoten. Punt 17 is herschreven
+  naar **nginx-vhost + `certbot --nginx`**, als `StaffHub/deploy/nginx-site.example`
+  (de `Caddyfile.example` is weg). Voor Windows-Verkenner-WebDAV staat er
+  `client_max_body_size 0`, `proxy_request_buffering off` en 600 s timeouts; géén
+  http2 aanzetten op dat vhost (de WebDAV-redirector hikt erop). Herkenning van de
+  foute situatie vóór de DNS-correctie: `https://staff.iekcorbar.com` gaf de **BlueMap**-pagina
+  (nginx vond geen matching server_name → default vhost) met een cert-naamfout.
+- Overige stand op de VPS: `/opt` bevat alléén `containerd` (StaffHub dus nog níét
+  uitgepakt), geen staffhub-container, `127.0.0.1:3120` luistert nog niet, schijf 323 GB
+  vrij, 19 GB RAM beschikbaar. Niets gewijzigd op de server — alleen gelezen.
+- Nieuwe artefacten: `StaffHub/tools/make_release_zip.py` (bouwt de zip uit package.json-
+  versie, voorvoegsel `staffhub/`, zonder node_modules/.next/data) en
+  `deploy\staffhub-0.1.1.zip` (61 KB, sha1 7db5733183f0a9212a9022ed5da3a8674af8c811,
+  45 bestanden). Zelfde bron als 0.1.0, alleen de deploy-laag anders; de 0.1.0-zip is
+  weggegooid (nooit geüpload — op de VPS niets met staffhub gevonden).

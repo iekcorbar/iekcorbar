@@ -1,0 +1,54 @@
+# StaffHub — nginx voordeur op de iekcorbar-VPS (82.165.250.99)
+#
+# VERVANGT het oude Caddy-plan: op deze VPS doet nginx al poort 80/443
+# (map.iekcorbar.com, node1.iekcorbar.com). Caddy naast nginx vecht om die
+# havens en is hier dus NIET de juiste weg.
+#
+# Te gebruiken als /etc/nginx/sites-available/staff.iekcorbar.com
+# (certbot schrijft er zelf de SSL-regels bij, zie TE-DEPLOYEN).
+#
+# Let op: WebDAV heeft méér nodig dan een gewone proxy — daarom hier
+# onbeperkte lichaamsgrootte, geen request-buffering en lange timeouts.
+
+# WebSocket-upgrade in éne variabele. De naam is hier bewust uniek
+# (staffhub_): een `map` staat op http-niveau en botst met zichzelf als
+# twee bestanden dezelfde variabelenaam gebruiken.
+map $http_upgrade $staffhub_connection {
+    default upgrade;
+    ''      close;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name staff.iekcorbar.com;
+
+    # Grootste upload in het staff-netwerk is de limiet van de app zelf (600 MB);
+    # nginx mag er nooit halfweg een "413" van maken.
+    client_max_body_size 0;
+
+    location / {
+        proxy_pass http://127.0.0.1:3120;
+
+        proxy_http_version 1.1;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebDAV: methods (PROPFIND/MKCOL/PUT/MOVE/...) moeten doorgiven worden,
+        # nginx doet dat via proxy_pass — maar de body mag niet gebufferd worden
+        # naar schijf, anders stokt Verkenner bij grote bestanden.
+        proxy_request_buffering off;
+        proxy_buffering off;
+        proxy_connect_timeout 10s;
+        proxy_send_timeout    600s;
+        proxy_read_timeout    600s;
+        send_timeout          600s;
+        chunked_transfer_encoding on;
+
+        # Verkenner stuurt soms geen Upgrade-header; dit doet geen schade.
+        proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection $staffhub_connection;
+    }
+}

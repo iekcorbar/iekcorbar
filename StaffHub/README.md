@@ -40,16 +40,24 @@ testen doe je met `npm run build` + `npm start`.
 2. `.env` maken met een sterke `STAFFHUB_BOOTSTRAP`.
 3. `docker compose up -d --build` (docker-compose.yml beperkt het geheugen tot
    512 MB - de Minecraft-server mag er nooit last van hebben).
-4. Caddy: het blok uit `deploy/Caddyfile.example` aan de Caddyfile toevoegen
-   (staff.iekcorbar.com → 127.0.0.1:3120). Caddy regelt gratis HTTPS, nodig
-   voor Verkenner-WebDAV en veilige cookies.
+4. Voordeur: **nginx**, geen Caddy. Op onze VPS doet nginx al poort 80/443
+   (map.iekcorbar.com), dus Caddy ernaast zou om die havens vechten.
+   `deploy/nginx-site.example` kopiëren naar
+   `/etc/nginx/sites-available/staff.iekcorbar.com`, symlink in sites-enabled,
+   `nginx -t` en dan `certbot --nginx -d staff.iekcorbar.com` — certbot regelt
+   het gratis HTTPS (nodig voor Verkenner-WebDAV en veilige cookies) en schrijft
+   de SSL-regels zelf in dat bestand.
 5. Open de URL, maak de owner aan met de bootstrap-code.
 6. Back-up: `deploy/backup.sh` in de cron zetten (wekelijks; bewaart 8 tar's).
 
 Beveiliging: alleen HTTPS, geen anoniem lezen, tokens zijn intrekbaar, en deze
 accounts staan los van de site - een gestolen staff-wachtwoord raakt dus niets
-op iekcorbar.com. Zet de firewall op de VPS zo dat alleen 80/443 (via Caddy) en
-SSH naar buiten wijzen; de app zelf luistert lokaal op 127.0.0.1.
+op iekcorbar.com. De app zelf luistert alleen op 127.0.0.1:3120 (zie
+docker-compose); naar buiten wijzen dus enkel 80/443 via nginx en SSH.
+Zet op dit vhost géén `http2` aan: de Windows WebDAV-redirector (Verkenner)
+hikt erop. Vooraf nodig: een A-record `staff.iekcorbar.com` → het VPS-adres
+(gemaakt 28-10 bij Hostnet; de apex `iekcorbar.com` wijst naar de site-host,
+dat is correct zo).
 
 ## Desktop-app bouwen (eigen Windows-machines)
 
