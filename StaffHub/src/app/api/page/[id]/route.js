@@ -17,18 +17,31 @@ export async function GET(req, { params }) {
   const n = d.prepare('SELECT * FROM nodes WHERE id = ?').get(Number(id));
   if (!n || n.type !== 'page' || !canSee(u, n)) return Response.json({ error: 'not found' }, { status: 404 });
   const p = d.prepare('SELECT * FROM pages WHERE node = ?').get(n.id);
-  const html = p ? p.html : '';
+  let html = p ? p.html : '';
+
+  // ?lang=it = de VERTALING van dit document opvragen, niet het origineel: de
+  // brontaal is de bron van waarheid en staat als één rij in `pages`. Zonder deze
+  // regel was een gemaakte vertaling alleen in het AI-bord te zien, en verdween
+  // hij uit het oog zodra je de handleiding zelf opende.
+  const gevraagd = String(new URL(req.url).searchParams.get('lang') || '').toLowerCase();
+  let gekozen = null;
+  if (gevraagd && gevraagd !== 'nl') {
+    const v = d.prepare('SELECT html, updated FROM vertalingen WHERE node = ? AND lang = ?').get(n.id, gevraagd);
+    if (!v) return Response.json({ error: 'nog niet vertaald' }, { status: 404 });
+    html = v.html; gekozen = gevraagd;
+  }
 
   // ?fmt=md of ?fmt=html = DOWNLOADEN: een handleiding is niet alleen iets om in
   // te kijken maar ook iets om mee te nemen (in de bus, zonder bereik, of in een
   // andere editor). Zonder deze regel was een pagina de enige soort in de hub die
-  // je niet als bestand kon krijgen.
+  // je niet als bestand kon krijgen. Met ?lang mee: dan gaat de VERTALING mee.
   const fmt = String(new URL(req.url).searchParams.get('fmt') || '').toLowerCase();
   if (fmt === 'md' || fmt === 'html') {
-    const bestandsnaam = (String(n.name).replace(/[\\/:*?"<>|\u0000-\u001f]/g, '').trim() || 'handleiding') + (fmt === 'md' ? '.md' : '.html');
+    const schoon = String(n.name).replace(/[\\/:*?"<>|\u0000-\u001f]/g, '').trim() || 'handleiding';
+    const bestandsnaam = schoon + (gekozen ? '-' + gekozen : '') + (fmt === 'md' ? '.md' : '.html');
     const body = fmt === 'md'
       ? htmlToMd(html)
-      : `<!doctype html><html lang="nl"><head><meta charset="utf-8"><title>${encodeURIComponent(n.name)}</title>` +
+      : `<!doctype html><html lang="${gekozen || 'nl'}"><head><meta charset="utf-8"><title>${encodeURIComponent(n.name)}</title>` +
         `<style>body{font:15px/1.6 system-ui;max-width:46rem;margin:3rem auto;padding:0 1rem;color:#1b1b1b}img{max-width:100%}</style>` +
         `</head><body>${html}</body></html>`;
     return new Response(body, {
@@ -39,7 +52,13 @@ export async function GET(req, { params }) {
       },
     });
   }
-  return Response.json({ node: { id: n.id, name: n.name, updated: n.updated }, html, who: p ? p.who : n.owner });
+  // `varianten`: wat er al klaarligt, zodat de editor er tabbladen van kan maken.
+  const varianten = d.prepare('SELECT lang, updated FROM vertalingen WHERE node = ?').all(n.id)
+    .map((v) => ({ lang: v.lang, updated: v.updated, verouderd: v.updated < n.updated }));
+  return Response.json({
+    node: { id: n.id, name: n.name, updated: n.updated }, html, wie: p ? p.who : n.owner,
+    gekozen, varianten,
+  });
 }
 
 export async function PUT(req, { params }) {

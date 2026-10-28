@@ -9,6 +9,7 @@ import Image from '@tiptap/extension-image';
 import { useEffect, useRef, useState } from 'react';
 import { Bold, Italic, Strikethrough, Heading1, Heading2, Heading3, List, ListOrdered, Quote, Code, Undo, Redo, Link2, ImagePlus, Save } from 'lucide-react';
 import { useLang, trServer } from '@/lib/i18n';
+import { GidsWeergave } from '@/components/Vertaal';
 
 const BTN = 'p-1.5 rounded hover:bg-white/10 text-parch/70';
 
@@ -22,6 +23,13 @@ export default function PageEditor({ node, onRenamed }) {
   // ook onUpdate af, en zonder deze vlag zou een vers geopend document meteen
   // als "niet opgeslagen" boven de knop staan.
   const loading = useRef(true);
+  // Taal-tabbladen boven een handleiding. `taal === null` is de BRON (die is te
+  // bewerken); een gekozen taal is een bestaande vertaling en dus alleen te
+  // lezen. Zo hoeft TipTap niet op "alleen-lezen" te schakelen en kan er niets
+  // per ongeluk in een vertaling worden teruggezet.
+  const [varianten, setVarianten] = useState([]);
+  const [taal, setTaal] = useState(null);
+  const [vertaald, setVertaald] = useState('');
 
   const editor = useEditor({
     extensions: [StarterKit, Link.configure({ openOnClick: false }), Image],
@@ -44,12 +52,13 @@ export default function PageEditor({ node, onRenamed }) {
     if (!editor) return undefined;
     let live = true;
     loading.current = true;
-    setDirty(false); setErr('');
+    setDirty(false); setErr(''); setTaal(null);
     fetch('/api/page/' + node.id)
       .then((r) => r.json().then((j) => ({ ok: r.ok, j })).catch(() => ({ ok: false, j: null })))
       .then(({ ok, j }) => {
         if (!live) return;
         if (!ok || j?.error) { setErr(trServer(j?.error || 'mislukt')); return; }
+        setVarianten(j.varianten || []);
         editor.commands.setContent(j.html || '<h1>' + node.name + '</h1><p></p>');
         setDirty(false);
       })
@@ -57,6 +66,29 @@ export default function PageEditor({ node, onRenamed }) {
       .finally(() => { loading.current = false; });
     return () => { live = false; };
   }, [node.id, editor]); // eslint-disable-line
+
+  // De gekozen vertaling halen op. Apart effect: de editor blijft gewoon op de
+  // bron staan, dit is alleen wat er in de ruit getoond wordt.
+  useEffect(() => {
+    if (!taal) { setVertaald(''); return undefined; }
+    let live = true;
+    fetch('/api/page/' + node.id + '?lang=' + encodeURIComponent(taal))
+      .then((r) => (r.ok ? r.json() : { html: '' }))
+      .then((j) => { if (live) setVertaald(j.html || ''); })
+      .catch(() => { if (live) setVertaald(''); });
+    return () => { live = false; };
+  }, [node.id, taal]);
+
+  // Seintje uit het AI-bord: er is zojuist een vertaling bijgekomen, dus de
+  // tabbladen moeten ververst - anders moet men eerst een andere map in en uit.
+  useEffect(() => {
+    const op = () => fetch('/api/page/' + node.id)
+      .then((r) => (r.ok ? r.json() : {}))
+      .then((j) => { if (j.varianten) setVarianten(j.varianten); })
+      .catch(() => { });
+    window.addEventListener('staffhub:vertaling', op);
+    return () => window.removeEventListener('staffhub:vertaling', op);
+  }, [node.id]);
 
   async function save() {
     try {
@@ -92,6 +124,37 @@ export default function PageEditor({ node, onRenamed }) {
   if (!editor) return null;
   const I = ({ icon: Ic, ...p }) => <button type="button" {...p}><Ic className="size-4" /></button>;
 
+  // Tabstrip: potlood = de bron (bewerkbaar), taalcodes = een bestaande
+  // vertaling (alleen lezen). ⚠ = het origineel is later nog bewerkt.
+  const tabbalk = varianten.length > 0 && (
+    <div className="px-3 pt-2 flex items-center gap-1 flex-wrap">
+      <button onClick={() => setTaal(null)} title="✎"
+        className={`rounded px-2 py-0.5 text-[11px] border ${!taal ? 'bg-gold/20 border-gold/50 text-gold' : 'bg-white/5 border-bronze/30 text-parch/60 hover:border-gold/60'}`}>✎</button>
+      {varianten.map((v) => (
+        <button key={v.lang} onClick={() => setTaal(v.lang)} title={new Date(v.updated).toISOString().slice(0, 10) + (v.verouderd ? ' ⚠' : '')}
+          className={`rounded px-2 py-0.5 text-[11px] border ${taal === v.lang ? 'bg-gold/20 border-gold/50 text-gold' : 'bg-white/5 border-bronze/30 text-parch/60 hover:border-gold/60'}`}>
+          {String(v.lang).toUpperCase()}{v.verouderd ? ' ⚠' : ''}
+        </button>
+      ))}
+    </div>
+  );
+
+  // Lees-stand: eigen.return zónder werkbalk en zónder opslaanknop. Die knop
+  // schrijft namelijk altíjd naar de BRON - wie in een vertaling zou "bewerken"
+  // en opslaan, overschrijft het origineel met een vertaling. Dat mag niet kunnen.
+  if (taal) return (
+    <div className="flex flex-col h-full">
+      <div className="px-3 pt-3 flex items-center gap-2">
+        <h3 className="text-sm font-bold text-gold truncate flex-1">{node.name}</h3>
+        <span className="text-[10px] text-parch/45">{taal.toUpperCase()}</span>
+      </div>
+      {tabbalk}
+      <div className="flex-1 overflow-auto px-3 py-2">
+        <GidsWeergave html={vertaald} klas="min-h-full" />
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex flex-col h-full">
       <div className="px-3 pt-3 flex items-center gap-2">
@@ -100,6 +163,7 @@ export default function PageEditor({ node, onRenamed }) {
           <Save className="size-3.5" /> {dirty ? t('ed.save') : t('ed.saved')}
         </button>
       </div>
+      {tabbalk}
       <div className="px-3 pt-2 flex flex-wrap gap-0.5 border-b border-bronze/20">
         <I icon={Bold} className={`${BTN} ${editor.isActive('bold') ? 'text-gold' : ''}`} onClick={() => editor.chain().focus().toggleBold().run()} />
         <I icon={Italic} className={`${BTN} ${editor.isActive('italic') ? 'text-gold' : ''}`} onClick={() => editor.chain().focus().toggleItalic().run()} />

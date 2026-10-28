@@ -17,6 +17,20 @@ import { useLang, trServer } from '@/lib/i18n';
 
 const TAALNAAM = { en: 'EN', it: 'IT' };
 
+/**
+ * Een handleiding-HTML zoals die in de hub staat, puur lezen. Zelfde opmaak voor
+ * het bord én de editor-tabbladen, dus één plek.
+ *
+ * Het HTML is door onszelf opgebouwd (mdToHtml escaapt álle rauwe HTML vóórdat
+ * het eigen tags toevoegt), dus er kan geen modeltekst als markup doorglippen.
+ */
+export function GidsWeergave({ html, klas = '' }) {
+  return (
+    <div className={`overflow-auto rounded-lg border border-bronze/25 bg-black/40 p-2 text-[11px] text-parch/90 space-y-1 ${klas}`}
+      dangerouslySetInnerHTML={{ __html: String(html || '') }} />
+  );
+}
+
 export default function Vertaal({ node }) {
   const { t, tr } = useLang();
   const [bezig, setBezig] = useState('');        // taal die loopt
@@ -36,6 +50,9 @@ export default function Vertaal({ node }) {
       const j = await r.json().catch(() => ({}));
       if (!r.ok || j.error) { setMelding(trServer(j.error || 'mislukt') + (j.stuk ? ' (stuk ' + j.stuk + ')' : '')); return; }
       setResultaat({ taal: lang, html: j.html, controle: j.controle, stukken: j.stukken, cached: j.cached });
+      // Seintje naar de handleiding: er is een taal-tab bij gekomen. Zonder dit
+      // moet de staff-lid eerst een andere map in en uit om de nieuwe tab te zien.
+      try { window.dispatchEvent(new Event('staffhub:vertaling')); } catch { }
     } catch (e) {
       setMelding(String(e?.message || e));
     } finally {
@@ -74,8 +91,7 @@ export default function Vertaal({ node }) {
             {resultaat.cached ? ' · ' + t('tr.klaar') : ''}
             {resultaat.controle?.twijfel ? ' · ⚠ ' + t('tr.twijfel') : ''}
           </p>
-          <div className="mt-1 max-h-52 overflow-auto rounded-lg border border-bronze/25 bg-black/40 p-2 text-[11px] text-parch/90 space-y-1 [&_h1]:text-[13px] [&_h1]:font-bold [&_h1]:text-gold [&_h2]:font-bold [&_h2]:text-gold/90 [&_li]:ml-4 [&_li]:list-disc [&_code]:bg-black/60 [&_code]:px-1 [&_pre]:bg-black/60 [&_pre]:p-2 [&_pre]:overflow-auto"
-            dangerouslySetInnerHTML={{ __html: resultaat.html }} />
+          <GidsWeergave html={resultaat.html} klas="mt-1 max-h-52 [&_h1]:text-[13px] [&_h1]:font-bold [&_h1]:text-gold [&_h2]:font-bold [&_h2]:text-gold/90 [&_li]:ml-4 [&_li]:list-disc [&_code]:bg-black/60 [&_code]:px-1 [&_pre]:bg-black/60 [&_pre]:p-2 [&_pre]:overflow-auto" />
           <a href={'/api/page/' + node.id + '?fmt=md'} download className="mt-1 inline-flex items-center gap-1 text-[10px] text-parch/60 hover:text-gold">
             <Download className="size-3" /> markdown van het origineel
           </a>
