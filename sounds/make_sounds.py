@@ -872,6 +872,35 @@ def zebra_whinny(rnd):
     return env(mix(osc(f, "saw"), gain(bandpass(noise(len(f) / SR, rnd), 2200, 1.5), 0.2)), 0.02, 0.06, 0.7, 0.2)
 
 
+def wraith_moan(rnd):
+    """Wraith: a breathy low moan sliding down - wind through a crack in the dark. Warm sine
+    + soft octave, slow vibrato and a ribbon of filtered noise; deliberately NOT a drone buzz."""
+    sec = rnd.uniform(1.6, 2.1)
+    f0 = rnd.uniform(165, 230)
+    f = vibrato(glide(f0, f0 * rnd.uniform(0.55, 0.68), sec, 1.3), 4.2, 45)
+    voice = mix(osc(f), gain(osc([x * 2 for x in f]), 0.28), gain(lowpass(osc(f, "triangle"), 900), 0.35))
+    breath = gain(bandpass(noise(sec, rnd), 800, 1.2), 0.16)
+    return env(am(mix(voice, breath), 3.5, 0.35), 0.35, 0.3, 0.6, 0.6)
+
+
+def wraith_shriek(rnd):
+    """Wraith hurt: a thin rising wail through two formants, with a tremble - startling but short."""
+    sec = rnd.uniform(0.7, 0.95)
+    f = vibrato(glide(rnd.uniform(420, 520), 1150, sec * 0.35, 0.7) + glide(1150, 700, sec * 0.65), 11, 90)
+    src = osc(f, "saw")
+    wail = mix(gain(bandpass(src, 1400, 2.2), 1.0), gain(bandpass(src, 2600, 3), 0.5), gain(lowpass(osc([x * 0.5 for x in f]), 500), 0.3))
+    return env(am(wail, 7, 0.5), 0.03, 0.08, 0.75, 0.35)
+
+
+def wraith_fade(rnd):
+    """Wraith death: the voice sinks out of hearing under a sigh of cold air (long release)."""
+    sec = 1.8
+    f = vibrato(glide(rnd.uniform(280, 330), 85, sec, 1.5), 3, 60)
+    voice = lowpass(osc(f, "triangle"), 700)
+    air = gain(bandpass(noise(sec, rnd), glide(1800, 300, sec), 1.4), 0.3)
+    return env(mix(voice, air), 0.1, 0.3, 0.5, 0.9)
+
+
 CATALOGUE = {
     "wildlife": {
         "duck.ambient": (duck_quack, 3, "Duck quacks"), "duck.hurt": (lambda r: gain(duck_quack(r), 1.0), 2, "Duck hurts"),
@@ -932,6 +961,16 @@ CATALOGUE = {
         "cauldron.add": (splash, 3, "Ingredient splashes in"), "cauldron.bubble": (lambda r: simmer(r, 1.2), 3, "Cauldron bubbles"),
         "distill.drip": (drips, 2, "Still drips"), "cask.open": (lambda r: creak(r, 180, 210, 0.6), 2, "Cask creaks open"),
         "drunk.hiccup": (hiccup, 3, "Hic!"), "drunk.puke": (puke, 2, "Someone throws up"),
+    },
+}
+
+# Wraith (Wildlife 0.7.0): appended AFTER both CATALOGUE and EXTRA. The RNG stream must not
+# shift for anything already in the pack, so new events never go into EXTRA's wildlife block
+# (that block is drawn BEFORE the relics EXTRA events, which would all change byte-wise).
+LATE = {
+    "wildlife": {
+        "wraith.ambient": (wraith_moan, 3, "Wraith moans"), "wraith.hurt": (wraith_shriek, 2, "Wraith shrieks"),
+        "wraith.death": (wraith_fade, 2, "Wraith fades away"),
     },
 }
 
@@ -1050,28 +1089,29 @@ def main():
         os.makedirs(os.path.join(OUT, ns, "lang"), exist_ok=True)
         with open(os.path.join(OUT, ns, "lang", "en_us.json"), "w", encoding="utf-8") as f:
             json.dump(lang, f, indent=1)
-    for ns, events in EXTRA.items():
-        jpath = os.path.join(OUT, ns, "sounds.json")
-        lpath = os.path.join(OUT, ns, "lang", "en_us.json")
-        sounds_json = json.load(open(jpath, encoding="utf-8"))
-        lang = json.load(open(lpath, encoding="utf-8"))
-        for event, (fn, variants, subtitle) in events.items():
-            group, _, name = event.rpartition(".")
-            folder = (group or "misc").replace(".", "/")
-            entries = []
-            for v in range(variants):
-                rel = f"{folder}/{name}_{v + 1}"
-                wav = os.path.join(tmp, f"{ns}_{rel.replace('/', '_')}.wav")
-                write_wav(wav, fn(rnd))
-                ogg = os.path.join(OUT, ns, "sounds", rel + ".ogg")
-                os.makedirs(os.path.dirname(ogg), exist_ok=True)
-                subprocess.run([ffmpeg, "-loglevel", "error", "-y", "-i", wav, "-c:a", "libvorbis", "-ac", "1", "-ar", "32000", "-b:a", "40k", ogg], check=True)
-                entries.append(f"{ns}:{rel}")
-                total += 1
-            sounds_json[event] = {"sounds": entries, "subtitle": f"subtitles.{ns}.{event}"}
-            lang[f"subtitles.{ns}.{event}"] = subtitle
-        json.dump(sounds_json, open(jpath, "w", encoding="utf-8"), indent=1)
-        json.dump(lang, open(lpath, "w", encoding="utf-8"), indent=1)
+    for extra in (EXTRA, LATE):   # LATE is drawn last: the seeded stream of every earlier sound stays byte-identical
+        for ns, events in extra.items():
+            jpath = os.path.join(OUT, ns, "sounds.json")
+            lpath = os.path.join(OUT, ns, "lang", "en_us.json")
+            sounds_json = json.load(open(jpath, encoding="utf-8"))
+            lang = json.load(open(lpath, encoding="utf-8"))
+            for event, (fn, variants, subtitle) in events.items():
+                group, _, name = event.rpartition(".")
+                folder = (group or "misc").replace(".", "/")
+                entries = []
+                for v in range(variants):
+                    rel = f"{folder}/{name}_{v + 1}"
+                    wav = os.path.join(tmp, f"{ns}_{rel.replace('/', '_')}.wav")
+                    write_wav(wav, fn(rnd))
+                    ogg = os.path.join(OUT, ns, "sounds", rel + ".ogg")
+                    os.makedirs(os.path.dirname(ogg), exist_ok=True)
+                    subprocess.run([ffmpeg, "-loglevel", "error", "-y", "-i", wav, "-c:a", "libvorbis", "-ac", "1", "-ar", "32000", "-b:a", "40k", ogg], check=True)
+                    entries.append(f"{ns}:{rel}")
+                    total += 1
+                sounds_json[event] = {"sounds": entries, "subtitle": f"subtitles.{ns}.{event}"}
+                lang[f"subtitles.{ns}.{event}"] = subtitle
+            json.dump(sounds_json, open(jpath, "w", encoding="utf-8"), indent=1)
+            json.dump(lang, open(lpath, "w", encoding="utf-8"), indent=1)
     shutil.rmtree(tmp)
     print("wrote", total, "sounds to", OUT)
 

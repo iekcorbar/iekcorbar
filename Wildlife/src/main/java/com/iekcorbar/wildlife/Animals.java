@@ -123,19 +123,23 @@ final class Animals implements Listener {
 
     /** look = the adult model to use (null: a random common look, or the rare one); babies get "<look>_baby". */
     Animal spawn(Species s, Location at, boolean rare, boolean baby, String look) {
+        // custom creatures are decoration, not animals: there is no _rare and no _baby model,
+        // so those flags are off before anything can ask FreeMinecraftModels for them
+        final boolean isRare = rare && s.animal();
+        final boolean isBaby = baby && s.animal();
         List<String> looks = s.models();
-        String adult = look != null ? look : rare ? s.rareModel() : looks.get(ThreadLocalRandom.current().nextInt(looks.size()));
-        String model = baby ? adult + "_baby" : adult;
+        String adult = look != null ? look : isRare ? s.rareModel() : looks.get(ThreadLocalRandom.current().nextInt(looks.size()));
+        String model = isBaby ? adult + "_baby" : adult;
         Entity e = at.getWorld().spawnEntity(at, s.base, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.CUSTOM, en -> {
             PersistentDataContainer pdc = en.getPersistentDataContainer();
             pdc.set(speciesKey, PersistentDataType.STRING, s.id());
-            pdc.set(rareKey, PersistentDataType.BYTE, (byte) (rare ? 1 : 0));
+            pdc.set(rareKey, PersistentDataType.BYTE, (byte) (isRare ? 1 : 0));
             pdc.set(modelKey, PersistentDataType.STRING, model);
-            if (baby) {
+            if (isBaby) {
                 pdc.set(babyKey, PersistentDataType.BYTE, (byte) 1);
                 pdc.set(growKey, PersistentDataType.LONG, en.getWorld().getFullTime() + breeding.growTicks());
             }
-            setup((LivingEntity) en, s, baby);
+            setup((LivingEntity) en, s, isBaby);
         });
         Animal a = register((LivingEntity) e);
         if (a == null || !a.attached) {
@@ -384,6 +388,24 @@ final class Animals implements Listener {
                                 : org.bukkit.Color.fromRGB(250, 236, 110), 0.6f);
                         w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.15, 0), 1, 0.02, 0.02, 0.02, 0, dust);
                     }
+                }
+                case WRAITH -> {
+                    // A placed atmosphere piece, not an animal (0.7.0): it owns the dark and the
+                    // morning takes it away, exactly like the fireflies do. No fight, no flight.
+                    if (!night) {
+                        for (int i = 0; i < 5; i++)   // it unravels into soul flames at dawn
+                            w.spawnParticle(Particle.SOUL, e.getLocation().add(0, 0.3 + r.nextDouble() * 1.1, 0), 1, 0.25, 0.2, 0.25, 0.0);
+                        e.remove();
+                        continue;
+                    }
+                    // slow dwarreling: a small random lift now and then, capped so it never takes off
+                    Vector v = e.getVelocity();
+                    e.setVelocity(v.setY(Math.max(-0.04, Math.min(0.05, v.getY() + (r.nextDouble() - 0.5) * 0.05))));
+                    // mist off the hem, a cold spark at the hood, both modest
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.SMOKE, e.getLocation().add(0, 0.2 + r.nextDouble() * 0.5, 0), 1, 0.3, 0.15, 0.3, 0.0);
+                    if (r.nextInt(12) == 0)
+                        w.spawnParticle(Particle.SOUL, e.getLocation().add(0, 1.25, 0), 1, 0.12, 0.1, 0.12, 0.0);
                 }
                 case CRAB -> {
                     // waves its big claw at a player who comes close, turned to face them

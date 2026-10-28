@@ -44,3 +44,17 @@ The **African Elephant** is the biggest animal around and the **Plains Zebra** a
 And everywhere their own little rumours: a fresh **molehill** in the lawn means a **Mole** has been working below - see one of them and you are lucky. **Penguins** bray like donkeys on the ice, **koalas** sleep the day away, and a **crocodile** is exactly as still as it looks. Out in the deep ocean, an **Orca** surfaces so rarely that nobody plans on it; near the jungle water, a shimmering shoal of **Piranhas** is a reminder not to swim there hungry, and the **Scarlet Macaw** overhead will happily repeat back whatever you said about it.
 
 Animals are scarce on purpose: if you don't see one, keep exploring - and try a different time of day.
+
+## Spirits and placed creatures
+
+Not everything with a model is an animal. The **Wraith** is a floating, hooded shadow in a torn robe -
+a creature of atmosphere for dark, quiet corners: a crypt, an old tower, a swamp at midnight. It never
+hunts and never flees; it drifts slowly up and down, sheds a little mist off its hem and a cold spark
+at its hood, moans softly when someone stands near, and it **vanishes when the morning comes** - it
+belongs to the dark only.
+
+Wraiths are deliberately outside everything that makes an animal an animal: they are **not in the Field
+Journal** (no page, no advancement, no spyglass record), they **cannot be bred** and have no babies,
+there is **no spawn egg and no statue** for them, and **no recipe** anywhere makes one. They are placed
+by staff with `/wildlife spawn wraith` (an admin command; they are also switched off in the wild-spawner
+config). So if you meet one, it was put there on purpose - enjoy the chill.

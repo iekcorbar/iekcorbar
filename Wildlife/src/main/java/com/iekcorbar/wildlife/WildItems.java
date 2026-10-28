@@ -93,6 +93,7 @@ final class WildItems implements Listener {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getClickedBlock() == null) return;
         Player p = e.getPlayer();
         var at = e.getClickedBlock().getRelative(e.getBlockFace()).getLocation().add(0.5, 0, 0.5);
+        // spawn() clears the baby flag for non-animals on its own, so a sneak-click gives the same creature
         if (plugin.animals().spawn(s, at, false, p.isSneaking(), null) == null) {
             p.sendActionBar(Component.text("The model isn't loaded in FreeMinecraftModels (see console).", NamedTextColor.RED));
             return;

@@ -50,6 +50,8 @@ BASE = {
     "tanuki": (126, 108, 92), "tanuki_dark": (66, 56, 50),
     "koi_orange": (236, 118, 40), "koi_black": (40, 34, 36), "koi_fin": (246, 196, 150),
     "macaque": (150, 118, 92),
+    # wraith (0.7.0): eigen kleuren, appended at the END so every existing palette cell keeps its index
+    "wraith_robe": (52, 58, 74), "wraith_void": (18, 18, 24), "wraith_glow": (148, 226, 232),
 }
 PALETTE = {}
 for n, (r, g, b) in BASE.items():
@@ -108,7 +110,8 @@ SIZE = {"elephant": 0.9, "zebra": 1.25, "deer": 1.3, "bear": 1.15, "boar": 1.3, 
         "lizard": 1.3, "crab": 1.2, "songbird": 1.3, "snail": 1.3, "butterfly": 1.2, "dragonfly": 1.2,
         "tanuki": 1.3, "crane": 1.25, "koi": 1.4, "macaque": 1.25,
         "kangaroo": 1.3, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.3, "mole": 1.35,
-        "rhino": 1.15, "penguin": 1.35, "orca": 1.0, "piranha": 1.35, "macaw": 1.35}
+        "rhino": 1.15, "penguin": 1.35, "orca": 1.0, "piranha": 1.35, "macaw": 1.35,
+        "wraith": 1.0}   # drawn 26 px = 1.63 m, matching Species.WRAITH scale 1.8 on the 0.9 m bee hitbox
 
 # ------------------------------------------------------------------ model + bones + animations
 
@@ -1323,6 +1326,79 @@ def macaw(m, col="cardinal", col2="jay", belly="canary"):
     death(m, drop=0.5)
 
 
+# ------------------------------------------------------------------ solo creatures (0.7.0)
+
+def wraith(m):
+    """Floating shadow in a torn robe (a custom creature, not an animal): a hooded torso with
+    two loose sleeve-arms and a hem that flares and trails off to the back, cut on a slant (front
+    lifted, back longest) as if it blows by, not hangs. Drawn 26 px tall = ~1.65 m; no legs -
+    the robe simply ends. The plugin adds the drifting motion and the soul/smoke particles.
+    Colours are the own wraith cells (dark grey-blue robe, void face, pale glow eyes)."""
+    rb, rd, vd, gl = "wraith_robe", "wraith_robe_d", "wraith_void", "wraith_glow"
+    m.bone("body", (0, 10, 0))
+    # torso: chest, shoulders, waist, hip (all robe; the body IS the robe)
+    m.box("body", -2.6, 14.0, -1.9, 2.6, 17.8, 1.6, rb)
+    m.box("body", -3.2, 16.2, -2.1, 3.2, 18.0, 1.9, rd)
+    m.box("body", -2.9, 10.5, -2.2, 2.9, 14.2, 2.0, rb)
+    m.box("body", -3.4, 7.2, -2.5, 3.4, 10.8, 2.4, rb)
+    m.box("body", -0.9, 17.4, -1.65, 0.9, 17.9, -1.3, gl)         # cold light in the collar
+    # hood with an overhanging brim; the face is a void with two pale glimmers
+    m.bone("h_head", (0, 17.6, -0.8), "body")
+    m.box("h_head", -2.3, 18.2, -2.6, 2.3, 22.8, 0.6, rb)
+    m.box("h_head", -1.6, 22.6, -2.2, 1.6, 24.6, 0.2, rb)
+    m.box("h_head", -0.9, 24.4, -1.6, 0.9, 26.2, -0.2, rd)        # crummed hood peak
+    m.box("h_head", -1.7, 18.4, -3.3, 1.7, 21.8, -2.5, vd)        # face opening, drawn forward
+    m.box("h_head", -1.9, 21.4, -3.45, 1.9, 22.3, -2.6, rd)       # brow brim over it
+    m.sym("h_head", 0.5, 19.7, -3.4, 0.95, 20.3, -3.3, gl)        # eyes
+    m.sym("h_head", 2.0, 17.8, -1.0, 2.5, 20.6, 0.9, rd)          # cheek falls
+    m.box("h_head", -1.8, 18.0, 0.4, 1.8, 21.2, 1.6, rd)          # hood cloth onto the back
+    # two loose arms in wide sleeves, hanging a little forward; a shadow hand at each cuff
+    for name, sx in (("arm_l", 1), ("arm_r", -1)):
+        m.bone(name, (sx * 2.4, 16.5, -0.6), "body")
+        x1, x2 = (1.6, 3.0) if sx > 0 else (-3.0, -1.6)
+        c1, c2 = (1.4, 3.2) if sx > 0 else (-3.2, -1.4)
+        t1, t2 = (1.8, 2.8) if sx > 0 else (-2.8, -1.8)
+        h1, h2 = (2.0, 2.6) if sx > 0 else (-2.6, -2.0)
+        m.box(name, x1, 12.4, -1.4, x2, 16.7, 0.2, rb)            # upper sleeve
+        m.box(name, c1, 10.2, -1.6, c2, 12.7, 0.4, rd)            # wide cuff
+        m.box(name, t1, 8.2, -0.8, t2, 10.5, 0.5, rd)             # sleeve tail hanging below it
+        m.box(name, h1, 9.6, -1.9, h2, 10.6, -1.4, vd)            # hand, just out of the cuff
+    # the robe below the hip: flares, front edge lifted (blown back), longest at the tail
+    m.bone("hem", (0, 7.5, 0), "body")
+    m.box("hem", -3.9, 5.0, -2.8, 3.9, 7.6, 2.8, rb)
+    m.box("hem", -4.6, 2.6, -2.4, 4.6, 5.2, 3.6, rd)
+    m.box("hem", -5.2, 0.6, -1.8, 5.2, 2.9, 4.6, rb)
+    m.box("hem", -4.4, 2.2, -3.4, 4.4, 3.2, -1.9, rd)             # lifted front flap
+    m.box("hem", -2.4, 0.0, 4.4, 2.4, 1.2, 6.4, rd)               # trailing tail
+    m.box("hem", -1.3, 0.0, 6.2, 1.3, 0.7, 7.6, rb)               # ... and its tip
+    m.sym("hem", 2.8, 0.0, -1.4, 3.6, 1.4, -0.6, rb)              # torn teeth along the slanted edge
+    m.sym("hem", 1.2, 0.4, -2.6, 1.9, 1.6, -1.8, rd)
+    m.sym("hem", 0.8, 0.0, 4.0, 1.5, 1.6, 4.8, rb)
+    m.sym("hem", 3.6, 0.6, 3.2, 4.4, 2.2, 4.0, rd)
+    # idle: slow rise and fall with a soft roll; sleeves and hem lag one beat behind
+    p = 2.6
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.8, 0.0, axis=1), "rotation": wave(6, p, 1.4, 0.5, axis=2)},
+        "h_head": {"rotation": [(0, (0, 0, 0)), (p * 0.3, (0, 9, 0)), (p * 0.65, (0, -7, 0)), (p, (0, 0, 0))]},
+        "arm_l": {"rotation": wave(6, p, 2.2, 0.6, axis=0)},
+        "arm_r": {"rotation": wave(6, p, 2.2, 0.6 + math.pi, axis=0)},
+        "hem": {"rotation": [(t, (v[0] * 3.6, 0.0, v[2] * 1.8)) for t, v in wave(6, p, 1.0, 1.2, axis=0)]},
+    })
+    # walk (drift): a bit more swing, sleeves swinging out of step with the hem
+    p = 2.0
+    m.anim("walk", p, {
+        "body": {"position": wave(6, p, 1.2, 0.0, axis=1), "rotation": wave(6, p, 1.8, 0.4, axis=2)},
+        "h_head": {"rotation": wave(6, p, 2.0, 1.8, axis=0)},
+        "arm_l": {"rotation": wave(6, p, 4.0, 0.0, axis=0)},
+        "arm_r": {"rotation": wave(6, p, 4.0, math.pi, axis=0)},
+        "hem": {"rotation": [(t, (v[0] * 5.5, 0.0, v[2] * 2.6)) for t, v in wave(6, p, 1.0, 1.0, axis=0)]},
+    })
+    # death: it does not fall over - it sags and sinks away under the ground
+    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.55, (10, 0, 0)), (0.8, (10, 0, 0))],
+                                   "position": [(0, (0, 0, 0)), (0.55, (0, -12, 0)), (0.8, (0, -12, 0))]},
+                          "hem": {"rotation": [(0, (0, 0, 0)), (0.55, (8, 0, 0)), (0.8, (8, 0, 0))]}}, loop="hold")
+
+
 # ------------------------------------------------------------------ species list
 
 SPECIES = [  # (id, builder, kwargs, rare recolour, rare kwargs)
@@ -1363,6 +1439,13 @@ EXTRA = [  # more common looks of a species (chosen at random by the plugin)
     ("songbird_sparrow", songbird, {"col": "sparrow", "breast": "fur_cream", "cap": "fur_brown"}),
     ("macaw_blue", macaw, {"col": "jay", "col2": "canary", "belly": "white"}),        # blue-and-gold
     ("macaw_green", macaw, {"col": "leaf", "col2": "canary", "belly": "fur_cream"}),  # military macaw
+]
+
+# Solo creatures (0.7.0): custom mobs that are NOT animals. Deliberately outside SPECIES and
+# EXTRA, so nothing else builds on them: no _rare, no _baby, no zoo statue and no spawn egg
+# (make_zoo_pack.py also walks SPECIES/EXTRA). Only wl_<id> is written.
+SOLOS = [
+    ("wraith", wraith, {}),
 ]
 
 # ------------------------------------------------------------------ item display models (true scale, like Steamworks)
@@ -1427,6 +1510,10 @@ def main():
         b = Model("wl_" + name + "_baby")
         build(b, **kw)
         save(b)
+    for name, build, kw in SOLOS:   # single model only: no rare, no baby (not animals)
+        m = Model("wl_" + name)
+        build(m, **kw)
+        save(m)
     for name, cubes in ITEMS.items():
         bb, js = item_model(name, cubes)
         with open(os.path.join(out, name + ".bbmodel"), "w", encoding="utf-8") as f:

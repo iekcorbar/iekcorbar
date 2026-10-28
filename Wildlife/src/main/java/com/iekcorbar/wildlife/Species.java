@@ -150,7 +150,22 @@ enum Species {
             List.of("jungle"), "cookie",
             "A tail longer than its body, a beak like bolt cutters, and the vocabulary of a sailor.",
             "Over the jungle canopy - yes, it may land on your shoulder.",
-            "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.85f);
+            "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.85f),
+
+    // Sfeer-wezen, GEEN dier (0.7.0): niet fokbaar, geen baby, geen rare-kleur, buiten het
+    // journaal, geen statue en geen recept - zie animal(). Basemob BEE (PARROT is wel bewezen
+    // maar past slecht: parrot zit op schouders, hopt op de grond en danst bij jukeboxes;
+    // ALLAY/PHANTOM/VEX zijn in deze repo ongebruikt dus onbewezen). BEE zweeft 3D (bewezen
+    // bij de AIR-insekten), kan via Animals.onTarget nooit targetten, woede wordt elke tick
+    // gezeroed en Brain stript de hive/flower/aanval-goals. De OptiFine-wraith uit Downloads
+    // is alleen als VOORBEELD bestudeerd (zwevende romp, uitlopende tolge, hangende mouwen);
+    // maten, vorm en palette-kleuren zijn eigen werk. Schaal: bee-hitbox 0.9 m x 1.8 = 1.62 m,
+    // model 26 px = 1.63 m - binnen de meetnauwigheid van de andere soorten.
+    WRAITH("Wraith", EntityType.BEE, 1.8, 20, 0.08, Habitat.AIR, Time.NIGHT, 1, 1, 0,
+            List.of("dark_forest", "mushroom_fields", "swamp", "old_growth"), "soul_lantern",
+            "A cold shape in a torn robe, drifting a hand above the ground. It does not hunt and does not flee - it watches, and the morning takes it away.",
+            "Not found in the wild: staff place them at dark, quiet spots.",
+            "wildlife:wraith.ambient", "wildlife:wraith.hurt", "wildlife:wraith.death", 0.65f);
 
     enum Habitat { LAND, WATER, SHORE, AIR, POND }
 
@@ -197,6 +212,23 @@ enum Species {
 
     String id() {
         return name().toLowerCase(Locale.ROOT);
+    }
+
+    /**
+     * False for custom creatures that are NOT animals (the wraith). They are decorative
+     * placements only: no journal page or advancement, no rare look, no baby, no spawn egg
+     * and no craftable statue, and they never enter the wild (config + Spawner keep them off).
+     */
+    boolean animal() {
+        return this != WRAITH;
+    }
+
+    /** Species that the Field Journal actually tracks: everything that is an animal. Keeps the
+     *  "Living Encyclopedia" denominator honest when non-animals join the enum. */
+    static int journalCount() {
+        int n = 0;
+        for (Species s : values()) if (s.animal()) n++;
+        return n;
     }
 
     /**
@@ -275,6 +307,7 @@ enum Species {
             case ORCA -> "White Orca";
             case PIRANHA -> "Golden Piranha";
             case MACAW -> "Albino Macaw";
+            case WRAITH -> displayName;   // not an animal: there is no rare look (animal() guard)
         };
     }
 
@@ -310,6 +343,7 @@ enum Species {
             case ORCA -> m == Material.COD || m == Material.SALMON || m == Material.TROPICAL_FISH;
             case PIRANHA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.CHICKEN || m == Material.MUTTON;
             case MACAW -> m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS || m == Material.COCOA_BEANS;
+            case WRAITH -> false;   // not an animal: nothing tempts it, breeding is out of the question
         };
     }
 
@@ -345,6 +379,7 @@ enum Species {
             case ORCA -> "a big fish";
             case PIRANHA -> "any raw meat";
             case MACAW -> "seeds or cocoa beans";
+            case WRAITH -> "nothing - it is not an animal and cannot be bred";
         };
     }
 

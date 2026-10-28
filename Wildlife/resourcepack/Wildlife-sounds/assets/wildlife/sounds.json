@@ -239,5 +239,27 @@
    "wildlife:zebra/hurt_2"
   ],
   "subtitle": "subtitles.wildlife.zebra.hurt"
+ },
+ "wraith.ambient": {
+  "sounds": [
+   "wildlife:wraith/ambient_1",
+   "wildlife:wraith/ambient_2",
+   "wildlife:wraith/ambient_3"
+  ],
+  "subtitle": "subtitles.wildlife.wraith.ambient"
+ },
+ "wraith.hurt": {
+  "sounds": [
+   "wildlife:wraith/hurt_1",
+   "wildlife:wraith/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.wraith.hurt"
+ },
+ "wraith.death": {
+  "sounds": [
+   "wildlife:wraith/death_1",
+   "wildlife:wraith/death_2"
+  ],
+  "subtitle": "subtitles.wildlife.wraith.death"
  }
 }

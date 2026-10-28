@@ -31,5 +31,8 @@
  "subtitles.wildlife.elephant.ambient": "Elephant rumbles",
  "subtitles.wildlife.elephant.hurt": "Elephant trumpets",
  "subtitles.wildlife.zebra.ambient": "Zebra barks",
- "subtitles.wildlife.zebra.hurt": "Zebra whinnies"
+ "subtitles.wildlife.zebra.hurt": "Zebra whinnies",
+ "subtitles.wildlife.wraith.ambient": "Wraith moans",
+ "subtitles.wildlife.wraith.hurt": "Wraith shrieks",
+ "subtitles.wildlife.wraith.death": "Wraith fades away"
 }

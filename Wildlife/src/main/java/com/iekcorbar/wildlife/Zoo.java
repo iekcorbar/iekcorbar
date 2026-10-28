@@ -131,6 +131,7 @@ final class Zoo implements org.bukkit.event.Listener {
             plugin.getLogger().warning("Could not read statues.csv: " + e.getMessage());
         }
         for (Species s : Species.values()) {
+            if (!s.animal()) continue;   // custom creatures get no statue: that is what makes the wraith uncraftable
             Material icon = Material.matchMaterial(s.icon);
             Object[] adult = icon == null ? new Object[]{Material.STONE, Material.STONE, Material.STONE} : new Object[]{Material.STONE, Material.STONE, Material.STONE, icon};
             Object[] baby = icon == null ? new Object[]{Material.STONE, Material.STONE} : new Object[]{Material.STONE, Material.STONE, icon};

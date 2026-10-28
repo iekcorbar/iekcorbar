@@ -39,6 +39,9 @@ species:
   dragonfly: {enabled: true, weight: 5}
   elephant: {enabled: true, weight: 3}
   zebra: {enabled: true, weight: 7}
+  # sfeer-wezen (0.7.0): geen dier en dus nooit in het wild - alleen te plaatsen met
+  # /wildlife spawn wraith (het commando negeert deze sectie; de spawner holds itself extra in)
+  wraith: {enabled: false, weight: 0}
 
 
 # breeding: right-click an adult with its food (see /wildlife help or the wiki); two of one kind in love close together get a baby

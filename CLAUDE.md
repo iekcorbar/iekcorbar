@@ -1453,3 +1453,48 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Guides bijgewerkt: StaffHub-pagina 'Sakagura' (node 11) en workspace-copy op de VPS.
 - Open volgen: nog GEEN flessen-recepten op de nieuwe gewassen (20 losse brouwsels =
   apart werkblok op verzoek; Ingredients herkent ze al wél als sakagura:<naam>).
+
+### Wildlife 0.7.0 - de Wraith: eerste sfeer-creatuur, géén dier (28-10 avond)
+
+- Eigenaarsvraag: één nieuw wezen bij Wildlife, "alle assets zelf maken", spawnbaar met
+  /wildlife spawn wraith, NICHT craftbaar, buiten het dier-journal. De OptiFine-pack in
+  Downloads\wraiths-in-minecraft is alleen bestudeerd (zwevende romp, uitlopende tolge,
+  hangende mouwen, capuchon) - geen byte daarvan overgenomen.
+- Species krijgt een tweede soort lid: `boolean animal()` (WRAITH = false). Basemob BEE
+  (ALLAY/PHANTOM/VEX onbewezen in deze repo; PARROT bewezen maar slecht passend: schouder-
+  zitten, grond-huppen, jukebox-dans). BEE zweeft 3D (als de AIR-insekten), kan via onTarget
+  nooit targetten, woede wordt elke tick gezeroed en Brain stript hive/flower/anger/attack.
+  AIR + NIGHT, group 1-1, weight 0, scale 1.8 (hitbox bee 0.9 m x 1.8 = 1.62 m, model 26 px).
+- Dier-loketten afgeschermd: Zoo.statues() slaat niet-dieren over (dus GEEN statue-recept),
+  ZukanData geeft geen ei, Journal-tick/open/advancements slaan ze over, WildlifeCommand
+  wijst /wildlife egg wraith af (geen zoo:egg_-model = anders paars in 26.2) en rare/baby
+  worden genegeerd; Animals.spawn cleart rare+baby vóór het FMM-model wordt opgevraagd.
+  Valkuil reparatie: "Living Encyclopedia" telde values().length - nu Species.journalCount()
+  (de 30 journaalsoorten), anders was de prestatie onhaalbaar geworden door de 31e soort.
+- config.yml: `wraith: {enabled: false, weight: 0}` en de Spawner-code hoedt zichzelf extra
+  (server-configs worden nooit overgeschreven door saveResource, dus enabled-falsy is daar
+  niet te vertrouwen - diercheck in Spawner.load).
+- Gedrag (Animals.tick, night-only als firefly): bij dageraad dissolveert de wraith in
+  SOUL-deeltjes en verdwijnt; 's nachts een zachte willekeurige up/down-snelheid (gedempt
+  -0.04..0.05) en matige deeltjes (SMOKE bij de zoom, SOUL bij de muts). Ambient via het
+  bestaande pad (AIR-volume 0.3). Geen vechten, geen chase, geen drops, geen exp.
+- Model: `def wraith(m)` + SOLOS-lijst (buiten SPECIES/EXTRA, want SPECIES/EXTRA zou
+  automatisch _baby/_rare/statue/egg genereren - main() schrijft SOLOS als één wl_wraith).
+  37 elementen, 5 botten (body, h_head, arm_l/r, hem), idle 2.6 s + walk 2.0 s via wave()
+  (body zweeft, hem en mouwen hangen achter), death = wegzakken (geen val-rotatie). Palette
+  uitgebreid: wraith_robe/-d/void/glow (234/256 cellen). Deterministisch: gegenereerd naar
+  BEIDE bomen (Wildlife/fmm-models + fmm-models, 134+3 bestanden, wl_wraith byte-gelijk).
+- Geluid: wraith.ambient (3), wraith.hurt (2), wraith.death (2) via een nieuwe LATE-dict in
+  sounds/make_sounds.py die ná CATALOGUE én EXTRA wordt getekend - wildlife-EXTRA zit VÓÓR
+  relics-EXTRA in dezelfde seeded stream, dus dáár appenden had alle relics-clips verplaatst
+  (aanhaakpunt in de opdracht was net iets te optimistisch). Bewijs geleverd: old-script-run
+  vs new-script-run, alle 210 bestaande clips decoded PCM-gelijk (ogg-bytes zijn zélf bij een
+  ongewijzigd script niet reproduceerbaar - ffmpeg ruis; in TE-DEPLOYEN staat dus: hele pack
+  vervangen). make_sound_pack -> Wildlife-sounds.zip; merge BUILD 12->13 (build12 opgeruimd),
+  audit exit 0 (2486 models, 0 problemen).
+- mvn clean package groen; Wildlife-0.7.0.jar sha1 eecd4c4f..; models-zip sha1 ead5f4c1..;
+  pack-build13 sha1 fb5abd29.. -> TE-DEPLOYEN punt 24 (punt 15/21-boxen van vandaag wijzen
+  ernaar: 0.7.0 bevat 0.6.2, build13 bevat build12). Wiki 02-species.md: sectie 'Spirits and
+  placed creatures'. Not live-tested: dwarrelhoogte/deeltjes/ambient-volume en de death-sink
+  moeten in het spel worden gezien; /wildlife spawn wraith bij overdag-light = direct fader.
+

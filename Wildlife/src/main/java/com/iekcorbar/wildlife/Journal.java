@@ -75,7 +75,8 @@ final class Journal implements Listener {
             }
             Entity t = p.getTargetEntity(96, false);
             Animals.Animal a = plugin.animals().get(t);
-            if (a == null) {
+            // custom creatures (the wraith) are not journaled: no page, no advancement, so no observing either
+            if (a == null || !a.species.animal()) {
                 watching.remove(p.getUniqueId());
                 continue;
             }
@@ -123,7 +124,7 @@ final class Journal implements Listener {
         int n = seen.size();
         if (n >= 5) award(p, key("naturalist"));
         if (n >= 10) award(p, key("field_biologist"));
-        if (n >= Species.values().length) award(p, key("living_encyclopedia"));
+        if (n >= Species.journalCount()) award(p, key("living_encyclopedia"));
     }
 
     // ------------------------------------------------------------ the journal book
@@ -132,10 +133,11 @@ final class Journal implements Listener {
         Set<String> seen = seen(p, false), rares = seen(p, true);
         List<Component> pages = new ArrayList<>();
         pages.add(Component.text("Field Journal\n\n", NamedTextColor.DARK_GREEN).decorate(TextDecoration.BOLD)
-                .append(Component.text("Species: " + seen.size() + " / " + Species.values().length + "\n", NamedTextColor.BLACK).decoration(TextDecoration.BOLD, false))
-                .append(Component.text("Rare looks: " + rares.size() + " / " + Species.values().length + "\n\n", NamedTextColor.DARK_PURPLE).decoration(TextDecoration.BOLD, false))
+                .append(Component.text("Species: " + seen.size() + " / " + Species.journalCount() + "\n", NamedTextColor.BLACK).decoration(TextDecoration.BOLD, false))
+                .append(Component.text("Rare looks: " + rares.size() + " / " + Species.journalCount() + "\n\n", NamedTextColor.DARK_PURPLE).decoration(TextDecoration.BOLD, false))
                 .append(Component.text("Watch an animal through a spyglass to record it - shy ones take longer.\n\nWalk or sprint close and they bolt; sneak up slowly and keep your distance. A steady view from afar records fastest.", NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, false)));
         for (Species s : Species.values()) {
+            if (!s.animal()) continue;   // the book tracks animals only
             if (seen.contains(s.id())) {
                 Component page = Component.text(s.displayName + "\n", NamedTextColor.DARK_GREEN).decorate(TextDecoration.BOLD)
                         .append(Component.text(where(s) + "\n\n", NamedTextColor.DARK_GRAY).decoration(TextDecoration.BOLD, false).decorate(TextDecoration.ITALIC))
@@ -192,7 +194,7 @@ final class Journal implements Listener {
         if (rares.size() >= 5) award(p, key("rare_collector"));
         if (seen.size() >= 5) award(p, key("naturalist"));
         if (seen.size() >= 10) award(p, key("field_biologist"));
-        if (seen.size() >= Species.values().length) award(p, key("living_encyclopedia"));
+        if (seen.size() >= Species.journalCount()) award(p, key("living_encyclopedia"));
     }
 
     @EventHandler
@@ -215,6 +217,7 @@ final class Journal implements Listener {
         load(key("root"), adv(null, "spyglass", "Wildlife", "Watch animals through a spyglass to fill your Field Journal.",
                 "task", false, false, false, "minecraft:tick"), true);
         for (Species s : Species.values()) {
+            if (!s.animal()) continue;   // no advancements for custom creatures: they are not journal finds
             load(key(s.id()), adv(key("root"), s.icon, s.displayName, "Observe a " + s.displayName.toLowerCase() + " through a spyglass.",
                     "task", true, false, false, null), false);
             load(key(s.id() + "_rare"), advGlint(key(s.id()), s.icon, s.rareName(), "Spot the rare " + s.rareName().toLowerCase() + ".",

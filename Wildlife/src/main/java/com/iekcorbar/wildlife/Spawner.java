@@ -48,7 +48,8 @@ final class Spawner {
         ConfigurationSection s = c.getConfigurationSection("species");
         for (Species sp : Species.values()) {
             ConfigurationSection one = s == null ? null : s.getConfigurationSection(sp.id());
-            on.put(sp, one == null || one.getBoolean("enabled", true));
+            // custom creatures never enter the wild, even when an old server config still says enabled: true
+            on.put(sp, sp.animal() && (one == null || one.getBoolean("enabled", true)));
             int base = one == null ? sp.weight : one.getInt("weight", sp.weight);
             // shyer species are seen less often too (0.6.0): tier 3 ~40% rarer, tier 2 ~20% rarer
             int scaled = sp.shy() == 3 ? Math.max(1, base * 3 / 5) : sp.shy() == 2 ? Math.max(1, base * 4 / 5) : base;
