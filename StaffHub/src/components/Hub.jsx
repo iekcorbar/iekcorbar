@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
 import Assistant from '@/components/Assistant';
+import Vertaal from '@/components/Vertaal';
 import { useLang, useDt, trServer, LangToggle } from '@/lib/i18n';
 
 const fmt = (n) => n == null ? '' : n > 1e9 ? (n / 1e9).toFixed(1) + ' GB' : n > 1e6 ? (n / 1e6).toFixed(1) + ' MB' : n > 1000 ? (n / 1000).toFixed(0) + ' KB' : n + ' B';
@@ -245,6 +246,7 @@ export default function Hub({ me, onLogout }) {
         {/* voorbeeld */}
         <aside className="hidden md:flex md:flex-col border-l border-bronze/20 bg-black/20 overflow-hidden">
           <Assistant onOpen={(n) => setSel(n)} />
+          <Vertaal node={sel} />
           <div className="flex-1 overflow-auto min-h-0">
             {!sel && <p className="p-4 text-xs text-parch/40">{t('aside.hint')}</p>}
             {sel?.type === 'page' && <PageEditor node={sel} onRenamed={refresh} />}
