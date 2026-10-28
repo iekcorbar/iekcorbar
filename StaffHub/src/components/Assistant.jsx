@@ -31,7 +31,7 @@ export default function Assistant({ onOpen }) {
         const j = await r.json().catch(() => ({}));
         if (!r.ok || j.error) {
           if (String(j.error || '').startsWith('ai-uit')) sidRef.current = '';
-          setLog((l) => [...l, { ask: query, mode: m, error: String(j.error || '').startsWith('ai-uit') ? t('ai.off') : tr(j.error || 'mislukt') }]);
+          setLog((l) => [...l, { ask: query, mode: m, error: String(j.error || '').startsWith('ai-uit') ? t('ai.off') : String(j.error || '').startsWith('ai-modelfout') ? t('ai.modelerr') : tr(j.error || 'mislukt') }]);
         } else {
           sidRef.current = j.session || sidRef.current;
           setLog((l) => [...l, { ask: query, mode: m, answer: j.answer || '' }]);

@@ -59,6 +59,11 @@ export async function POST(req) {
     });
     if (!r.ok) return Response.json({ error: 'ai-fout (' + r.status + ')' }, { status: 502 });
     const j = await r.json();
+    // Model-fout (bijv. API-key die geen modellen mag aanroepen) netjes doorgeven:
+    if (j.info?.error) {
+      const m = j.info.error.data?.message || j.info.error.name || 'onbekend';
+      return Response.json({ error: 'ai-modelfout: ' + m }, { status: 502 });
+    }
     const answer = (j.parts || []).filter((p) => p.type === 'text').map((p) => p.text).join('\n').trim();
     return Response.json({ answer: answer || '(leeg antwoord)', session: sid });
   } catch (e) {
