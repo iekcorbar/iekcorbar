@@ -7,6 +7,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 
 const DATA = process.env.STAFFHUB_DATA || path.join(process.cwd(), 'data');
+export const DATA_DIR = DATA;
 export const BLOBS = path.join(DATA, 'blobs');
 
 let db;

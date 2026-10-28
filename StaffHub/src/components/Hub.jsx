@@ -177,6 +177,7 @@ export default function Hub({ me, onLogout }) {
         <div className="ml-auto flex items-center gap-2 text-xs">
           <span className="text-parch/60 hidden sm:inline">{me.username}{me.team ? ` (${me.team})` : ''}{me.role === 'owner' ? ' ⚓' : ''}</span>
           <LangToggle />
+          <button title={t('tip.desktop')} onClick={() => setModal('desktop')} className="p-1.5 rounded hover:bg-white/10"><Download className="size-4" /></button>
           <button title={t('tip.disk')} onClick={() => setModal('dav')} className="p-1.5 rounded hover:bg-white/10"><Server className="size-4" /></button>
           <button title={t('tip.tokens')} onClick={() => setModal('tokens')} className="p-1.5 rounded hover:bg-white/10"><KeyRound className="size-4" /></button>
           {me.role === 'owner' && <button title={t('tip.accounts')} onClick={() => setModal('users')} className="p-1.5 rounded hover:bg-white/10"><Users className="size-4" /></button>}
@@ -253,9 +254,25 @@ export default function Hub({ me, onLogout }) {
         </aside>
       </div>
 
+      {/* Telefoon/tablet: de ruit hierboven is md+ only, dus zonder dit blok is
+          een document aanklikken op iOS/Android gewoon niets - leeg scherm,
+          geen foutmelding. Zelfde inhoud, nu als vel_over de rest met een
+          dichtknop. */}
+      {sel && (
+        <div className="md:hidden fixed inset-0 z-40 bg-ink overflow-auto">
+          <div className="sticky top-0 z-50 flex justify-end bg-gradient-to-b from-black/80 to-transparent p-2">
+            <button onClick={() => setSel(null)} title={t('dt.close')} className="p-2 rounded-lg bg-black/60 border border-bronze/30"><X className="size-4" /></button>
+          </div>
+          {sel.type === 'page' && <PageEditor key={sel.id} node={sel} onRenamed={refresh} />}
+          {sel.type === 'file' && <FilePane key={sel.id} n={sel} onChanged={refresh} />}
+          {sel.type === 'folder' && <FolderPane n={sel} open={() => { setParent(sel.id); setSel(null); }} />}
+        </div>
+      )}
+
       {modal === 'users' && <UsersModal onClose={() => setModal(null)} />}
       {modal === 'tokens' && <TokensModal onClose={() => setModal(null)} />}
       {modal === 'dav' && <DavModal onClose={() => setModal(null)} />}
+      {modal === 'desktop' && <DesktopModal onClose={() => setModal(null)} />}
     </div>
   );
 }
@@ -460,6 +477,49 @@ function DavModal({ onClose }) {
           <p>{t('dav.phone_a')}<i>{t('dav.phone_b')}</i>{t('dav.phone_c')}<code>{url}</code>{t('dav.phone_d')}</p>
         </div>
         <p className="text-parch/50">{t('dav.note')}</p>
+      </div>
+    </Modal>
+  );
+}
+
+/** "StaffHub als app": Windows = de installateur van de server; Mac/iOS/Linux
+ *  = dezelfde website als losse app (Dock/beginscherm/adresbalk-menu), want
+ *  electron-builder kan die platformen vanaf Windows niet meebouwen. Zonder
+ *  installateur op de server zegt de knop dat zelf - geen dode download. */
+function DesktopModal({ onClose }) {
+  const { t } = useLang();
+  const dt = useDt();
+  const [info, setInfo] = useState(null);
+  useEffect(() => {
+    fetch('/api/desktop?info=1')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => j && setInfo(j))
+      .catch(() => { });
+  }, []);
+  const rij = (naam, a, b, noot) => (
+    <div className="bg-black/30 border border-bronze/20 rounded-lg px-3 py-2">
+      <h4 className="text-gold font-bold mb-0.5">{naam}</h4>
+      <p>{a}<b>{b}</b></p>
+      {noot && <p className="text-parch/40 text-[10px] mt-1">{noot}</p>}
+    </div>
+  );
+  return (
+    <Modal title={t('dt.title')} onClose={onClose} wide>
+      <div className="text-xs space-y-2 text-parch/80">
+        <p className="text-parch/60">{t('dt.web')}</p>
+        <div className="bg-black/30 border border-bronze/20 rounded-lg px-3 py-2">
+          <h4 className="text-gold font-bold mb-0.5">{t('dt.win')}</h4>
+          {info ? (
+            <div className="flex items-center gap-2 flex-wrap">
+              <a href="/api/desktop" download className="flex items-center gap-1 bg-gold/90 text-ink rounded-lg px-2.5 py-1.5 font-bold hover:bg-gold"><Download className="size-3.5" /> {t('dt.fetch')}{info.version ? ` ${info.version}` : ''}</a>
+              <span className="text-parch/50">{fmt(info.size)} · {t('dt.updated')} {dt(info.updated)}</span>
+            </div>
+          ) : <p className="text-parch/50">{t('dt.none')}</p>}
+          <p className="text-parch/40 text-[10px] mt-1">{t('dt.win_note')}</p>
+        </div>
+        {rij(t('dt.mac'), t('dt.mac_a'), t('dt.mac_b'))}
+        {rij(t('dt.ios'), t('dt.ios_a'), t('dt.ios_b'))}
+        {rij(t('dt.linux'), t('dt.linux_a'), t('dt.linux_b'))}
       </div>
     </Modal>
   );

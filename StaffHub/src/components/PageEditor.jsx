@@ -8,7 +8,7 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import { useEffect, useRef, useState } from 'react';
 import { Bold, Italic, Strikethrough, Heading1, Heading2, Heading3, List, ListOrdered, Quote, Code, Undo, Redo, Link2, ImagePlus, Save } from 'lucide-react';
-import { useLang } from '@/lib/i18n';
+import { useLang, trServer } from '@/lib/i18n';
 
 const BTN = 'p-1.5 rounded hover:bg-white/10 text-parch/70';
 
@@ -18,24 +18,45 @@ export default function PageEditor({ node, onRenamed }) {
   const [savedAt, setSavedAt] = useState(null);
   const [err, setErr] = useState('');
   const imgRef = useRef();
+  // Zet tijdens het INLADEN van een document op true: setContent zelf vuurt
+  // ook onUpdate af, en zonder deze vlag zou een vers geopend document meteen
+  // als "niet opgeslagen" boven de knop staan.
+  const loading = useRef(true);
 
   const editor = useEditor({
     extensions: [StarterKit, Link.configure({ openOnClick: false }), Image],
     content: '',
     editable: true,
-    onUpdate: () => setDirty(true),
+    // Puur client-side component, dus de editor meteen neerzetten in plaats van
+    // in een effect: zonder deze regel draait de allereerste render ZONDER
+    // editorinstance en was het laad-effect hieronder te vroeg.
+    immediatelyRender: true,
+    onUpdate: () => { if (!loading.current) setDirty(true); },
   });
 
+  // Document laden. `editor` staat in de deps: is hij in deze render nog niet
+  // klaar, dan draait dit effect opnieuw zodra hij er wél is. Voorheen werd het
+  // document wél opgehaald en `editor.commands.setContent(...)` vervolgens
+  // tegen een null-editor aangelopen, waarna een lege .catch(() => {}) de fout
+  // inslikte: het eerste aanklikken van een handleiding leeg, en pas na een
+  // paar keer rondklikken (nieuw effect, editor intussen klaar) verscheen hij.
   useEffect(() => {
+    if (!editor) return undefined;
     let live = true;
+    loading.current = true;
     setDirty(false); setErr('');
-    fetch('/api/page/' + node.id).then((r) => r.json()).then((j) => {
-      if (!live) return;
-      editor.commands.setContent(j.html || '<h1>' + node.name + '</h1><p></p>');
-      setDirty(false);
-    }).catch(() => { });
+    fetch('/api/page/' + node.id)
+      .then((r) => r.json().then((j) => ({ ok: r.ok, j })).catch(() => ({ ok: false, j: null })))
+      .then(({ ok, j }) => {
+        if (!live) return;
+        if (!ok || j?.error) { setErr(trServer(j?.error || 'mislukt')); return; }
+        editor.commands.setContent(j.html || '<h1>' + node.name + '</h1><p></p>');
+        setDirty(false);
+      })
+      .catch(() => { if (live) setErr(t('err.load')); })
+      .finally(() => { loading.current = false; });
     return () => { live = false; };
-  }, [node.id]); // eslint-disable-line
+  }, [node.id, editor]); // eslint-disable-line
 
   async function save() {
     try {
