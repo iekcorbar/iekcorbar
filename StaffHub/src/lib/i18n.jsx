@@ -227,6 +227,14 @@ const nl = {
   'med.herframe': 'terug naar startbeeld',
   'med.draai_hint': 'sleep draait · scroll zoomt',
   'med.bbmodel': 'Blockbench-project - exporteer het als .glb om hier in 3D te kijken',
+  'adm.titel': 'Beheer',
+  'adm.tellingen': 'Stand van de hub',
+  'adm.opslag': 'opslag',
+  'adm.sessies': 'Alle sessies',
+  'adm.verlopen': 'verlopen',
+  'adm.logboek': 'Logboek (inloggen en uitpakken)',
+  'adm.beheren': 'Accounts beheren',
+  'adm.leeg': 'Nog niets',
 };
 
 const en = {
@@ -445,6 +453,14 @@ const en = {
   'med.herframe': 'reset view',
   'med.draai_hint': 'drag rotates · scroll zooms',
   'med.bbmodel': 'Blockbench project - export it as .glb to view it here in 3D',
+  'adm.titel': 'Admin',
+  'adm.tellingen': 'Hub status',
+  'adm.opslag': 'storage',
+  'adm.sessies': 'All sessions',
+  'adm.verlopen': 'expired',
+  'adm.logboek': 'Logbook (logins and extractions)',
+  'adm.beheren': 'Manage accounts',
+  'adm.leeg': 'Nothing yet',
 };
 
 const it = {
@@ -663,6 +679,14 @@ const it = {
   'med.herframe': 'ripristina vista',
   'med.draai_hint': 'trascina ruota · scorri zooma',
   'med.bbmodel': 'Progetto Blockbench - esportalo come .glb per vederlo qui in 3D',
+  'adm.titel': 'Amministrazione',
+  'adm.tellingen': 'Stato dell’hub',
+  'adm.opslag': 'archiviazione',
+  'adm.sessies': 'Tutte le sessioni',
+  'adm.verlopen': 'scaduta',
+  'adm.logboek': 'Registro (accessi ed estrazioni)',
+  'adm.beheren': 'Gestisci account',
+  'adm.leeg': 'Ancora niente',
 };
 
 // Fins: volledige interface-vertaling voor het Finse staff-lid (28-10).
@@ -886,6 +910,14 @@ const fi = {
   'med.herframe': 'nollaa näkymä',
   'med.draai_hint': 'vedä kääntää · vieritä zoomaa',
   'med.bbmodel': 'Blockbench-projekti - vie se .glb-muodossa nähdäksesi sen täällä 3D:ssä',
+  'adm.titel': 'Ylläpito',
+  'adm.tellingen': 'Hubin tila',
+  'adm.opslag': 'tila',
+  'adm.sessies': 'Istunnot (kaikilla)',
+  'adm.verlopen': 'vanhentunut',
+  'adm.logboek': 'Loki (kirjautumiset ja purkaiset)',
+  'adm.beheren': 'Hallinnoi tilejä',
+  'adm.leeg': 'Ei vielä mitään',
 };
 
 const DICT = { nl, en, it, fi };

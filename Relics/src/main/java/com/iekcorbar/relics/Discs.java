@@ -132,7 +132,12 @@ final class Discs implements Listener {
     boolean installDatapack() {
         if (discs.isEmpty() || Bukkit.getWorlds().isEmpty()) return false;
         World w = Bukkit.getWorlds().get(0);
-        Path base = w.getWorldFolder().toPath().resolve("datapacks").resolve("relics_discs");
+        // Let op: Bukkit's getWorldFolder() points at the DIMENSION folder of the
+        // overworld (world/dimensions/minecraft/overworld) since the 1.16 rework -
+        // datapacks there are not picked up for global registries like jukebox_song.
+        // The real world root (next to server.properties, where every other plugin's
+        // pack also lives) is worldContainer/worldName: that is where the songs must land.
+        Path base = Bukkit.getWorldContainer().toPath().resolve(w.getName()).resolve("datapacks").resolve("relics_discs");
         boolean changed = false;
         try {
             changed |= write(base.resolve("pack.mcmeta"), "{\"pack\":{\"description\":\"Relics music discs\",\"pack_format\":64,"

@@ -1498,3 +1498,65 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   placed creatures'. Not live-tested: dwarrelhoogte/deeltjes/ambient-volume en de death-sink
   moeten in het spel worden gezien; /wildlife spawn wraith bij overdag-light = direct fader.
 
+
+
+### StaffHub 0.4.2 t/m 0.4.7 + Relics 0.4.4 - de avond van 28-10 (agent)
+
+- **StaffHub in zes stappen doorgerold** (allemaal eigen build+deploy+meting,
+  bak blijft intact: 4 accounts / 35 nodes / 17 pagina's): 0.4.2 inlogbegrenzing
+  (tabel loginwacht + audit-log, generieke melding, verlengende slot), deelbare
+  links (?open=<id> + GET /api/nodes/<id> + linkknop in de editor) en eigen
+  toestellen intrekken (DELETE /api/profile?sessie); 0.4.3 volledige Finse
+  interface (185->223-sleutelwoordenboeken, check_i18n.py houdt nl/en/it/fi in
+  balans); 0.4.4 archief-uitpakken met UITPAKPLAN-eerst (eigen zip-lezer
+  src/lib/unzip.js: geen npm-dep, wijst zip64/versleuteld/'..'/bommen af,
+  strip gedeelde topmap, macOS-rommel weg; twee-staps-API /api/archive met
+  uuid-token in data/archief, 1 dag zelfopruiend; zelfde naam = automatische
+  revisie - de hub was er al zo gebouwd) + professionele huisstijl (palette in
+  globals.css: staalblauw/slate, kolomkoppen, chip-gebruikersnaam); 0.4.5 taal +
+  "leesbare tekst" als ACCOUNT-VOORKEUR (users.prefs, meereizend naar elk
+  toestel; AI-bord stuurt de interface-taal mee in elke vraag en antwoordt erin;
+  vertalen kan nu ook naar het NL - de nl-variant wint van de bron zodra hij
+  bestaat; Atkinson Hyperlegible woff2 uit google/fonts, lokaal in
+  public/fonts); 0.4.6 mediaspeler (audio-balk play/stop/vorige/volgende/
+  shuffle/herhaal op de map-siblings, video native + playlistknoppen, 3D via
+  three.js lui geladen - sleep-draaien/scroll-zoom/animaties; file-route
+  streamt nu 206-Partial-Content op Range) en 0.4.7 het BEHEERPANEEL (schild-
+  knop, alleen owners): tellingen, alle sessies intrekbaar per account,
+  audit-logboek - de API's bestonden al maanden, het venster was de rest.
+- **Eigen logo** (eigenaarsbesluit 28-10, screenshot-goedkeuring): slate-tegel
+  + staalblauw anker in lucide-verhoudingen; generator StaffHub/tools/
+  make_icons.py (handgetekend - geen font op deze machine tekent U+2693 écht)
+  levert favicon.ico, icon-192/384/512, apple-icon én desktop/build/icon.ico;
+  server-icoon voor het multiplayer-scherm via scripts/make_server_icon.py
+  (importeert dezelfde tegel; vanilla server-icon.png = exact 64x64 + Paper
+  server-icon64..1024; 6 png's staan in de server-root, effectief bij start).
+- **Dockerfile: npm ci -> npm install** - npm 11.19 in node:24-alpine weigerde
+  een lock die lokaal (npm 11.6) in sync heette (ontbrekende floating-ui-entry
+  van tiptap + root-versieveld); install is ev deterministisch met een lock en
+  repareert zulk kruimelwerk. tools/sync_lock.py houdt de root-velden bij
+  package.json (let op: draait op script-eigen pad).
+- **Relics 0.4.4 (jar in deploy/, sha1 a23d9a0d..)**: de disc-datapack-bug van
+  vanavond. Server-log na de eerste start met discs-config: "loaded 9
+  music disc(s)" + 9x "could not set the jukebox song (NoSuchElementException)"
+  - Discs.installDatapack() schreef via getWorldFolder() naar de DIMENSIE-map
+  (world/dimensions/minecraft/overworld/datapacks), en dáár leest de server
+  geen globale registries zoals jukebox_song. 0.4.4 schrijft naar
+  getWorldContainer()/worldnaam/datapacks/relics_discs (de echte wereld-root,
+  waar Tally ook werkt). De songs staan alvast handmatig overgekopieerd naar
+  de root (met eigenaars-toestemming), dus EEN herstart maakt de discs werkend
+  - de jar is dan nog niet nodig maar voorkomt dat de VOLGENDE disc (via
+  tools/make_discs.py) weer in de verkeerde lade valt. De Relics-config op de
+  server miste het discs:-blok helemaal (stamt van vóór 0.4.2) -> ingevoegd,
+  back-up /root/Relics-config.backup-28-10.yml.
+- **Server-batch geplaatst op eigenaarsvraag** ("alles pushen en updaten wat
+  er nu naar de server moet"): Wildlife 0.7.0 (0.6.1 weg), Sakagura 0.4.0
+  (0.3.7 weg), pack build13 in de mixer (build11 weg), 137 wildlife-bbmodels;
+  alle sha1's op de server nagemeten gelijk aan lokaal. Wraith-config staat
+  nog op enabled:false. Agent raakte de MC-server voor het eerst schrijvend
+  aan - uitdrukkelijk opdracht van de eigenaar, read-only-beleid blijft de
+  default.
+- **Nieuwe tools**: StaffHub/tools/check_i18n.py (toetsenbalance 4 talen),
+  sync_lock.py, make_icons.py, test_unzip.mjs + make_zip_fixtures.py
+  (fixtures in StaffHub/tools/fixtures/, 4/4 groen).
+

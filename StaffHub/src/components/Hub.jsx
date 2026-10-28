@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Anchor, Folder, FolderPlus, FileText, File as FileIcon, Image as ImageIcon, Download, Trash2,
   Pencil, MoveRight, Search, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
-  RefreshCw, Eye, EyeOff, Plus, X, UserCog,
+  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
@@ -284,6 +284,7 @@ export default function Hub({ me, onLogout }) {
           <button title={t('tip.desktop')} onClick={() => setModal('desktop')} className="p-1.5 rounded hover:bg-white/10"><Download className="size-4" /></button>
           <button title={t('tip.disk')} onClick={() => setModal('dav')} className="p-1.5 rounded hover:bg-white/10"><Server className="size-4" /></button>
           <button title={t('tip.tokens')} onClick={() => setModal('tokens')} className="p-1.5 rounded hover:bg-white/10"><KeyRound className="size-4" /></button>
+          {me.role === 'owner' && <button title={t('adm.titel')} onClick={() => setModal('admin')} className="p-1.5 rounded hover:bg-white/10"><Shield className="size-4" /></button>}
           {me.role === 'owner' && <button title={t('tip.accounts')} onClick={() => setModal('users')} className="p-1.5 rounded hover:bg-white/10"><Users className="size-4" /></button>}
           <button title={t('tip.logout')} onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); onLogout(); }} className="p-1.5 rounded hover:bg-white/10"><LogOut className="size-4" /></button>
         </div>
@@ -393,6 +394,7 @@ export default function Hub({ me, onLogout }) {
       )}
 
       {modal === 'users' && <UsersModal onClose={() => setModal(null)} />}
+      {modal === 'admin' && <AdminModal onClose={() => setModal(null)} openAccounts={() => setModal('users')} />}
       {modal === 'tokens' && <TokensModal onClose={() => setModal(null)} />}
       {archief && <ArchiveModal archief={archief} sluit={() => setArchief(null)} ververst={refresh} bewaar={arBewaar} />}
       {modal === 'dav' && <DavModal onClose={() => setModal(null)} />}
@@ -512,6 +514,97 @@ function Modal({ title, onClose, children, wide }) {
         {children}
       </div>
     </div>
+  );
+}
+
+// Het beheerpaneel van de eigenaar (sinds 0.4.7): daar stond tot nu toe alleen
+// de API voor - dit is het venster erbij. Eén opgave van /api/admin/oversicht
+// geeft tellingen, opslag, alle sessies én het audit-logboek; intrekken gaat
+// op rowid, want een getoond token is een ingelogd account. Alleen eigenaars
+// zien dit (knop noch data: de API weigert andere rollen met 403).
+function AdminModal({ onClose, openAccounts }) {
+  const { t } = useLang();
+  const dt = useDt();
+  const [ov, setOv] = useState(null);
+  const [fout, setFout] = useState('');
+  function laad() {
+    fetch('/api/admin/oversicht').then((r) => r.json())
+      .then((j) => { if (j.error) setFout(trServer(j.error)); else setOv(j); })
+      .catch(() => setFout(t('err.load')));
+  }
+  useEffect(laad, []);
+  async function trek(id) {
+    try { await jsend('/api/admin/oversicht?sessie=' + id, 'DELETE'); laad(); }
+    catch (e) { window.alert(e.message); }
+  }
+  const namen = {};
+  if (ov) for (const g of ov.gebruikers) namen[g.id] = g.username;
+  const tegel = (lab, Waarde) => (
+    <div className="rounded-lg border border-bronze/30 bg-black/30 px-2 py-1.5 text-center">
+      <div className="text-base font-bold text-parch tabular-nums">{Waarde}</div>
+      <div className="text-[9px] uppercase tracking-wider text-parch/45">{lab}</div>
+    </div>
+  );
+  return (
+    <Modal title={t('adm.titel')} onClose={onClose} wide>
+      {fout && <p className="text-red-300 text-xs mb-2">{fout}</p>}
+      {!ov && !fout && <p className="text-parch/50 text-xs mb-2">…</p>}
+      {ov && (
+        <div className="space-y-4 text-xs">
+          <section>
+            <div className="flex items-center justify-between mb-1">
+              <h4 className="text-gold font-bold">{t('adm.tellingen')}</h4>
+              <button onClick={laad} title={t('tip.refresh')} className="p-1 rounded hover:bg-white/10 text-parch/60"><RefreshCw className="size-3.5" /></button>
+            </div>
+            <div className="grid grid-cols-4 md:grid-cols-8 gap-1.5">
+              {tegel(t('tip.accounts'), ov.gebruikers.length)}
+              {tegel(t('type.folder'), ov.telling.mappen)}
+              {tegel(t('type.page'), ov.telling.documenten)}
+              {tegel(t('type.file'), ov.telling.bestanden)}
+              {tegel(t('fp.versions'), ov.telling.versies)}
+              {tegel(t('com.title'), ov.telling.reacties)}
+              {tegel(t('tip.tokens'), ov.telling.davtokens)}
+              {tegel(t('adm.opslag'), fmt(ov.opslag.bytes))}
+            </div>
+          </section>
+          <section>
+            <h4 className="text-gold font-bold mb-1">{t('adm.sessies')}</h4>
+            <div className="max-h-48 overflow-auto rounded-lg border border-bronze/25 bg-black/30">
+              <table className="w-full">
+                <tbody>
+                  {ov.sessies.map((s) => (
+                    <tr key={s.id} className={`border-b border-white/5 last:border-0 ${s.verlopen ? 'opacity-40' : ''}`}>
+                      <td className="px-2 py-1 font-bold text-parch/80 w-28">{namen[s.user] || s.user}</td>
+                      <td className="px-2 py-1 text-parch/60 truncate" title={s.agent}>{s.agent}</td>
+                      <td className="px-2 py-1 text-parch/50 whitespace-nowrap tabular-nums">{dt(s.expires)}</td>
+                      <td className="px-2 py-1 text-parch/40 whitespace-nowrap">{s.verlopen ? t('adm.verlopen') : s.over + ' d'}</td>
+                      <td className="px-2 py-1 text-right w-8"><button onClick={() => trek(s.id)} title={t('tip.remove')} className="hover:text-red-300"><X className="size-3.5" /></button></td>
+                    </tr>
+                  ))}
+                  {!ov.sessies.length && <tr><td className="px-2 py-2 text-parch/40">{t('adm.leeg')}</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h4 className="text-gold font-bold mb-1">{t('adm.logboek')}</h4>
+            <div className="max-h-44 overflow-auto rounded-lg border border-bronze/25 bg-black/30 p-1.5 space-y-0.5">
+              {(ov.logboek || []).map((l, i) => (
+                <div key={i} className="flex gap-2 text-[11px]">
+                  <span className="text-parch/40 tabular-nums shrink-0">{dt(l.at)}</span>
+                  <span className="text-copper shrink-0">{l.area}</span>
+                  <span className="text-parch/80 shrink-0">{l.actie}</span>
+                  <span className="text-parch/60 shrink-0">{l.wie || '—'}</span>
+                  <span className="text-parch/40 truncate" title={l.detail || ''}>{l.detail || ''}</span>
+                </div>
+              ))}
+              {!(ov.logboek || []).length && <p className="text-parch/40 text-[11px]">{t('adm.leeg')}</p>}
+            </div>
+          </section>
+          <button onClick={openAccounts} className="w-full bg-gold/90 text-ink rounded-lg py-1.5 font-bold">{t('adm.beheren')}</button>
+        </div>
+      )}
+    </Modal>
   );
 }
 

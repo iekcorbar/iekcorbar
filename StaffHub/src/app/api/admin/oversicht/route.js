@@ -68,6 +68,9 @@ export async function GET() {
       davtokens: d.prepare('SELECT count(*) AS n FROM davtokens').get().n,
     },
     opslag: opslag(),
+    // Het logboek van inlog-pogingen en archief-uitpakken (tabel `audit`, sinds
+    // 0.4.2). De eigenaar vroeg vandaag zelf "wat doet wie hier" - nu toonbaar.
+    logboek: d.prepare('SELECT at, area, actie, wie, detail FROM audit ORDER BY id DESC LIMIT 40').all(),
   });
 }
 
