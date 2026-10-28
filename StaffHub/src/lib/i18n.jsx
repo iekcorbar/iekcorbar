@@ -515,12 +515,23 @@ export function useLang() {
   return useContext(Ctx) || { lang: 'nl', setLang: () => { }, t: (k) => k, tr: (m) => m, locale: 'nl' };
 }
 
-/** Datum-formaatteerder in de gekozen taal (Hub + panelen). */
+/** Datum-formaatteerder in de gekozen taal (Hub + panelen).
+ *  Let op: 'day' kent GEEN 'short' als waarde (alleen numeric/2-digit) - wie dat
+ *  vraegt krijgt een RangeError, en die blies de hele Hub om (Next's
+ *  "This page couldn't load"-scherm) zodra er één bestand met datum in de lijst
+ *  stond. Daarom hier nette waarden + een vangnet: een onverwachte opmaak-fout
+ *  mag nooit meer de hele tool onbereikbaar maken, alleen de datum leest raar. */
 export function useDt() {
   const { locale } = useLang();
-  return useCallback((ms) => new Date(ms).toLocaleDateString(locale, {
-    day: 'short', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
-  }), [locale]);
+  return useCallback((ms) => {
+    try {
+      return new Date(ms).toLocaleDateString(locale, {
+        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+      });
+    } catch {
+      try { return new Date(ms).toISOString().slice(0, 16).replace('T', ' '); } catch { return ''; }
+    }
+  }, [locale]);
 }
 
 /** Klein NL→EN→IT-wisseler-knopgetje, te gebruiken in header en login. */

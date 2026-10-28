@@ -12,9 +12,13 @@ export async function setSessionCookie(token) {
   c.set(SID, token, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 30, secure: process.env.COOKIE_SECURE === '1' });
 }
 
+/** Sessie-opschonen aan de kant van de browser. Met EXPRESSIEZELFDE attributen
+ *  als hierboven wegzetten: een remove met andere opties laat twijfel over welk
+ *  blaadje er nu weg is, en dat is precies het gevoel "mijn sessie staat nog
+ *  open". De server-intrekking gebeurt apart (api/auth/logout). */
 export async function clearSessionCookie() {
   const c = await cookies();
-  c.delete(SID);
+  c.set(SID, '', { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 0, secure: process.env.COOKIE_SECURE === '1' });
 }
 
 /** Huidige gebruiker uit de sessie-cookie, of null. */
