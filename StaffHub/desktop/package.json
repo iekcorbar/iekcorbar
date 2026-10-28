@@ -3,10 +3,11 @@
   "version": "0.1.1",
   "private": true,
   "description": "StaffHub desktop-app: het staff-netwerk in één klik.",
+  "author": "Iekcorbar",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win --dir"
+    "dist": "electron-builder --win"
   },
   "devDependencies": {
     "electron": "^33.0.0",

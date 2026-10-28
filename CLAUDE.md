@@ -1383,28 +1383,37 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   45 bestanden). Zelfde bron als 0.1.0, alleen de deploy-laag anders; de 0.1.0-zip is
   weggegooid (nooit geüpload — op de VPS niets met staffhub gevonden).
 
-### StaffHub desktop 0.1.1 - de Electron-shell écht gebouwd, offline (28-10 middag)
+### StaffHub desktop 0.1.1 - de Electron-shell écht gebouwd, via een offline-detour (28-10 middag)
 
 - Het vierde deel van StaffHub is nu af: `StaffHub/desktop/` (Electron-venster op de
-  webapp + WebDAV-uitleg in het menu) is gebouwd tot werkende Windows-app. Artefact:
-  `deploy\staffhub-desktop-0.1.1-win.zip` (114,9 MB, sha1 bd32f78092d61957b65ec11b0e355080fafb2f7a,
-  portable: uitpakken en StaffHub.exe draait) + TE-DEPLOYEN punt 18 (geen server-action:
-  pas distribueren ná punt 17, via StaffHub zelf of staff-Discord).
+  webapp + WebDAV-uitleg in het menu) is gebouwd tot werkende Windows-app. Artefacten
+  (laatste stand, ná de routerherstart, in `deploy/` + TE-DEPLOYEN punt 18):
+  `staffhub-desktop-0.1.1-setup.exe` (77,9 MB, sha1 41f288613a1443a2f872ca6ec163faf5dc6d24fc,
+  NSIS-installateur) en `staffhub-desktop-0.1.1-win.zip` (109,7 MB, sha1
+  66e4a0ec5a221c058e2b9eab37a2f5e2e4b49677, portable). Beide met eigen pictogram en
+  correcte exe-metadata (Product=StaffHub, FileVersion 0.1.1, Company=Iekcorbar).
 - Versie van de shell meegeset naar 0.1.1 (was 0.1.0) zodat zip-naam, exe en webapp
   één lijn volgen. `desktop/package-lock.json` bestaat nu en staat bij de bron.
-- **Waarom offline-bouwen een klus was:** thuis stond wél "internettoegang" (het Wi-Fi-
-  icoon liegt deels: IPv6 werkt, IPv4-out is dood — 8.8.8.8:53 en github.com:443 geven
-  timeout). npm kan dan nog (registry.npmjs.org heeft AAAA), GitHub niet — en Electron
-  zélf heeft géén IPv6. Daardoor: git push naar github kan nu niet (commit staat
-  lokaal klaar) en electron-builder's downloads faalden.
-- Valkuil electron-builder + GitHub-dode (vastgelegd, handig bij elke offline-build):
-  1) Electron-zip: zit al na `npm install` in `node_modules\electron\dist`. In de
-     build-config `"electronDist": "node_modules/electron/dist"` zetten: dan
-     kopieert de builder vanaf schijf i.p.v. te downloaden (blijft staan; handig).
-  2) `winCodeSign` (rcedit: icon/versie in de exe) wordt OOK bij `--dir` van GitHub
-     gehaald → fail. Omzeilen met CLI-overstijging:
-     `npx electron-builder --win --dir --config.win.signAndEditExecutable=false`
-     (niets in de repo aangepast). Nadeel: standaard-Electron-icon/-metadata in de exe.
-     Als IPv4 terug is: `npm run dist` opnieuw + eventueel NSIS-installer bouwen.
-- Check straks bij "internet terug": `git push` (dit blok + de StaffHub-0.1.1-commit)
-  en optioneel de nette installer.
+- **De offline-detour:** tijdens de eerste bouwlag was de IPv4-out thuis weggevallen
+  (Wi-Fi toonde "internettoegang" want IPv6 werkte; GitHub is IPv4-only → push onmogelijk).
+  npm kon toen wél (registry.npmjs.org heeft AAAA), dus de eerste portable-build kwam tot
+  stand met: (1) `"electronDist": "node_modules/electron/dist"` in de build-config — de
+  Electron-runtime komt dan van schijf i.p.v. GitHub (blijft staan, handig); (2) CLI-
+  override `--config.win.signAndEditExecutable=false` om de winCodeSign-download te
+  omzeilen. Tussentijds artefact (offline-zip bd32f780… zonder pictogram/metadata) is
+  vervallen en weg; ná de routerherstart volledig herbouwd en alsnog groen.
+- Twee valkuilen voor elke Windows/Electron-build op deze pc, vastgelegd:
+  1) `winCodeSign-2.6.0.7z` bevat macOS-symlinks (darwin/*.dylib) die 7za niet mag
+     aanmaken zonder admin-/developer-mode → de héle extractie faalde, terwijl élke
+     Windows-tool (rcedit, signtool) wél werd uitgepakt. Fix: die half uitgepakte dir
+     eenmaal naar `%LOCALAPPDATA%\electron-builder\Cache\winCodeSign\winCodeSign-2.6.0`
+     zetten — daarna accepteert electron-builder de cache en draait de build groen door.
+  2) Exe-metadata bleef "GitHub, Inc." zolang `author` in desktop/package.json ontbrak;
+     `author: Iekcorbar` gezet en herbouwd.
+- Pictogram: `StaffHub/desktop/build/icon.ico` (7 formaten 16-256 px, PNG-entries),
+  procedureel gegenereerd met System.Drawing in de huisstijl (tegel #171210, bronzen
+  rand, gouden hub met vier staff-knooppunnen); electron-builder pikt `build/icon.ico`
+  automatisch op. Het tegenscript zelf staat niet in de repo — palette komt uit
+  `src/app/globals.css`.
+- Niet code-signed (geen cert) → SmartScreen kan bij eerste start "Toch uitvoeren"
+  vragen; normaal voor een eigen build.
