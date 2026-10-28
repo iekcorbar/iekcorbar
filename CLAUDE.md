@@ -1434,3 +1434,22 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   /opt/opencode-ai/workspace/guides/*.html. Een gids die hier in de hub wordt
   aangepast moet daar opnieuw overhezet worden (of straks: repo-clone + export).
 - Hulpmap .tmp-guides/ is weer weg; upload-/testscriptjes zijn weg.
+
+### Sakagura 0.4.0 - tuin van 16 naar 36 gewassen (28-10 namiddag)
+
+- Gebruikersvraag 'wat meer crops, een stuk of 20 meer' -> 20 nieuwe Fruit-entries:
+  RICE, RYE, MAIZE (graansoorten, worden uitgetrokken), TOMATO, RASPBERRY, BLACKCURRANT,
+  ELDERBERRY, CRANBERRY, GOOSEBERRY (heesters), MULBERRY, PERSIMMON, LOQUAT, POMEGRANATE,
+  FIG, QUINCE, OLIVE, DATE, LYCHEE (dwergboompjes met trunk-sprite), PASSIONFRUIT en
+  VANILLA (ranken - dorstig als hop/druif, zie Garden.java vochtcheck).
+- Alles regenerert uit de enum: goods + zadenrecepten (Goods.java), achievement-tellingen
+  (Full Orchard = nu 36), Zukan-oogstoverzicht, wild-plantages per biome (wildBiomes-lijst
+  per crop; 'dark_forest' i.p.v. 'dark' gebruikt wegens deep_dark-bots).
+- Pack: 20 kleuren + 31 ITEMS-modellen + sprite-takken verbreed in tools/make_pack.py;
+  FRUITS-volgorde MOET matchen met Fruit.java (state in de comments).
+- Gemeten: mvn package groen, RecipeTest ALL PASSED, Sakagura-pack 69 items/108 stages,
+  merge build11->12 (audit exit 0, 0 problemen), jar sha1 dd509db0.., pack sha1 2e6337df..
+  -> TE-DEPLOYEN punt 21 (jar + pack in één batch, oude 0.3.7.jar verwijderen).
+- Guides bijgewerkt: StaffHub-pagina 'Sakagura' (node 11) en workspace-copy op de VPS.
+- Open volgen: nog GEEN flessen-recepten op de nieuwe gewassen (20 losse brouwsels =
+  apart werkblok op verzoek; Ingredients herkent ze al wél als sakagura:<naam>).

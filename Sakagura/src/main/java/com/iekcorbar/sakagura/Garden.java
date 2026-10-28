@@ -312,7 +312,7 @@ final class Garden implements Listener {
                     if (roll >= chance) continue;
                     Block soil = b.getRelative(BlockFace.DOWN);
                     if (soil.getType() != Material.FARMLAND) continue;
-                    if (e.fruit == Fruit.GRAPE || e.fruit == Fruit.HOPS) {
+                    if (e.fruit == Fruit.GRAPE || e.fruit == Fruit.HOPS || e.fruit == Fruit.PASSIONFRUIT || e.fruit == Fruit.VANILLA) {
                         if (!(soil.getBlockData() instanceof Farmland f) || f.getMoisture() < f.getMaximumMoisture()) continue; // thirsty vines
                     }
                     if (Math.max(b.getLightFromSky(), b.getLightFromBlocks()) < 9) continue;

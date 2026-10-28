@@ -8,7 +8,7 @@
     <artifactId>Sakagura</artifactId>
     <!-- Brewing + fruit garden: cauldron, distilling, cask aging, quality, drunkenness; new crops.
          Replaces the old Brewery plugin; own code, recipes based on the iekcorbar.com /brewing recipes. -->
-    <version>0.3.7</version>
+    <version>0.4.0</version>
     <packaging>jar</packaging>
 
     <name>Sakagura</name>

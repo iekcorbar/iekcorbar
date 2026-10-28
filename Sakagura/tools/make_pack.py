@@ -18,6 +18,12 @@ BASE = {
     "ink": (40, 30, 30), "red": (180, 40, 36), "glow": (240, 226, 120),
     "oak": (168, 132, 82), "spruce": (110, 80, 50), "birch": (210, 196, 140), "jungle": (164, 116, 80), "acacia": (176, 96, 56),
     "dark_oak": (70, 48, 26), "cherrywood": (226, 180, 172), "mangrove": (120, 56, 50), "bamboo": (200, 186, 96),
+    # 2026-10-28: new-crop colours (must cover every col used in FRUITS below)
+    "rice": (232, 226, 198), "rye": (196, 158, 96), "maize": (238, 200, 78), "tomato": (208, 52, 42),
+    "raspberry": (214, 74, 104), "blackcurrant": (48, 34, 66), "elderberry": (64, 44, 82), "cranberry": (188, 32, 48),
+    "gooseberry": (168, 198, 96), "mulberry": (96, 24, 48), "persimmon": (232, 118, 44), "loquat": (238, 172, 84),
+    "pomegranate": (198, 42, 64), "fig": (118, 62, 102), "quince": (224, 190, 84), "olive": (122, 132, 62),
+    "date": (142, 86, 42), "lychee": (218, 98, 92), "passion": (128, 62, 142), "vanilla": (228, 210, 172),
 }
 PALETTE = {}
 for k, (r, g, b) in BASE.items():
@@ -30,9 +36,16 @@ assert len(NAMES) <= 256
 # must match Fruit.java (order!)
 FRUITS = [("barley", "grain"), ("hops", "hop"), ("grape", "grape"), ("ume", "ume"), ("yuzu", "yuzu"), ("peach", "peach"),
           ("cherry", "cherry"), ("strawberry", "strawberry"), ("blueberry", "blueberry"), ("juniper", "juniper"), ("ginger", "ginger"),
-          ("apple", "red"), ("pear", "hop"), ("apricot", "peach"), ("mikan", "yuzu"), ("kiwi", "pit")]
+          ("apple", "red"), ("pear", "hop"), ("apricot", "peach"), ("mikan", "yuzu"), ("kiwi", "pit"),
+          ("rice", "rice"), ("rye", "rye"), ("maize", "maize"), ("tomato", "tomato"), ("raspberry", "raspberry"),
+          ("blackcurrant", "blackcurrant"), ("elderberry", "elderberry"), ("cranberry", "cranberry"), ("gooseberry", "gooseberry"),
+          ("mulberry", "mulberry"), ("persimmon", "persimmon"), ("loquat", "loquat"), ("pomegranate", "pomegranate"), ("fig", "fig"),
+          ("quince", "quince"), ("olive", "olive"), ("date", "date"), ("lychee", "lychee"), ("passionfruit", "passion"),
+          ("vanilla", "vanilla")]
 SEEDS = ["hop_cuttings", "grape_seeds", "ume_pit", "yuzu_seeds", "peach_pit", "cherry_pit",
-         "apple_pip", "pear_pip", "apricot_kernel", "mikan_seeds", "kiwi_seeds"]
+         "apple_pip", "pear_pip", "apricot_kernel", "mikan_seeds", "kiwi_seeds",
+         "tomato_seeds", "persimmon_pip", "loquat_stone", "pomegranate_seeds", "fig_cuttings",
+         "quince_pip", "olive_stone", "date_pit", "lychee_seed", "passionfruit_seeds", "vanilla_cuttings"]
 WOODS = [("oak", "oak"), ("spruce", "spruce"), ("birch", "birch"), ("jungle", "jungle"), ("acacia", "acacia"), ("dark_oak", "dark_oak"),
          ("cherry", "cherrywood"), ("mangrove", "mangrove"), ("bamboo", "bamboo"), ("copper", "copper")]
 
@@ -143,6 +156,38 @@ ITEMS = {
     "apricot_kernel": [box(6.5, 0, 6.5, 9.5, 2.5, 9.5, "pit"), box(7, 2.5, 7, 9, 3, 9, "pit_d")],
     "mikan_seeds": berries("grain_d", 6, 1.0, 13),
     "kiwi_seeds": berries("ink", 5, 0.8, 14),
+    # --- 20 new crops (Fruit.java 0.4.0): produce + seeds
+    "rice": [box(7.5, 0, 7.5, 8.5, 8, 8.5, "rice_d")] + [box(7.0 + (i % 2), 8 + i, 7.2, 8.0 + (i % 2), 9 + i, 8.8, "rice") for i in range(4)],
+    "rye": [box(7.5, 0, 7.5, 8.5, 9, 8.5, "rye_d")] + [box(7.0 + (i % 2), 9 + i, 7.2, 8.0 + (i % 2), 10 + i, 8.8, "rye") for i in range(5)],
+    "maize": [box(7.2, 0, 7.2, 8.8, 9, 8.8, "maize"), box(6.2, 1, 8.0, 7.2, 8, 9.0, "leaf"), box(8.8, 2, 7.0, 9.8, 9, 8.0, "leaf_d")],
+    "tomato": round_fruit("tomato", 3.2),
+    "raspberry": berries("raspberry", 8, 1.7, 21),
+    "blackcurrant": berries("blackcurrant", 9, 1.4, 22),
+    "elderberry": berries("elderberry", 11, 1.2, 23) + [box(6, 5.4, 6, 10, 5.8, 10, "leaf")],
+    "cranberry": berries("cranberry", 6, 1.6, 24),
+    "gooseberry": berries("gooseberry", 5, 2.0, 25),
+    "mulberry": berries("mulberry", 7, 1.5, 26),
+    "persimmon": round_fruit("persimmon", 3.0),
+    "loquat": round_fruit("loquat", 2.2),
+    "pomegranate": round_fruit("pomegranate", 3.3) + [box(7.4, 6.6, 7.4, 8.6, 7.4, 8.6, "pomegranate_d")],
+    "fig": round_fruit("fig", 2.4, leaf=False),
+    "quince": round_fruit("quince", 3.0),
+    "olive": round_fruit("olive", 1.9),
+    "date": [box(6.2, 0, 7.0, 9.8, 2.8, 9.0, "date"), box(7.0, 2.8, 7.4, 9.0, 3.4, 8.6, "date_d"), box(8.0, 3.4, 7.8, 8.3, 4.6, 8.1, "stem")],
+    "lychee": round_fruit("lychee", 2.6),
+    "passionfruit": round_fruit("passion", 3.0),
+    "vanilla": [box(6.9, 0, 7.4, 7.8, 8, 8.3, "vanilla_d"), box(8.1, 0.6, 7.6, 9.0, 7.2, 8.5, "vanilla"), box(7.4, 8.0, 7.4, 8.2, 9.0, 8.2, "stem")],
+    "tomato_seeds": berries("seed", 6, 1.0, 27),
+    "persimmon_pip": [box(6.5, 0, 6.5, 9.5, 2.5, 9.5, "pit"), box(7, 2.5, 7, 9, 3, 9, "pit_d")],
+    "loquat_stone": berries("pit", 3, 1.6, 28),
+    "pomegranate_seeds": berries("pomegranate", 7, 1.0, 29),
+    "fig_cuttings": [box(7.6, 0, 7.6, 8.4, 9, 8.4, "stem"), box(6, 6, 7.6, 10, 6.4, 8.4, "fig"), box(6.5, 2, 7.6, 9.5, 2.4, 8.4, "fig")],
+    "quince_pip": berries("seed", 5, 1.1, 30),
+    "olive_stone": [box(6.8, 0, 7.0, 9.2, 2.6, 9.0, "pit")],
+    "date_pit": [box(6.6, 0, 7.0, 9.4, 2.4, 9.0, "date_d"), box(7.2, 2.4, 7.3, 8.8, 2.8, 8.7, "date")],
+    "lychee_seed": [box(6.5, 0, 6.5, 9.5, 3.0, 9.5, "pit")],
+    "passionfruit_seeds": berries("ink", 6, 0.9, 31),
+    "vanilla_cuttings": [box(7.6, 0, 7.6, 8.4, 9, 8.4, "stem"), box(6, 6, 7.6, 10, 6.4, 8.4, "vanilla_d"), box(6.5, 2, 7.6, 9.5, 2.4, 8.4, "vanilla")],
 }
 
 
@@ -197,7 +242,7 @@ def sprite(name, col, stage):
     L, D = PALETTE["leaf"], PALETTE["leaf_d"]
     fruit, fruit_l = PALETTE[col], PALETTE[col + "_l"]
     h = [5, 9, 13][stage]
-    if name == "barley":
+    if name in ("barley", "rice", "rye", "maize"):
         for i in range(7):
             x, hh = 1 + i * 2, h - rnd.randint(0, 2)
             for y in range(hh):
@@ -205,7 +250,7 @@ def sprite(name, col, stage):
             if stage >= 1:
                 for k in range(3):
                     put(px, x + (k % 2), hh - k, fruit if stage == 2 else L)
-    elif name in ("hops", "grape"):
+    elif name in ("hops", "grape", "passionfruit", "vanilla"):
         for y in range(h + 2):                                  # a trellis pole the vine climbs
             put(px, 8, y, PALETTE["rope"] if name == "hops" else PALETTE["spruce"])
         for y in range(1, h):
@@ -226,7 +271,8 @@ def sprite(name, col, stage):
             for x in range(5, 11):
                 put(px, x, 0, fruit)
     else:                                                       # bushes and dwarf fruit trees
-        trunk = name in ("ume", "yuzu", "peach", "cherry", "apple", "pear", "apricot", "mikan")
+        trunk = name in ("ume", "yuzu", "peach", "cherry", "apple", "pear", "apricot", "mikan",
+                         "persimmon", "loquat", "pomegranate", "fig", "quince", "olive", "date", "lychee")
         if trunk:
             for y in range(max(2, h // 2)):
                 put(px, 8, y, PALETTE["spruce"])
