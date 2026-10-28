@@ -215,6 +215,18 @@ const nl = {
   'ar.afgekapt': '(lijst ingekort — de rest volgt dezelfde regels)',
   'col.grootte': 'grootte',
   'col.datum': 'laatst gewijzigd',
+  'med.play': 'afspelen',
+  'med.pauze': 'pauze',
+  'med.stop': 'stop',
+  'med.next': 'volgende',
+  'med.prev': 'vorige',
+  'med.shuffle': 'willekeurig',
+  'med.repeat': 'herhalen',
+  'med.list': '{n} van {van} · nummers uit deze map',
+  'med.draaien': 'automatisch draaien',
+  'med.herframe': 'terug naar startbeeld',
+  'med.draai_hint': 'sleep draait · scroll zoomt',
+  'med.bbmodel': 'Blockbench-project - exporteer het als .glb om hier in 3D te kijken',
 };
 
 const en = {
@@ -421,6 +433,18 @@ const en = {
   'ar.afgekapt': '(list shortened — the rest follows the same rules)',
   'col.grootte': 'size',
   'col.datum': 'last changed',
+  'med.play': 'play',
+  'med.pauze': 'pause',
+  'med.stop': 'stop',
+  'med.next': 'next',
+  'med.prev': 'previous',
+  'med.shuffle': 'shuffle',
+  'med.repeat': 'repeat',
+  'med.list': '{n} of {van} · tracks from this folder',
+  'med.draaien': 'auto-rotate',
+  'med.herframe': 'reset view',
+  'med.draai_hint': 'drag rotates · scroll zooms',
+  'med.bbmodel': 'Blockbench project - export it as .glb to view it here in 3D',
 };
 
 const it = {
@@ -627,6 +651,18 @@ const it = {
   'ar.afgekapt': '(elenco abbreviato — il resto segue le stesse regole)',
   'col.grootte': 'dimensione',
   'col.datum': 'ultima modifica',
+  'med.play': 'riproduci',
+  'med.pauze': 'pausa',
+  'med.stop': 'stop',
+  'med.next': 'successivo',
+  'med.prev': 'precedente',
+  'med.shuffle': 'casuale',
+  'med.repeat': 'ripeti',
+  'med.list': '{n} di {van} · tracce da questa cartella',
+  'med.draaien': 'rotazione automatica',
+  'med.herframe': 'ripristina vista',
+  'med.draai_hint': 'trascina ruota · scorri zooma',
+  'med.bbmodel': 'Progetto Blockbench - esportalo come .glb per vederlo qui in 3D',
 };
 
 // Fins: volledige interface-vertaling voor het Finse staff-lid (28-10).
@@ -838,6 +874,18 @@ const fi = {
   'ar.afgekapt': '(lista lyhennetty — loput samoilla säännöillä)',
   'col.grootte': 'koko',
   'col.datum': 'muutettu',
+  'med.play': 'toista',
+  'med.pauze': 'tauko',
+  'med.stop': 'pysäytä',
+  'med.next': 'seuraava',
+  'med.prev': 'edellinen',
+  'med.shuffle': 'sekoita',
+  'med.repeat': 'toisto',
+  'med.list': '{n}/{van} · kappaleet tästä kansiosta',
+  'med.draaien': 'automaattinen kierto',
+  'med.herframe': 'nollaa näkymä',
+  'med.draai_hint': 'vedä kääntää · vieritä zoomaa',
+  'med.bbmodel': 'Blockbench-projekti - vie se .glb-muodossa nähdäksesi sen täällä 3D:ssä',
 };
 
 const DICT = { nl, en, it, fi };

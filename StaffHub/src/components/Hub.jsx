@@ -7,6 +7,7 @@ import {
   RefreshCw, Eye, EyeOff, Plus, X, UserCog,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
+import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
 import Vertaal from '@/components/Vertaal';
 import { useLang, useDt, trServer, LangToggle, LANGS, setLeesbaar, leesbaarStand } from '@/lib/i18n';
@@ -370,7 +371,7 @@ export default function Hub({ me, onLogout }) {
           <div className="flex-1 overflow-auto min-h-0">
             {!sel && <p className="p-4 text-xs text-parch/40">{t('aside.hint')}</p>}
             {sel?.type === 'page' && <PageEditor node={sel} onRenamed={refresh} />}
-            {sel?.type === 'file' && <FilePane n={sel} onChanged={refresh} />}
+            {sel?.type === 'file' && <FilePane n={sel} onChanged={refresh} lijst={kids.filter((k) => k.type === 'file' && mediaKind(k.name) === mediaKind(sel.name))} />}
             {sel?.type === 'folder' && <FolderPane n={sel} open={() => { setParent(sel.id); setSel(null); }} />}
           </div>
         </aside>
@@ -386,7 +387,7 @@ export default function Hub({ me, onLogout }) {
             <button onClick={() => setSel(null)} title={t('dt.close')} className="p-2 rounded-lg bg-black/60 border border-bronze/30"><X className="size-4" /></button>
           </div>
           {sel.type === 'page' && <PageEditor key={sel.id} node={sel} onRenamed={refresh} />}
-          {sel.type === 'file' && <FilePane key={sel.id} n={sel} onChanged={refresh} />}
+          {sel.type === 'file' && <FilePane key={sel.id} n={sel} onChanged={refresh} lijst={kids.filter((k) => k.type === 'file' && mediaKind(k.name) === mediaKind(sel.name))} />}
           {sel.type === 'folder' && <FolderPane n={sel} open={() => { setParent(sel.id); setSel(null); }} />}
         </div>
       )}
@@ -403,7 +404,7 @@ export default function Hub({ me, onLogout }) {
 
 // ---------------------------------------------------------------- voorbeeld-ruiten
 
-function FilePane({ n, onChanged }) {
+function FilePane({ n, onChanged, lijst = [] }) {
   const { t } = useLang();
   const dt = useDt();
   const [versies, setVersies] = useState([]);
@@ -414,6 +415,7 @@ function FilePane({ n, onChanged }) {
   const isImg = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'avif'].includes(ext);
   const isPdf = ext === 'pdf';
   const isText = ['txt', 'md', 'log', 'json', 'yml', 'yaml', 'js', 'java', 'css', 'html', 'csv'].includes(ext);
+  const kind = mediaKind(n.name);           // 'audio' | 'video' | '3d' | null
 
   useEffect(() => {
     setVersies(null); setText(null);
@@ -438,7 +440,9 @@ function FilePane({ n, onChanged }) {
       {isImg && <img src={url} alt="" className="max-h-72 w-full object-contain rounded-lg border border-bronze/30 bg-black/30" />}
       {isPdf && <iframe src={url} title="pdf" className="h-72 w-full rounded-lg border border-bronze/30 bg-white" />}
       {isText && !isPdf && <pre className="max-h-72 overflow-auto bg-black/40 border border-bronze/20 rounded-lg p-2 whitespace-pre-wrap">{text ?? '…'}</pre>}
-      {!isImg && !isPdf && !isText && <div className="text-parch/50">{t('fp.nopreview')}</div>}
+      {!isImg && !isPdf && !isText && !kind && <div className="text-parch/50">{t('fp.nopreview')}</div>}
+      {(kind === 'audio' || kind === 'video') && <MediaPlayer kind={kind} id={n.id} naam={n.name} lijst={lijst} />}
+      {kind === '3d' && <Model3D url={url} naam={n.name} />}
       <div className="flex gap-2">
         <a href={url} download className="flex items-center gap-1 bg-gold/90 text-ink rounded-lg px-2.5 py-1.5 font-bold"><Download className="size-3.5" /> {t('fp.download')}</a>
       </div>

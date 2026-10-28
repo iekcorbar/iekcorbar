@@ -1,6 +1,6 @@
 {
   "name": "staffhub",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "private": true,
   "type": "module",
   "scripts": {
@@ -19,6 +19,7 @@
     "next": "^16.3.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "three": "^0.186.1"
   }
 }
