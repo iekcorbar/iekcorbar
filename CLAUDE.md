@@ -1382,3 +1382,29 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   `deploy\staffhub-0.1.1.zip` (61 KB, sha1 7db5733183f0a9212a9022ed5da3a8674af8c811,
   45 bestanden). Zelfde bron als 0.1.0, alleen de deploy-laag anders; de 0.1.0-zip is
   weggegooid (nooit geüpload — op de VPS niets met staffhub gevonden).
+
+### StaffHub desktop 0.1.1 - de Electron-shell écht gebouwd, offline (28-10 middag)
+
+- Het vierde deel van StaffHub is nu af: `StaffHub/desktop/` (Electron-venster op de
+  webapp + WebDAV-uitleg in het menu) is gebouwd tot werkende Windows-app. Artefact:
+  `deploy\staffhub-desktop-0.1.1-win.zip` (114,9 MB, sha1 bd32f78092d61957b65ec11b0e355080fafb2f7a,
+  portable: uitpakken en StaffHub.exe draait) + TE-DEPLOYEN punt 18 (geen server-action:
+  pas distribueren ná punt 17, via StaffHub zelf of staff-Discord).
+- Versie van de shell meegeset naar 0.1.1 (was 0.1.0) zodat zip-naam, exe en webapp
+  één lijn volgen. `desktop/package-lock.json` bestaat nu en staat bij de bron.
+- **Waarom offline-bouwen een klus was:** thuis stond wél "internettoegang" (het Wi-Fi-
+  icoon liegt deels: IPv6 werkt, IPv4-out is dood — 8.8.8.8:53 en github.com:443 geven
+  timeout). npm kan dan nog (registry.npmjs.org heeft AAAA), GitHub niet — en Electron
+  zélf heeft géén IPv6. Daardoor: git push naar github kan nu niet (commit staat
+  lokaal klaar) en electron-builder's downloads faalden.
+- Valkuil electron-builder + GitHub-dode (vastgelegd, handig bij elke offline-build):
+  1) Electron-zip: zit al na `npm install` in `node_modules\electron\dist`. In de
+     build-config `"electronDist": "node_modules/electron/dist"` zetten: dan
+     kopieert de builder vanaf schijf i.p.v. te downloaden (blijft staan; handig).
+  2) `winCodeSign` (rcedit: icon/versie in de exe) wordt OOK bij `--dir` van GitHub
+     gehaald → fail. Omzeilen met CLI-overstijging:
+     `npx electron-builder --win --dir --config.win.signAndEditExecutable=false`
+     (niets in de repo aangepast). Nadeel: standaard-Electron-icon/-metadata in de exe.
+     Als IPv4 terug is: `npm run dist` opnieuw + eventueel NSIS-installer bouwen.
+- Check straks bij "internet terug": `git push` (dit blok + de StaffHub-0.1.1-commit)
+  en optioneel de nette installer.
