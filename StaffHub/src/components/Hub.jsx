@@ -117,6 +117,19 @@ export default function Hub({ me, onLogout }) {
     try { await jsend('/api/nodes/' + moveFrom.id, 'PATCH', { parent: targetId }); setMoveFrom(null); await refresh(); } catch (e) { setErr(e.message); }
   }
 
+  // Slepen-and-neerzetten: een node pakken en in een map lostlaten. Het oude
+  // klik-en-"hierheen" blijft staan, want op een telefoon werkt HTML5-slepen
+  // niet - en de app moet voor staff op de vloer gewoon blijven werken.
+  const [sleepNode, setSleepNode] = useState(null);   // wat getild wordt
+  const [sleepOver, setSleepOver] = useState(null);   // map waar de muis boven hangt
+  async function dropNaar(mapId) {
+    const node = sleepNode;
+    setSleepNode(null); setSleepOver(null);
+    if (!node || node.id === mapId) return;           // in zijn eigen map laten: doet niets
+    try { await jsend('/api/nodes/' + node.id, 'PATCH', { parent: mapId }); await refresh(); }
+    catch (e) { setErr(e.message); }                  // cyclus/rechten: server meldt het netjes
+  }
+
   // ---------- zoeken ----------
   useEffect(() => {
     if (!q || q.length < 2) { setResults(null); return; }
@@ -135,7 +148,13 @@ export default function Hub({ me, onLogout }) {
     const open = !!expanded[n.id];
     return (
       <div>
-        <div className="flex items-center gap-1 text-[12px] hover:bg-white/5 rounded px-1 cursor-pointer" style={{ paddingLeft: depth * 12 }}
+        <div draggable
+          onDragStart={(e) => { setSleepNode(n); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(n.id)); } catch { } }}
+          onDragEnd={() => { setSleepNode(null); setSleepOver(null); }}
+          onDragOver={(e) => { if (sleepNode && sleepNode.id !== n.id) { e.preventDefault(); e.stopPropagation(); setSleepOver(n.id); } }}
+          onDragLeave={() => setSleepOver((v) => (v === n.id ? null : v))}
+          onDrop={(e) => { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); }}
+          className={`flex items-center gap-1 text-[12px] hover:bg-white/5 rounded px-1 cursor-pointer ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/20' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`} style={{ paddingLeft: depth * 12 }}
           onClick={() => { setParent(n.id); setSel(null); }} onDoubleClick={() => toggleDir(n.id)}>
           <button onClick={(e) => { e.stopPropagation(); toggleDir(n.id); }} className="w-4 text-parch/40">{open ? '▾' : '▸'}</button>
           <Folder className="size-3.5 text-gold/70 shrink-0" />
@@ -191,7 +210,10 @@ export default function Hub({ me, onLogout }) {
       <div className="flex-1 grid grid-cols-[220px_1fr] md:grid-cols-[240px_1fr_380px] overflow-hidden">
         {/* boom */}
         <nav className="border-r border-bronze/20 bg-black/20 p-2 overflow-auto">
-          <div className={`flex items-center gap-1 text-[12px] rounded px-1 cursor-pointer ${parent === null ? 'bg-gold/15 text-gold' : 'hover:bg-white/5'}`}
+          <div className={`flex items-center gap-1 text-[12px] rounded px-1 cursor-pointer ${parent === null ? 'bg-gold/15 text-gold' : 'hover:bg-white/5'} ${sleepOver === 'root' ? 'outline outline-1 outline-gold bg-gold/20' : ''}`}
+            onDragOver={(e) => { if (sleepNode) { e.preventDefault(); e.stopPropagation(); setSleepOver('root'); } }}
+            onDragLeave={() => setSleepOver((v) => (v === 'root' ? null : v))}
+            onDrop={(e) => { e.preventDefault(); e.stopPropagation(); dropNaar(null); }}
             onClick={() => { setParent(null); setSel(null); }}>
             <Folder className="size-3.5" /> <b>{t('nav.all')}</b>
             {moveFrom && <button className="ml-auto text-[9px] bg-copper text-ink rounded px-1" onClick={() => moveTo(null)}>{t('nav.here')}</button>}
@@ -222,7 +244,13 @@ export default function Hub({ me, onLogout }) {
                 {kids.map((n) => {
                   const I = TypeIcon(n);
                   return (
-                    <tr key={n.id} className={`group cursor-pointer hover:bg-white/5 ${sel?.id === n.id ? 'bg-gold/10' : ''}`}
+                    <tr key={n.id} draggable
+                      onDragStart={(e) => { setSleepNode(n); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(n.id)); } catch { } }}
+                      onDragEnd={() => { setSleepNode(null); setSleepOver(null); }}
+                      onDragOver={(e) => { if (n.type === 'folder' && sleepNode && sleepNode.id !== n.id) { e.preventDefault(); e.stopPropagation(); setSleepOver(n.id); } }}
+                      onDragLeave={() => setSleepOver((v) => (v === n.id ? null : v))}
+                      onDrop={(e) => { if (n.type === 'folder') { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); } }}
+                      className={`group cursor-pointer hover:bg-white/5 ${sel?.id === n.id ? 'bg-gold/10' : ''} ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/15' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`}
                       onClick={() => setSel(n)} onDoubleClick={() => n.type === 'folder' && setParent(n.id)}>
                       <td className="py-1.5 pl-2 w-6"><I className="size-4 text-gold/70" /></td>
                       <td className="py-1.5"><span className="truncate">{n.name}</span> {visBadge(n)}</td>
