@@ -1,0 +1,23 @@
+﻿# Boord-AI sandbox - draait naast staffhub op de VPS (eigen map: /opt/opencode-ai).
+# Bedient ALLEEN het interne docker-netwerk; geen poort naar de buitenwereld.
+services:
+  opencode-ai:
+    build: .
+    container_name: opencode-ai
+    restart: unless-stopped
+    environment:
+      OPENCODE_SERVER_PASSWORD: ${AI_PASS}
+    volumes:
+      - ./data:/root/.local/share/opencode     # sessies + model-login
+      - ./config:/root/.config/opencode        # permissions-deny config
+      - ./workspace:/app                       # kennismap (git clone, read-only-agents)
+    mem_limit: 1g
+    cpus: 1.0
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+    networks: [staffhub_default]
+
+networks:
+  staffhub_default:
+    external: true

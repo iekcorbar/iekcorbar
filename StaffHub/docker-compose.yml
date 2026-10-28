@@ -8,6 +8,8 @@ services:
     environment:
       STAFFHUB_BOOTSTRAP: ${STAFFHUB_BOOTSTRAP}
       COOKIE_SECURE: "1"
+      STAFFHUB_AI_URL: ${STAFFHUB_AI_URL}       # Boord-AI (zie deploy/ai/) - uit: .env op ''
+      STAFFHUB_AI_PASS: ${STAFFHUB_AI_PASS}
     volumes:
       - ./data:/app/data            # sqlite + bestanden: dit IS de NAS-bak
     mem_limit: 512m                 # de Minecraft-server mag never knocken

@@ -5,7 +5,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 export const LANGS = ['nl', 'en', 'it'];
-const STORE_KEY = 'staffhub_…lang';
+const STORE_KEY = 'staffhub_lang';
 
 const nl = {
   'app.loading': 'StaffHub laden…',
@@ -135,6 +135,14 @@ const nl = {
   'ai.ask': 'vragen',
   'ai.answer_none': 'Daar heb ik niets over gevonden in de hub.',
   'ai.answer_found': 'Ik vond {n} resultaten:',
+  'ai.mode_zoek': 'Zoeken',
+  'ai.mode_ai': 'Boord-AI',
+  'ai.deep_hint': 'De Boord-AI leest mee in de kennismap en antwoordt in jouw taal.',
+  'ai.ph_ai': 'stel je vraag aan de Boord-AI…',
+  'ai.think': 'vragen',
+  'ai.off': 'De Boord-AI staat (nog) uit op deze server.',
+  'ai.disclaimer': 'AI-antwoord - controleer bij twijfel de bronnen.',
+  'ai.toolong': 'Vraag is te lang (max 4000 tekens)',
   'type.folder': 'map',
   'type.page': 'handleiding',
   'type.file': 'bestand',
@@ -268,6 +276,14 @@ const en = {
   'ai.ask': 'ask',
   'ai.answer_none': 'I could not find anything about that in the hub.',
   'ai.answer_found': 'I found {n} results:',
+  'ai.mode_zoek': 'Search',
+  'ai.mode_ai': 'Ship AI',
+  'ai.deep_hint': 'The Ship AI reads the knowledge folder and answers in your language.',
+  'ai.ph_ai': 'ask the Ship AI…',
+  'ai.think': 'ask',
+  'ai.off': 'The Ship AI is (not yet) switched on on this server.',
+  'ai.disclaimer': 'AI answer - check sources when in doubt.',
+  'ai.toolong': 'Question is too long (max 4000 characters)',
   'type.folder': 'folder',
   'type.page': 'guide',
   'type.file': 'file',
@@ -401,6 +417,14 @@ const it = {
   'ai.ask': 'chiedi',
   'ai.answer_none': 'Non ho trovato nulla al riguardo nell hub.',
   'ai.answer_found': 'Trovati {n} risultati:',
+  'ai.mode_zoek': 'Cerca',
+  'ai.mode_ai': 'AI di bordo',
+  'ai.deep_hint': 'L AI di bordo legge la cartella della conoscenza e risponde nella tua lingua.',
+  'ai.ph_ai': 'chiedi all AI di bordo…',
+  'ai.think': 'chiedi',
+  'ai.off': 'L AI di bordo è (ancora) spenta su questo server.',
+  'ai.disclaimer': 'Risposta AI - in caso di dubbio controlla le fonti.',
+  'ai.toolong': 'Domanda troppo lunga (max 4000 caratteri)',
   'type.folder': 'cartella',
   'type.page': 'guida',
   'type.file': 'file',
@@ -436,6 +460,7 @@ const API_MSG = {
   'je kunt een map niet in zijn eigen kind stoppen': 'err.cycle',
   'naar root mag niet': 'err.noroot',
   'leeg': 'err.empty',
+  'te lang (max 4000)': 'ai.toolong',
   'mislukt': 'err.failed',
   login: 'err.login',
 };
