@@ -197,6 +197,18 @@ const nl = {
   'type.folder': 'map',
   'type.page': 'handleiding',
   'type.file': 'bestand',
+  'ar.titel': 'Archief uitpakken',
+  'ar.samenvat': '{n} bestanden, samen {grootte} uitgepakt',
+  'ar.nieuw': 'nieuw',
+  'ar.versie': 'revisie',
+  'ar.map': 'nieuwe mappen',
+  'ar.botsing': 'botsing',
+  'ar.uitpakken': 'uitpakken',
+  'ar.bezig': 'uitpakken…',
+  'ar.bewaren': 'als één bestand bewaren',
+  'ar.afgekapt': '(lijst ingekort — de rest volgt dezelfde regels)',
+  'col.grootte': 'grootte',
+  'col.datum': 'laatst gewijzigd',
 };
 
 const en = {
@@ -385,6 +397,18 @@ const en = {
   'type.folder': 'folder',
   'type.page': 'guide',
   'type.file': 'file',
+  'ar.titel': 'Extract archive',
+  'ar.samenvat': '{n} files, {grootte} total when extracted',
+  'ar.nieuw': 'new',
+  'ar.versie': 'revision',
+  'ar.map': 'new folders',
+  'ar.botsing': 'conflict',
+  'ar.uitpakken': 'extract',
+  'ar.bezig': 'extracting…',
+  'ar.bewaren': 'keep as one file',
+  'ar.afgekapt': '(list shortened — the rest follows the same rules)',
+  'col.grootte': 'size',
+  'col.datum': 'last changed',
 };
 
 const it = {
@@ -573,9 +597,22 @@ const it = {
   'type.folder': 'cartella',
   'type.page': 'guida',
   'type.file': 'file',
+  'ar.titel': 'Estrai archivio',
+  'ar.samenvat': '{n} file, {grootte} totali estratti',
+  'ar.nieuw': 'nuovo',
+  'ar.versie': 'revisione',
+  'ar.map': 'nuove cartelle',
+  'ar.botsing': 'conflitto',
+  'ar.uitpakken': 'estrai',
+  'ar.bezig': 'estrazione…',
+  'ar.bewaren': 'conserva come un file',
+  'ar.afgekapt': '(elenco abbreviato — il resto segue le stesse regole)',
+  'col.grootte': 'dimensione',
+  'col.datum': 'ultima modifica',
 };
 
-// Finse:keyset - één stafflid is Fin en kiest Fins boven Engels. Woordenboek
+// Fins: volledige interface-vertaling voor het Finse staff-lid (28-10).
+// Woordenboek
 // volgt dezelfde sleutels en volgorde als `nl`; ontbreekt hier een sleutel valt
 // t() netjes terug op het Nederlands, dus een halve vertaling is nooit een crash.
 // Schepstaal ("aan boord", "Boord-AI") is meegenomen: laiva / Laiva-AI.
@@ -765,6 +802,18 @@ const fi = {
   'type.folder': 'kansio',
   'type.page': 'opas',
   'type.file': 'tiedosto',
+  'ar.titel': 'Pura arkisto',
+  'ar.samenvat': '{n} tiedostoa, {grootte} yhteensä',
+  'ar.nieuw': 'uusi',
+  'ar.versie': 'versio',
+  'ar.map': 'uutta kansiota',
+  'ar.botsing': 'ristiriita',
+  'ar.uitpakken': 'pura',
+  'ar.bezig': 'puretaan…',
+  'ar.bewaren': 'säilytä yhtenä tiedostona',
+  'ar.afgekapt': '(lista lyhennetty — loput samoilla säännöillä)',
+  'col.grootte': 'koko',
+  'col.datum': 'muutettu',
 };
 
 const DICT = { nl, en, it, fi };

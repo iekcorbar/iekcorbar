@@ -31,6 +31,7 @@ export default function Hub({ me, onLogout }) {
   const [modal, setModal] = useState(null);       // 'users' | 'tokens' | 'dav'
   const [moveFrom, setMoveFrom] = useState(null);  // node die verplaatst wordt
   const [err, setErr] = useState('');
+  const [archief, setArchief] = useState(null);     // {plan, file} van een zip-dry-run
   const upRef = useRef();
 
   const load = useCallback(async (pid) => {
@@ -68,7 +69,15 @@ export default function Hub({ me, onLogout }) {
   async function refresh() { await load(parent); }
 
   // ---------- uploaden (knop + drag&drop, ook met mappen) ----------
+  // Eén los .zip-archief is geen gewoon bestand: dan toont de hub eerst een
+  // UITPAKPLAN (wat is nieuw, wat wordt een revisie) en beslist de mens.
+  // Meerdere bestanden tegelijk of een zip tussen mappenwerk: gewoon uploaden,
+  // de mens wil soms gewoon een zip als bestand bewaren.
   async function uploadFiles(list) {
+    if (list.length === 1 && !list[0].path && /\.zip$/i.test(list[0].file.name || '')) {
+      await arPlannen(list[0].file);
+      return;
+    }
     const groups = new Map(); // dirPath -> File[]
     for (const { file, path } of list) {
       const key = path || '';
@@ -84,6 +93,30 @@ export default function Hub({ me, onLogout }) {
       catch (e) { setErr(t('err.upload') + ': ' + e.message); }
     }
     await refresh();
+  }
+  // Dry-run van één zip: de server antwoordt met een plan, nog is er niets
+  // gewijzigd. Het plan gaat in een venster; daar pas valt de knop.
+  async function arPlannen(file) {
+    setErr('');
+    try {
+      const fd = new FormData();
+      fd.set('file', file, file.name);
+      if (parent) fd.set('parent', String(parent));
+      const r = await fetch('/api/archive', { method: 'POST', body: fd });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) { setErr(trServer(j.error || 'archief mislukt')); return; }
+      setArchief({ plan: j, file });
+    } catch (e) { setErr(t('err.upload') + ': ' + e.message); }
+  }
+  // "Bewaar als één bestand": de weg die de hub al kende - de zip zélf de hub
+  // in, niet zijn inhoud. Some staff-leden willen dat zo; beslis hen niet weg.
+  async function arBewaar(file) {
+    const fd = new FormData();
+    if (parent) fd.set('parent', String(parent));
+    fd.append('files', file, file.name);
+    try { await fetch('/api/upload', { method: 'POST', body: fd }); await refresh(); }
+    catch (e) { setErr(t('err.upload') + ': ' + e.message); }
+    setArchief(null);
   }
   async function onDrop(e) {
     e.preventDefault();
@@ -198,8 +231,8 @@ export default function Hub({ me, onLogout }) {
     <div className="h-screen flex flex-col">
       {/* topbalk */}
       <header className="flex items-center gap-3 px-4 py-2 border-b border-bronze/30 bg-panel">
-        <span className="size-8 grid place-items-center rounded-full bg-gold/10 border border-gold/40"><Anchor className="size-4 text-gold" /></span>
-        <h1 className="font-bold text-gold mr-2">StaffHub</h1>
+        <span className="size-8 grid place-items-center rounded-lg bg-gold/10 border border-gold/30"><Anchor className="size-4 text-gold" /></span>
+        <h1 className="font-bold text-parch mr-2 tracking-tight">Staff<span className="text-gold">Hub</span></h1>
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-2.5 top-2 size-4 text-parch/40" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('search.ph')}
@@ -218,7 +251,7 @@ export default function Hub({ me, onLogout }) {
           )}
         </div>
         <div className="ml-auto flex items-center gap-2 text-xs">
-          <span className="text-parch/60 hidden sm:inline">{me.username}{me.team ? ` (${me.team})` : ''}{me.role === 'owner' ? ' ⚓' : ''}</span>
+          <span className="hidden sm:inline rounded-full bg-white/5 border border-bronze/30 px-2.5 py-1 text-parch/70">{me.username}{me.team ? ` · ${me.team}` : ''}</span>
           <LangToggle />
           <button title={t('tip.desktop')} onClick={() => setModal('desktop')} className="p-1.5 rounded hover:bg-white/10"><Download className="size-4" /></button>
           <button title={t('tip.disk')} onClick={() => setModal('dav')} className="p-1.5 rounded hover:bg-white/10"><Server className="size-4" /></button>
@@ -230,7 +263,7 @@ export default function Hub({ me, onLogout }) {
 
       {err && <div className="bg-red-900/40 text-red-100 text-xs px-4 py-1.5 flex items-center gap-2"><span>{err}</span><button onClick={() => setErr('')}><X className="size-3.5" /></button></div>}
 
-      <div className="flex-1 grid grid-cols-[220px_1fr] md:grid-cols-[240px_1fr_380px] overflow-hidden">
+      <div className="flex-1 grid grid-cols-[230px_1fr] md:grid-cols-[250px_1fr_400px] overflow-hidden">
         {/* boom */}
         <nav className="border-r border-bronze/20 bg-black/20 p-2 overflow-auto">
           <div className={`flex items-center gap-1 text-[12px] rounded px-1 cursor-pointer ${parent === null ? 'bg-gold/15 text-gold' : 'hover:bg-white/5'} ${sleepOver === 'root' ? 'outline outline-1 outline-gold bg-gold/20' : ''}`}
@@ -262,8 +295,17 @@ export default function Hub({ me, onLogout }) {
             onDragOver={(e) => e.preventDefault()} onDrop={onDrop}
             className="rounded-xl border border-dashed border-bronze/25 min-h-[60vh] p-1">
             {kids.length === 0 && <div className="grid place-items-center h-64 text-parch/40 text-sm">{t('dir.empty')}</div>}
-            <table className="w-full text-xs">
-              <tbody>
+            <table className="w-full text-[13px]">
+              <thead>
+                <tr className="text-[10px] uppercase tracking-wider text-parch/40">
+                  <th className="text-left font-semibold py-1.5 pl-2"></th>
+                  <th className="text-left font-semibold py-1.5">{t('why.naam')}</th>
+                  <th className="text-right font-semibold py-1.5 w-20">{t('col.grootte')}</th>
+                  <th className="text-right font-semibold py-1.5 w-36 hidden md:table-cell">{t('col.datum')}</th>
+                  <th className="w-32"></th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
                 {kids.map((n) => {
                   const I = TypeIcon(n);
                   return (
@@ -275,11 +317,11 @@ export default function Hub({ me, onLogout }) {
                       onDrop={(e) => { if (n.type === 'folder') { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); } }}
                       className={`group cursor-pointer hover:bg-white/5 ${sel?.id === n.id ? 'bg-gold/10' : ''} ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/15' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`}
                       onClick={() => setSel(n)} onDoubleClick={() => n.type === 'folder' && setParent(n.id)}>
-                      <td className="py-1.5 pl-2 w-6"><I className="size-4 text-gold/70" /></td>
-                      <td className="py-1.5"><span className="truncate">{n.name}</span> {visBadge(n)}</td>
-                      <td className="py-1.5 text-right text-parch/50 w-20">{n.size != null ? fmt(n.size) : ''}</td>
-                      <td className="py-1.5 text-right text-parch/40 w-28 hidden md:table-cell">{dt(n.updated)}</td>
-                      <td className="py-1.5 pr-2 w-32 text-right opacity-0 group-hover:opacity-100">
+                      <td className="py-2 pl-2 w-6"><I className="size-4 text-parch/55" /></td>
+                      <td className="py-2"><span className="truncate">{n.name}</span> {visBadge(n)}</td>
+                      <td className="py-2 text-right text-parch/50 w-20 tabular-nums">{n.size != null ? fmt(n.size) : ''}</td>
+                      <td className="py-2 text-right text-parch/40 w-36 hidden md:table-cell tabular-nums">{dt(n.updated)}</td>
+                      <td className="py-2 pr-2 w-32 text-right opacity-0 group-hover:opacity-100">
                         {n.type === 'file' && <a href={'/api/file/' + n.id} download title={t('tip.download')} className="p-1 hover:text-gold inline-block"><Download className="size-3.5" /></a>}
                         <button title={t('tip.rename')} onClick={(e) => { e.stopPropagation(); rename(n); }} className="p-1 hover:text-gold inline-block"><Pencil className="size-3.5" /></button>
                         <button title={t('tip.vis')} onClick={(e) => { e.stopPropagation(); toggleVis(n); }} className="p-1 hover:text-gold inline-block">{n.vis === 'owner' ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}</button>
@@ -324,6 +366,7 @@ export default function Hub({ me, onLogout }) {
 
       {modal === 'users' && <UsersModal onClose={() => setModal(null)} />}
       {modal === 'tokens' && <TokensModal onClose={() => setModal(null)} />}
+      {archief && <ArchiveModal archief={archief} sluit={() => setArchief(null)} ververst={refresh} bewaar={arBewaar} />}
       {modal === 'dav' && <DavModal onClose={() => setModal(null)} />}
       {modal === 'desktop' && <DesktopModal onClose={() => setModal(null)} />}
     </div>
@@ -529,6 +572,72 @@ function TokensModal({ onClose }) {
           </div>
         ))}
         {sessies.length === 0 && <p className="text-parch/40">…</p>}
+      </div>
+    </Modal>
+  );
+}
+
+// Zip-uitpakvenster: eerst KIJKEN, dan pas doen. De telling bovenaan is het
+// antwoord op de enge vraag ("vervang ik per ongeluk dertig handleidingen?"):
+// elke lijn zegt nieuw / revisie / botsing, en bij een botsing of onduidelijk
+// plan is annuleren altijd nog een keuze. Uitgepakte bestanden krijgen hun
+// normale revisie-gedrag: zelfde naam = nieuwe versie, oude blijven staan.
+function ArchiveModal({ archief, sluit, ververst, bewaar }) {
+  const { t } = useLang();
+  const p = archief.plan;
+  const [bezig, setBezig] = useState('');
+  const AK = {
+    nieuw: { lab: t('ar.nieuw'), klas: 'text-emerald-300' },
+    versie: { lab: t('ar.versie'), klas: 'text-gold' },
+    botsing: { lab: t('ar.botsing'), klas: 'text-red-300' },
+  };
+  async function uitpakken() {
+    setBezig('uit');
+    try {
+      const r = await fetch('/api/archive', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: p.token }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(trServer(j.error) || 'mislukt');
+      ververst(); sluit();
+    } catch (e) { window.alert(e.message); setBezig(''); }
+  }
+  return (
+    <Modal title={t('ar.titel')} onClose={sluit} wide>
+      <p className="text-xs text-parch/70 mb-2">
+        <b className="text-parch">{p.ennaam}</b>{' · '}
+        {t('ar.samenvat', { n: p.aantal, grootte: fmt(p.omvang) })}
+      </p>
+      <div className="flex flex-wrap gap-2 text-[11px] mb-3">
+        <span className="rounded bg-emerald-900/30 border border-emerald-500/30 px-2 py-0.5 text-emerald-300">{t('ar.nieuw')}: {p.nieuw}</span>
+        <span className="rounded bg-gold/10 border border-gold/40 px-2 py-0.5 text-gold">{t('ar.versie')}: {p.versies}</span>
+        <span className="rounded bg-white/5 border border-bronze/40 px-2 py-0.5 text-parch/70">{t('ar.map')}: {p.mappen}</span>
+        {p.botsingen > 0 && <span className="rounded bg-red-900/30 border border-red-500/40 px-2 py-0.5 text-red-300">{t('ar.botsing')}: {p.botsingen}</span>}
+      </div>
+      <div className="max-h-64 overflow-auto rounded-lg border border-bronze/25 bg-black/40 p-2 text-[11px] space-y-0.5 mb-3">
+        {(p.regels || []).map((rg) => (
+          <div key={rg.pad} className="flex items-center gap-2">
+            <span className={`shrink-0 w-16 ${AK[rg.actie]?.klas}`}>{AK[rg.actie]?.lab || rg.actie}</span>
+            <span className="truncate flex-1 text-parch/85" title={rg.pad}>{rg.pad}</span>
+            <span className="shrink-0 text-parch/40">{fmt(rg.grootte)}</span>
+          </div>
+        ))}
+        {p.afgekapt && <p className="text-parch/40 pt-1">{t('ar.afgekapt')}</p>}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <button onClick={uitpakken} disabled={!!bezig}
+          className="flex-1 bg-gold/90 text-ink rounded-lg py-1.5 font-bold text-xs disabled:opacity-50">
+          {bezig === 'uit' ? t('ar.bezig') : t('ar.uitpakken')}
+        </button>
+        <button onClick={() => bewaar(archief.file)} disabled={!!bezig}
+          className="rounded-lg border border-bronze/40 px-3 py-1.5 text-xs text-parch/70 hover:border-gold/60 disabled:opacity-50">
+          {t('ar.bewaren')}
+        </button>
+        <button onClick={sluit} disabled={!!bezig}
+          className="rounded-lg border border-bronze/40 px-3 py-1.5 text-xs text-parch/70 hover:border-gold/60 disabled:opacity-50">
+          {t('dt.close')}
+        </button>
       </div>
     </Modal>
   );

@@ -1,28 +1,48 @@
 @import "tailwindcss";
 
+/* StaffHub-merk 2.0 (28-10): van stoompunk-parchment naar zakelijk staal.
+   Alle componenten gebruiken deze namen (bg-ink, text-parch, border-bronze,
+   text-gold, ...); de JSX bleef dus ongemakkelijk en alleen dit kaartje
+   veranderde. De voormalige "gold" is nu staalblauw - primary knoppen,
+   kopjes en selecties; "copper" is een rustige secundaire tint geworden.  */
 @theme {
-  --color-ink: #0d0a07;
-  --color-panel: #171210;
-  --color-bronze: #8a6a45;
-  --color-gold: #c9a55a;
-  --color-copper: #b87333;
-  --color-parch: #e8dcc8;
+  --color-ink: #0c1117;      /* app-achtergrond */
+  --color-panel: #121a23;    /* kopbalken, kaarten, modals */
+  --color-parch: #d8e0e8;    /* hoofdtekst */
+  --color-bronze: #33414f;   /* randen en scheidingen */
+  --color-gold: #5b9dd9;     /* accent: staalblauw */
+  --color-copper: #6fae9b;   /* secundair: zacht groen-blauw */
 }
 
+html { color-scheme: dark; }
+body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+/* Dunne, rustige scrollbalken: dik chroom is precies wat "niet-professioneel"
+   oplevert. Firefox + WebKit. */
+* { scrollbar-width: thin; scrollbar-color: #2b3947 transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2b3947; border-radius: 6px; border: 2px solid #0c1117; }
+::-webkit-scrollbar-thumb:hover { background: #3b4c5e; }
+
+::selection { background: #5b9dd966; }
+
 /* TipTap-bewerker: kale content een beetje adem geven */
-.prose-hub :is(h1, h2, h3) { color: var(--color-gold); font-weight: 700; margin: 0.8em 0 0.3em; }
-.prose-hub h1 { font-size: 1.5rem; }
+.prose-hub :is(h1, h2, h3) { color: var(--color-parch); font-weight: 650; margin: 0.9em 0 0.35em; letter-spacing: -0.01em; }
+.prose-hub h1 { font-size: 1.5rem; border-bottom: 1px solid #33414f; padding-bottom: 0.25em; }
 .prose-hub h2 { font-size: 1.2rem; }
 .prose-hub h3 { font-size: 1.05rem; }
-.prose-hub p { margin: 0.4em 0; }
-.prose-hub ul { list-style: disc; padding-left: 1.4em; margin: 0.4em 0; }
-.prose-hub ol { list-style: decimal; padding-left: 1.4em; margin: 0.4em 0; }
-.prose-hub blockquote { border-left: 3px solid var(--color-copper); padding-left: 0.8em; color: #cbb896; margin: 0.5em 0; }
-.prose-hub code { background: #00000066; padding: 1px 5px; border-radius: 4px; font-size: 0.85em; }
-.prose-hub pre { background: #00000088; padding: 0.7em; border-radius: 8px; overflow-x: auto; }
-.prose-hub pre code { background: transparent; padding: 0; }
+.prose-hub p { margin: 0.45em 0; line-height: 1.65; }
+.prose-hub ul { list-style: disc; padding-left: 1.4em; margin: 0.45em 0; }
+.prose-hub ol { list-style: decimal; padding-left: 1.4em; margin: 0.45em 0; }
+.prose-hub li { margin: 0.15em 0; }
+.prose-hub blockquote { border-left: 3px solid var(--color-copper); padding-left: 0.8em; color: #a9b6c2; margin: 0.6em 0; font-style: normal; }
+.prose-hub code { background: #0a0f14; padding: 1px 6px; border-radius: 4px; font-size: 0.85em; border: 1px solid #223040; }
+.prose-hub pre { background: #0a0f14; padding: 0.75em; border-radius: 8px; overflow-x: auto; border: 1px solid #223040; }
+.prose-hub pre code { background: transparent; padding: 0; border: 0; }
 .prose-hub img { max-width: 100%; border-radius: 8px; margin: 0.5em 0; }
-.prose-hub a { color: var(--color-gold); text-decoration: underline; }
+.prose-hub a { color: var(--color-gold); text-decoration: underline; text-underline-offset: 2px; }
 .prose-hub table { border-collapse: collapse; }
-.prose-hub td, .prose-hub th { border: 1px solid #8a6a4555; padding: 4px 8px; }
+.prose-hub td, .prose-hub th { border: 1px solid #33414f; padding: 5px 10px; }
+.prose-hub th { background: #16202b; font-weight: 600; }
 .prose-hub :is(h1, h2, h3, p, ul, ol):first-child { margin-top: 0; }
