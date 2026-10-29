@@ -1627,6 +1627,13 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   (Marco) over StaffHub-gebruik (voor hem gebouwd), opendere communicatie en de
   staff-verdeling. De eigenaar verstuurt het zelf als DM; observaties over ander
   staff zijn bewust als één-op-één-vertrouwelijk gemarkeerd in de tekst.
+- UPDATE uren later: **afriendlystomach (Tuomo) resigned**. NDA-PDF voor hem
+  ingetrokken (tekende nooit → geen boetebeding; rest zwijgplicht spelerdata),
+  tracker + board bijgewerkt op 3 pdf's. Servercheck (read-only): géén ops/CMI-rollen
+  aan hem gekoppeld - niets in te trekken op de VPS.
+- Opvallende bijvangst bij die check: **"_Gabes_" staat wél als OP4 in ops.json**
+  maar kwam in geen enkel staff- of NDA-verhaal voor. Vragen aan eigenaar: is hij
+  staff (dan NDA + board) of vriend/gast (dan overwegen of OP af mag)?
 
 ### Cinematic Interaction — REA-analyse eerste passage (29-10 nachts)
 

@@ -19,7 +19,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Steamworks 0.3.26 (treinlijnen + windmolen-woosh) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
 | iekcorbar-pack-build15.zip | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |
-| NDA ondertekenen | docs/nda/signed/ (4 pdf's) | zelf tekenen → per DM naar kooyer, afriendlystomach, iekjebr36, greyarts91; getekend terug in dezelfde map |
+| NDA ondertekenen | docs/nda/signed/ (3 pdf's) | zelf tekenen → per DM naar kooyer, iekjebr36, greyarts91; getekend terug in dezelfde map. (afriendlystomach resigned - PDF ingetrokken) |
 
 ## 🔵 In uitvoering (agent) → afgerond, wacht op deploy
 | Blok | Status |
