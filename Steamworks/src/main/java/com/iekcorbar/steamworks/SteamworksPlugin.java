@@ -108,6 +108,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
 
         // FreeMinecraftModels loads its models after startup; spawn ours once it knows them
         getServer().getScheduler().runTaskLater(this, () -> items.waitForModels(() -> {
+            items.registerRecipes();  // nu mét FMM-modellen op resultaatstacks + exacte ingredienten
             for (World w : getServer().getWorlds()) {
                 for (Entity e : w.getEntities()) {
                     if (e.getPersistentDataContainer().has(visuals.tag, PersistentDataType.BYTE)) e.remove();

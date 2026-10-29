@@ -224,6 +224,8 @@ final class PartItems {
     // ------------------------------------------------------------ recipes
 
     void registerRecipes() {
+        recipeKeys.clear();
+        recipeSpecs.clear();
         RecipeChoice planks = new RecipeChoice.MaterialChoice(Tag.PLANKS);
         RecipeChoice stones = new RecipeChoice.MaterialChoice(Material.STONE, Material.COBBLESTONE, Material.ANDESITE,
                 Material.DIORITE, Material.GRANITE, Material.DEEPSLATE, Material.COBBLED_DEEPSLATE);
@@ -341,7 +343,6 @@ final class PartItems {
 
     /** d = {amount (unused here), shape, char, ingredient, ...}. */
     void addRecipe(String id, ItemStack result, Object[] d) {
-        RecipeChoice paper = new RecipeChoice.MaterialChoice(Material.PAPER);
         NamespacedKey key = new NamespacedKey(plugin, id);
         Bukkit.removeRecipe(key, false);
         ShapedRecipe recipe = new ShapedRecipe(key, result);
@@ -355,11 +356,14 @@ final class PartItems {
             all.put(c, ing);
             if (ing instanceof Material m) recipe.setIngredient(c, m);
             else if (ing instanceof RecipeChoice choice) recipe.setIngredient(c, choice);
-            else if (ing instanceof DecorType) {
-                recipe.setIngredient(c, new RecipeChoice.MaterialChoice(Material.NOTE_BLOCK)); // checked in validCraft
+            else if (ing instanceof DecorType dt) {
+                recipe.setIngredient(c, new RecipeChoice.ExactChoice(plugin.decor().item(dt, 1)));
                 paperSlots.put(c, ing);
             } else {
-                recipe.setIngredient(c, paper);
+                // part/material/car slot: the EXACT item, so the recipe book shows the right icon,
+                // filters "craftable" honestly and auto-fills the grid with real parts (paper slots
+                // made vanilla drop any scrap of paper in the grid: validCraft then vetoed = "soms werkt het, soms niet")
+                recipe.setIngredient(c, new RecipeChoice.ExactChoice(exactFor(ing)));
                 paperSlots.put(c, ing);
             }
         }
@@ -367,6 +371,13 @@ final class PartItems {
         recipeKeys.add(key);
         recipeSpecs.put(key, new Spec(shape, paperSlots));
         craftRecipes.put(id, new CraftRecipe(result.clone(), shape, all));
+    }
+
+    private ItemStack exactFor(Object ing) {
+        if (ing instanceof PartType t) return create(t, 1);
+        if (ing instanceof MaterialType t) return createMaterial(t, 1);
+        if (ing instanceof CarType t) return createCar(t, 1);
+        throw new IllegalArgumentException("unknown recipe ingredient " + ing);
     }
 
     /** Which Steamworks item each paper slot of one of our recipes must hold. */

@@ -16,7 +16,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| Steamworks 0.3.26 (treinlijnen + windmolen-woosh) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
+| Steamworks 0.3.26 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
 | iekcorbar-pack-build15.zip | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |
 | AfkCinema 0.3.0 (klikbare zwevende menu's) | TE-DEPLOYEN punt 44 | bij dezelfde herstart-batch; jar staat ook al in de testbank (E:) |

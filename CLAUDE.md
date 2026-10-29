@@ -1708,6 +1708,37 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
   (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
 
+### Receptboek-herstel + Additions 0.1.3 (29-10 nachts)
+
+- Klacht eigenaar: "vent grille recipe zit niet goed" én "craftbare recepten
+  worden niet altijd geladen in de workbench, soms wel soms niet".
+- Oorzaak 1 (het algemene): alle Steamworks-recepten gebruikten generieke
+  PAPER/NOTE_BLOCK RecipeChoices als part-sloten + validCraft als bewaker. Het
+  vanilla-receptenboek vult daarmee willekeurig papier in het raster → geldige
+  poging wordt afgekeurd; pictogrammen zijn kaal; "craftable"-filter liegt.
+  Dit verklaart de willekeur. FIX: PartItems.addRecipe zet nu per part-slot een
+  RecipeChoice.ExactChoice van het ECHTE item (create/createMaterial/createCar/
+  decor.item), en registerRecipes() draait opnieuw zodra waitForModels langs is
+  (resultaten hadden toen pas hun FMM-model; recipeKeys/Specs worden vooraf
+  geleegd zodat herregistratie de lijsten niet laat aangroeien). validCraft blijft
+  als dubbele zekerheid.
+- Oorzaak 2 (vent grille specifiek): de Bukkit-recepten van Additions stonden
+  WEL geregistreerd (shapeless, vanilla-ingrediënten) maar de eigen
+  ZukanData-provider leverde een lege recipes-lijst ("Zukan leest ze zelf wel" -
+  bleek onjuist: Zukan telt wat de supplier geeft: log "SteamworksAdditions:
+  0 recipes"). Daardoor ontbrak de vent grille in de Zukan-receptenviewer/site.
+  FIX: Additions 0.1.3 levert de drie recepten als echte 3x3-kaarten.
+- Getest op testbank E: (26.3): Done 59.6s, "All Steamworks models found" ×2
+  (Steamworks + Power whenModels), geen exception bij de ExactChoice-herregistratie.
+  LESSERS: (a) mijn eerste test draaide per ongeluk op de OUDE deploy-jar -
+  houw de sha1 in de dop voordat je een build testeert; (b) PowerShell-`$(...)`
+  in ssh-opdrachten interpoleert lokaal → via .sh-pijp.
+- Files: PartItems.java (ExactChoice + clear), SteamworksPlugin.java (herregistratie
+  in whenModelsReady-callback), Additions ZukanData.java. Jars: Steamworks-0.3.26
+  sha1 e645794333881710901a15e113f87837f000d8d6 (vervangt 2b48119e), Additions-0.1.3
+  sha1 a85bbef1274b91269405aabbbe5e2276e60753d8. TE-DEPLOYEN: punt 42 om (e)+
+  nieuwe hash, punt 45 nieuw.
+
 ### Structuur: projectbord + grote opschontronde (29-10 avond)
 
 - Aanleiding eigenaar: "we moeten echt wat gestructureerder gaan werken" midden in
