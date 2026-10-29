@@ -18,7 +18,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 |---|---|---|
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | Steamworks 0.3.26 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
-| Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | jouw ja/nee op lockplan + klasse-keus; daarna bericht naar greyarts |
+| Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | jouw ja/nee op lockplan + klasse-keus; grijs-bericht klaar in 3 DM-delen (docs/berichten/greyarts-2026-10-30-italiano.md) |
 | iekcorbar-pack-build15.zip | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |
 | AfkCinema 0.3.0 (klikbare zwevende menu's) | TE-DEPLOYEN punt 44 | bij dezelfde herstart-batch; jar staat ook al in de testbank (E:) |
