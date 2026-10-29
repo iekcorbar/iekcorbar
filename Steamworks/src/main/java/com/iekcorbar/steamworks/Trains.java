@@ -220,6 +220,7 @@ final class Trains implements Listener {
         });
         byEntity.put(car.model.getUniqueId(), car);
         byEntity.put(car.hitbox.getUniqueId(), car);
+        if (car.type == CarType.TANK_WAGON) updateSign(car);
     }
 
     private void tag(Entity e) {
@@ -241,6 +242,10 @@ final class Trains implements Listener {
         if (car.hitbox != null) {
             byEntity.remove(car.hitbox.getUniqueId());
             car.hitbox.remove();
+        }
+        if (car.sign != null) {
+            car.sign.remove();
+            car.sign = null;
         }
         car.model = null;
         car.hitbox = null;
@@ -340,6 +345,7 @@ final class Trains implements Listener {
             if (s.isValid()) s.teleport(seatLoc(car, car.type.seats[i]), TeleportFlag.EntityState.RETAIN_PASSENGERS);
         }
         if (car.hitbox != null && car.hitbox.isValid()) car.hitbox.teleport(at);
+        if (car.sign != null && car.sign.isValid()) car.sign.teleport(seatLoc(car, TANK_SIGN_AT));
     }
 
     // ------------------------------------------------------------ ticking
@@ -778,6 +784,164 @@ final class Trains implements Listener {
         return ((long) cx << 32) | (cz & 0xFFFFFFFFL);
     }
 
+    // ------------------------------------------------------------ tank wagon
+
+    static final int TANK_CAP = 3000;
+    /** Where the canister sign floats above the hatch: {forward, up, sideways} in blocks. */
+    private static final double[] TANK_SIGN_AT = {0, 0.24, 0};
+
+    /** The floating canister on top of a tank wagon: shows what is on board (empty = no sign). */
+    private void updateSign(Car car) {
+        if (car.type != CarType.TANK_WAGON) return;
+        if (car.fluid == null || car.fluidAmount <= 0 || !car.spawned()) {
+            if (car.sign != null) {
+                car.sign.remove();
+                car.sign = null;
+            }
+            return;
+        }
+        if (car.sign == null || !car.sign.isValid()) {
+            car.sign = car.train.world.spawn(seatLoc(car, TANK_SIGN_AT), ItemDisplay.class, d -> {
+                tag(d);
+                d.setItemStack(plugin.items().displayItem(car.fluid.canister.model()));
+                d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
+                d.setTransformation(new Transformation(new Vector3f(0, 0, 0), new Quaternionf(), new Vector3f(0.55f, 0.55f, 0.55f), new Quaternionf()));
+                d.setTeleportDuration(2);
+                d.setViewRange(2.5f);
+            });
+        } else {
+            car.sign.teleport(seatLoc(car, TANK_SIGN_AT));
+        }
+    }
+
+    private static String tankContent(Car car) {
+        return car.fluid == null || car.fluidAmount <= 0
+                ? "empty (" + TANK_CAP + " mB in it)"
+                : car.fluid.displayName + ": " + car.fluidAmount + "/" + TANK_CAP + " mB";
+    }
+
+    /** Fill or dump the wagon with an (fluid) canister - the wagon is a portable Tank. */
+    private void canisterAtWagon(Player p, Car car, ItemStack hand) {
+        MaterialType m = plugin.items().materialOf(hand);
+        boolean creative = p.getGameMode() == GameMode.CREATIVE;
+        Location at = p.getLocation();
+        if (m == MaterialType.CANISTER) {
+            if (car.fluid == null || car.fluidAmount < Oil.CANISTER) {
+                p.sendActionBar(Component.text("The wagon tank has nothing left to draw.", NamedTextColor.YELLOW));
+                return;
+            }
+            FluidType f = car.fluid;
+            car.fluidAmount -= Oil.CANISTER;
+            if (car.fluidAmount <= 0) {
+                car.fluidAmount = 0;
+                car.fluid = null;
+            }
+            if (!creative) hand.setAmount(hand.getAmount() - 1);
+            for (ItemStack left : p.getInventory().addItem(plugin.items().createMaterial(f.canister, 1)).values())
+                p.getWorld().dropItemNaturally(at, left);
+            p.playSound(at, Sound.ITEM_BUCKET_FILL, 0.6f, 0.8f);
+            p.sendActionBar(Component.text("Drawn 1000 mB " + f.displayName + ".", NamedTextColor.GREEN));
+            updateSign(car);
+            save();
+            return;
+        }
+        FluidType f = FluidType.byCanister(m);
+        if (f == null) return;
+        if (car.fluid != null && car.fluid != f) {
+            p.sendActionBar(Component.text("The wagon carries " + car.fluid.displayName + " - this canister wants " + f.displayName + ".", NamedTextColor.RED));
+            return;
+        }
+        if (car.fluidAmount + Oil.CANISTER > TANK_CAP) {
+            p.sendActionBar(Component.text("The wagon tank is full.", NamedTextColor.YELLOW));
+            return;
+        }
+        car.fluid = f;
+        car.fluidAmount += Oil.CANISTER;
+        if (!creative) p.getInventory().setItemInMainHand(plugin.items().createMaterial(MaterialType.CANISTER, 1));
+        p.playSound(at, Sound.ITEM_BUCKET_EMPTY, 0.6f, 0.7f);
+        p.sendActionBar(Component.text("Poured 1000 mB " + f.displayName + " into the wagon.", NamedTextColor.GREEN));
+        updateSign(car);
+        save();
+    }
+
+    /** Nearest Tank part within reach of the standing wagon (the station's loading hose). */
+    private KNode nearestTank(Car car) {
+        Vector c = car.center();
+        KNode best = null;
+        double bestD = 6 * 6;
+        for (KNode n : plugin.kinetics().all()) {
+            if (!n.alive || n.type != PartType.TANK || n.world != car.train.world) continue;
+            double d = (n.x + 0.5 - c.getX()) * (n.x + 0.5 - c.getX())
+                    + (n.y + 0.5 - c.getY()) * (n.y + 0.5 - c.getY())
+                    + (n.z + 0.5 - c.getZ()) * (n.z + 0.5 - c.getZ());
+            if (d < bestD) {
+                bestD = d;
+                best = n;
+            }
+        }
+        return best;
+    }
+
+    /** Empty-hand click: pump the whole load to/from the tank beside the track (train must stand). */
+    private void pumpAtWagon(Player p, Car car) {
+        if (car.train.speed != 0) {
+            p.sendActionBar(Component.text("The hose pulls loose - let the train stand first.", NamedTextColor.RED));
+            return;
+        }
+        KNode tank = nearestTank(car);
+        if (tank == null) {
+            p.sendActionBar(Component.text("Wagon " + tankContent(car) + " - no Tank beside the track.", NamedTextColor.GRAY));
+            return;
+        }
+        int cap = plugin.settings().tankCapacity;
+        Location at = p.getLocation();
+        if (car.fluid != null && tank.fluid != null && tank.fluid != car.fluid) {
+            p.sendActionBar(Component.text("Different liquids: wagon " + car.fluid.displayName + ", tank " + tank.fluid.displayName + ".", NamedTextColor.RED));
+            return;
+        }
+        if (car.fluid != null) {                                                                        // unload wagon -> tank
+            int room = Math.max(0, cap - tank.fluidAmount);
+            int move = Math.min(car.fluidAmount, Math.max(0, room));
+            if (move <= 0) {
+                p.sendActionBar(Component.text("That tank is full.", NamedTextColor.YELLOW));
+                return;
+            }
+            FluidType f = car.fluid;
+            car.fluidAmount -= move;
+            if (car.fluidAmount <= 0) {
+                car.fluidAmount = 0;
+                car.fluid = null;
+            }
+            tank.fluid = f;
+            tank.fluidAmount += move;
+            p.playSound(at, Sound.BLOCK_NOTE_BLOCK_PLING, 0.5f, 1.1f);
+            p.sendActionBar(Component.text("Pumped " + move + " mB " + f.displayName + " into the tank.", NamedTextColor.GREEN));
+        } else if (tank.fluid != null) {                                                               // load tank -> wagon
+            int move = Math.min(tank.fluidAmount, TANK_CAP - car.fluidAmount);
+            if (move <= 0) {
+                p.sendActionBar(Component.text("The wagon is full.", NamedTextColor.YELLOW));
+                return;
+            }
+            FluidType f = tank.fluid;
+            tank.fluidAmount -= move;
+            if (tank.fluidAmount <= 0) {
+                tank.fluidAmount = 0;
+                tank.fluid = null;
+            }
+            car.fluid = f;
+            car.fluidAmount += move;
+            p.playSound(at, Sound.BLOCK_NOTE_BLOCK_PLING, 0.5f, 1.3f);
+            p.sendActionBar(Component.text("Pumped " + move + " mB " + f.displayName + " into the wagon.", NamedTextColor.GREEN));
+        } else {
+            p.sendActionBar(Component.text("Both the wagon and the tank are empty.", NamedTextColor.YELLOW));
+            return;
+        }
+        plugin.visuals().updateTank(tank);
+        plugin.saveSoon(tank);
+        updateSign(car);
+        save();
+    }
+
     // ------------------------------------------------------------ clicks
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -832,6 +996,13 @@ final class Trains implements Listener {
             p.sendActionBar(dashboard(t));
             return;
         }
+        if (car.type == CarType.TANK_WAGON) {
+            MaterialType mt = plugin.items().materialOf(hand);
+            if (mt == MaterialType.CANISTER || (mt != null && FluidType.byCanister(mt) != null)) canisterAtWagon(p, car, hand);
+            else if (hand.isEmpty()) pumpAtWagon(p, car);
+            else p.sendActionBar(Component.text("Wagon " + tankContent(car) + ".", NamedTextColor.GRAY));
+            return;
+        }
         if (car.type == CarType.CARGO_WAGON) {
             p.openInventory(car.cargo);
             return;
@@ -879,6 +1050,12 @@ final class Trains implements Listener {
         if (car.cargo != null) {
             for (ItemStack s : car.cargo.getContents()) if (s != null && !s.isEmpty()) t.world.dropItemNaturally(at, s);
             for (var viewer : new ArrayList<>(car.cargo.getViewers())) viewer.closeInventory();
+        }
+        if (car.type == CarType.TANK_WAGON && car.fluidAmount > 0) {   // the load hisses away into the ballast
+            t.world.spawnParticle(Particle.CLOUD, at, 20, 0.35, 0.2, 0.35, 0.02);
+            t.world.playSound(at, Sound.ITEM_BUCKET_EMPTY, 0.7f, 0.5f);
+            car.fluid = null;
+            car.fluidAmount = 0;
         }
         despawn(car);
         t.world.playSound(at, Sound.BLOCK_ANVIL_BREAK, 0.5f, 1.2f);
@@ -1008,6 +1185,10 @@ final class Trains implements Listener {
                 m.put("rear", c.rear.save());
                 if (c.cargo != null) m.put("cargo", java.util.Base64.getEncoder().encodeToString(ItemStack.serializeItemsAsBytes(
                         Arrays.stream(c.cargo.getContents()).map(i -> i == null ? ItemStack.empty() : i).toList())));
+                if (c.type == CarType.TANK_WAGON && c.fluidAmount > 0) {
+                    m.put("fluid", c.fluid.name());
+                    m.put("fluid-amount", c.fluidAmount);
+                }
                 cars.add(m);
             }
             s.set("cars", cars);
@@ -1044,6 +1225,15 @@ final class Trains implements Listener {
                         if (data != null) {
                             ItemStack[] items = ItemStack.deserializeItemsFromBytes(java.util.Base64.getDecoder().decode(String.valueOf(data)));
                             for (int i = 0; i < items.length && i < 27; i++) c.cargo.setItem(i, items[i] == null || items[i].isEmpty() ? null : items[i]);
+                        }
+                    }
+                    if (c.type == CarType.TANK_WAGON && m.get("fluid") != null && m.get("fluid-amount") != null) {
+                        try {
+                            c.fluid = FluidType.valueOf(String.valueOf(m.get("fluid")));
+                            c.fluidAmount = Integer.parseInt(String.valueOf(m.get("fluid-amount")));
+                        } catch (RuntimeException ignored) {
+                            c.fluid = null;
+                            c.fluidAmount = 0;
                         }
                     }
                     t.cars.add(c);

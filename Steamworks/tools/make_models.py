@@ -616,6 +616,34 @@ def cargo_wagon():
     return m
 
 
+def tank_wagon():
+    # steel shell riveted from three bands, lying along the track; brass hatch on top,
+    # red hand-wheel at the front end, ladder at the right side (net 1 px = 1/16 block)
+    m = Model("sw_tank_wagon", 0.5)
+    m.cube("frame", (-6.4, -8.2, -15.0), (6.4, -6.6, 15.0), "dark")
+    wheels(m, (9.0, -9.0))
+    m.cube("floor", (-6.6, -6.6, -15.0), (6.6, -5.8, 15.0), "darkwood")
+    m.cube("cradle", (-4.0, -5.8, -10.6), (4.0, -5.0, 10.6), "wood")
+    m.cube("tank_lo", (-3.8, -5.0, -11.6), (3.8, -2.6, 11.6), "steel")
+    m.cube("tank_mid", (-4.6, -2.6, -11.6), (4.6, 2.6, 11.6), "steel")
+    m.cube("tank_hi", (-4.0, 2.6, -11.6), (4.0, 4.6, 11.6), "steel")
+    m.cube("tank_top", (-2.8, 4.6, -11.6), (2.8, 5.6, 11.6), "steel")
+    for zs in (-1, 1):
+        z0, z1 = (11.6, 12.6) if zs > 0 else (-12.6, -11.6)
+        m.cube(f"end{zs}", (-3.8, -3.8, z0), (3.8, 4.4, z1), "steel")
+    for z in (-8.2, -0.4, 7.4):
+        m.cube(f"band{z}", (-4.8, -2.8, z), (4.8, 2.8, z + 0.8), "brass")
+    m.cube("dome", (-1.6, 5.6, -1.6), (1.6, 6.2, 1.6), "dark")
+    m.cube("lid", (-1.0, 6.2, -1.0), (1.0, 6.6, 1.0), "brass")
+    m.cube("valve", (2.0, 1.0, 12.6), (2.8, 2.2, 13.4), "brass")
+    m.cube("valve_wheel", (1.6, 2.2, 12.8), (3.2, 2.6, 13.2), "red")
+    for z in (0.9, -1.3):
+        m.cube(f"stile{z}", (4.7, -5.6, z), (5.1, 5.6, z + 0.4), "steel")
+    for y in (-2.6, 0.2, 3.4):
+        m.cube(f"rung{y}", (4.7, y, -1.3), (5.1, y + 0.4, 1.3), "steel")
+    return m
+
+
 def station():
     # eki sign: white name board on two dark posts under a small red roof; board faces model +-Z
     # (the plugin puts the station name on it as text, 1 px in front of each face)
@@ -1323,6 +1351,9 @@ def build():
     # metal dusts (crusher output, smelts to ingots) - last so all UUID counters above stay put
     parts += [dust("iron", "dark"), dust("copper", "copper"), dust("gold", "gold"),
               dust("zinc", "steel"), dust("tin", "stone")]
+    # 29-10: tank wagon toegevoegd - HELEMAAL achteraan, anders schuiven alle U()-tellers
+    # van de bestaande modellen op en verandert elke .bbmodel in de git-diff
+    parts.append(tank_wagon())
     return parts
 
 

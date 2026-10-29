@@ -1596,6 +1596,31 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   plugin-standaard iekcorbar MMO (naam nog te kiezen), import uit de
   bestaande tabellen, races+trinkets als losse modules.
 
+### Steamworks 0.3.26 - tankwagon (29-10 avond)
+
+- Eigenaar koos "alleen tankwagen" uit de trein-batches. Eigen design (Create heeft
+  geen vloeistof-wagon): CarType.TANK_WAGON (geen zitplaatsen) + Car.fluid/
+  fluidAmount (capaciteit TANK_CAP=3000 mB) + drevend kannetje boven het luik als
+  inhouds-display (ItemDisplay 'sign', loopt met de wagon mee via moveEntities).
+- Interactie: kannetjes werken exact als bij een normale Tank (1000 mB per klik,
+  geen mengen, creative houdt gevuld); lege hand bij stilstaande trein (speed==0)
+  pompt de HELE lading naar/uit de dichtstbijzijnde Tank binnen 6 blokken
+  (over->vol-melding, ander vocht-> geweigerd, visuals().updateTank + saveSoon).
+- Afbreken = lek: vloeistof vervliegt met CLOUD-deeltjes + emmergeluid;
+  trains.yml redt 'fluid' + 'fluid-amount' per wagon (oude bestanden werken door).
+- Model tank_wagon() in make_models.py ACHTER de dusts (invoegen halverwege liet
+  92 bbmodels verschuiven - U()-teller is globaal). Bijvangst: sw_locomotive.bbmodel
+  is handwerk (groups + 75 elementen, JSON blijft gelijk) → regenereren overschrijft
+  hem, steeds terugzetten met git checkout. preview3d-sheet bekeken: shell met
+  koperen banden, ladder, rode klep - herkenbaar als familie van de cargowagon.
+- Recept "P P/PTP/ M " planken + Tank + mijnkartje; commentaar ACHTER de ';' - losse
+  commentaarregel tussen addRecipes blinderde de site-parser (tank_wagon was even weg
+  uit recipes-data, nu weer gevonden).
+- Wiki 05-trains Wagons-sectie uitgebreid, steamworks-seed 59 pagina's, jar
+  92bf32c9bccf49ea48324b8ef8f57f2098e16c34 in deploy/, punt 42(c) + modelinstructie
+  plugins/FreeMinecraftModels/models/steamworks/ erbij. Eerste build misser:
+  Location is in Paper 26.x GEEN Vector meer - afstand in nearestTank handmatig.
+
 ### Mailronde naar staff (29-10 avond, status)
 
 - Op verzoek van de eigenaar in chat opgesteld: een Italiaans bericht aan greyarts

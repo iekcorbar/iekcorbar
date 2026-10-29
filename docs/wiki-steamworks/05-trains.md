@@ -37,6 +37,11 @@ Right-click the locomotive with fuel (sneak = the whole stack). You only burn fu
 ### Wagons
 * **Passenger Wagon** - 4 seats. Right-click to sit.
 * **Cargo Wagon** - a chest of 27 slots. Right-click to open. Contents stay when the server restarts.
+* **Tank Wagon** - carries 3000 mB of one liquid (crude oil, fuel or chemical waste).
+  Click it with a **canister** to fill or draw 1000 mB; click it with an **empty hand** while the
+  train stands to pump to or from the nearest **Tank** beside the track (whole tank load at once).
+  The canister floating above the hatch shows what is on board. Contents survive restarts;
+  a broken wagon spills its load. Craft: planks + a Tank + a minecart.
 
 ## Stations and signals
 * **Station** - place it next to the track (same height or one higher, on a platform). Rename the station item in an anvil (or click the station with a renamed name tag) to put a name on its board. Riders see "Next stop" and the station name.

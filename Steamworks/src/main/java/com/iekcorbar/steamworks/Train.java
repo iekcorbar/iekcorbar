@@ -58,6 +58,10 @@ final class Train {
         final List<ItemDisplay> seats = new ArrayList<>();
         Interaction hitbox;
         Inventory cargo;
+        // tank wagon: one liquid on board (mB), plus the floating canister that shows it
+        FluidType fluid;
+        int fluidAmount;
+        ItemDisplay sign;
         int hits;
         long lastHit;
 

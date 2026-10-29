@@ -295,6 +295,8 @@ final class PartItems {
                 'P', planks, 'I', MaterialType.IRON_PLATE, 'M', Material.MINECART});
         addRecipe("cargo_wagon", createCar(CarType.CARGO_WAGON, 1), new Object[]{1, new String[]{"P P", "PCP", " M "},
                 'P', planks, 'C', Material.CHEST, 'M', Material.MINECART});
+        addRecipe("tank_wagon", createCar(CarType.TANK_WAGON, 1), new Object[]{1, new String[]{"P P", "PTP", " M "},
+                'P', planks, 'T', PartType.TANK, 'M', Material.MINECART}); // eigen design (Create heeft geen tankwagen): tank bovenop een mijnkar-recept
 
         // tin canisters and the dowsing rod
         addRecipe("canister", createMaterial(MaterialType.CANISTER, 2), new Object[]{2, new String[]{" T ", "T T", "TTT"}, 'T', MaterialType.TIN_INGOT});
