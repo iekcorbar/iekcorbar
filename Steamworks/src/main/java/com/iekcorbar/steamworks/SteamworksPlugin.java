@@ -184,7 +184,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
                 }
                 case BELT -> { if (r.nextInt(3) != 0) continue; key = "belt.rumble"; vol = 0.2f; }
                 case PUMPJACK -> { key = "pumpjack.creak"; vol = 0.4f; }
-                case WINDMILL -> { if (r.nextInt(8) != 0) continue; key = "windmill.creak"; vol = 0.22f; }
+                case WINDMILL -> { if (r.nextInt(8) != 0) continue; key = "windmill.woosh"; vol = 0.12f; }
                 case GEARBOX -> { if (r.nextInt(4) != 0) continue; key = "gear.clatter"; vol = 0.15f; }
                 case STEAM_BOILER -> { key = "boiler.hiss"; vol = 0.3f; }
                 default -> { continue; }

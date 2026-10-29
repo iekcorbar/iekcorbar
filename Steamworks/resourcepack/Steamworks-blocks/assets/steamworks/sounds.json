@@ -72,12 +72,12 @@
   ],
   "subtitle": "subtitles.steamworks.pumpjack.creak"
  },
- "windmill.creak": {
+ "windmill.woosh": {
   "sounds": [
-   "steamworks:windmill/creak_1",
-   "steamworks:windmill/creak_2"
+   "steamworks:windmill/woosh_1",
+   "steamworks:windmill/woosh_2"
   ],
-  "subtitle": "subtitles.steamworks.windmill.creak"
+  "subtitle": "subtitles.steamworks.windmill.woosh"
  },
  "arm.servo": {
   "sounds": [

@@ -27,12 +27,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Transformation;
@@ -73,10 +78,12 @@ final class Trains implements Listener {
 
     record Obstacle(Stop kind, double dist, long rail, KNode node) {}
     private final File file;
+    private final NamespacedKey lineNameKey;
 
     Trains(SteamworksPlugin plugin) {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "trains.yml");
+        this.lineNameKey = new NamespacedKey(plugin, "line_station");
     }
 
     // ------------------------------------------------------------ rails
@@ -466,6 +473,16 @@ final class Trains implements Listener {
         return KNode.key(w.x, w.y, w.z);
     }
 
+    /** Station name as used in line lists and announcements. */
+    private static String stationName(KNode station) {
+        return station.label == null || station.label.isBlank() ? "Station" : station.label;
+    }
+
+    /** A train without a line stops everywhere; one with a line only stops at its own stations. */
+    private static boolean stopsHere(Train t, KNode station) {
+        return t.line.isEmpty() || t.line.contains(stationName(station));
+    }
+
     private void indexRails() {
         stationRails.clear();
         signalRails.clear();
@@ -520,7 +537,7 @@ final class Trains implements Listener {
             KNode signal = sg.get(k);
             if (signal != null && (SteamworksPlugin.hasSignal(signal) || sectionTaken(t.world, t, w.copy(), step))) return new Obstacle(Stop.SIGNAL, d, k, signal);
             KNode station = st.get(k);
-            if (stations && station != null && k != t.lastStation) return new Obstacle(Stop.STATION, d + 0.5, k, station);
+            if (stations && station != null && k != t.lastStation && stopsHere(t, station)) return new Obstacle(Stop.STATION, d + 0.5, k, station);
         }
         return null;
     }
@@ -606,6 +623,18 @@ final class Trains implements Listener {
                     t.waitTicks = cfg.trainStationWait;
                     t.lastStation = o.rail();
                     t.sinceStation = 0;
+                    // lijn-bediening: volgende stop onthouden, bij een eindpunt omkeren
+                    if (!t.line.isEmpty()) {
+                        int idx = t.line.indexOf(stationName(o.node()));
+                        if (idx >= 0) t.linePos = idx;
+                        int np = t.linePos + t.lineDir;
+                        if (np < 0 || np >= t.line.size()) {   // end stop: dwell, turn, run back
+                            t.lineDir = -t.lineDir;
+                            t.turnAfterWait = true;
+                            np = t.linePos + t.lineDir;
+                        }
+                        t.linePos = Math.max(0, np);
+                    }
                     arrived(t, o.node());
                 } else if (o.kind() == Stop.END) {
                     t.waitTicks = cfg.trainStationWait;
@@ -637,7 +666,7 @@ final class Trains implements Listener {
     private void announce(Train t) {
         Obstacle o = scan(t, 14, (int) Math.signum(t.speed), true);
         if (o == null || o.kind() != Stop.STATION) return;
-        String name = o.node().label == null ? "Station" : o.node().label;
+        String name = stationName(o.node());
         if (name.equals(t.announced)) return;
         t.announced = name;
         for (Player p : riders(t)) {
@@ -647,7 +676,7 @@ final class Trains implements Listener {
     }
 
     private void arrived(Train t, KNode station) {
-        String name = station.label == null ? "Station" : station.label;
+        String name = stationName(station);
         t.announced = null;
         for (Player p : riders(t)) {
             p.showTitle(net.kyori.adventure.title.Title.title(Component.text(name, NamedTextColor.GOLD),
@@ -766,10 +795,14 @@ final class Trains implements Listener {
             t.waitTicks = 0;
             t.turnAfterWait = false;
             if (t.auto) t.autoDir = t.speed < 0 ? -1 : 1;
-            p.sendActionBar(Component.text(t.auto ? "Autopilot on: stops at stations, waits at red signals, turns round at the end"
+            p.sendActionBar(Component.text(t.auto ? "Autopilot on: runs its line (or every station), waits at red signals, turns round at the ends"
                     : "Autopilot off", t.auto ? NamedTextColor.AQUA : NamedTextColor.YELLOW));
             p.playSound(p.getLocation(), Sound.BLOCK_LEVER_CLICK, 0.6f, t.auto ? 1.2f : 0.8f);
             save();
+            return;
+        }
+        if (car.type == CarType.LOCOMOTIVE && hand.getType() == Material.PAPER && p.hasPermission("steamworks.admin")) {
+            openLineBoard(p, car.train);
             return;
         }
         if (car.type == CarType.LOCOMOTIVE && plugin.items().materialOf(hand) == MaterialType.FUEL_CANISTER) {
@@ -869,6 +902,91 @@ final class Trains implements Listener {
         save();
     }
 
+    // ------------------------------------------------------------ line board (paper on the locomotive)
+
+    /** Inventory holder marking the line-board windows, so clicks only ever touch our own GUI. */
+    private final class LineHolder implements InventoryHolder {
+        final Train train;
+        LineHolder(Train t) { train = t; }
+        @Override public Inventory getInventory() { return null; }
+    }
+
+    private void openLineBoard(Player p, Train t) {
+        Inventory gui = Bukkit.createInventory(new LineHolder(t), 54,
+                Component.text("Train Line - stops in driving order (shuttle)"));
+        fillLineBoard(gui, t);
+        p.openInventory(gui);
+        p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 0.8f, 1f);
+    }
+
+    /** Top row: this train's stops, numbered; rest: every named station in the world, click toggles. */
+    private void fillLineBoard(Inventory gui, Train t) {
+        gui.clear();
+        int slot = 0;
+        for (String s : t.line) {
+            ItemStack it = new ItemStack(Material.DETECTOR_RAIL);
+            ItemMeta im = it.getItemMeta();
+            im.displayName(Component.text((slot + 1) + ". " + s, NamedTextColor.GOLD));
+            im.lore(List.of(Component.text("Stop " + (slot + 1) + " of " + t.line.size(), NamedTextColor.GRAY),
+                    Component.text("Click to remove from the line", NamedTextColor.DARK_GRAY)));
+            im.getPersistentDataContainer().set(lineNameKey, PersistentDataType.STRING, s);
+            it.setItemMeta(im);
+            gui.setItem(slot++, it);
+        }
+        if (slot < 9) {
+            ItemStack info = new ItemStack(Material.BOOK);
+            ItemMeta im = info.getItemMeta();
+            im.displayName(Component.text("Line board", NamedTextColor.DARK_AQUA));
+            im.lore(List.of(Component.text(t.line.isEmpty()
+                            ? "No line set: the autopilot stops at every station."
+                            : "The autopilot runs this line back and forth,", NamedTextColor.GRAY),
+                    t.line.isEmpty() ? Component.text("Click stations below to build a line.", NamedTextColor.GRAY)
+                            : Component.text("stopping only at the stops above.", NamedTextColor.GRAY)));
+            info.setItemMeta(im);
+            gui.setItem(slot, info);
+        }
+        int s2 = 18;
+        java.util.Set<String> shown = new java.util.LinkedHashSet<>();
+        for (KNode n : plugin.kinetics().stations) {
+            if (n.world != t.world || !shown.add(stationName(n)) || s2 >= 54) continue;
+            String name = stationName(n);
+            ItemStack it = new ItemStack(Material.RAIL);
+            ItemMeta im = it.getItemMeta();
+            boolean on = t.line.contains(name);
+            im.displayName(Component.text(name, on ? NamedTextColor.GREEN : NamedTextColor.WHITE));
+            im.lore(List.of(Component.text(on ? "On the line - click to remove" : "Click to add to the line", NamedTextColor.GRAY)));
+            im.getPersistentDataContainer().set(lineNameKey, PersistentDataType.STRING, name);
+            it.setItemMeta(im);
+            gui.setItem(s2++, it);
+        }
+    }
+
+    @EventHandler
+    public void onLineBoardClick(InventoryClickEvent e) {
+        if (!(e.getInventory().getHolder() instanceof LineHolder h)) return;
+        e.setCancelled(true);
+        if (!(e.getWhoClicked() instanceof Player p) || e.getCurrentItem() == null || !e.getCurrentItem().hasItemMeta()) return;
+        String name = e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(lineNameKey, PersistentDataType.STRING);
+        if (name == null) return;
+        Train t = h.train;
+        if (!t.line.remove(name)) {
+            if (t.line.size() >= 9) { p.sendActionBar(Component.text("Nine stops is a long enough line.", NamedTextColor.YELLOW)); return; }
+            t.line.add(name);
+            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.6f, 1.3f);
+        } else {
+            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 0.6f, 0.9f);
+        }
+        t.linePos = 0;
+        t.lineDir = 1;
+        fillLineBoard(e.getInventory(), t);
+        save();
+    }
+
+    @EventHandler
+    public void onLineBoardDrag(InventoryDragEvent e) {
+        if (e.getInventory().getHolder() instanceof LineHolder) e.setCancelled(true);
+    }
+
     // ------------------------------------------------------------ saving
 
     void save() {
@@ -881,6 +999,7 @@ final class Trains implements Listener {
             s.set("fuel", t.fuel);
             s.set("auto", t.auto);
             s.set("auto-dir", t.autoDir);
+            if (!t.line.isEmpty()) s.set("line", new ArrayList<>(t.line));
             List<Map<String, Object>> cars = new ArrayList<>();
             for (Car c : t.cars) {
                 Map<String, Object> m = new HashMap<>();
@@ -914,6 +1033,7 @@ final class Trains implements Listener {
                 t.fuel = s.getDouble("fuel");
                 t.auto = s.getBoolean("auto");
                 t.autoDir = s.getInt("auto-dir", 1) < 0 ? -1 : 1;
+                for (Object stop : s.getList("line", new ArrayList<>())) t.line.add(String.valueOf(stop));
                 for (Map<?, ?> m : s.getMapList("cars")) {
                     Car c = new Car(CarType.valueOf(String.valueOf(m.get("type"))),
                             RailWalker.load(String.valueOf(m.get("front"))), RailWalker.load(String.valueOf(m.get("rear"))));

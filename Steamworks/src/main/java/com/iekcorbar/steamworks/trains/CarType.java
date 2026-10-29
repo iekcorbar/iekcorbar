@@ -5,7 +5,8 @@ import java.util.Locale;
 /** Train cars. Seat offsets: {forward, up, sideways} from the car centre at rail level. */
 public enum CarType {
     LOCOMOTIVE("Steam Locomotive", new double[][]{{-0.6, 0.35, 0}},
-            "Drives the train. Sit in the cab: W = steam on,", "S = brake / reverse, jump = whistle. Feed it coal."),
+            "Drives the train. Sit in the cab: W = steam on,", "S = brake / reverse, jump = whistle. Feed it coal.",
+            "Click it with paper to lay out its line."),
     PASSENGER_WAGON("Passenger Wagon", new double[][]{{0.45, 0.35, 0.2}, {0.45, 0.35, -0.2}, {-0.45, 0.35, 0.2}, {-0.45, 0.35, -0.2}},
             "Four seats. Place it on rails right behind", "a locomotive or another wagon to couple it."),
     CARGO_WAGON("Cargo Wagon", new double[][]{},

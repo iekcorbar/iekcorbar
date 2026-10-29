@@ -39,6 +39,11 @@ final class Train {
     String announced;
     boolean turnAfterWait;
     final Set<Long> tickets = new HashSet<>();
+    // Lijnen: ordered station names this train serves. Empty = stops at every
+    // station (old behaviour). With a line the autopilot runs it as a shuttle:
+    // dwell, next stop, bounce at the ends of the list.
+    final List<String> line = new ArrayList<>();
+    int linePos, lineDir = 1;
 
     Train(UUID id, World world) {
         this.id = id;

@@ -50,3 +50,12 @@ Right-click a locomotive with a **Clock** to switch the autopilot on (click agai
 * waits at the **end of the track** and drives back.
 
 A line with a station at each end is a working shuttle service. Pressing W or S in the cab takes over and switches the autopilot off.
+
+## Lines and timetables
+Click a locomotive with a piece of **paper** to open its **line board**:
+* The top row shows the stops of this line, in driving order; click one to remove it.
+* The rows below list every named station on this world's rails - click to add (or remove) a stop, up to nine.
+* With a line set, the autopilot **only stops at its own stations** and runs the line as a shuttle:
+  dwell at each stop, next, and bounce (with a short wait) at the ends of the list.
+* An empty line keeps the plain autopilot: stop at every station along the way.
+* Lines are saved with the train and survive a restart. Name your stations first (anvil or name tag) - the board speaks names.

@@ -1596,6 +1596,44 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   plugin-standaard iekcorbar MMO (naam nog te kiezen), import uit de
   bestaande tabellen, races+trinkets als losse modules.
 
+### Steamworks 0.3.26 - treinlijnen & dienstregeling + windmolen-woosh (29-10 avond)
+
+- Eigenaar koos de trein-batch "Lijnen & dienstregeling" én meldde kort daarna:
+  "het geluid van de windmill is erg irritant - moet een subtiele woosh worden,
+  zoals wind door de bomen". Beide in dezelfde (nog niet gedeployde) 0.3.26.
+- LIJNEN (eigen design, Create heeft dit niet - Train.java/Trains.java):
+  * Train krijgt `line` (gesorteerde lijst stations-NAMEN, max 9), `linePos`
+    en `lineDir`; opgeslagen in trains.yml als `line:`. Lijn leeg = oud gedrag
+    (bij élk station stoppen) - alles blijft backwards compatible.
+  * scan() filtert via stopsHere(t, station): een trein met lijn stopt alleen
+    bij eigen haltes, passeert de rest. Bij aankomst: linePos optellen met
+    lineDir, bounce (omkeer + turnAfterWait) aan de list-einden = shuttle.
+  * LIJNBORD: klik locomotief met papier → 54-slot GUI (LineHolder); rij 1 =
+    haltes in rijvolgorde (detector-rails, klik=verwijderen), rij 3+ = alle
+    benoemde stations van die wereld (rail-items, klik=toggle). Per wijziging
+    save() + noot: bewust zender permissie-check (zoals instappen).
+  * Mee: CarType LOCOMOTIVE lore + Manual-tip + wiki 05-trains "Lines and
+    timetables" + steamworks-seed herbouwd (59 pagina's).
+- WINDMOLENGELUID (sounds/make_sounds.py + SteamworksPlugin.machineSounds):
+  * Oude `windmill.creak` = gezaag (zaaggolf 140→160 Hz) - weg. Nieuwe
+    `windmill_woosh()`: gefilterd ruis (bandpass 500↔1100 Hz sweep + lage
+    adem-laag), sine-envelope, 2,8 s. EIGEN `random.Random(7301)`: de oude
+    creak consumeerde 0 uit de gedeelde seeded stream, dus die blijft 0 -
+    geen enkele andere clip verandert van klank.
+  * Event omgedoopt naar `windmill.woosh` (sounds.json + lang +ogg's
+    regenereerd via make_sounds.py + make_blocks_pack.py; oude creak-ogg's
+    zijn uit de Steamworks-blocks.zip - oude root-map eerst weggegooid).
+  * Java: `case WINDMILL` speelt nu windmill.woosh op vol 0.12 (was 0.22);
+    frequentie ongewijzigd (1/8 per machineSounds-aanroep ≈ om de 12 s,
+    alleen binnen 20 blokken van een speler). config.yml-commentaar meegenomen.
+- Packritueel: BUILD 14→15, merge + audit groen (0 want our namespaces),
+  deploy/iekcorbar-pack-build15.zip sha1 f30cfb223b63180e132117f91373af823e6399c1
+  (build14 staat nog op de server-mixer - punt 43 zegt hem verwijderen).
+  Jar herbouwd: deploy/Steamworks-0.3.26.jar sha1 e25e1a85f29e06d464c5383fc556224cbbd10fb3.
+  TE-DEPLOYEN: punt 42 herschreven (lijnen + woosh, typefouten eruit) en
+  punt 43 (pack build15) toegevoegd. Jar en pack samen deployen, anders
+  zwijgen de molens.
+
 ### StaffHub 0.4.9 - bbmodel-3D-weergave + uitgerold op de VPS (29-10 avond)
 
 - Opdracht eigenaar ("deploy en build de nieuwe staffhub maar hoor" + "moet

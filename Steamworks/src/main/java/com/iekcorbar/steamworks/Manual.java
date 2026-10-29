@@ -66,7 +66,7 @@ final class Manual implements Listener {
                         PartType.PUMPJACK, PartType.REFINERY}),
         new Chapter("Rails & Trains",
                 "Steam rails follow the route you drive; trains do the rest.",
-                "Tip: rename a Station with a name tag and the board above it changes. A Signal turns red while the block after it holds a train.",
+                "Tip: rename a Station in an anvil to name it. Click a locomotive with paper to pick its stops - the autopilot then runs that line back and forth.",
                 new PartType[]{PartType.STATION, PartType.SIGNAL}),
         new Chapter("Reading the Machines",
                 "Every network has a pulse - here is how to feel it.",

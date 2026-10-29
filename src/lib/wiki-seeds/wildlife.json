@@ -13,224 +13,28 @@
    "title": "Wildlife",
    "category": "Wildlife",
    "parent": null,
-   "content": "## Wildlife - shy animals to find and record\n\nIekcorbar's countryside has new animals living next to the familiar ones: deer in the forests, mallards on the rivers, fireflies over the swamps at night, crabs scuttling along the beach - and in the east, tanuki at dusk, cranes standing in the reeds, koi gliding under the surface and macaques chattering in the trees. They are **rare and shy**, and each species only lives in its own kind of place. Nothing vanilla was removed - cows, pigs and sheep are all still there.\n\n### How it works\n\n1. **Get a spyglass** (copper + amethyst shard, as in vanilla).\n2. **Find an animal** in the right biome. Some only come out by day, fireflies only at night, and snails like the rain. Shy species are also rarer in the wild.\n3. **Approach like a naturalist, not a hunter.** Deer, zebras, cranes and songbirds bolt when an upright or sprinting player gets close; a **sneaking, still** one may come near enough. Tortoises hide, hedgehogs curl - even from a friendly boot.\n4. **Watch it through the spyglass** until the dots fill. A calm species takes a second; a shy one up to four - and **from far away it goes twice as fast** while standing right in front of it takes twice as long. A bolted animal resets the meter.\n5. **Read your journal** with **/wildlife journal**, or craft a **Field Journal** (book + feather + wheat seeds) and right-click it. Species you haven't found yet show a hint - recorded ones show a **true fact** and a **myth** about the animal. Some of those facts surprise even old hands.\n\n### Rare looks\n\nNow and then an animal has a rare colouring - an albino deer, a blue morpho butterfly, a capybara wearing a yuzu. Spotting one gives its own (hidden) advancement and a mark in your journal.\n\n### Advancements\n\nOpen the advancement screen and look for the **Wildlife** tab: one advancement per species, one per rare look, and milestones for 5 species, 10 species, every species, your first rare find and 5 rare finds.\n\n### Behaviour worth knowing\n\n* **Deer and lizards** run when you come close - sneak to get near.\n* **Hedgehogs and snails** curl up or hide in their shell; **tortoises** pull in their head and legs.\n* **Brown bears** are calm until you hurt them, sleep at night and eat sweet berries.\n* **Wild boars** charge when they feel cornered.\n* **Capybaras** sometimes give a duck or a songbird a ride.\n* **Lizards** can drop their tail when hit (it grows back). **Crabs** sometimes drop a claw: hold a **Crab Claw** in your off hand to reach one block further.\n* A **name tag** keeps an animal around; unnamed wildlife wanders off when nobody is near. So does a **lead**: an animal you put on a lead stays.\n* Only adult bears and boars ever fight back. Every other animal is harmless, and so are their young.\n* **Young animals** exist too, and you can raise them: see [Breeding and Babies](/wiki?page=wildlife-breeding).\n\nSee [Wildlife Species](/wiki?page=wildlife-species) for where each animal lives.\n"
+   "content": "## Wildlife - shy animals to find and record\n\nIekcorbar's countryside has new animals living next to the familiar ones: deer in the forests, mallards on the rivers, fireflies over the swamps at night, crabs scuttling along the beach - and in the east, tanuki at dusk, cranes standing in the reeds, koi gliding under the surface and macaques chattering in the trees. They are **rare and shy**, and each species only lives in its own kind of place. Nothing vanilla was removed - cows, pigs and sheep are all still there.\n\n### How it works\n\n1. **Get a spyglass** (copper + amethyst shard, as in vanilla).\n2. **Find an animal** in the right biome. Some only come out by day, fireflies only at night, and snails like the rain. Shy species are also rarer in the wild.\n3. **Approach like a naturalist, not a hunter.** Deer, zebras, cranes and songbirds bolt when an upright or sprinting player gets close; a **sneaking, still** one may come near enough. Tortoises hide, hedgehogs curl - even from a friendly boot.\n4. **Watch it through the spyglass** until the dots fill. A calm species takes a second; a shy one up to four - and **from far away it goes twice as fast** while standing right in front of it takes twice as long. A bolted animal resets the meter.\n5. **Read your journal** with **/wildlife journal**, or craft a **Field Journal** (book + feather + wheat seeds) and right-click it. Species you haven't found yet show a hint - recorded ones show a **true fact** and a **myth** about the animal. Some of those facts surprise even old hands.\n\n### Rare looks\n\nNow and then an animal has a rare colouring - an albino deer, a blue morpho butterfly, a capybara wearing a yuzu. Spotting one gives its own (hidden) advancement and a mark in your journal.\n\n### Advancements\n\nOpen the advancement screen and look for the **Wildlife** tab: one advancement per species, one per rare look, and milestones for 5 species, 10 species, every species, your first rare find and 5 rare finds.\n\n### Behaviour worth knowing\n\n* **Deer and lizards** run when you come close - sneak to get near.\n* **Hedgehogs and snails** curl up or hide in their shell; **tortoises** pull in their head and legs.\n* **Brown bears** are calm until you hurt them, sleep at night, eat sweet berries - and by day you may see one sit at the riverbank, fish a **salmon** out of the water and eat it on the spot.\n* **Wild boars** charge when they feel cornered.\n* **Butterflies** pollinate: they flutter over your wheat, carrots, potatoes and beetroots and ripen them a step faster, and flower patches near them spread themselves to bare grass. A field with butterflies visibly outgrows one without.\n* **Hunter's trophy**: an animal you have **recorded in your Field Journal first** sometimes leaves its own **statue** as a trophy when you take it down (rarer animals, bigger chance). The naturalist's deal: observe, then hunt.\n* **Capybaras** sometimes give a duck or a songbird a ride.\n* **Lizards** can drop their tail when hit (it grows back). **Crabs** sometimes drop a claw: hold a **Crab Claw** in your off hand to reach one block further.\n* A **name tag** keeps an animal around; unnamed wildlife wanders off when nobody is near. So does a **lead**: an animal you put on a lead stays.\n* Only adult bears and boars ever fight back. Every other animal is harmless, and so are their young.\n* **Young animals** exist too, and you can raise them: see [Breeding and Babies](/wiki?page=wildlife-breeding).\n\nSee [Wildlife Species](/wiki?page=wildlife-species) for where each animal lives.\n"
   },
   {
    "slug": "wildlife-species",
    "title": "Wildlife Species",
    "category": "Wildlife",
    "parent": null,
-   "content": "## Species\n\n* [Red Deer](/wiki?page=wildlife-species-red-deer)\n* [Brown Bear](/wiki?page=wildlife-species-brown-bear)\n* [Wild Boar](/wiki?page=wildlife-species-wild-boar)\n* [Mallard](/wiki?page=wildlife-species-mallard)\n* [Monarch Butterfly](/wiki?page=wildlife-species-monarch-butterfly)\n* [Firefly](/wiki?page=wildlife-species-firefly)\n* [Garden Snail](/wiki?page=wildlife-species-garden-snail)\n* [Hedgehog](/wiki?page=wildlife-species-hedgehog)\n* [Capybara](/wiki?page=wildlife-species-capybara)\n* [Tortoise](/wiki?page=wildlife-species-tortoise)\n* [Wall Lizard](/wiki?page=wildlife-species-wall-lizard)\n* [Shore Crab](/wiki?page=wildlife-species-shore-crab)\n* [Songbird (jay, cardinal, canary, sparrow)](/wiki?page=wildlife-species-songbird-jay-cardinal)\n* [Emperor Dragonfly](/wiki?page=wildlife-species-emperor-dragonfly)\n* [African Elephant](/wiki?page=wildlife-species-african-elephant)\n* [Plains Zebra](/wiki?page=wildlife-species-plains-zebra)\n* [Red Kangaroo](/wiki?page=wildlife-species-red-kangaroo)\n* [Common Ostrich](/wiki?page=wildlife-species-common-ostrich)\n* [Siamese Crocodile](/wiki?page=wildlife-species-siamese-crocodile)\n* [Koala](/wiki?page=wildlife-species-koala)\n* [European Mole](/wiki?page=wildlife-species-european-mole)\n* [White Rhinoceros](/wiki?page=wildlife-species-white-rhinoceros)\n* [Emperor Penguin](/wiki?page=wildlife-species-emperor-penguin)\n* [Orca](/wiki?page=wildlife-species-orca)\n* [Red-bellied Piranha](/wiki?page=wildlife-species-red-bellied-piranha)\n* [Scarlet Macaw](/wiki?page=wildlife-species-scarlet-macaw)\n* [Tanuki](/wiki?page=wildlife-species-tanuki)\n* [Red-Crowned Crane](/wiki?page=wildlife-species-red-crowned-crane)\n* [Koi](/wiki?page=wildlife-species-koi)\n* [Japanese Macaque](/wiki?page=wildlife-species-japanese-macaque)\n\nThe **African Elephant** is the biggest animal around and the **Plains Zebra** always walks in a group. Both have a rare look too: a white elephant and a golden zebra. From the east come four more: the night-wandering **Tanuki** (rarely seen, charcoal-black on lucky nights), the stately **Red-Crowned Crane** that stays with its partner for life, the **Koi** gliding just under the surface (the all-gold one is the famous Golden Koi), and noisy troops of **Japanese Macaques** in the bamboo and snowy woods.\n\nAnd everywhere their own little rumours: a fresh **molehill** in the lawn means a **Mole** has been working below - see one of them and you are lucky. **Penguins** bray like donkeys on the ice, **koalas** sleep the day away, and a **crocodile** is exactly as still as it looks. Out in the deep ocean, an **Orca** surfaces so rarely that nobody plans on it; near the jungle water, a shimmering shoal of **Piranhas** is a reminder not to swim there hungry, and the **Scarlet Macaw** overhead will happily repeat back whatever you said about it.\n\nAnimals are scarce on purpose: if you don't see one, keep exploring - and try a different time of day.\n"
+   "content": "* [Species](/wiki?page=wildlife-species-species)\n* [Spirits and placed creatures](/wiki?page=wildlife-species-spirits-and-placed)\n"
   },
   {
-   "slug": "wildlife-species-red-deer",
-   "title": "Red Deer",
+   "slug": "wildlife-species-species",
+   "title": "Species",
    "category": "Wildlife",
    "parent": "wildlife-species",
-   "content": "* forests, taiga, meadows, cherry groves\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
+   "content": "| Animal | Where to look | When |\n|---|---|---|\n| Red Deer | forests, taiga, meadows, cherry groves | day and night |\n| Brown Bear | old taiga, dark forests | day and night (sleeps at night) |\n| Wild Boar | forests, dark forests, wooded badlands | day and night |\n| Mallard | rivers, swamps, mangroves | day and night |\n| Monarch Butterfly | flower forests, meadows, plains, cherry groves | by day |\n| Firefly | swamps, mangroves, forests | at night |\n| Garden Snail | damp forests, swamps (more in the rain) | day and night |\n| Hedgehog | forests, plains, meadows | day and night |\n| Capybara | jungle, swamp and mangrove riverbanks | day and night |\n| Tortoise | savannas, jungles, badlands | by day |\n| Wall Lizard | deserts, badlands, savannas, stony shores | by day |\n| Shore Crab | beaches, mangroves, stony shores | day and night |\n| Songbird (jay, cardinal, canary, sparrow) | forests, plains, meadows | by day |\n| Emperor Dragonfly | above rivers and swamps | by day |\n| African Elephant | savannas, in small herds | day and night |\n| Plains Zebra | savannas, in groups | day and night |\n| Red Kangaroo | plains, savanna edges | day and night |\n| Common Ostrich | savannas, deserts | by day |\n| Siamese Crocodile | swamps, jungles, mangroves | day and night |\n| Koala | jungle and bamboo, asleep | day and night |\n| European Mole | lawns and forest edges (follow the molehills) | day and night |\n| White Rhinoceros | savannas, at wallows | day and night |\n| Emperor Penguin | ice coasts and frozen shores | by day, in colonies |\n| Orca | the deep ocean | day and night, very rare |\n| Red-bellied Piranha | warm rivers and swamps | day and night, in shoals |\n| Scarlet Macaw | over the jungle | by day |\n| Tanuki | bamboo thickets, old forests | at night |\n| Red-Crowned Crane | swamps, marshes, river flats | day and night (always in pairs) |\n| Koi | rivers, swamp pools | day and night (in the water!) |\n| Japanese Macaque | bamboo, snowy forests | by day, in troops |\n\nThe **African Elephant** is the biggest animal around and the **Plains Zebra** always walks in a group. Both have a rare look too: a white elephant and a golden zebra. From the east come four more: the night-wandering **Tanuki** (rarely seen, charcoal-black on lucky nights), the stately **Red-Crowned Crane** that stays with its partner for life, the **Koi** gliding just under the surface (the all-gold one is the famous Golden Koi), and noisy troops of **Japanese Macaques** in the bamboo and snowy woods.\n\nAnd everywhere their own little rumours: a fresh **molehill** in the lawn means a **Mole** has been working below - see one of them and you are lucky. **Penguins** bray like donkeys on the ice, **koalas** sleep the day away, and a **crocodile** is exactly as still as it looks. Out in the deep ocean, an **Orca** surfaces so rarely that nobody plans on it; near the jungle water, a shimmering shoal of **Piranhas** is a reminder not to swim there hungry, and the **Scarlet Macaw** overhead will happily repeat back whatever you said about it.\n\nAnimals are scarce on purpose: if you don't see one, keep exploring - and try a different time of day.\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
   },
   {
-   "slug": "wildlife-species-brown-bear",
-   "title": "Brown Bear",
+   "slug": "wildlife-species-spirits-and-placed",
+   "title": "Spirits and placed creatures",
    "category": "Wildlife",
    "parent": "wildlife-species",
-   "content": "* old taiga, dark forests\n* **When:** day and night (sleeps at night)\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-wild-boar",
-   "title": "Wild Boar",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* forests, dark forests, wooded badlands\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-mallard",
-   "title": "Mallard",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* rivers, swamps, mangroves\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-monarch-butterfly",
-   "title": "Monarch Butterfly",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* flower forests, meadows, plains, cherry groves\n* **When:** by day\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-firefly",
-   "title": "Firefly",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* swamps, mangroves, forests\n* **When:** at night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-garden-snail",
-   "title": "Garden Snail",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* damp forests, swamps (more in the rain)\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-hedgehog",
-   "title": "Hedgehog",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* forests, plains, meadows\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-capybara",
-   "title": "Capybara",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* jungle, swamp and mangrove riverbanks\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-tortoise",
-   "title": "Tortoise",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* savannas, jungles, badlands\n* **When:** by day\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-wall-lizard",
-   "title": "Wall Lizard",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* deserts, badlands, savannas, stony shores\n* **When:** by day\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-shore-crab",
-   "title": "Shore Crab",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* beaches, mangroves, stony shores\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-songbird-jay-cardinal",
-   "title": "Songbird (jay, cardinal, canary, sparrow)",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* forests, plains, meadows\n* **When:** by day\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-emperor-dragonfly",
-   "title": "Emperor Dragonfly",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* above rivers and swamps\n* **When:** by day\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-african-elephant",
-   "title": "African Elephant",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* savannas, in small herds\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-plains-zebra",
-   "title": "Plains Zebra",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* savannas, in groups\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-red-kangaroo",
-   "title": "Red Kangaroo",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* plains, savanna edges\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-common-ostrich",
-   "title": "Common Ostrich",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* savannas, deserts\n* **When:** by day\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-siamese-crocodile",
-   "title": "Siamese Crocodile",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* swamps, jungles, mangroves\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-koala",
-   "title": "Koala",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* jungle and bamboo, asleep\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-european-mole",
-   "title": "European Mole",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* lawns and forest edges (follow the molehills)\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-white-rhinoceros",
-   "title": "White Rhinoceros",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* savannas, at wallows\n* **When:** day and night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-emperor-penguin",
-   "title": "Emperor Penguin",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* ice coasts and frozen shores\n* **When:** by day, in colonies\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-orca",
-   "title": "Orca",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* the deep ocean\n* **When:** day and night, very rare\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-red-bellied-piranha",
-   "title": "Red-bellied Piranha",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* warm rivers and swamps\n* **When:** day and night, in shoals\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-scarlet-macaw",
-   "title": "Scarlet Macaw",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* over the jungle\n* **When:** by day\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-tanuki",
-   "title": "Tanuki",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* bamboo thickets, old forests\n* **When:** at night\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-red-crowned-crane",
-   "title": "Red-Crowned Crane",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* swamps, marshes, river flats\n* **When:** day and night (always in pairs)\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-koi",
-   "title": "Koi",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* rivers, swamp pools\n* **When:** day and night (in the water!)\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
-  },
-  {
-   "slug": "wildlife-species-japanese-macaque",
-   "title": "Japanese Macaque",
-   "category": "Wildlife",
-   "parent": "wildlife-species",
-   "content": "* bamboo, snowy forests\n* **When:** by day, in troops\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
+   "content": "Not everything with a model is an animal. The **Wraith** is a floating, hooded shadow in a torn robe -\na creature of atmosphere for dark, quiet corners: a crypt, an old tower, a swamp at midnight. It never\nhunts and never flees; it drifts slowly up and down, sheds a little mist off its hem and a cold spark\nat its hood, moans softly when someone stands near, and it **vanishes when the morning comes** - it\nbelongs to the dark only.\n\nWraiths are deliberately outside everything that makes an animal an animal: they are **not in the Field\nJournal** (no page, no advancement, no spyglass record), they **cannot be bred** and have no babies,\nthere is **no spawn egg and no statue** for them, and **no recipe** anywhere makes one. They are placed\nby staff with `/wildlife spawn wraith` (an admin command; they are also switched off in the wild-spawner\nconfig). So if you meet one, it was put there on purpose - enjoy the chill.\n\nBack to [Wildlife Species](/wiki?page=wildlife-species)\n"
   },
   {
    "slug": "wildlife-breeding",

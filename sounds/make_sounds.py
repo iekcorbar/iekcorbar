@@ -404,6 +404,23 @@ def creak(rnd, f0=300, f1=340, sec=0.8):
     return env(bandpass(am(src, 30, 0.8), 1100, 2), 0.05, 0.1, 0.7, 0.2)
 
 
+def windmill_woosh(rnd):
+    # 29-10: eigenaar vond de creak (gezaag op 140 Hz) erg irritant; de windmILL
+    # moet klinken als wind door bladeren. Geen toon, alleen zacht gefilterd
+    # ruis-gezwollen: een bandpass die traag 500-1100 Hz op en neer vaart met
+    # een sine-envelope, plus een diepe adem-laag. Eigen Random: de GEDEELDE
+    # seeded stream verbruikt hier niets (de oude creak ook niet), dus alle
+    # andere clips blijven byte-identisch.
+    local = random.Random(7301)
+    sec = 2.8
+    sweep = glide(500, 1100, sec / 2) + glide(1100, 500, sec / 2)
+    leaves = bandpass(noise(sec, local), sweep, 1.3)
+    breath = lowpass(noise(sec, local), 350)
+    sig = mix(leaves, gain(breath, 0.35))
+    m = len(sig)
+    return [x * math.sin(math.pi * i / m) for i, x in enumerate(sig)]
+
+
 def servo(rnd):
     return env(mix(osc(glide(600, 950, 0.5), "square"), gain(noise(0.5, rnd), 0.05)), 0.02, 0.05, 0.4, 0.1)
 
@@ -925,7 +942,7 @@ CATALOGUE = {
         "hammer.strike": (hammer, 3, "Steam hammer strikes"), "fan.whoosh": (whoosh, 2, "Fan blows"),
         "drill.grind": (drill, 2, "Drill grinds"), "saw.buzz": (saw_buzz, 2, "Saw buzzes"),
         "belt.rumble": (lambda r: grind(r, 1.0), 2, "Belt rumbles"), "pumpjack.creak": (creak, 2, "Pumpjack creaks"),
-        "windmill.creak": (lambda r: creak(r, 140, 160, 1.2), 2, "Windmill creaks"), "arm.servo": (servo, 3, "Robot arm whirs"),
+        "windmill.woosh": (windmill_woosh, 2, "Wind blows past the windmill"), "arm.servo": (servo, 3, "Robot arm whirs"),
         "train.chuff": (lambda r: chuff(r, 0.25), 3, "Locomotive chuffs"), "train.whistle": (whistle, 1, "Train whistles"),
         "train.brake": (brake, 1, "Train brakes"), "train.clack": (rail_clack, 2, "Rails clack"),
         "station.bell": (bell, 1, "Station bell rings"), "machine.hum": (hum, 2, "Machines hum"),
