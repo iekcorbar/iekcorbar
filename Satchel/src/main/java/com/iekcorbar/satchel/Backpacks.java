@@ -552,6 +552,8 @@ final class Backpacks implements Listener {
 
     // ------------------------------------------------------------ everlasting
 
+    private final java.util.Map<java.util.UUID, Integer> sinking = new java.util.HashMap<>();
+
     private boolean everlasting(Entity en) {
         return plugin.getConfig().getBoolean("everlasting.enabled", true) && en instanceof Item it
                 && items.bagType(it.getItemStack()) != null && items.has(it.getItemStack(), SItem.EVERLASTING_UPGRADE);
@@ -567,14 +569,53 @@ final class Backpacks implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onDamage(EntityDamageEvent e) {
-        if (!everlasting(e.getEntity())) return;
-        e.setCancelled(true);
-        if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
-            Entity en = e.getEntity();
-            Location l = en.getWorld().getSpawnLocation().add(0.5, 1, 0.5);
-            en.setVelocity(new Vector());
-            en.teleportAsync(l);
+        if (everlasting(e.getEntity())) {
+            e.setCancelled(true);
+            if (e.getCause() == EntityDamageEvent.DamageCause.VOID) {
+                Entity en = e.getEntity();
+                Location l = en.getWorld().getSpawnLocation().add(0.5, 1, 0.5);
+                en.setVelocity(new Vector());
+                en.teleportAsync(l);
+            }
+            return;
         }
+        // joke: an unprotected backpack that lands in lava sinks slowly - with bubbles, with dignity
+        if (e.getEntity() instanceof Item it && e.getCause() == EntityDamageEvent.DamageCause.LAVA
+                && items.bagType(it.getItemStack()) != null && !sinking.containsKey(it.getUniqueId())) {
+            e.setCancelled(true);
+            zink(it);
+        }
+    }
+
+    private void zink(Item it) {
+        sinking.put(it.getUniqueId(), 0);
+        Bukkit.getScheduler().runTaskTimer(plugin, task -> {
+            Integer t = sinking.get(it.getUniqueId());
+            if (t == null || t > 30 || !it.isValid()) {       // opgepakt, vergaan of af
+                sinking.remove(it.getUniqueId());
+                task.cancel();
+                return;
+            }
+            sinking.put(it.getUniqueId(), t + 1);
+            Location l = it.getLocation();
+            it.setVelocity(new Vector(0, -0.05, 0));
+            l.getWorld().spawnParticle(org.bukkit.Particle.BUBBLE, l.clone().add(0, 0.2, 0), 2, 0.08, 0.05, 0.08, 0);
+            if (t == 30) {
+                sinking.remove(it.getUniqueId());
+                task.cancel();
+                Location last = it.getLocation();
+                it.remove();
+                last.getWorld().playSound(last, "minecraft:block.lava.extinguish", 1f, 0.8f);
+                Player nearest = null;
+                double best = 64;
+                for (Player q : last.getWorld().getNearbyPlayers(last, 8)) {
+                    double d = q.getLocation().distanceSquared(last);
+                    if (d < best) { best = d; nearest = q; }
+                    q.sendActionBar(Component.text("It goes down with dignity.", NamedTextColor.GRAY));
+                }
+                if (nearest != null) adv.grant(nearest, "sink");
+            }
+        }, 2L, 2L);
     }
 
     List<ItemStack> allItems() {

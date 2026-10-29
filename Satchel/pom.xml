@@ -7,7 +7,7 @@
     <groupId>com.iekcorbar</groupId>
     <artifactId>Satchel</artifactId>
     <!-- Satchel: backpacks with upgrades. Behaviour ideas from the Sophisticated Backpacks mod (high level only); own code, models and textures. -->
-    <version>0.3.1</version>
+    <version>0.3.2</version>
     <packaging>jar</packaging>
 
     <name>Satchel</name>

@@ -1287,6 +1287,16 @@ final class Relics implements Listener {
                 r.world.spawnParticle(Particle.HAPPY_VILLAGER, r.center(), 12, 0.3, 0.3, 0.3, 0);
                 p.playSound(r.center(), "relics:egg.found", 1f, 1f);
                 p.sendActionBar(Component.text("Egg found! (" + n + " so far)", NamedTextColor.LIGHT_PURPLE));
+                // joke: the hider is watching? then the egg bites back
+                Player hider = r.owner == null ? null : Bukkit.getPlayer(r.owner);
+                if (hider != null && hider.getWorld() == r.world
+                        && hider.getLocation().distanceSquared(r.center()) <= 64) {
+                    r.world.spawnParticle(Particle.CLOUD, r.center().add(0, 0.5, 0), 12, 0.15, 0.15, 0.15, 0.02);
+                    p.playSound(r.center(), "minecraft:entity.creeper.primed", 1f, 1.5f);
+                    p.sendActionBar(Component.text("It was a trap.", NamedTextColor.RED));
+                    hider.sendActionBar(Component.text("They found it. And they lived. Probably.", NamedTextColor.GOLD));
+                    plugin.adv().grant(p, "trap");
+                }
             }
             case GOLD -> {
                 NamespacedKey k = new NamespacedKey(plugin, "gold_day");

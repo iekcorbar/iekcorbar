@@ -428,13 +428,25 @@ final class Animals implements Listener {
                 }
                 case CAPYBARA -> {
                     if (!e.getPassengers().isEmpty() && tick > a.rideUntil) e.eject();
-                    else if (e.getPassengers().isEmpty() && r.nextInt(400) == 0) {
+                    else if (e.getPassengers().size() < 5 && r.nextInt(400) == 0) {
                         for (Entity n : e.getNearbyEntities(6, 3, 6)) {
                             Animal o = get(n);
                             if (o != null && (o.species == Species.DUCK || o.species == Species.SONGBIRD) && !n.isInsideVehicle()) {
                                 e.addPassenger(n);
                                 a.rideUntil = tick + 1200;
                                 for (org.bukkit.entity.Player pl : e.getWorld().getNearbyPlayers(e.getLocation(), 24)) plugin.adv().grant(pl, "capy_love");
+                                int riders = 0;
+                                for (Entity ps : e.getPassengers()) {
+                                    Animal q = get(ps);
+                                    if (q != null && (q.species == Species.DUCK || q.species == Species.SONGBIRD)) riders++;
+                                }
+                                if (riders >= 5) {   // joke: the bus is full
+                                    e.getWorld().playSound(e.getLocation(), "minecraft:block.bell.use", 1.2f, 0.9f);
+                                    for (org.bukkit.entity.Player pl : e.getWorld().getNearbyPlayers(e.getLocation(), 24)) {
+                                        pl.sendActionBar(net.kyori.adventure.text.Component.text("Next stop: pond.", net.kyori.adventure.text.format.NamedTextColor.GOLD));
+                                        plugin.adv().grant(pl, "pond_stop");
+                                    }
+                                }
                                 break;
                             }
                         }
@@ -450,6 +462,22 @@ final class Animals implements Listener {
                             e.getWorld().playSound(e.getLocation(), "wildlife:elephant.hurt", 1f, 1.3f);
                             for (org.bukkit.entity.Player pl : e.getWorld().getNearbyPlayers(e.getLocation(), 24)) plugin.adv().grant(pl, "tiny_scare");
                             break;
+                        }
+                    }
+                }
+                case TANUKI -> {
+                    // joke: at night a tanuki winks at a player who stands very still
+                    long wt = e.getWorld().getTime();
+                    if (wt > 13000 && wt < 23000 && tick > a.rideUntil && r.nextInt(30) == 0) {
+                        Player close = nearestPlayer(e, 6);
+                        if (close != null && close.getLocation().distanceSquared(e.getLocation()) <= 36
+                                && close.getVelocity().lengthSquared() < 0.01 && !close.isSprinting()) {
+                            a.rideUntil = tick + 600;
+                            e.getWorld().spawnParticle(Particle.DUST, e.getLocation().add(0, 0.7, 0), 1,
+                                    0.04, 0.02, 0.04, 0, new Particle.DustOptions(org.bukkit.Color.fromRGB(255, 214, 120), 0.5f));
+                            e.getWorld().playSound(e.getLocation(), "minecraft:entity.fox.ambient", 0.4f, 1.5f);
+                            close.sendActionBar(net.kyori.adventure.text.Component.text("You've made a friend.", net.kyori.adventure.text.format.NamedTextColor.GREEN));
+                            plugin.adv().grant(close, "tanuki_wink");
                         }
                     }
                 }

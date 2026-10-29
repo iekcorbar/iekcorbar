@@ -69,6 +69,9 @@ final class Achievements {
         a.add("mind_the_gap", "ride", "note_block", "Mind the Gap", "Whistle three times in a row.", "task").hidden();
         a.add("dry_run", "mixer", "bucket", "Dry Run", "Watch a mixer spin above an empty kettle.", "task").hidden();
         a.add("sneeze", "prospector", "gunpowder", "Alchemist's Sneeze", "Carry raw zinc, raw tin and sulfur at once.", "task").hidden();
+        a.add("anxiety", "hammer", "iron_bars", "Performance Anxiety", "Let a steam hammer spin over nothing for half a minute.", "task").hidden();
+        a.add("sulk", "placed", "gray_dye", "Even Machines Sulk", "Stand next to a jammed network for half a minute.", "task").hidden();
+        a.add("commute", "water_wheel", "water_bucket", "Rush Hour", "Put three water wheels on one network.", "task").hidden();
         a.add("master", "placed", "nether_star", "Master Engineer", "Get a Steam Engine, a Refinery and a Karakuri Arm.", "challenge")
                 .allOf("engine", "refinery", "arm").glint();
 

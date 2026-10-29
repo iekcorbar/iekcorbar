@@ -22,6 +22,8 @@ final class Achievements {
         a.add("passed_out", "tipsy", "red_bed", "Lights Out", "Pass out from drinking.", "goal").hidden();
         a.add("definitely_fine", "tipsy", "player_head", "Definitely Fine", "Get so drunk your name changes.", "task").hidden();
         a.add("kanpai", "tasted", "glass_bottle", "Kanpai!", "Sneak next to another drinker, both holding a drink.", "task").hidden();
+        a.add("table", "kanpai", "lantern", "A Table for Three", "Cheers with three or more drinkers at the same time.", "task").hidden();
+        a.add("terroir", "cauldron", "water_bucket", "Terroir", "Start a brew next to open river or sea water.", "task").hidden();
         a.add("dont_tell", "murky", "cat_spawn_egg", "Don't Tell the Cat", "Drink a Murky Brew.", "task").hidden();
         // garden
         a.add("planted", null, "wheat_seeds", "Green Fingers", "Plant a garden seed.", "task");

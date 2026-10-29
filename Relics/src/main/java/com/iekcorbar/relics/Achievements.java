@@ -34,6 +34,7 @@ final class Achievements {
         a.add("skip", "music", "jukebox", "Skip... Skip... Skip", "Click the gramophone a hundred times.", "task").hidden();
         a.add("umbrella", "curio", "lightning_rod", "Rain or Shine", "Stand next to a tesla coil holding a wagasa stand.", "task").hidden();
         a.add("lucky_paw", "curio", "gold_ingot", "Lucky Paw", "Click the maneki-neko seven times.", "task").hidden();
+        a.add("trap", "egg_found", "gunpowder", "It Was a Trap", "Find an egg while the hider watches.", "task").hidden();
         a.add("collector", "first", "nether_star", "Collector", "Get relics from all collections.", "challenge")
                 .allOf("shadow", "xmas", "new_year", "easter", "patrick", "valentine", "curio", "halloween").glint();
 

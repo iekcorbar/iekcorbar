@@ -30,7 +30,7 @@ repo-root, mvn groen, 133 modellen, 0 bot-audit mismatches. NIET live-getest.
 ## Nog open (later)
 - Sets restant: poolvos, sneeuwuil; giraf, leeuw, hyena; fenek, meerkat, aasgier.
 - Custom wildlife-sounds (nu vanilla placeholders) — sounds/make_sounds.py, ALLEEN toevoegen.
-- Tanuki-knipoog-easter-egg (staat alleen in CLAUDE.md-text, nooit in code geweest).
+- Tanuki-knipoog-easter-egg: **GEBOUWD 29-10** (Wildlife 0.7.1, `Animals` case TANUKI, `tanuki_wink`).
 - Mol: graaft MOLHEUVEL bij spawn; optioneel later: mol verdwijnt in heuvel bij panic.
 
 ## Opdracht (gebruiker)

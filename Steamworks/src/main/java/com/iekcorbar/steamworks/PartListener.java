@@ -276,6 +276,7 @@ final class PartListener implements Listener {
         plugin.addNode(n);
         lastPlaceNano.put(p.getUniqueId(), now);
         plugin.adv().grant(p, "placed");
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> plugin.eggs().checkCommute(n), 40L);
         plugin.manual().markPlaced(p, type);
         if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
         target.getWorld().playSound(n.center(), type.placeSound(), 1f, 0.9f);

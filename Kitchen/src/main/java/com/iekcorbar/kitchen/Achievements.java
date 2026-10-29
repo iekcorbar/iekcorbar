@@ -57,6 +57,9 @@ final class Achievements {
         a.add("plain", "seeds", "bowl", "Plain. Bold.", "Put only rice in a cooking pot.", "task").hidden();
         a.add("sit", "tatami", "white_carpet", "Take a Seat", "Sit on a zabuton.", "task");
         a.add("purr", "sit", "cod", "Cat Cushion", "Sit on a zabuton for five minutes.", "task").hidden();
+        a.add("noodle", "plain", "water_bucket", "Waiting for Noodles", "Keep a pot of pure water bubbling for five minutes.", "task").hidden();
+        a.add("sitter", "purr", "white_carpet", "The Cat Disagrees", "Stand on a zabuton for five minutes without sitting down.", "task").hidden();
+        a.add("furnace", "shared", "cooked_beef", "You Are Not a Furnace", "Eat ten meals in two minutes.", "task").hidden();
         a.add("tansu", "pot", "barrel", "Tansu", "Get a Tansu Cabinet.", "task");
         a.add("basket", "tansu", "bamboo", "Bamboo Basket", "Get a Bamboo Basket.", "task");
         a.scanner(it -> {

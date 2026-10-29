@@ -25,6 +25,8 @@ final class Achievements {
         a.add("fisher", "root", "salmon", "Fishing Bear", "Watch a bear catch a fish at the riverbank.", "task").hidden();
         a.add("pollinator", "root", "wheat", "Butterfly Garden", "See a butterfly ripen your crops.", "task").hidden();
         a.add("trophy", "root", "armor_stand", "Hunter's Trophy", "Take a statue home from an animal you had recorded first.", "goal").hidden();
+        a.add("pond_stop", "root", "bell", "Next Stop: Pond", "See five birds ride one capybara at once.", "task").hidden();
+        a.add("tanuki_wink", "root", "sweet_berries", "Charcoal Deal", "Stand very still near a tanuki at night.", "task").hidden();
 
         NamespacedKey decor = new NamespacedKey(plugin, "decor");
         a.scanner(it -> {

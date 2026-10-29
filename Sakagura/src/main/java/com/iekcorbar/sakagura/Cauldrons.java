@@ -129,6 +129,13 @@ final class Cauldrons implements Listener {
         if (pot == null) {
             pot = new Pot(b.getWorld(), b.getX(), b.getY(), b.getZ());
             pots.computeIfAbsent(b.getWorld().getUID(), k -> new HashMap<>()).put(key(b.getX(), b.getY(), b.getZ()), pot);
+            // joke: brewing with the great outdoors as your tap water — terroir!
+            String biome = b.getBiome().getKey().getKey();
+            if ((biome.contains("river") || biome.contains("ocean") || biome.contains("beach"))
+                    && !plugin.adv().has(p, "terroir")) {
+                p.sendActionBar(Component.text("Bold choice. Bold label.", NamedTextColor.GOLD));
+                plugin.adv().grant(p, "terroir");
+            }
         }
         int total = 0;
         for (int v : pot.brew.ingredients.values()) total += v;

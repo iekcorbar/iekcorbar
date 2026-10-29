@@ -12,7 +12,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /** Small jokes with a hidden advancement each. */
@@ -20,10 +22,13 @@ final class EasterEggs {
     private final SteamworksPlugin plugin;
     private final Map<UUID, long[]> crank = new HashMap<>();          // start, last
     private final Map<UUID, ArrayDeque<Long>> whistles = new HashMap<>();
+    private final Map<String, long[]> dryHammer = new HashMap<>();    // hammer-pos -> [start, last]
+    private final Map<UUID, Long> sulking = new HashMap<>();          // player -> start
 
     EasterEggs(SteamworksPlugin plugin) {
         this.plugin = plugin;
         Bukkit.getScheduler().runTaskTimer(plugin, this::alchemist, 200L, 100L);
+        Bukkit.getScheduler().runTaskTimer(plugin, this::sulkWatch, 120L, 100L);
     }
 
     /** Cranking for 30 seconds without a break wears your arm out. */
@@ -65,6 +70,65 @@ final class EasterEggs {
         if (above == null || above.type != PartType.MIXER || Math.abs(above.speed()) < 1) return;
         p.sendActionBar(Component.text("Dry run, brass monkey.", NamedTextColor.GOLD));
         plugin.adv().grant(p, "dry_run");
+    }
+
+    /** A steam hammer spinning over nothing for 30 seconds is just exercising. */
+    void hammerDry(KNode n) {
+        long now = System.currentTimeMillis();
+        String k = n.world.getName() + ":" + n.x + ":" + n.y + ":" + n.z;
+        long[] d = dryHammer.computeIfAbsent(k, x -> new long[]{now, now});
+        if (now - d[1] > 2000) d[0] = now;
+        d[1] = now;
+        if (now - d[0] < 30_000) return;
+        dryHammer.remove(k);
+        Location l = n.center();
+        for (Player p : l.getWorld().getNearbyPlayers(l, 8)) {
+            p.sendActionBar(Component.text("It's just exercising.", NamedTextColor.GRAY));
+            plugin.adv().grant(p, "anxiety");
+        }
+    }
+
+    void hammerWorking(KNode n) { dryHammer.remove(n.world.getName() + ":" + n.x + ":" + n.y + ":" + n.z); }
+
+    /** Standing next to a jammed network for 30 seconds: even machines need to sulk. */
+    private void sulkWatch() {
+        long now = System.currentTimeMillis();
+        Set<UUID> near = new HashSet<>();
+        for (Network net : plugin.kinetics().networks) {
+            if (!net.jammed || net.nodes.isEmpty()) continue;
+            int seen = 0;
+            for (KNode n : net.nodes) {
+                if (seen++ > 40) break;                       // cheap radius sweep
+                Location c = n.center();
+                if (c.getWorld() == null) continue;
+                for (Player p : c.getWorld().getNearbyPlayers(c, 6)) near.add(p.getUniqueId());
+            }
+        }
+        sulking.keySet().removeIf(id -> !near.contains(id));
+        for (UUID id : near) {
+            Long start = sulking.putIfAbsent(id, now);
+            if (start == null || now - start < 30_000) continue;
+            sulking.remove(id);
+            Player p = Bukkit.getPlayer(id);
+            if (p == null) continue;
+            p.sendActionBar(Component.text("Even machines need to sulk.", NamedTextColor.GRAY));
+            p.getWorld().playSound(p.getLocation(), "minecraft:block.note_block.bass", 1f, 0.7f);
+            plugin.adv().grant(p, "sulk");
+        }
+    }
+
+    /** Three water wheels on one network: rush hour. Checked shortly after placement. */
+    void checkCommute(KNode placed) {
+        if (placed.type != PartType.WATER_WHEEL) return;
+        Network net = placed.network;
+        if (net == null || net.nodes.size() < 3) return;
+        int wheels = 0;
+        for (KNode n : net.nodes) if (n.type == PartType.WATER_WHEEL) wheels++;
+        if (wheels < 3) return;
+        Player p = placed.owner == null ? null : Bukkit.getPlayer(placed.owner);
+        if (p == null || plugin.adv().has(p, "commute")) return;
+        p.sendActionBar(Component.text("You're not paying for all these lanes?", NamedTextColor.GOLD));
+        plugin.adv().grant(p, "commute");
     }
 
     /** Raw zinc, raw tin and sulfur in one inventory make you sneeze. */

@@ -46,8 +46,10 @@ final class Hammers {
             Item target = findInput(n);
             if (target == null) {
                 n.hammerProgress = 0;
+                plugin.eggs().hammerDry(n);              // joke: spinning over nothing
                 continue;
             }
+            plugin.eggs().hammerWorking(n);
             double rate = rate(cfg, speed);
             n.hammerProgress += 5 * rate;
             if (n.hammerProgress < cfg.hammerCycle) continue;

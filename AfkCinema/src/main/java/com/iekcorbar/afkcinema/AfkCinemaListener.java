@@ -39,6 +39,7 @@ final class AfkCinemaListener implements Listener {
 
     private final AfkCinemaPlugin plugin;
     private final Map<java.util.UUID, CineSession> sessies = new HashMap<>();
+    private final Map<java.util.UUID, Long> opgemerkt = new HashMap<>();  // "You're in the shot."-cooldown
 
     AfkCinemaListener(AfkCinemaPlugin plugin) {
         this.plugin = plugin;
@@ -119,6 +120,7 @@ final class AfkCinemaListener implements Listener {
         if (s.filmLoopt) return;
         s.vorigeLoc = viewer.getLocation().clone();
         s.vorigeGameMode = viewer.getGameMode();
+        s.standYaw = s.vorigeLoc.getYaw();
         double head = plugin.getConfig().getDouble("cine.head-offset", 1.4);
         if (viewer.getUniqueId().equals(onderwerp.getUniqueId())) {
             s.modus = CineSession.Modus.ORBIT;
@@ -136,6 +138,23 @@ final class AfkCinemaListener implements Listener {
             + (s.standIn != null ? "de camera draait om je personage"
                                  : "de camera draait — beweeg om terug te keren"));
         s.filmLoopt = true;
+
+        // grapjes: handmatige taken tellen; in slaap gefilmd = aftiteling
+        if (!s.afk) {
+            int dag = java.time.LocalDate.now().getDayOfYear();
+            if (s.takeDay != dag) { s.takeDay = dag; s.takes = 0; }
+            s.takes++;
+            if (s.takes >= 7 && !plugin.adv().has(viewer, "directors_cut")) {
+                viewer.sendActionBar(net.kyori.adventure.text.Component.text(
+                        "That's a wrap... again.", net.kyori.adventure.text.format.NamedTextColor.GOLD));
+                plugin.adv().grant(viewer, "directors_cut");
+            }
+        }
+        if (viewer.isSleeping() && !plugin.adv().has(viewer, "closing_credits")) {
+            viewer.sendActionBar(net.kyori.adventure.text.Component.text(
+                    "Roll credits.", net.kyori.adventure.text.format.NamedTextColor.GRAY));
+            plugin.adv().grant(viewer, "closing_credits");
+        }
     }
 
     /** Camera-vlucht langs een opgenomen pad. */
@@ -149,7 +168,7 @@ final class AfkCinemaListener implements Listener {
         s.vorigeGameMode = viewer.getGameMode();
         s.modus = CineSession.Modus.PAD;
         s.pad = pad;
-        bouwgCum(s, viewer);
+        bouwgCum(s);
         s.padT = 0;
         s.padRichting = 1;
         viewer.setGameMode(GameMode.SPECTATOR);
@@ -159,7 +178,7 @@ final class AfkCinemaListener implements Listener {
             + " punten, " + String.format(java.util.Locale.ROOT, "%.0fs", s.totaal) + ") — beweeg = terug");
     }
 
-    private void bouwgCum(CineSession s, Player wie) {
+    private void bouwgCum(CineSession s) {
         List<Pad.Punt> ptn = s.pad.punten();
         int n = ptn.size();
         boolean lus = plugin.padLus().equals("lus") && n >= 3;
@@ -218,9 +237,31 @@ final class AfkCinemaListener implements Listener {
             if (s.doel == null || !s.doel.isOnline()) { stopAlles(s); return; }
             s.focusPunt = s.doel.getLocation().clone().add(0, head, 0);
         } else if (s.standIn != null) {
-            // stand-in op zijn plek houden (water/druk kan 'm verschuiven)
+            // stand-in blijft staan; een voorbijganger wordt opgemerkt: hoofd draait langzaam naar ze toe
             NPC npc = (NPC) s.standIn;
-            if (npc.isSpawned()) npc.teleport(s.vorigeLoc, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            if (npc.isSpawned()) {
+                float richting = s.vorigeLoc.getYaw();
+                Player passer = null;
+                for (Player q : s.vorigeLoc.getWorld().getNearbyPlayers(s.vorigeLoc, 5.2)) {
+                    if (!q.getUniqueId().equals(s.speler.getUniqueId())) { passer = q; break; }
+                }
+                if (passer != null) {
+                    org.bukkit.util.Vector dv = passer.getLocation().toVector().subtract(s.vorigeLoc.toVector());
+                    richting = (float) (Math.toDegrees(Math.atan2(dv.getZ(), dv.getX())) - 90);
+                    long now = System.currentTimeMillis();
+                    Long last = opgemerkt.get(passer.getUniqueId());
+                    if (last == null || now - last > 30_000L) {
+                        opgemerkt.put(passer.getUniqueId(), now);
+                        passer.sendActionBar(net.kyori.adventure.text.Component.text(
+                                "You're in the shot.", net.kyori.adventure.text.format.NamedTextColor.GRAY));
+                        plugin.adv().grant(passer, "extra");
+                    }
+                }
+                s.standYaw = lerpHoek(s.standYaw, richting, 0.08);
+                Location staan = s.vorigeLoc.clone();
+                staan.setYaw(s.standYaw);
+                npc.teleport(staan, PlayerTeleportEvent.TeleportCause.PLUGIN);
+            }
         }
         World w = s.focusPunt.getWorld();
         double staps = plugin.getConfig().getDouble("cine.orbit-snelheid", 0.0035);
@@ -274,7 +315,7 @@ final class AfkCinemaListener implements Listener {
 
         // positie: Catmull-Rom door de punten
         int b = (i + 1) % n;
-        int a = index(i, n, s.lusModus);
+        int a = index(i - 1, n, s.lusModus);
         int c = index(i + 1, n, s.lusModus);
         int d = index(i + 2, n, s.lusModus);
         Pad.Punt p0 = ptn.get(a), p1 = ptn.get(i), p2 = ptn.get(c), p3 = ptn.get(d);

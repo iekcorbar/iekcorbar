@@ -32,6 +32,7 @@ final class Prop implements InventoryHolder {
     int progress;
     String cooking;
     boolean lit;
+    long waterFor;   // joke: since when is this pot bubbling pure water only (not saved)
     ItemDisplay main;
     final List<Entity> extras = new ArrayList<>();
     int hits;

@@ -119,16 +119,26 @@ final class Drunk implements Listener {
     public void onSneak(org.bukkit.event.player.PlayerToggleSneakEvent e) {
         Player p = e.getPlayer();
         if (!e.isSneaking() || !holdsDrink(p)) return;
+        java.util.List<Player> mede = new java.util.ArrayList<>();
         for (Player o : p.getWorld().getNearbyPlayers(p.getLocation(), 3)) {
             if (o == p || !o.isSneaking() || !holdsDrink(o)) continue;
-            Location mid = p.getLocation().add(o.getLocation()).multiply(0.5).add(0, 1.4, 0);
-            p.getWorld().playSound(mid, "minecraft:block.amethyst_block.chime", 1.2f, 1.4f);
-            p.getWorld().spawnParticle(org.bukkit.Particle.HAPPY_VILLAGER, mid, 8, 0.2, 0.2, 0.2, 0);
-            for (Player who : new Player[]{p, o}) {
-                who.sendActionBar(Component.text("Kanpai!", NamedTextColor.GOLD));
-                plugin.adv().grant(who, "kanpai");
+            mede.add(o);
+        }
+        if (mede.isEmpty()) return;
+        Location mid = p.getLocation().add(mede.get(0).getLocation()).multiply(0.5).add(0, 1.4, 0);
+        p.getWorld().playSound(mid, "minecraft:block.amethyst_block.chime", 1.2f, 1.4f);
+        p.getWorld().spawnParticle(org.bukkit.Particle.HAPPY_VILLAGER, mid, 8, 0.2, 0.2, 0.2, 0);
+        for (Player who : new Player[]{p, mede.get(0)}) {
+            who.sendActionBar(Component.text("Kanpai!", NamedTextColor.GOLD));
+            plugin.adv().grant(who, "kanpai");
+        }
+        if (mede.size() >= 2) {   // joke: three or more at once — the brewery lays out a table
+            for (Player who : mede) {
+                who.sendActionBar(Component.text("The brewery has a table for this.", NamedTextColor.GOLD));
+                plugin.adv().grant(who, "table");
             }
-            return;
+            p.sendActionBar(Component.text("The brewery has a table for this.", NamedTextColor.GOLD));
+            plugin.adv().grant(p, "table");
         }
     }
 

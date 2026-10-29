@@ -34,6 +34,11 @@ final class CineSession {
     int padRichting = 1;                // pingpong
     boolean lusModus;                   // indices lopen rond
 
+    // grapjes
+    float standYaw;                     // waar de stand-in naar kijkt (hoofd draait langzaam mee)
+    int takeDay;                        // dag-teller voor de director's-cut-grap
+    int takes;
+
     // opname-modus (vrij kijken terwijl je waypoints zet)
     Pad opneemPad;
 

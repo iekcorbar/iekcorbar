@@ -77,6 +77,7 @@ final class Props implements Listener {
     // jokes: daikon cuts in a row per player, and when each zabuton sitter sat down
     private final Map<UUID, Integer> daikonCuts = new HashMap<>();
     private final Map<UUID, Long> sitSince = new HashMap<>();
+    private final Map<UUID, Long> standSince = new HashMap<>();   // joke: standing ON the cushion like an idiot
     private final ItemStack filler;
     private int breakHits, compostSeconds;
 
@@ -639,6 +640,7 @@ final class Props implements Listener {
         seat.addPassenger(p);
         seats.put(seat.getUniqueId(), prop);
         sitSince.put(p.getUniqueId(), System.currentTimeMillis());
+        standSince.remove(p.getUniqueId());   // Sitting is the correct way to use a zabuton.
     }
 
     @EventHandler
@@ -758,6 +760,27 @@ final class Props implements Listener {
                 }
             }
         }
+        // joke: five minutes of standing on the cushion without sitting — the cat notices
+        if (second) {
+            long now = System.currentTimeMillis();
+            for (Player pl : Bukkit.getOnlinePlayers()) {
+                org.bukkit.block.Block onder = pl.getLocation().getBlock().getRelative(BlockFace.DOWN);
+                Prop z = at(onder);
+                if (z != null && z.type == PropType.ZABUTON && !sitSince.containsKey(pl.getUniqueId())) {
+                    Long t = standSince.putIfAbsent(pl.getUniqueId(), now);
+                    if (t != null && now - t >= 300_000L && !plugin.adv().has(pl, "sitter")) {
+                        standSince.remove(pl.getUniqueId());
+                        pl.getWorld().playSound(pl.getLocation(), "minecraft:entity.cat.hiss", 0.9f, 1f);
+                        pl.getWorld().spawnParticle(Particle.ANGRY_VILLAGER,
+                                pl.getLocation().add(0, 1.9, 0), 4, 0.25, 0.15, 0.25, 0);
+                        pl.sendActionBar(Component.text("The cat disagrees.", NamedTextColor.GRAY));
+                        plugin.adv().grant(pl, "sitter");
+                    }
+                } else {
+                    standSince.remove(pl.getUniqueId());
+                }
+            }
+        }
         for (Map<Long, Prop> m : props.values()) {
             for (Prop p : new ArrayList<>(m.values())) {
                 switch (p.type.behaviour) {
@@ -783,6 +806,16 @@ final class Props implements Listener {
         return rice > 0;
     }
 
+    private boolean onlyWater(ItemStack[] slots) {
+        int water = 0;
+        for (ItemStack s : slots) {
+            if (s == null || s.isEmpty()) continue;
+            if (s.getType() != Material.WATER_BUCKET) return false;
+            water++;
+        }
+        return water > 0;
+    }
+
     private void cook(Prop p) {
         ItemStack[] slots = new ItemStack[6];
         for (int i = 0; i < 6; i++) slots[i] = p.inv.getItem(Prop.POT_INGREDIENTS[i]);
@@ -796,6 +829,19 @@ final class Props implements Listener {
                     near.sendActionBar(Component.text("Plain. Bold.", NamedTextColor.GRAY));
                     plugin.adv().grant(near, "plain");
                 }
+            }
+            // joke: a pot of nothing but water, kept hot for five minutes, is patience itself
+            if (onlyWater(slots) && heated(p.block())) {
+                if (p.waterFor == 0) p.waterFor = System.currentTimeMillis();
+                else if (System.currentTimeMillis() - p.waterFor >= 300_000L) {
+                    p.waterFor = 0;
+                    for (Player near : p.world.getNearbyPlayers(p.center(), 6)) {
+                        near.sendActionBar(Component.text("Waiting for noodles.", NamedTextColor.GRAY));
+                        plugin.adv().grant(near, "noodle");
+                    }
+                }
+            } else {
+                p.waterFor = 0;
             }
             updateProgress(p, slots[0] == null && isEmpty(slots) ? progressItem("Put ingredients in", NamedTextColor.GRAY)
                     : progressItem("No recipe with these ingredients", NamedTextColor.RED));

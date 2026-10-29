@@ -19,12 +19,15 @@ public final class AfkCinemaPlugin extends JavaPlugin {
     private AfkCinemaListener manager;
     private SpatialMenu menus;
     private PadStore pads;
+    private Adv adv;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         pads = new PadStore(getDataFolder());
         pads.laad();
+        adv = new Adv(this);
+        adv.register();
         manager = new AfkCinemaListener(this);
         menus = new SpatialMenu(this);
         getServer().getPluginManager().registerEvents(manager, this);
@@ -59,6 +62,7 @@ public final class AfkCinemaPlugin extends JavaPlugin {
     public AfkCinemaListener manager() { return manager; }
     public SpatialMenu menus() { return menus; }
     public PadStore pads() { return pads; }
+    public Adv adv() { return adv; }
 
     public boolean broadcastAfk() { return getConfig().getBoolean("broadcast-afk", true); }
 

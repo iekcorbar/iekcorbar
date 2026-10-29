@@ -177,3 +177,57 @@ advancements:
     announce: true
     requirements:
       - type: manual
+
+  untrustworthy:
+    tab: iekcorbar
+    parent: secret_friend
+    title: "Officially Untrustworthy"
+    description: "Collect every hidden easter egg on this server."
+    icon: minecraft:dragon_egg
+    frame: challenge
+    hidden: true
+    announce: false
+    requirements:
+      - type: external_advancements
+        keys:
+          - "steamworks:steamworks/tired_arm"
+          - "steamworks:steamworks/mind_the_gap"
+          - "steamworks:steamworks/dry_run"
+          - "steamworks:steamworks/sneeze"
+          - "steamworks:steamworks/anxiety"
+          - "steamworks:steamworks/sulk"
+          - "steamworks:steamworks/commute"
+          - "kitchen:kitchen/tears"
+          - "kitchen:kitchen/plain"
+          - "kitchen:kitchen/purr"
+          - "kitchen:kitchen/noodle"
+          - "kitchen:kitchen/sitter"
+          - "kitchen:kitchen/furnace"
+          - "sakagura:sakagura/tipsy"
+          - "sakagura:sakagura/passed_out"
+          - "sakagura:sakagura/definitely_fine"
+          - "sakagura:sakagura/kanpai"
+          - "sakagura:sakagura/dont_tell"
+          - "sakagura:sakagura/table"
+          - "sakagura:sakagura/terroir"
+          - "wildlife:wildlife/capy_love"
+          - "wildlife:wildlife/tiny_scare"
+          - "wildlife:wildlife/fisher"
+          - "wildlife:wildlife/pollinator"
+          - "wildlife:wildlife/trophy"
+          - "wildlife:wildlife/pond_stop"
+          - "wildlife:wildlife/tanuki_wink"
+          - "relics:relics/skip"
+          - "relics:relics/umbrella"
+          - "relics:relics/lucky_paw"
+          - "relics:relics/trap"
+          - "satchel:satchel/wizard"
+          - "satchel:satchel/back_day"
+          - "satchel:satchel/sink"
+          - "kura:kura/cookie"
+          - "kura:kura/dobby"
+          - "zukan:zukan/hoarder"
+          - "zukan:zukan/disaster"
+          - "afkcinema:afkcinema/extra"
+          - "afkcinema:afkcinema/closing_credits"
+          - "afkcinema:afkcinema/directors_cut"

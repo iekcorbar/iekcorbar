@@ -26,6 +26,7 @@ final class Achievements {
         a.add("full", "base", "nether_star", "Fully Loaded", "Fill every upgrade slot of one backpack.", "challenge").glint();
         a.add("wizard", "opened", "ender_pearl", "Nice Try, Wizard", "Try to put a backpack inside a backpack.", "task").hidden();
         a.add("back_day", "opened", "anvil", "Back Day", "Close a completely full netherite backpack.", "task").hidden();
+        a.add("sink", "opened", "lava_bucket", "It Goes Down With Dignity", "Watch an unprotected backpack sink into lava.", "task").hidden();
         a.scanner(it -> {
             SItem t = items.typeOf(it);
             return t == null ? null : t.id();

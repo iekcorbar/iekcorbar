@@ -125,10 +125,27 @@ final class Items implements Listener {
 
     // ------------------------------------------------------------ eating
 
+    private final java.util.Map<java.util.UUID, java.util.ArrayDeque<Long>> feesten = new java.util.HashMap<>();
+
     @EventHandler(ignoreCancelled = true)
     public void onEat(PlayerItemConsumeEvent e) {
         KItem t = typeOf(e.getItem());
         if (t != null) applyEffects(e.getPlayer(), t);
+        // joke: ten meals in two minutes — you are not a furnace
+        Player p = e.getPlayer();
+        boolean fed = (t != null && (t.kind == KItem.Kind.FOOD || t.kind == KItem.Kind.DRINK))
+                || e.getItem().getType().name().contains("COOKED")
+                || e.getItem().getType().name().contains("BAKED");
+        if (!fed) return;
+        long now = System.currentTimeMillis();
+        java.util.ArrayDeque<Long> q = feesten.computeIfAbsent(p.getUniqueId(), k -> new java.util.ArrayDeque<>());
+        q.addLast(now);
+        while (!q.isEmpty() && now - q.peekFirst() > 120_000) q.pollFirst();
+        if (q.size() < 10) return;
+        q.clear();
+        p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 0));
+        p.sendActionBar(Component.text("You are not a furnace.", NamedTextColor.GOLD));
+        plugin.adv().grant(p, "furnace");
     }
 
     /** Extra effects of a dish (also used by meals eaten bite by bite). */

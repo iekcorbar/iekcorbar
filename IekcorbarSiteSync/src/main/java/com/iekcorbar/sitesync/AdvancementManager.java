@@ -418,6 +418,19 @@ public class AdvancementManager implements Listener, TabExecutor {
                 }
                 return true;
             }
+            // Full namespaced keys from OTHER plugins' advancement systems.
+            case "external_advancements": {
+                Object list = r.get("keys");
+                if (!(list instanceof List<?> keys) || keys.isEmpty()) return false;
+                for (Object k : keys) {
+                    NamespacedKey nk = NamespacedKey.fromString(String.valueOf(k).trim().toLowerCase(Locale.ROOT));
+                    if (nk == null) return false;
+                    org.bukkit.advancement.Advancement ext = Bukkit.getAdvancement(nk);
+                    if (ext == null) return false;                    // plugin not loaded (yet)
+                    if (!p.getAdvancementProgress(ext).isDone()) return false;
+                }
+                return true;
+            }
             // Custom lore books (BookManager) — "read" = opened at least once.
             case "book_read": {
                 BookManager books = plugin.getBookManager();
@@ -541,6 +554,11 @@ public class AdvancementManager implements Listener, TabExecutor {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("{player}", p.getName()));
         }
         if (d.rewardMessage != null && !d.rewardMessage.isBlank()) p.sendMessage(text(d.rewardMessage));
+        // de meta-grap: wie álles verzamelt wordt publiekelijk onbetrouwbaar verklaard
+        if (d.id.equals("untrustworthy")) {
+            Bukkit.getServer().broadcast(text("&8[&6the Guild&8] &e" + p.getName()
+                    + " &7is officially untrustworthy. Every single joke, found."));
+        }
     }
 
     // /minecraft:reload re-reads datapacks and drops advancements registered at
