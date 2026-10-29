@@ -18,6 +18,12 @@ import bpy
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 MODE = args[0] if args else "still"
 OUTDIR = args[1] if len(args) > 1 else os.getcwd()
+# Blender -b draait met cwd C:\ -> relatieve OUTDIR hier opzoeken vanaf de
+# projectmap (de ouder van scripts/, via __file__ wat Blender altijd absoluut
+# maakt), nooit vanaf de cwd. Les 29-10: anders belanden frames in C:\deploy.
+if not os.path.isabs(OUTDIR):
+    root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    OUTDIR = os.path.join(root, OUTDIR)
 os.makedirs(OUTDIR, exist_ok=True)
 
 # ---------- huisstijl uit de badge ----------

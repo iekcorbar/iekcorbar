@@ -1531,6 +1531,15 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   server-icoon voor het multiplayer-scherm via scripts/make_server_icon.py
   (importeert dezelfde tegel; vanilla server-icon.png = exact 64x64 + Paper
   server-icon64..1024; 6 png's staan in de server-root, effectief bij start).
+- **3D merk-logo (render-laag, trailer/titelkaarten)**: scripts/make_logo3d.py draait
+  headless in Blender 5.2 en bouwt de badge na (lak-schijf, messing rand + bogen,
+  IEKCORBAR in Georgia, tandwiel met goud-oog, sakura-tak) - géén stoom/embers
+  (eigenaarsbesluit 29-10: het merk zélf is de held). Modus `still` =
+  deploy/logo3d/logo3d-v5-final.png (goedgekeurd), modus `anim` = 96 frames zachte
+  swing-beweging, met ffmpeg gemonteerd tot deploy/logo3d/logo3d-v5-anim.mp4
+  (1536px, 24 fps, naadloze 4s-lus). Les 29-10: Blender `-b` relatief pad = relatief
+  C:\ (altijd absolute uitdir meegven) en 5.2 gebruikt slotted actions
+  (action.fcurves bestaat niet meer; fcurves zitten in layers→strips→channelbags).
 - **Dockerfile: npm ci -> npm install** - npm 11.19 in node:24-alpine weigerde
   een lock die lokaal (npm 11.6) in sync heette (ontbrekende floating-ui-entry
   van tiptap + root-versieveld); install is ev deterministisch met een lock en
