@@ -174,6 +174,7 @@ final class Trains implements Listener {
         }
         car.train = t;
         if (car.type == CarType.CARGO_WAGON) car.cargo = Bukkit.createInventory(null, 27, Component.text("Cargo Wagon"));
+        if (car.type == CarType.PLATEAU_WAGON) car.cargo = Bukkit.createInventory(null, 1, Component.text("Plateau"));
         t.cars.add(index, car);
         spawn(car);
         return true;
@@ -221,6 +222,7 @@ final class Trains implements Listener {
         byEntity.put(car.model.getUniqueId(), car);
         byEntity.put(car.hitbox.getUniqueId(), car);
         if (car.type == CarType.TANK_WAGON) updateSign(car);
+        if (car.type == CarType.PLATEAU_WAGON) updateLoad(car);
     }
 
     private void tag(Entity e) {
@@ -246,6 +248,10 @@ final class Trains implements Listener {
         if (car.sign != null) {
             car.sign.remove();
             car.sign = null;
+        }
+        if (car.load != null) {
+            car.load.remove();
+            car.load = null;
         }
         car.model = null;
         car.hitbox = null;
@@ -346,6 +352,7 @@ final class Trains implements Listener {
         }
         if (car.hitbox != null && car.hitbox.isValid()) car.hitbox.teleport(at);
         if (car.sign != null && car.sign.isValid()) car.sign.teleport(seatLoc(car, TANK_SIGN_AT));
+        if (car.load != null && car.load.isValid()) car.load.teleport(seatLoc(car, PLATEAU_LOAD_AT));
     }
 
     // ------------------------------------------------------------ ticking
@@ -789,6 +796,8 @@ final class Trains implements Listener {
     static final int TANK_CAP = 3000;
     /** Where the canister sign floats above the hatch: {forward, up, sideways} in blocks. */
     private static final double[] TANK_SIGN_AT = {0, 0.24, 0};
+    /** Where a plateau wagon's block stands on the deck. */
+    private static final double[] PLATEAU_LOAD_AT = {0, 0.09, 0};
 
     /** The floating canister on top of a tank wagon: shows what is on board (empty = no sign). */
     private void updateSign(Car car) {
@@ -814,8 +823,69 @@ final class Trains implements Listener {
         }
     }
 
-    private static String tankContent(Car car) {
-        return car.fluid == null || car.fluidAmount <= 0
+    /** The block on a plateau wagon's deck; null/empty cargo = bare plateel. */
+    private void updateLoad(Car car) {
+        if (car.type != CarType.PLATEAU_WAGON) return;
+        ItemStack held = car.cargo == null ? null : car.cargo.getItem(0);
+        if (held == null || held.isEmpty() || !car.spawned()) {
+            if (car.load != null) {
+                car.load.remove();
+                car.load = null;
+            }
+            return;
+        }
+        if (car.load == null || !car.load.isValid()) {
+            car.load = car.train.world.spawn(seatLoc(car, PLATEAU_LOAD_AT), ItemDisplay.class, d -> {
+                tag(d);
+                d.setItemStack(held.clone());
+                d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
+                d.setTransformation(new Transformation(new Vector3f(0, 0, 0), new Quaternionf(), new Vector3f(1.6f, 1.6f, 1.6f), new Quaternionf()));
+                d.setTeleportDuration(2);
+                d.setViewRange(2.5f);
+            });
+        } else {
+            car.load.setItemStack(held.clone());
+            car.load.teleport(seatLoc(car, PLATEAU_LOAD_AT));
+        }
+    }
+
+    /** Click with a full block = lash it to the deck; empty hand = take it back. */
+    private void plateauClick(Player p, Car car, ItemStack hand) {
+        ItemStack onDeck = car.cargo.getItem(0);
+        boolean hasDeck = onDeck != null && !onDeck.isEmpty();
+        if (hand.isEmpty()) {
+            if (!hasDeck) {
+                p.sendActionBar(Component.text("The plateau is empty.", NamedTextColor.GRAY));
+                return;
+            }
+            car.cargo.setItem(0, null);
+            for (ItemStack left : p.getInventory().addItem(onDeck).values())
+                p.getWorld().dropItemNaturally(p.getLocation(), left);
+            p.playSound(p.getLocation(), Sound.BLOCK_LODESTONE_PLACE, 0.5f, 1.5f);
+            p.sendActionBar(Component.text("Unlashed the block from the plateau.", NamedTextColor.GREEN));
+            updateLoad(car);
+            save();
+            return;
+        }
+        if (hasDeck) {
+            p.sendActionBar(Component.text("The plateau already carries a block.", NamedTextColor.YELLOW));
+            return;
+        }
+        if (!hand.getType().isBlock() || !hand.getType().isSolid() || plugin.items().isOurs(hand)) {
+            p.sendActionBar(Component.text("Only whole blocks fit on the plateel.", NamedTextColor.YELLOW));
+            return;
+        }
+        ItemStack one = hand.clone();
+        one.setAmount(1);
+        car.cargo.setItem(0, one);
+        if (p.getGameMode() != GameMode.CREATIVE) hand.subtract(1);
+        p.playSound(p.getLocation(), Sound.BLOCK_CHAIN_PLACE, 0.5f, 1.1f);
+        p.sendActionBar(Component.text("Block lashed to the plateau.", NamedTextColor.GREEN));
+        updateLoad(car);
+        save();
+    }
+
+    private static String tankContent(Car car) {        return car.fluid == null || car.fluidAmount <= 0
                 ? "empty (" + TANK_CAP + " mB in it)"
                 : car.fluid.displayName + ": " + car.fluidAmount + "/" + TANK_CAP + " mB";
     }
@@ -994,6 +1064,10 @@ final class Trains implements Listener {
             if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - use);
             p.playSound(p.getLocation(), Sound.ITEM_FIRECHARGE_USE, 0.5f, 0.8f);
             p.sendActionBar(dashboard(t));
+            return;
+        }
+        if (car.type == CarType.PLATEAU_WAGON) {
+            plateauClick(p, car, hand);
             return;
         }
         if (car.type == CarType.TANK_WAGON) {
@@ -1219,12 +1293,13 @@ final class Trains implements Listener {
                     Car c = new Car(CarType.valueOf(String.valueOf(m.get("type"))),
                             RailWalker.load(String.valueOf(m.get("front"))), RailWalker.load(String.valueOf(m.get("rear"))));
                     c.train = t;
-                    if (c.type == CarType.CARGO_WAGON) {
-                        c.cargo = Bukkit.createInventory(null, 27, Component.text("Cargo Wagon"));
+                    if (c.type == CarType.CARGO_WAGON || c.type == CarType.PLATEAU_WAGON) {
+                        c.cargo = Bukkit.createInventory(null, c.type == CarType.PLATEAU_WAGON ? 1 : 27,
+                                Component.text(c.type == CarType.PLATEAU_WAGON ? "Plateau" : "Cargo Wagon"));
                         Object data = m.get("cargo");
                         if (data != null) {
                             ItemStack[] items = ItemStack.deserializeItemsFromBytes(java.util.Base64.getDecoder().decode(String.valueOf(data)));
-                            for (int i = 0; i < items.length && i < 27; i++) c.cargo.setItem(i, items[i] == null || items[i].isEmpty() ? null : items[i]);
+                            for (int i = 0; i < items.length && i < c.cargo.getSize(); i++) c.cargo.setItem(i, items[i] == null || items[i].isEmpty() ? null : items[i]);
                         }
                     }
                     if (c.type == CarType.TANK_WAGON && m.get("fluid") != null && m.get("fluid-amount") != null) {

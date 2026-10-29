@@ -25,7 +25,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 ## 🔵 In uitvoering (agent) → afgerond, wacht op deploy
 | Blok | Status |
 |---|---|
-| Tankwagon (stoomgoederen per spoor) | af: code + model + audit + site + wiki; jar (punt 42) + sw_tank_wagon.json + pack (punt 43) wachten op jouw batch |
+| Tank- + plateauwagen | af: code + modellen + audit + site + wiki; jar (punt 42) + 2 sw-modellen + pack (punt 43) wachten op jouw batch |
 
 ## ⚪ Wachtrij
 - **Cinematic Interaction** (Fabric-mod `cinematic` v0.18.30, MC 26.3): REA-analyse
@@ -33,7 +33,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
   actie-grammatica, feasibility = 100% server-side + server-getrouw paneel).
   Volgende stap: bouw-sessie werkbank-prototype (TABLE + FURNACE) op 26.2/26.3.
   Jar staat in archief/cinematic-interaction/.
-- Plateau-wagon, wissels + rangeerkoppeling (treinen, daarna)
+- Wissels + rangeerkoppeling (treinen, als volgende batch)
 - Sakagura: fruitbomen
 - Website: profielscherm, AI-vertalingen
 - MMO: feature-keuze uit Valhalla-onderzoek (gesprek met eigenaar)

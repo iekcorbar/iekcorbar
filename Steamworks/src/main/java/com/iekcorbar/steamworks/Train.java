@@ -62,6 +62,8 @@ final class Train {
         FluidType fluid;
         int fluidAmount;
         ItemDisplay sign;
+        // plateau wagon: cargo is a one-slot inventory, 'load' renders that block on the deck
+        ItemDisplay load;
         int hits;
         long lastHit;
 

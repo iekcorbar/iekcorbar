@@ -42,6 +42,10 @@ Right-click the locomotive with fuel (sneak = the whole stack). You only burn fu
   train stands to pump to or from the nearest **Tank** beside the track (whole tank load at once).
   The canister floating above the hatch shows what is on board. Contents survive restarts;
   a broken wagon spills its load. Craft: planks + a Tank + a minecart.
+* **Plateau Wagon** - an open flatbed for **one block in plain sight**. Click with any solid
+  block to lash it to the deck, click empty-handed to take it back. Great for showing off
+  what your freight train hauls. The block survives restarts; a broken wagon drops it on the track.
+  Craft: iron plates + planks + a minecart.
 
 ## Stations and signals
 * **Station** - place it next to the track (same height or one higher, on a platform). Rename the station item in an anvil (or click the station with a renamed name tag) to put a name on its board. Riders see "Next stop" and the station name.

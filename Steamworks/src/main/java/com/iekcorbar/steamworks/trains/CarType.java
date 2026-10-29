@@ -13,7 +13,10 @@ public enum CarType {
             "Carries a chest's worth of goods.", "Right-click it to open, place behind a train to couple."),
     TANK_WAGON("Tank Wagon", new double[][]{},
             "Carries 3000 mB of one liquid - the canister", "on top shows what. Click with a canister to",
-            "fill or dump; an empty hand pumps to the tank", "beside the track while the train stands.");
+            "fill or dump; an empty hand pumps to the tank", "beside the track while the train stands."),
+    PLATEAU_WAGON("Plateau Wagon", new double[][]{},
+            "One block rides in plain sight on the", "plateel. Click it with a block to load, click",
+            "empty-handed to take it back.");
 
     public final String displayName;
     public final double[][] seats;

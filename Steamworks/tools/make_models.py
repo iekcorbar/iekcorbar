@@ -644,6 +644,27 @@ def tank_wagon():
     return m
 
 
+def plateau_wagon():
+    # open laadplateau: lage houten randen onder messing-railing, buffer-uiteinden
+    # en vier stalen vangringen - het blok zelf wordt door de plugin getoond
+    m = Model("sw_plateau_wagon", 0.5)
+    m.cube("frame", (-6.4, -8.2, -15.0), (6.4, -6.6, 15.0), "dark")
+    wheels(m, (9.0, -9.0))
+    m.cube("floor", (-6.6, -6.6, -15.0), (6.6, -5.2, 15.0), "darkwood")
+    for s in (-1, 1):
+        x0, x1 = (6.0, 6.6) if s > 0 else (-6.6, -6.0)
+        m.cube(f"rail{s}", (x0, -5.2, -15.0), (x1, -4.4, 15.0), "wood")
+        m.cube(f"rail_cap{s}", (x0 - 0.1 * s, -4.4, -15.0), (x1 + 0.1 * s, -4.1, 15.0), "brass")
+    for zs in (-1, 1):
+        z0, z1 = (14.4, 15.0) if zs > 0 else (-15.0, -14.4)
+        m.cube(f"buffer{zs}", (-5.4, -5.2, z0), (5.4, -3.6, z1), "wood")
+    for su in (-1, 1):
+        for sv in (-1, 1):
+            m.cube(f"ring{su}{sv}", (su * 5.4 - 0.3, -5.2, sv * 13.4 - 0.3),
+                   (su * 5.4 + 0.3, -2.6, sv * 13.4 + 0.3), "steel")
+    return m
+
+
 def station():
     # eki sign: white name board on two dark posts under a small red roof; board faces model +-Z
     # (the plugin puts the station name on it as text, 1 px in front of each face)
@@ -1354,6 +1375,7 @@ def build():
     # 29-10: tank wagon toegevoegd - HELEMAAL achteraan, anders schuiven alle U()-tellers
     # van de bestaande modellen op en verandert elke .bbmodel in de git-diff
     parts.append(tank_wagon())
+    parts.append(plateau_wagon())   # idem: laatst toegevoegd, U()-tellers blijven staan
     return parts
 
 
