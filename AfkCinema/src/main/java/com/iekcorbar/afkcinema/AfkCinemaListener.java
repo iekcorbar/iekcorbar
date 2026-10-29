@@ -108,6 +108,7 @@ final class AfkCinemaListener implements Listener {
         CineSession s = sessies.remove(e.getPlayer().getUniqueId());
         if (s != null) herstel(s);                          // Anders staat z'n data straks
         // in de lucht en in spectator — vóór het opslaan terugzetten.
+        plugin.menus().verwijder(e.getPlayer().getUniqueId());
     }
 
     // ---------- starten / stoppen ----------

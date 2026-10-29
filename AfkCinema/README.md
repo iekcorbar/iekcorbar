@@ -13,6 +13,7 @@ server-side: werkt op élke vanilla client.
 | `/cine afk <speler>` | (admin) draai om een andere, gewoon zichtbare speler |
 | `/cine stop` | terug naar je oude plek en gamemode |
 | `/cine automatisch` | je AFK-bioscoop uit/aan zetten |
+| `/cine menu` | ruimtelijk **stoompaneel**: zwevend messing bedieningspaneel vóór je neer (het "spatial GUI"-concept uit de client-MOD, maar dan server-side op elke vanilla client) |
 | `/cine opname <padnaam>` | vrij rondvliegen als camera-man (pad wordt gemaakt als het nog niet bestaat) |
 | `/cine pad add` | huidig standpunt + kijkrichting als waypoint toevoegen |
 | `/cine pad verwijder <nr> [pad]` | waypoint-nummer weg |
@@ -39,6 +40,18 @@ Config:
 - `cine.pad-lus` — `heen-en-terug` (default), `lus` (rond, mits ≥3 punten), `eenmalig`
 - `cine.pad-easing` — zacht in/out per segment
 - `cine.afk-shot` — wat de AFK-camera doet: `orbit` of `pad:<naam>` (bestaand pad)
+
+## Ruimtelijk stoompaneel (/cine menu)
+
+De spatial-gui-MOD is puur client-rendering (78 klassen mixins op schermen/camera,
+geen enkele netwerkcodelijn) — die is niet naar de server te halen. Wat WÉL kan:
+hetzelfde belevingsgevoel server-side. `/cine menu` zet een zwevend paneel van
+TextDisplay-plaatjes (donker messing op stoomglas, klinkbare Interaction-gebieden)
+neer met: status, FILM STARTEN/STOPPEN, afk-automaat en per opgenomen route een
+▶-knop. Iedereen mag aan iemands paneel-knoppen draaien (het paneel bedient altijd
+de eigenaar). Voorzichtige notities: een dragende film zet de kijker in spectator
+en spectators kunnen niet klikken — het paneel is dus de afstandsbediening vóór en
+tussen de shots door.
 
 ## Tips voor de trailer
 

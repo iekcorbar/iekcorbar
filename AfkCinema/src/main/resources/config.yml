@@ -5,6 +5,7 @@ broadcast-afk: true       # "welkom terug"-titel als iemand terugkomt
 
 cine:
   head-offset: 1.4        # doelhoogte: hoofd van het onderwerp
+  menu-afstand: 4.0       # waar het stoompaneel verschijnt (blokken vóór je gezicht)
   collision-lift: true    # camera optillen als een muur in de weg staat
   orbit-snelheid: 0.0035  # radialen per tick rond het onderwerp (kleiner = rustiger)
   orbit-straal: 5.0       # basisafstand van de draaibaan

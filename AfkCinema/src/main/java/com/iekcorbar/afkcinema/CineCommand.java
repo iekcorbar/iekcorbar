@@ -42,6 +42,10 @@ final class CineCommand implements CommandExecutor, TabCompleter {
                 p.sendMessage("§e afk-bioskoop: " + (s.cineToegelaten ? "AAN" : "UIT"));
             }
             case "opname" -> opname(sender, args);
+            case "menu" -> {
+                if (!(sender instanceof Player p)) { sender.sendMessage("alleen in game"); return true; }
+                plugin.menus().toggle(p);
+            }
             case "pad" -> pad(sender, args);
             case "herlaad" -> {
                 if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§c geen recht"); return true; }
@@ -165,7 +169,7 @@ final class CineCommand implements CommandExecutor, TabCompleter {
     }
 
     private void help(CommandSender sender) {
-        sender.sendMessage("§8[§ecinema§8] §f/cine afk [speler] §7· §f/cine stop §7· §f/cine automatisch");
+        sender.sendMessage("§8[§ecinema§8] §f/cine afk [speler] §7· §f/cine stop §7· §f/cine automatisch §7· §f/cine menu");
         sender.sendMessage("  §f/cine opname <pad> §7→ vlieg vrij, §f/cine pad add§7, dan §f/cine pad speel <pad>");
         sender.sendMessage("  §f/cine pad lijst/info/wis/verwijder §7· §f/cine herlaad");
     }
@@ -175,7 +179,7 @@ final class CineCommand implements CommandExecutor, TabCompleter {
         List<String> out = new ArrayList<>();
         String la = args[args.length - 1].toLowerCase(Locale.ROOT);
         if (args.length == 1) {
-            for (String s : new String[]{"afk", "film", "stop", "automatisch", "opname", "pad", "herlaad"})
+            for (String s : new String[]{"afk", "film", "stop", "automatisch", "opname", "menu", "pad", "herlaad"})
                 if (s.startsWith(la)) out.add(s);
         } else if (args.length == 2 && args[0].equalsIgnoreCase("pad")) {
             for (String s : new String[]{"add", "verwijder", "speel", "info", "wis", "lijst"})

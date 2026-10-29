@@ -17,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class AfkCinemaPlugin extends JavaPlugin {
 
     private AfkCinemaListener manager;
+    private SpatialMenu menus;
     private PadStore pads;
 
     @Override
@@ -25,14 +26,16 @@ public final class AfkCinemaPlugin extends JavaPlugin {
         pads = new PadStore(getDataFolder());
         pads.laad();
         manager = new AfkCinemaListener(this);
+        menus = new SpatialMenu(this);
         getServer().getPluginManager().registerEvents(manager, this);
+        getServer().getPluginManager().registerEvents(menus, this);
         PluginCommand cine = getCommand("cine");
         if (cine != null) {
             CineCommand cc = new CineCommand(this);
             cine.setExecutor(cc);
             cine.setTabCompleter(cc);
         }
-        Bukkit.getScheduler().runTaskTimer(this, manager::tick, 20L, 1L);
+        Bukkit.getScheduler().runTaskTimer(this, () -> { manager.tick(); menus.tick(); }, 20L, 1L);
         if (Bukkit.getPluginManager().getPlugin("Citizens") == null) {
             getLogger().warning("Citizens ontbreekt: de stand-in valt weg — bij /cine afk "
                 + "zie je jezelf dan niet in beeld (wellen om de plek waar je stond).");
@@ -44,6 +47,7 @@ public final class AfkCinemaPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (menus != null) menus.clearAlles();
         if (manager != null) manager.allesStoppen();
     }
 
@@ -53,6 +57,7 @@ public final class AfkCinemaPlugin extends JavaPlugin {
     }
 
     public AfkCinemaListener manager() { return manager; }
+    public SpatialMenu menus() { return menus; }
     public PadStore pads() { return pads; }
 
     public boolean broadcastAfk() { return getConfig().getBoolean("broadcast-afk", true); }

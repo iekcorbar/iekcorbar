@@ -7,8 +7,8 @@ description: 'AFK-bioscoop met stand-in + opneembare camerapaden (drone-shots), 
 softdepend: [Citizens]
 commands:
   cine:
-    description: 'Bioscoop: /cine afk [speler] · stop · automatisch · opname <pad> · pad <beheer> · herlaad'
-    usage: '/cine <afk|stop|automatisch|opname|pad|herlaad>'
+    description: 'Bioscoop: /cine afk [speler] · stop · automatisch · menu · opname <pad> · pad <beheer> · herlaad'
+    usage: '/cine <afk|stop|automatisch|menu|opname|pad|herlaad>'
     permission: afkcinema.cine
 permissions:
   afkcinema.cine:
