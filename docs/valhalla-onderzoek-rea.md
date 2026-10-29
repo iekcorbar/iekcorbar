@@ -13,7 +13,7 @@ sessie.
 |---|---|---|---|---|
 | ValhallaMMO | 1.10.3 | `me.athlaeos.valhallammo.ValhallaMMO` | 1842 | API 1.19; softdepends: Vault, WorldEdit, WorldGuard, PlaceholderAPI, DecentHolograms, JustLootIt, CoreProtect, Nexo, CraftEngine, ItemsAdder |
 | ValhallaTrinkets | 2.9 | `me.athlaeos.valhallatrinkets.ValhallaTrinkets` | 65 | softdepend MMO; /trinkets-menu, /trinketeditor |
-| ValhallaRaces | 2.3 | `me.athlaeos.valhallaraces.ValhallaRaces` | 54 | **depend** op MMO; rassen + klassen, eigen statsources |
+| ValhallaRaces | 2.3 | `me.athlaeos.valhallaraces.ValhallaRaces` | 54 (51 leesbaar) | **depend** op MMO; rassen + klassen, eigen statsources |
 
 Alle drie draaien op de live-server (Map: `plugins/ValhallaMMO`,
 `plugins/ValhallaTrinkets`, `plugins/ValhallaRaces`).
@@ -102,7 +102,16 @@ eigen recipen/loot-draaitabellen (jos).
   attribute-sources + actieve abilities met cooldowns
   (CooldownManager), `classes.yml` + `races.yml` data; opslag in
   PlayerClassProfile/Progress.
-  **Bronnen (29-10, 01:19): races is volledig DATA-gedreven** — rassen
+  **Volledig leesbaar (29-10, 01:25): 51 van de 54 klassen gedecompileerd**
+  — de protector `pdjAO/RLHXh/UhzX/SknVT/yszthvbepghksbpl` uitgesloten,
+  wat de eerdere vineflower-hang veroorzaakte. Structuur is precies zoals
+  de data suggereert: `Race`/`RaceManager`/`RacePickerMenu` en
+  `Class`/`ClassManager`/`ClassPickerMenu` met `RaceStatSource`/
+  `ClassStatSource` (+Offensive/Defensive-varianten) die als
+  StatSources in de MMO-stack schuiven; `RaceSource`/`ClassSource` als
+  externe API; `CooldownManager` voor abilities; `DataManager` =
+  PlayerClassProfile/Progress-tabellen.
+  **Races is volledig DATA-gedreven** — rassen
   met `stat_buffs` (MINING_EXP_GAIN: 0.2, EXPLOSION_RESISTANCE: 0.4,
   MOVEMENT_SPEED_BONUS: -0.15, HEALTH_BONUS: 4 …) in `races.yml`, klassen
   met `group`-nummer (één keuze per groep) + `stat_buffs` + optionele
@@ -140,7 +149,7 @@ tar -xzf "C:\Users\baaye\Downloads\archive-2026-10-28T231233Z.tar.gz" -C $w
 # Vineflower 1.11.1 (sha1 77767cdbc76d116c6d5e1565ec387e531085b9f4,
 # geverifieerd op Maven Central) - de license-classes uitsluiten:
 java -jar vineflower.jar "-e=me/athlaeos/valhallaraces/Dgduf.class,me/athlaeos/valhallaraces/HXvGq.class,me/athlaeos/valhallaraces/igzHW.class,me/athlaeos/valhallaraces/JHesM.class,me/athlaeos/valhallaraces/mXjYm.class,me/athlaeos/valhallaraces/qjgRP.class" <jar> <out>
-# (Races liep vast op die protectie-klassen; run mét uitsluitingen was
-# onderweg — bronnen van races: nabouwen vanuit classes.yml/races.yml +
-# de 54 klassennamen die al bekend zijn uit de jar-inventaris.)
+# (Races liep vast op precies die protectie-klassen; mét bovenstaande
+#  -e-uitsluitingen decompileert de jar keurig: 51 bronnen. Volledige
+#  klassenlijst + API-shape staat in §4 hierboven.)
 ```

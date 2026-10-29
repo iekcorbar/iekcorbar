@@ -1571,7 +1571,8 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   maxallowedlevel + perk-kolommen), PlayerClassProfile/Progress (races),
   trinkets zitten als NBT op de items zelf. Oude sqlite player_data.db is dood.
 - Decompileeren met Vineflower (REA zelf heeft geen JVM-decompiler): 1518 +
-  61 + (races deels) bronnen; alles wat telt is DATA-gedreven:
+  61 + 51 (races, protection-klassen uitgesloten) = 1630 bronnen; alles wat
+  telt is DATA-gedreven:
   exp-kurves als formule-strings in skills/*_progression.yml, perk-bomen in
   skills/*.yml, rassen/klassen als stat_buffs in races.yml/classes.yml.
   Kernmotor = stat-source-stack (AccumulativeStatManager + ~dozens
