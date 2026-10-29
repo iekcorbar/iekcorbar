@@ -40,19 +40,38 @@ modellen → summons in de lucht boven L6/L7 = echte vliegende schepen.
 
 ## BEOORDELEN VOORAF: wat er bijgebouwd moet worden (klein)
 
-**Status 29-10 nachtelijk: S1, S2 en S3 zijn KLAAR** — staan als `.schem`
-op de server in `schematics/` (eigenaar pterodactyl, door onszelf gebouwde
-Sponge-v2-formaat, gevalideerd tegen de echte WorldEdit-files):
-- `iekcorbar-trailer-S1-sakura-laan.schem` (46×12×20) — gracht + bruggen +
-  12 lantaarnpalen (blacksteen + shroomlight) + 6 kersenbomen + bloesem
-- `iekcorbar-trailer-S2-stenen-hoofden.schem` (20×14×10) — 3 stenen hoofden
-  op sokkels met gloed-voorhoofd en zwarte ogen + lantaarnpalen
-- `iekcorbar-trailer-S3-torii.schem` (18×15×12) — rood-zwarte torii op
-  stenen plateau met treden, kersenbomen en twee lantaarnpalen
-In-game laden (op locatie naar keuze, staand met je neus in het zuidoost-
-hoek-blok van waar het neer moet): `//schem load iekcorbar-trailer-S1-sakura-laan`
-dan `//paste -a` (-a = lucht overslaan).
-Generator: `scripts/make_trailer_schems.py` (python -X utf8 ... gen).
+**Status 29-10 nachtelijk: TWINTIG sets KLAAR** — als `.schem` op de server
+in `schematics/` (pterodactyl-eigendom, Sponge-v2, stuk voor stuk gevalideerd
+tegen de echte WorldEdit-files). In-game laden:
+`//schem load iekcorbar-trailer-S<nummer>` dan `//paste -a`.
+
+| set | wat | voor |
+|---|---|---|
+| S1 sakura-laan | gracht + bruggen + 12 lantaarnpalen + 6 kersenbomen (46×12×20) | A1 |
+| S2 stenen-hoofden | 3 Godenkoppen met gloed (20×14×10) | A1 |
+| S3 torii | grote poort + trede + bomen + lantaarns (18×15×12) | A1/A4 |
+| S4 kerker-poort | poort met torens, kantelen, zielen-licht (26×16×14) | A3 C2 |
+| S5 burchttoren | 26 hoog, lichte ramen, wimpel (12×26×12) | A4 D4 |
+| S6 zwevend-eiland | eiland + hangende kettingen + boompje (16×16×16) | A4 D1 |
+| S7 theehuis | pilaren + laagdak + lampionnetten (14×12×14) | A1/A2 |
+| S8 lantaarn-laantje | close-up-versie van S1 (14×7×8) | A1 B-roll |
+| S9 vuurtoren | wit-rood, lichtkoepel aan (14×22×14) | A2/A4 |
+| S10 meerpaal | luchtschip-meermast met gloeiringen (10×18×10) | A1f/A4 |
+| S11 hokora | mini-heiligdom (8×7×8) | A1 detail |
+| S12 boogbrug | brug over water met hek (16×8×10) | A1/A2 overgang |
+| S13 markt | 3 gestreepte kraampjes + toonbanken (20×8×14) | A2 B6 |
+| S14 smederij | hall met 2 magma-schoorstenen (14×11×12) | A2 B1/B3 |
+| S15 kerkgang | zuilengang, magma-strip, hangende zielen (8×10×20) | A3 C3 |
+| S16 baaskamer | obsidiaan-arena + lavapoel + kroon (16×12×16) | A3 |
+| S17 herberg | gilde-herberg, ramen verlicht (14×13×12) | A3 C7 |
+| S18 brouwerij | gistketels + leiding + schoorsteen (12×9×10) | A2 B5 |
+| S19 uitkijktoren | houten toren voor de zoo (8×14×8) | A3/A4 |
+| S20 tuinvijver | vijver + mini-torii + boom (12×5×12) | A1/D6 slot |
+
+Generator: `scripts/make_trailer_schems.py` → `python -X utf8
+scripts\make_trailer_schems.py gen` (20 bestanden naar
+`deploy/trailer-schems/`). Maten zijn blok×blok×blok; `//paste -a` slaat
+lucht over.
 
 Alles andere: bestaand.
 
