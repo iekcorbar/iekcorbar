@@ -15,6 +15,13 @@ import bpy
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 SHOT = args[0] if args else "sakura"
 OUT = args[1] if len(args) > 1 else os.path.join(os.getcwd(), f"trailer-{SHOT}.png")
+MODUS = args[2] if len(args) > 2 else "still"      # still | close | anim
+
+# beweegbare lijsten (gevuld tijdens scene-opbouw, gebruikt in anim-modus)
+PETALS, STEEMS, ORBES, OGEN = [], [], [], []
+ROTOR = None
+HEREN = []           # (object, Draagwaarde) zeppelins die vooruit varen
+CAM = None
 
 OBJ = os.path.join(os.environ.get("TEMP", "/tmp"), "opencode", "trailer", "obj")
 
@@ -126,6 +133,7 @@ def lamp(energie, kleur, maat, positie, richting=None):
 
 
 def camera(loc, doel, lens=50):
+    global CAM
     cam = link(bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam")))
     cam.data.lens = lens
     cam.location = loc
@@ -133,6 +141,8 @@ def camera(loc, doel, lens=50):
     d = mathutils.Vector((doel[0] - loc[0], doel[1] - loc[1], doel[2] - loc[2]))
     cam.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
     bpy.context.scene.camera = cam
+    CAM = (cam, doel)
+    return cam
 
 
 def vloer(kleur, z=0.0, metallic=0.2, rough=0.5):
@@ -184,6 +194,7 @@ def petals_verstrooid(aantal, m_bloem, x0, x1, y0, y1, z0, z1, rmin=0.03, rmax=0
         p.rotation_euler = (rng.uniform(0, 3), rng.uniform(0, 3), rng.uniform(0, 3))
         p.scale = (1.0, 0.7, 1.0)
         geef(p, m_bloem)
+        PETALS.append(p)
 
 
 # ================= SHOTS =================
@@ -233,7 +244,7 @@ elif SHOT == "stoom":
         import_obj("sw_brass_casing", (i * 1.08 + 5.0, 2.2, 0.54), doel_r=1.05)
     # ventilator-front naar de camera (y=-2.2)
     import_obj("sw_bellows_fan_casing", (0.2, -2.2, 1.6), doel_r=2.3, rot=(0, 0, -math.pi / 2))
-    import_obj("sw_bellows_fan_rotor", (0.2, -1.2, 1.6), doel_r=2.2, rot=(0, 0, -math.pi / 2))
+    ROTOR = import_obj("sw_bellows_fan_rotor", (0.2, -1.2, 1.6), doel_r=2.2, rot=(0, 0, -math.pi / 2))
     ketel = ops(bpy.ops.mesh.primitive_cylinder_add, vertices=48, radius=0.85, depth=1.7, location=(3.0, -0.6, 0.85))
     geef(ketel, mate("Koper", srgb("b57a3c"), 1.0, 0.35))
     deksel = ops(bpy.ops.mesh.primitive_cylinder_add, vertices=48, radius=0.5, depth=0.18, location=(3.0, -0.6, 1.78))
@@ -246,6 +257,7 @@ elif SHOT == "stoom":
                 location=(3.62 + rng.uniform(-0.1, 0.15), -0.6 + rng.uniform(-0.15, 0.1), 3.0 + i * 0.34))
         geef(s, m_stoom)
         s.scale = (1.0, 0.9, 0.8)
+        STEEMS.append(s)
     lamp(900, (1.0, 0.9, 0.72), 3.0, (0.5, -7.5, 4.6), (0.5, 0.4, 1.2))
     lamp(1500, (0.5, 0.66, 1.0), 2.6, (-7.0, 4.5, 3.6), (0.4, 1.0, 1.4))
     lamp(260, (1.0, 0.72, 0.38), 1.2, (3.2, -2.4, 2.8), (3.0, -0.6, 1.4))
@@ -282,6 +294,7 @@ elif SHOT == "kerker":
         oog = ops(bpy.ops.mesh.primitive_uv_sphere_add, segments=10, ring_count=8, radius=0.055,
                   location=(-2.4 + off, 1.92, 3.25))
         geef(oog, m_ogen)
+        OGEN.append(oog)
     for (mx, my, mr) in ((1.9, 0.8, 1.1), (3.1, -0.2, 0.75)):
         bult = ops(bpy.ops.mesh.primitive_uv_sphere_add, segments=16, ring_count=10, radius=mr, location=(mx, my, mr * 0.45))
         bult.scale = (1.25, 0.9, 0.55)
@@ -290,10 +303,12 @@ elif SHOT == "kerker":
             oog = ops(bpy.ops.mesh.primitive_uv_sphere_add, segments=10, ring_count=8, radius=0.05,
                       location=(mx + off, my - mr * 0.78, mr * 0.62))
             geef(oog, m_ogen)
+            OGEN.append(oog)
     m_gloed = mate("Gloed", srgb("ffd27a"), 0.0, 0.4, emissie=(1.0, 0.74, 0.3), sterkte=9)
     for (x, y, z) in ((1.0, -0.6, 2.0), (2.6, 0.0, 2.5), (1.8, 1.1, 1.7), (-2.2, 1.4, 2.8)):
         l = ops(bpy.ops.mesh.primitive_ico_sphere_add, subdivisions=2, radius=0.15, location=(x, y, z))
         geef(l, m_gloed)
+        ORBES.append(l)
     lamp(240, (1.0, 0.8, 0.55), 1.6, (1.6, -2.8, 3.2), (1.6, 0.4, 0.8))
     lamp(620, (0.45, 0.6, 1.0), 2.2, (-5.0, -1.5, 4.0), (-2.8, 2.6, 1.4))
     camera((0.6, -7.2, 2.3), (1.0, 0.8, 0.9), lens=46)
@@ -313,9 +328,10 @@ elif SHOT == "lucht":
         geef(b, m_rots)
     gras = ops(bpy.ops.mesh.primitive_cylinder_add, vertices=48, radius=3.2, depth=0.4, location=(0, 0, 0.05))
     geef(gras, mate("Gras", srgb("3f5d3a"), 0.0, 0.8))
-    import_obj("em_zeppelin_dragon", (4.4, 2.6, 5.4), doel_r=6.8,
-               rot=(math.radians(-8), math.radians(12), math.radians(38)))
-    import_obj("em_airship_ghast", (-4.6, 5.2, 7.6), doel_r=5.5, rot=(0, 0, math.radians(-125)))
+    zp = import_obj("em_zeppelin_dragon", (4.4, 2.6, 5.4), doel_r=6.8,
+                    rot=(math.radians(-8), math.radians(12), math.radians(38)))
+    gh = import_obj("em_airship_ghast", (-4.6, 5.2, 7.6), doel_r=5.5, rot=(0, 0, math.radians(-125)))
+    HEREN.extend([(zp, (0.9, 0.5, 0.05)), (gh, (0.45, 0.3, 0.02))])   # koers (m/s-achtig)
     lamp(2600, (1.0, 0.7, 0.5), 7.0, (-10.0, -18.0, 10.0), (0, 0, 3.0))
     lamp(900, (1.0, 0.75, 0.55), 4.0, (-7.0, -5.0, 6.5), (3.0, 1.4, 4.4))
     lamp(700, (0.85, 0.6, 0.9), 5.0, (14.0, 8.0, 12.0), (3.0, 1.0, 4.5))
