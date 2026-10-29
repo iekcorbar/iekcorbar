@@ -58,7 +58,31 @@ final class AfkCinemaListener implements Listener {
     void opInteractie(PlayerInteractEvent e) { actief(e.getPlayer()); }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void opCommando(PlayerCommandPreprocessEvent e) { actief(e.getPlayer()); }
+    void opCommando(PlayerCommandPreprocessEvent e) {
+        Player p = e.getPlayer();
+        String msg = e.getMessage().toLowerCase(java.util.Locale.ROOT);
+        // /afk (CMI) = bewust even weg: bioscoop op pauze tot de speler terugkomt
+        String[] delen = msg.split("\\s+", 2);
+        String kop = delen[0];
+        boolean cmiAfk = kop.equals("/afk")
+                || (kop.equals("/cmi") && delen.length > 1 && delen[1].startsWith("afk"));
+        if (cmiAfk) { viaAfkCommand(p); return; }
+        actief(p);
+    }
+
+    void viaAfkCommand(Player p) {
+        CineSession s = sessie(p);
+        s.markeerActief();                       // typen is altijd activiteit
+        boolean nuAfwzigend = !s.cinePaused;
+        s.cinePaused = nuAfwzigend;
+        if (nuAfwzigend) {
+            if (s.filmLoopt) stopAlles(s);       // draait er toevallig een film: uit
+            s.afk = false;
+            p.sendMessage("§8[§6Cinema§8] §7cinema paused while you're /afk");
+        } else {
+            p.sendMessage("§8[§6Cinema§8] §7cinema resumed");
+        }
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     void opSchade(EntityDamageEvent e) {
@@ -74,6 +98,7 @@ final class AfkCinemaListener implements Listener {
         CineSession s = sessie(p);
         boolean wasAfk = s.afk;
         s.markeerActief();
+        s.cinePaused = false;                        // elke input beëindigt ook de /afk-pauze
         if (s.modus == CineSession.Modus.OPNAME) return;   // opnemer mag vrij vliegen
         if (s.filmLoopt) stopAlles(s);
         if (wasAfk && plugin.broadcastAfk()) {
@@ -92,7 +117,16 @@ final class AfkCinemaListener implements Listener {
         CineSession s = sessies.get(p.getUniqueId());
         if (s == null) return;
         if (s.modus == CineSession.Modus.OPNAME) { s.markeerActief(); return; }
-        if (!s.filmLoopt) return;
+        if (!s.filmLoopt) {
+            // puur rondlopen is ook activiteit — anders zou de wandelaar gefilmd worden
+            Location naar0 = e.getTo();
+            if (naar0 == null) return;
+            if (naar0.distanceSquared(e.getFrom()) > 0.004) {
+                s.markeerActief();
+                s.cinePaused = false;                // CMI laat /afk ook los bij bewegen
+            }
+            return;
+        }
         Location naar = e.getTo();
         if (naar == null) return;
         // onszelf aan het teleporteren? cameraLoc is wat wij zojuist stuurden
@@ -206,7 +240,7 @@ final class AfkCinemaListener implements Listener {
             if (!p.isOnline()) { sessies.remove(p.getUniqueId()); continue; }
             if (!s.filmLoopt) {
                 if (s.modus == CineSession.Modus.OPNAME) continue;   // opnemer is zelf de camera
-                if (!s.afk && !s.hasMovedRecent(afkSeconden()) && s.cineToegelaten && !p.isDead()) {
+                if (!s.afk && !s.hasMovedRecent(afkSeconden()) && s.cineToegelaten && !s.cinePaused && !p.isDead()) {
                     s.afk = true;
                     startAfkFilm(p, s);
                 }

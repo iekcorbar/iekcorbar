@@ -38,6 +38,7 @@ final class CineSession {
     float standYaw;                     // waar de stand-in naar kijkt (hoofd draait langzaam mee)
     int takeDay;                        // dag-teller voor de director's-cut-grap
     int takes;
+    boolean cinePaused;                 // /afk van CMI: bewuste afwezigheid → géén bioscoop
 
     // opname-modus (vrij kijken terwijl je waypoints zet)
     Pad opneemPad;

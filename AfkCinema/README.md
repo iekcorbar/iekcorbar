@@ -13,6 +13,7 @@ server-side: werkt op élke vanilla client.
 | `/cine afk <speler>` | (admin) draai om een andere, gewoon zichtbare speler |
 | `/cine stop` | terug naar je oude plek en gamemode |
 | `/cine automatisch` | je AFK-bioscoop uit/aan zetten |
+| `/afk` (CMI) | bewust AFK: de bioscoop pauzeert automatisch zolang je /afk staat |
 | `/cine menu` | ruimtelijk **stoompaneel**: zwevend messing bedieningspaneel vóór je neer (het "spatial GUI"-concept uit de client-MOD, maar dan server-side op elke vanilla client) |
 | `/cine opname <padnaam>` | vrij rondvliegen als camera-man (wordt automatisch aangemaakt als het pad nog niet bestaat) |
 
