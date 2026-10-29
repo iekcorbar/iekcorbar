@@ -1,11 +1,17 @@
-# AfkCinema — configuratie
+# AfkCinema — configuratie (26.2)
 
 afk-seconds: 180          # geen beweging/interactie = AFK na dit aantal seconden
-broadcast-afk: true       # aankondigen als iemand AFK wordt (camera's staan klaar)
+broadcast-afk: true       # "welkom terug"-titel als iemand terugkomt
 
 cine:
-  sequence-length: 5      # aantal shots per vooraf geplande sequentie
-  shot-min-seconds: 8     # shots worden langer dan /cine-stop verveelt
-  shot-max-seconds: 15
-  collision-lift: true    # camera optillen als een muur in de weg staat (i.p.v. skip)
   head-offset: 1.4        # doelhoogte: hoofd van het onderwerp
+  collision-lift: true    # camera optillen als een muur in de weg staat
+  orbit-snelheid: 0.0035  # radialen per tick rond het onderwerp (kleiner = rustiger)
+  orbit-straal: 5.0       # basisafstand van de draaibaan
+  orbit-adem: 1.6         # hoezeer de straal "ademt"
+  orbit-crane: 1.9        # hoezeer de hoogte schommelt
+  afk-shot: orbit         # wat de AFK-camera doet: orbit | pad:<padnaam>
+
+  pad-snelheid: 2.0       # blocks per seconde over een opgenomen pad
+  pad-lus: heen-en-terug  # heen-en-terug | lus (rond, vanaf 3 punten) | eenmalig
+  pad-easing: true        # zacht in/out per segment (Catmull-Rom blijft 'm zo soepel)

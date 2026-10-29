@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.iekcorbar</groupId>
   <artifactId>AfkCinema</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
   <packaging>jar</packaging>
   <name>AfkCinema</name>
   <description>AFK-detectie + server-gestuurde cinematische camera - inspired by the ji-afk-cinematic client mod, herimplemented voor Paper.</description>
@@ -24,6 +24,15 @@
       <artifactId>paper-api</artifactId>
       <version>${paper.api.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <!-- Citizens: alleen nodig om te compileren (stand-in-NPC's). Het jar zelf
+         zit NIET in git (*.jar). Lokaal: AfkCinema/lib/Citizens.jar. -->
+    <dependency>
+      <groupId>net.citizensnpcs</groupId>
+      <artifactId>citizens</artifactId>
+      <version>2.0.44</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/Citizens.jar</systemPath>
     </dependency>
   </dependencies>
 
