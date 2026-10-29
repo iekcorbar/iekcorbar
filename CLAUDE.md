@@ -678,7 +678,7 @@ Moving items, Karakuri, Trains, Oil, Tools; conversie-recepten verschijnen als t
 (Shaft nu alloy-ketting, brass 1:1), 00: /sw manual. Seed opnieuw: steamworks 59 pagina's.
 De polish-werkwijze staat vastgelegd als skill 'steamworks-polish' (~/.claude/skills/).
 mvn groen; Steamworks-0.3.18.jar in deploy/ (0.3.17 ervoor was nooit live - vervangen).
-Nog open op deze missie: Steamworks-Additions losse jar + interactieve handboek test in het spel.
+Nog open op deze missie: ~~Steamworks-Additions losse jar + interactieve handboek test in het spel~~ — BEIDE AFGEHANDELD (29-10): de Additions-losse-jar draait al als 0.1.2, en het Engineer's Manual is statisch afgeaudit (37/38 onderdelen in de hoofdstukken - alleen CUSTOM ontbreekt, bewust; change_page is 1-gebaseerd en de indexering in de code klopt; /zukan-multi-word-ok; engineers_manual FMM-model staat in plugins/FreeMinecraftModels/models/steampunk_iekcorbar/books/ op de server; 12 pagina's, ruim binnen het limiet). Rest = één minuut in het spel: /sw manual →klik Contents→klik hoofdstuk→klik [recipe]→Zukan open→plaats tandwiel→heropen→O'tje staat.
 
 ### Steamworks Additions 0.1.0 - de eerste losse addon (26-10 laat op de avond)
 
