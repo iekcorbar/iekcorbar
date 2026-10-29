@@ -1595,3 +1595,27 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Next move: feature-keuze met eigenaar (welke skills/perks blijven), dan
   plugin-standaard iekcorbar MMO (naam nog te kiezen), import uit de
   bestaande tabellen, races+trinkets als losse modules.
+
+### StaffHub 0.4.8 - bulk selectie + prullenbak met undo (29-10 avond)
+
+- Aanleiding: eigenaar zette 117 Steamworks-modellen (234 bestanden) per ongeluk
+  los in `Models/` i.p.v. `Models/Steamworks/` en vroeg om undo/bulk-select.
+- Nieuw in de hub: vinkjes per rij + ☑ "alles in deze map", toolbar met
+  "verplaats selectie" (klik bestemming in de boom; drag pakt nu de hele selectie;
+  de bestemmingsknop stond eerst alleen op root) en "selectie naar prullenbak".
+- Prullenbak = gewone root-map `Prullenbak` (wordt lazily aangemaakt door
+  GET/POST `/api/trash`); oud-thuis (parent+naam) comes in de `meta`-tabel onder
+  `trash:<id>` — restores werken dus ook na herstart. Undo-balk (groen, 15 s)
+  na elk prullen- en verplaats-actie; "definitief wissen/legen" pas na
+  bevestiging. `remove()` is nu non-destructief (bak + undo).
+- Lokaal bewezen: next build groen incl. /api/trash-route; check_i18n 242 toetsen
+  ×4 talen exactly balanced (twee per ongeluk dubbelgeplaatste blokjes in nl/en
+  zijn weer weg). Artefact: `deploy/staffhub-0.4.8.zip` (87 bestanden, 361 KB,
+  sha1 21055dd36f3049a141a628306224a286848245a1; kopie ook op de VPS:
+  /root/staffhub-0.4.8.zip) + TE-DEPLOYEN punt 41.
+- Data-reparatie (opdracht "alle content moet kloppen", agent vocht uit): VACUUM
+  INTO-consistentiebackup `/app/data/staffhub-backup-20261029.db`, daarna één
+  UPDATE: 234 sw_bestanden parent 39→40 (Models/Steamworks was toen leeg).
+  Geverifieerd: 0 losse files meer in Models; de pagina 'oops' (id 280) en de
+  mappen Kitchen/Sakagura/Techcore zijn bewust níét aangeraakt.
+  Docker-deploy van de bron (unzip /opt + compose build) = moment van eigenaar.

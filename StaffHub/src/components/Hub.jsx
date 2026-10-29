@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Anchor, Folder, FolderPlus, FileText, File as FileIcon, Image as ImageIcon, Download, Trash2,
   Pencil, MoveRight, Search, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
-  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield,
+  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield, RotateCcw,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
@@ -33,6 +33,9 @@ export default function Hub({ me, onLogout }) {
   const [moveFrom, setMoveFrom] = useState(null);  // node die verplaatst wordt
   const [err, setErr] = useState('');
   const [archief, setArchief] = useState(null);     // {plan, file} van een zip-dry-run
+  const [aan, setAan] = useState(new Set());        // bulk-selectie: node-ids
+  const [ton, setTon] = useState({ id: null, items: [] });   // prullenbak (id + inhoud met herkomst)
+  const [laatste, setLaatste] = useState(null);     // {tekst, herstel:fn} voor de undo-balk
   const upRef = useRef();
 
   const load = useCallback(async (pid) => {
@@ -43,6 +46,39 @@ export default function Hub({ me, onLogout }) {
     } catch (e) { setErr(t('err.load') + ': ' + e.message); }
   }, [t]);
   useEffect(() => { load(parent); }, [parent, load]);
+
+  // ---------- prullenbak + bulk-selectie ----------
+  async function verversTon() {
+    try { const j = await (await fetch('/api/trash')).json(); if (j && j.id) setTon({ id: j.id, items: j.items || [] }); } catch { }
+  }
+  useEffect(() => { verversTon(); }, []);                 // map bestaat nog niet? GET maakt 'm
+  useEffect(() => { setAan(new Set()); }, [parent]);      // andere map = schone lei voor de selectie
+  const isTon = parent != null && parent === ton.id;
+  function toggleSel(id) { const s = new Set(aan); if (s.has(id)) s.delete(id); else s.add(id); setAan(s); }
+  function allesSel() {
+    const s = new Set(aan);
+    const alles = kids.length > 0 && kids.every((k) => s.has(k.id));
+    for (const k of kids) { if (alles) s.delete(k.id); else s.add(k.id); }
+    setAan(s);
+  }
+  function laatUndo(l) { setLaatste(l); setTimeout(() => setLaatste((v) => (v === l ? null : v)), 15000); }
+  async function trashActie(actie, ids) {
+    try {
+      const j = await jsend('/api/trash', 'POST', { actie, ids });
+      setAan(new Set());
+      await refresh(); await verversTon();
+      return j;
+    } catch (e) { setErr(e.message); return null; }
+  }
+  async function prullen(ids) {
+    if (!ids.length) return;
+    const j = await trashActie('prullen', ids);
+    if (j?.gedaan) laatUndo({ tekst: t('msg.prull', { n: j.gedaan }), herstel: () => trashActie('herstel', ids) });
+  }
+  async function legeTon() {
+    if (!window.confirm(t('confirm.lege'))) return;
+    await trashActie('legenen', []);
+  }
 
   // Gedeelde link: ?open=<id> opent één handleiding direct, ook voor iemand die
   // net inlogt en geen idee heeft in welke map iets staat. Vóór dit stukje was
@@ -193,11 +229,28 @@ export default function Hub({ me, onLogout }) {
     try { await jsend('/api/nodes/' + n.id, 'PATCH', { vis: next }); await refresh(); } catch (e) { setErr(e.message); }
   }
   async function remove(n) {
-    if (!window.confirm(t(n.type === 'folder' ? 'confirm.del_folder' : 'confirm.del', { name: n.name }))) return;
-    try { await jsend('/api/nodes/' + n.id, 'DELETE'); await refresh(); if (sel?.id === n.id) setSel(null); } catch (e) { setErr(e.message); }
+    // Uit de prullenbak = echt weg (onomkeerbaar, dus mét bevestiging).
+    // Elders = naar de prullenbak: altijd terug te draaien via de undo-balk.
+    if (isTon) {
+      if (!window.confirm(t('confirm.purge', { name: n.name }))) return;
+      try { await jsend('/api/nodes/' + n.id, 'DELETE'); await refresh(); await verversTon(); if (sel?.id === n.id) setSel(null); } catch (e) { setErr(e.message); }
+      return;
+    }
+    await prullen([n.id]);
   }
   async function moveTo(targetId) {
-    try { await jsend('/api/nodes/' + moveFrom.id, 'PATCH', { parent: targetId }); setMoveFrom(null); await refresh(); } catch (e) { setErr(e.message); }
+    const ids = (moveFrom.ids && moveFrom.ids.length) ? moveFrom.ids : [moveFrom.id];
+    const bron = ids.map((id) => { const k = kids.find((x) => x.id === id); return { id, van: k ? k.parent : null }; });
+    let ok = 0;
+    for (const b of bron) {
+      try { await jsend('/api/nodes/' + b.id, 'PATCH', { parent: targetId }); ok++; }
+      catch (e) { setErr(e.message); }
+    }
+    setMoveFrom(null); setAan(new Set()); await refresh();
+    if (ok) laatUndo({ tekst: t('msg.verpl', { n: ok }), herstel: async () => {
+      for (const b of bron) { try { await jsend('/api/nodes/' + b.id, 'PATCH', { parent: b.van }); } catch { } }
+      await refresh();
+    } });
   }
 
   // Slepen-and-neerzetten: een node pakken en in een map lostlaten. Het oude
@@ -209,8 +262,10 @@ export default function Hub({ me, onLogout }) {
     const node = sleepNode;
     setSleepNode(null); setSleepOver(null);
     if (!node || node.id === mapId) return;           // in zijn eigen map laten: doet niets
-    try { await jsend('/api/nodes/' + node.id, 'PATCH', { parent: mapId }); await refresh(); }
-    catch (e) { setErr(e.message); }                  // cyclus/rechten: server meldt het netjes
+    const pak = aan.has(node.id) && aan.size > 1 ? [...aan].filter((id) => id !== mapId) : [node.id];
+    for (const id of pak) { try { await jsend('/api/nodes/' + id, 'PATCH', { parent: mapId }); } catch (e) { setErr(e.message); } }
+    setAan(new Set());
+    await refresh();                                  // cyclus/rechten: server meldt het netjes
   }
 
   // ---------- zoeken ----------
@@ -237,8 +292,8 @@ export default function Hub({ me, onLogout }) {
           onDragOver={(e) => { if (sleepNode && sleepNode.id !== n.id) { e.preventDefault(); e.stopPropagation(); setSleepOver(n.id); } }}
           onDragLeave={() => setSleepOver((v) => (v === n.id ? null : v))}
           onDrop={(e) => { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); }}
-          className={`flex items-center gap-1 text-[12px] hover:bg-white/5 rounded px-1 cursor-pointer ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/20' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`} style={{ paddingLeft: depth * 12 }}
-          onClick={() => { setParent(n.id); setSel(null); }} onDoubleClick={() => toggleDir(n.id)}>
+          className={`flex items-center gap-1 text-[12px] hover:bg-white/5 rounded px-1 cursor-pointer ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/20' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''} ${moveFrom ? 'outline outline-1 outline-dashed outline-copper/40' : ''}`} style={{ paddingLeft: depth * 12 }}
+          onClick={() => { if (moveFrom) { moveTo(n.id); return; } setParent(n.id); setSel(null); }} onDoubleClick={() => toggleDir(n.id)}>
           <button onClick={(e) => { e.stopPropagation(); toggleDir(n.id); }} className="w-4 text-parch/40">{open ? '▾' : '▸'}</button>
           <Folder className="size-3.5 text-gold/70 shrink-0" />
           <span className="truncate">{n.name}</span>
@@ -292,6 +347,14 @@ export default function Hub({ me, onLogout }) {
 
       {err && <div className="bg-red-900/40 text-red-100 text-xs px-4 py-1.5 flex items-center gap-2"><span>{err}</span><button onClick={() => setErr('')}><X className="size-3.5" /></button></div>}
 
+      {laatste && (
+        <div className="bg-emerald-900/40 text-emerald-100 text-xs px-4 py-1.5 flex items-center gap-3">
+          <span>{laatste.tekst}</span>
+          <button className="font-bold underline underline-offset-2 hover:text-white" onClick={async () => { const h = laatste.herstel; setLaatste(null); await h(); await verversTon(); }}>{t('undo.btn')}</button>
+          <button className="ml-auto" onClick={() => setLaatste(null)}><X className="size-3.5" /></button>
+        </div>
+      )}
+
       <div className="flex-1 grid grid-cols-[230px_1fr] md:grid-cols-[250px_1fr_400px] overflow-hidden">
         {/* boom */}
         <nav className="border-r border-bronze/20 bg-black/20 p-2 overflow-auto">
@@ -317,9 +380,23 @@ export default function Hub({ me, onLogout }) {
               <button onClick={newPage} className="flex items-center gap-1 text-xs bg-white/5 border border-bronze/30 rounded-lg px-2.5 py-1.5 hover:bg-white/10"><FileText className="size-3.5" /> {t('btn.page')}</button>
               <button onClick={() => upRef.current?.click()} className="flex items-center gap-1 text-xs bg-gold/90 text-ink rounded-lg px-2.5 py-1.5 font-bold hover:bg-gold"><Upload className="size-3.5" /> {t('btn.upload')}</button>
               <input ref={upRef} type="file" multiple hidden onChange={onPick} />
+              {moveFrom && <button onClick={() => moveTo(parent)} className="flex items-center gap-1 text-xs bg-copper text-ink rounded-lg px-2.5 py-1.5 font-bold hover:brightness-110">{t('nav.here')}</button>}
+              {isTon && kids.length > 0 && <button onClick={legeTon} className="flex items-center gap-1 text-xs bg-white/5 border border-red-300/40 text-red-200/80 rounded-lg px-2.5 py-1.5 hover:bg-red-900/30"><Trash2 className="size-3.5" /> {t('btn.lege')}</button>}
               <button onClick={refresh} className="p-1.5 rounded hover:bg-white/10" title={t('tip.refresh')}><RefreshCw className="size-4" /></button>
             </div>
           </div>
+          {aan.size > 0 && (
+            <div className="flex items-center gap-2 flex-wrap mb-2 px-2.5 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-xs">
+              <b className="text-gold">{t('sel.n', { n: aan.size })}</b>
+              <button className="text-parch/60 hover:text-parch underline underline-offset-2" onClick={() => setAan(new Set())}>{t('sel.geen')}</button>
+              <span className="flex-1" />
+              <button onClick={() => setMoveFrom({ ids: [...aan], name: t('sel.n', { n: aan.size }) })} className="flex items-center gap-1 rounded-lg border border-bronze/40 px-2 py-1 hover:border-gold/60"><MoveRight className="size-3.5" /> {t('btn.moveSel')}</button>
+              {isTon
+                ? <button onClick={async () => { const j = await trashActie('herstel', [...aan]); if (j?.mislukt) setErr(t('msg.herstel-fout', { n: j.mislukt })); }} className="flex items-center gap-1 rounded-lg border border-bronze/40 px-2 py-1 hover:border-gold/60"><RotateCcw className="size-3.5" /> {t('btn.herstelSel')}</button>
+                : <button onClick={() => prullen([...aan])} className="flex items-center gap-1 rounded-lg border border-red-300/40 text-red-200/80 px-2 py-1 hover:bg-red-900/30"><Trash2 className="size-3.5" /> {t('btn.trashSel')}</button>}
+              {isTon && <button onClick={async () => { if (!window.confirm(t('confirm.purgeSel', { n: aan.size }))) return; for (const id of [...aan]) { try { await jsend('/api/nodes/' + id, 'DELETE'); } catch { } } setAan(new Set()); await refresh(); await verversTon(); }} className="flex items-center gap-1 rounded-lg border border-red-300/40 text-red-300 px-2 py-1 hover:bg-red-900/40"><X className="size-3.5" /> {t('btn.purgeSel')}</button>}
+            </div>
+          )}
           <div
             onDragOver={(e) => e.preventDefault()} onDrop={onDrop}
             className="rounded-xl border border-dashed border-bronze/25 min-h-[60vh] p-1">
@@ -327,6 +404,7 @@ export default function Hub({ me, onLogout }) {
             <table className="w-full text-[13px]">
               <thead>
                 <tr className="text-[10px] uppercase tracking-wider text-parch/40">
+                  <th className="w-6 pl-2 py-1.5"><button title={t('tip.selectAll')} onClick={allesSel} className="text-[13px] leading-none text-parch/50 hover:text-gold">{kids.length > 0 && kids.every((k) => aan.has(k.id)) ? '☑' : '☐'}</button></th>
                   <th className="text-left font-semibold py-1.5 pl-2"></th>
                   <th className="text-left font-semibold py-1.5">{t('why.naam')}</th>
                   <th className="text-right font-semibold py-1.5 w-20">{t('col.grootte')}</th>
@@ -346,8 +424,11 @@ export default function Hub({ me, onLogout }) {
                       onDrop={(e) => { if (n.type === 'folder') { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); } }}
                       className={`group cursor-pointer hover:bg-white/5 ${sel?.id === n.id ? 'bg-gold/10' : ''} ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/15' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`}
                       onClick={() => setSel(n)} onDoubleClick={() => n.type === 'folder' && setParent(n.id)}>
-                      <td className="py-2 pl-2 w-6"><I className="size-4 text-parch/55" /></td>
-                      <td className="py-2"><span className="truncate">{n.name}</span> {visBadge(n)}</td>
+                      <td className="py-2 pl-2 w-6" onClick={(e) => e.stopPropagation()}>
+                        <button title={t('tip.sel')} onClick={() => toggleSel(n.id)} className={`size-3.5 rounded border inline-block align-middle ${aan.has(n.id) ? 'bg-gold border-gold' : 'border-parch/40 hover:border-gold'}`} />
+                      </td>
+                      <td className="py-2 w-6"><I className="size-4 text-parch/55" /></td>
+                      <td className="py-2"><span className="truncate">{n.name}</span>{isTon && ton.items.find((x) => x.id === n.id) && <span className="text-[10px] text-parch/40 ml-1.5">{t('trash.was', { pad: ton.items.find((x) => x.id === n.id).thuishaven })}</span>} {visBadge(n)}</td>
                       <td className="py-2 text-right text-parch/50 w-20 tabular-nums">{n.size != null ? fmt(n.size) : ''}</td>
                       <td className="py-2 text-right text-parch/40 w-36 hidden md:table-cell tabular-nums">{dt(n.updated)}</td>
                       <td className="py-2 pr-2 w-32 text-right opacity-0 group-hover:opacity-100">
@@ -355,7 +436,9 @@ export default function Hub({ me, onLogout }) {
                         <button title={t('tip.rename')} onClick={(e) => { e.stopPropagation(); rename(n); }} className="p-1 hover:text-gold inline-block"><Pencil className="size-3.5" /></button>
                         <button title={t('tip.vis')} onClick={(e) => { e.stopPropagation(); toggleVis(n); }} className="p-1 hover:text-gold inline-block">{n.vis === 'owner' ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}</button>
                         <button title={t('tip.move')} onClick={(e) => { e.stopPropagation(); setMoveFrom(n); }} className="p-1 hover:text-gold inline-block"><MoveRight className="size-3.5" /></button>
-                        <button title={t('tip.remove')} onClick={(e) => { e.stopPropagation(); remove(n); }} className="p-1 hover:text-red-300 inline-block"><Trash2 className="size-3.5" /></button>
+                        {isTon
+                          ? <button title={t('tip.restore')} onClick={(e) => { e.stopPropagation(); trashActie('herstel', [n.id]); }} className="p-1 hover:text-gold inline-block"><RotateCcw className="size-3.5" /></button>
+                          : <button title={t('tip.trash')} onClick={(e) => { e.stopPropagation(); remove(n); }} className="p-1 hover:text-red-300 inline-block"><Trash2 className="size-3.5" /></button>}
                       </td>
                     </tr>
                   );
