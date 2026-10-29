@@ -47,6 +47,17 @@ sessie ziet een dergelijke bug nooit meer live op de server — alleen lokaal, e
 Uitzonderingen (minecraft:-verwijzingen, MMOItems-export met custom model data) staan daar
 verklaard op de KNOWN-lijst.
 
+## Structuur (sinds 29-10)
+
+- **`PROJECTBORD.md`** (repo-root) is DE statusplek: één regel per werkblok met status
+  (🟢 live · 🟡 wacht-op-eigenaar · 🔵 agent-bezig · ⚪ wachtrij). De agent werkt hem bij
+  bij élke afronding; de eigenaar leest alleen daar.
+- **`deploy/`** bevat uitsluitend nog NIET-uitgeleverde artefacten + TE-DEPLOYEN.txt.
+  Render-/onderzoeksresten en snapshots gaan naar **`archief/`** (bij gitignored).
+- Afgerond = weg: bevestigde artefacten uit deploy/, dode blokken uit TE-DEPLOYEN,
+  volgens de skill `cleanup` (onder andere: UTF-8 teksten NOOIT via PowerShell
+  Get-Content/Set-Content herbouwen - altijd python of edit-tool).
+
 ## Server-pad (handig)
 
 - Pack + derden-packs: `plugins/ResourcePackManager/mixer/` op de server; na een upload:

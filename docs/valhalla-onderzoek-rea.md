@@ -3,7 +3,7 @@
 Opdracht van de eigenaar: ValhallaMMO met REA onderzoeken en de
 **core-features verbeteren in een EIGEN plugin**; Trinkets en Races worden
 **addons**. Vraag "zit deze data al in onze player database?" is beantwoord:
-ja (zie §2). Decompileerd bronmateriaal staat in `deploy/valhalla-decomp/`
+ja (zie §2). Decompileerd bronmateriaal staat in `archief/valhalla-decomp/`
 (gitignore-werk, lokaal alleen). Dit document is de ingang voor de volgende
 sessie.
 

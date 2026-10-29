@@ -93,7 +93,7 @@ tegen de echte WorldEdit-files). In-game laden:
 
 Generator: `scripts/make_trailer_schems.py` → `python -X utf8
 scripts\make_trailer_schems.py gen` (20 bestanden naar
-`deploy/trailer-schems/`). Maten zijn blok×blok×blok; `//paste -a` slaat
+`archief/trailer-schems/`). Maten zijn blok×blok×blok; `//paste -a` slaat
 lucht over.
 
 Alles andere: bestaand.

@@ -55,3 +55,6 @@ __pycache__/
 
 # NDA: getekende exemplaren zijn persoonsgegevens - nooit in git (alleen de blanco template staat in docs/nda/)
 docs/nda/signed/
+
+# archief/ = renders/onderzoek/snapshots die niet meer meedoen (nooit in git)
+archief/

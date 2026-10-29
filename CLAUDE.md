@@ -1539,8 +1539,8 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   headless in Blender 5.2 en bouwt de badge na (lak-schijf, messing rand + bogen,
   IEKCORBAR in Georgia, tandwiel met goud-oog, sakura-tak) - géén stoom/embers
   (eigenaarsbesluit 29-10: het merk zélf is de held). Modus `still` =
-  deploy/logo3d/logo3d-v5-final.png (goedgekeurd), modus `anim` = 96 frames zachte
-  swing-beweging, met ffmpeg gemonteerd tot deploy/logo3d/logo3d-v5-anim.mp4
+  archief/logo3d/logo3d-v5-final.png (goedgekeurd), modus `anim` = 96 frames zachte
+  swing-beweging, met ffmpeg gemonteerd tot archief/logo3d/logo3d-v5-anim.mp4
   (1536px, 24 fps, naadloze 4s-lus). Les 29-10: Blender `-b` relatief pad = relatief
   C:\ (altijd absolute uitdir meegven) en 5.2 gebruikt slotted actions
   (action.fcurves bestaat niet meer; fcurves zitten in layers→strips→channelbags).
@@ -1591,10 +1591,45 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Kernmotor = stat-source-stack (AccumulativeStatManager + ~dozens
   StatSource-klassen) - precies wat onze API moet worden.
 - Volledige bevindingen + reproduceer-specificatie: **docs/valhalla-onderzoek-rea.md**
-  (gedecompilde bronnen lokaal: deploy/valhalla-decomp/, gitignore-werk).
+  (gedecompilde bronnen lokaal: archief/valhalla-decomp/, gitignore-werk).
 - Next move: feature-keuze met eigenaar (welke skills/perks blijven), dan
   plugin-standaard iekcorbar MMO (naam nog te kiezen), import uit de
   bestaande tabellen, races+trinkets als losse modules.
+
+### Mailronde naar staff (29-10 avond, status)
+
+- Op verzoek van de eigenaar in chat opgesteld: een Italiaans bericht aan greyarts
+  (Marco) over StaffHub-gebruik (voor hem gebouwd), opendere communicatie en de
+  staff-verdeling. De eigenaar verstuurt het zelf als DM; observaties over ander
+  staff zijn bewust als één-op-één-vertrouwelijk gemarkeerd in de tekst.
+
+### Structuur: projectbord + grote opschontronde (29-10 avond)
+
+- Aanleiding eigenaar: "we moeten echt wat gestructureerder gaan werken" midden in
+  een sesión met drei lopende blokken (treinen, NDA, cleanup).
+- NIEUW: **PROJECTBORD.md** in de repo-root als enige statusplek per werkblok
+  (live / wacht-op-jou / bezig / wachtrij + open vragen). Regel: elk afrondend
+  blok raakt het board, detail blijft in dit werklog.
+- NIEUW: skill **cleanup** (C:\Users\baaye\.claude\skills\cleanup) met de vaste
+  einde-ronde: bevestigds weg uit deploy/ + blokken snijden uit TE-DEPLOYEN +
+  board bijwerken + git-ronde. Harde regels: twijfel=laten staan, persoons-
+  gegevens alleen in gitignore-gebied, VPS-nooit-zonder-goedkeuring, en de
+  PowerShell-les: Get-Content/Set-Content op UTF-8 bestanden makt molekbollen
+  (vanavond 3 doc's geamoeerd uit git nadat een padverwijzing zo was opgeslagen).
+- Grote schoning uitgevoerd: TE-DEPLOYEN 1300→993 regels (blokken 33-41 waren
+  allemaal live/vervangen - 8 STATE-blokken weg), 10 afgeleverde artefacten uit
+  deploy/ (eieren-jars, AfkCinema, SiteSync jar+yml, staffhub 0.4.7/0.4.9),
+  upload-2026-10-24/ (43 MB snapshot) weg, root-`resourcepack\` (verhaalde
+  324-bestands Relics-kopie, git-tracked → git rm) weg. deploy/ bevat nu alleen
+  nog: Steamworks-0.3.26.jar + pack-build15 + desktop-setup + wildlife-fmm-zip
+  + TE-DEPLOYEN.
+- Nieuwe indeling: `archief/` (gitignored) voor render-/onderzoeksresten:
+  logo3d, trailer, trailer-schems, valhalla-decomp; padverwijzingen in
+  CLAUDE.md + docs bijgewerkt. NDA-generator verhuisd van %TEMP% naar
+  docs/nda/signed/make_nda_pdfs.py (blijft buiten git: namen).
+- Open vragen op het board: iekcorbar_iekje_barend.zip (28-10 site-build, geen
+  punt - bewaren of weg?), desktop 0.1.3 uitgedeeld? (punt 25), punten ≤32
+  straks server-voor-server verifiëren en de lijst naar 0.
 
 ### Steamworks 0.3.26 - treinlijnen & dienstregeling + windmolen-woosh (29-10 avond)
 
