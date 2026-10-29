@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Mini-RCON-client (Source RCON protocol) voor het backup-script.
+
+Geen extra packets: socket + struct alleen. Het wachtwoord staat in
+server.properties; dit script leest het daar voor elk commando en print het
+NOOIT. RCON zit op het container-netwerk van de spelserver, dus het script
+vraagt het container-IP op via docker.
+
+Gebruik:  iekcorbar-rcon "save-all flush"
+"""
+import socket
+import struct
+import subprocess
+import sys
+
+VOLUME = "/var/lib/pterodactyl/volumes/06b962a3-cf1d-4606-a254-a62027f0983d"
+
+
+def rcon_settings():
+    pw, poort = "", None
+    with open(VOLUME + "/server.properties", encoding="utf-8", errors="replace") as f:
+        for regel in f:
+            if regel.startswith("rcon.password="):
+                pw = regel.strip().split("=", 1)[1]
+            elif regel.startswith("rcon.port="):
+                try:
+                    poort = int(regel.strip().split("=", 1)[1])
+                except ValueError:
+                    pass
+    return pw, poort or 25575
+
+
+def host_ip():
+    """Container-ip van de spelserver (RCON luistert dáár, niet op 127.0.0.1).
+
+    De container-ID wisselt na elke herstart van het panel, dus zoeken we
+    hem dynamisch op: welke draaiende container heeft onze volume-map gemount?
+    """
+    try:
+        draaiend = subprocess.run(["docker", "ps", "-q"],
+                                  capture_output=True, text=True, timeout=10)
+        for cid in draaiend.stdout.split():
+            inspect = subprocess.run(
+                ["docker", "inspect", cid], capture_output=True, text=True, timeout=10)
+            if VOLUME in inspect.stdout:
+                ip = subprocess.run(
+                    ["docker", "inspect", "-f",
+                     "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}", cid],
+                    capture_output=True, text=True, timeout=10).stdout.strip()
+                if ip:
+                    return ip
+    except Exception:
+        pass
+    return "127.0.0.1"
+
+
+def pakket(id, type, payload):
+    body = struct.pack("<ii", id, type) + payload.encode("utf-8") + b"\x00\x00"
+    return struct.pack("<i", len(body)) + body
+
+
+def lees(s):
+    kop = s.recv(4)
+    if len(kop) < 4:
+        return None, None
+    lengte = struct.unpack("<i", kop)[0]
+    data = b""
+    while len(data) < lengte:
+        chunk = s.recv(lengte - len(data))
+        if not chunk:
+            break
+        data += chunk
+    if len(data) < 8:
+        return None, None
+    id, type = struct.unpack("<ii", data[:8])
+    return id, data[8:].rstrip(b"\x00").decode("utf-8", "replace")
+
+
+def main():
+    commando = " ".join(sys.argv[1:])
+    if not commando:
+        sys.exit("geen commando")
+    pw, poort = rcon_settings()
+    if not pw:
+        sys.exit("geen rcon.password in server.properties")
+    met = socket.create_connection((host_ip(), poort), timeout=15)
+    try:
+        met.sendall(pakket(1, 3, pw))
+        id, _ = lees(met)
+        if id == -1:
+            sys.exit("rcon-login mislukt")
+        met.sendall(pakket(2, 2, commando))
+        id, antwoord = lees(met)
+        print(antwoord if antwoord else "(geen antwoord - commando uitgevoerd)")
+    finally:
+        met.close()
+
+
+if __name__ == "__main__":
+    main()
