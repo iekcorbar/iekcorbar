@@ -1630,6 +1630,29 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   build misser: Location is in Paper 26.x GEEN Vector meer - afstand nearestTank
   handmatig uitgemeten.
 
+### AfkCinema 0.3.0 - klikbare zwevende menu's (29-10 nachts)
+
+- Aanleiding: eigenaar speelde met de Cinematic-fabric-mod (3rd-person werkbank-
+  schermen) en merkte op: ONZE custom GUI's (Skript/CMI/plugin-menu's) kent die mod
+  niet - "deze feature moet in de cinema-plugin". Navraag: 3D-zwevend menu, allemaal,
+  zoals het was → ScreenPanels was er al (12 vakjes, niet klikbaar); deze ronde vol-
+  ledig gemaakt: MAX_VAKKEN 12→28, raster naar 5 kolommen, en elk niet-leeg vakje
+  krijgt een Interaction-klikker.
+- Klik-doorstuurt: linkklik → synthetic InventoryClickEvent op het echte view met de
+  rauwe slotindex (26.x-API: InventoryClickEvent(view, SlotType.CONTAINER, slot,
+  ClickType, InventoryAction) - constructor met cursor bestaat er niet meer, die
+  compileerde pas na corrigeren), sluipklik = SHIFT_LEFT + MOVE_TO_OTHER_INVENTORY.
+  Menu-logica (Skript/CMI/onze eigen) prikt er dus doorheen - het platte scherm blijft
+  gewoon open als vangnet. Alleen de eigenaar bedient zijn scherm; een ander dat
+  aanklikt krijgt een "nee"-toon.
+- Config: cine.screen-clicks (default true, bestaande server-configs blijven werken).
+- Notities uit de bouw: (1) SlotType.TOP bestaat niet meer → CONTAINER;
+  (2) veldtypenaam-index (indexen vs indexes) - javadoc-fout "menu-logICA" mee geprikt;
+  (3) TE-DEPLOYEN-blok knippen: de STATE-kop van het 42-blok per ongeluk meevervangen,
+  hersteld - de lijst is de status, die moet kloppen.
+- AfkCinema-0.3.0.jar: sha1 ff3c714a53a9c872045aeae6a92894b1e022db85 → deploy/ +
+  testbank E:\mctest26_3\plugins\ (0.2.5 daar verwijderd). TE-DEPLOYEN punt 44.
+
 ### Kerstdorp: demo-schem gesplitst (29-10 nachts)
 
 - Eigenaar dropte `rebirthchristmasdemo-e3070.schem` (Downloads): "dit moeten

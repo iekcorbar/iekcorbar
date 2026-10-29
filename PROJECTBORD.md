@@ -19,6 +19,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Steamworks 0.3.26 (treinlijnen + windmolen-woosh) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
 | iekcorbar-pack-build15.zip | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |
+| AfkCinema 0.3.0 (klikbare zwevende menu's) | TE-DEPLOYEN punt 44 | bij dezelfde herstart-batch; jar staat ook al in de testbank (E:) |
 | NDA ondertekenen | docs/nda/signed/ (3 pdf's) | zelf tekenen → per DM naar kooyer, iekjebr36, greyarts91; getekend terug in dezelfde map. (afriendlystomach resigned - PDF ingetrokken) |
 | Kerstdorp-delen klaar | deploy/kerst-town-schems/ (3 .schem) | in de server-WorldEdit-map droppen, dan net als de trailer: //schem load kerstdorp-01 + //paste -a (01=kerstboom, 02=rood huisje, 03=lantaarn/toren) |
 
