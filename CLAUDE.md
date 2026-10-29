@@ -1708,6 +1708,27 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
   (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
 
+### RAM-groei op de server: BluMap eraf + plafond op Java (30-10 nacht)
+
+- Eigenaar zag in het paneel RAM richting 16/20 GB (normaal 10-11), "sinds Earis
+  joinde". Oorzaak, in drieën: (1) de start-up geeft Java GEEN plafond
+  (-XX:MaxRAMPercentage=95 van de volle 21 GB) dus de heap kruipt omhoog en geeft
+  nooit terug; (2) BluMap rendert elke door spelers beladen chunk in het
+  serverproces mee - deze week 53.000 tegels (13 GB op schijf) terwijl niemand
+  naar de live map kijkt; (3) lange uptimes + /reload-resten. Earis zelf deed
+  niets verdachts: /rt ×16 + /back ×25 laadt alleen steeds nieuwe gebieden.
+- GEDAAN (agent, alleen-verplaatsen): BlueMap-jar uit plugins/ -> plugins/disabled/
+  (30-10 00:19). 13 GB mapdata laat staan tot schijfruimte nodig is.
+- VOOR EIGENAAR (paneel-klikken, TE-DEPLOYEN punten 47-48): STARTUP-line
+  `java -Xms8G -Xmx14G -Dterminal.jline=false -Dterminal.ansi=true -jar {{SERVER_JARFILE}}`
+  + Schedules: elke dag 05:00 commando `restart`.
+- Vondst terzijde: op de VPS draait een TWEEDE server-container
+  (c9bda5ec = "Fenneswereld", Forge, van nichtje; 2,7 GB, staat sinds
+  26-10 ledig maar 'paused'). Laat staan. NOTitie voor later: eerdere "hangend
+  proces"-analyse was deze container - die hangde níét, de MC-container sloot
+  netjes (Exited 0) omstreeks 00:04.
+- Les voor disk: 23 GB in de volume = bluemap 13 + world 7 + plugins 1.8.
+
 ### Receptboek-herstel + Additions 0.1.3 (29-10 nachts)
 
 - Klacht eigenaar: "vent grille recipe zit niet goed" én "craftbare recepten
