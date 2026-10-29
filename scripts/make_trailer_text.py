@@ -30,11 +30,12 @@ GOUD = (217, 160, 56, 255)
 ROZE = (242, 182, 200, 255)
 SCHADUW = (0, 0, 0, 190)
 
-centrer("iekcorbar.com", font(84), 556, SCHADUW)
+# PDF typte "://iekcorbar.com" - echt adres is play.iekcorbar.com (Replay-meta 29-10)
+centrer("play.iekcorbar.com", font(84), 556, SCHADUW)
 d.offset = (2, 2)
 centrer("", font(1), 0, (0, 0, 0, 0))  # offset-reset placeholder
 d.offset = (0, 0)
-centrer("iekcorbar.com", font(84), 552, GOUD)
+centrer("play.iekcorbar.com", font(84), 552, GOUD)
 centrer("discord.gg/G9P2khU7F4", font(40), 652, ROZE)
 
 img.save(uit)

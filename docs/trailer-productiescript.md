@@ -19,6 +19,29 @@ Benodigdheden (éénmalig, owner-acties in vet):
 
 ---
 
+## AUTORITATIEF SCRIPT (woordelijk uit `trailer script.pdf`, 29-10 uitgelezen)
+
+**Voice-over regels per acte** (cn = snijpunt-richting voor de montage):
+
+| acte | VO-regels (woorden als de mp3) | auditieve cues om op te snijden |
+|---|---|---|
+| A1 | "Time does not rush here. It flows... toward a new era. Welcome to a world where the ancient traditions of the Shogunate melt into the steady power of steam and copper." → "The old gods watch in silence as the machines awaken. Mechanical airships drift through the clouds. And beneath the falling pink petals of the Sakura, pioneers forge a future. But this land does not build itself." | start: lage strijkers + **één klokgelier**; midden: **klokwerk-tiktak** zet in |
+| A2 | "This is no world for spectators. This is a world for creators. Forge your own empire. Claim your land, and protect your sanctuaries. Master the ancient art of the Steam Brewery... and let your flavors rule the Villager Market." | koper akkoorden + **rumtige drum-slagen** per zin |
+| A3 | "But with great power... comes great threat. In the shadows of the mechanical cities lie elite dungeons. Dangerous depths... where only the strongest dare to tread." | **taiko-rollen** + koor "Ahhh-Ohhh" bij "dangerous depths" |
+| A4 | "Who will you be when the pressure rises? Declare your race. Choose your RPG job within the Adventure Guild. Unlock powerful, custom trinkets. Because in this challenging world... you do not survive alone." → "Fight for your allies. Protect what you have built. The pressure gauges are rising... the sky turns to rose and gold. Claim your destiny. Ascend in rank, and become the legend this realm needs." | maximum intensiteit; **"rose and gold" = colorgrade-shift** |
+| OUT | "Sakura and Steam. Your adventure awaits." | **abrupt stop**, dan enige galmende bel + stoom-guishe, daarna absolute stilte |
+
+**Muziekstijl (Suno-notitie uit de PDF, voor eventuele alternatieve track):**
+slow cinematic trailer, dark fantasy, deep bass drones, orchestral strings,
+shakuhachi, taiko accents, subtle ticking gears, noble spoken-word narration.
+
+**Eindkaart-correctie:** de PDF typt `://iekcorbar.com` (gerestaarteerd).
+Het echte adres is **`play.iekcorbar.com`** (bevestigd uit de Replay-opname-
+metadata: `serverName: play.iekcorbar.com`). Op de eindkaart dus:
+`play.iekcorbar.com` + `discord.gg/G9P2khU7F4`.
+
+---
+
 ## LOCATIES op de live-server (bestaand — niet bouwen, alleen filmen)
 
 | code | locatie | wat staat er | bron |
