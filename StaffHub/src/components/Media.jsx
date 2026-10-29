@@ -147,10 +147,11 @@ export function MediaPlayer({ kind, id, naam, lijst }) {
 }
 
 /**
- * 3D-kijker voor .glb/.gltf (three.js, lui geladen). Sleep draait, scroll zoomt,
- * animaties uit Blockbench/Blender spoelen vanzelf; knop voor automatisch
- * draaien en herframe. .bbmodel kan hier niet: dat is een Blockbench-PROJECT
- * (json), geen vorm - de hint zegt hoe je er wél naar kunt kijken.
+ * 3D-kijker voor .glb/.gltf én .bbmodel (three.js, lui geladen). Sleep draait,
+ * scroll zoomt, animaties uit Blockbench/Blender spoelen vanzelf; knop voor
+ * automatisch draaien en herframe. .bbmodel (Blockbench-PROJECT, json met cubes
+ * + base64-texturen) wordt door eigen builder naar meshes omgezet: statische
+ * pose, per textuur één mesh - voldoende om een model te beoordelen.
  */
 export function Model3D({ url, naam }) {
   const { t } = useLang();
@@ -161,7 +162,6 @@ export function Model3D({ url, naam }) {
   const [spin, setSpin] = useState(true);
 
   useEffect(() => {
-    if (String(naam || '').toLowerCase().endsWith('.bbmodel')) { setFout('bbmodel'); return; }
     let weg = false;
     const doos = doosRef.current;
     if (!doos) return undefined;
@@ -169,7 +169,6 @@ export function Model3D({ url, naam }) {
       try {
         const THREE = await import('three');
         const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
-        const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
         if (weg) return;
         const breed = () => doos.clientWidth || 380;
         const hoog = () => Math.max(240, Math.min(420, window.innerHeight * 0.45));
@@ -187,24 +186,30 @@ export function Model3D({ url, naam }) {
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         const mixer = { h: null };
-        const loader = new GLTFLoader();
-        await new Promise((res, rej) => loader.load(url, (g) => {
-          if (weg) return res();
-          const o = g.scene || g.scenes?.[0];
+        // bron: glb/gltf via de loader; .bbmodel via eigen builder (Blockbench-project)
+        let object;
+        if (String(naam || '').toLowerCase().endsWith('.bbmodel')) {
+          const { bouwBbmodel } = await import('@/lib/bbmodel');
+          object = bouwBbmodel(THREE, JSON.parse(await (await fetch(url)).text()));
+        } else {
+          const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
+          const g = await new Promise((res, rej) => new GLTFLoader().load(url, res, undefined, rej));
+          object = g.scene || g.scenes?.[0];
+          if (g.animations?.length) { mixer.h = new THREE.AnimationMixer(object); for (const a of g.animations) mixer.h.clipAction(a).play(); }
+        }
+        if (weg) { renderer.dispose(); return; }
+        if (object) {
           // centreer en schaalt naar een kast van ~2 eenheden - élke modelgrootte vult het scherm
-          const bb = new THREE.Box3().setFromObject(o);
+          const bb = new THREE.Box3().setFromObject(object);
           const om = bb.getSize(new THREE.Vector3());
           const f = 2 / Math.max(om.x, om.y, om.z, 1e-6);
-          o.scale.setScalar(f);
-          bb.setFromObject(o);
-          o.position.sub(bb.getCenter(new THREE.Vector3()));   // in het midden
-          bb.setFromObject(o);
-          o.position.y -= bb.min.y;                            // op het raster zetten
-          scene.add(o);
-          if (g.animations?.length) { mixer.h = new THREE.AnimationMixer(o); for (const a of g.animations) mixer.h.clipAction(a).play(); }
-          res();
-        }, undefined, rej));
-        if (weg) { renderer.dispose(); return; }
+          object.scale.setScalar(f);
+          bb.setFromObject(object);
+          object.position.sub(bb.getCenter(new THREE.Vector3()));   // in het midden
+          bb.setFromObject(object);
+          object.position.y -= bb.min.y;                            // op het raster zetten
+          scene.add(object);
+        }
         const hor = () => {
           if (weg) return;
           requestAnimationFrame(hor);

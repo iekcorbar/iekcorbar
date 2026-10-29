@@ -1596,6 +1596,24 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   plugin-standaard iekcorbar MMO (naam nog te kiezen), import uit de
   bestaande tabellen, races+trinkets als losse modules.
 
+### StaffHub 0.4.9 - bbmodel-3D-weergave + uitgerold op de VPS (29-10 avond)
+
+- Opdracht eigenaar ("deploy en build de nieuwe staffhub maar hoor" + "moet
+  .bbmodel files kunnen renderen"): de 0.4.8-werkblok (bulk-selectie,
+  prullenbak-undo, verplaats-klik - zie vorige sectie) kreeg een vierde
+  kracht vóór de uitrol en versie 0.4.9.
+- NIEUW: src/lib/bbmodel.js - bouwt van een Blockbench-project (.bbmodel:
+  cubes from/to + per-vlak UV + base64-PNG-texturen + elementrotatie) één
+  three.js-mesh per textuur; Model3D laadt hem op voor .bbmodel met dezelfde
+  viewer als .glb (draaien/zoomen/spinnen/hervenen).resolution-rescale,
+  Y-uitsnijding cull: DoubleSide + alphaTest, mipmaps uit (pixel-shot).
+- Uitgerold 29-10 19:2x: staffhub-0.4.9.zip (88 bestanden, 364 KB, sha1
+  d090f3122ebaf59045552e8dc16da687a6c09ddb) → /root → unzip /opt/staffhub →
+  docker compose build + up -d. Geverifieerd: container up, home HTTP 200,
+  /api/trash HTTP 401 (route leeft = nieuwe build draait). Twee parallelle
+  compose-pogingen gaven één naam-conflict (tweede Shell), het eindbeeld is
+  één draaiende nieuwe container; de 0.4.8-proefzip is van de VPS gehaald.
+
 ### StaffHub 0.4.8 - bulk selectie + prullenbak met undo (29-10 avond)
 
 - Aanleiding: eigenaar zette 117 Steamworks-modellen (234 bestanden) per ongeluk
