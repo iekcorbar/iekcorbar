@@ -1621,6 +1621,27 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   plugins/FreeMinecraftModels/models/steamworks/ erbij. Eerste build misser:
   Location is in Paper 26.x GEEN Vector meer - afstand in nearestTank handmatig.
 
+### Kerstdorp: demo-schem gesplitst (29-10 nachts)
+
+- Eigenaar dropte `rebirthchristmasdemo-e3070.schem` (Downloads): "dit moeten
+  allemaal losse schematics worden voor kerst town".
+- NIEUWE TOOL: scripts/split_schem.py - leest Sponge-v2 .schem (varint-blockdata,
+  eigen NBT-lezer met echte doubles), vindt gebouwen als 26-samenhangende brokken,
+  smelt marge-overlappende boxen, negeert doorlopende grondslappen (lagen >85% vol)
+  en neemt BlockEntities/Entities positioneel mee. Check: formaat van
+  make_trailer_schems.py's controleer().
+- Die "demo" bleek klein: 50x60x94 met 11k blokken = 2 lagen zwarte-betonvloer +
+  precies 3 bouwsels. Geleverd in deploy/kerst-town-schems/:
+  * kerstdorp-01 - grote kerstboom (berk+spar, gouden ster, end-rod glans) 16x29x16
+  * kerstdorp-02 - rode wolvilten-hut (wol/concrete/zandsteen) 12x12x12
+  * kerstdorp-03 - smalle lantaarn/toren (mangrove+quartz) 5x18x11
+- Bodem afgekapt (geen zwarte vloer meer mee in de files), marge 1 blok rondom.
+  In-game laden als destijds de trailer: //schem load + //paste -a.
+- Twee Python-lessen van vanavond: (1) de bekende `d[_rstr(f)] = _rread(f, t)`
+  regel - RHS wordt vóór de subscript-sleutel geëvalueerd, dus two-lines verplicht
+  (stond al als waarschuwing in make_trailer_schems, toch weer gemaakt); (2) split
+  naar bestaande tools pas echt testen via hun eigen check-commando.
+
 ### Mailronde naar staff (29-10 avond, status)
 
 - Op verzoek van de eigenaar in chat opgesteld: een Italiaans bericht aan greyarts
