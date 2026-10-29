@@ -267,10 +267,20 @@ if MODE == "anim":
     for fr, draai in ((1, -0.30), (48, 0.30), (96, -0.30)):
         badge.rotation_euler = (math.pi / 2, 0, base_z + draai)
         badge.keyframe_insert("rotation_euler", frame=fr)
-    for fc in badge.animation_data.action.fcurves:
+    # Blender 5.x heeft "slotted actions": action.fcurves bestaat niet meer,
+    # de fcurves zitten in action.layers[].strips[].channelbags[].
+    def alle_fcurves(act):
+        if hasattr(act, "fcurves"):
+            return list(act.fcurves)
+        fcs = []
+        for laag in getattr(act, "layers", []):
+            for strip in getattr(laag, "strips", []):
+                for cb in getattr(strip, "channelbags", []):
+                    fcs.extend(cb.fcurves)
+        return fcs
+    for fc in alle_fcurves(badge.animation_data.action):
         for kp in fc.keyframe_points:
             kp.interpolation = "BEZIER"
-            kp.easing = "EASE_IN_OUT"
     for i, ob in enumerate(stoom):
         voor = ob.location.z
         for fr, (s, z) in {1: (0.55, voor - 0.3), 72: (1.15, voor + 0.5), 97: (1.5, voor + 1.0)}.items():
