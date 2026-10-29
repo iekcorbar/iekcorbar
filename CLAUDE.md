@@ -1628,6 +1628,26 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   staff-verdeling. De eigenaar verstuurt het zelf als DM; observaties over ander
   staff zijn bewust als één-op-één-vertrouwelijk gemarkeerd in de tekst.
 
+### Cinematic Interaction — REA-analyse eerste passage (29-10 nachts)
+
+- Eigenaar gaf `Cinematic Interaction-Fabric-26.3-0.18.30.jar` (Downloads) met de
+  opdracht: in de wachtrij + met REA analyseren + zo goed mogelijk nabouwen als
+  plugin voor 26.2 én 26.3.
+- Jar naar archief/cinematic-interaction/ (binary, buiten git). REA: open_binary +
+  inspect_artifact (identity sha256 bb74ca7d…, zip-inventaris) — REA heeft geen
+  plain-Java-decompiler, dus bytecode-reader zelf geschreven (constant pool parser
+  in %TEMP%/cpool2.py) en klassenamen/mixins.json/fabric.mod.json gecombineerd.
+- Bevindingen: mod = complete server-zijde (19 StationKinds, Sessions, per-station
+  watchers met delta-detectie, TableCrafting-engine, AddonStations-API) + 17
+  versie-gebrandde payloads met actie-grammatica (BEGIN/CLICK/PAINT/CRAFT/LEAVE/
+  WINDOW/PLACE/SPREAD/QUICK/CHOOSE, velden pos;kind;action;index;button;shift;side)
+  + client-cinema (217 klassen, 26 camera/GUI-mixins) die we zó niet kunnen.
+- Conclusie (uitgewerkt in **docs/cinematic-onderzoek-rea.md**): session-model en
+  actie-grammatica 1-op-1 na te bouwen in Paper; presentatie als server-getrouw
+  zwevend paneel (AfkCinema-/cine-screen-leer) draait op elke vanilla client.
+  Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
+  (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
+
 ### Structuur: projectbord + grote opschontronde (29-10 avond)
 
 - Aanleiding eigenaar: "we moeten echt wat gestructureerder gaan werken" midden in
