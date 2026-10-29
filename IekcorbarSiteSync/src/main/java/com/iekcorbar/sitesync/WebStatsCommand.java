@@ -1,14 +1,25 @@
 package com.iekcorbar.sitesync;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+
+import java.io.File;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Map;
+import java.util.UUID;
 
 public class WebStatsCommand implements CommandExecutor {
 
@@ -37,15 +48,28 @@ public class WebStatsCommand implements CommandExecutor {
         boolean isOnline = offlinePlayer.isOnline();
         Player onlinePlayer = offlinePlayer.getPlayer();
 
+        // 1-3. Speeltijd, kills/deaths en gebroken blokken.
+        //
+        // 29-10 fix (Paper watchdog 15-20 s stall): CraftOfflinePlayer.getStatistic
+        // parsede het complete stats-bestand VAN ELKE ROEP opnieuw. DeMaterialen-loop
+        // hieronder maakte daarvan ~1600 hoofddraad-parsings per /webstats.
+        // Offline spelers lezen het bestand nu ONE keer direct van schijf; online
+        // spelers treffen een geladen counter aan en gaan gewoon via de API.
+        JsonObject stats = isOnline ? null : readStatisticsFile(offlinePlayer.getUniqueId());
+
         // 1. Playtime in hours (TICKS to HOURS: 20 ticks = 1 sec -> 72,000 ticks = 1 hour)
         int ticksPlayed = 0;
-        try {
-            ticksPlayed = offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE);
-        } catch (Exception e) {
+        if (stats != null) {
+            ticksPlayed = customInt(stats, "minecraft:play_time", "minecraft:play_one_minute");
+        } else {
             try {
-                // Fallback for older Spigot versions
-                ticksPlayed = offlinePlayer.getStatistic(Statistic.valueOf("PLAY_TIME"));
-            } catch (Exception ignored) {}
+                ticksPlayed = offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE);
+            } catch (Exception e) {
+                try {
+                    // Fallback for older Spigot versions
+                    ticksPlayed = offlinePlayer.getStatistic(Statistic.valueOf("PLAY_TIME"));
+                } catch (Exception ignored) {}
+            }
         }
         int playtimeHours = ticksPlayed / 72000;
 
@@ -53,19 +77,31 @@ public class WebStatsCommand implements CommandExecutor {
         int kills = 0;
         int deaths = 0;
         int mobKills = 0;
-        try { kills = offlinePlayer.getStatistic(Statistic.PLAYER_KILLS); } catch (Exception ignored) {}
-        try { deaths = offlinePlayer.getStatistic(Statistic.DEATHS); } catch (Exception ignored) {}
-        try { mobKills = offlinePlayer.getStatistic(Statistic.MOB_KILLS); } catch (Exception ignored) {}
+        if (stats != null) {
+            kills = customInt(stats, "minecraft:players_killed");
+            deaths = customInt(stats, "minecraft:deaths");
+            mobKills = customInt(stats, "minecraft:mob_kills");
+        } else {
+            try { kills = offlinePlayer.getStatistic(Statistic.PLAYER_KILLS); } catch (Exception ignored) {}
+            try { deaths = offlinePlayer.getStatistic(Statistic.DEATHS); } catch (Exception ignored) {}
+            try { mobKills = offlinePlayer.getStatistic(Statistic.MOB_KILLS); } catch (Exception ignored) {}
+        }
 
-        // 3. Blocks mined
-        int blocksMined = 0;
-        try {
-            for (Material mat : Material.values()) {
-                if (mat.isBlock()) {
-                    blocksMined += offlinePlayer.getStatistic(Statistic.MINE_BLOCK, mat);
+        // 3. Blocks mined: de som van de minecraft:mined-categorie.
+        long blocksMined = 0;
+        if (stats != null) {
+            blocksMined = sumCategory(stats, "minecraft:mined");
+        } else if (isOnline) {
+            // Online: de statistieken zitten al in het geheugen, dit is geen IO.
+            try {
+                for (Material mat : Material.values()) {
+                    if (mat.isBlock()) {
+                        blocksMined += onlinePlayer.getStatistic(Statistic.MINE_BLOCK, mat);
+                    }
                 }
-            }
-        } catch (Exception ignored) {}
+            } catch (Exception ignored) {}
+        }
+        // Offline zónder stats-bestand: de speler heeft niets geregistreerd -> 0 is correct.
 
         // 4. Economy balance (Vault integration)
         double balance = 0.0;
@@ -141,6 +177,60 @@ public class WebStatsCommand implements CommandExecutor {
 
         sender.sendMessage(json.toString());
         return true;
+    }
+
+    /**
+     * Leest het stats-JSON van één speler direct van schijf (één keer, geen
+     * per-Material-herschoteling). Eerst de hoofdwereld (waar Bukkit mee opstart),
+     * dan de rest - het speelse statsbestand staat normaliter daar.
+     */
+    private static JsonObject readStatisticsFile(UUID id) {
+        for (World w : Bukkit.getWorlds()) {
+            File f = new File(w.getWorldFolder(), "stats" + File.separator + id + ".json");
+            if (!f.isFile()) {
+                continue;
+            }
+            try (Reader r = Files.newBufferedReader(f.toPath(), StandardCharsets.UTF_8)) {
+                JsonElement root = JsonParser.parseReader(r);
+                if (root.isJsonObject() && root.getAsJsonObject().has("statistics")) {
+                    return root.getAsJsonObject().getAsJsonObject("statistics");
+                }
+            } catch (Exception ignored) {}
+            return null;
+        }
+        return null;
+    }
+
+    /** Waarde uit de minecraft:custom-categorie; meerdere mogelijke (oude/nieuwe) namen. */
+    private static int customInt(JsonObject stats, String... keys) {
+        JsonElement c = stats.get("minecraft:custom");
+        if (c == null || !c.isJsonObject()) {
+            return 0;
+        }
+        for (String k : keys) {
+            JsonElement v = c.getAsJsonObject().get(k);
+            if (v != null && v.isJsonPrimitive()) {
+                try {
+                    return v.getAsInt();
+                } catch (Exception ignored) {}
+            }
+        }
+        return 0;
+    }
+
+    /** De som van alle waarden in een categorie (bv. minecraft:mined = alle gebroken blokken). */
+    private static long sumCategory(JsonObject stats, String category) {
+        JsonElement c = stats.get(category);
+        if (c == null || !c.isJsonObject()) {
+            return 0;
+        }
+        long total = 0;
+        for (Map.Entry<String, JsonElement> e : c.getAsJsonObject().entrySet()) {
+            try {
+                total += e.getValue().getAsInt();
+            } catch (Exception ignored) {}
+        }
+        return total;
     }
 
     private String escapeJson(String input) {
