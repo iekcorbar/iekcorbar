@@ -156,7 +156,7 @@ Alles andere: bestaand.
 | tc | s | VO | SHOT |
 |---|---|---|---|
 | 3:35 | 4 | "Sakura and Steam." | **E1** zwart → **3D-logo** (onze bestaande sting) 2 s + tekst |
-| 3:39 | 5 | "Your adventure awaits." | **E2** `iekcorbar.com` + discord-link boven **gameplay-screenshot** (vage vignette) |
+| 3:39 | 5 | "Your adventure awaits." | **E2** `play.iekcorbar.com` (goud; PDF-typos gecorrigeerd, zie eindnoot) + discord-link boven de logo-sting |
 | 3:44 | 6 | — | **E3** fade zwart, stoom-guishe |
 
 ---
