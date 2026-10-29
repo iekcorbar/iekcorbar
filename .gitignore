@@ -52,3 +52,6 @@ deploy/
 !StaffHub/deploy/
 
 __pycache__/
+
+# NDA: getekende exemplaren zijn persoonsgegevens - nooit in git (alleen de blanco template staat in docs/nda/)
+docs/nda/signed/
