@@ -1,18 +1,18 @@
-# AfkCinema — configuratie (26.2)
+# AfkCinema — configuration
 
-afk-seconds: 180          # geen beweging/interactie = AFK na dit aantal seconden
-broadcast-afk: true       # "welkom terug"-titel als iemand terugkomt
+afk-seconds: 180          # no movement/interaction = AFK after this many seconds
+broadcast-afk: true       # "welcome back" title when a player returns
 
 cine:
-  head-offset: 1.4        # doelhoogte: hoofd van het onderwerp
-  menu-afstand: 4.0       # waar het stoompaneel verschijnt (blokken vóór je gezicht)
-  collision-lift: true    # camera optillen als een muur in de weg staat
-  orbit-snelheid: 0.0035  # radialen per tick rond het onderwerp (kleiner = rustiger)
-  orbit-straal: 5.0       # basisafstand van de draaibaan
-  orbit-adem: 1.6         # hoezeer de straal "ademt"
-  orbit-crane: 1.9        # hoezeer de hoogte schommelt
-  afk-shot: orbit         # wat de AFK-camera doet: orbit | pad:<padnaam>
+  head-offset: 1.4        # camera target height: the subject's head
+  menu-distance: 4.0      # where the floating steam panel appears (blocks in front of you)
+  collision-lift: true    # lift the camera when a wall is in the way
+  orbit-speed: 0.0035     # radians per tick around the subject (smaller = calmer)
+  orbit-radius: 5.0       # base distance of the orbit
+  orbit-breathe: 1.6      # how much the radius "breathes"
+  orbit-crane: 1.9        # how much the height drifts up and down
+  afk-shot: orbit         # what the AFK camera does: orbit | pad:<path name>
 
-  pad-snelheid: 2.0       # blocks per seconde over een opgenomen pad
-  pad-lus: heen-en-terug  # heen-en-terug | lus (rond, vanaf 3 punten) | eenmalig
-  pad-easing: true        # zacht in/out per segment (Catmull-Rom blijft 'm zo soepel)
+  pad-speed: 2.0          # blocks per second when playing a camera path
+  pad-loop: back-and-forth  # back-and-forth | loop (needs 3+ points) | once
+  pad-easing: true        # soft start/stop per segment (keeps the Catmull-Rom smooth)

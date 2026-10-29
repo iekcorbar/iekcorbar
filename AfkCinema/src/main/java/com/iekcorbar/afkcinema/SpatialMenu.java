@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  * Ruimtelijk bedieningspaneel in steampunk-stijl — het server-side antwoord op
  * de spatial-gui client-MOD: zwevende messing plaatjes (TextDisplay) met
  * onzichtbare klik-gebieden (Interaction) vóór de speler. Werkt op elke
- * vanilla client, zonder MOD.
+ * vanilla client, zonder MOD. Alle teksten Engels.
  *
  * Het paneel is een persoonlijke afstandsbediening: klikken bedient het paneel
  * van de EIGENAR (ieder mag aan iemands kraan draaien, net als in de machinekamer).
@@ -68,19 +68,20 @@ final class SpatialMenu implements Listener {
     void toggle(Player p) {
         if (menus.containsKey(p.getUniqueId())) {
             verwijder(p.getUniqueId());
-            p.sendMessage("§8[§ecinema§8] §7stoompaneel opgeruimd");
+            p.sendMessage("§8[§6Cinema§8] §7steam panel cleared");
             return;
         }
-        double afstand = Math.min(8.0, Math.max(2.0, plugin.getConfig().getDouble("cine.menu-afstand", 4.0)));
+        double afstand = Math.min(8.0, Math.max(2.0, plugin.getConfig().getDouble("cine.menu-distance", 4.0)));
         Location oog = p.getEyeLocation();
         Vector vooruit = oog.getDirection().clone().normalize();
         Location anker = oog.clone().add(vooruit.clone().multiply(afstand));
         Vector terug = vooruit.clone().multiply(-1);   // wijst van paneel terug naar de speler
         Menu m = new Menu(p.getUniqueId(), anker, terug);
-        if (!bouw(m, p)) { p.sendMessage("§c het paneel past hier niet — stap terug en probeer opnieuw"); return; }
+        if (!bouw(m, p)) { p.sendMessage("§cthe panel doesn't fit here — step back and try again"); return; }
         menus.put(p.getUniqueId(), m);
         p.playSound(anker, Sound.BLOCK_ANVIL_USE, 0.8f, 1.2f);
-        p.sendMessage("§8[§ecinema§8] §7stoompaneel gezet — klik met §erecht§7 op de messing knoppen (niet tijdens een draaiende film: dan ben je spectator en kun je niet klikken)");
+        p.sendMessage("§8[§6Cinema§8] §7steam panel placed — §eright-click§7 the brass buttons "
+            + "(not while a film is rolling: then you're a spectator and can't click)");
     }
 
     /** Elke 2 s: paneelteksten verversen (status, automaat-stand, nieuwe pads). */
@@ -129,20 +130,20 @@ final class SpatialMenu implements Listener {
         CineSession s = plugin.manager().sessie(p);
         r.add(new Rijdef("§6⚙ C I N E M A ⚙", null));
         if (s.filmLoopt) {
-            r.add(new Rijdef("§c▮ film draait", null));
-            r.add(new Rijdef("§e■ STOPPEN", q -> plugin.manager().stopAlles(plugin.manager().sessie(q))));
+            r.add(new Rijdef("§c▮ film rolling", null));
+            r.add(new Rijdef("§e■ STOP", q -> plugin.manager().stopAlles(plugin.manager().sessie(q))));
         } else if (s.modus == CineSession.Modus.OPNAME) {
             String pad = s.opneemPad == null ? "?" : s.opneemPad.naam();
-            r.add(new Rijdef("§e✎ opname '" + pad + "'", null));
-            r.add(new Rijdef("§e■ OPNAME BEËINDIGEN", q -> plugin.manager().stopAlles(plugin.manager().sessie(q))));
+            r.add(new Rijdef("§e✎ recording '" + pad + "'", null));
+            r.add(new Rijdef("§e■ END RECORDING", q -> plugin.manager().stopAlles(plugin.manager().sessie(q))));
         } else {
-            r.add(new Rijdef("§7○ ketel rustig", null));
-            r.add(new Rijdef("§a▶ FILM STARTEN", q -> {
+            r.add(new Rijdef("§7○ boiler idle", null));
+            r.add(new Rijdef("§a▶ START FILM", q -> {
                 CineSession t = plugin.manager().sessie(q);
                 if (!t.actiefFilmpje()) plugin.manager().startFilm(q, q);
             }));
         }
-        r.add(new Rijdef("§7⚙ afk-automaat: " + (s.cineToegelaten ? "§aAAN" : "§8UIT"),
+        r.add(new Rijdef("§7⚙ afk-auto: " + (s.cineToegelaten ? "§aON" : "§8OFF"),
             q -> { CineSession t = plugin.manager().sessie(q); t.cineToegelaten = !t.cineToegelaten; }));
         List<String> pads = plugin.pads().namen();
         for (int i = 0; i < Math.min(6, pads.size()); i++) {
@@ -152,7 +153,7 @@ final class SpatialMenu implements Listener {
                 if (pad != null && pad.punten().size() >= 2) plugin.manager().startPad(q, pad);
             }));
         }
-        if (pads.isEmpty()) r.add(new Rijdef("§8geen routes — /cine opname <naam>", null));
+        if (pads.isEmpty()) r.add(new Rijdef("§8no paths yet — /cine record <name>", null));
         r.add(new Rijdef("§8╙─────────────╜", null));
         return r;
     }
@@ -207,7 +208,7 @@ final class SpatialMenu implements Listener {
             return true;
         } catch (Throwable t) {
             wis(m);
-            plugin.getLogger().warning("stoompaneel bouwen mislukt: " + t);
+            plugin.getLogger().warning("steam panel build failed: " + t);
             return false;
         }
     }

@@ -3,17 +3,17 @@ version: '${project.version}'
 main: com.iekcorbar.afkcinema.AfkCinemaPlugin
 api-version: '26.2'
 author: iekcorbar
-description: 'AFK-bioscoop met stand-in + opneembare camerapaden (drone-shots), server-side.'
+description: 'AFK cinema: a camera orbits your character while you are away, plus recordable camera paths.'
 softdepend: [Citizens]
 commands:
   cine:
-    description: 'Bioscoop: /cine afk [speler] · stop · automatisch · menu · opname <pad> · pad <beheer> · herlaad'
-    usage: '/cine <afk|stop|automatisch|menu|opname|pad|herlaad>'
+    description: 'Cinema: /cine afk [player] · stop · auto · menu · record <path> · pad · reload'
+    usage: '/cine <afk|stop|auto|menu|record|pad|reload>'
     permission: afkcinema.cine
 permissions:
   afkcinema.cine:
     default: true
-    description: Zelf de cinema starten/stoppen en pads afspelen.
+    description: Start and stop your own cinema flight and play camera paths.
   afkcinema.admin:
     default: op
-    description: Andere spelers filmen, pads opnemen/wissen, herladen.
+    description: Film other players, record and delete camera paths, reload.

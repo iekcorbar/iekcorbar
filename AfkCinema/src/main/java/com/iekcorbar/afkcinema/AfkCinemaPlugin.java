@@ -40,12 +40,12 @@ public final class AfkCinemaPlugin extends JavaPlugin {
         }
         Bukkit.getScheduler().runTaskTimer(this, () -> { manager.tick(); menus.tick(); }, 20L, 1L);
         if (Bukkit.getPluginManager().getPlugin("Citizens") == null) {
-            getLogger().warning("Citizens ontbreekt: de stand-in valt weg — bij /cine afk "
-                + "zie je jezelf dan niet in beeld (wellen om de plek waar je stond).");
+            getLogger().warning("Citizens not found: no stand-in — at /cine afk the player "
+                + "will orbit an empty spot instead of their own character.");
         }
         getLogger().info("AfkCinema " + getDescription().getVersion()
-            + " aan — AFK na " + manager.afkSeconden() + "s, shot="
-            + getConfig().getString("cine.afk-shot", "orbit") + ", pads=" + pads.namen().size() + ".");
+            + " enabled — AFK after " + manager.afkSeconden() + "s, shot="
+            + getConfig().getString("cine.afk-shot", "orbit") + ", paths=" + pads.namen().size() + ".");
     }
 
     @Override
@@ -68,9 +68,9 @@ public final class AfkCinemaPlugin extends JavaPlugin {
 
     public boolean collisionLift() { return getConfig().getBoolean("cine.collision-lift", true); }
 
-    public double padSnelheid() { return getConfig().getDouble("cine.pad-snelheid", 2.0); }
+    public double padSnelheid() { return getConfig().getDouble("cine.pad-speed", 2.0); }
 
-    public String padLus() { return getConfig().getString("cine.pad-lus", "heen-en-terug").toLowerCase(); }
+    public String padLus() { return getConfig().getString("cine.pad-loop", "back-and-forth").toLowerCase(); }
 
     public boolean padEasing() { return getConfig().getBoolean("cine.pad-easing", true); }
 }

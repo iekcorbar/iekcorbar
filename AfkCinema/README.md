@@ -14,6 +14,12 @@ server-side: werkt op élke vanilla client.
 | `/cine stop` | terug naar je oude plek en gamemode |
 | `/cine automatisch` | je AFK-bioscoop uit/aan zetten |
 | `/cine menu` | ruimtelijk **stoompaneel**: zwevend messing bedieningspaneel vóór je neer (het "spatial GUI"-concept uit de client-MOD, maar dan server-side op elke vanilla client) |
+| `/cine opname <padnaam>` | vrij rondvliegen als camera-man (wordt automatisch aangemaakt als het pad nog niet bestaat) |
+
+**Taal:** alle speler-teksten zijn Engels (0.2.3). Commando-namen: Engels met
+Nederlandse aliasen (`auto`/`automatisch`, `record`/`opname`, `reload`/`herlaad`,
+`pad play`/`speel`, `pad remove`/`verwijder`, `pad clear`/`wis`, `pad list`/`lijst`).
+Config-sleutels Engels (`orbit-speed`, `pad-loop`, `menu-distance`, …).
 | `/cine opname <padnaam>` | vrij rondvliegen als camera-man (pad wordt gemaakt als het nog niet bestaat) |
 | `/cine pad add` | huidig standpunt + kijkrichting als waypoint toevoegen |
 | `/cine pad verwijder <nr> [pad]` | waypoint-nummer weg |

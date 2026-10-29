@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * /cine afk [speler] · stop · automatisch · opname <pad> · pad <beheer> · herlaad
+ * /cine afk [player] · stop · automatisch · menu · opname <pad> · pad <beheer> · herlaad
+ * Alle speler-teksten Engels; commando-namen blijven zoals ingeburgerd.
  */
 final class CineCommand implements CommandExecutor, TabCompleter {
 
@@ -26,31 +27,31 @@ final class CineCommand implements CommandExecutor, TabCompleter {
         switch (sub) {
             case "afk", "film" -> film(sender, args);
             case "stop" -> {
-                if (!(sender instanceof Player p)) { sender.sendMessage("alleen in game"); return true; }
+                if (!(sender instanceof Player p)) { sender.sendMessage("in game only"); return true; }
                 CineSession s = plugin.manager().sessie(p);
                 if (s.actiefFilmpje()) {
                     int punten = s.opneemPad == null ? 0 : s.opneemPad.punten().size();
                     plugin.manager().stopAlles(s);
-                    p.sendMessage("§e gestopt — je staat weer waar je was"
-                        + (punten > 0 ? " (" + punten + " punten opgenomen)" : ""));
-                } else p.sendMessage("niets gestopt");
+                    p.sendMessage("§estopped — you're back where you were"
+                        + (punten > 0 ? " (" + punten + " points recorded)" : ""));
+                } else p.sendMessage("nothing was running");
             }
-            case "automatisch" -> {
-                if (!(sender instanceof Player p)) { sender.sendMessage("alleen in game"); return true; }
+            case "auto", "automatisch" -> {
+                if (!(sender instanceof Player p)) { sender.sendMessage("in game only"); return true; }
                 CineSession s = plugin.manager().sessie(p);
                 s.cineToegelaten = !s.cineToegelaten;
-                p.sendMessage("§e afk-bioskoop: " + (s.cineToegelaten ? "AAN" : "UIT"));
+                p.sendMessage("§eafk cinema: " + (s.cineToegelaten ? "ON" : "OFF"));
             }
-            case "opname" -> opname(sender, args);
+            case "record", "opname" -> opname(sender, args);
             case "menu" -> {
-                if (!(sender instanceof Player p)) { sender.sendMessage("alleen in game"); return true; }
+                if (!(sender instanceof Player p)) { sender.sendMessage("in game only"); return true; }
                 plugin.menus().toggle(p);
             }
             case "pad" -> pad(sender, args);
-            case "herlaad" -> {
-                if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§c geen recht"); return true; }
+            case "reload", "herlaad" -> {
+                if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§cno permission"); return true; }
                 plugin.reloadAlles();
-                sender.sendMessage("§e config en pads herladen");
+                sender.sendMessage("§econfig and paths reloaded");
             }
             default -> help(sender);
         }
@@ -58,65 +59,65 @@ final class CineCommand implements CommandExecutor, TabCompleter {
     }
 
     private void film(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player p)) { sender.sendMessage("alleen in game"); return; }
+        if (!(sender instanceof Player p)) { sender.sendMessage("in game only"); return; }
         Player doel = p;
         if (args.length > 1) {
             if (!p.hasPermission("afkcinema.admin")) {
-                p.sendMessage("§c alleen met admin-rechten kun je een ander filmen"); return;
+                p.sendMessage("§cyou need admin rights to film someone else"); return;
             }
             Player ander = Bukkit.getPlayerExact(args[1]);
-            if (ander == null) { p.sendMessage("speler niet online: " + args[1]); return; }
+            if (ander == null) { p.sendMessage("player not online: " + args[1]); return; }
             doel = ander;
         }
         CineSession s = plugin.manager().sessie(p);
-        if (s.actiefFilmpje()) { p.sendMessage("§e er draait al iets — /cine stop eerst"); return; }
+        if (s.actiefFilmpje()) { p.sendMessage("§esomething is already rolling — /cine stop first"); return; }
         plugin.manager().startFilm(p, doel);
     }
 
     private void opname(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player p)) { sender.sendMessage("alleen in game"); return; }
-        if (!p.hasPermission("afkcinema.admin")) { p.sendMessage("§c geen recht"); return; }
+        if (!(sender instanceof Player p)) { sender.sendMessage("in game only"); return; }
+        if (!p.hasPermission("afkcinema.admin")) { p.sendMessage("§cno permission"); return; }
         CineSession s = plugin.manager().sessie(p);
         if (s.modus == CineSession.Modus.OPNAME) {
             int punten = s.opneemPad == null ? 0 : s.opneemPad.punten().size();
             plugin.manager().stopAlles(s);
-            p.sendMessage("§e opname uit — " + punten + " punten; vlieg ze na met /cine pad speel");
+            p.sendMessage("§erecording off — " + punten + " points saved; fly it with /cine pad play");
             return;
         }
-        if (args.length < 2) { p.sendMessage("gebruik: /cine opname <padnaam>  (bestaat het nog niet, dan maak ik 'm)"); return; }
+        if (args.length < 2) { p.sendMessage("usage: /cine record <path name>  (created if it doesn't exist yet)"); return; }
         Pad pad = plugin.pads().pad(args[1], true);
         plugin.manager().startOpname(p, pad);
         plugin.pads().opslaan();
     }
 
     private void pad(CommandSender sender, String[] args) {
-        if (args.length < 2) { sender.sendMessage("gebruik: /cine pad <add|verwijder|speel|info|wis|lijst>"); return; }
+        if (args.length < 2) { sender.sendMessage("usage: /cine pad <add|remove|play|info|clear|list>"); return; }
         String actie = args[1].toLowerCase(Locale.ROOT);
         Player p = sender instanceof Player pl ? pl : null;
         switch (actie) {
             case "add" -> {
-                if (p == null) { sender.sendMessage("alleen in game"); return; }
+                if (p == null) { sender.sendMessage("in game only"); return; }
                 CineSession s = plugin.manager().sessie(p);
                 Pad pad = s.opneemPad;
                 if (pad == null && args.length > 2) pad = plugin.pads().pad(args[2], true);
-                if (pad == null) { p.sendMessage("§c geen pad gekozen — /cine opname <naam> of /cine pad add <naam>"); return; }
+                if (pad == null) { p.sendMessage("§cno path selected - /cine record <name> or /cine pad add <name>"); return; }
                 pad.voegToe(p.getLocation());
                 plugin.pads().opslaan();
-                p.sendMessage("§8[§ecinema§8] §fpunt " + pad.punten().size() + " toegevoegd aan '" + pad.naam() + "'");
+                p.sendMessage("§8[§6Cinema§8] §fpoint " + pad.punten().size() + " added to '" + pad.naam() + "'");
             }
-            case "verwijder" -> {
-                if (args.length < 3) { sender.sendMessage("gebruik: /cine pad verwijder <nummer> [padnaam]"); return; }
+            case "remove", "verwijder" -> {
+                if (args.length < 3) { sender.sendMessage("usage: /cine pad remove <number> [path name]"); return; }
                 Pad pad = kiesPad(sender, args, 3);
                 if (pad == null) return;
                 try {
                     if (pad.verwijder(Integer.parseInt(args[2]))) {
                         plugin.pads().opslaan();
-                        sender.sendMessage("§e punt " + args[2] + " verwijderd — nog " + pad.punten().size() + " over");
-                    } else sender.sendMessage("§c nummer " + args[2] + " bestaat niet (1.." + pad.punten().size() + ")");
-                } catch (NumberFormatException e) { sender.sendMessage("§c dat is geen nummer"); }
+                        sender.sendMessage("§epoint " + args[2] + " removed — " + pad.punten().size() + " left");
+                    } else sender.sendMessage("§cno point " + args[2] + " (1.." + pad.punten().size() + ")");
+                } catch (NumberFormatException e) { sender.sendMessage("§cthat is not a number"); }
             }
-            case "speel" -> {
-                if (p == null) { sender.sendMessage("alleen in game"); return; }
+            case "play", "speel" -> {
+                if (p == null) { sender.sendMessage("in game only"); return; }
                 Pad pad = kiesPad(sender, args, 2);
                 if (pad == null) return;
                 plugin.manager().startPad(p, pad);
@@ -124,32 +125,32 @@ final class CineCommand implements CommandExecutor, TabCompleter {
             case "info" -> {
                 Pad pad = kiesPad(sender, args, 2);
                 if (pad == null) return;
-                sender.sendMessage("§e pad '" + pad.naam() + "' — " + pad.punten().size() + " punten"
-                    + (pad.snelheid() > 0 ? ", snelheid " + pad.snelheid() : ""));
+                sender.sendMessage("§epath '" + pad.naam() + "' — " + pad.punten().size() + " points"
+                    + (pad.snelheid() > 0 ? ", speed " + pad.snelheid() : ""));
                 int i = 1;
                 for (Pad.Punt pt : pad.punten()) {
                     sender.sendMessage("  §f" + i++ + "§8: " + String.format(Locale.ROOT, "%.1f, %.1f, %.1f", pt.x(), pt.y(), pt.z())
-                        + " §7kijk " + String.format(Locale.ROOT, "%.0f/%.0f", pt.yaw(), pt.pitch()) + " §8(" + pt.wereld() + ")");
+                        + " §7look " + String.format(Locale.ROOT, "%.0f/%.0f", pt.yaw(), pt.pitch()) + " §8(" + pt.wereld() + ")");
                 }
             }
-            case "wis" -> {
-                if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§c geen recht"); return; }
-                if (args.length < 3) { sender.sendMessage("gebruik: /cine pad wis <padnaam>"); return; }
+            case "clear", "wis" -> {
+                if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§cno permission"); return; }
+                if (args.length < 3) { sender.sendMessage("usage: /cine pad clear <path name>"); return; }
                 if (plugin.pads().verwijderPad(args[2])) {
                     plugin.pads().opslaan();
-                    sender.sendMessage("§e pad '" + args[2] + "' gewist");
-                } else sender.sendMessage("§c dat pad bestaat niet");
+                    sender.sendMessage("§epath '" + args[2] + "' deleted");
+                } else sender.sendMessage("§cno such path");
             }
-            case "lijst" -> {
+            case "list", "lijst" -> {
                 List<String> namen = plugin.pads().namen();
-                if (namen.isEmpty()) { sender.sendMessage("nog geen pads — maak er een met /cine opname <naam>"); return; }
-                sender.sendMessage("§epads§8:");
+                if (namen.isEmpty()) { sender.sendMessage("no paths yet — make one with /cine record <name>"); return; }
+                sender.sendMessage("§epaths§8:");
                 for (String n : namen) {
                     Pad pd = plugin.pads().pad(n);
-                    sender.sendMessage("  §f" + n + " §8(" + (pd == null ? 0 : pd.punten().size()) + " punten)");
+                    sender.sendMessage("  §f" + n + " §8(" + (pd == null ? 0 : pd.punten().size()) + " points)");
                 }
             }
-            default -> sender.sendMessage("gebruik: /cine pad <add|verwijder|speel|info|wis|lijst>");
+            default -> sender.sendMessage("usage: /cine pad <add|remove|play|info|clear|list>");
         }
     }
 
@@ -157,21 +158,21 @@ final class CineCommand implements CommandExecutor, TabCompleter {
     private Pad kiesPad(CommandSender sender, String[] args, int naamPositie) {
         if (args.length > naamPositie) {
             Pad pad = plugin.pads().pad(args[naamPositie]);
-            if (pad == null) sender.sendMessage("§c pad '" + args[naamPositie] + "' bestaat niet — /cine pad lijst");
+            if (pad == null) sender.sendMessage("§cno such path '" + args[naamPositie] + "' — /cine pad lijst");
             return pad;
         }
         if (sender instanceof Player p) {
             CineSession s = plugin.manager().sessie(p);
             if (s.opneemPad != null) return s.opneemPad;
         }
-        sender.sendMessage("§c welk pad? noem de naam: /cine pad " + args[1].toLowerCase(Locale.ROOT) + " <naam>");
+        sender.sendMessage("§cwhich path? name it: /cine pad " + args[1].toLowerCase(Locale.ROOT) + " <name>");
         return null;
     }
 
     private void help(CommandSender sender) {
-        sender.sendMessage("§8[§ecinema§8] §f/cine afk [speler] §7· §f/cine stop §7· §f/cine automatisch §7· §f/cine menu");
-        sender.sendMessage("  §f/cine opname <pad> §7→ vlieg vrij, §f/cine pad add§7, dan §f/cine pad speel <pad>");
-        sender.sendMessage("  §f/cine pad lijst/info/wis/verwijder §7· §f/cine herlaad");
+        sender.sendMessage("§8[§6Cinema§8] §f/cine afk [player] §7· §f/cine stop §7· §f/cine auto §7· §f/cine menu");
+        sender.sendMessage("  §f/cine record <path> §7→ fly freely, §f/cine pad add§7, then §f/cine pad play <path>");
+        sender.sendMessage("  §f/cine pad list/info/clear/remove §7· §f/cine reload");
     }
 
     @Override
@@ -179,18 +180,18 @@ final class CineCommand implements CommandExecutor, TabCompleter {
         List<String> out = new ArrayList<>();
         String la = args[args.length - 1].toLowerCase(Locale.ROOT);
         if (args.length == 1) {
-            for (String s : new String[]{"afk", "film", "stop", "automatisch", "opname", "menu", "pad", "herlaad"})
+            for (String s : new String[]{"afk", "stop", "auto", "menu", "record", "pad", "reload"})
                 if (s.startsWith(la)) out.add(s);
         } else if (args.length == 2 && args[0].equalsIgnoreCase("pad")) {
-            for (String s : new String[]{"add", "verwijder", "speel", "info", "wis", "lijst"})
+            for (String s : new String[]{"add", "remove", "play", "info", "clear", "list"})
                 if (s.startsWith(la)) out.add(s);
         } else if (args.length == 2 && (args[0].equalsIgnoreCase("afk") || args[0].equalsIgnoreCase("film"))) {
             for (Player online : Bukkit.getOnlinePlayers())
                 if (online.getName().toLowerCase(Locale.ROOT).startsWith(la)) out.add(online.getName());
-        } else if (args[0].equalsIgnoreCase("opname") && args.length == 2) {
+        } else if (args[0].equalsIgnoreCase("record") && args.length == 2) {
             for (String n : plugin.pads().namen()) if (n.toLowerCase(Locale.ROOT).startsWith(la)) out.add(n);
         } else if (args[0].equalsIgnoreCase("pad") && args.length == 3
-                && (args[1].equalsIgnoreCase("speel") || args[1].equalsIgnoreCase("info") || args[1].equalsIgnoreCase("wis"))) {
+                && (args[1].equalsIgnoreCase("play") || args[1].equalsIgnoreCase("info") || args[1].equalsIgnoreCase("clear"))) {
             for (String n : plugin.pads().namen()) if (n.toLowerCase(Locale.ROOT).startsWith(la)) out.add(n);
         }
         return out;

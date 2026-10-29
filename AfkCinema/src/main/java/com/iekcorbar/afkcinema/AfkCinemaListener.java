@@ -28,6 +28,7 @@ import java.util.Map;
 
 /**
  * AFK-detectie + de bioscoop. Server-only; werkt op elke vanilla client.
+ * Alle speler-teksten zijn Engels (publieke server).
  *
  * ORBIT  : camera cirkelt om een stand-in (Citizens-NPC met jouw skin) —
  *          zo zie je je EIGEN personage in beeld, ook al zweef je als spectator.
@@ -78,7 +79,7 @@ final class AfkCinemaListener implements Listener {
         if (wasAfk && plugin.broadcastAfk()) {
             p.showTitle(net.kyori.adventure.title.Title.title(
                 net.kyori.adventure.text.Component.empty(),
-                net.kyori.adventure.text.Component.text("welkom terug"),
+                net.kyori.adventure.text.Component.text("welcome back"),
                 net.kyori.adventure.title.Title.Times.times(java.time.Duration.ofMillis(200), java.time.Duration.ofSeconds(1), java.time.Duration.ofMillis(300))));
         }
     }
@@ -134,9 +135,9 @@ final class AfkCinemaListener implements Listener {
         s.hoek = Math.random() * Math.PI * 2;
         s.liftTeller = 0;
         viewer.setGameMode(GameMode.SPECTATOR);
-        viewer.sendMessage("§8[§ecinema§8] §7"
-            + (s.standIn != null ? "de camera draait om je personage"
-                                 : "de camera draait — beweeg om terug te keren"));
+        viewer.sendMessage("§8[§6Cinema§8] §7"
+            + (s.standIn != null ? "the camera is orbiting your character"
+                                 : "camera rolling — move to return"));
         s.filmLoopt = true;
 
         // grapjes: handmatige taken tellen; in slaap gefilmd = aftiteling
@@ -159,9 +160,9 @@ final class AfkCinemaListener implements Listener {
 
     /** Camera-vlucht langs een opgenomen pad. */
     void startPad(Player viewer, Pad pad) {
-        if (pad.punten().size() < 2) { viewer.sendMessage("§c dat pad heeft minder dan 2 punten"); return; }
+        if (pad.punten().size() < 2) { viewer.sendMessage("§cthat path has fewer than 2 points"); return; }
         World w = pad.wereld();
-        if (w == null) { viewer.sendMessage("§c wereld van dit pad bestaat niet (meer)"); return; }
+        if (w == null) { viewer.sendMessage("§cthe world of this path no longer exists"); return; }
         CineSession s = sessie(viewer);
         if (s.filmLoopt) stopAlles(s);
         s.vorigeLoc = viewer.getLocation().clone();
@@ -174,14 +175,14 @@ final class AfkCinemaListener implements Listener {
         viewer.setGameMode(GameMode.SPECTATOR);
         s.filmLoopt = true;
         teleportNaarPunt(s, 0);
-        viewer.sendMessage("§8[§ecinema§8] §7pad '" + pad.naam() + "' (" + pad.punten().size()
-            + " punten, " + String.format(java.util.Locale.ROOT, "%.0fs", s.totaal) + ") — beweeg = terug");
+        viewer.sendMessage("§8[§6Cinema§8] §7path '" + pad.naam() + "' (" + pad.punten().size()
+            + " points, " + String.format(java.util.Locale.ROOT, "%.0fs", s.totaal) + ") — move to return");
     }
 
     private void bouwgCum(CineSession s) {
         List<Pad.Punt> ptn = s.pad.punten();
         int n = ptn.size();
-        boolean lus = plugin.padLus().equals("lus") && n >= 3;
+        boolean lus = plugin.padLus().equals("loop") && n >= 3;
         int segmenten = lus ? n : n - 1;
         double snel = s.pad.snelheid() > 0 ? s.pad.snelheid() : plugin.padSnelheid();
         s.cum = new double[segmenten + 1];
@@ -225,7 +226,7 @@ final class AfkCinemaListener implements Listener {
         if (shot.toLowerCase().startsWith("pad:")) {
             Pad pad = plugin.pads().pad(shot.substring(4));
             if (pad != null && pad.punten().size() >= 2) { startPad(p, pad); return; }
-            p.sendMessage("§8[§ecinema§8] §7pad '" + shot.substring(4) + "' niet gevonden — teruggevallen op de draaibaan");
+            p.sendMessage("§8[§6Cinema§8] §7path '" + shot.substring(4) + "' not found — falling back to the orbit");
         }
         startFilm(p, p);
     }
@@ -264,9 +265,9 @@ final class AfkCinemaListener implements Listener {
             }
         }
         World w = s.focusPunt.getWorld();
-        double staps = plugin.getConfig().getDouble("cine.orbit-snelheid", 0.0035);
-        double straalBasis = plugin.getConfig().getDouble("cine.orbit-straal", 5.0);
-        double adem = plugin.getConfig().getDouble("cine.orbit-adem", 1.6);
+        double staps = plugin.getConfig().getDouble("cine.orbit-speed", 0.0035);
+        double straalBasis = plugin.getConfig().getDouble("cine.orbit-radius", 5.0);
+        double adem = plugin.getConfig().getDouble("cine.orbit-breathe", 1.6);
         double crane = plugin.getConfig().getDouble("cine.orbit-crane", 1.9);
         s.hoek += staps;
         double straal = straalBasis + Math.sin(s.hoek * 0.7) * adem;
@@ -297,12 +298,12 @@ final class AfkCinemaListener implements Listener {
         double dt = 0.05;                                   // scheduler draait op 1 tick
         String lus = plugin.padLus();
         s.padT += dt * s.padRichting;
-        if (lus.equals("lus")) {
+        if (lus.equals("loop")) {
             double m = s.padT % s.totaal;
             s.padT = (m < 0 ? m + s.totaal : m);
-        } else if (lus.equals("eenmalig")) {
+        } else if (lus.equals("once")) {
             if (s.padT >= s.totaal) s.padT = s.totaal;
-        } else {                                            // heen-en-terug
+        } else {                                            // back-and-forth
             if (s.padT >= s.totaal) { s.padT = s.totaal; s.padRichting = -1; }
             else if (s.padT <= 0) { s.padT = 0; s.padRichting = 1; }
         }
@@ -453,8 +454,8 @@ final class AfkCinemaListener implements Listener {
         s.modus = CineSession.Modus.OPNAME;
         s.opneemPad = pad;
         p.setGameMode(GameMode.SPECTATOR);
-        p.sendMessage("§8[§ecinema§8] §7opname aan — §f/cine pad add §7zet een punt in '"
-            + pad.naam() + "' (elke input telt nu NIET als terug)");
+        p.sendMessage("§8[§6Cinema§8] §7recording on — §f/cine pad add §7drops a point in '"
+            + pad.naam() + "' (movement no longer stops anything now)");
     }
 
     Map<java.util.UUID, CineSession> sessies() { return sessies; }
