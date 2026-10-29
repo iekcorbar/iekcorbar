@@ -104,7 +104,18 @@ template-resten).
    (opschonen, geen gedrag), en in `pluginset-aangepast/` een repo-kopie van
    zowel tutorial-package.yml als CMI Ranks.yml bijhouden.
 
-## 4. Nog te beslissen door de eigenaar
+## 4. Conceptbericht greyarts (30-10, nog NIET verzonden - eigenaar stuurt)
+
+Engels, drie blokken: (1) inkorten van de tutorial + klasse-overschrijfbug +
+dubbele raskeuze + kleine type-fouten; (2) slotplan: LP-groep `tutorial` met
+`cmi.command.*`-ontkennningen, BQ-acties parent wisselen, Kōsei-rank een
+`iekcorbar.tutorial_done` PermissionRequirement geven (want de ladder runt
+`lp parent set rank_N` en wist elke tutorial-groep na 1 uur idle); (3) nieuwe
+quests: agent schrijft BetonQuest-YAML-pakketten + `/npc create`-lijst, greyarts
+schetst ideeën. Plus vraag: repo-kopie van tutorial-package.yml + Ranks.yml.
+Volledige tekst in chat van 29/30-10 nacht.
+
+## 5. Nog te beslissen door de eigenaar
 
 - Ja/nee op slot-plan hierboven (en welke permissies tutorial-spellers WEL houden).
 - Klasse-keus: één eerlijke 9-klassekeuze (aanbevolen) of multi-class (VR-ontwerp).
