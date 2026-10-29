@@ -1,125 +1,154 @@
-# Trailer-productiescript "SAKURA AND STEAM" — volledig zelf te maken
+# Trailer-productiescript v3 — "SAKURA AND STEAM" — ALLES IN MINECRAFT
 
-Versie 2 (29-10). Bewust herschreven vanuit de PDF-script: **elk shot is
-bouwmateriaal dat wij zelf in Blender kunnen renderen** — eigen
-FMM/Blockbench-modellen, procedurele sets en de bestaande 3D-logo. Geen
-gameplay-opnames nodig (optionele later-upgrade: Replay Mode-beelden op
-dezelfde timings). Audio = bestaande genarrateerde mp3 (229,92 s,
-`trailer versie 2- narrated intro 6 ... female only.mp3`).
+Versie 3 (29-10, ochtend). Gebruikers-eis: **alles moet in Minecraft zijn.**
+Dit script vervangt de Blender-diorama-benadering (v2). Elke shot is een
+in-game opname met **Replay Mod** op de client, op locaties die al op de
+server staan of met één kleine build-sectie die WE nog in de serverwereld
+zetten (met bestaande blokken/FMM-modellen/decor uit onze eigen plugins).
+Audio blijft: `trailer versie 2- narrated intro 6 ... female only.mp3`
+(229,92 s — de vier aktes + outro uit de PDF).
 
-Beeldformaat: 1280x720 @ 24 fps · look: donker navy + messing + sakura-roze,
-anamorfische filmkleur, 2.39:1 letterbox vanaf ACT 2.
-
----
-
-## KLEUREN & STIJL (vast, uit het merk)
-- Nacht: `#100d15` · messing/goud: `#b57a3c` / `#d9a038`
-- Sakura-roze: `#f2b6c8` / hardroze `#c46a86`
-- Steam-wit `#cfd6de` · gloeiember `#ffb347`
-- Letterbox-balken 2.39:1, vignette ~0.35, 35 mm-korrel, subtiele bloom.
-- Tekst-in-beeld: Georgia-bold, messing-goud, fade 6 frames in / 12 uit.
+Benodigdheden (éénmalig, owner-acties in vet):
+- **Replay Mod installeren op de client** (java 25 staat klaar; Replay
+  ondersteunt 26.x — instant-filming mode aan).
+- Opname-client met ons resourcepack + Optifine-achtige shaders uit
+  **Bliss/Tildes** voor de film-look (optioneel, doet enorm veel).
+- Ik lever: camera-route-tabellen (positie/tijd per shot), per-shot
+  commando-lijst (/time, /weather,tp, summons), de uiteindelijke montage
+  (ffmpeg: beats, letterbox, titel, audio-sync).
 
 ---
 
-## ACT 1 — THE LOST WORLD   0:00 – 0:45
+## LOCATIES op de live-server (bestaand — niet bouwen, alleen filmen)
 
-| tc | duur | VO | SHOT | bron / camera |
+| code | locatie | wat staat er | bron |
+|---|---|---|---|
+| L1 | **sakura-tuin** (Sakagura Garden-set) | kersenbomen, bye-byes… | garden-decor: 21 items, lantaarn-palen |
+| L2 | **stoom-fabriek** (Steamworks run-live) | draaiende machines: belts, fans, presses, robots-arms, treinen/cargo wagons | machines.ylive, FMM-modellen |
+| L3 | **keuken + markt** (Kitchen/Kitchendecor) | toonbanken, kratten, brouwsels, drankjes | Kitchen 0.x live |
+| L4 | **Zoo** (Wildlife) | hagen met beer/zwijn/hert/kraanvogel/zebra/olifant + beebies, kiosk, beelden | Wildlife 0.7.0 live, 137 modellen |
+| L5 | **Elitemobs-dungeons**: `em_hallosseum` + `em_knight_castle` (LOSSE wouden!) | kant-en-klare donkere burcht-sets met mobs | staan als wereldmappen op de server |
+| L6 | **haven + strand** (Bluemap-area) | water, kades, schemerschaduwen | Bluemap 13 GB = rijke wereld |
+| L7 | **hoofdstad/spawn** | de stad zelf, straten, lantaarnpalen (brass/copper straat-lampen uit fmm steampunk-set) | fmm-models/steampunk_iekcorbar |
+
+Bijvangst: de twee dungeon-werelden (L5) zijn de "elite dungeons" van de
+VO — letterlijk gebouwd op de server. Luchtschepen: EliteMobs-spawns
+`em_airship_ghast`/`em_zeppelin_dragon` bestaan als ENTITEIT met onze
+modellen → summons in de lucht boven L6/L7 = echte vliegende schepen.
+
+---
+
+## BEOORDELEN VOORAF: wat er bijgebouwd moet worden (klein)
+
+**Status 29-10 nachtelijk: S1, S2 en S3 zijn KLAAR** — staan als `.schem`
+op de server in `schematics/` (eigenaar pterodactyl, door onszelf gebouwde
+Sponge-v2-formaat, gevalideerd tegen de echte WorldEdit-files):
+- `iekcorbar-trailer-S1-sakura-laan.schem` (46×12×20) — gracht + bruggen +
+  12 lantaarnpalen (blacksteen + shroomlight) + 6 kersenbomen + bloesem
+- `iekcorbar-trailer-S2-stenen-hoofden.schem` (20×14×10) — 3 stenen hoofden
+  op sokkels met gloed-voorhoofd en zwarte ogen + lantaarnpalen
+- `iekcorbar-trailer-S3-torii.schem` (18×15×12) — rood-zwarte torii op
+  stenen plateau met treden, kersenbomen en twee lantaarnpalen
+In-game laden (op locatie naar keuze, staand met je neus in het zuidoost-
+hoek-blok van waar het neer moet): `//schem load iekcorbar-trailer-S1-sakura-laan`
+dan `//paste -a` (-a = lucht overslaan).
+Generator: `scripts/make_trailer_schems.py` (python -X utf8 ... gen).
+
+Alles andere: bestaand.
+
+---
+
+## SHOT-LIJST (tc = opnametijd, REPLAY-tijd = daadwerkelijk opnemen)
+
+### ACT 1 — THE LOST WORLD   0:00–0:45   locaties: L1/L7, tijd: 18000 (zonsopgang), weather clear → regen later
+
+| tc | s | VO-regel | SHOT | in-game camera |
 |---|---|---|---|---|
-| 0:00 | 3 | stilte | **00 ZWART + bell** | zwart, 1 bel-gloed |
-| 0:03 | 7 | "Time does not rush here. It flows..." | **A1a sakura macro** | eigen `wl`-loze procedurele tak; **slow dolly-in 60→75 mm**, 40 vallende bloesems (echte particles), 2 lantaarns f9 |
-| 0:10 | 6 | "...toward a new era." | **A1b lantaarn-reeks** | `brass_street_lamp` + `copper_paper_lantern` (5 exemplaren) langs nachtsloot; **tracking shot op rails**, mist |
-| 0:16 | 8 | "Welcome to a world where the ancient traditions of the Shogunate..." | **A1c torii-poort** | procedurele torii (2 palen + 2 balken, lakrood `#8c2f2f`) + kersenboom + zwenkende camera (30°-arc) |
-| 0:24 | 7 | "...melt into the steady power of steam and copper." | **A1d overgang** | **match-cut**: roze bloesem → roestige messing-kogellager; 1 frame roodflits op "copper" |
-| 0:31 | 8 | "The old gods watch in silence as the machines awaken." | **A1e stenen gezichten** | 3 procedurele Jizo-stenen hoofden, ogen aan (emissie), camera crash-zoom naar 1 paar ogen; **1 frame wit** |
-| 0:39 | 6 | "Mechanical airships drift through the clouds." | **A1f airship silhouet** | `em_zeppelin_dragon` ver weg door wolken (backlight, silhouet); slow push |
+| 0:00 | 3 | — | **ZWART + klok** | (geen opname — zwart) |
+| 0:03 | 8 | "Time does not rush here. It flows..." | **A1** sakura-tuin: **kruipende groothoek-dolly** tussen bomen door door bloesem | replay-cam, path langs 10 takken, fog aan |
+| 0:11 | 6 | "...toward a new era." | **A2** lantaarn-reeks: **tracking shot** langs 8 lantaarnpalen, regen + reflecties | /weather rain; cam 1,5 m hoogte |
+| 0:17 | 8 | "Welcome to a world where the ancient traditions of the Shogunate..." | **A3** S1/S3 **torii-breed** camera **rijgt verticaal** achter poort om | /time set 23000; zachte maan |
+| 0:25 | 6 | "...melt into the steady power of steam and copper." | **A4** macro **draaiend messing tandwiel** (Steamworks `cogwheel`-item op ItemFrame/dispenser-anim) | slow-mo 20 %, rack-focus |
+| 0:31 | 8 | "The old gods watch in silence as the machines awaken." | **A5** S2 stenen hoofden → daarachter **lichten van de stad/fabriek gaan aan** (one shot, lampen togglen) | cam static, 24 u-time-lapse 3 s |
+| 0:39 | 6 | "Mechanical airships drift through the clouds." | **A6** twee `em_zeppelin_dragon`-spawns **boven L6 haven** in mist | cam omhoog, zeppelin **volgt eigen path** |
 
-> Inactie-regel: max 9 s per shot, wissel elke snij-point van scale (macro ↔ wijd).
+### ACT 2 — THE GEARS TURN   0:45–1:45   locatie: L2 (dag, zon 6000)
 
----
+| tc | s | VO | SHOT |
+|---|---|---|---|
+| 0:45 | 8 | "This is no world for spectators." | **B1** L2 fabriek: **steadicam-wandeling** tussen draaiende machines door (belts, presses, fans) |
+| 0:53 | 5 | "This is a world for creators." | **B2** speler-hand (first-person!) `sw_brass_ingot` in arm, robot-arm `sw_arm` **grijpt erom** |
+| 0:58 | 6 | "Forge your own empire." | **B3** `crushing_wheel` + `sw_cogwheel` rij, **dolly langs** de draaiende as |
+| 1:04 | 8 | "Claim your land, and protect your sanctuaries." | **B4** L7: **Lands-vlag/genest** — claim-block + palen; cam **cirkelt** erom |
+| 1:12 | 8 | "Master the ancient art of the Steam Brewery..." | **B5** L3 keuken/brouwerij: **overhead-dolly** over ketels + `Kitchen`-fornuizen, stoomdeeltjes |
+| 1:20 | 8 | "...and let your flavors rule the Villager Market." | **B6** L3 markt: NPC-handel, **360°-orbit** om een kraam met drankjes |
+| 1:28 | 10 | — | **B7 montage**: 5 × 1,2 s punch-ins van draaiende onderdelen (tandwiel/pers/belt/grijper/whistle) |
+| 1:38 | 7 | — | **B8** fabriek-breed: camera **trekt 40 m terug** in 7 s — hele stad draait |
 
-## ACT 2 — THE GEARS TURN   0:45 – 1:45
+### ACT 3 — THE CALL TO ARMS   1:45–2:45   locatie: **L5 em_knight_castle / hallosseum** (tijd 24000, regen)
 
-| tc | duur | VO | SHOT | bron / camera |
-|---|---|---|---|---|
-| 0:45 | 8 | "This is no world for spectators." | **B1 factory wide** | `sw_brass_casing` + `sw_andesite_casing` wand (8x3), `sw_bellows_fan` (rotor **draaiend**, 2,4 omwentelingen/s), stoom; **crane-up 2 m** |
-| 0:53 | 5 | "This is a world for creators." | **B2 hands-on close** | `sw_arm` + `sw_arm_tool_gripper` pakt gloeiend `sw_brass_ingot`; **rack focus** op ingot |
-| 0:58 | 7 | "Forge your own empire." | **B3 forge** | `sw_crushing_wheel` draait, `sw_cogwheel`-tandwielset, ember-particles (60), **whip-pan** B2→B3 |
-| 1:05 | 8 | "Claim your land, and protect your sanctuaries." | **B4 claim-grens** | messing `sw_pipe`-lijn met `sw_valve`/`clutch_casing_on` (groen licht aan), **dolly langs pijpleiding**, 2 seinen |
-| 1:13 | 7 | "Master the ancient art of the Steam Brewery..." | **B5 brouwerij** | koperen brouwketels (3, procedureel, bubbel-schaalanime) + `sw_canister` + `sw_crude_canister` op `sw_belt` **LOPEND**; warm sidelight |
-| 1:20 | 7 | "...and let your flavors rule the Villager Market." | **B6 markt** | marktkraam `sw_depot` + `sw_cargo_wagon` + `Kitchen`-kist, bonte lanternen; **360°-orbit** om toonbank |
-| 1:27 | 8 | (muziek-zwelling) | **B7 gears montage** | 5 × 0,8 s **punch-ins**: tandwiel/ketel/pijp/ventilator/grijper — elk 1 frame flits op de taiko-slag |
-| 1:35 | 10 | — | **B8 chain reveal** | camera **trekt achteruit** door 12 m fabriek, alles draait; tekst: **SAKURA AND STEAM** (goud, 1 s in) |
+| tc | s | VO | SHOT |
+|---|---|---|---|
+| 1:45 | 6 | "But with great power... comes great threat." | **C1** donker: **ene paar rode ogen** (EliteMob-spawn in het zwart) knipperen |
+| 1:51 | 8 | "In the shadows of the mechanical cities lie elite dungeons." | **C2** **burcht-buitenwijd**: kasteel + machine-lantaarns, cam **crash-zoom** naar poort |
+| 2:01 | 6 | "Dangerous depths..." | **C3** **kruip door gang** (cam 0,5 m), fakkels, mob-silhouet achter glas |
+| 2:07 | 7 | "...where only the strongest dare to tread." | **C4** vechtsbeeld: speler + EliteMob **echt gevecht** opnamemoment (1 takes) |
+| 2:14 | 8 | "Who will you be when the pressure rises?" | **C5** 3 mob-types op rij (tank/zoeker/genezer skins) — cam **dolly** langs |
+| 2:22 | 7 | "Declare your race." | **C6** L4 Zoo: **rij dieren** (beer-hert-krane) — top-down orbit, 1 dier per tel (letterlijk "races") |
+| 2:29 | 8 | "Choose your RPG job within the Adventure Guild." | **C7** MMO-guild-bord/quest (BetonQuest NPC `betonquest_player` is live!) — **over-the-shoulder shot** |
+| 2:37 | 8 | "Unlock powerful, custom trinkets." | **C8** macro: **ValhallaTrinket-item** in hand, PDC-gloed, draaiend op display |
 
----
+### ACT 4 — THE GRAND CLIMAX   2:45–3:35   mix-locaties
 
-## ACT 3 — THE CALL TO ARMS   1:45 – 2:45
+| tc | s | VO | SHOT |
+|---|---|---|---|
+| 2:45 | 8 | "Fight for your allies." | **D1** L4/Zoo-bos: **spelers + tamme dieren** rennen samen naar camera (breeding-kudde live) |
+| 2:53 | 8 | "Protect what you have built." | **D2** L5 burcht-doorway: verdediging — `sw_arm_turret`s richten **omhoog** |
+| 3:01 | 10 | "The pressure gauges are rising... the sky turns to rose and gold." | **D3** **time-lapse** 6000→18000 (rose/gold!), stad-silhouet, 2 zeppelins kruisen |
+| 3:11 | 10 | "Claim your destiny. Ascend in rank, and become the legend this realm needs." | **D4 ascent**: cam **verticale klim 60 m** langs toren/stad, alles hieronder |
+| 3:21 | 6 | — | **D5** zeppelin-front **keert terug** camera in → **1 frame wit** |
+| 3:27 | 8 | — | **D6** stil: torii (S3) bij zonsopgang, bloesem waait |
 
-| tc | duur | VO | SHOT | bron / camera |
-|---|---|---|---|---|
-| 1:45 | 6 | "But with great power... comes great threat." | **C1 duisternis** | zwart + 2 rode ogen die **knipperen** (emissie-schaal), onscreente tekst |
-| 1:51 | 9 | "In the shadows of the mechanical cities lie elite dungeons." | **C2 dungeon-ingang** | poort van `sw_andesite_casing`-puin + `copper_paper_lantern`-rij die **uitgaan** (dim-oord, 1 per seconde) |
-| 2:00 | 7 | "Dangerous depths... where only the strongest dare to tread." | **C3 monster-siluets** | `wl_wraith` + `wl_bear` silhouet met rim-light, ogen aan; camera **slow creep-in** |
-| 2:07 | 8 | "Who will you be when the pressure rises?" | **C4 class menu** | 3 iconen op sokkel (`sw_arm_turret`, `sw_drill`, `sw_ejector`) in rij, één na één **oplichtend** |
-| 2:15 | 8 | "Declare your race." | **C5 races** | 4 dier masks (`wl_deer`, `wl_boar`, `wl_bear_rare`, `wl_crane`) in cirkel, **top-down orbit**, 1 mask per tel |
-| 2:23 | 8 | "Choose your RPG job within the Adventure Guild." | **C6 guild-hal** | zelfde hal als B6 maar **vanboven gefilmd**, lantaarn-rij naar troon; tekst: **ADVENTURE GUILD** |
-| 2:31 | 8 | "Unlock powerful, custom trinkets." | **C7 trinkets** | 5 `sw_andesite_alloy`-ringen + `brass_ingot`-hangers, **draaiende macro** (300°/s), elk met emissie-gloed |
-| 2:39 | 6 | "Because in this challenging world... you do not survive alone." | **C8 party** | 5 wezens + 2 machines schouder aan schouder als silhouet tegen gouden lucht, camera **crane-back** |
+### OUTRO — THE LANDING   3:35–3:50
 
----
-
-## ACT 4 — THE GRAND CLIMAX   2:45 – 3:35
-
-| tc | duur | VO | SHOT | bron / camera |
-|---|---|---|---|---|
-| 2:45 | 9 | "Fight for your allies." | **D1 airship battle** | 2 × `em_zeppelin_dragon` + `em_airship_ghast` **in elkaars nabijheid vliegend** met rookspoor; **handheld-shake** (0,3° ruis) |
-| 2:54 | 9 | "Protect what you have built." | **D2 defense** | `sw_arm_turret` × 3 die **omhoog richten**, `sw_pipe`-wallen, ember-regen; crash-zoom |
-| 3:03 | 10 | "The pressure gauges are rising... the sky turns to rose and gold." | **D3 sky shift** | **time-lapse**: hemelkleur navy → rose → gold over 10 s (wereld-RGB keyframes), stad-silhouet `sw_cargo_wagon`-toren |
-| 3:13 | 10 | "Claim your destiny. Ascend in rank, and become the legend this realm needs." | **D4 ascent** | camera **stijgt 40 m** langs alles wat er toe doet: sakura→fabriek→dungeon→vloot→koning; tekst **ASCEND** |
-| 3:23 | 7 | (slot-akkoord) | **D5 freeze** | alles blijft 2 s stilstaan → **1 frame wit** → cut |
-| 3:30 | 5 | — | **D6 black hold** | zwart, enkel bel-gloed |
-
----
-
-## OUTRO — THE LANDING   3:35 – 3:50
-
-| tc | duur | VO | SHOT | bron / camera |
-|---|---|---|---|---|
-| 3:35 | 4 | "Sakura and Steam." | **E1 logo sting** | eigen 3D-logo **uit zwart komend** (rotatie 8 s-clip → 4 s), stoom-werveling, messing-rand gloeit |
-| 3:39 | 4 | "Your adventure awaits." | **E2 IP** | logo-center 520 px + `iekcorbar.com` (goud) + `discord.gg/G9P2khU7F4` (roze) |
-| 3:43 | 4 | stilte / stoom-hiss fade | **E3 fade to black** | audio **abrupt stop**, laatste 2 s stil, slow fade |
-| 3:47 | 3 | — | **E4 end card** | 2 logo's: app-tegel (anker) + merk-badge, 1 regel: "SEIZOEN 2 · 2026" |
+| tc | s | VO | SHOT |
+|---|---|---|---|
+| 3:35 | 4 | "Sakura and Steam." | **E1** zwart → **3D-logo** (onze bestaande sting) 2 s + tekst |
+| 3:39 | 5 | "Your adventure awaits." | **E2** `iekcorbar.com` + discord-link boven **gameplay-screenshot** (vage vignette) |
+| 3:44 | 6 | — | **E3** fade zwart, stoom-guishe |
 
 ---
 
-## SHOT-PRODUCTIE LIJST (wat er gebouwd moet worden)
+## OPNAME-EN-MONTAGEWERKWIJZE (Replay Mod)
 
-Alles in **één Blender-scene per set** + `make_trailer.py`-modes:
-`still | close | anim` + frame-registry (LOPENDE machine-delen, particles,
-lichtdim). Nieuw te bouwen sets (totaal 12):
+1. **Per locatie één Replay-opname** van 1–3 min met daarin ALLE shots van
+   die locatie (achtereenvolgens, spoor-achtig): je spant de cam per shot
+   op de aangegeven posities (Replay ingebouwde keyframes: posie + rotatie
+   + easing). Ik lever per shot een rijtje
+   `(start-pos, eind-pos, duur, easing)` dat je 1-op-1 typt/inleest.
+2. **Instant-Filming toetsen**: F5 hide UI altijd; shaders: Bliss medium.
+3. Replay-export: 1280×720 60 fps → **ik versnel/vertraag + knip in ffmpeg**
+   op de VO-timings, letterbox 2.39:1, grain+vignette, flitsen, audio eronder.
+4. **Vliegende zeppelins**: `em_zeppelin_dragon` + `em_airship_ghast` als
+   entiteiten (onze FMM-modellen) via `/wildlife`- achtige spawn of direct
+   `/summon` + CustomModelData; Replay filmt ze real.
+5. Rode-ogen-c1: EliteMob spawn → `invisibility potion` + `glow in the
+   dark eyes` = simpele embers/eye-armor stand-in.
 
-1. `sakura_macro` — tak + 40 bloesems + vallende petals (deeltjessysteem)
-2. `lantaarnreeks` — 5 × `brass_street_lamp`/`copper_paper_lantern`
-3. `torii` — procedureel, lakrood
-4. `stenen_gezichten` — 3 Jizo-koppen + oog-emissie
-5. `factory_wide` — bestaand (al gebouwd) + draaiende rotor + stoom
-6. `forge` — `crushing_wheel` + 20 `cogwheel` + ember-sproeiers (60)
-7. `brouwerij` — 3 koperen brouwketels + lopende belt (`sw_belt_rollers` + blikken)
-8. `markt` — depot/kraam/wagon + 12 kratzen + 8 lantaarns
-9. `dungeon_poort` — puin + 8 dimmende lantaarns
-10. `races_cirkel` — 4 diermaskers op sokkels + top-down-orbit
-11. `vloot` — 2 zeppelins + ghast + rookspoor (curve-volgend)
-12. `ascent_toren` — stapeling van alle eerdere elementen in één vertical dolly
+## MIJN AUTOMATISCHE DELEN (geen client nodig)
+- camera-routes als `.replay`-import CSV's + per-shot `/tp`- en
+  `/time`/`/weather`-commandolisten (kopieer-klaar)
+- Summon-commando's per shot (zeppelins/mobs/dieren)
+- montage + grading + audio-sync + titel-overlays in ffmpeg
+- de logo-sting (E1) staat al kant-en-klaar
 
-**Al beschikt** (bouw niet dubbel): `iekcorbar-logo3d-anim.mp4`,
-`tekst-uitkaart.png`, 4 bestaande stills (upgraden naar anim).
+## WAT JIJ DOET (korte lijst, 1 namiddag)
+1. Replay Mod installeren + connect naar iekcorbar.com
+2. Per locatie (6 locaties) één opname draaien volgens mijn scripts
+3. Die `.replay`-bestanden (of de mp4-exports) in de projectmap zetten →
+   ik knip alles.
 
-## TIMING-CONTROLES
-- Som shots = exact 3:50 (229,92 s audio, geen drift; elke shot `duur` = 0,5 s-multipel)
-- Cut-points vallen op taiko-slagen (uit audio detecteren: ffprobe loudness-pieken)
-- Letterbox + korrel als **ffmpeg post-pass** (niet in Blender renderen) → goedkoper
-
-## DEFINITIE VAN "KLAAR"
-1. Alle 12 sets renderen ≥ 24 fps clip (of still + beweging in ffmpeg)
-2. Montage: act 1-4 + outro = 1 mp4, audio erop
-3. Post: letterbox, korrel, flitsen, whip-pan/transities
-4. Kleurgrading: goud-roze look
+## NOG TE BEANTWOORDEN (owner)
+- Bestaat er al een **gebouwde sakura-lantern-street** op de server, of
+  bouwen we S1-S3 eerst (1 avond, ik lever block-lijst + place-commando's)?
+- Shaders (Bliss/Tildes) op de opname-client: ja/nee (sterk aan te raden).
