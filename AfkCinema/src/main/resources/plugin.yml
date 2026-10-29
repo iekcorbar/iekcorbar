@@ -1,0 +1,23 @@
+name: AfkCinema
+version: '${project.version}'
+main: com.iekcorbar.afkcinema.AfkCinemaPlugin
+api-version: '26.2'
+author: iekcorbar
+description: AFK-detectie + server-gestuurde cinematische camera voor toeschouwers.
+softdepend: [PlaceholderAPI]
+commands:
+  cine:
+    description: Cinematische camera rond een onderwerp starten/stoppen.
+    usage: /cine <start [speler]|stop|lijst|automatisch>
+    permission: afkcinema.cine
+  afkcinema:
+    description: Beheer (reload).
+    usage: /afkcinema reload
+    permission: afkcinema.admin
+permissions:
+  afkcinema.cine:
+    default: true
+    description: Eigen cameravlucht rond een (AFK) speler starten.
+  afkcinema.admin:
+    default: op
+    description: Config herladen en andere dingen forceren.

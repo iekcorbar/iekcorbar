@@ -16,11 +16,12 @@ foreach ($j in $weg) {
 }
 
 # 2) MySQL-verwijzingen in bijgeleverde configs: vinden + op sqlite/none zetten
+$pat = '172\.18\.0\.1|jdbc:mysql|db_type:\s*.?.?mysql|storage(-type)?:\s*.?.?mysql'
 $cfgs = Get-ChildItem $P -Recurse -Include *.yml,*.json,*.properties,*.conf -ErrorAction SilentlyContinue
 $hits = @()
 foreach ($f in $cfgs) {
   $t = Get-Content $f.FullName -Raw -ErrorAction SilentlyContinue
-  if ($t -and ($t -match "172\.18\.0\.1|jdbc:mysql|db_type: ?mysql|storage: ?mysql|'mysql'|\"mysql\"")) {
+  if ($t -and ($t -match $pat)) {
     $hits += $f.FullName
   }
 }
