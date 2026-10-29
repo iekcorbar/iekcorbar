@@ -18,6 +18,7 @@ public final class AfkCinemaPlugin extends JavaPlugin {
 
     private AfkCinemaListener manager;
     private SpatialMenu menus;
+    private ScreenPanels panels;
     private PadStore pads;
     private Adv adv;
 
@@ -30,15 +31,17 @@ public final class AfkCinemaPlugin extends JavaPlugin {
         adv.register();
         manager = new AfkCinemaListener(this);
         menus = new SpatialMenu(this);
+        panels = new ScreenPanels(this);
         getServer().getPluginManager().registerEvents(manager, this);
         getServer().getPluginManager().registerEvents(menus, this);
+        getServer().getPluginManager().registerEvents(panels, this);
         PluginCommand cine = getCommand("cine");
         if (cine != null) {
             CineCommand cc = new CineCommand(this);
             cine.setExecutor(cc);
             cine.setTabCompleter(cc);
         }
-        Bukkit.getScheduler().runTaskTimer(this, () -> { manager.tick(); menus.tick(); }, 20L, 1L);
+        Bukkit.getScheduler().runTaskTimer(this, () -> { manager.tick(); menus.tick(); panels.tick(); }, 20L, 1L);
         if (Bukkit.getPluginManager().getPlugin("Citizens") == null) {
             getLogger().warning("Citizens not found: no stand-in — at /cine afk the player "
                 + "will orbit an empty spot instead of their own character.");
@@ -50,6 +53,7 @@ public final class AfkCinemaPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (panels != null) panels.clearAlles();
         if (menus != null) menus.clearAlles();
         if (manager != null) manager.allesStoppen();
     }
@@ -61,6 +65,7 @@ public final class AfkCinemaPlugin extends JavaPlugin {
 
     public AfkCinemaListener manager() { return manager; }
     public SpatialMenu menus() { return menus; }
+    public ScreenPanels panels() { return panels; }
     public PadStore pads() { return pads; }
     public Adv adv() { return adv; }
 

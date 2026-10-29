@@ -39,6 +39,7 @@ final class CineSession {
     int takeDay;                        // dag-teller voor de director's-cut-grap
     int takes;
     boolean cinePaused;                 // /afk van CMI: bewuste afwezigheid → géén bioscoop
+    boolean schermZichtbaar = true;     // ScreenPanels: drijvend menu voor anderen (default uit config bij join)
 
     // opname-modus (vrij kijken terwijl je waypoints zet)
     Pad opneemPad;

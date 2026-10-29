@@ -13,7 +13,9 @@ server-side: werkt op élke vanilla client.
 | `/cine afk <speler>` | (admin) draai om een andere, gewoon zichtbare speler |
 | `/cine stop` | terug naar je oude plek en gamemode |
 | `/cine automatisch` | je AFK-bioscoop uit/aan zetten |
+| `/cine screen` | je geopende menu's als drijvend raam boven je hoofd tonen aan iedereen (de spatial-gui-beleving, server-side: ItemDisplay-vakjes + titel; 2x2-crafts geven een korte 'crafted'-flits) |
 | `/afk` (CMI) | bewust AFK: de bioscoop pauzeert automatisch zolang je /afk staat |
+| `/cine screen` | drijvend-menufunctie aan/uit: jouw geopende scherm (craftbank, kist,oven…) zweeft als voor iedereen zichtbaar venster boven je hoofd — de server-side third-person-modus van spatial-gui; 2x2-handscrafts krijgen een korte "crafted"-flits |
 | `/cine menu` | ruimtelijk **stoompaneel**: zwevend messing bedieningspaneel vóór je neer (het "spatial GUI"-concept uit de client-MOD, maar dan server-side op elke vanilla client) |
 | `/cine opname <padnaam>` | vrij rondvliegen als camera-man (wordt automatisch aangemaakt als het pad nog niet bestaat) |
 

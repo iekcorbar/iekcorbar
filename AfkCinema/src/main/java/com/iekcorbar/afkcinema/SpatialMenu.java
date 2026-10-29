@@ -145,6 +145,8 @@ final class SpatialMenu implements Listener {
         }
         r.add(new Rijdef("§7⚙ afk-auto: " + (s.cineToegelaten ? "§aON" : "§8OFF"),
             q -> { CineSession t = plugin.manager().sessie(q); t.cineToegelaten = !t.cineToegelaten; }));
+        r.add(new Rijdef("§7👁 floating screens: " + (s.schermZichtbaar ? "§aON" : "§8OFF"),
+            q -> { CineSession t = plugin.manager().sessie(q); t.schermZichtbaar = !t.schermZichtbaar; }));
         List<String> pads = plugin.pads().namen();
         for (int i = 0; i < Math.min(6, pads.size()); i++) {
             String naam = pads.get(i);

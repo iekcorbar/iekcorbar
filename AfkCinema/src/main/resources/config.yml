@@ -12,6 +12,7 @@ cine:
   orbit-breathe: 1.6      # how much the radius "breathes"
   orbit-crane: 1.9        # how much the height drifts up and down
   afk-shot: orbit         # what the AFK camera does: orbit | pad:<path name>
+  screen-default: true    # open menus float in the world above your head, visible to everyone (/cine screen toggles)
 
   pad-speed: 2.0          # blocks per second when playing a camera path
   pad-loop: back-and-forth  # back-and-forth | loop (needs 3+ points) | once
