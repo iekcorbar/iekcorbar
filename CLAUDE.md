@@ -1560,3 +1560,24 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   sync_lock.py, make_icons.py, test_unzip.mjs + make_zip_fixtures.py
   (fixtures in StaffHub/tools/fixtures/, 4/4 groen).
 
+
+### Valhalla-onderzoek (REA) klaar - blauwdruk voor eigen MMO-plugin (29-10 nacht)
+
+- Eigenaar wil ValhallaMMO (1.10.3, +Trinkets 2.9 +Races 2.3, allen Athlaeos,
+  betaald/gesloten met licentie-obfuscatie) vervangen door een EIGEN plugin:
+  core-features nabouwen, Trinkets/Races als addons. NABOUWEN, niet kopiëren.
+- **De Valhalla-data zit AL in onze player database** (s30266_iekcorbar_player_data
+  op de Plesk-MySQL): 14x profiles_<skill> (owner/exp/exp_total/level/
+  maxallowedlevel + perk-kolommen), PlayerClassProfile/Progress (races),
+  trinkets zitten als NBT op de items zelf. Oude sqlite player_data.db is dood.
+- Decompileeren met Vineflower (REA zelf heeft geen JVM-decompiler): 1518 +
+  61 + (races deels) bronnen; alles wat telt is DATA-gedreven:
+  exp-kurves als formule-strings in skills/*_progression.yml, perk-bomen in
+  skills/*.yml, rassen/klassen als stat_buffs in races.yml/classes.yml.
+  Kernmotor = stat-source-stack (AccumulativeStatManager + ~dozens
+  StatSource-klassen) - precies wat onze API moet worden.
+- Volledige bevindingen + reproduceer-specificatie: **docs/valhalla-onderzoek-rea.md**
+  (gedecompilde bronnen lokaal: deploy/valhalla-decomp/, gitignore-werk).
+- Next move: feature-keuze met eigenaar (welke skills/perks blijven), dan
+  plugin-standaard iekcorbar MMO (naam nog te kiezen), import uit de
+  bestaande tabellen, races+trinkets als losse modules.
