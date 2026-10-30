@@ -846,7 +846,13 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             }
             case "sound" -> {
                 var snd = sound(val);
-                p.playSound(p.getLocation(), snd == null ? Sound.BLOCK_NOTE_BLOCK_PLING : snd, SoundCategory.PLAYERS, 0.8f, 1f);
+                if (snd != null) {
+                    p.playSound(p.getLocation(), snd, SoundCategory.PLAYERS, 0.8f, 1f);
+                } else {
+                    // Pakcet-only events (steamworks:quest.complete) staan NIET in de
+                    // server-registry: speel op naam, de client resolvet via het pack.
+                    p.playSound(p.getLocation(), namespaced(val), SoundCategory.PLAYERS, 0.8f, 1f);
+                }
             }
             case "say" -> p.sendMessage(legacy(val));
             case "tag+" -> { if (!pr.tags.contains(val)) pr.tags.add(val); save(); }
@@ -972,8 +978,14 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private void speak(Player p, String key) {
         if (key == null || key.isEmpty()) return;
-        var s = sound(key);
-        if (s != null) p.playSound(p.getLocation(), s, SoundCategory.RECORDS, 0.9f, 1f);
+        // Stem-events (steamworks:igor.lineXX) leven alleen IN het resourcepack:
+        // Registry.SOUNDS kent ze niet en gaf null -> er speelde niets af.
+        // Altijd op naam sturen; de client resolvet via pack of vanilla.
+        p.playSound(p.getLocation(), namespaced(key), SoundCategory.RECORDS, 0.9f, 1f);
+    }
+
+    private String namespaced(String key) {
+        return key.contains(":") ? key : "steamworks:" + key;
     }
 
     private Sound sound(String key) {
