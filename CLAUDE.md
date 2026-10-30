@@ -1756,6 +1756,27 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.2.1 - migratie-golf 1: handelaars + eetwarens (30-10, ~04:20)
+
+- Alle contractcijfers uit de BQ-pakketten getrokken (python-scan): Vorkan/
+  Brakka/Petra/Aster 12×12+11 contracten, 8 eetwarens (npc 82 Aiko t/m 89 Yuki,
+  ID-mapping via Citizens saves.yml op de server) elk 6 contracten, 400c.
+  Cooldown 1320s = exact dezelfde timer die BQ gebruikte.
+- Engine-verbeteringen: keuzes van de eerste stage blijven zichtbaar na
+  voltooiing (winkelknoppen, tag menu:<i>), contracten-rij verbreed naar
+  slots 18-34 (12 contracten past), keuzes verhuisd naar 19-25 (botsing met
+  de act-knop op 31 was een bug), `shop`-actie draait nu via de console
+  (spelers hebben geen mi-rechten, BQ deed het ook console).
+- quests.yml: 14 quests (milo, igor + 4 handelaars + 8 eetwarens), alles
+  Engels, beloningen nu MET elitecoins (2-5 per schaal - in BQ was het alleen
+  munt). Generator: scripts/gen-iekquests-merchants.py.
+- Rod_merchant UITGESTELD: contracten zijn MMOItems-vissen (PYROFISH_BRONZE_*),
+  engine kent mmoitem-matching nog niet - hij blijft op BQ tot golf 2.
+- Dubbele-NPC-klik-valkuil gedocumenteerd: bij deploy de 5 BQ-package-mappen
+  mee naar QuestPackages-offline\ (anders praten BQ én IekQuests tegelijk).
+- jar: deploy/IekQuests-0.2.1.jar sha1 217da0e38c1ba4ce46c7538561fa1010b299e987;
+  TE-DEPLOYEN 53 herschreven; docs/quests-migratie.md status-tabel bij.
+
 ### IekQuests 0.2.0 - feature-pariteit + alles Engels (30-10)
 
 - Taalregel van de eigenaar: alle speler-tekst is Engels

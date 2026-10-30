@@ -27,6 +27,10 @@ Citizens-NPC-klik, compass-knop, eigen data.yml, reload/reset.
 | 10 | NPC-koppeling meerdere NPC's per quest + "open shop"-actie | handelaars (mi stations / mmo shops) |
 | later | region-conditie (WorldGuard, 8×) & mmoitem-conditie (12×) | alleen als migratie ze vraagt |
 
+> **Stand 0.2.1 (30-10 04:30):** features 1-9 + shop-knoppen zijn IN de engine
+> en getest via de generator; `mmoitem` (Rod_merchant) en `region` zijn het
+> enige dat nog ontbreekt.
+
 ## Migratie-volgorde (risico oplopend)
 
 1. **Onze eigen twee** (milo, halloween) — staan al in de questconfig, alleen nog
@@ -49,8 +53,24 @@ Citizens-NPC-klik, compass-knop, eigen data.yml, reload/reset.
 | pakket | staat op | naar IekQuests |
 |---|---|---|
 | milo, halloween_lanterns | ✅ al in IekQuests | klaar (na deploy + test) |
-| vorkan/Armorshop/Rod/gemologist/Upgradestone | BQ | stap 2 |
-| mmoitems_food_shop | BQ | stap 2 (zelfde proef, 8× herhalen) |
+| vorkan/Armorshop/gemologist/Upgradestone | ✅ gemigreerd 0.2.1 | 12+12+12+11 contracten, cooldown 1320s, rep-punten, mi-shopknoppen |
+| mmoitems_food_shop | ✅ gemigreerd 0.2.1 | 8×6 contracten (82 Aiko … 89 Yuki), 400c + eco |
+| Rod_merchant | BQ (blijft) | **uitgesteld** — contracten zijn `mmoitem FISH PYROFISH_BRONZE_*`; engine heeft MMOItems-itemherkenning nodig (golf 2: reflectie API of lore-matching). FishingRodney npc 81 doet dus zolang z'n BQ-gesprek door. |
 | Backpack, Techcore, mad_doctor, cleric, CapitaUsop, NPCGuideGuards, RankTime (leeg) | BQ | stap 3 |
 | JobsRank1-5 | BQ | stap 4 |
 | tutorial | BQ | stap 5, met greyarts |
+
+### Migratie-opmerkingen golf 1 (30-10 04:30)
+
+- BQ gaf 1 willekeurig contract per dag; IekQuests toont de hele contracten-
+  rij met per-contract cooldown (1320s) — zelfde tempo, transparanter menu.
+- Cijfers 1-op-1 uit de pakketten: Vorkan/Brakka 250/400/650/900c, Petra 250-650,
+  Aster 300-600, eetwarens 400c. Elitecoins erbij: 2-5 naar schaal (was er niet
+  in BQ — eigenaar wil elitecoins in beloningen waar passend).
+- Rep-punten: vorkan/brakka/petra/aster/aiko..._friendship +1 per contract.
+  BQ's vriendjes-drempels (1/31/61/100 met eigen praatregels) zijn NOT
+  migrated — gesprekken worden in golf 3 mooier (choices + condities kunnen het).
+- NPC-klik botsing: ZOLANG beide draaien reageren BQ én IekQuests op dezelfde
+  NPC. Bij deploy de 5 package-mappen mee naar QuestPackages-offline\ ver-
+  places (TE-DEPLOYEN punt 53 zegt hoe).
+- scripts/gen-iekquests-merchants.py = bron van de merchant/hall-YAML-blokken.

@@ -19,7 +19,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
 | StaffHub 0.4.10 uitrollen (vertaalbalk mobiel) | TE-DEPLOYEN punt 49 | /opt/staffhub bijwerken + container rebuilden (zelfde als 0.4.9) |
-| IekQuests 0.2.0 klaar (eigen quest-engine) | TE-DEPLOYEN punt 53 + docs/quests-migratie.md | jar in deploy/ (sha1 cf4f1d12); alle spelerteksten Engels; BQ draait door tot migratie rond is |
+| IekQuests 0.2.1 klaar (eigen quest-engine) | TE-DEPLOYEN punt 53 + docs/quests-migratie.md | jar in deploy/ (sha1 217da0e3); migratie-golf 1: 4 handelaars (47 contracten) + 8 eetwarens (48 contracten) + milo + igor = 14 quests, alles Engels; Rod_merchant blijft BQ tot mmoitem-ondersteuning; bij deploy BQ-handelaars mee offline |
 | Halloween-quest plaatsen (morgen is het zo ver!) | TE-DEPLOYEN punt 52 | /npc create Igor Nightgrave → mapje uploaden → /bq reload |
 | Steamworks 0.3.26 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
 | Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | grijs-bericht VERSTUURD door eigenaar (30-10, DM) → wacht op antwoord; daarna ja/nee lockplan + klasse-keus |

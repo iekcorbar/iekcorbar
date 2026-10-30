@@ -520,17 +520,19 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             case "start" -> { startQuest(p, q, pr); return; }
             case "newtry" -> { resetQuest(pr); refresh(p, q); save(); return; }
         }
-        if (tag.startsWith("choice:")) {
-            var s = q.stages.get(pr.stage);
+        if (tag.startsWith("choice:") || tag.startsWith("menu:")) {
+            Stage s = pr.stage.isEmpty()
+                    ? (q.stages.isEmpty() ? null : q.stages.values().iterator().next())
+                    : q.stages.get(pr.stage);
             if (s == null) return;
-            int i = Integer.parseInt(tag.substring(7));
+            int i = Integer.parseInt(tag.substring(tag.indexOf(':') + 1));
             if (i < 0 || i >= s.choices.size()) return;
             Choice c = s.choices.get(i);
             if (!ok(p, q, pr, c.conds)) { deny(p); return; }
             if (!c.say.isEmpty()) p.sendMessage(legacy(c.say));
             speak(p, c.voice);
             for (var d : c.doList) run(p, q, pr, d);
-            if (!c.gotoKey.isEmpty() && q.stages.containsKey(c.gotoKey)) {
+            if (!pr.stage.isEmpty() && !c.gotoKey.isEmpty() && q.stages.containsKey(c.gotoKey)) {
                 pr.stage = c.gotoKey;
                 speakFirst(p, q, pr);
             }
@@ -715,8 +717,9 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 if (l != null) setCompass(p, l);
             }
             case "shop" -> {
+                // mi stations vereist console-rechten: %player% is al ingevuld
                 p.closeInventory();
-                Bukkit.dispatchCommand(p, val);
+                dispatch(val);
             }
             case "sequence" -> playSeq(p, q, pr, val);
             default -> dispatch(a);
@@ -854,12 +857,12 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         var book = item(q.icon, q.title, lines);
         inv.setItem(13, book);
 
-        int nextSlot = 31;
         if (!pr.started) {
             inv.setItem(31, tagged(Material.LIME_DYE, "&a✔ Start quest", "start"));
         } else if (pr.done) {
             if (!q.repeats.isEmpty()) {
-                int slot = 29;
+                // contracten-rij: slots 18-34 (max 17 contracts naast elkaar)
+                int slot = 18;
                 for (var r : q.repeats) {
                     Long cd = pr.cd.get(r.id);
                     boolean ready = cd == null || cd <= now();
@@ -869,14 +872,27 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     if (slot < 35) { inv.setItem(slot, tagged(Material.LIME_DYE, lab, "repeat:" + r.id)); slot++; }
                 }
             } else inv.setItem(31, tagged(Material.PAPER, "&aStart the quest again", "newtry"));
+            // winkelknoppen blijven beschikbaar na voltooiing (keuzes van de eerste stage)
+            Stage first = q.stages.isEmpty() ? null : q.stages.values().iterator().next();
+            if (first != null) {
+                int m = 36;
+                for (var c : first.choices) {
+                    if (m > 40) break;
+                    if (m == 40) { m = 41; }        // 40 is voor de terug-knop
+                    inv.setItem(m, tagged(Material.OAK_SIGN, c.label, "menu:" + first.choices.indexOf(c)));
+                    m++;
+                }
+            }
         } else if (s != null) {
             inv.setItem(31, tagged(Material.PAPER, labelFor(p, q, pr, s), "act"));
             if (s.kind.equals("walk") && s.loc != null)
                 inv.setItem(33, tagged(Material.COMPASS, "&6Point the way",
                         "compass:" + s.loc.getWorld().getName() + ";" + s.loc.getBlockX()
                                 + ";" + s.loc.getBlockY() + ";" + s.loc.getBlockZ()));
+            // keuzes boven de act-knop (19-25) - nooit meer botsing met 31
+            int nextSlot = 19;
             for (var c : s.choices) {
-                if (nextSlot > 37) break;
+                if (nextSlot > 25) break;
                 inv.setItem(nextSlot, tagged(Material.OAK_SIGN, c.label, "choice:" + indexOfChoice(s, c)));
                 nextSlot++;
             }

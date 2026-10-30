@@ -111,37 +111,1444 @@ quests:
         eco: 2
         voice: steamworks:igor.line11
 
-  # ---- migration-style demo (greyarts' vorkan in 0.2 language) -------------
-  vorkan_demo:
-    title: "&2Vorkan - Weapon Merchant"
-    subtitle: "Weapon Merchant Vorkan Kross &8(demo)"
+  vorkan:
+    title: "&2Weapon Merchant Vorkan Kross"
+    subtitle: "Weapon stall - Contraband Bay"
     icon: IRON_SWORD
     npc-id: 79
-    order: 90
-    start: "!tag:vorkan_demo_done"
+    order: 30
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: vorkan_friendship"
     stages:
-      talk:
+      intro:
         type: talk
-        label: "&2I'm looking for work."
+        label: "&aLet's do business."
         lines:
-          - "&fVorkan: &7Materials, not excuses. This time:"
-          - "&76× gunpowder. The smith needs it for blasting charges."
+          - "&fVorkan: &7Materials, not excuses. The forge eats"
+          - "&7ore and the apprentices eat insults. Bring me what"
+          - "&7I list and the coin follows - reputation too."
         choices:
-          - label: "&2What went wrong with the last contract?"
-            say: "&7Vorkan: &8nothing - except you never finished it."
-            cond: "!tag:vorkan_grumpy"
-            do: ["tag+ vorkan_grumpy"]
-        next: gunpowder
-      gunpowder:
-        type: deliver
+          - label: "&2Browse the weapon stall"
+            say: "&7Vorkan: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-weapon-1 %player%"]
+          - label: "&2Premium weapon rack"
+            say: "&7Vorkan: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-weapon-2 %player%"]
+          - label: "&2Legendary weapon case"
+            say: "&7Vorkan: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-weapon-3 %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a24x Sticks"
+        material: STICK
+        amount: 24
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a16x Leather"
+        material: LEATHER
+        amount: 16
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a12x String"
+        material: STRING
+        amount: 12
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a16x Coal"
+        material: COAL
+        amount: 16
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a10x Iron Ingots"
+        material: IRON_INGOT
+        amount: 10
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a12x Copper Ingots"
+        material: COPPER_INGOT
+        amount: 12
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c7:
+        label: "&a6x Gold Ingots"
+        material: GOLD_INGOT
+        amount: 6
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c8:
+        label: "&a6x Redstone"
+        material: REDSTONE
+        amount: 6
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c9:
+        label: "&a10x Flint"
+        material: FLINT
+        amount: 10
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c10:
+        label: "&a6x Gunpowder"
         material: GUNPOWDER
         amount: 6
-        label: "&aDeliver 6× gunpowder"
-    rewards:
-      - "money 650"
-      - "point vorkan_friend +1"
-      - "sound steamworks:quest.complete"
-      - "title &2CONTRACT COMPLETE|&7Vorkan remembers your name"
-      - "tag+ vorkan_demo_done"
+        cooldown: 1320
+        money: 650
+        eco: 4
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+650 coins, +4 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 650 coins"
+          - "sound steamworks:quest.complete"
+      c11:
+        label: "&a1x Diamonds"
+        material: DIAMOND
+        amount: 1
+        cooldown: 1320
+        money: 650
+        eco: 4
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+650 coins, +4 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 650 coins"
+          - "sound steamworks:quest.complete"
+      c12:
+        label: "&a1x Netherite Scrap"
+        material: NETHERITE_SCRAP
+        amount: 1
+        cooldown: 1320
+        money: 900
+        eco: 5
+        rewards:
+          - "point vorkan_friendship +1"
+          - "say &7+900 coins, +5 elite coins, +1 reputation with Vorkan"
+          - "title &aCONTRACT COMPLETE|&7Vorkan pays 900 coins"
+          - "sound steamworks:quest.complete"
+  brakka:
+    title: "&3Armor Merchant Brakka Stonewall"
+    subtitle: "Armor stall - Contraband Bay"
+    icon: DIAMOND_CHESTPLATE
+    npc-id: 95
+    order: 31
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: brakka_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fBrakka: &7Plate doesn't polish itself. Carry me"
+          - "&7hides, bars and whatever glitters, and you walk"
+          - "&7away richer than your armor."
+        choices:
+          - label: "&3Browse the armor stall"
+            say: "&7Brakka: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-armor-1 %player%"]
+          - label: "&3Premium armor rack"
+            say: "&7Brakka: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-armor-2 %player%"]
+          - label: "&3Legendary armor case"
+            say: "&7Brakka: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-armor-3 %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a24x Sticks"
+        material: STICK
+        amount: 24
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a16x Leather"
+        material: LEATHER
+        amount: 16
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a12x String"
+        material: STRING
+        amount: 12
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a16x Coal"
+        material: COAL
+        amount: 16
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a10x Iron Ingots"
+        material: IRON_INGOT
+        amount: 10
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a12x Copper Ingots"
+        material: COPPER_INGOT
+        amount: 12
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c7:
+        label: "&a6x Gold Ingots"
+        material: GOLD_INGOT
+        amount: 6
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c8:
+        label: "&a6x Redstone"
+        material: REDSTONE
+        amount: 6
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c9:
+        label: "&a10x Flint"
+        material: FLINT
+        amount: 10
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c10:
+        label: "&a48x Raw Iron"
+        material: RAW_IRON
+        amount: 48
+        cooldown: 1320
+        money: 650
+        eco: 4
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+650 coins, +4 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 650 coins"
+          - "sound steamworks:quest.complete"
+      c11:
+        label: "&a1x Diamonds"
+        material: DIAMOND
+        amount: 1
+        cooldown: 1320
+        money: 650
+        eco: 4
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+650 coins, +4 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 650 coins"
+          - "sound steamworks:quest.complete"
+      c12:
+        label: "&a1x Netherite Scrap"
+        material: NETHERITE_SCRAP
+        amount: 1
+        cooldown: 1320
+        money: 900
+        eco: 5
+        rewards:
+          - "point brakka_friendship +1"
+          - "say &7+900 coins, +5 elite coins, +1 reputation with Brakka"
+          - "title &aCONTRACT COMPLETE|&7Brakka pays 900 coins"
+          - "sound steamworks:quest.complete"
+  petra:
+    title: "&dGemologist Petra"
+    subtitle: "Gem stall - Contraband Bay"
+    icon: DIAMOND
+    npc-id: 78
+    order: 32
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: petra_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fPetra: &7Every stone has a story; the pretty ones"
+          - "&7have price tags. Fill my display cases and I'll"
+          - "&7fill your purse. Carefully. Nothing scratched."
+        choices:
+          - label: "&dBrowse the gem stall"
+            say: "&7Petra: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-gem-1 %player%"]
+          - label: "&dPremium gem rack"
+            say: "&7Petra: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-gem-2 %player%"]
+          - label: "&dRare gem vault"
+            say: "&7Petra: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-gem-3 %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a16x Coal"
+        material: COAL
+        amount: 16
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a12x Raw Copper"
+        material: RAW_COPPER
+        amount: 12
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a10x Raw Iron"
+        material: RAW_IRON
+        amount: 10
+        cooldown: 1320
+        money: 250
+        eco: 2
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+250 coins, +2 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 250 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a8x Raw Gold"
+        material: RAW_GOLD
+        amount: 8
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a6x Amethyst Shards"
+        material: AMETHYST_SHARD
+        amount: 6
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a4x Lapis Lazuli"
+        material: LAPIS_LAZULI
+        amount: 4
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c7:
+        label: "&a4x Redstone"
+        material: REDSTONE
+        amount: 4
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c8:
+        label: "&a3x Quartz"
+        material: QUARTZ
+        amount: 3
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c9:
+        label: "&a2x Emeralds"
+        material: EMERALD
+        amount: 2
+        cooldown: 1320
+        money: 650
+        eco: 4
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+650 coins, +4 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 650 coins"
+          - "sound steamworks:quest.complete"
+      c10:
+        label: "&a1x Diamonds"
+        material: DIAMOND
+        amount: 1
+        cooldown: 1320
+        money: 650
+        eco: 4
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+650 coins, +4 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 650 coins"
+          - "sound steamworks:quest.complete"
+      c11:
+        label: "&a8x Glowstone Dust"
+        material: GLOWSTONE_DUST
+        amount: 8
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c12:
+        label: "&a4x Prismarine Crystals"
+        material: PRISMARINE_CRYSTALS
+        amount: 4
+        cooldown: 1320
+        money: 650
+        eco: 4
+        rewards:
+          - "point petra_friendship +1"
+          - "say &7+650 coins, +4 elite coins, +1 reputation with Petra"
+          - "title &aCONTRACT COMPLETE|&7Petra pays 650 coins"
+          - "sound steamworks:quest.complete"
+  aster:
+    title: "&5Upgrade Merchant Aster Veyl"
+    subtitle: "Upgrade stall - Contraband Bay"
+    icon: ENDER_EYE
+    npc-id: 96
+    order: 33
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: aster_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fAster: &7Rarities only, darling. Pearls, shells,"
+          - "&7hearts that still beat. Bring me the deep and the"
+          - "&7end and I'll pay like a royal jeweller."
+        choices:
+          - label: "&5Browse the upgrade stall"
+            say: "&7Aster: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-specialupgrade-1 %player%"]
+          - label: "&5Premium upgrade rack"
+            say: "&7Aster: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-specialupgrade-2 %player%"]
+          - label: "&5Master upgrade bench"
+            say: "&7Aster: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open shop-specialupgrade-3 %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a8x Ender Pearls"
+        material: ENDER_PEARL
+        amount: 8
+        cooldown: 1320
+        money: 300
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+300 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 300 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a2x Shulker Shells"
+        material: SHULKER_SHELL
+        amount: 2
+        cooldown: 1320
+        money: 450
+        eco: 4
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+450 coins, +4 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 450 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a4x Nautilus Shells"
+        material: NAUTILUS_SHELL
+        amount: 4
+        cooldown: 1320
+        money: 350
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+350 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 350 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a1x a Heart of the Sea"
+        material: HEART_OF_THE_SEA
+        amount: 1
+        cooldown: 1320
+        money: 600
+        eco: 4
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+600 coins, +4 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 600 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a6x Phantom Membranes"
+        material: PHANTOM_MEMBRANE
+        amount: 6
+        cooldown: 1320
+        money: 350
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+350 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 350 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a2x Echo Shards"
+        material: ECHO_SHARD
+        amount: 2
+        cooldown: 1320
+        money: 550
+        eco: 4
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+550 coins, +4 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 550 coins"
+          - "sound steamworks:quest.complete"
+      c7:
+        label: "&a8x Blaze Rods"
+        material: BLAZE_ROD
+        amount: 8
+        cooldown: 1320
+        money: 350
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+350 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 350 coins"
+          - "sound steamworks:quest.complete"
+      c8:
+        label: "&a12x Armadillo Scutes"
+        material: ARMADILLO_SCUTE
+        amount: 12
+        cooldown: 1320
+        money: 300
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+300 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 300 coins"
+          - "sound steamworks:quest.complete"
+      c9:
+        label: "&a16x Amethyst Shards"
+        material: AMETHYST_SHARD
+        amount: 16
+        cooldown: 1320
+        money: 300
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+300 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 300 coins"
+          - "sound steamworks:quest.complete"
+      c10:
+        label: "&a10x Glow Ink Sacs"
+        material: GLOW_INK_SAC
+        amount: 10
+        cooldown: 1320
+        money: 300
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+300 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 300 coins"
+          - "sound steamworks:quest.complete"
+      c11:
+        label: "&a16x Chorus Fruit"
+        material: CHORUS_FRUIT
+        amount: 16
+        cooldown: 1320
+        money: 350
+        eco: 3
+        rewards:
+          - "point aster_friendship +1"
+          - "say &7+350 coins, +3 elite coins, +1 reputation with Aster"
+          - "title &aCONTRACT COMPLETE|&7Aster pays 350 coins"
+          - "sound steamworks:quest.complete"
+  teahouse:
+    title: "&aTea House - Aiko"
+    subtitle: "Aiko"
+    icon: HONEY_BOTTLE
+    npc-id: 82
+    order: 40
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: aiko_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fAiko: &7Welcome, welcome! The kettle never sleeps,"
+          - "&7but my pantry does. Restock me and every cup"
+          - "&7sold pays a little interest back to you."
+        choices:
+          - label: "&aTea House shop"
+            say: "&7Aiko: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-tea-house %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a12x Sugar"
+        material: SUGAR
+        amount: 12
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point aiko_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Aiko"
+          - "title &aCONTRACT COMPLETE|&7Aiko pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a4x Honey Bottles"
+        material: HONEY_BOTTLE
+        amount: 4
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point aiko_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Aiko"
+          - "title &aCONTRACT COMPLETE|&7Aiko pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a20x Sugar Cane"
+        material: SUGAR_CANE
+        amount: 20
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point aiko_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Aiko"
+          - "title &aCONTRACT COMPLETE|&7Aiko pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a24x Wheat"
+        material: WHEAT
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point aiko_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Aiko"
+          - "title &aCONTRACT COMPLETE|&7Aiko pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a16x Sweet Berries"
+        material: SWEET_BERRIES
+        amount: 16
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point aiko_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Aiko"
+          - "title &aCONTRACT COMPLETE|&7Aiko pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a18x Bamboo"
+        material: BAMBOO
+        amount: 18
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point aiko_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Aiko"
+          - "title &aCONTRACT COMPLETE|&7Aiko pays 400 coins"
+          - "sound steamworks:quest.complete"
+  sakebrewery:
+    title: "&bSake Brewery - Goro"
+    subtitle: "Goro"
+    icon: POTION
+    npc-id: 83
+    order: 41
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: goro_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fGoro: &7You smell that? Rice, heat, barrels and"
+          - "&7trouble. The vats are hungry - feed them supplies"
+          - "&7and I will pay properly."
+        choices:
+          - label: "&bSake Brewery shop"
+            say: "&7Goro: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-sake-brewery %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a32x Wheat"
+        material: WHEAT
+        amount: 32
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point goro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Goro"
+          - "title &aCONTRACT COMPLETE|&7Goro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a16x Sugar"
+        material: SUGAR
+        amount: 16
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point goro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Goro"
+          - "title &aCONTRACT COMPLETE|&7Goro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a12x Brown Mushrooms"
+        material: BROWN_MUSHROOM
+        amount: 12
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point goro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Goro"
+          - "title &aCONTRACT COMPLETE|&7Goro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a24x Potatoes"
+        material: POTATO
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point goro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Goro"
+          - "title &aCONTRACT COMPLETE|&7Goro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a20x Kelp"
+        material: KELP
+        amount: 20
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point goro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Goro"
+          - "title &aCONTRACT COMPLETE|&7Goro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a3x Barrels"
+        material: BARREL
+        amount: 3
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point goro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Goro"
+          - "title &aCONTRACT COMPLETE|&7Goro pays 400 coins"
+          - "sound steamworks:quest.complete"
+  bbqmaster:
+    title: "&6BBQ Master - Taro"
+    subtitle: "Taro"
+    icon: COOKED_BEEF
+    npc-id: 84
+    order: 42
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: taro_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fTaro: &7The grill is a hungry dragon and I am its"
+          - "&7tamer. Meat, coal, patience - bring the first two"
+          - "&7and the third comes free."
+        choices:
+          - label: "&6BBQ Master shop"
+            say: "&7Taro: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-bbq-master %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a16x Beef"
+        material: BEEF
+        amount: 16
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point taro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Taro"
+          - "title &aCONTRACT COMPLETE|&7Taro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a16x Porkchops"
+        material: PORKCHOP
+        amount: 16
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point taro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Taro"
+          - "title &aCONTRACT COMPLETE|&7Taro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a20x Chicken"
+        material: CHICKEN
+        amount: 20
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point taro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Taro"
+          - "title &aCONTRACT COMPLETE|&7Taro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a14x Mutton"
+        material: MUTTON
+        amount: 14
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point taro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Taro"
+          - "title &aCONTRACT COMPLETE|&7Taro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a24x Coal"
+        material: COAL
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point taro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Taro"
+          - "title &aCONTRACT COMPLETE|&7Taro pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a18x Charcoal"
+        material: CHARCOAL
+        amount: 18
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point taro_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Taro"
+          - "title &aCONTRACT COMPLETE|&7Taro pays 400 coins"
+          - "sound steamworks:quest.complete"
+  sushimaster:
+    title: "&eSushi Master - Daichi"
+    subtitle: "Daichi"
+    icon: COD
+    npc-id: 85
+    order: 43
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: daichi_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fDaichi: &7Fresh fish, sharp knife, steady hand."
+          - "&7The sea delivers, you carry, I create. Deal?"
+        choices:
+          - label: "&eSushi Master shop"
+            say: "&7Daichi: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-sushi-master %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a12x Cod"
+        material: COD
+        amount: 12
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point daichi_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Daichi"
+          - "title &aCONTRACT COMPLETE|&7Daichi pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a10x Salmon"
+        material: SALMON
+        amount: 10
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point daichi_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Daichi"
+          - "title &aCONTRACT COMPLETE|&7Daichi pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a24x Dried Kelp"
+        material: DRIED_KELP
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point daichi_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Daichi"
+          - "title &aCONTRACT COMPLETE|&7Daichi pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a24x Seagrass"
+        material: SEAGRASS
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point daichi_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Daichi"
+          - "title &aCONTRACT COMPLETE|&7Daichi pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a32x Kelp"
+        material: KELP
+        amount: 32
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point daichi_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Daichi"
+          - "title &aCONTRACT COMPLETE|&7Daichi pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a12x Bowls"
+        material: BOWL
+        amount: 12
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point daichi_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Daichi"
+          - "title &aCONTRACT COMPLETE|&7Daichi pays 400 coins"
+          - "sound steamworks:quest.complete"
+  candymerchant:
+    title: "&dCandy Merchant - Momo"
+    subtitle: "Momo"
+    icon: SUGAR
+    npc-id: 86
+    order: 44
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: momo_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fMomo: &7Sugar is organized happiness! My candy"
+          - "&7lines are long and my jars are empty. Fill them"
+          - "&7and sweetness pays the courier."
+        choices:
+          - label: "&dCandy Merchant shop"
+            say: "&7Momo: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-candy-merchant %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a32x Sugar"
+        material: SUGAR
+        amount: 32
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point momo_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Momo"
+          - "title &aCONTRACT COMPLETE|&7Momo pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a6x Honey Bottles"
+        material: HONEY_BOTTLE
+        amount: 6
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point momo_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Momo"
+          - "title &aCONTRACT COMPLETE|&7Momo pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a18x Apples"
+        material: APPLE
+        amount: 18
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point momo_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Momo"
+          - "title &aCONTRACT COMPLETE|&7Momo pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a12x Glow Berries"
+        material: GLOW_BERRIES
+        amount: 12
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point momo_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Momo"
+          - "title &aCONTRACT COMPLETE|&7Momo pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a20x Cocoa Beans"
+        material: COCOA_BEANS
+        amount: 20
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point momo_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Momo"
+          - "title &aCONTRACT COMPLETE|&7Momo pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a24x Paper"
+        material: PAPER
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point momo_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Momo"
+          - "title &aCONTRACT COMPLETE|&7Momo pays 400 coins"
+          - "sound steamworks:quest.complete"
+  fruitmarket:
+    title: "&2Fruit Market - Sora"
+    subtitle: "Sora"
+    icon: MELON_SLICE
+    npc-id: 87
+    order: 45
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: sora_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fSora: &7Nothing fancy - just the orchard's best"
+          - "&7piled in crates. Pick fresh, deliver fast, and"
+          - "&7the fruit business feeds both of us."
+        choices:
+          - label: "&2Fruit Market shop"
+            say: "&7Sora: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-fruit-market %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a24x Apples"
+        material: APPLE
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point sora_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Sora"
+          - "title &aCONTRACT COMPLETE|&7Sora pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a32x Melon Slices"
+        material: MELON_SLICE
+        amount: 32
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point sora_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Sora"
+          - "title &aCONTRACT COMPLETE|&7Sora pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a24x Sweet Berries"
+        material: SWEET_BERRIES
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point sora_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Sora"
+          - "title &aCONTRACT COMPLETE|&7Sora pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a16x Glow Berries"
+        material: GLOW_BERRIES
+        amount: 16
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point sora_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Sora"
+          - "title &aCONTRACT COMPLETE|&7Sora pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a8x Pumpkins"
+        material: PUMPKIN
+        amount: 8
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point sora_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Sora"
+          - "title &aCONTRACT COMPLETE|&7Sora pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a28x Carrots"
+        material: CARROT
+        amount: 28
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point sora_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Sora"
+          - "title &aCONTRACT COMPLETE|&7Sora pays 400 coins"
+          - "sound steamworks:quest.complete"
+  coffeehouse:
+    title: "&6Coffee House - Ren"
+    subtitle: "Ren"
+    icon: COCOA_BEANS
+    npc-id: 88
+    order: 46
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: ren_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fRen: &7The city drinks before it wakes. Beans,"
+          - "&7milk, cups by the hundred. Keep the machine"
+          - "&7fed and keep the city grateful."
+        choices:
+          - label: "&6Coffee House shop"
+            say: "&7Ren: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-coffee-house %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a24x Cocoa Beans"
+        material: COCOA_BEANS
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point ren_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Ren"
+          - "title &aCONTRACT COMPLETE|&7Ren pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a18x Sugar"
+        material: SUGAR
+        amount: 18
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point ren_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Ren"
+          - "title &aCONTRACT COMPLETE|&7Ren pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a4x Milk Buckets"
+        material: MILK_BUCKET
+        amount: 4
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point ren_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Ren"
+          - "title &aCONTRACT COMPLETE|&7Ren pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a16x Cookies"
+        material: COOKIE
+        amount: 16
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point ren_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Ren"
+          - "title &aCONTRACT COMPLETE|&7Ren pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a20x Paper"
+        material: PAPER
+        amount: 20
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point ren_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Ren"
+          - "title &aCONTRACT COMPLETE|&7Ren pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a10x Copper Ingots"
+        material: COPPER_INGOT
+        amount: 10
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point ren_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Ren"
+          - "title &aCONTRACT COMPLETE|&7Ren pays 400 coins"
+          - "sound steamworks:quest.complete"
+  icecreamcart:
+    title: "&bIce Cream Cart - Yuki"
+    subtitle: "Yuki"
+    icon: PACKED_ICE
+    npc-id: 89
+    order: 47
+    journal:
+      - "Standard contracts, 22 min cooldown after each delivery."
+      - "Reputation: yuki_friendship"
+    stages:
+      intro:
+        type: talk
+        label: "&aLet's do business."
+        lines:
+          - "&fYuki: &7Cold is an art form. Snow, ice, milk,"
+          - "&7and just enough sugar to forgive the winter."
+          - "&7Restock my cart and summer pays up."
+        choices:
+          - label: "&bIce Cream Cart shop"
+            say: "&7Yuki: &8The stall is open. Look, don't breathe on the glass."
+            do: ["shop mi stations open mmo-food-shop-ice-cream-cart %player%"]
+    rewards: []
+    repeat:
+      c1:
+        label: "&a32x Snowballs"
+        material: SNOWBALL
+        amount: 32
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point yuki_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Yuki"
+          - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c2:
+        label: "&a16x Ice"
+        material: ICE
+        amount: 16
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point yuki_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Yuki"
+          - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c3:
+        label: "&a8x Packed Ice"
+        material: PACKED_ICE
+        amount: 8
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point yuki_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Yuki"
+          - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c4:
+        label: "&a5x Milk Buckets"
+        material: MILK_BUCKET
+        amount: 5
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point yuki_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Yuki"
+          - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c5:
+        label: "&a24x Sugar"
+        material: SUGAR
+        amount: 24
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point yuki_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Yuki"
+          - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
+          - "sound steamworks:quest.complete"
+      c6:
+        label: "&a2x Blue Ice"
+        material: BLUE_ICE
+        amount: 2
+        cooldown: 1320
+        money: 400
+        eco: 3
+        rewards:
+          - "point yuki_friendship +1"
+          - "say &7+400 coins, +3 elite coins, +1 reputation with Yuki"
+          - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
+          - "sound steamworks:quest.complete"
 
 sequences: {}
