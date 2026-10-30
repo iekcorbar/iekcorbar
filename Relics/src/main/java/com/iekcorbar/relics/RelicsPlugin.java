@@ -4,16 +4,21 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -45,6 +50,61 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     boolean craftable(RelicType t) {
         return getConfig().getBoolean("crafting." + t.id(), t.craftableByDefault);
     }
+
+    // ------------------------------------------------------------ shop crates (0.5.0)
+
+    /** crates.yml in the plugin folder (bundled default; saveResource on first start). */
+    YamlConfiguration crateConfig() {
+        return YamlConfiguration.loadConfiguration(new File(getDataFolder(), "crates.yml"));
+    }
+
+    /** Who already opened the once-per-player crates (crates-used.yml, own file: keeps config.yml's comments). */
+    private YamlConfiguration usedC;
+
+    private YamlConfiguration usedConfig() {
+        if (usedC == null) usedC = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "crates-used.yml"));
+        return usedC;
+    }
+
+    /** One 'items:' entry of crates.yml -> the items it hands out. */
+    ItemStack[] crateItems(String entry) {
+        String[] p = entry.toLowerCase(Locale.ROOT).split(":");
+        switch (p[0]) {
+            case "relic" -> {
+                RelicType t = RelicType.byId(p.length > 1 ? p[1] : "");
+                return t == null ? new ItemStack[0] : new ItemStack[]{relics.item(t, 1)};
+            }
+            case "disc" -> {
+                Discs.Disc d = discs.byId(p.length > 1 ? p[1] : "");
+                return d == null ? new ItemStack[0] : new ItemStack[]{discs.item(d)};
+            }
+            case "random" -> {
+                var rnd = java.util.concurrent.ThreadLocalRandom.current();
+                if (p.length > 1 && p[1].equals("disc")) {          // one random shop-only disc
+                    List<Discs.Disc> pool = new ArrayList<>();
+                    for (Discs.Disc d : discs.discs.values()) if (d.recipe() == null) pool.add(d);
+                    return pool.isEmpty() ? new ItemStack[0] : new ItemStack[]{discs.item(pool.get(rnd.nextInt(pool.size())))};
+                }
+                // random:relic[:COLLECTION] - one random shop-only relic (craftable:false stock)
+                List<RelicType> pool = new ArrayList<>();
+                for (RelicType t : RelicType.values()) {
+                    if (craftable(t) || t.use == RelicType.Use.GIFT || t.use == RelicType.Use.CALENDAR
+                            || t == RelicType.EASTER_EGG || t == RelicType.COUNTDOWN_BOARD) continue;
+                    if (p.length > 2 && !t.collection.name().equalsIgnoreCase(p[2])) continue;
+                    pool.add(t);
+                }
+                return pool.isEmpty() ? new ItemStack[0] : new ItemStack[]{relics.item(pool.get(rnd.nextInt(pool.size())), 1)};
+            }
+            default -> { }
+        }
+        return new ItemStack[0];
+    }
+
+    static String titleize(String id) {
+        StringBuilder sb = new StringBuilder();
+        for (String w : id.split("_")) sb.append(sb.isEmpty() ? "" : " ").append(Character.toUpperCase(w.charAt(0))).append(w.substring(1));
+        return sb.toString();
+    }
     private Relics relics;
     private Treats treats;
     private Discs discs;
@@ -53,6 +113,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        if (!new File(getDataFolder(), "crates.yml").exists()) saveResource("crates.yml", false);
         try {
             zone = java.time.ZoneId.of(getConfig().getString("timezone", "Europe/Amsterdam"));
         } catch (Exception e) {
@@ -226,9 +287,53 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             target.playSound(target.getLocation(), org.bukkit.Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.8f, 1.2f);
             return true;
         }
+        // ---------------------------------------------------------------- shop crates (0.5.0)
+        // /relics crate <player> <naam> - bundles uit crates.yml. De site-shop levert
+        // kits met give_command "relics crate {player} <naam>"; één commando, geen
+        // lange ;;-chains (give_command is maar 255 karakters).
+        if (sub.equals("crate")) {
+            if (denied(s, "relics.give")) return true;
+            Player target = a.length > 1 ? Bukkit.getPlayerExact(a[1]) : s instanceof Player self ? self : null;
+            YamlConfiguration c = crateConfig();
+            String id = a.length > 2 ? a[2].toLowerCase(Locale.ROOT) : "";
+            ConfigurationSection cr = id.isEmpty() ? null : c.getConfigurationSection(id);
+            if (target == null || cr == null) {
+                s.sendMessage(Component.text("usage: /" + label + " crate <player> <" + String.join("|", c.getKeys(false)) + ">", NamedTextColor.RED));
+                return true;
+            }
+            String title = cr.getString("title", titleize(id));
+            boolean once = cr.getBoolean("once", false);
+            YamlConfiguration used = usedConfig();
+            if (once && used.getStringList("opened." + id).contains(target.getUniqueId().toString())) {
+                s.sendMessage(Component.text(target.getName() + " already opened the " + title + " - this one is once per player.", NamedTextColor.YELLOW));
+                target.sendMessage(Component.text("You already opened this " + title + " - one collection per soul.", NamedTextColor.YELLOW));
+                return true;
+            }
+            int n = 0;
+            for (String entry : cr.getStringList("items"))
+                for (ItemStack it : crateItems(entry)) {
+                    n++;
+                    for (var left : target.getInventory().addItem(it).values())
+                        target.getWorld().dropItemNaturally(target.getLocation(), left);
+                }
+            if (once) {
+                List<String> owners = used.getStringList("opened." + id);
+                owners.add(target.getUniqueId().toString());
+                used.set("opened." + id, owners);
+                try {
+                    used.save(new File(getDataFolder(), "crates-used.yml"));
+                } catch (Exception e) {
+                    getLogger().warning("Could not save crates-used.yml: " + e.getMessage());
+                }
+            }
+            s.sendMessage(Component.text("Opened " + title + " for " + target.getName() + ": " + n + " item(s).", NamedTextColor.GREEN));
+            target.sendMessage(Component.text("The " + title + " falls open at your feet!", NamedTextColor.GOLD));
+            target.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.3f);
+            target.getWorld().spawnParticle(Particle.FIREWORK, target.getLocation().add(0, 1.2, 0), 30, 0.4, 0.4, 0.4, 0.1);
+            return true;
+        }
         if (sub.equals("protect")) {
-            if (denied(s, "relics.admin")) return true;
-            if (!(s instanceof Player self)) {
+            if (denied(s, "relics.admin")) return true;            if (!(s instanceof Player self)) {
                 s.sendMessage("Players only.");
                 return true;
             }
@@ -559,7 +664,11 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"list", "give", "giveall", "random", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"list", "give", "giveall", "random", "crate", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
+        } else if (a.length == 2 && a[0].equalsIgnoreCase("crate")) {
+            for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
+        } else if (a.length == 3 && a[0].equalsIgnoreCase("crate")) {
+            for (String k : crateConfig().getKeys(false)) if (k.startsWith(last)) out.add(k);
         } else if (a.length == 2 && a[0].equalsIgnoreCase("remove")) {
             if ("target".startsWith(last)) out.add("target");
         } else if (a.length == 2 && a[0].equalsIgnoreCase("where")) {

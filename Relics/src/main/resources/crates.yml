@@ -1,0 +1,68 @@
+# Collector crates - the shop's kits (0.5.0).
+# /relics crate <player> <name> delivers one bundle; the website shop's
+# give_command is exactly "relics crate {player} <name>".
+#
+# items: each entry is one of
+#   relic:<id>            the relic with that id (see RelicType)
+#   disc:<id>             that music disc
+#   random:relic[:COLL]   one random shop-only relic (optionally: only from collection COLL)
+#   random:disc           one random shop-only music disc
+# once: true - the full bundle is only ever handed out ONCE per player; a second
+# purchase gives a polite refusal (staff can refund via the Shop Purchases view).
+# Edit freely while the server runs; the file is re-read on every /relics crate.
+
+melomaniac:
+  title: "Melomaniac's Crate"
+  items:
+    - disc:bountiful_barn_ballad
+    - disc:gears_of_christmas
+    - disc:ghosts_of_the_samurai
+    - disc:halloween_in_iekcorbar
+    - disc:trick_or_treat_at_halloween
+
+cellar:
+  title: "Sakagura Cellar Set"
+  items:
+    - relic:sugi_dama
+    - relic:koji_crock
+    - relic:bottling_crate
+    - relic:barrel_stack
+    - relic:steam_pipe
+    - relic:tasting_counter
+    - relic:noren
+    - relic:brew_kettle
+    - relic:bottle_rack
+    - relic:drunkard_barrel
+    - relic:greeter_doll
+    - relic:sweeper_doll
+
+shadow:
+  title: "Shadow of the Settlement"
+  once: true
+  items:
+    - relic:creature_skull
+    - relic:creature_ribcage
+    - relic:torn_settlement_banner
+    - relic:charred_outpost_lantern
+    - relic:vigil_candles
+    - relic:settlers_grave
+    - relic:ruin_monolith
+    - relic:specimen_jar
+    - relic:creature_egg_sac
+    - relic:gibbet_cage
+    - relic:ash_pile
+    - relic:warding_totem
+    - relic:shattered_portal_shard
+
+lucky:
+  title: "Lucky Relic Crate"
+  items:
+    - random:disc
+    - random:relic:curio
+
+hamper:
+  title: "Haunted Hamper"
+  items:
+    - disc:halloween_in_iekcorbar
+    - disc:trick_or_treat_at_halloween
+    - random:relic:shadow

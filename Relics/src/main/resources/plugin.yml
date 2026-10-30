@@ -8,7 +8,7 @@ author: iekcorbar
 commands:
   relics:
     description: Relics commands
-    usage: /relics <list|give|giveall|random|disc|remove|protect|where|info|board|music|gift|secret>
+    usage: /relics <list|give|giveall|random|crate|disc|remove|protect|where|info|board|music|gift|secret>
     aliases: [relic]
 
 permissions:
