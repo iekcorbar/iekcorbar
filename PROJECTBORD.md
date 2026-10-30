@@ -16,13 +16,13 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Relics 0.5.0 | 30-10 12:25 | shop-crates `/relics crate` (kits uit crates.yml) + shadow-set voortaan niet-craftbaar |
 | **Wildlife 0.8.0 stoomdraken** | 30-10 18:51 | berijden/temmen/grotten + 149 modellen + pack build21; clients: pack herhalen + herstart |
 | **SiteSync 1.16.3 + 4 Darkmatter86-boeken** | 30-10 18:51 | story_bundle-model + 11 books geladen; /ibook give <speler> the_well enz. |
+| **Relics 0.6.0 (Blood Token + Water Bottle)** | 30-10 18:38 | token-relic + Blessed via blood-moon (crates/config herschreven, .bak-060), fles drinkbaar; pack build22 |
 | **IekQuests 0.5.4 + Igor conversatie-quest** | 30-10 18:05 | stage-dialoog in chat + paneel sluit voor leespauze; Igor: 4 verduidelijkte stages + receptuur in de praat |
 | Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| **Relics 0.6.0 (Blood Token + Water Bottle)** | TE-DEPLOYEN punt 67 | jar + pack build22; even belangrijk: crates.yml/config.yml op de server zijn ouder - bak ze en laat de plugin ze opnieuw schrijven (of de 5 crate-regels + blood-moon zelf plakken), anders vallen de tokens uit de crates weg |
 | site-zip + **Shop Settings-commando's** | TE-DEPLOYEN punt 63 (nieuw: sha1 ecf1d85c) | zip uitpakken + NPM + restart; dan Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online) |
 | 2 site-SQL's importeren | deploy/site-30-10-kits.sql + site-30-10-nieuws.sql | phpMyAdmin → iekcorbar-DB; kits zijn nu veilig (Relics 0.5.0 draait), nieuws kan direct |
 | 2 announcement-posts publiceren | Discord #announcements | per post nog op 'Publish' klikken - anders zien abonnees de Halloween- en Blood Moon-post niet |
