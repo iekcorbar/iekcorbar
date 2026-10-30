@@ -52,7 +52,7 @@ Citizens-NPC-klik, compass-knop, eigen data.yml, reload/reset.
 
 | pakket | staat op | naar IekQuests |
 |---|---|---|
-| milo, halloween_lanterns | ✅ al in IekQuests | klaar (na deploy + test) |
+| milo, halloween_lanterns | ✅ al in IekQuests | milo live; Igor npc-id 137 gekoppeld 30-10 09:25 (halloween live na reload + test) |
 | vorkan/Armorshop/gemologist/Upgradestone | ✅ gemigreerd 0.2.1 | 12+12+12+11 contracten, cooldown 1320s, rep-punten, mi-shopknoppen |
 | mmoitems_food_shop | ✅ gemigreerd 0.2.1 | 8×6 contracten (82 Aiko … 89 Yuki), 400c + eco |
 | mad_doctor, cleric, CapitaUsop, Techcore | ✅ gemigreerd 0.4.0 (golf 3) | md_show-reeks, betaalde-cleric-optie, kompas-richtingen |

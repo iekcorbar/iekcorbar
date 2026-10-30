@@ -61,7 +61,7 @@ quests:
     title: "&5Halloween Lanterns"
     subtitle: "Igor Nightgrave - Halloween Town"
     icon: CARVED_PUMPKIN
-    npc-id: -1
+    npc-id: 137
     order: 20
     journal:
       - "Eight candles and six pumpkins for the town."
