@@ -1756,6 +1756,22 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.5.1 - de stemmen-fix + Igor live (30-10, ~09:46)
+
+- Eigenaar testte Igor: "horen nieman praten". Oorzaak: speak()/sound zochten in
+  Registry.SOUNDS - die kent ALLEEN vanilla-geluiden. Pack-events
+  (steamworks:igor.lineXX, milo.lineXX, quest.complete) gaven null: Igor was
+  stom, quest-complete klonk als note-blokje. Fix: altijd op naam afspelen, de
+  client resolvet via het pack. 0.5.1 bouwt + draait sinds herstart ~09:46.
+- Igor NPC: eigenaar bevestigde Citizens-id 137; quests.yml npc-id -1 → 137,
+  naar server (bak quests.yml.bak-pre-igor). Halloween-quest hiermee LIVE.
+- EIGENAARSUITROLVOLGORDE 30-10 (staat in skill server-toegang): nieuwe artefact
+  EERST naar de server pushen → server uit → OUDE eraf → aan. ("Pushen" = deploy,
+  git push mag gewoon eerder.) Bij deze beurt: oude jar per ongeluk al weg voor
+  de stop; further always in die volgorde.
+- Bij de docker stop nam Pterodactyl-Wings het opstarten zelf over (container-id
+  wisselde naar 22fb85b2a0ff) - geen extra start nodig, log bevestigde 0.5.1.
+
 ### IekQuests 0.5.0 - golf 3b + 4 uitgerold: alles behalve tutorial (30-10, ~08:45)
 
 - "migreer alles" afgerond (behalve golf 5): Rod_merchant, 24 NPCGuideGuards,
