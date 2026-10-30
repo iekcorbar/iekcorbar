@@ -14,13 +14,13 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Relics-config + ghosts-disc | 28-10 | discs staan weer goed |
 | Sakagura 0.5.0 | 30-10 11:23 | 12 nieuwe gewassen + orchard-trees (5 soorten, sapling→groei→plukken→vellen) |
 | Relics 0.5.0 | 30-10 12:25 | shop-crates `/relics crate` (kits uit crates.yml) + shadow-set voortaan niet-craftbaar |
+| **Wildlife 0.8.0 stoomdraken** | 30-10 18:51 | berijden/temmen/grotten + 149 modellen + pack build21; clients: pack herhalen + herstart |
+| **SiteSync 1.16.3 + 4 Darkmatter86-boeken** | 30-10 18:51 | story_bundle-model + 11 books geladen; /ibook give <speler> the_well enz. |
 | Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| **Wildlife 0.8.0 stoomdraken** | TE-DEPLOYEN punt 64 | jar + 149 modellen + pack build21; volgorde: server uit → wildlife-modellenmap VOLLEDIG vervangen → jar wisselen → build21 in mixer (build20 weg) → aan → `/fmm reload` + `/wildlife reload`; temmen/rijden/zitten/brullen testen |
-| **4 Darkmatter86-boeken + story_bundle** | TE-DEPLOYEN punt 65 | SiteSync 1.16.3-jar (txt'en worden bij eerste start automatisch in books/ gelegd) + modelzip in FMM/models; /fmm reload; test /ibook give <speler> the_well |
 | site-zip + **Shop Settings-commando's** | TE-DEPLOYEN punt 63 (nieuw: sha1 ecf1d85c) | zip uitpakken + NPM + restart; dan Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online) |
 | 2 site-SQL's importeren | deploy/site-30-10-kits.sql + site-30-10-nieuws.sql | phpMyAdmin → iekcorbar-DB; kits zijn nu veilig (Relics 0.5.0 draait), nieuws kan direct |
 | 2 announcement-posts publiceren | Discord #announcements | per post nog op 'Publish' klikken - anders zien abonnees de Halloween- en Blood Moon-post niet |
@@ -30,7 +30,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | StaffHub 0.5.0 🟢 LIVE (30-10 ~13:00, agent) | — | Grote UX-ronde op eigenaarswish: permissies per lid (caps-scherm in Accounts), zijbalk WEG → mappen-tegels + broodkruimel, documenten als popup, AI als volle rechterkolom, nieuwe bbmodel-kijker (textuur/klei/draad + textuurpaneel + fullscreen) |
 | IekQuests 0.5.2 🟢 LIVE sinds 30-10 11:23 (51 quests: alles gemigreerd behalve tutorial) | TE-DEPLOYEN punten 55-58 | 0.5.0 = golf 3b+4; 0.5.1 = stemmen-fix (pack-events op naam afspelen); 0.5.2 = /iekrestart met titel + afteller. BQ jar van de server af |
 | IekQuests 0.5.3 🟢 LIVE sinds 30-10 ~14:20 (56 quests) | TE-DEPLOYEN punt 61 | Steamworks-quests: Engineer-cursus II-V (cogwerk→boiler→olie→spoor) + hervatbare Engineer's Contracts; keuzes in lijstvorm werden door de engine genegeerd (o.a. Vokans stallknoppen) - parser hersteld, alles vertakt nu wél |
-| IekQuests 0.5.3 + 12 cursuskets 🟢 file LIVE (30-10 15:07), WACHT op /questbook reload | TE-DEPLOYEN punt 62 | Cook's course (Daichi 48-51), Cellar course (Goro 52-55), Keeper's course (Vorkan 56-59) - 68 quests; jar ongewijzigd, alleen quests.yml gepusht (bak-cursussen-3010) |
+| IekQuests 0.5.3 + 12 cursuskets 🟢 LIVE (quests.yml geladen bij herstart 18:51, /questbook-reload damit overbodig) | TE-DEPLOYEN punt 62 | Cook's course (Daichi 48-51), Cellar course (Goro 52-55), Keeper's course (Vorkan 56-59) - 68 quests |
 | Halloween-quest: Igor NPC 137 + quest live (met stem!) | TE-DEPLOYEN punten 52 + 56 | /questbook reload niet eens nodig - herstart 09:46 laadt alles. Klik Igor: "Heeeeey, little pumpkin..." hoorbaar; quest-complete klinkt nu echt |
 | Steamworks 0.3.26 🟢 LIVE sinds 30-10 05:05 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 (afgevinkt) | oude 0.3.25 van de server af |
 | Steamworks 0.3.27 (placement-rotatie: machines kijken kant op van speler + wrench draait voorkant) | TE-DEPLOYEN punt 54 | 🟢 LIVE 30-10 06:54 (sha1 6df44ece gemeten, log groen); KineticsTest 70/70; wiki-seed herbouwd |
@@ -44,7 +44,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 ## 🔵 In uitvoering (agent) → afgerond, wacht op deploy
 | Blok | Status |
 |---|---|
-| 3 Darkmatter86-verhaalboeken (ibook) | ✅ gebouwd → wacht op deploy als TE-DEPLOYEN punt 65 (SiteSync 1.16.3 + story_bundle-model, 4 tales) |
+| Igor Nightgrave (NPC 137) Halloween-quest | 🔵 agent bezig: uitgebreider + conversation i.p.v. GUI + duidelijker doel |
 
 ## ⚪ Wachtrij
 - **Pluginstrategie eigen beheer** → docs/plugin-strategie.md (30-10): routekaart
