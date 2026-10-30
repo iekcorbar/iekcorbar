@@ -1756,6 +1756,39 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### Sakagura 0.5.0 + IekQuests 0.5.2 - crops, trees en /iekrestart (30-10, ~11:23)
+
+- Eigenaar: "meer crops en trees" + "kondig een restart altijd in-game aan,
+  liefst met een title en aftellen".
+- 12 nieuwe gewassen ACHTER de Fruit-ordinal appended (chunkdata blijft
+  geldig): sudachi, shiso, wasabi, daikon, chili, mango, papaya, guava,
+  rambutan, longan, mangosteen, dragonfruit. Generator: kleuren (shiso/chili/
+  papaya/dragon nieuw, rest hergebruikt), FRUITS-list, 21 ITEM-modellen
+  (produce+seeds), sprite-takken (vines/roots/dwarf-trunks). Full Orchard
+  telt nu 48; Zukan/gives/trader automatisch mee.
+- TREES (helemaal nieuw): Tree-enum (sakura/ume/apple/orange/esdoorn),
+  Trees.java = chunk-PDC tekstregels (Decor-stijl) + display per blokniveau
+  + ene Interaction op de stam. Sapling (eigen item + recept: fruit + 2
+  sticks, esdoorn: 2 rode paddenstoelen) op gras/dirt; 20 min/stage,
+  bonemeal = +1 stage; rijpe kroon (2f-model met fruit-dots) -> rechtsklik
+  plukt de gewone garden-produce; 20 min ripen; 3 slagen = vellen (sapling
+  terug). Sakura laat CHERRY_LEAVES-deeltjes zien, esdoorn
+  FALLING_SPORE_BLOSSOM (Paper 26.2: FALLING_PETAL en Block.isAir() bestaan
+  hier niet - API-lessen). Wereld-map op UUID key (Garden-patroon).
+- API-valkuilen 26.2 die nu in de code staan: Block.isAir() -> isAir() van
+  Material, Particle.FALLING_PETAL -> CHERRY_LEAVES, World.getUID() is UUID.
+- PACK build20: merge 6430 bestanden, boundary-clamp op 2 modellen (bestaand
+  gereedschap), audit 0 problemen, sha1 601ec629.
+- IekQuests 0.5.2: /iekrestart <min|sec|now|cancel> - chat-berichten + titel
+  met afteller elke seconde, markerfile .restart-request + /stop. Container
+  draait java als PID1 ZONDER restart-loop: Paper /restart stopt alleen,
+  vandaar de host-cron-watcher /usr/local/sbin/iekcorbar-restart-watcher.sh
+  (elke min: marker + gestopt -> docker start). De eerste boot ermee is de
+  test-observatie: 11:23 deed ik stop→oude eraf→start nog zelf (opdracht
+  "gewoon herstart", countdown vergeten).
+- sha1's: Sakagura-0.5.0 17cff352, IekQuests-0.5.2 34d1cbc9, pack601ec629;
+  TE punt 58 + board bijgewerkt; artefacten uit deploy/.
+
 ### Sakagura 0.4.2 - still & cask oriëntatie (30-10, ~10:39)
 
 - Eigenaar: "steam still en sake cask zijn nog niet goed, moeten denk ik een

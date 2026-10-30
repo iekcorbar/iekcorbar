@@ -12,7 +12,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Easter-egg-golf | 29-10 16:56 | 16 eieren over 8 plugins + meta-ei SiteSync |
 | StaffHub 0.4.9 | 29-10 19:2x | bulk-beheer, prullenbak-undo, .bbmodel-3D-weergave |
 | Relics-config + ghosts-disc | 28-10 | discs staan weer goed |
-| Sakagura 0.4.2 | 30-10 10:39 | Steam Still + Sake Cask oriënteren op kijkrichting (ouwe rug-showend bug, Decor-patroon uit additions) |
+| Sakagura 0.5.0 | 30-10 11:23 | 12 nieuwe gewassen + orchard-trees (5 soorten, sapling→groei→plukken→vellen) |
 
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
@@ -20,12 +20,12 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
 | StaffHub 0.4.11 🟢 LIVE (30-10 05:20, agent) | TE-DEPLOYEN punt 49 (af) | DELETION-BUG REPARERD: prullenbak-lazy-create had onjuiste SQL (5 waardes/6 kolommen) → 'verwijderen' deed niets; nu fix + rebuild + bewezen op DB-kopie. Tevens 0.4.10 (vertaalbalk mobiel) mee live |
-| IekQuests 0.5.1 🟢 LIVE sinds 30-10 09:46 (51 quests: alles gemigreerd behalve tutorial) | TE-DEPLOYEN punten 55-56 | 0.5.0 = golf 3b+4 (Rod, guards, Backpack, JobsRank1-5); 0.5.1 = stemmen-fix: engine speelde pack-events via server-registry (null → stil). BQ jar van de server af |
+| IekQuests 0.5.2 🟢 LIVE sinds 30-10 11:23 (51 quests: alles gemigreerd behalve tutorial) | TE-DEPLOYEN punten 55-58 | 0.5.0 = golf 3b+4; 0.5.1 = stemmen-fix (pack-events op naam afspelen); 0.5.2 = /iekrestart met titel + afteller. BQ jar van de server af |
 | Halloween-quest: Igor NPC 137 + quest live (met stem!) | TE-DEPLOYEN punten 52 + 56 | /questbook reload niet eens nodig - herstart 09:46 laadt alles. Klik Igor: "Heeeeey, little pumpkin..." hoorbaar; quest-complete klinkt nu echt |
 | Steamworks 0.3.26 🟢 LIVE sinds 30-10 05:05 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 (afgevinkt) | oude 0.3.25 van de server af |
 | Steamworks 0.3.27 (placement-rotatie: machines kijken kant op van speler + wrench draait voorkant) | TE-DEPLOYEN punt 54 | 🟢 LIVE 30-10 06:54 (sha1 6df44ece gemeten, log groen); KineticsTest 70/70; wiki-seed herbouwd |
 | Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | grijs-bericht VERSTUURD door eigenaar (30-10, DM) → wacht op antwoord; daarna ja/nee lockplan + klasse-keus |
-| iekcorbar-pack-build19.zip 🟢 LIVE sinds 30-10 05:05 (woosh + blips + Milo/Igor-stem + questboek-model) | TE-DEPLOYEN punt 43 (afgevinkt) | build14 uit de mixer; clients: pack opnieuw halen + herstart |
+| iekcorbar-pack-build20.zip 🟢 LIVE sinds 30-10 11:23 (nieuwe gewassen + bomen + alles wat build19 had) | TE-DEPLOYEN punt 58 | build19 uit de mixer; clients: pack opnieuw halen + herstart |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |
 | AfkCinema 0.3.0 (klikbare zwevende menu's) | TE-DEPLOYEN punt 44 | bij dezelfde herstart-batch; jar staat ook al in de testbank (E:) |
 | NDA ondertekenen | docs/nda/signed/ (3 pdf's) | zelf tekenen → per DM naar kooyer, iekjebr36, greyarts91; getekend terug in dezelfde map. (afriendlystomach resigned - PDF ingetrokken) |
