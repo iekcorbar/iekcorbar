@@ -10,7 +10,7 @@ A sakagura is a Japanese sake brewery, and ours is open to everyone. Brew sake, 
 
 ### What you will do
 
-* **Grow.** Sixteen garden crops, from barley and hops to yuzu, plums, peaches, apples and berries, grow wild or on your own farmland.
+* **Grow.** Forty-eight garden crops - from barley and hops to yuzu, mangoes and dragon fruit - plus five orchard trees, wild or on your own farmland.
 * **Brew.** A cauldron with heat cooks, a cold one mixes. Add the ingredients, wait the right number of real minutes, and bottle the result.
 * **Distill and age.** Some drinks need a Steam Still, and others years in a cask. Casks age in real time, even while you are offline.
 * **Enjoy (carefully).** Drinks give effects, but alcohol also makes you drunk. Drink too much and you pass out and wake up with a hangover.

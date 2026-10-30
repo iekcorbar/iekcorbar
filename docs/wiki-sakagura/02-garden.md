@@ -6,7 +6,7 @@ parent: sakagura
 ---
 ## Garden
 
-New crops for brewing grow on **farmland**, in three stages. They need light, and bone meal speeds them up. Right-click a ripe plant to pick it: bushes and dwarf fruit trees grow back, barley and ginger are replanted from the start.
+Everything for brewing grows on **farmland**, in three stages. Plants need light, and bone meal speeds them up. Right-click a ripe plant to pick it: bushes, vines and dwarf fruit trees grow back for another pick; the grains and roots are dug up and replanted from the start. Every crop below has its own page with the numbers.
 
 | Crop | Plant | Harvest | Found wild in |
 |---|---|---|---|
@@ -26,10 +26,39 @@ New crops for brewing grow on **farmland**, in three stages. They need light, an
 | Apricots | Apricot Kernel | 1-3 Apricots | savannas, badlands, plains |
 | Mikan Oranges | Mikan Seeds | 2-4 Mikan Oranges | jungles, bamboo |
 | Kiwis | Kiwi Seeds | 2-3 Kiwis | jungles, forests |
+| Rice | Rice | 3-5 Rice | swamps, rivers, jungles |
+| Rye | Rye | 2-4 Rye | plains, taiga |
+| Maize | Maize | 1-3 Maize | plains, savannas |
+| Tomatoes | Tomato Seeds | 2-4 Tomatoes | plains, sunflower plains |
+| Raspberries | Raspberries | 2-4 Raspberries | forests, taiga |
+| Blackcurrants | Blackcurrants | 2-4 Blackcurrants | forests, groves |
+| Elderberries | Elderberries | 2-5 Elderberries | forests, dark forests |
+| Cranberries | Cranberries | 2-4 Cranberries | swamps, groves |
+| Gooseberries | Gooseberries | 2-4 Gooseberries | forests |
+| Mulberries | Mulberries | 2-5 Mulberries | plains, savannas |
+| Persimmons | Persimmon Pip | 1-3 Persimmons | forests |
+| Loquats | Loquat Stone | 1-3 Loquats | jungles |
+| Pomegranates | Pomegranate Seeds | 1-3 Pomegranates | savannas, badlands |
+| Figs | Fig Cuttings | 1-3 Figs | savannas, plains |
+| Quinces | Quince Pip | 1-3 Quinces | forests, flower forests |
+| Olives | Olive Stone | 2-4 Olives | savannas, badlands |
+| Dates | Date Pit | 1-3 Dates | badlands, jungles |
+| Lychees | Lychee Seed | 2-4 Lychees | jungles, bamboo |
+| Passion Fruits | Passionfruit Seeds | 1-3 Passion Fruits | jungles |
+| Vanilla Pods | Vanilla Cuttings | 1-2 Vanilla Pods | jungles, bamboo |
+| Sudachi | Sudachi Seeds | 2-3 Sudachi | jungles, bamboo |
+| Shiso Leaves | Shiso Leaves | 2-4 Shiso Leaves | forests, jungles |
+| Wasabi Roots | Wasabi Roots | 1-2 Wasabi Roots | swamps, rivers |
+| Daikon | Daikon | 1-2 Daikon | plains, flower forests |
+| Chili Peppers | Chili Seeds | 2-4 Chili Peppers | jungles, savannas |
+| Mangoes | Mango Pit | 1-3 Mangoes | jungles |
+| Papayas | Papaya Seeds | 1-2 Papayas | jungles |
+| Guavas | Guava Seeds | 2-3 Guavas | savannas, jungles |
+| Rambutan | Rambutan Seed | 2-3 Rambutan | jungles |
+| Longans | Longan Seed | 2-4 Longans | jungles |
+| Mangosteens | Mangosteen Seeds | 1-3 Mangosteens | jungles |
+| Dragon Fruits | Dragonfruit Seeds | 1-2 Dragon Fruits | swamps, jungles |
 
-### Good to know
+**Good to know:** hops, grapes, passion fruit and vanilla are thirsty - they only grow on wet farmland. Grains and roots (barley, rice, rye, maize, ginger, wasabi, daikon) are dug up whole and replanted. Wild bushes appear here and there in the world; break or pick them for your first seeds. Fruiting plants sometimes drop their pit or seeds when picked, and one fruit crafts into two seeds. Many fruits are also nice to eat.
 
-* **Hops and grapes** are thirsty: they only grow on wet farmland.
-* Wild bushes appear here and there in the world; break them or pick them for your first seeds.
-* Fruit trees sometimes drop their pit or seeds when picked, and you can craft one fruit into two seeds.
-* Many fruits are also nice to eat.
+**Looking for bigger harvests?** The garden has an orchard too: [Orchard Trees](/wiki?page=sakagura-trees) grow from saplings into full trees whose fruit you pick off the canopy.
