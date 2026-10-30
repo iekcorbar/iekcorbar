@@ -33,9 +33,6 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.util.Transformation;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,13 +48,14 @@ import java.util.Map;
  */
 final class Stills implements Listener {
     private final Sakagura plugin;
-    private final NamespacedKey coverKey;
+    private final NamespacedKey coverKey, facingKey;
     private final Map<Location, ItemDisplay> covers = new HashMap<>();
     private final Map<Location, Integer> progress = new HashMap<>();
 
     Stills(Sakagura plugin) {
         this.plugin = plugin;
         coverKey = new NamespacedKey(plugin, "still_cover");
+        facingKey = new NamespacedKey(plugin, "still_facing");
     }
 
     private int secondsPerRun() {
@@ -85,6 +83,7 @@ final class Stills implements Listener {
         if (!plugin.goods().isStillItem(e.getItemInHand())) return;
         Block b = e.getBlockPlaced();
         if (b.getState(false) instanceof Barrel barrel) {
+            CoverTransform.storeFacing(barrel, facingKey, CoverTransform.horizontalFacing(e.getPlayer()));
             barrel.getPersistentDataContainer().set(plugin.goods().stillKey, PersistentDataType.BYTE, (byte) 1);
             barrel.customName(Component.text("Steam Still"));
             barrel.update();
@@ -231,7 +230,7 @@ final class Stills implements Listener {
             en.getPersistentDataContainer().set(coverKey, PersistentDataType.BYTE, (byte) 1);
             en.setItemStack(look);
             en.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
-            en.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(1.01f, 1.01f, 1.01f), new Quaternionf()));
+            en.setTransformation(CoverTransform.rotated(CoverTransform.facingOf(b, facingKey)));
         });
         light(d, b);
         covers.put(b.getLocation(), d);

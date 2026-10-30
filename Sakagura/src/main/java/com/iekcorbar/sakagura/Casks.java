@@ -31,9 +31,6 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.util.Transformation;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,13 +44,14 @@ import java.util.Map;
  */
 final class Casks implements Listener {
     private final Sakagura plugin;
-    private final NamespacedKey woodKey, tagKey;
+    private final NamespacedKey woodKey, tagKey, facingKey;
     private final Map<Location, ItemDisplay> covers = new HashMap<>();
 
     Casks(Sakagura plugin) {
         this.plugin = plugin;
         woodKey = new NamespacedKey(plugin, "cask");
         tagKey = new NamespacedKey(plugin, "cover");
+        facingKey = new NamespacedKey(plugin, "cover_facing");
     }
 
     private long yearMillis() {
@@ -142,6 +140,7 @@ final class Casks implements Listener {
             b.setBlockData(d, false);
         }
         if (b.getState(false) instanceof Barrel barrel) {
+            CoverTransform.storeFacing(barrel, facingKey, CoverTransform.horizontalFacing(e.getPlayer()));
             barrel.getPersistentDataContainer().set(woodKey, PersistentDataType.STRING, w.id());
             barrel.customName(net.kyori.adventure.text.Component.text(w.label() + " Sake Cask"));
             barrel.update();
@@ -205,7 +204,7 @@ final class Casks implements Listener {
             en.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
             en.setItemStack(look);
             en.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
-            en.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(1.01f, 1.01f, 1.01f), new Quaternionf()));
+            en.setTransformation(CoverTransform.rotated(CoverTransform.facingOf(b, facingKey)));
         });
         light(d, b);
         covers.put(b.getLocation(), d);
