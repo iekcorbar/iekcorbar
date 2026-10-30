@@ -38,6 +38,7 @@ final class ZukanData implements Supplier<Map<String, Object>> {
             all.add(goods.item(f.produce, 1));
             if (f.seed != null) all.add(goods.item(f.seed, 1));
         }
+        for (Tree t : Tree.values()) all.add(goods.item(t.sapling(), 1));
         for (Woods w : Woods.values()) all.add(goods.cask(w, 1));
         all.add(goods.still(1));
         all.addAll(plugin.gardenDecor().allItems());

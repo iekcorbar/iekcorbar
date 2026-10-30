@@ -40,7 +40,10 @@ final class Goods implements Listener {
     final List<NamespacedKey> recipeKeys = new ArrayList<>();
     private static final Map<String, Integer> FOOD = Map.ofEntries(Map.entry("grape", 1), Map.entry("peach", 3), Map.entry("cherry", 2), Map.entry("strawberry", 2),
             Map.entry("blueberry", 2), Map.entry("yuzu", 1), Map.entry("ume", 1), Map.entry("apple", 4), Map.entry("pear", 3),
-            Map.entry("apricot", 2), Map.entry("mikan", 2), Map.entry("kiwi", 2));
+            Map.entry("apricot", 2), Map.entry("mikan", 2), Map.entry("kiwi", 2),
+            // 0.5.0: nieuwe gewassen (pittig/kruidachtige dingen blijven on-eetbaar)
+            Map.entry("mango", 3), Map.entry("papaya", 2), Map.entry("guava", 2), Map.entry("mangosteen", 2),
+            Map.entry("dragonfruit", 1), Map.entry("rambutan", 1), Map.entry("longan", 1), Map.entry("sudachi", 1));
 
     Goods(Sakagura plugin) {
         this.plugin = plugin;
@@ -59,10 +62,12 @@ final class Goods implements Listener {
         ItemMeta m = it.getItemMeta();
         Fruit f = Fruit.byId(id);
         Fruit planted = Fruit.byPlantItem(id);
-        String name = f != null ? f.displayName : label(id);
+        Tree sapling = Tree.bySapling(id);
+        String name = f != null ? f.displayName : sapling != null ? sapling.displayName + " Sapling" : label(id);
         m.displayName(Component.text(name, NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
         List<Component> lore = new ArrayList<>();
         if (planted != null) lore.add(Component.text("Plant on farmland.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        if (sapling != null) lore.add(Component.text("Right-click grass or dirt to plant an orchard tree.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
         lore.add(Component.text("Sakagura", NamedTextColor.DARK_AQUA).decoration(TextDecoration.ITALIC, false));
         m.lore(lore);
         m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, id);
@@ -233,6 +238,20 @@ final class Goods implements Listener {
             NamespacedKey k = new NamespacedKey(plugin, f.seed);
             ShapelessRecipe r = new ShapelessRecipe(k, item(f.seed, 2));
             r.addIngredient(org.bukkit.inventory.RecipeChoice.exactChoice(item(f.produce, 1)));
+            Bukkit.addRecipe(r);
+            recipeKeys.add(k);
+        }
+        // 0.5.0 orchard saplings: fruit + sticks (maple: two red mushrooms - it bears none)
+        for (Tree t : Tree.values()) {
+            NamespacedKey k = new NamespacedKey(plugin, t.sapling());
+            ShapelessRecipe r = new ShapelessRecipe(k, item(t.sapling(), 1));
+            if (t.fruit() != null) r.addIngredient(org.bukkit.inventory.RecipeChoice.exactChoice(item(t.fruitId, 1)));
+            else {
+                r.addIngredient(Material.RED_MUSHROOM);
+                r.addIngredient(Material.RED_MUSHROOM);
+            }
+            r.addIngredient(Material.STICK);
+            r.addIngredient(Material.STICK);
             Bukkit.addRecipe(r);
             recipeKeys.add(k);
         }

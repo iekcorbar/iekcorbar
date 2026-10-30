@@ -15,6 +15,12 @@ garden:
   # chance (0-1) that a patch of wild fruit bushes appears the first time a chunk loads
   wild-chance-per-chunk: 0.1
 
+trees:
+  # orchard trees (0.5.0): sapling -> sprout -> young tree -> full tree, then fruit ripens
+  minutes-per-stage: 20   # real minutes per growth step (bone meal skips one)
+  fruit-minutes: 20       # after picking, how long until the canopy shows fruit again
+  break-hits: 3           # punches on the trunk before the tree comes down (drops the sapling)
+
 distilling:
   # the Steam Still: bottles + a glowstone dust inside, fire/lava/campfire below.
   seconds-per-run: 20     # one run distills the bottles inside and spends one glowstone dust

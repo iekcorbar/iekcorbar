@@ -10,6 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -33,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -249,6 +252,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             else sender.sendMessage(Component.text("questwizard: iekquests.admin required."));
             return true;
         });
+        var rcmd = Bukkit.getPluginCommand("iekrestart");
+        if (rcmd != null) rcmd.setExecutor(this::onRestartCommand);
         Bukkit.getScheduler().runTaskTimer(this, this::refreshOpenGuis, 40L, 40L);
         Bukkit.getScheduler().runTaskTimer(this, this::saveData, 1200L, 1200L);
         load();
@@ -257,7 +262,93 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (restartTask != null) restartTask.cancel();
         saveData();
+    }
+
+    // ---------------------------------------------------------------- /iekrestart
+
+    private BukkitTask restartTask;
+    private int restartLeft;
+
+    /**
+     * In-game restart met aankondiging (eigenaar, 30-10): titel + afteller in de chat.
+     * De container draait java als PID 1 zonder restart-loop, dus Paper's eigen /restart
+     * zou alleen stoppen. Daarom: markerfile .restart-request + /stop; een cron op de VPS
+     * (/usr/local/sbin/iekcorbar-restart-watcher.sh) start de container dan opnieuw op.
+     */
+    private boolean onRestartCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
+        if (!sender.hasPermission("iekquests.admin")) {
+            sender.sendMessage(Component.text("Only staff can schedule restarts."));
+            return true;
+        }
+        if (args.length < 1) {
+            sender.sendMessage(Component.text("Usage: /" + label + " <minutes 1-60 | seconds 61-3600 | now | cancel>"));
+            return true;
+        }
+        String a = args[0].toLowerCase(Locale.ROOT);
+        if (a.equals("cancel")) {
+            if (restartTask != null) {
+                restartTask.cancel();
+                restartTask = null;
+                Bukkit.broadcast(legacy("&aRestart cancelled - carry on!"));
+                for (Player p : Bukkit.getOnlinePlayers())
+                    p.showTitle(Title.title(legacy("&aCancelled"), legacy("&7No restart after all.")));
+            } else sender.sendMessage(Component.text("No restart is scheduled."));
+            return true;
+        }
+        int secs;
+        if (a.equals("now")) secs = 10;
+        else {
+            int n;
+            try { n = Integer.parseInt(a); } catch (NumberFormatException e) {
+                sender.sendMessage(Component.text("Give a number (minutes up to 60, seconds above 60), now or cancel."));
+                return true;
+            }
+            secs = n <= 60 ? n * 60 : Math.min(n, 3600);
+            if (secs < 10) secs = 10;
+        }
+        startRestart(sender, secs);
+        return true;
+    }
+
+    private void startRestart(CommandSender by, int secs) {
+        if (restartTask != null) restartTask.cancel();
+        restartLeft = secs;
+        Bukkit.broadcast(legacy("&6&#9888 Server restart in " + fmt(secs) + " &7- announced by " + by.getName() + "."));
+        showRestartTitle(secs);
+        restartTask = Bukkit.getScheduler().runTaskTimer(this, () -> {
+            restartLeft--;
+            if (restartLeft > 0) {
+                showRestartTitle(restartLeft);
+                int r = restartLeft;
+                if (r == 300 || r == 120 || r == 60) Bukkit.broadcast(legacy("&eRestart in " + fmt(r) + "."));
+                if (r == 30 || (r <= 10 && r >= 1)) Bukkit.broadcast(legacy("&cRestart in " + r + "s - log out safely!"));
+                return;
+            }
+            restartTask = null;
+            try {
+                new File(Bukkit.getWorldContainer(), ".restart-request").createNewFile();
+            } catch (Exception e) {
+                getLogger().warning("Could not write the restart marker: " + e.getMessage());
+            }
+            Bukkit.broadcast(legacy("&cRestarting now. Back in about a minute - see you then!"));
+            Bukkit.getScheduler().runTaskLater(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "stop"), 40L);
+        }, 20L, 20L);
+    }
+
+    private void showRestartTitle(int left) {
+        var times = Title.Times.times(java.time.Duration.ofMillis(100), java.time.Duration.ofMillis(900), java.time.Duration.ofMillis(100));
+        for (Player p : Bukkit.getOnlinePlayers())
+            p.showTitle(Title.title(legacy("&6Server restart"), legacy("&e" + fmt(left) + " left"), times));
+    }
+
+    private static String fmt(int s) {
+        if (s >= 60) {
+            int m = s / 60, r = s % 60;
+            return r == 0 ? m + " min" : m + "m " + r + "s";
+        }
+        return s + "s";
     }
 
     // ---------------------------------------------------------------- load + save

@@ -43,6 +43,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     private Casks casks;
     private Drunk drunk;
     private Garden garden;
+    private Trees trees;
     private GardenDecor gardenDecor;
     private Adv adv;
 
@@ -58,9 +59,10 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
         casks = new Casks(this);
         drunk = new Drunk(this);
         garden = new Garden(this);
+        trees = new Trees(this);
         gardenDecor = new GardenDecor(this);
         var pm = getServer().getPluginManager();
-        for (var l : new org.bukkit.event.Listener[]{goods, cauldrons, stills, casks, drunk, garden}) pm.registerEvents(l, this);
+        for (var l : new org.bukkit.event.Listener[]{goods, cauldrons, stills, casks, drunk, garden, trees}) pm.registerEvents(l, this);
         pm.registerEvents(gardenDecor.decor, this);
         // items sold by wandering traders (WanderingTrades hands out a plain paper, see TraderSwap)
         pm.registerEvents(new TraderSwap(this, "Sakagura", name -> {
@@ -84,6 +86,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                     casks.loadChunk(c);
                     stills.loadChunk(c);
                     garden.loadChunk(c);
+                    trees.loadChunk(c);
                     gardenDecor.decor.loadChunk(c);
                 }
         });
@@ -93,9 +96,11 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
             stills.tick();
             drunk.tick();
             garden.tick();
+            trees.tick();
             if (tick % 30 == 0) {
                 casks.relight();
                 stills.relight();
+                trees.relight();
             }
         }, 20L, 20L);
         long[] decorTick = {0};
@@ -112,6 +117,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
             casks.removeAll();
             stills.removeAll();
             garden.removeAllDisplays();
+            trees.removeAllDisplays();
             gardenDecor.decor.removeAllDisplays();
             gardenDecor.decor.unregisterRecipes();
         }
@@ -126,6 +132,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     Recipes recipes() { return recipes; }
     Goods goods() { return goods; }
     Stills stills() { return stills; }
+    Trees trees() { return trees; }
     Adv adv() { return adv; }
     Drunk drunk() { return drunk; }
     GardenDecor gardenDecor() { return gardenDecor; }
@@ -169,7 +176,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                 }
                 Recipe r = recipes.get(a[2].toLowerCase(Locale.ROOT));
                 Woods wood = a[2].startsWith("cask_") ? Woods.byId(a[2].substring(5)) : null;
-                if (r == null && wood == null && Fruit.byId(a[2]) == null && Fruit.byPlantItem(a[2]) == null) {
+                if (r == null && wood == null && Fruit.byId(a[2]) == null && Fruit.byPlantItem(a[2]) == null && Tree.bySapling(a[2]) == null) {
                     s.sendMessage(Component.text("Unknown drink/item - see /" + label + " recipes", NamedTextColor.RED));
                     return true;
                 }
@@ -322,6 +329,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                 if (f.produce.startsWith(last)) out.add(f.produce);
                 if (f.seed != null && f.seed.startsWith(last)) out.add(f.seed);
             }
+            for (Tree t : Tree.values()) if (t.sapling().startsWith(last)) out.add(t.sapling());
         }
         return out;
     }

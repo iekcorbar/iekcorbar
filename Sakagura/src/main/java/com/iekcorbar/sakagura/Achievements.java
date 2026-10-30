@@ -28,6 +28,8 @@ final class Achievements {
         // garden
         a.add("planted", null, "wheat_seeds", "Green Fingers", "Plant a garden seed.", "task");
         a.add("harvest", "planted", "sweet_berries", "First Harvest", "Pick a ripe garden crop.", "task");
+        a.add("sapling", "harvest", "oak_sapling", "Tree Planting", "Plant an orchard sapling.", "task");
+        a.add("tree_harvest", "sapling", "apple", "From the Canopy", "Pick fruit off a grown tree.", "task");
         for (Fruit f : Fruit.values()) {
             a.add("f_" + f.id(), "harvest", "sweet_berries", f.displayName, "Collect " + f.displayName.toLowerCase(java.util.Locale.ROOT) + ".", "task");
         }

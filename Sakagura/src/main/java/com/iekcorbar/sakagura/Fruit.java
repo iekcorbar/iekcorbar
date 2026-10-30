@@ -47,7 +47,21 @@ enum Fruit {
     DATE("Dates", "date", "date_pit", 1, 3, true, 26, List.of("badlands", "jungle")),
     LYCHEE("Lychees", "lychee", "lychee_seed", 2, 4, true, 24, List.of("jungle", "bamboo")),
     PASSIONFRUIT("Passion Fruits", "passionfruit", "passionfruit_seeds", 1, 3, true, 22, List.of("jungle")),
-    VANILLA("Vanilla Pods", "vanilla", "vanilla_cuttings", 1, 2, true, 30, List.of("jungle", "bamboo"));
+    VANILLA("Vanilla Pods", "vanilla", "vanilla_cuttings", 1, 2, true, 30, List.of("jungle", "bamboo")),
+    // 30-10 golf 0.5.0: twaalf nieuwe gewassen. BELANGRIJK: alleen ACHTERAPPENDEN,
+    // de enum-volgorde staat in de chunk-data als ordinal (zie Garden.encode).
+    SUDACHI("Sudachi", "sudachi", "sudachi_seeds", 2, 3, true, 22, List.of("jungle", "bamboo")),
+    SHISO("Shiso Leaves", "shiso", null, 2, 4, true, 14, List.of("forest", "jungle")),
+    WASABI("Wasabi Roots", "wasabi", null, 1, 2, false, 20, List.of("swamp", "river")),
+    DAICON("Daikon", "daikon", null, 1, 2, false, 22, List.of("plains", "flower_forest")),
+    CHILI("Chili Peppers", "chili", "chili_seeds", 2, 4, true, 16, List.of("jungle", "savanna")),
+    MANGO("Mangoes", "mango", "mango_pit", 1, 3, true, 26, List.of("jungle")),
+    PAPAYA("Papayas", "papaya", "papaya_seeds", 1, 2, true, 24, List.of("jungle")),
+    GUAVA("Guavas", "guava", "guava_seeds", 2, 3, true, 22, List.of("savanna", "jungle")),
+    RAMBUTAN("Rambutan", "rambutan", "rambutan_seed", 2, 3, true, 24, List.of("jungle")),
+    LONGAN("Longans", "longan", "longan_seed", 2, 4, true, 24, List.of("jungle")),
+    MANGOSTEEN("Mangosteens", "mangosteen", "mangosteen_seeds", 1, 3, true, 26, List.of("jungle")),
+    DRAGONFRUIT("Dragon Fruits", "dragonfruit", "dragonfruit_seeds", 1, 2, true, 24, List.of("swamp", "jungle"));
 
     static final int STAGES = 3;
 

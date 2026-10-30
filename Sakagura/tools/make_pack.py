@@ -24,6 +24,11 @@ BASE = {
     "gooseberry": (168, 198, 96), "mulberry": (96, 24, 48), "persimmon": (232, 118, 44), "loquat": (238, 172, 84),
     "pomegranate": (198, 42, 64), "fig": (118, 62, 102), "quince": (224, 190, 84), "olive": (122, 132, 62),
     "date": (142, 86, 42), "lychee": (218, 98, 92), "passion": (128, 62, 142), "vanilla": (228, 210, 172),
+    # 2026-10-30: 0.5.0 crops (sudachi->ume, wasabi->gooseberry, daikon->rice, mango->persimmon, guava->peach,
+    # rambutan->strawberry, longan->pit, mangosteen->grape hergebruiken bestaande cellen)
+    "shiso": (152, 56, 112), "chili": (216, 72, 34), "papaya": (246, 142, 62), "dragon": (230, 62, 140),
+    # 0.5.0 orchard trees: knotjes van sakura en esdoorn
+    "blossom": (250, 190, 215), "maple": (212, 96, 38),
 }
 PALETTE = {}
 for k, (r, g, b) in BASE.items():
@@ -41,7 +46,9 @@ FRUITS = [("barley", "grain"), ("hops", "hop"), ("grape", "grape"), ("ume", "ume
           ("blackcurrant", "blackcurrant"), ("elderberry", "elderberry"), ("cranberry", "cranberry"), ("gooseberry", "gooseberry"),
           ("mulberry", "mulberry"), ("persimmon", "persimmon"), ("loquat", "loquat"), ("pomegranate", "pomegranate"), ("fig", "fig"),
           ("quince", "quince"), ("olive", "olive"), ("date", "date"), ("lychee", "lychee"), ("passionfruit", "passion"),
-          ("vanilla", "vanilla")]
+          ("vanilla", "vanilla"), ("sudachi", "ume"), ("shiso", "shiso"), ("wasabi", "gooseberry"), ("daikon", "rice"),
+          ("chili", "chili"), ("mango", "persimmon"), ("papaya", "papaya"), ("guava", "peach"), ("rambutan", "strawberry"),
+          ("longan", "pit"), ("mangosteen", "grape"), ("dragonfruit", "dragon")]
 SEEDS = ["hop_cuttings", "grape_seeds", "ume_pit", "yuzu_seeds", "peach_pit", "cherry_pit",
          "apple_pip", "pear_pip", "apricot_kernel", "mikan_seeds", "kiwi_seeds",
          "tomato_seeds", "persimmon_pip", "loquat_stone", "pomegranate_seeds", "fig_cuttings",
@@ -188,6 +195,34 @@ ITEMS = {
     "lychee_seed": [box(6.5, 0, 6.5, 9.5, 3.0, 9.5, "pit")],
     "passionfruit_seeds": berries("ink", 6, 0.9, 31),
     "vanilla_cuttings": [box(7.6, 0, 7.6, 8.4, 9, 8.4, "stem"), box(6, 6, 7.6, 10, 6.4, 8.4, "vanilla_d"), box(6.5, 2, 7.6, 9.5, 2.4, 8.4, "vanilla")],
+    # --- 12 new crops (Fruit.java 0.5.0): produce + seeds
+    "sudachi": round_fruit("ume", 2.2),
+    "shiso": [box(7.7, 0, 7.7, 8.3, 7, 8.3, "stem"), box(5.2, 4, 7.7, 7.6, 4.9, 8.3, "shiso"),
+              box(8.4, 2.5, 7.7, 10.8, 3.4, 8.3, "shiso_l"), box(5.6, 1, 7.7, 8, 1.9, 8.3, "shiso_d")],
+    "wasabi": [box(4.5, 0, 6.5, 8.5, 2.5, 8.5, "gooseberry"), box(8, 0, 7.5, 11.5, 2, 9.5, "gooseberry_d"),
+               box(5.5, 2.5, 7, 7, 4, 8.5, "gooseberry_d"), box(7.6, 3, 7.6, 8.2, 7, 8.2, "stem")],
+    "daikon": [box(6.8, 0, 7.3, 9.2, 6.5, 8.7, "rice"), box(7.4, 6, 7.3, 8.6, 6.8, 8.7, "rice_d"),
+               box(6, 6.8, 7.6, 7.8, 8.4, 9, "leaf"), box(8.2, 6.8, 7, 10, 8, 8.4, "leaf_d")],
+    "chili": [box(7.7, 0, 7.8, 8.3, 2, 8.2, "stem"), box(5.8, 2, 7.7, 7, 6.4, 8.3, "chili"),
+              box(9, 0, 7.7, 10.2, 4.4, 8.3, "chili_d"), box(5.8, 6.4, 7.8, 7, 7.2, 8.2, "leaf")],
+    "mango": round_fruit("persimmon", 2.9),
+    "papaya": [box(6.6, 0, 7, 9.4, 6, 9, "papaya"), box(7, 6, 7.5, 9, 7.4, 8.5, "stem"), box(6.9, 1.5, 6.8, 7.3, 4.5, 7, "papaya_l")],
+    "guava": round_fruit("peach", 2.4),
+    "rambutan": round_fruit("strawberry", 2.2) + [box(6.6, 0.6, 7.4, 7, 1.8, 7.8, "strawberry_l"), box(9.2, 1, 8, 9.6, 2.2, 8.4, "strawberry_l")],
+    "longan": berries("pit", 6, 1.3, 41),
+    "mangosteen": round_fruit("grape", 2.5, leaf=False) + [box(7.2, 4.6, 7.2, 8.8, 5.2, 8.8, "leaf"), box(7.8, 5.2, 7.8, 8.2, 5.8, 8.2, "stem")],
+    "dragonfruit": [box(6.8, 0, 7.2, 9.2, 6.8, 8.8, "dragon"),
+                    box(5.9, 1.4, 7.3, 6.8, 3, 8.7, "leaf"), box(9.2, 2.6, 7.3, 10.1, 4.2, 8.7, "leaf"),
+                    box(6.2, 4.2, 7.3, 7.1, 5.8, 8.7, "leaf_d"), box(7.6, 6.8, 7.6, 8.4, 7.6, 8.4, "dragon_d")],
+    "sudachi_seeds": berries("seed", 5, 1.0, 42),
+    "chili_seeds": berries("seed", 6, 0.9, 43),
+    "mango_pit": [box(6, 0, 6.8, 10, 3.5, 9.2, "pit"), box(6.6, 3.5, 7.4, 9.4, 4, 8.6, "pit_d")],
+    "papaya_seeds": berries("seed", 7, 0.9, 44),
+    "guava_seeds": berries("seed", 6, 1.0, 45),
+    "rambutan_seed": [box(6.8, 0, 7, 9.2, 3, 9, "pit")],
+    "longan_seed": berries("pit", 4, 1.2, 46),
+    "mangosteen_seeds": berries("seed", 5, 1.1, 47),
+    "dragonfruit_seeds": berries("ink", 6, 0.8, 48),
 }
 
 
@@ -228,6 +263,44 @@ def still():
           box(-0.7, 8.0, 7.2, 0, 9.2, 8.8, "copper_l"), box(16, 8.0, 7.2, 16.7, 9.2, 8.8, "copper_l")]
     return e
 
+
+# ------------------------------------------------------------------ orchard trees (0.5.0)
+# (id, canopy colour, fruit colour) - fruit None = decorative (maple). Names must match Tree.java.
+TREES = [("sakura", "blossom", "cherry"), ("ume", "leaf", "ume"), ("apple", "leaf", "red"),
+         ("orange", "leaf", "yuzu"), ("maple", "maple", None)]
+
+
+def block_model(name, es):
+    """A 3D element model used by the Trees.java displays (ITEM_MODEL sakagura:block/<name>);
+    the items/block definition is what stops 26.2 from showing a magenta cube."""
+    write(f"assets/sakagura/models/block/{name}.json",
+          {"textures": {"p": "sakagura:item/palette", "particle": "sakagura:item/palette"}, "elements": es})
+    write(f"assets/sakagura/items/block/{name}.json", {"model": {"type": "minecraft:model", "model": f"sakagura:block/{name}"}})
+
+
+def tree_models():
+    for tid, crown, fruit in TREES:
+        cc, ccd = crown, crown + "_d"
+        block_model(f"tree_{tid}_0", [box(7.6, 0, 7.6, 8.4, 5, 8.4, "stem"), box(5.6, 4, 7.7, 7.4, 4.7, 8.3, cc),
+                                      box(8.6, 3, 7.7, 10.4, 3.4, 8.3, ccd)])
+        block_model(f"tree_{tid}_1_0", [box(6.8, 0, 6.8, 9.2, 16, 9.2, "spruce"), box(5.5, 0, 5.5, 10.5, 2, 10.5, "spruce_d")])
+        block_model(f"tree_{tid}_1_1", [box(2, 0, 2, 14, 9, 14, cc), box(0, 2, 0, 16, 7, 16, cc), box(4, 8, 4, 12, 11, 12, ccd)])
+        block_model(f"tree_{tid}_2_0", [box(6.5, 0, 6.5, 9.5, 16, 9.5, "spruce"), box(5, 0, 5, 11, 2.5, 11, "spruce_d"),
+                                        box(3, 1, 3, 4.5, 4, 4.5, "spruce_d")])
+        block_model(f"tree_{tid}_2_1", [box(7, 0, 7, 9, 10, 9, "spruce"), box(-4, 1, -4, 20, 7, 20, ccd),
+                                        box(-2, 6, -2, 18, 13, 18, cc), box(2, 12, 2, 14, 15, 14, ccd)])
+        top = [box(1, 0, 1, 15, 4, 15, cc), box(4, 4, 4, 12, 8, 12, ccd), box(7, 8, 7, 9, 11, 9, "spruce")]
+        block_model(f"tree_{tid}_2_2", top)
+        if fruit:
+            rnd = random.Random(sum(map(ord, tid)))
+            es = list(top)
+            for i in range(6):
+                x, y, z = rnd.uniform(1.5, 12.3), rnd.uniform(0.5, 5.3), rnd.uniform(1.5, 12.3)
+                es.append(box(x, y, z, x + 1.7, y + 1.7, z + 1.7, fruit if i % 2 else fruit + "_l"))
+            block_model(f"tree_{tid}_2f_2", es)
+        model(f"{tid}_sapling", [box(4, 0, 4, 12, 1.5, 12, "pit"), box(7.6, 1.5, 7.6, 8.4, 7, 8.4, "stem"),
+                                 box(5.6, 6, 7.7, 7.4, 6.7, 8.3, cc), box(8.6, 4.5, 7.7, 10.4, 5.2, 8.3, ccd)])
+
 # ------------------------------------------------------------------ crop sprites (16x16, 3 stages)
 
 
@@ -250,7 +323,7 @@ def sprite(name, col, stage):
             if stage >= 1:
                 for k in range(3):
                     put(px, x + (k % 2), hh - k, fruit if stage == 2 else L)
-    elif name in ("hops", "grape", "passionfruit", "vanilla"):
+    elif name in ("hops", "grape", "passionfruit", "vanilla", "dragonfruit"):
         for y in range(h + 2):                                  # a trellis pole the vine climbs
             put(px, 8, y, PALETTE["rope"] if name == "hops" else PALETTE["spruce"])
         for y in range(1, h):
@@ -262,7 +335,7 @@ def sprite(name, col, stage):
                 x, y = rnd.randint(4, 12), rnd.randint(3, h - 1)
                 for dx, dy in ((0, 0), (1, 0), (0, -1), (1, -1), (0, -2)):
                     put(px, x + dx, y + dy, fruit if (dx + dy) % 2 else fruit_l)
-    elif name == "ginger":
+    elif name in ("ginger", "wasabi", "daikon"):
         for i in range(5):
             x = 3 + i * 2
             for y in range(h):
@@ -272,7 +345,8 @@ def sprite(name, col, stage):
                 put(px, x, 0, fruit)
     else:                                                       # bushes and dwarf fruit trees
         trunk = name in ("ume", "yuzu", "peach", "cherry", "apple", "pear", "apricot", "mikan",
-                         "persimmon", "loquat", "pomegranate", "fig", "quince", "olive", "date", "lychee")
+                         "persimmon", "loquat", "pomegranate", "fig", "quince", "olive", "date", "lychee",
+                         "sudachi", "mango", "papaya", "guava", "rambutan", "longan", "mangosteen")
         if trunk:
             for y in range(max(2, h // 2)):
                 put(px, 8, y, PALETTE["spruce"])
@@ -312,6 +386,7 @@ def main():
     for wid, col in WOODS:
         model("cask_" + wid, cask(col))
     model("still", still())
+    tree_models()
     for i, (name, col) in enumerate(FRUITS):
         for st in range(3):
             tex = f"{name}_stage{st}"

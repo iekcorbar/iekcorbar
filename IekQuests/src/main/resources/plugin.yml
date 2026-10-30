@@ -17,6 +17,12 @@ commands:
     permission: iekquests.admin
     permission-message: The quest wizard is for staff only.
     aliases: [qwiz]
+  iekrestart:
+    description: Announce a server restart with a title and countdown, then stop and restart via the VPS watcher
+    usage: /iekrestart <minutes 1-60 | seconds 61-3600 | now | cancel>
+    permission: iekquests.admin
+    permission-message: Only staff can schedule restarts.
+    aliases: [iekre, restartnow]
 
 permissions:
   iekquests.use:
