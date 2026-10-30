@@ -1708,6 +1708,22 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
   (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
 
+### Alles Engels + StaffHub 0.4.10 (30-10)
+
+- Eigenaar: alle staff-content in het Engels. De 8 quests-gidsen zijn
+  herschreven in Engels (deploy/staffhub-quests/: 00-overview t/m
+  07-new-quests-roadmap; de NL-versies zijn verwijderd - hub wordt Engelstalig
+  geïmporteerd). Ook deploy/quest-sounds/ Engelstalig gemaakt (voice-milo-*,
+  quest-complete-chime, choice-click + mp3/ogg-mapjes + EN README).
+- **Vertaalbalk-melding van de eigenaar onderzocht:** de balk stond
+  alleen in de desktop-aside (md: only); het mobiele telefoon-blok (Hub.jsx
+  L468+) miste <Vertaal>. Niet "weg", maar nooit op klein scherm getekend.
+  Fix: `<Vertaal node={sel} />` toegevoegd in het md:hidden blok (pages-only,
+  zelfde regel als desktop). Nevenfeit: bestanden (.md) hebben nooit een
+  vertaalbalk - alleen pagina's; is ontwerp, staat in TE-DEPLOYEN punt 49.
+- StaffHub 0.4.9 -> **0.4.10** (bump_version.py), `npm run build` groen,
+  check_i18n 242/242/242/242. Uitrollen = eigenaar (TE-DEPLOYEN 49).
+
 ### StaffHub quest-gidsen + git-backup alle quests + quest-stemgeluid (30-10)
 
 - Nieuwe skill `monitor` (~\.claude\skills\monitor): één ssh-scan

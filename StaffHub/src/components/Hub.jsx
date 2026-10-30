@@ -470,6 +470,10 @@ export default function Hub({ me, onLogout }) {
           <div className="sticky top-0 z-50 flex justify-end bg-gradient-to-b from-black/80 to-transparent p-2">
             <button onClick={() => setSel(null)} title={t('dt.close')} className="p-2 rounded-lg bg-black/60 border border-bronze/30"><X className="size-4" /></button>
           </div>
+          {/* Vertaal hoort ook op telefoon/tablet zichtbaar zijn - op de desktop
+            staat hij in de aside. Without this line the translate bar was simply
+            gone on small screens (owner-melding 30-10). */}
+          {sel.type === 'page' && <Vertaal node={sel} />}
           {sel.type === 'page' && <PageEditor key={sel.id} node={sel} onRenamed={refresh} />}
           {sel.type === 'file' && <FilePane key={sel.id} n={sel} onChanged={refresh} lijst={kids.filter((k) => k.type === 'file' && mediaKind(k.name) === mediaKind(sel.name))} />}
           {sel.type === 'folder' && <FolderPane n={sel} open={() => { setParent(sel.id); setSel(null); }} />}

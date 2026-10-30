@@ -17,7 +17,8 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Wat | Waar | Actie |
 |---|---|---|
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
-| StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 md) | mapje slepen in de StaffHub-webapp (team-rechten); backup aller quests staat in git |
+| StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
+| StaffHub 0.4.10 uitrollen (vertaalbalk mobiel) | TE-DEPLOYEN punt 49 | /opt/staffhub bijwerken + container rebuilden (zelfde als 0.4.9) |
 | Steamworks 0.3.26 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
 | Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | grijs-bericht VERSTUURD door eigenaar (30-10, DM) → wacht op antwoord; daarna ja/nee lockplan + klasse-keus |
 | iekcorbar-pack-build15.zip | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
