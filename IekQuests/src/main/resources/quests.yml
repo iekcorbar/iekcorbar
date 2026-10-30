@@ -6365,6 +6365,528 @@ quests:
           - "&7From this moment on, you belong to the armorsmiths."
     rewards: []
   # <<< wave3b <<<
+  kit_knife:
+    title: "&eFirst, the Blade"
+    subtitle: "Daichi - Cook's course I"
+    icon: STONE_SWORD
+    npc-id: 85
+    order: 48
+    start: "!tag:kit_knife_done"
+    journal:
+      - "Cook's course I - a knife and a cutting board for Daichi."
+    stages:
+      offer:
+        type: talk
+        label: "&aTeach me to cook for real."
+        lines:
+          - "&fDaichi: &7A cook who borrows knives is a guest."
+          - "&7Yours begins cheap - flint on a stick, and a plank"
+          - "&7sawn flat to cut on. Make both, then we talk fish."
+      handin:
+        type: deliverall
+        label: "&aBring a knife and a cutting board"
+        items:
+          - "STONE_SWORD 1 knife"
+          - "PAPER 1 cutting board"
+        lines:
+          - "&fDaichi: &7Blade on board. That is where every meal"
+          - "&7starts - the sea, the field and the fire follow."
+    rewards:
+      - "tag+ kit_knife_done"
+      - "money 600"
+      - "eco 15"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&eFirst, the Blade"
+      - "say &fDaichi: &aKeep it sharp. Next comes the field."
+
+  kit_prep:
+    title: "&eFrom Field to Board"
+    subtitle: "Daichi - Cook's course II"
+    icon: BOWL
+    npc-id: 85
+    order: 49
+    start: "qtag:kit_knife:kit_knife_done,!tag:kit_prep_done"
+    journal:
+      - "Cook's course II - prepped vegetables and steamed rice."
+    stages:
+      offer:
+        type: talk
+        label: "&aWhat grows on the board next?"
+        lines:
+          - "&fDaichi: &7Cut what the field gives. Daikon thin,"
+          - "&7green onion fine, rice steamed until it clings."
+          - "&8Grow it yourself - rice seed on wet farmland."
+      handin:
+        type: deliverall
+        label: "&aDeliver the prepped trays"
+        items:
+          - "PAPER 2 daikon slices"
+          - "PAPER 4 green onion"
+          - "PAPER 4 steamed rice"
+        lines:
+          - "&fDaichi: &7Even slices. A knife reads a cook's"
+          - "&7patience in the cut. This one passes."
+    rewards:
+      - "tag+ kit_prep_done"
+      - "money 700"
+      - "eco 18"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&eFrom Field to Board"
+      - "say &fDaichi: &7Now the fire wants something."
+
+  kit_hot:
+    title: "&eThe Hot Kitchen"
+    subtitle: "Daichi - Cook's course III"
+    icon: MUSHROOM_STEW
+    npc-id: 85
+    order: 50
+    start: "qtag:kit_prep:kit_prep_done,!tag:kit_hot_done"
+    journal:
+      - "Cook's course III - one ramen and two miso soups, hot."
+    stages:
+      offer:
+        type: talk
+        label: "&aTeach me the pots."
+        lines:
+          - "&fDaichi: &7Dashi first - kombu and fish, then the"
+          - "&7pot sings. Bring me one ramen, steaming, and two"
+          - "&7miso soups. Cold food insults the fire."
+      handin:
+        type: deliverall
+        label: "&aDeliver the hot dishes"
+        items:
+          - "PAPER 1 ramen"
+          - "PAPER 2 miso soup"
+        lines:
+          - "&fDaichi: &7Broth clear, noodles unbroken. You cook"
+          - "&7like someone who will be fed again."
+    rewards:
+      - "tag+ kit_hot_done"
+      - "money 800"
+      - "eco 20"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&eThe Hot Kitchen"
+      - "say &fDaichi: &7Last lesson: a meal is not eaten alone."
+
+  kit_feast:
+    title: "&eA Place at the Table"
+    subtitle: "Daichi - Cook's course IV + contracts"
+    icon: COOKED_COD
+    npc-id: 85
+    order: 51
+    start: "qtag:kit_hot:kit_hot_done,!tag:kit_feast_done"
+    journal:
+      - "Cook's course IV - set a shared table. Reputation: cook_credit"
+    stages:
+      offer:
+        type: talk
+        label: "&aThe final lesson?"
+        lines:
+          - "&fDaichi: &7One plate you eat. One table you build."
+          - "&7A bento for the road, a platter for the table,"
+          - "&7a tea set for whoever stays too long. That is a cook."
+      handin:
+        type: deliverall
+        label: "&aSet the table"
+        items:
+          - "PAPER 1 bento box"
+          - "PAPER 1 sushi platter"
+          - "PAPER 1 tea set"
+        lines:
+          - "&fDaichi: &7You fed the room. Course complete."
+          - "&8The stall below takes sweets any day - steady pay."
+    rewards:
+      - "tag+ kit_feast_done"
+      - "tag+ cook_graduate"
+      - "money 1100"
+      - "eco 28"
+      - "relics crate %player% lucky"
+      - "sound steamworks:quest.complete"
+      - "title &eSUPPER CLUB|&7Daichi's course complete - a crate falls open"
+      - "say &fDaichi: &aA cook feeds strangers until they are not strangers. Here - a little crate of luck."
+    repeat:
+      dango:
+        label: "&a6x Dango"
+        material: PAPER
+        name: dango
+        amount: 6
+        cooldown: 1200
+        money: 300
+        eco: 3
+        rewards:
+          - "point cook_credit +1"
+          - "say &7+300 coins, +3 elite coins, +1 credit with Daichi"
+      mochi:
+        label: "&d4x Mochi"
+        material: PAPER
+        name: mochi
+        amount: 4
+        cooldown: 1200
+        money: 350
+        eco: 3
+        rewards:
+          - "point cook_credit +1"
+          - "say &7+350 coins, +3 elite coins, +1 credit with Daichi"
+      tempura:
+        label: "&e3x Kabocha Tempura"
+        material: PAPER
+        name: tempura
+        amount: 3
+        cooldown: 1500
+        money: 450
+        eco: 4
+        rewards:
+          - "point cook_credit +2"
+          - "say &7+450 coins, +4 elite coins, +2 credit with Daichi"
+
+  sak_garden:
+    title: "&bRows in the Orchard"
+    subtitle: "Goro - Cellar course I"
+    icon: SWEET_BERRIES
+    npc-id: 83
+    order: 52
+    start: "!tag:sak_garden_done"
+    journal:
+      - "Cellar course I - fruit and grain from the Sakagura garden."
+    stages:
+      offer:
+        type: talk
+        label: "&aYour vats looked hungry."
+        lines:
+          - "&fGoro: &7Hungry is polite. Thirsty is accurate."
+          - "&7Everything in my cellar starts in the ground -"
+          - "&7grape, peach, grain. Pick, and do not bruise."
+      handin:
+        type: deliverall
+        label: "&aDeliver the harvest"
+        items:
+          - "PAPER 6 grape"
+          - "PAPER 4 peach"
+          - "PAPER 4 rice"
+        lines:
+          - "&fGoro: &7Fruit with the bloom still on it. Good."
+          - "&8The garden regrows bushes; trees take longer - plant some."
+    rewards:
+      - "tag+ sak_garden_done"
+      - "money 600"
+      - "eco 15"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&bRows in the Orchard"
+      - "say &fGoro: &7Now the fruit needs somewhere to wait."
+
+  sak_cellar:
+    title: "&bWood and Time"
+    subtitle: "Goro - Cellar course II"
+    icon: BARREL
+    npc-id: 83
+    order: 53
+    start: "qtag:sak_garden:sak_garden_done,!tag:sak_cellar_done"
+    journal:
+      - "Cellar course II - one cask and the grain it drinks."
+    stages:
+      offer:
+        type: talk
+        label: "&aWhere does it all go?"
+        lines:
+          - "&fGoro: &7In a cask. Oak, spruce, birch - wood gives"
+          - "&7flavour while the brew sleeps. Some recipes want"
+          - "&7a certain wood. I want one cask on the bench."
+      handin:
+        type: deliverall
+        label: "&aBring a cask and barley"
+        items:
+          - "BARREL 1 sake cask"
+          - "PAPER 6 barley"
+        lines:
+          - "&fGoro: &7Sealed tight? Then let it sit and sulk."
+          - "&8Put drinks inside and time does the rest, even offline."
+    rewards:
+      - "tag+ sak_cellar_done"
+      - "money 700"
+      - "eco 16"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&bWood and Time"
+      - "say &fGoro: &7Patience pays. Heat, next, pays faster."
+
+  sak_still:
+    title: "&bUnder the Still"
+    subtitle: "Goro - Cellar course III"
+    icon: CAULDRON
+    npc-id: 83
+    order: 54
+    start: "qtag:sak_cellar:sak_cellar_done,!tag:sak_still_done"
+    journal:
+      - "Cellar course III - a Steam Still and juniper for the first distillate."
+    stages:
+      offer:
+        type: talk
+        label: "&aTeach me the heat."
+        lines:
+          - "&fGoro: &7A cask waits. A still decides. Bottles in,"
+          - "&7glowstone dust, fire under - what rises is cleaner"
+          - "&7than what stayed. Build me one and bring the berries."
+      handin:
+        type: deliverall
+        label: "&aDeliver the still and juniper"
+        items:
+          - "BARREL 1 steam still"
+          - "PAPER 4 juniper"
+        lines:
+          - "&fGoro: &7Copper work, no leaks. I can smell the"
+          - "&7difference already. Distil something. Come back wet."
+    rewards:
+      - "tag+ sak_still_done"
+      - "money 800"
+      - "eco 20"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&bUnder the Still"
+      - "say &fGoro: &7One lesson left, and it is the one that matters: taste."
+
+  sak_bottler:
+    title: "&bThe First Bottle"
+    subtitle: "Goro - Cellar course IV + contracts"
+    icon: POTION
+    npc-id: 83
+    order: 55
+    start: "qtag:sak_still:sak_still_done,!tag:sak_bottler_done"
+    journal:
+      - "Cellar course IV - two bottles of real sake. Reputation: cellar_credit"
+    stages:
+      offer:
+        type: talk
+        label: "&aThe last lesson."
+        lines:
+          - "&fGoro: &7Rice, water, patience - that is sake, and"
+          - "&7sake is the house's name. Two honest bottles and"
+          - "&7I will open the cellar for you. Properly."
+      handin:
+        type: deliver
+        label: "&aBring two bottles of sake"
+        material: POTION
+        name: sake
+        amount: 2
+        lines:
+          - "&fGoro: &7...that pours clean. Course complete, brewer."
+          - "&8The cellar set is yours now - all of it, in a crate."
+    rewards:
+      - "tag+ sak_bottler_done"
+      - "tag+ sak_cellar_graduate"
+      - "money 1200"
+      - "eco 25"
+      - "relics crate %player% cellar"
+      - "sound steamworks:quest.complete"
+      - "title &bCELLAR OF GORO|&7Course complete - the Sakagura set falls open"
+      - "say &fGoro: &aThe vats remember everyone who fed them. Take the crate."
+    repeat:
+      grapes:
+        label: "&a8x Grapes"
+        material: PAPER
+        name: grape
+        amount: 8
+        cooldown: 1200
+        money: 250
+        eco: 3
+        rewards:
+          - "point cellar_credit +1"
+          - "say &7+250 coins, +3 elite coins, +1 credit with Goro"
+      rice:
+        label: "&a6x Rice"
+        material: PAPER
+        name: rice
+        amount: 6
+        cooldown: 1200
+        money: 300
+        eco: 3
+        rewards:
+          - "point cellar_credit +1"
+          - "say &7+300 coins, +3 elite coins, +1 credit with Goro"
+      cask:
+        label: "&61x Sake Cask"
+        material: BARREL
+        name: sake cask
+        amount: 1
+        cooldown: 1500
+        money: 450
+        eco: 4
+        rewards:
+          - "point cellar_credit +2"
+          - "say &7+450 coins, +4 elite coins, +2 credit with Goro"
+
+  kura_first:
+    title: "&2One More Drawer"
+    subtitle: "Vorkan - Keeper's course I"
+    icon: CHEST
+    npc-id: 79
+    order: 56
+    start: "!tag:kura_first_done"
+    journal:
+      - "Keeper's course I - connectors and a terminal for Vorkan's stall."
+    stages:
+      offer:
+        type: talk
+        label: "&aYour stockroom is chaos."
+        lines:
+          - "&fVorkan: &7It is an organised chaos. Worse."
+          - "&8Word is there is a network - one terminal over"
+          - "&8all the chests. Wire my stall. Prove the parts work."
+      handin:
+        type: deliverall
+        label: "&aBring connectors and a terminal"
+        items:
+          - "PAPER 2 inventory connector"
+          - "PAPER 1 storage terminal"
+        lines:
+          - "&fVorkan: &7Two chests, one drawer everywhere. Hm."
+          - "&8It beats walking. Continue."
+    rewards:
+      - "tag+ kura_first_done"
+      - "money 600"
+      - "eco 15"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&2One More Drawer"
+      - "say &fVorkan: &7Distance is the next insult to a stockroom."
+
+  kura_lines:
+    title: "&2Over Distance"
+    subtitle: "Vorkan - Keeper's course II"
+    icon: STRING
+    npc-id: 79
+    order: 57
+    start: "qtag:kura_first:kura_first_done,!tag:kura_lines_done"
+    journal:
+      - "Keeper's course II - cable enough to cross the bay, and the connectors to hang it."
+    stages:
+      offer:
+        type: talk
+        label: "&aHow far can a drawer reach?"
+        lines:
+          - "&fVorkan: &8Farther than your arm. Cable carries"
+          - "&8a network over floors, walls, nonsense. Six lengths,"
+          - "&8two connectors - and no, string is not cable."
+      handin:
+        type: deliverall
+        label: "&aDeliver cable and connectors"
+        items:
+          - "PAPER 6 cable"
+          - "PAPER 2 cable connector"
+        lines:
+          - "&fVorkan: &7From the forge to the stall without legs."
+          - "&8I almost like it. Almost. Now let things move on their own."
+    rewards:
+      - "tag+ kura_lines_done"
+      - "money 700"
+      - "eco 18"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&2Over Distance"
+      - "say &fVorkan: &8Next: hands that do not exist."
+
+  kura_flow:
+    title: "&2Things That Move Themselves"
+    subtitle: "Vorkan - Keeper's course III"
+    icon: HOPPER
+    npc-id: 79
+    order: 58
+    start: "qtag:kura_lines:kura_lines_done,!tag:kura_flow_done"
+    journal:
+      - "Keeper's course III - hopper, interface and a filter."
+    stages:
+      offer:
+        type: talk
+        label: "&aAutomation for the stall."
+        lines:
+          - "&fVorkan: &8A merchant who carries is a porter with"
+          - "&8a fine coat. Hopper moves, interface feeds belts"
+          - "&8and arms, filter decides. Bring me the three."
+      handin:
+        type: deliverall
+        label: "&aDeliver the working trio"
+        items:
+          - "PAPER 1 inventory hopper"
+          - "PAPER 1 inventory interface"
+          - "PAPER 1 item filter"
+        lines:
+          - "&fVorkan: &7The ore walks in by itself. I will stand"
+          - "&7here and take credit for it. Good."
+    rewards:
+      - "tag+ kura_flow_done"
+      - "money 800"
+      - "eco 20"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&2Things That Move Themselves"
+      - "say &fVorkan: &8Last course: the whole room, from one chair."
+
+  kura_net:
+    title: "&2The Keeper's Seal"
+    subtitle: "Vorkan - Keeper's course IV + contracts"
+    icon: ENDER_CHEST
+    npc-id: 79
+    order: 59
+    start: "qtag:kura_flow:kura_flow_done,!tag:kura_net_done"
+    journal:
+      - "Keeper's course IV - a finished network. Reputation: kura_credit"
+    stages:
+      offer:
+        type: talk
+        label: "&aFinish the room."
+        lines:
+          - "&fVorkan: &8Craft without a bench. File without a"
+          - "&8shelf. Watch levels while you sleep. And then -"
+          - "&8sit down, and open it all from your pocket."
+      handin:
+        type: deliverall
+        label: "&aDeliver the keeper's four"
+        items:
+          - "PAPER 1 crafting terminal"
+          - "PAPER 1 filing cabinet"
+          - "PAPER 1 level emitter"
+          - "PAPER 1 wireless terminal"
+        lines:
+          - "&fVorkan: &7...the stall runs itself now. Course complete."
+          - "&8Stock contracts stay open. Bring cable; take coin."
+    rewards:
+      - "tag+ kura_net_done"
+      - "tag+ kura_keeper"
+      - "money 1400"
+      - "eco 30"
+      - "relics crate %player% melomaniac"
+      - "sound steamworks:quest.complete"
+      - "title &2KEEPER OF THE KURA|&7The network answers to you now"
+      - "say &fVorkan: &aMaterials, no longer excuses. Here - five discs the forge cannot make."
+    repeat:
+      cable:
+        label: "&a8x Inventory Cable"
+        material: PAPER
+        name: cable
+        amount: 8
+        cooldown: 1200
+        money: 300
+        eco: 3
+        rewards:
+          - "point kura_credit +1"
+          - "say &7+300 coins, +3 elite coins, +1 credit with Vorkan"
+      trim:
+        label: "&a6x Inventory Trim"
+        material: PAPER
+        name: trim
+        amount: 6
+        cooldown: 1200
+        money: 250
+        eco: 3
+        rewards:
+          - "point kura_credit +1"
+          - "say &7+250 coins, +3 elite coins, +1 credit with Vorkan"
+      filters:
+        label: "&d2x Filters (any kind)"
+        material: PAPER
+        name: filter
+        amount: 2
+        cooldown: 1500
+        money: 400
+        eco: 4
+        rewards:
+          - "point kura_credit +2"
+          - "say &7+400 coins, +4 elite coins, +2 credit with Vorkan"
+
 sequences:
   md_show:
     - "0|say &eMad Doctor: &7Excellent! Please remain perfectly still."

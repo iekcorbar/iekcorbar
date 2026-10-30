@@ -1756,6 +1756,30 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests - 12 cursuskets voor Keuken, Sakagura en Kura (30-10, file live 15:07, reload open)
+
+- Eigenaar: "hetzelfde voor sakaguru, kitchen en kura" - na de Steamworks-
+  cursus nu drie ketens op de bestaande markt-NPC's, 48-59 (totaal 68 quests):
+  Daichi's Cook's course (mes→snijden→heet→tafel), Goro's Cellar course
+  (oogst→vat→still→flessen) en Vorkans Keeper's course (connector→kabel→
+  automatie→volledig netwerk). Slotstukken geven crate-beloningen via het
+  Relics-commando: lucky / cellar (de brouwerijset!) / melomaniac + titel;
+  de repeat-contracten (dango, vaten, kabels) geven punt-cook/cellar/kura-credit.
+- Levering werkt overal op dezelfde manier: al deze plugin-items zijn PAPER
+  (of BARREL voor vaten/stills, POTION voor drank) met display-naam - de
+  engine-fasen gebruiken material + naamfilter (allHeld respecteerde die
+  filter al, lijn 834 - gecheckt vóór het schrijven). Ketting via qtag op de
+  eigen-done-tags; contract-fasen pas na het slot (repeat van het hoofdstuk).
+- Teksten in het Engels, in de stem van de bestaande NPC-regels (korte,
+  droge regels - Daichi/Goro/Vorkan-stijl uit de stall-quests).
+- GEEN jar-wijziging nodig: alles met de bestaande engine (0.5.3 van vandaag
+  parseert ook de lijst-keuzes die deze quests NIET gebruiken, maar de stall-
+  quests dus wél redden). Deploy = quests.yml-push (gedaan, sha1 31cc58cf,
+  bak quests.yml.bak-cursussen-3010) + /questbook reload in het spel (open).
+- Grammar-check (node/js-yaml + eigen stage/reward-controles) op 68 quests:
+  groen; start-tags, qtag-ketting, reward-werkwoorden en deliver-grammatica
+  stuk voor stuk geverifieerd tegen de engine-code.
+
 ### IekQuests 0.5.3 - Steamworks-quests + de dode-keuzes-reparatie (30-10, ~14:20 live)
 
 - Eigenaar: "ik wil steamworks quests". Gebouwd als vijfdelige Engineer-cursus
