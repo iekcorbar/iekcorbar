@@ -161,7 +161,26 @@ final class Animals implements Listener {
     private void setup(LivingEntity e, Species s, boolean baby) {
         e.setSilent(true);
         e.setInvisible(true); // the FMM model is what players see
-        if (e instanceof Mob m) m.setRemoveWhenFarAway(false); // = persistent: not counted in the vanilla mob cap
+        if (e instanceof Mob m) {
+            m.setRemoveWhenFarAway(false); // = persistent: not counted in the vanilla mob cap
+            m.setAI(true); // ensure pathfinding is active (some base mobs spawn with AI off)
+        }
+        // Suppress vanilla base-mob behaviors that fight the FMM model:
+        // 1. Horses (DEER, ZEBRA) jump over obstacles on their own, which makes the model look like
+        //    it is "springing but not walking". Disable jumping entirely.
+        if (e instanceof org.bukkit.entity.Horse h) {
+            h.setJumpStrength(0.0); // no jumping at all - it walks around obstacles instead
+            h.setDomestication(h.getMaxDomestication()); // fully tamed: no rearing animation
+        }
+        // 2. Chickens (DUCK, CRANE, OSTRICH, PENGUIN) flap their wings when falling, which can
+        //    trigger unwanted FMM animation states. Prevent flapping by zeroing fall distance.
+        if (e instanceof org.bukkit.entity.Chicken) {
+            e.setFallDistance(0f);
+        }
+        // 3. Goats (BOAR) can ram - already cancelled via onHarm, but also disable the ram animation.
+        if (e instanceof org.bukkit.entity.Goat g) {
+            g.setScreaming(false);
+        }
         double hp = baby ? Math.max(2, s.health / 2) : s.health;
         set(e, Attribute.MAX_HEALTH, hp);
         e.setHealth(hp);
@@ -255,6 +274,7 @@ final class Animals implements Listener {
         animals.remove(old.getUniqueId());
         old.remove();
         at.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, at.add(0, ne.getHeight() * 0.5, 0), 12, 0.4, 0.4, 0.4, 0);
+        for (org.bukkit.entity.Player pl : at.getWorld().getNearbyPlayers(at, 24)) plugin.adv().grant(pl, "grown_up");
         return true;
     }
 
@@ -313,6 +333,7 @@ final class Animals implements Listener {
                 if (threat != null && (!threat.isSneaking() || threat.isSprinting())) {
                     if (a.species == Species.DEER) w.playSound(e.getLocation(), "wildlife:deer.snort", 0.8f, 1f);
                     flee(e, threat, 2.2 + a.species.shy() * 0.25);
+                    for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "first_flee");
                     a.fleeUntil = tick + 40; // any running spyglass observation breaks for 2 s
                     a.busyUntil = tick + 20 + 10 * a.species.shy(); // one reaction per 1-1.5 s, no jittering
                 }
@@ -329,6 +350,7 @@ final class Animals implements Listener {
                     if (scared && !a.curled) {
                         a.curled = true;
                         plugin.fmm().play(e, "curl", true);
+                        for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "first_curl");
                         if (e instanceof Mob m) m.setAware(false);
                     } else if (!scared && a.curled) {
                         a.curled = false;
@@ -342,6 +364,7 @@ final class Animals implements Listener {
                     if (hide && !a.hiding) {
                         a.hiding = true;
                         plugin.fmm().play(e, "hide", true);
+                        for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "first_curl");
                         w.playSound(e.getLocation(), "wildlife:tortoise.hide", 0.5f, 1f);
                         if (e instanceof Mob m) m.setAware(false);
                     } else if (!hide && a.hiding && tick >= a.busyUntil) {
@@ -356,6 +379,7 @@ final class Animals implements Listener {
                     if (night && calm && !a.sleeping) {
                         a.sleeping = true;
                         plugin.fmm().play(e, "sleep", true);
+                        for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "first_sleep");
                         if (e instanceof Mob m) m.setAware(false);
                     } else if ((!night || !calm) && a.sleeping) {
                         wake(a);
@@ -375,6 +399,7 @@ final class Animals implements Listener {
                     if (!a.sleeping && !night && calm2 && r.nextInt(200) == 0) {
                         a.sleeping = true;
                         plugin.fmm().play(e, "sleep", true);
+                        for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "first_sleep");
                         if (e instanceof Mob m2) m2.setAware(false);
                     } else if (a.sleeping && (night || !calm2 || r.nextInt(500) == 0)) {
                         wake(a);
@@ -394,7 +419,11 @@ final class Animals implements Listener {
                 case WRAITH -> {
                     // A placed atmosphere piece, not an animal (0.7.0): it owns the dark and the
                     // morning takes it away, exactly like the fireflies do. No fight, no flight.
+                    if (night) {
+                        for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "wraith_night");
+                    }
                     if (!night) {
+                        for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "wraith_dissolve");
                         for (int i = 0; i < 5; i++)   // it unravels into soul flames at dawn
                             w.spawnParticle(Particle.SOUL, e.getLocation().add(0, 0.3 + r.nextDouble() * 1.1, 0), 1, 0.25, 0.2, 0.25, 0.0);
                         e.remove();
@@ -555,6 +584,7 @@ final class Animals implements Listener {
             w.playSound(at, "entity.salmon.flop", 0.7f, 0.9f);
             plugin.fmm().play(a.entity, "eat", false);
             w.dropItem(at.clone().add(0, 0.5, 0), new ItemStack(Material.SALMON));
+            for (org.bukkit.entity.Player pl : w.getNearbyPlayers(at, 16)) plugin.adv().grant(pl, "first_fish");
             for (Player p : w.getNearbyPlayers(at, 16)) plugin.adv().grant(p, "fisher");
         }
     }
@@ -634,7 +664,14 @@ final class Animals implements Listener {
         Animal a = get(e.getRightClicked());
         if (a == null) return;
         ItemStack hand = e.getPlayer().getInventory().getItem(e.getHand());
-        if (hand.getType() == Material.NAME_TAG || hand.getType() == Material.LEAD) return; // name tags keep an animal
+        if (hand.getType() == Material.AIR) {
+            plugin.adv().grant(e.getPlayer(), "first_pet");
+        }
+        if (hand.getType() == Material.NAME_TAG) {
+            plugin.adv().grant(e.getPlayer(), "named");
+            return; // name tags keep an animal
+        }
+        if (hand.getType() == Material.LEAD) return; // leads keep an animal
         e.setCancelled(true);
         if (e.getHand() == EquipmentSlot.HAND) {
             // dragons answer to coal (taming) and to their owner's empty hand (sit/ride) before breeding thinks of it
@@ -758,6 +795,7 @@ final class Animals implements Listener {
             }
         }
         boolean tiny = a.species.habitat == Species.Habitat.AIR || a.species == Species.SNAIL || a.species == Species.HEDGEHOG || a.species.habitat == Species.Habitat.POND;
+        if (!d.isEmpty()) for (org.bukkit.entity.Player pl : e.getEntity().getWorld().getNearbyPlayers(e.getEntity().getLocation(), 16)) plugin.adv().grant(pl, "first_item");
         e.setDroppedExp(tiny ? 0 : 1 + r.nextInt(3));
         if (a.species.death != null) e.getEntity().getWorld().playSound(e.getEntity().getLocation(), a.species.death, 0.9f, a.species.pitch);
     }

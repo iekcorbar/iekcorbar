@@ -105,6 +105,7 @@ final class Breeding {
         }
         a.loveUntil = plugin.tick + 600;
         plugin.adv().grant(p, "love");
+        plugin.adv().grant(p, "first_feed");
         consume(p, hand);
         hearts(e, 6);
     }
@@ -152,6 +153,8 @@ final class Breeding {
         if (child != null && (animals.kept(a.entity) || animals.kept(b.entity)))
             child.entity.getPersistentDataContainer().set(animals.keptKey, PersistentDataType.BYTE, (byte) 1);
         if (child != null) for (Player near : a.entity.getWorld().getNearbyPlayers(at, 24)) plugin.adv().grant(near, "baby");
+        if (child != null) for (Player near : a.entity.getWorld().getNearbyPlayers(at, 24)) plugin.adv().grant(near, "first_birth");
+        if (child != null && a.species == Species.DRAGON) for (Player near : a.entity.getWorld().getNearbyPlayers(at, 24)) plugin.adv().grant(near, "dragon_breeder");
         if (child != null) a.entity.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, at.add(0, 0.4, 0), 10, 0.4, 0.3, 0.4, 0);
     }
 

@@ -21,6 +21,7 @@ public final class WildlifePlugin extends JavaPlugin {
     private Spawner spawner;
     private Journal journal;
     private Adv adv;
+    private Adv zooAdv;
     private WildItems items;
     private Ambience ambience;
     private Zoo zoo;
@@ -39,6 +40,7 @@ public final class WildlifePlugin extends JavaPlugin {
         ambience = new Ambience(this);
         zoo = new Zoo(this);
         adv = Achievements.create(this);
+        zooAdv = ZooAchievements.create(this);
         var pm = getServer().getPluginManager();
         pm.registerEvents(animals, this);
         pm.registerEvents(dragon, this);
@@ -60,6 +62,7 @@ public final class WildlifePlugin extends JavaPlugin {
         getServer().getScheduler().runTask(this, () -> {
             journal.registerAdvancements();
             adv.start();
+            zooAdv.start();
             for (World w : getServer().getWorlds()) {
                 for (Entity e : w.getEntities())
                     if (e instanceof LivingEntity le && e.getPersistentDataContainer().has(animals.speciesKey, PersistentDataType.STRING)) animals.register(le);
@@ -98,6 +101,7 @@ public final class WildlifePlugin extends JavaPlugin {
 
     Zoo zoo() { return zoo; }
     Adv adv() { return adv; }
+    Adv zooAdv() { return zooAdv; }
     Fmm fmm() { return fmm; }
     Animals animals() { return animals; }
     DragonAI dragon() { return dragon; }

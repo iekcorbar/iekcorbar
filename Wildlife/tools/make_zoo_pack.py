@@ -14,7 +14,7 @@ PALETTE = {
     "red": (190, 48, 44), "white": (246, 244, 238), "green": (60, 118, 70), "green_dark": (36, 78, 46), "straw": (222, 196, 102),
     "straw_dark": (176, 148, 66), "bamboo": (190, 182, 100), "bamboo_dark": (132, 126, 62), "water": (64, 120, 200), "paper": (240, 232, 210),
     "leaf": (86, 150, 60), "lantern": (255, 214, 120), "brass": (206, 168, 72), "blue": (46, 80, 150), "yellow": (240, 200, 50),
-    "clay": (150, 84, 56), "bark": (96, 70, 48), "bark_light": (190, 150, 100), "ticket": (240, 200, 110),
+    "clay": (150, 84, 56), "dirt": (134, 96, 67), "bark": (96, 70, 48), "bark_light": (190, 150, 100), "ticket": (240, 200, 110),
 }
 
 
@@ -251,6 +251,63 @@ def build(out):
     # the ticket you hold (not a prop): a small ticket on a tilted plane
     pk.model("ticket", [b(3, 6, 6, 13, 7, 10, "ticket", rot=("y", 22.5, (8, 6, 8))), b(3, 7, 6, 5, 7.3, 10, "red", rot=("y", 22.5, (8, 6, 8))),
                         b(9, 7, 7.2, 12, 7.3, 8.8, "brass", rot=("y", 22.5, (8, 6, 8)))])
+    # ------------------------------------------------------------ zoo-builder props (0.8.2): doors, toilets, paths, signs, benches, etc.
+    # door (2 tall, swings open)
+    pk.model("zoo_door", [b(0, 0, 6, 2, 30, 10, "wood_dark"), b(14, 0, 6, 16, 30, 10, "wood_dark"), b(2, 0, 6, 14, 2, 10, "wood"),
+                          b(2, 28, 6, 14, 30, 10, "wood"), b(2, 2, 6, 4, 28, 10, "wood_light"), b(12, 2, 6, 14, 28, 10, "wood_light"),
+                          b(4, 2, 6, 12, 4, 10, "wood_light"), b(4, 26, 6, 12, 28, 10, "wood_light"), b(5, 13, 5.5, 7, 15, 6.5, "brass"),
+                          b(9, 13, 5.5, 11, 15, 6.5, "brass")])
+    pk.model("zoo_door_open", [b(0, 0, 6, 2, 30, 10, "wood_dark"), b(2, 0, 6, 4, 30, 10, "wood"),
+                               b(2, 0, 10, 4, 30, 12, "wood_light"), b(2, 0, 6, 4, 2, 10, "wood_light"),
+                               b(2, 28, 6, 4, 30, 10, "wood_light"), b(2, 0, 6, 4, 30, 8, "wood_light")], item=False)
+
+    # toilet (1 block, simple)
+    pk.model("toilet", [b(2, 0, 2, 14, 2, 14, "white"), b(3, 2, 3, 13, 4, 13, "white"), b(4, 4, 4, 12, 14, 12, "white"),
+                        b(5, 14, 5, 11, 16, 11, "white"), b(5, 10, 3, 11, 12, 5, "blue"), b(3, 2, 13, 13, 4, 14, "blue"),
+                        b(4, 4, 13, 12, 6, 14, "white")])
+
+    # cobblestone path (flat, 1 block)
+    pk.model("path_cobble", [b(0, 0, 0, 16, 1, 16, "stone"), b(1, 1, 1, 5, 1.2, 5, "stone_dark"),
+                             b(6, 1, 2, 10, 1.2, 6, "stone_dark"), b(11, 1, 1, 15, 1.2, 5, "stone_dark"),
+                             b(1, 1, 6, 5, 1.2, 10, "stone_dark"), b(6, 1, 7, 10, 1.2, 11, "stone_dark"),
+                             b(11, 1, 6, 15, 1.2, 10, "stone_dark"), b(1, 1, 11, 5, 1.2, 15, "stone_dark"),
+                             b(6, 1, 12, 10, 1.2, 16, "stone_dark"), b(11, 1, 11, 15, 1.2, 15, "stone_dark")])
+
+    # welcome sign (2 tall)
+    pk.model("sign_welcome", [b(7, 0, 7, 9, 30, 9, "wood_dark"), b(0, 24, 4, 16, 32, 6, "wood"),
+                              b(1, 25, 4.5, 15, 31, 5.5, "white"), b(2, 26, 4.6, 14, 30, 5.4, "green")])
+
+    # exit sign (2 tall)
+    pk.model("sign_exit", [b(7, 0, 7, 9, 30, 9, "wood_dark"), b(0, 24, 4, 16, 32, 6, "wood"),
+                           b(1, 25, 4.5, 15, 31, 5.5, "white"), b(2, 26, 4.6, 14, 30, 5.4, "red")])
+
+    # flower box (1 block)
+    pk.model("flower_box", [b(1, 0, 1, 15, 4, 15, "wood_dark"), b(2, 4, 2, 14, 6, 14, "dirt"),
+                            b(3, 6, 3, 7, 9, 7, "leaf"), b(8, 6, 4, 12, 10, 8, "red"), b(4, 6, 9, 8, 10, 13, "yellow"),
+                            b(9, 6, 9, 13, 10, 13, "blue")])
+
+    # picnic table (1 block tall)
+    pk.model("picnic_table", [b(0, 6, 0, 16, 8, 16, "wood"), b(1, 0, 1, 3, 6, 3, "wood_dark"),
+                              b(13, 0, 1, 15, 6, 3, "wood_dark"), b(1, 0, 13, 3, 6, 15, "wood_dark"),
+                              b(13, 0, 13, 15, 6, 15, "wood_dark"), b(4, 8, 4, 12, 9, 12, "wood_dark")])
+
+    # parasol (2 tall)
+    pk.model("parasol", [b(7, 0, 7, 9, 24, 9, "wood"), b(7, 24, 7, 9, 26, 9, "wood_dark"),
+                         b(0, 26, 0, 16, 27, 16, "red"), b(0, 27, 0, 8, 28, 8, "red"), b(8, 27, 0, 16, 28, 8, "white"),
+                         b(0, 27, 8, 8, 28, 16, "white"), b(8, 27, 8, 16, 28, 16, "red")])
+
+    # first aid post (2 tall)
+    pk.model("first_aid", [b(2, 0, 2, 14, 2, 14, "white"), b(3, 2, 3, 13, 30, 13, "white"),
+                           b(5, 8, 2.5, 11, 14, 3.5, "red"), b(7, 8, 2.5, 9, 14, 3.5, "white"),
+                           b(5, 16, 2.5, 11, 22, 3.5, "red"), b(7, 16, 2.5, 9, 22, 3.5, "white"),
+                           b(5, 24, 2.5, 11, 30, 3.5, "red")])
+
+    # brick wall (1 block, connects)
+    pk.model("wall_brick", [b(0, 0, 0, 16, 16, 4, "stone"), b(0, 0, 4, 16, 16, 8, "stone_dark"),
+                            b(2, 2, 0, 6, 6, 4, "clay"), b(7, 2, 0, 11, 6, 4, "clay"), b(12, 2, 0, 16, 6, 4, "clay"),
+                            b(0, 7, 0, 4, 11, 4, "clay"), b(5, 7, 0, 9, 11, 4, "clay"), b(10, 7, 0, 14, 11, 4, "clay"),
+                            b(0, 12, 0, 6, 16, 4, "clay"), b(7, 12, 0, 11, 16, 4, "clay"), b(12, 12, 0, 16, 16, 4, "clay")])
+
     statues(pk, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "resources", "statues.csv"))
     eggs(pk)
     pk.finish()

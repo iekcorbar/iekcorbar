@@ -68,6 +68,7 @@ final class Spawner {
         for (Player p : plugin.getServer().getOnlinePlayers()) {
             if (p.getGameMode() == GameMode.SPECTATOR || p.getWorld().getEnvironment() != World.Environment.NORMAL) continue;
             if (r.nextDouble() < chance && plugin.animals().countNear(p.getLocation(), nearRadius, null) < maxNear) trySpawn(p, r);
+            if (r.nextDouble() < chance * 0.5 && plugin.animals().countNear(p.getLocation(), nearRadius, Species.WRAITH) < 2) tryGraveyard(p, r);   // wraiths near graveyards
             if (r.nextDouble() < caveChance) tryCave(p, r);   // dragons keep their own cap
         }
     }
@@ -112,6 +113,54 @@ final class Spawner {
             boolean baby = n >= 3 && i == n - 1 && s.habitat != Species.Habitat.AIR && r.nextInt(5) == 0;   // sometimes a young one in a bigger group
             plugin.animals().spawn(s, at, r.nextDouble() < rareChance, baby, null);
         }
+    }
+
+    /**
+     * Graveyard pass (0.8.2): wraiths spawn at night near graveyards (soul sand/soul soil clusters).
+     * Graveyards are detected by checking for soul sand/soul soil in a radius around the player.
+     * Better Structures graveyards typically have soul sand, soul soil, and grave markers.
+     */
+    private void tryGraveyard(Player p, ThreadLocalRandom r) {
+        World w = p.getWorld();
+        long time = w.getTime();
+        boolean night = time > 13000 && time < 23000;
+        if (!night) return;
+        if (!on.get(Species.WRAITH)) return;
+        // Search for graveyard-like blocks near the player
+        Location center = null;
+        int bestScore = 0;
+        for (int dx = -64; dx <= 64; dx += 8) {
+            for (int dz = -64; dz <= 64; dz += 8) {
+                int x = (int) (p.getLocation().getX() + dx);
+                int z = (int) (p.getLocation().getZ() + dz);
+                if (!w.isChunkLoaded(x >> 4, z >> 4)) continue;
+                int score = graveyardScore(w, x, z);
+                if (score > bestScore) {
+                    bestScore = score;
+                    center = new Location(w, x + 0.5, w.getHighestBlockYAt(x, z) + 1, z + 0.5);
+                }
+            }
+        }
+        if (center == null || bestScore < 3) return;   // need at least 3 graveyard blocks
+        if (plugin.animals().countNear(center, 32, Species.WRAITH) >= 2) return;   // cap at 2 per graveyard
+        plugin.animals().spawn(Species.WRAITH, center, r.nextDouble() < rareChance, false, null);
+    }
+
+    /** Score a location for graveyard-ness: soul sand, soul soil, mossy cobblestone, etc. */
+    private int graveyardScore(World w, int x, int z) {
+        int score = 0;
+        for (int dx = -4; dx <= 4; dx++) {
+            for (int dz = -4; dz <= 4; dz++) {
+                for (int dy = -2; dy <= 2; dy++) {
+                    Block b = w.getBlockAt(x + dx, w.getHighestBlockYAt(x, z) + dy, z + dz);
+                    Material t = b.getType();
+                    if (t == Material.SOUL_SAND || t == Material.SOUL_SOIL) score += 2;
+                    if (t == Material.MOSSY_COBBLESTONE || t == Material.MOSSY_STONE_BRICKS) score += 1;
+                    if (t == Material.SOUL_CAMPFIRE || t == Material.SOUL_LANTERN) score += 3;
+                }
+            }
+        }
+        return score;
     }
 
     /**

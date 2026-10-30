@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 /** /wildlife [help] | journal | spawn &lt;species&gt; [rare] [baby] | egg &lt;species&gt; [player] | give &lt;player&gt; &lt;journal|crab_claw|lizard_tail&gt; | info | reload */
 final class WildlifeCommand implements TabExecutor {
@@ -26,8 +27,71 @@ final class WildlifeCommand implements TabExecutor {
     public boolean onCommand(CommandSender s, Command cmd, String label, String[] a) {
         String sub = a.length == 0 ? "help" : a[0].toLowerCase(Locale.ROOT);
         switch (sub) {
-            case "journal" -> {
-                if (s instanceof Player p) plugin.journal().open(p);
+            case "journal", "stats", "list", "find", "tamed" -> {
+                if (!s.hasPermission("wildlife.use")) {
+                    s.sendMessage(Component.text("You don't have permission for that.", NamedTextColor.RED));
+                    return true;
+                }
+                switch (sub) {
+                    case "journal" -> { if (s instanceof Player p) plugin.journal().open(p); }
+                    case "stats" -> {
+                        Player target = (s instanceof Player self) ? self : (a.length > 1 ? Bukkit.getPlayerExact(a[1]) : null);
+                        if (target == null) {
+                            s.sendMessage(Component.text("/" + label + " stats [player]", NamedTextColor.RED));
+                            return true;
+                        }
+                        Set<String> seen = plugin.journal().seen(target, false);
+                        Set<String> rares = plugin.journal().seen(target, true);
+                        s.sendMessage(Component.text("Wildlife stats for " + target.getName(), NamedTextColor.DARK_GREEN));
+                        s.sendMessage(Component.text("Species recorded: " + seen.size() + " / " + Species.journalCount(), NamedTextColor.GRAY));
+                        s.sendMessage(Component.text("Rare variants: " + rares.size(), NamedTextColor.GRAY));
+                        s.sendMessage(Component.text("Animals nearby: " + plugin.animals().countNear(target.getLocation(), 64, null), NamedTextColor.GRAY));
+                        if (s.hasPermission("wildlife.admin"))
+                            s.sendMessage(Component.text("Total loaded: " + plugin.animals().count(), NamedTextColor.GRAY));
+                    }
+                    case "list" -> {
+                        String filter = a.length > 1 ? a[1].toLowerCase(Locale.ROOT) : "";
+                        s.sendMessage(Component.text("Wildlife species:", NamedTextColor.DARK_GREEN));
+                        for (Species sp : Species.values()) {
+                            if (!sp.animal()) continue;
+                            if (!filter.isEmpty() && !sp.displayName.toLowerCase(Locale.ROOT).contains(filter) && !sp.id().contains(filter)) continue;
+                            String biomeStr = String.join(", ", sp.biomes);
+                            s.sendMessage(Component.text("  " + sp.displayName + " (" + sp.id() + ") - " + biomeStr, NamedTextColor.GRAY));
+                        }
+                    }
+                    case "find" -> {
+                        if (!(s instanceof Player p)) {
+                            s.sendMessage(Component.text("Only players can use this.", NamedTextColor.RED));
+                            return true;
+                        }
+                        Species sp = a.length > 1 ? Species.byId(a[1]) : null;
+                        if (sp == null) {
+                            s.sendMessage(Component.text("/" + label + " find <species>", NamedTextColor.RED));
+                            return true;
+                        }
+                        int count = plugin.animals().countNear(p.getLocation(), 128, sp);
+                        if (count == 0) {
+                            s.sendMessage(Component.text("No " + sp.displayName + " found within 128 blocks.", NamedTextColor.GRAY));
+                        } else {
+                            s.sendMessage(Component.text(count + " " + sp.displayName + "(s) within 128 blocks.", NamedTextColor.GREEN));
+                        }
+                    }
+                    case "tamed" -> {
+                        if (!(s instanceof Player p)) {
+                            s.sendMessage(Component.text("Only players can use this.", NamedTextColor.RED));
+                            return true;
+                        }
+                        int n = 0;
+                        for (Animals.Animal an : plugin.animals().all()) {
+                            if (an.species == Species.DRAGON && plugin.dragon().isTamedBy(an, p)) {
+                                n++;
+                                s.sendMessage(Component.text("  Dragon at " + an.entity.getLocation().getBlockX() + ", " + an.entity.getLocation().getBlockY() + ", " + an.entity.getLocation().getBlockZ(), NamedTextColor.GRAY));
+                            }
+                        }
+                        if (n == 0) s.sendMessage(Component.text("You have no tamed dragons.", NamedTextColor.GRAY));
+                        else s.sendMessage(Component.text("You have " + n + " tamed dragon(s).", NamedTextColor.GREEN));
+                    }
+                }
             }
             case "spawn" -> {
                 if (!admin(s) || !(s instanceof Player p)) return true;
@@ -93,6 +157,7 @@ final class WildlifeCommand implements TabExecutor {
                 if (!admin(s)) return true;
                 s.sendMessage(Component.text("Loaded wildlife: " + plugin.animals().count() + " animals. FreeMinecraftModels: "
                         + (plugin.fmm().available() ? "ok" : "MISSING"), NamedTextColor.GOLD));
+                s.sendMessage(Component.text("Species: " + Species.values().length + " (animals: " + Species.journalCount() + ")", NamedTextColor.GRAY));
             }
             case "reload" -> {
                 if (!admin(s)) return true;
@@ -107,7 +172,8 @@ final class WildlifeCommand implements TabExecutor {
                 s.sendMessage(Component.text("/" + label + " journal - read your journal (or craft one: book + feather + seeds)", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Guide: ", NamedTextColor.GRAY).append(Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url))));
                 if (s.hasPermission("wildlife.admin"))
-                    s.sendMessage(Component.text("/" + label + " spawn <species> [rare] [baby] | egg <species> [player] | give <player> <item> | info | reload", NamedTextColor.GRAY));
+                    s.sendMessage(Component.text("/" + label + " spawn <species> [rare] [baby] | egg <species> [player] | give <player> <item> | info | reload | remove <radius>", NamedTextColor.GRAY));
+                s.sendMessage(Component.text("/" + label + " stats [player] | list [filter] | find <species> | tamed", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Feed an adult its food to breed it; a golden dandelion keeps a baby small.", NamedTextColor.GRAY));
             }
         }
@@ -125,8 +191,8 @@ final class WildlifeCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"help", "journal", "spawn", "egg", "give", "giveall", "info", "reload"}) if (v.startsWith(last)) out.add(v);
-        } else if (a.length == 2 && (a[0].equalsIgnoreCase("spawn") || a[0].equalsIgnoreCase("egg"))) {
+            for (String v : new String[]{"help", "journal", "spawn", "egg", "give", "giveall", "info", "reload", "stats", "list", "find", "tamed", "remove"}) if (v.startsWith(last)) out.add(v);
+        } else if (a.length == 2 && (a[0].equalsIgnoreCase("spawn") || a[0].equalsIgnoreCase("egg") || a[0].equalsIgnoreCase("find"))) {
             boolean egg = a[0].equalsIgnoreCase("egg");
             for (Species sp : Species.values()) if ((!egg || sp.animal()) && sp.id().startsWith(last)) out.add(sp.id());
         } else if (a.length >= 3 && a[0].equalsIgnoreCase("spawn")) {

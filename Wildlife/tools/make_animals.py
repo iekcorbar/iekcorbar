@@ -112,12 +112,12 @@ def cell(col):
 
 # Size factor per species on top of the real-size drawing (1 block = 1 m): the real animals are shown a bit
 # larger so they read well next to vanilla mobs (cow 1.4 m, horse 1.6 m, player 1.8 m). Keep Species.scale in sync.
-SIZE = {"elephant": 0.9, "zebra": 1.25, "deer": 1.3, "bear": 1.15, "boar": 1.3, "capybara": 1.3, "duck": 1.4, "tortoise": 1.3, "hedgehog": 1.3,
+SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "capybara": 0.9, "duck": 1.4, "tortoise": 1.3, "hedgehog": 1.3,
         "lizard": 1.3, "crab": 1.2, "songbird": 1.3, "snail": 1.3, "butterfly": 1.2, "dragonfly": 1.2,
         "tanuki": 1.3, "crane": 1.25, "koi": 1.4, "macaque": 1.25,
         "kangaroo": 1.3, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.3, "mole": 1.35,
-        "rhino": 1.15, "penguin": 1.35, "orca": 1.0, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0, "dragon": 1.15}   # drawn 26 px = 1.63 m, matching Species.WRAITH scale 1.8 on the 0.9 m bee hitbox
+        "rhino": 0.8, "penguin": 1.35, "orca": 0.7, "piranha": 1.35, "macaw": 1.35,
+        "wraith": 1.0, "dragon": 1.15}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -16..32 bounds
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
@@ -258,16 +258,16 @@ class Model:
             return
         for e in self.elements:
             for key in ("from", "to", "origin"):
-                e[key] = [round(v * k, 3) for v in e[key]]
+                e[key] = [round(max(-16.0, min(32.0, v * k)), 3) for v in e[key]]
         for b in self.bones.values():
-            b.origin = [v * k for v in b.origin]
+            b.origin = [max(-16.0, min(32.0, v * k)) for v in b.origin]
         for an in self.anims:
             for ani in an["animators"].values():
                 for kf in ani["keyframes"]:
                     if kf["channel"] == "position":
                         for dp in kf["data_points"]:
                             for ax in "xyz":
-                                dp[ax] = str(round(float(dp[ax]) * k, 2))
+                                dp[ax] = str(round(max(-16.0, min(32.0, float(dp[ax]) * k)), 2))
 
     def bbmodel(self):
         self.chibi()

@@ -59,6 +59,10 @@ final class DragonAI implements Listener {
         return s == null ? null : UUID.fromString(s);
     }
 
+    boolean isTamedBy(Animals.Animal a, Player p) {
+        return tamer(a.entity) != null && tamer(a.entity).equals(p.getUniqueId());
+    }
+
     private static final class Input {
         boolean forward, back, left, right, jump, sprint;
     }
@@ -82,6 +86,7 @@ final class DragonAI implements Listener {
         LivingEntity e = a.entity;
         Material held = hand.getType();
         if (held == Material.COAL || held == Material.CHARCOAL) {
+            if (tamer(e) != null && tamer(e).equals(p.getUniqueId())) plugin.adv().grant(p, "dragon_feed");
             if (a.baby || tamer(e) != null) return false;                  // babies grow on it, the tamed breed on it
             if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
             e.getWorld().spawnParticle(Particle.HEART, e.getLocation().add(0, e.getHeight(), 0), 3, 0.3, 0.2, 0.3, 0);
@@ -152,7 +157,13 @@ final class DragonAI implements Listener {
 
     @EventHandler
     public void onDismount(EntityDismountEvent e) {
-        if (e.getEntity() instanceof Player p) inputs.remove(p.getUniqueId());
+        if (e.getEntity() instanceof Player p) {
+            inputs.remove(p.getUniqueId());
+            if (e.getDismounted() instanceof LivingEntity le) {
+                Animals.Animal a = plugin.animals().get(le);
+                if (a != null && a.species == Species.DRAGON) plugin.adv().grant(p, "dragon_landing");
+            }
+        }
     }
 
     /** Every tick: steer the dragons that carry a rider, keep the tamed ones near their owner. */
@@ -166,6 +177,9 @@ final class DragonAI implements Listener {
                 steer(e, rider, r);
                 if (e.getLocation().getY() > 100) plugin.adv().grant(rider, "dragon_flight");
                 else if (e.getLocation().getY() < 40) plugin.adv().grant(rider, "dragon_caver");
+                Input in = inputs.get(rider.getUniqueId());
+                if (in != null && in.sprint) plugin.adv().grant(rider, "dragon_speed");
+                if (e.getWorld().getTime() > 13000 && e.getWorld().getTime() < 23000) plugin.adv().grant(rider, "dragon_night");
             } else if (tamer(e) == null) {                                 // wild: roar at anyone too close
                 long now = e.getWorld().getFullTime();
                 Player near = nearest(e, 4.0);
@@ -174,7 +188,12 @@ final class DragonAI implements Listener {
                     plugin.fmm().play(e, "roar", false);
                     e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 1f, 0.5f);
                     plugin.adv().grant(near, "dragon_wild");
+                    plugin.adv().grant(near, "dragon_roar");
                 }
+            } else if (tamer(e) != null && !isSitting(e)) {
+                follow(e);
+                Player owner = Bukkit.getPlayer(tamer(e));
+                if (owner != null) plugin.adv().grant(owner, "dragon_follow");
             } else {
                 follow(e);
             }

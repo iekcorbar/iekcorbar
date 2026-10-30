@@ -108,6 +108,27 @@ final class Zoo implements org.bukkit.event.Listener {
                 .height(3).scale(1.5625f).glow(15).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.STICK, Material.LANTERN));
         l.add(new DecorDef("souvenir_stall", "Souvenir Stall", "A little striped stall. Decoration.")
                 .height(2).recipe(1, planks, planks, planks, Tag.WOOL, Tag.WOOL, Material.PAPER));
+        // ---- zoo-builder props (0.8.2)
+        l.add(new DecorDef("zoo_door", "Zoo Door", "A sturdy wooden door for zoo buildings.")
+                .height(2).recipe(1, planks, planks, planks, Material.IRON_INGOT).sound("minecraft:block.wood.place"));
+        l.add(new DecorDef("toilet", "Toilet", "A simple toilet. Right-click to use.")
+                .recipe(1, Material.WHITE_CONCRETE, Material.WHITE_CONCRETE, Material.WATER_BUCKET, Material.IRON_INGOT));
+        l.add(new DecorDef("path_cobble", "Cobblestone Path", "A cobblestone path tile. Joins its neighbours.")
+                .connect("zoopath").recipe(4, Material.COBBLESTONE, Material.COBBLESTONE));
+        l.add(new DecorDef("sign_welcome", "Welcome Sign", "A sign that says 'Welcome to the Zoo'.")
+                .height(2).hit(0.8f, 1.2f).recipe(1, planks, planks, Material.PAPER, Material.STICK));
+        l.add(new DecorDef("sign_exit", "Exit Sign", "A sign that says 'Exit'.")
+                .height(2).hit(0.8f, 1.2f).recipe(1, planks, planks, Material.PAPER, Material.STICK));
+        l.add(new DecorDef("flower_box", "Flower Box", "A wooden box full of flowers.")
+                .recipe(1, planks, planks, Material.DIRT, Material.RED_DYE, Material.YELLOW_DYE, Material.BLUE_DYE));
+        l.add(new DecorDef("picnic_table", "Picnic Table", "A wooden picnic table. Right-click to sit.")
+                .seat(0.45f).hit(0.9f, 0.7f).recipe(1, planks, planks, planks, Material.STICK, Material.STICK));
+        l.add(new DecorDef("parasol", "Parasol", "A colourful parasol for shade.")
+                .height(2).recipe(1, Material.STICK, Material.STICK, Material.STICK, Tag.WOOL, Tag.WOOL));
+        l.add(new DecorDef("first_aid", "First Aid Post", "A first aid station. Right-click for a bandage.")
+                .height(2).recipe(1, Material.WHITE_WOOL, Material.WHITE_WOOL, Material.RED_DYE, Material.IRON_INGOT));
+        l.add(new DecorDef("wall_brick", "Brick Wall", "A brick wall tile. Joins its neighbours.")
+                .height(1).connect("zoowall").recipe(4, Material.BRICK, Material.BRICK));
         statues(l);
         return l;
     }
@@ -235,7 +256,7 @@ final class Zoo implements org.bukkit.event.Listener {
         public void placed(Decor d, Decor.Prop p, Player by) {
             p.data = by.getName() + "'s Zoo|10|60|0|0|1";
             d.save(p);
-            plugin.adv().grant(by, "kiosk");
+            plugin.zooAdv().grant(by, "kiosk");
             by.sendMessage(Component.text("Ticket Kiosk placed. Sneak + right-click to see and change the settings.", NamedTextColor.GREEN));
         }
 
@@ -280,7 +301,7 @@ final class Zoo implements org.bukkit.event.Listener {
             f[3] = String.valueOf(Integer.parseInt(f[3]) + 1);
             if (!owner) f[4] = String.valueOf(Double.parseDouble(f[4]) + price);
             saveKiosk(d, p, f);
-            plugin.adv().grant(pl, "ticket");
+            plugin.zooAdv().grant(pl, "ticket");
             pl.getWorld().playSound(p.center(), "minecraft:entity.experience_orb.pickup", 0.8f, 1.4f);
             pl.sendMessage(Component.text("Ticket bought. Enjoy the zoo!", NamedTextColor.GREEN));
             return true;

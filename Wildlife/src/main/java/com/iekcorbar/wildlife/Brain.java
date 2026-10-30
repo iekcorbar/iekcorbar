@@ -108,7 +108,9 @@ final class Brain {
         boolean water = top.getType() == Material.WATER || top.getType() == Material.BUBBLE_COLUMN;
         if (wantWater) return water ? new Location(w, bx + 0.5, hy + 0.9, bz + 0.5) : null;
         if (water || top.isLiquid() || !top.getType().isSolid()) return null;
-        if (!w.getBlockAt(bx, hy + 1, bz).isPassable() || !w.getBlockAt(bx, hy + 2, bz).isPassable()) return null;
+        // More lenient passability check: only require the block at hy+1 to be passable
+        // (hy+2 is often a tree/overhang, which shouldn't block ground movement)
+        if (!w.getBlockAt(bx, hy + 1, bz).isPassable()) return null;
         return new Location(w, bx + 0.5, hy + 1, bz + 0.5);
     }
 
@@ -182,7 +184,7 @@ final class Brain {
                 case DUCK -> 12;
                 case CAPYBARA, LIZARD -> 8;
                 case HEDGEHOG, TORTOISE, CRAB -> 6;
-                case SNAIL -> 3;
+                case SNAIL -> 5;
                 default -> 10;
             };
         }
@@ -208,13 +210,27 @@ final class Brain {
             boolean water = wantWaterSurface && r.nextInt(100) < 75;
             Location here = m.getLocation();
             double rad = radius();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 20; i++) {
                 double ang = r.nextDouble() * Math.PI * 2, d = 2 + r.nextDouble() * (rad - 2);
                 Location l = spot(m.getWorld(), here.getX() + Math.cos(ang) * d, here.getZ() + Math.sin(ang) * d, here.getY(), water);
                 if (l != null) {
                     target = l;
                     return true;
                 }
+            }
+            // Fallback: try to move in a random direction on the ground, even without a perfect spot
+            for (int i = 0; i < 8; i++) {
+                double ang = r.nextDouble() * Math.PI * 2, d = 3 + r.nextDouble() * 4;
+                int bx = (int) Math.floor(here.getX() + Math.cos(ang) * d);
+                int bz = (int) Math.floor(here.getZ() + Math.sin(ang) * d);
+                if (!m.getWorld().isChunkLoaded(bx >> 4, bz >> 4)) continue;
+                int hy = m.getWorld().getHighestBlockYAt(bx, bz);
+                if (Math.abs(hy - here.getY()) > 3) continue;
+                Block ground = m.getWorld().getBlockAt(bx, hy, bz);
+                if (ground.getType() == Material.LAVA || ground.getType() == Material.CACTUS || ground.getType() == Material.FIRE) continue;
+                if (!ground.getType().isSolid()) continue;
+                target = new Location(m.getWorld(), bx + 0.5, hy + 1, bz + 0.5);
+                return true;
             }
             nextAt = now + 40;
             return false;

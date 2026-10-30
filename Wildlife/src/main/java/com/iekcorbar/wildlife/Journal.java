@@ -109,6 +109,13 @@ final class Journal implements Listener {
             award(p, key(id));
             p.sendActionBar(Component.text("New species: " + a.species.displayName, NamedTextColor.GREEN));
             p.playSound(p.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1f, 1.2f);
+            // observation-line advancements
+            int n = seen.size();
+            int total = Species.journalCount();
+            if (n == 1) plugin.adv().grant(p, "first_sighting");
+            if (n >= 5) plugin.adv().grant(p, "observer");
+            if (n >= total / 2) plugin.adv().grant(p, "naturalist");
+            if (n >= total) plugin.adv().grant(p, "encyclopedia");
         }
         if (a.rare) {
             Set<String> rares = seen(p, true);

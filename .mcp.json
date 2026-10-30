@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "blockbench": {
+      "type": "http",
+      "url": "http://localhost:3000/bb-mcp"
+    },
+    "blockbench-headless": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "github:jasonjgardner/blockbench-mcp-plugin",
+        "--root",
+        "C:\\Users\\baaye\\Desktop\\iekcorbar-final"
+      ]
+    }
+  }
+}

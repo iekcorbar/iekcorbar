@@ -22,5 +22,8 @@ permissions:
     description: Walk through every zoo gate and change any kiosk
     default: op
   wildlife.admin:
-    description: Spawn animals, give items, reload
+    description: Spawn animals, give items, reload, remove animals
     default: op
+  wildlife.use:
+    description: Use basic wildlife commands (journal, stats, list, find, tamed)
+    default: true
