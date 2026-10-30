@@ -4,7 +4,7 @@ main: com.iekcorbar.quests.IekQuestsPlugin
 api-version: '26.2'
 description: Own quest engine - conversations, goals, rewards, compass and a click GUI.
 author: iekcorbar
-softdepend: [Citizens]
+softdepend: [Citizens, Vault]
 
 commands:
   questbook:

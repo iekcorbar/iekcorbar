@@ -252,11 +252,15 @@ final class QuestWizard implements Listener {
         List<String> txt = List.of(
                 "&eConditions (comma = and):", "&ftag:name &7| &f!tag:name &7| &fpoint:cat>=N",
                 "&fitem:MAT>=N &7| &fperm:node &7| &fday &7| &fnight",
-                "&eRewards / do-actions:", "&fmoney N &7| &feco N &7| &ftitle A|B &7| &fsound ns:key",
+                "&fmoney>=N &7| &fmoney<N",
+                "&eRewards / do-actions:", "&fmoney N &7| &feco N &7| &fpay N (cost) &7| &ftitle A|B &7| &fsound ns:key",
                 "&fsay text &7| &ftag+ name &7| &ftag- name", "&fpoint cat +N &7| &feffect TYPE secs amp",
-                "&fteleport x;y;z;world &7| &fgive MAT N &7| &fshop console-cmd %player%",
+                "&fgive MAT N &7| &fshop console-cmd %player%",
+                "&fteleport x;y;z;world &8(staff only - players get a compass)",
                 "&fcompass x;y;z;world &7| &fperm+ node &7| &fperm- node",
                 "&7anything else runs as a &fconsole command&7.",
+                "&eStage extras: 'name' filter on deliver/craft",
+                "&7(matches only items whose display name contains it - e.g. Techcore steel).",
                 "&eVoices: steamworks:milo.line01 ... igor.line12",
                 "&eNPCs: bind by Citizens id (79 = Vorkan) or create new.",
                 "&eSave writes to &fwizard-quests.yml&e - never to quests.yml.");

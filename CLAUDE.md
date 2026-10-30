@@ -1756,6 +1756,31 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.4.0 - golf 3 uitgerold: Mad Doctor, Usop, Techcore, Cleric (30-10, ~05:45)
+
+- Eigenaars-regel aangenomen: "teleport is staff-only - spelers gebruiken het
+  kompas of zoeken zelf". run() 'teleport' doet nu: admin → teleport, speler →
+  compass-punt + "make the journey yourself". Usop-rit en Mad-Doctor-pull
+  vallen daaronder (dus ook de BQ-trekschroef naar het laboratorium is weg:
+  je loopt er zelf heen).
+- Engine erbij: 'pay N' (cmi money take), geld-condities 'money>=N'/'money<N'
+  via Vault-reflectie (cleric-betaling), Stage 'name'-filter (deliver/craft
+  tellen alleen items wier display-name de tekst bevat - Techcore-staal is
+  een genamete iron ingot, dus grauw geschilderd ijzer wordt afgewezen),
+  dag/nacht-bug fixed (|| was altijd waar → &&), wizard-Help aangevuld.
+- quests.yml: +4 quests = 18 live. Mad Doctor = 25-stappen sequence (md_show:
+  scan-gruwel, freeze, poison/regen, moordmodus-terugdraaien, titel,
+  perm+ cmi.command.rt, tag) + md_quick. Cleric: gratis eerste ras/klasse-
+  wissel (tags), daarna 100k-betaling met geld-checks. Techcore: blueprint
+  grant op accept, deliver 'Steel'. Usop: compass-rit.
+- Uitgerold (server stond leeg, /stop niet nodig - docker restart volstond
+  ná jar+quests-wissel): 18 quests gemeten in log, 0 SEVERE, Done 60.9s.
+  BQ-packages-offline erbij: mad_doctor, cleric_change_vallhalla, CapitaUsop,
+  Techcore → BQ houdt: Rod_merchant, tutorial, JobsRank1-5, Backpack,
+  NPCGuideGuards (guards = 24×21-keuze-menu's: vraagt bredere keuzelijst,
+  golf 3b; Backpack = vertakking-logica, 3b).
+- deploy/: 0.4.0-artefact weg (live), TE 53 naar 0.4.0, board bij.
+
 ### StaffHub 0.4.11 - deletion-bug gerepareerd + uitgerold (30-10, ~05:20)
 
 - Gevraagd: "deletion werkt niet op staffhub of was dat al gerepareerd along

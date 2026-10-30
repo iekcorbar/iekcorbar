@@ -86,6 +86,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         String key = "", kind = "talk";      // talk|craft|deliver|walk|kill
         String material = "PAPER";
         String mobType = "";                 // kill: entity type naam of "monster"
+        String nameFilter = "";              // deliver/craft: display-naam moet dit bevatten (Techcore-staal)
         int amount = 1;
         Location loc;
         double radius = 6;
@@ -309,6 +310,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 g.key = k;
                 g.kind = v.getString("type", "talk");
                 g.material = v.getString("material", "PAPER").toUpperCase();
+                g.nameFilter = v.getString("name", "");
                 g.mobType = v.getString("mob", "").toUpperCase();
                 g.amount = v.getInt("amount", 1);
                 g.radius = v.getDouble("radius", 6);
@@ -466,11 +468,18 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 var body = c.substring(5);
                 var ge = body.indexOf(">=");
                 if (ge < 0) return false;
-                return held(p, body.substring(0, ge)) >= Integer.parseInt(body.substring(ge + 2));
+                return held(p, body.substring(0, ge), null) >= Integer.parseInt(body.substring(ge + 2));
+            }
+            if (c.startsWith("money")) {
+                boolean ge = c.startsWith("money>=");
+                if (!ge && !c.startsWith("money<")) return false;
+                var want = Double.parseDouble(c.substring(ge ? 7 : 6));
+                var bal = balance(p);
+                return bal < 0 ? false : (ge ? bal >= want : bal < want);
             }
             if (c.startsWith("perm:")) return p.hasPermission(c.substring(5));
-            if (c.equals("night")) return p.getWorld().getTime() > 13000 || p.getWorld().getTime() < 23000;
-            if (c.equals("day")) return p.getWorld().getTime() >= 23000 || p.getWorld().getTime() <= 13000;
+            if (c.equals("night")) { var t = p.getWorld().getTime(); return t > 13000 && t < 23000; }
+            if (c.equals("day")) { var t = p.getWorld().getTime(); return t <= 13000 || t >= 23000; }
             return true;   // onbekende string: niet blokkeren (log het niet, te veel ruis)
         } catch (Exception e) {
             return false;
@@ -623,10 +632,10 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 case "walk" -> s.loc != null && p.getWorld().equals(s.loc.getWorld())
                         && p.getLocation().distanceSquared(s.loc) <= s.radius * s.radius;
                 case "kill" -> pr.points.getOrDefault("kill:" + q.id + ":" + s.key, 0) >= s.amount;
-                default -> held(p, s.material) >= s.amount;
+                default -> held(p, s.material, s.nameFilter.isEmpty() ? null : s.nameFilter) >= s.amount;
             };
             if (done) {
-                if (s.kind.equals("deliver")) take(p, s.material, s.amount);
+                if (s.kind.equals("deliver")) take(p, s.material, s.amount, s.nameFilter.isEmpty() ? null : s.nameFilter);
                 advance(p, q, pr, s);
             } else deny(p);
         }
@@ -739,6 +748,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         String val = sp < 0 ? "" : a.substring(sp + 1);
         switch (key) {
             case "money" -> dispatch("cmi money give " + p.getName() + " -s " + val);
+            case "pay" -> dispatch("cmi money take " + p.getName() + " -s " + val);
             case "eco" -> dispatch("em money add " + p.getName() + " " + val);
             case "title" -> {
                 String[] ab = val.split("\\|");
@@ -774,7 +784,16 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             }
             case "teleport" -> {
                 var l = parseLoc(val);
-                if (l != null) p.teleport(l);
+                if (l != null) {
+                    // EIGENAAR-REGEL 30-10: spelers worden NOOIT_remote gestuurd.
+                    // Teleport is een staff-hulpmiddel (iekquests.admin); een
+                    // speler krijgt het kompas en loopt/zoeft zelf.
+                    if (p.hasPermission("iekquests.admin")) p.teleport(l);
+                    else {
+                        setCompass(p, l);
+                        p.sendMessage(legacy("&7No ride for you - the compass points the way. Make the journey yourself!"));
+                    }
+                }
             }
             case "give" -> {
                 String[] x = val.split(" ");
@@ -863,13 +882,35 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     // ---------------------------------------------------------------- inventaris
 
-    private int held(Player p, String material) {
+    private int held(Player p, String material) { return held(p, material, null); }
+
+    private int held(Player p, String material, String nameContains) {
         var mt = Material.matchMaterial(material);
         if (mt == null) return 0;
-        return p.getInventory().all(mt).values().stream().mapToInt(ItemStack::getAmount).sum();
+        int n = 0;
+        for (var st : p.getInventory().getStorageContents()) {
+            if (st == null || st.getType() != mt) continue;
+            if (nameContains != null && !nameContains.isEmpty() && !displayNameIs(st, nameContains)) continue;
+            n += st.getAmount();
+        }
+        return n;
     }
 
-    private void take(Player p, String material, int amount) {
+    private static boolean displayNameIs(ItemStack st, String needle) {
+        try {
+            var im = st.getItemMeta();
+            if (im == null || im.displayName() == null) return false;
+            String dn = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+                    .plainText().serialize(im.displayName()).toLowerCase();
+            return dn.contains(needle.toLowerCase());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void take(Player p, String material, int amount) { take(p, material, amount, null); }
+
+    private void take(Player p, String material, int amount, String nameContains) {
         var mt = Material.matchMaterial(material);
         if (mt == null) return;
         int left = amount;
@@ -877,6 +918,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         for (int i = 0; i < content.length && left > 0; i++) {
             var it = content[i];
             if (it == null || it.getType() != mt) continue;
+            if (nameContains != null && !nameContains.isEmpty() && !displayNameIs(it, nameContains)) continue;
             int use = Math.min(it.getAmount(), left);
             left -= use;
             if (use >= it.getAmount()) p.getInventory().setItem(i, null);
@@ -992,9 +1034,10 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     }
 
     private String labelFor(Player p, Quest q, Prog pr, Stage s) {
+        var flt = s.nameFilter.isEmpty() ? null : s.nameFilter;
         return switch (s.kind) {
-            case "craft" -> "&e" + s.label + " &8(" + held(p, s.material) + "/" + s.amount + ")";
-            case "deliver" -> "&a" + s.label + " &8(" + held(p, s.material) + "/" + s.amount + ")";
+            case "craft" -> "&e" + s.label + " &8(" + held(p, s.material, flt) + "/" + s.amount + ")";
+            case "deliver" -> "&a" + s.label + " &8(" + held(p, s.material, flt) + "/" + s.amount + ")";
             case "walk" -> "&e" + s.label + " &8[" + (s.loc == null ? "?" : s.loc.getBlockX() + "," + s.loc.getBlockZ()) + "]";
             case "kill" -> "&c" + s.label + " &8(" + pr.points.getOrDefault("kill:" + q.id + ":" + s.key, 0) + "/" + s.amount + ")";
             default -> "&a" + s.label;
@@ -1087,6 +1130,25 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private String plain(String s) {
         return org.bukkit.ChatColor.stripColor(
                 org.bukkit.ChatColor.translateAlternateColorCodes('&', s == null ? "" : s));
+    }
+
+    /** Echte geldbalans via Vault (reflectie, geen compile-afhankelijkheid). */
+    private Object econProvider;
+    private Method mBalance;
+
+    private double balance(Player p) {
+        try {
+            if (mBalance == null) {
+                Class<?> ec = Class.forName("net.milkbowl.vault.economy.Economy");
+                var reg = Bukkit.getServicesManager().getRegistration(ec);
+                if (reg == null) return -1;
+                econProvider = reg.getProvider();
+                mBalance = ec.getMethod("getBalance", org.bukkit.OfflinePlayer.class);
+            }
+            return (double) mBalance.invoke(econProvider, p);
+        } catch (Exception e) {
+            return -1;
+        }
     }
 
     private Location parseLoc(String s) {

@@ -1551,4 +1551,161 @@ quests:
           - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
           - "sound steamworks:quest.complete"
 
-sequences: {}
+  # ---- golf 3 (30-10): preek- en service-quests uit BQ overgezet ------------
+  mad_doctor:
+    title: "&dThe Mad Doctor"
+    subtitle: "Volunteer for science - Machine Hill"
+    icon: LINGERING_POTION
+    npc-id: 76
+    order: 60
+    journal:
+      - "Sign the waiver, ride the machine, earn /rt."
+    stages:
+      talk:
+        type: talk
+        label: "&aLeave the laboratory."
+        lines:
+          - "&dMad Doctor: &7Ah! A fresh volunteer! Wonderful!"
+          - "&7My teleportation machine only exploded twice this week!"
+        choices:
+          - label: "&aI'll do it."
+            cond: "!tag:mad_doctor_done"
+            say: "&7Mad Doctor: &eExcellent! Please sign this completely legitimate liability waiver."
+            do: ["sequence md_show"]
+          - label: "&bSend me immediately. &8(quick trip)"
+            cond: "tag:mad_doctor_done"
+            say: "&7Mad Doctor: &eStraight to the destination this time. The machine and I had a long talk."
+            do: ["sequence md_quick"]
+          - label: "&cNo thanks."
+            say: "&7Mad Doctor: &eA perfectly reasonable decision. Cowardly, but reasonable."
+    rewards: []
+
+  usop:
+    title: "&bCapitan Usop's Voyage"
+    subtitle: "Passage to the capital"
+    icon: OAK_BOAT
+    npc-id: 126
+    order: 61
+    stages:
+      talk:
+        type: talk
+        label: "&aAsk about the voyage."
+        lines:
+          - "&bCapitan Usop: &7I'm setting sail for the capital."
+          - "&7Would you like to travel with me?"
+        choices:
+          - label: "&aYes, I want passage to the capital."
+            say: "&7Capitan Usop: &eVery well! The compass points to the capital docks - meet me there and all aboard!"
+            do: ["teleport 2883;67;-670;iekcorbarSeason2"]
+          - label: "&cNo, not now."
+            say: "&7Capitan Usop: &eAs you wish. Come back if you change your mind."
+    rewards: []
+
+  techcore:
+    title: "&dThe First Steel"
+    subtitle: "Engineer - Techcore trial"
+    icon: IRON_INGOT
+    npc-id: 125
+    order: 62
+    start: "!tag:first_steel_completed_1"
+    journal:
+      - "Chapter I - The Alloy Test: one real Steel Ingot."
+    stages:
+      offer:
+        type: talk
+        label: "&dI will make the Steel Ingot."
+        lines:
+          - "&dEngineer: &7Before you call yourself an engineer, prove it."
+          - "&7Make one Steel Ingot the right way - no shortcuts,"
+          - "&7no iron painted gray. The blueprint is yours on the word."
+        rewards:
+          - "techcore blueprint grant %player% ERA_1:technocore_placement"
+          - "say &6Quest Updated&7 - &dThe First Steel&7: obtain &d1 Steel Ingot&7 and return."
+          - "tag+ first_steel_active_1"
+      turnin:
+        type: deliver
+        material: IRON_INGOT
+        name: "steel"
+        amount: 1
+        label: "&aShow him the ingot."
+        lines:
+          - "&dEngineer: &7Not yet. I want to see one proper Steel Ingot."
+          - "&7Learn the process, build what you need, and come back."
+    rewards:
+      - "tag+ first_steel_completed_1"
+      - "tag- first_steel_active_1"
+      - "title &dQUEST COMPLETE|&7The First Steel"
+      - "say &dEngineer: &aGood. That is real steel. You earned it - keep it."
+
+  cleric:
+    title: "&fCleric of Valhalla"
+    subtitle: "Divine services - race and class"
+    icon: GOLDEN_APPLE
+    npc-id: 94
+    order: 63
+    stages:
+      talk:
+        type: talk
+        label: "&fTake your blessing and go."
+        lines:
+          - "&fCleric: &7Do you wish to use my divine services?"
+          - "&7A first change of race or class is a gift from the gods."
+          - "&7After that, divine memory costs 100,000 coins."
+        choices:
+          - label: "&aChange my race. &8(free, first time)"
+            cond: "!tag:cleric_race_used"
+            do: ["valhallaraces:races reset race %player%", "tag+ cleric_race_used",
+                 "say &7The gods reshape your bloodline - choose anew!"]
+          - label: "&aChange my race. &8Cost: 100,000"
+            cond: "tag:cleric_race_used,money>=100000"
+            do: ["pay 100000", "valhallaraces:races reset race %player%",
+                 "say &7A divine service, tribute included. Choose your new race!"]
+          - label: "&aChange my race. &8Cost: 100,000"
+            cond: "tag:cleric_race_used,money<100000"
+            say: "&7Cleric: &cYou do not have enough coins for this divine service. Return with 100,000."
+          - label: "&dChange my class. &8(free, first time)"
+            cond: "!tag:cleric_class_used"
+            do: ["valhallaraces:races reset class %player%", "tag+ cleric_class_used",
+                 "say &7Your calling is rewritten in the stars!"]
+          - label: "&dChange my class. &8Cost: 100,000"
+            cond: "tag:cleric_class_used,money>=100000"
+            do: ["pay 100000", "valhallaraces:races reset class %player%",
+                 "say &7The gods accept tribute. Choose your new class!"]
+          - label: "&dChange my class. &8Cost: 100,000"
+            cond: "tag:cleric_class_used,money<100000"
+            say: "&7Cleric: &cYou do not have enough coins for this divine service. Return with 100,000."
+    rewards:
+      - "say &7Cleric: &fMay the gods watch over your path."
+
+# Tijdlijnen (seconden|actie) - de BQ-folders na. %player% werkt in elke stap.
+sequences:
+  md_show:
+    - "0|say &eMad Doctor: &7Excellent! Please remain perfectly still."
+    - "1.5|say &bMachine: &7Biological scan started."
+    - "3|say &bMachine: &7Subject classified as: reckless."
+    - "4.5|say &eMad Doctor: &7Hey! That is rude!"
+    - "6|say &bMachine: &7Beginning cryogenic preservation."
+    - "7|freezeeffect %player% 5s"
+    - "8.5|say &eMad Doctor: &7NO! Teleportation! Not refrigeration!"
+    - "9|freezeeffect %player% remove"
+    - "10|say &bMachine: &7Alternative solution detected. Applying poison."
+    - "11|effect POISON 3 1"
+    - "12.5|say &eMad Doctor: &7Who programmed you?!"
+    - "13|effect REGENERATION 4 1"
+    - "14|say &bMachine: &7New strategy available: eliminate the problem."
+    - "15.5|say &eMad Doctor: &7The problem is not the volunteer!"
+    - "17|say &bMachine: &7Volunteer identified as source of all current issues."
+    - "18.5|say &eMad Doctor: &7Listen carefully. If you kill the volunteers, we will have no volunteers left."
+    - "20|say &bMachine: &7Processing... logical argument detected. Murder mode disabled."
+    - "21.5|say &eMad Doctor: &7See? Communication solves everything."
+    - "23|say &bMachine: &7Preparing safe teleportation. Updated survival chance: 63%."
+    - "24.5|say &eMad Doctor: &7ONLY SIXTY-THREE PERCENT?!"
+    - "26|say &bMachine: &7Correction. Sixty-four percent."
+    - "27.5|title &aQUEST COMPLETE|&7You have contributed to science"
+    - "28.5|say &6TRAVEL ABILITY UNLOCKED&7: type &b/rt&7 for a random safe landing."
+    - "29|perm+ cmi.command.rt"
+    - "29.5|tag+ mad_doctor_done"
+  md_quick:
+    - "0|say &eMad Doctor: &7The machine promised not to do anything weird."
+    - "1.2|say &bMachine: &7No promises were made."
+    - "2.4|say &7Type &b/rt &7yourself when you dare - nobody rides you around here."
