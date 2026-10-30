@@ -22,6 +22,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
+| **Relics 0.6.0 (Blood Token + Water Bottle)** | TE-DEPLOYEN punt 67 | jar + pack build22; even belangrijk: crates.yml/config.yml op de server zijn ouder - bak ze en laat de plugin ze opnieuw schrijven (of de 5 crate-regels + blood-moon zelf plakken), anders vallen de tokens uit de crates weg |
 | site-zip + **Shop Settings-commando's** | TE-DEPLOYEN punt 63 (nieuw: sha1 ecf1d85c) | zip uitpakken + NPM + restart; dan Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online) |
 | 2 site-SQL's importeren | deploy/site-30-10-kits.sql + site-30-10-nieuws.sql | phpMyAdmin → iekcorbar-DB; kits zijn nu veilig (Relics 0.5.0 draait), nieuws kan direct |
 | 2 announcement-posts publiceren | Discord #announcements | per post nog op 'Publish' klikken - anders zien abonnees de Halloween- en Blood Moon-post niet |

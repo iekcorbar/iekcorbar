@@ -19,6 +19,7 @@ melomaniac:
     - disc:ghosts_of_the_samurai
     - disc:halloween_in_iekcorbar
     - disc:trick_or_treat_at_halloween
+    - chance:0.1:relic:blood_token_blessed   # one night in ten mints a gold-veined coin
 
 cellar:
   title: "Sakagura Cellar Set"
@@ -35,6 +36,7 @@ cellar:
     - relic:drunkard_barrel
     - relic:greeter_doll
     - relic:sweeper_doll
+    - chance:0.1:relic:blood_token_blessed
 
 shadow:
   title: "Shadow of the Settlement"
@@ -53,12 +55,14 @@ shadow:
     - relic:ash_pile
     - relic:warding_totem
     - relic:shattered_portal_shard
+    - chance:0.1:relic:blood_token_blessed
 
 lucky:
   title: "Lucky Relic Crate"
   items:
     - random:disc
     - random:relic:curio
+    - relic:blood_token   # the standard coin: always in, always plain
 
 hamper:
   title: "Haunted Hamper"
@@ -66,3 +70,4 @@ hamper:
     - disc:halloween_in_iekcorbar
     - disc:trick_or_treat_at_halloween
     - random:relic:shadow
+    - chance:0.1:relic:blood_token_blessed

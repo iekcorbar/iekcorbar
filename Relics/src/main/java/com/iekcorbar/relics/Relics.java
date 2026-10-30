@@ -117,7 +117,8 @@ final class Relics implements Listener {
             if (m == null) m = type.floor; // no model of its own for this face: the floor model, tilted by transform()
             if (type == RelicType.WARDING_TOTEM && lit) m = "warding_totem_lit";
             if (type == RelicType.ADVENT_WREATH) m = (mount.equals("wall") ? "advent_wreath_wall_" : "advent_wreath_") + Math.max(0, candles);
-            if ((type == RelicType.GIFT_BOX || type == RelicType.EASTER_EGG || type == RelicType.GIANT_CANDY_CANE) && !variant.isEmpty()) m = variant;
+            if ((type == RelicType.GIFT_BOX || type == RelicType.EASTER_EGG || type == RelicType.GIANT_CANDY_CANE
+                    || type == RelicType.BLOOD_TOKEN) && !variant.isEmpty()) m = variant;
             if (type == RelicType.COOKIE_PLATE) m = count > 3 ? "cookie_plate" : count > 0 ? "cookie_plate_3" : "cookie_plate_0";
             if (type == RelicType.CHAMPAGNE_TOWER) m = count > 6 ? "champagne_tower" : count > 0 ? "champagne_tower_half" : "champagne_tower_empty";
             if (type == RelicType.CANDY_HEART_JAR) m = count > 4 ? "candy_heart_jar" : count > 0 ? "candy_heart_jar_half" : "candy_heart_jar_empty";
@@ -168,7 +169,7 @@ final class Relics implements Listener {
 
     private final RelicsPlugin plugin;
     final NamespacedKey itemKey;
-    private final NamespacedKey dataKey, tagKey;
+    private final NamespacedKey dataKey, tagKey, blessedKey;
     /** world -> block key -> relic (every block a tall relic occupies points to it). */
     private final Map<UUID, Map<Long, Relic>> relics = new HashMap<>();
     private final Map<UUID, Relic> byHitbox = new HashMap<>();
@@ -195,6 +196,7 @@ final class Relics implements Listener {
         itemKey = new NamespacedKey(plugin, "item");
         dataKey = new NamespacedKey(plugin, "relics");
         tagKey = new NamespacedKey(plugin, "display");
+        blessedKey = new NamespacedKey(plugin, "blessed");
         graveLoad();
         breakHits = Math.max(1, plugin.getConfig().getInt("break-hits", 3));
         boards = new NewYearBoards(plugin, this, tagKey);
@@ -240,19 +242,37 @@ final class Relics implements Listener {
     // ------------------------------------------------------------ items + recipes
 
     ItemStack item(RelicType t, int amount) {
+        return item(t, amount, false);
+    }
+
+    /** 0.6.0: the Blood Token also exists in a Blessed form - same relic, PDC flag + its own model. */
+    ItemStack item(RelicType t, int amount, boolean blessed) {
         // the Creature Skull is a dragon head item so it can be worn (right-click in the air); placing it is cancelled in onInteract
         ItemStack it = new ItemStack(t == RelicType.CREATURE_SKULL ? Material.DRAGON_HEAD : Material.PAPER, Math.max(1, amount));
         ItemMeta m = it.getItemMeta();
         boolean xmas = t.collection != RelicType.Collection.SHADOW;
-        m.displayName(Component.text(t.displayName, xmas ? NamedTextColor.GOLD : NamedTextColor.DARK_RED).decoration(TextDecoration.ITALIC, false));
-        m.lore(List.of(Component.text(t.lore, NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, true),
-                Component.text((xmas ? "" : "Relic - ") + t.collection.title, xmas ? NamedTextColor.DARK_GREEN : NamedTextColor.DARK_PURPLE)
-                        .decoration(TextDecoration.ITALIC, false)));
+        String name = blessed && t == RelicType.BLOOD_TOKEN ? "Blessed Blood Token" : t.displayName;
+        m.displayName(Component.text(name, blessed && t == RelicType.BLOOD_TOKEN ? NamedTextColor.GOLD : xmas ? NamedTextColor.GOLD : NamedTextColor.DARK_RED).decoration(TextDecoration.ITALIC, false));
+        List<Component> lore = new ArrayList<>(List.of(Component.text(t.lore, NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, true)));
+        if (blessed && t == RelicType.BLOOD_TOKEN)
+            lore.add(Component.text("Blessed by a blood moon - the veins run gold.", NamedTextColor.RED).decoration(TextDecoration.ITALIC, true));
+        lore.add(Component.text((xmas ? "" : "Relic - ") + t.collection.title, xmas ? NamedTextColor.DARK_GREEN : NamedTextColor.DARK_PURPLE)
+                .decoration(TextDecoration.ITALIC, false));
+        m.lore(lore);
         m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, t.id());
+        if (blessed && t == RelicType.BLOOD_TOKEN) m.getPersistentDataContainer().set(blessedKey, PersistentDataType.BYTE, (byte) 1);
         it.setItemMeta(m);
-        it.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics", t.floor));
+        it.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics",
+                blessed && t == RelicType.BLOOD_TOKEN ? "blood_token_blessed" : t.floor));
         it.setData(DataComponentTypes.MAX_STACK_SIZE, 16);
         return it;
+    }
+
+    /** Is this item a Blessed Blood Token? */
+    boolean blessedOf(ItemStack it) {
+        if (it == null || !it.hasItemMeta()) return false;
+        Byte b = it.getItemMeta().getPersistentDataContainer().get(blessedKey, PersistentDataType.BYTE);
+        return b != null && b == 1;
     }
 
     RelicType typeOf(ItemStack it) {
@@ -462,6 +482,14 @@ final class Relics implements Listener {
         if (t == RelicType.COUNTDOWN_BOARD) r.owner = p.getUniqueId(); // the placer may change its zone
         if (t == RelicType.GIANT_CANDY_CANE) r.variant = CANE_COLOURS[ThreadLocalRandom.current().nextInt(CANE_COLOURS.length)];
         if (t == RelicType.ADVENT_WREATH) r.candles = adventCandles();
+        if (t == RelicType.BLOOD_TOKEN) {                          // the crimson moon blesses what it shines on
+            plugin.adv().grant(p, "blood_token");
+            if (blessedOf(hand) || BloodMoon.isBloodMoon(plugin, target.getWorld())) {
+                r.variant = mount.equals("wall") ? "blood_token_blessed_wall" : "blood_token_blessed";
+                plugin.adv().grant(p, "blood_blessed");
+                p.sendMessage(Component.text("The moon bends this coin to its light - it is Blessed.", NamedTextColor.RED));
+            }
+        }
         index(r);
         draw(r);
         markDirty(r);

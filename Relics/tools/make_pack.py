@@ -530,6 +530,50 @@ def mug(col, liquid, extra=None):
     return e + (extra or [])
 
 
+def water_bottle():
+    """A stout glass bottle of clear water: thick glass foot, water filled to the shoulder
+    with one lighter band at the surface, a brass ring and a wooden cork under the lip."""
+    e = [box(5.4, 0, 5.4, 10.6, 0.6, 10.6, "glass"),                      # glass bottom
+         box(5.7, 0.6, 5.7, 10.3, 6.0, 10.3, "water_dark"),               # the water itself
+         box(5.7, 6.0, 5.7, 10.3, 6.35, 10.3, "water_dark_l"),            # surface band, a shade lighter
+         box(5.4, 6.35, 5.4, 10.6, 7.3, 10.6, "glass"),                   # empty shoulder
+         box(7.0, 7.3, 7.0, 9.0, 9.2, 9.0, "glass"),                      # neck
+         box(6.8, 9.0, 6.8, 9.2, 9.5, 9.2, "brass"),                      # lip ring
+         box(7.3, 9.5, 7.3, 8.7, 10.4, 8.7, "wood_warm"),                 # cork
+         box(5.6, 1.4, 5.5, 6.15, 5.0, 5.75, "icing")]                    # one shine stripe on the glass
+    return e
+
+
+def blood_token_coin(ring, face, mark):
+    """A coin standing on its edge: ring, field a hair proud front and back, stamped drop."""
+    return [box(4.8, 0.8, 7.2, 11.2, 7.2, 8.8, ring),
+            box(5.5, 1.5, 7.05, 10.5, 6.5, 8.95, face),
+            box(7.2, 2.6, 7.0, 8.8, 4.2, 9.0, mark),
+            box(7.6, 4.2, 7.3, 8.4, 5.1, 8.7, mark)]
+
+
+def blood_token():
+    """The plain coin of the crimson hour: brass ring, deep blood-red field, bone-white drop,
+    standing in a small iron stand."""
+    return [box(6.2, 0, 7.0, 9.8, 0.8, 9.0, "iron"),
+            box(6.5, 0.3, 7.15, 9.5, 0.8, 8.85, "coal")] + blood_token_coin("brass", "rose_deep", "bone")
+
+
+def blood_token_blessed():
+    """Blessed by the blood moon: gold ring and stand, the field glowing, gold veins."""
+    return [box(6.2, 0, 7.0, 9.8, 0.8, 9.0, "gold"),
+            box(6.5, 0.3, 7.15, 9.5, 0.8, 8.85, "ember")] + blood_token_coin("gold", "glow_red", "gold_l")
+
+
+def blood_token_wall(blessed=False):
+    """The coin in a wall plaque - frame flush with the stone (z = 16), face to the room."""
+    fr, ring, face, mark = ("brass", "gold", "glow_red", "gold_l") if blessed else ("wood_warm_d", "brass", "rose_deep", "bone")
+    return [box(4.5, 0.5, 14.8, 11.5, 7.8, 16, fr),
+            box(5.2, 1.2, 14.6, 10.8, 7.1, 15.2, ring),
+            box(5.9, 1.9, 14.55, 10.1, 6.4, 15.1, face),
+            box(7.4, 3.2, 14.5, 8.6, 4.4, 15.05, mark)]
+
+
 XMAS = {
     "christmas_tree": lambda: tree(True), "christmas_tree_b": lambda: tree(False),
     "string_lights": lambda: string_lights(True), "string_lights_b": lambda: string_lights(False),
@@ -1444,6 +1488,11 @@ MODELS.update(MORE)
 MODELS.update(BREWERY)
 MODELS.update(VALENTINE)
 MODELS["pillar_box"] = pillar_box  # Curiosities (year-round): the steam-pillar post box
+MODELS["water_bottle"] = water_bottle      # Treat: drinkable, see Treats.java
+MODELS["blood_token"] = blood_token        # RelicType: floor + wall, plain and Blessed - 0.6.0
+MODELS["blood_token_wall"] = lambda: blood_token_wall(False)
+MODELS["blood_token_blessed"] = blood_token_blessed
+MODELS["blood_token_blessed_wall"] = lambda: blood_token_wall(True)
 
 
 

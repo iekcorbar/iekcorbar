@@ -209,3 +209,14 @@ random:
     - heart_arch
     - clockwork_heart
     - amore_machine
+
+# The Blood Moon (0.6.0): the minting hour of the Blood Token.
+# A token placed while the moon stands above the horizon inside this window comes out
+# Blessed (gold veins, red glow). start/end-hour run on a 24-hour IN-GAME clock
+# (dawn is 06:00); the moon itself only keeps night watch near full moons, so Blessed
+# coins are a one-in-eight-nights affair even inside the window. enabled: false turns
+# the blessing off; /relics token then always mints a plain one.
+blood-moon:
+  enabled: true
+  start-hour: 20
+  end-hour: 4

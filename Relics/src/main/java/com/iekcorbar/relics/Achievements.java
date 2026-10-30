@@ -19,6 +19,10 @@ final class Achievements {
         a.add("wish", "valentine", "gold_nugget", "Wish Upon a Heart", "Drop a coin in the wishing well.", "task");
         a.add("curio", "first", "spyglass", "Curiosities", "Get a curiosity.", "task");
         a.add("halloween", "first", "jack_o_lantern", "Spooky Season", "Get a Halloween Party relic.", "task");
+        a.add("blood_token", "halloween", "amethyst_shard", "Coin of the Crimson Hour", "Place a Blood Token.", "task");
+        a.add("blood_normal", "blood_token", "brick", "A Plain One", "Hold a plain Blood Token in your hand.", "task");
+        a.add("blood_blessed", "blood_token", "glowstone", "Blessed by the Moon", "Hold a Blessed Blood Token - place one while the blood moon is up.", "task");
+        a.add("blood_set", "blood_token", "nether_star", "Under the Crimson Moon", "Hold a plain and a Blessed Blood Token at the same time.", "challenge").allOf("blood_normal", "blood_blessed").glint();
         a.add("treat", "first", "cookie", "Sweet Tooth", "Eat or drink a treat.", "task");
         a.add("disc", "first", "music_disc_cat", "Needle Drop", "Get a Relics music disc.", "task");
         // actions
@@ -40,12 +44,15 @@ final class Achievements {
 
         a.scanner(it -> {
             RelicType t = plugin.relics().typeOf(it);
+            if (t == RelicType.BLOOD_TOKEN)                        // the crimson coin counts double (0.6.0)
+                return plugin.relics().blessedOf(it) ? "token_blessed" : "token_plain";
             if (t != null) return "c:" + t.collection.id();
             if (plugin.treats().typeOf(it) != null) return "treat";
             return plugin.discs().isDisc(it) ? "disc" : null;
         });
         for (RelicType.Collection c : RelicType.Collection.values()) a.item("c:" + c.id(), c.id());
         a.item("treat", "treat").item("disc", "disc");
+        a.item("token_plain", "blood_normal").item("token_blessed", "blood_blessed");
         return a;
     }
 

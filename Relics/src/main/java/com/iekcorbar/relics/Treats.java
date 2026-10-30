@@ -44,7 +44,8 @@ final class Treats implements Listener {
         GREEN_GINGER_ALE("Green Ginger Ale", "Bubbly, gingery and very green.", 2, 2f, true, true),
         SODA_BREAD("Soda Bread", "Crusty Irish bread.", 6, 7f, false, false),
         SHAMROCK_COOKIE("Shamrock Cookie", "A little extra luck.", 2, 1.2f, false, false),
-        CHOCOLATE_HEART("Chocolate Heart", "Half bitter, half sweet - and a beat after eating, something extra.", 3, 1.2f, false, false);
+        CHOCOLATE_HEART("Chocolate Heart", "Half bitter, half sweet - and a beat after eating, something extra.", 3, 1.2f, false, false),
+        WATER_BOTTLE("Water Bottle", "Cool, clear and chased with nothing. Washes the day off.", 1, 0.4f, true, true);
 
         final String displayName, lore;
         final int nutrition;
@@ -77,7 +78,8 @@ final class Treats implements Listener {
         ItemStack it = new ItemStack(Material.PAPER, Math.max(1, amount));
         ItemMeta m = it.getItemMeta();
         m.displayName(Component.text(t.displayName, NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
-        String label = t.ordinal() >= Treat.CHOCOLATE_HEART.ordinal() ? "Valentine's"
+        String label = t == Treat.WATER_BOTTLE ? "Curiosities"
+                : t.ordinal() >= Treat.CHOCOLATE_HEART.ordinal() ? "Valentine's"
                 : t.ordinal() >= Treat.SODA_BREAD.ordinal() || t == Treat.GREEN_GINGER_ALE ? "St. Patrick's Day"
                 : t.ordinal() >= Treat.CHOCOLATE_BUNNY.ordinal() ? "Easter"
                 : t.ordinal() >= Treat.SPARKLING_CIDER.ordinal() ? "New Year" : "Xmas Town";
@@ -134,6 +136,13 @@ final class Treats implements Listener {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 600, 0));
                 p.getWorld().spawnParticle(org.bukkit.Particle.HEART, p.getEyeLocation().add(0, 0.6, 0), 3, 0.3, 0.15, 0.3, 0.02);
             }
+            case WATER_BOTTLE -> {                                   // water washes things clean
+                p.setFireTicks(0);
+                p.removePotionEffect(PotionEffectType.POISON);
+                p.removePotionEffect(PotionEffectType.NAUSEA);
+                p.removePotionEffect(PotionEffectType.WEAKNESS);
+                p.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, 1200, 0));
+            }
             default -> { }
         }
     }
@@ -154,6 +163,7 @@ final class Treats implements Listener {
         add(keys, Treat.SODA_BREAD, 2, Material.WHEAT, Material.WHEAT, Material.WHEAT, Material.MILK_BUCKET);
         add(keys, Treat.SHAMROCK_COOKIE, 8, Material.WHEAT, Material.WHEAT, Material.SUGAR, Material.LIME_DYE);
         add(keys, Treat.CHOCOLATE_HEART, 4, Material.COCOA_BEANS, Material.COCOA_BEANS, Material.SUGAR, Material.SUGAR, Material.MILK_BUCKET);
+        add(keys, Treat.WATER_BOTTLE, 2, Material.GLASS_BOTTLE, Material.ICE, Material.ICE);
     }
 
     private void add(List<NamespacedKey> keys, Treat t, int amount, Material... ing) {

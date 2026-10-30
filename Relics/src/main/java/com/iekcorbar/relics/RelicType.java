@@ -224,7 +224,17 @@ enum RelicType {
     GREETER_DOLL(Collection.CURIO, "Greeter Doll", "The friendliest staff you will ever have. Right-click to change his pose.",
             Base.NONE, 1, 0, "greeter_doll", null, null, Effect.DOLL, Use.POSE, 1f, false),
     SWEEPER_DOLL(Collection.CURIO, "Sweeper Doll", "Still sweeping at closing time. Right-click to change his pose.",
-            Base.NONE, 1, 0, "sweeper_doll", null, null, Effect.DOLL, Use.POSE, 1f, false);
+            Base.NONE, 1, 0, "sweeper_doll", null, null, Effect.DOLL, Use.POSE, 1f, false),
+
+    // ---------------------------------------------------------------- Blood Moon (0.6.0)
+    /**
+     * Coin of the crimson hour - a real relic (placeable, floor + wall), shop/event stock:
+     * NOT craftable. A plain one comes from the Lucky crate; the four event crates roll a
+     * Blessed one (gold veins, red glow) about one time in ten. Placing a token while the
+     * blood moon stands above the horizon (see BloodMoon) blesses it on the spot.
+     */
+    BLOOD_TOKEN(Collection.HALLOWEEN, "Blood Token", "Minted under a crimson moon. The Guild keeps the dies - the night keeps the rest.",
+            Base.NONE, 1, 0, "blood_token", "blood_token_wall", null, Effect.NONE, Use.NONE, 1f, false);
 
     enum Collection {
         SHADOW("Shoutlander's Shadow"), XMAS("Xmas Town"), NEW_YEAR("New Year"), EASTER("Easter"), PATRICK("St. Patrick's Day"),

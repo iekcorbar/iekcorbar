@@ -71,8 +71,21 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         String[] p = entry.toLowerCase(Locale.ROOT).split(":");
         switch (p[0]) {
             case "relic" -> {
-                RelicType t = RelicType.byId(p.length > 1 ? p[1] : "");
-                return t == null ? new ItemStack[0] : new ItemStack[]{relics.item(t, 1)};
+                String rid = p.length > 1 ? p[1] : "";
+                boolean bless = rid.endsWith("_blessed");           // relic:blood_token_blessed (0.6.0)
+                if (bless) rid = rid.substring(0, rid.length() - "_blessed".length());
+                RelicType t = RelicType.byId(rid);
+                return t == null ? new ItemStack[0] : new ItemStack[]{relics.item(t, 1, bless)};
+            }
+            case "chance" -> {                                       // chance:<0..1>:<entry> - one roll per opening
+                double pr;
+                try {
+                    pr = p.length > 1 ? Double.parseDouble(p[1]) : 0;
+                } catch (NumberFormatException e) {
+                    return new ItemStack[0];
+                }
+                if (java.util.concurrent.ThreadLocalRandom.current().nextDouble() >= pr) return new ItemStack[0];
+                return crateItems(String.join(":", java.util.Arrays.copyOfRange(p, 2, p.length)));
             }
             case "disc" -> {
                 Discs.Disc d = discs.byId(p.length > 1 ? p[1] : "");
@@ -89,7 +102,8 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
                 List<RelicType> pool = new ArrayList<>();
                 for (RelicType t : RelicType.values()) {
                     if (craftable(t) || t.use == RelicType.Use.GIFT || t.use == RelicType.Use.CALENDAR
-                            || t == RelicType.EASTER_EGG || t == RelicType.COUNTDOWN_BOARD) continue;
+                            || t == RelicType.EASTER_EGG || t == RelicType.COUNTDOWN_BOARD
+                            || t == RelicType.BLOOD_TOKEN) continue;   // the token only comes from its own crate line
                     if (p.length > 2 && !t.collection.name().equalsIgnoreCase(p[2])) continue;
                     pool.add(t);
                 }
@@ -330,6 +344,21 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             target.sendMessage(Component.text("The " + title + " falls open at your feet!", NamedTextColor.GOLD));
             target.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.3f);
             target.getWorld().spawnParticle(Particle.FIREWORK, target.getLocation().add(0, 1.2, 0), 30, 0.4, 0.4, 0.4, 0.1);
+            return true;
+        }
+        if (sub.equals("token")) {                                  // 0.6.0: mint the crimson coin
+            if (denied(s, "relics.give")) return true;
+            Player target = a.length > 1 ? Bukkit.getPlayerExact(a[1]) : s instanceof Player who ? who : null;
+            if (target == null) {
+                s.sendMessage(Component.text("usage: /" + label + " token [player]", NamedTextColor.RED));
+                return true;
+            }
+            boolean bless = BloodMoon.isBloodMoon(this, target.getWorld());
+            ItemStack it = relics.item(RelicType.BLOOD_TOKEN, 1, bless);
+            for (var left : target.getInventory().addItem(it).values())
+                target.getWorld().dropItemNaturally(target.getLocation(), left);
+            s.sendMessage(Component.text((bless ? "Blessed" : "Plain") + " Blood Token -> " + target.getName()
+                    + (bless ? " - the moon is up." : " - the moon is not up."), bless ? NamedTextColor.GOLD : NamedTextColor.GREEN));
             return true;
         }
         if (sub.equals("protect")) {
