@@ -1756,6 +1756,28 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### Deploy-batch eigenhandig uitgerold (30-10, 05:00-05:10)
+
+- Eigenaar gaf groen licht ("alles wat kan deployen/builden etc") - en de MC-
+  server stond al netjes uit (eigen /stop om 02:31, container Exited(0)):
+  dus swap zonder spelers-last.
+- Bestanden geswap op de VPS (via volume-pad, sha1's gemeten na upload,
+  identiek aan TE): Steamworks 0.3.26 (0.3.25 weg), SteamworksAdditions 0.1.3
+  (0.1.2 weg), IekQuests 0.3.0 (nieuw), iekcorbar-pack-build19.zip naar de
+  RPM-mixer (build14 weg), sw_tank_wagon + sw_plateau_wagon (json+bbmodel)
+  naar FMM/models/steamworks.
+- BQ-afbouw stap 1: zes pakketten (milo, vorkan_kross, Armorshop,
+  Shop_gemologist, Upgradestone, mmoitems_food_shop) verhuisd naar
+  plugins/BetonQuest/QuestPackages-offline - geen dubbele NPC-gesprekken.
+  Rod_merchant + alle nog-te-migreren pakketten blijven in BQ draaien.
+- Container gestart (docker start) en log gecheckt: Done (88.974s), IekQuests
+  "klaar - 14 quest(s)", Steamworks enabled, 0 SEVERE/ERROR. RAM: container
+  ~10,7 GiB van 21 GiB (warm-up normaal); host 14/31 GiB; schijf 38%.
+- Huiswerk: TE-DEPLOYEN - blokken 42/43/45/51/53 samengevoegd tot één
+  LIVE-record bovenaan; gedeployde artefacten uit deploy/ weg.
+- Rest voor de eigenaar: /npc create Igor Nightgrave + id invullen in
+  plugins/IekQuests/quests.yml bij igor (TE 52), plus de paneel-klikken 47/48.
+
 ### IekQuests 0.3.0 - in-game QUEST WIZARD + permissies (30-10, ~04:55)
 
 - Eigenaar-wens: "via de GUI een soort wizard om in-game een nieuwe NPC+quest

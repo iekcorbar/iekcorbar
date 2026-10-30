@@ -19,11 +19,11 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
 | StaffHub 0.4.10 uitrollen (vertaalbalk mobiel) | TE-DEPLOYEN punt 49 | /opt/staffhub bijwerken + container rebuilden (zelfde als 0.4.9) |
-| IekQuests 0.3.0 klaar (eigen quest-engine + IN-GAME QUEST WIZARD) | TE-DEPLOYEN punt 53 + docs/quest-wizard.md | jar in deploy/ (sha1 77140ce8); golf 1: 4 handelaars + 8 eetwarens Gemigreerd (14 quests, alles engels); /questwizard maakt quests+npc's via GUI (opslaan naar wizard-quests.yml, aparte bestand); permissies: wizard=admin-only, cond perm:, reward perm+/perm-; Rod_merchant blijft BQ tot mmoitem-ondersteuning; bij deploy BQ-handelaars mee offline |
+| IekQuests 0.3.0 🟢 LIVE sinds 30-10 05:05 (agent-deploy, log groen) | docs/quest-wizard.md | 14 quests live (milo, igor + 4 handelaars + 8 eetwarens, alles Engels); 6 BQ-pakketten → QuestPackages-offline (Rod_merchant blijft BQ tot mmoitem-ondersteuning); /questwizard bouwt quests+NPC's in de GUI → wizard-quests.yml; permissies: wizard=admin-only, cond perm:, reward perm+/perm- |
 | Halloween-quest plaatsen (morgen is het zo ver!) | TE-DEPLOYEN punt 52 | /npc create Igor Nightgrave → mapje uploaden → /bq reload |
-| Steamworks 0.3.26 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
+| Steamworks 0.3.26 🟢 LIVE sinds 30-10 05:05 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 (afgevinkt) | oude 0.3.25 van de server af |
 | Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | grijs-bericht VERSTUURD door eigenaar (30-10, DM) → wacht op antwoord; daarna ja/nee lockplan + klasse-keus |
-| iekcorbar-pack-build19.zip (woosh + blips + Milo/Igor-stem + questboek-model) | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
+| iekcorbar-pack-build19.zip 🟢 LIVE sinds 30-10 05:05 (woosh + blips + Milo/Igor-stem + questboek-model) | TE-DEPLOYEN punt 43 (afgevinkt) | build14 uit de mixer; clients: pack opnieuw halen + herstart |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |
 | AfkCinema 0.3.0 (klikbare zwevende menu's) | TE-DEPLOYEN punt 44 | bij dezelfde herstart-batch; jar staat ook al in de testbank (E:) |
 | NDA ondertekenen | docs/nda/signed/ (3 pdf's) | zelf tekenen → per DM naar kooyer, iekjebr36, greyarts91; getekend terug in dezelfde map. (afriendlystomach resigned - PDF ingetrokken) |
@@ -32,7 +32,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 ## 🔵 In uitvoering (agent) → afgerond, wacht op deploy
 | Blok | Status |
 |---|---|
-| Tank- + plateauwagen | af: code + modellen + audit + site + wiki; jar (punt 42) + 2 sw-modellen + pack (punt 43) wachten op jouw batch |
+| Tank- + plateauwagen | 🟢 LIVE 30-10 05:05: jar + 2 sw-modellen + pack build19 allemaal op de server |
 
 ## ⚪ Wachtrij
 - **Cinematic Interaction** (Fabric-mod `cinematic` v0.18.30, MC 26.3): REA-analyse
