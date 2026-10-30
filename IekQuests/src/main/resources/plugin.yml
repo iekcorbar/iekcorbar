@@ -11,11 +11,17 @@ commands:
     description: Open the quest menu (or admin operations)
     usage: /questbook [reload|reset <player> [quest]]
     aliases: [questsui, iquests]
+  questwizard:
+    description: In-game wizard to build a new quest (and NPC) into the config
+    usage: /questwizard [delete <quest-id>]
+    permission: iekquests.admin
+    permission-message: The quest wizard is for staff only.
+    aliases: [qwiz]
 
 permissions:
   iekquests.use:
     description: Open the quest book and do quests
     default: true
   iekquests.admin:
-    description: Reload configs and reset player progress
+    description: Quest wizard, config reload and progress resets
     default: op

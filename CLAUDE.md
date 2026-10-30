@@ -1756,6 +1756,32 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.3.0 - in-game QUEST WIZARD + permissies (30-10, ~04:55)
+
+- Eigenaar-wens: "via de GUI een soort wizard om in-game een nieuwe NPC+quest
+  aan te maken en natuurlijk in de config" + "zorg je ook voor permissies".
+- QuestWizard.java (nieuw): /questwizard of netherster-knop in /questbook.
+  GUI-stappen: basis (id/titel/icon/order), NPC-bindgen (bestaand id OF
+  NIEUWE Citizens-NPC spawns naast je + pull-to-me), stages talk/craft/
+  deliver/walk/kill (locatie = "mijn plek"-knop), gesprekskeuzes met
+  goto/cond/do-acties, herhaalcontracten (cooldown/daily/money/eco),
+  journal, quest-rewards, condities. Chat-tekstinvoer (cancel/done).
+  Beheer-scherm: wizard-quests editen/verwijderen.
+- Config-veiligheid: wizard schrijft ALLEEN naar plugins/IekQuests/
+  wizard-quests.yml (eigen serialization, geen Bukkit-comments-verlies);
+  load() leest quests.yml + wizard-file boven elkaar; handmatige quests
+  blijven onaangeroerd.
+- Permissies, drie lagen: (1) wizard + admin-acties op iekquests.admin,
+  questwizard commando in plugin.yml met permission; (2) quest-condities
+  perm:node (bestond al, nu gedocumenteerd in Help-pagina); (3) beloning
+  'perm+ node' / 'perm- node' via console-lp (Mad Doctor /rt-unlock kan
+  daarmee golf 3 in).
+- Alle speler/staff-strings Engels gemaakt (commando-feedback + default
+  labels Continue/Hand in).
+- jar: deploy/IekQuests-0.3.0.jar sha1 77140ce87b39adcb6ddf3b920b201ac3494bdf62;
+  TE-DEPLOYEN 53 bijgewerkt (wizard + permissies + teststappen);
+  handleiding: docs/quest-wizard.md (Engels, staff-plakbaar).
+
 ### IekQuests 0.2.1 - migratie-golf 1: handelaars + eetwarens (30-10, ~04:20)
 
 - Alle contractcijfers uit de BQ-pakketten getrokken (python-scan): Vorkan/

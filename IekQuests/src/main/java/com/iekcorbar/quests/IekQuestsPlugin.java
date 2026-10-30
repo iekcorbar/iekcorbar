@@ -89,7 +89,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         int amount = 1;
         Location loc;
         double radius = 6;
-        String label = "&aVerder";
+        String label = "&aContinue";
         String voice = "";
         List<String> lines = new ArrayList<>();
         List<Cond> conds = new ArrayList<>();
@@ -110,7 +110,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         int money = 100;
         int eco = 2;
         boolean daily;                       // max 1x per gamemiddag (24u)
-        String label = "&aInleveren";
+        String label = "&aHand in";
         String voice = "";
         List<String> rewards = new ArrayList<>();
     }
@@ -119,6 +119,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         String id = "", title = "&fQuest", subtitle = "", icon = "BOOK";
         int npcId = -1;
         int order = 0;
+        boolean fromWizard;                    // komt uit wizard-quests.yml (GUI-wizard)
         boolean randomStart;                 // bij start: willekeurige eerste stage uit 'random-stages'
         List<String> randomStages = new ArrayList<>();
         List<Cond> startConds = new ArrayList<>();
@@ -156,6 +157,43 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private YamlConfiguration data;
     private NamespacedKey tagKey;
     private final Random rnd = new Random();
+    private QuestWizard wizard;
+
+    // ---------------------------------------------------------------- wizard-toegang
+
+    /** Lijst voor de GUI-wizard (niet muteren buiten de plugin). */
+    List<Quest> questsView() { return quests; }
+
+    Quest questById(String id) { return byId(id); }
+
+    List<Cond> condsOf(String s) { return conds(s); }
+
+    /** Wizard-quest toevoegen/vervangen, wegenschrijven en direct inladen. */
+    void storeWizardQuest(Quest q) {
+        q.fromWizard = true;
+        quests.removeIf(x -> x.id.equals(q.id));
+        quests.add(q);
+        writeWizardFile();
+        saveData();
+        load();
+    }
+
+    boolean removeWizardQuest(String id) {
+        var q = byId(id);
+        if (q == null || !q.fromWizard) return false;
+        quests.remove(q);
+        writeWizardFile();
+        saveData();
+        load();
+        return true;
+    }
+
+    /** Alle wizard-quests terugschrijven naar wizard-quests.yml (handgemaakte blijft heel). */
+    private void writeWizardFile() {
+        var l = new ArrayList<Quest>();
+        for (var q : quests) if (q.fromWizard) l.add(q);
+        QuestWizard.writeWizardFile(new File(getDataFolder(), "wizard-quests.yml"), l);
+    }
 
     // ---------------------------------------------------------------- lifecycle
 
@@ -168,7 +206,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (cmd != null) cmd.setExecutor((sender, command, label, args) -> {
             if (args.length >= 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission("iekquests.admin")) {
                 load();
-                sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s) herladen."));
+                sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s) reloaded."));
                 return true;
             }
             if (args.length >= 2 && args[0].equalsIgnoreCase("reset") && sender.hasPermission("iekquests.admin")) {
@@ -178,12 +216,26 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 if (mm != null) {
                     if (args.length >= 3) mm.remove(args[2]); else mm.clear();
                     save();
-                    sender.sendMessage(Component.text("Progressie reset voor " + args[1]));
+                    sender.sendMessage(Component.text("Progress reset for " + args[1]));
                 }
                 return true;
             }
             if (sender instanceof Player p) openMenu(p);
-            else sender.sendMessage(Component.text("questbook: in-console alleen reload/reset"));
+            else sender.sendMessage(Component.text("questbook: from console use reload/reset only"));
+            return true;
+        });
+        wizard = new QuestWizard(this);
+        Bukkit.getPluginManager().registerEvents(wizard, this);
+        var wcmd = Bukkit.getPluginCommand("questwizard");
+        if (wcmd != null) wcmd.setExecutor((sender, command, label, args) -> {
+            if (args.length >= 1 && args[0].equalsIgnoreCase("delete") && sender.hasPermission("iekquests.admin")
+                    && args.length >= 2) {
+                if (removeWizardQuest(args[1])) sender.sendMessage(Component.text("Wizard-quest " + args[1] + " deleted."));
+                else sender.sendMessage(Component.text("Only wizard-made quests can be deleted here (not quests.yml ones)."));
+                return true;
+            }
+            if (sender instanceof Player p && p.hasPermission("iekquests.admin")) wizard.open(p);
+            else sender.sendMessage(Component.text("questwizard: iekquests.admin required."));
             return true;
         });
         Bukkit.getScheduler().runTaskTimer(this, this::refreshOpenGuis, 40L, 40L);
@@ -220,11 +272,25 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             sequences.put(k, s);
         }
 
-        var sec = qc.getConfigurationSection("quests");
-        if (sec != null) for (String id : sec.getKeys(false)) {
+        parseQuests(qc.getConfigurationSection("quests"), false);
+        var wf = new File(getDataFolder(), "wizard-quests.yml");
+        if (wf.exists()) parseQuests(
+                YamlConfiguration.loadConfiguration(wf).getConfigurationSection("quests"), true);
+        quests.sort((a, b) -> Integer.compare(a.order, b.order));
+
+        data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data.yml"));
+        prog.clear();
+        loadData();
+    }
+
+    /** Eén quests:-sectie inlezen; fromWizard markeert de GUI-wizard-bestanden. */
+    private void parseQuests(ConfigurationSection sec, boolean fromWizard) {
+        if (sec == null) return;
+        for (String id : sec.getKeys(false)) {
             var s = sec.getConfigurationSection(id);
             if (s == null) continue;
             Quest q = new Quest();
+            q.fromWizard = fromWizard;
             q.id = id;
             q.title = s.getString("title", id);
             q.subtitle = s.getString("subtitle", "");
@@ -246,7 +312,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 g.mobType = v.getString("mob", "").toUpperCase();
                 g.amount = v.getInt("amount", 1);
                 g.radius = v.getDouble("radius", 6);
-                g.label = v.getString("label", "&aVerder");
+                g.label = v.getString("label", "&aContinue");
                 g.voice = v.getString("voice", "");
                 g.lines.addAll(v.getStringList("lines"));
                 g.conds = conds(v.getString("cond", ""));
@@ -284,7 +350,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 r.daily = v.getBoolean("daily", false);
                 r.money = v.getInt("money", 0);
                 r.eco = v.getInt("eco", 0);
-                r.label = v.getString("label", "&aLever in");
+                r.label = v.getString("label", "&aHand in");
                 r.voice = v.getString("voice", "");
                 String locStr = v.getString("location", "");
                 if (!locStr.isEmpty()) r.loc = parseLoc(locStr);
@@ -294,10 +360,10 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             for (var x : s.getStringList("random-stages")) q.randomStages.add(x);
             quests.add(q);
         }
-        quests.sort((a, b) -> Integer.compare(a.order, b.order));
+    }
 
-        data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data.yml"));
-        prog.clear();
+    /** Spelersprogressie uit data.yml in het geheugen zetten. */
+    private void loadData() {
         var ps = data.getConfigurationSection("players");
         if (ps != null) for (String uuid : ps.getKeys(false)) {
             var m = new HashMap<String, Prog>();
@@ -510,6 +576,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 var q = byId(tag.substring(5));
                 if (q != null) openQuest(p, q);
             }
+            if (tag.equals("wizard") && wizard != null) wizard.open(p);
             return;
         }
         var q = byId(h.quest);
@@ -684,6 +751,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             case "say" -> p.sendMessage(legacy(val));
             case "tag+" -> { if (!pr.tags.contains(val)) pr.tags.add(val); save(); }
             case "tag-" -> { pr.tags.remove(val); save(); }
+            case "perm+" -> dispatch("lp user " + p.getName() + " permission set " + val + true);
+            case "perm-" -> dispatch("lp user " + p.getName() + " permission unset " + val);
             case "point" -> {
                 // vorm: point <cat> +N  (optellen) | point <cat> =N (zetten)
                 String[] x = val.split(" ");
@@ -823,7 +892,9 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             var pr = pr(p, q);
             if (ok(p, q, pr, q.startConds) || (pr.started && !pr.done)) vis.add(q);
         }
-        int size = Math.max(27, ((vis.size() / 9) + 1) * 9);
+        boolean admin = p.hasPermission("iekquests.admin");
+        int size = Math.max(27, ((vis.size() + 1) / 9 + 1) * 9);
+        if (admin) size = Math.min(54, size + 9);
         var inv = Bukkit.createInventory(new Holder(p.getUniqueId(), ""), size, legacy("&6&l⚒ Quest Book"));
         int slot = 10;
         for (var q : vis) {
@@ -836,6 +907,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             inv.setItem(slot, it);
             slot++;
         }
+        if (admin) inv.setItem(0, tagged(Material.NETHER_STAR, "&d✚ Quest wizard &8(new quest + NPC)", "wizard"));
         p.openInventory(inv);
     }
 
