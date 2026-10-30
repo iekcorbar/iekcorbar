@@ -1756,6 +1756,21 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.2.0 - feature-pariteit + alles Engels (30-10)
+
+- Taalregel van de eigenaar: alle speler-tekst is Engels
+  (quests.yml herschreven, GUI-strings in de code, plugin.yml-description).
+  Code-commentaren blijven Nederlands (huisstijl, niet zichtbaar).
+- Nieuwe engine-features voor de migratie van greyarts' 17 pakketten: tags,
+  points + condities (>=), vertakkende keuzes per stage, kill-stage, sequences
+  (getimede actie-reeksen als BQ-folders), daily-repeats, rewards shop/teleport/
+  effect/give/compass/tag/point, start-condities, random-start (daily contract).
+- Handtekening-refresh: geopende GUI's tekenen alleen opnieuw als staat/teller/
+  cooldown echt verandert (geen gefladder meer).
+- vorkan_demo in quests.yml = migratie-voorproef in de nieuwe taal.
+- jar: deploy/IekQuests-0.2.0.jar sha1 cf4f1d129492490a610b34bc41c6cd60b635a043;
+  TE-DEPLOYEN 53 + board bijgewerkt. Plan: docs/quests-migratie.md.
+
 ### IekQuests 0.1.0 - eigen quest-plugin (30-10, ~/3 uur werk)
 
 - Eigenaar: "helemaal van BQ af, eigen plugin met 'quests' in de naam". Gebuild:
