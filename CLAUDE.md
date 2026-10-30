@@ -1708,6 +1708,28 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
   (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
 
+### Milo's quest + echte NPC-stemmen + pack build16 (30-10)
+
+- Eerste eigen quest gebouwd: **De verdwaalde karavaan (Milo)**. Pakket in
+  git: pluginset-aangepast/BetonQuest/QuestPackages/milo/package.yml.
+  Mechaniek 1:1 gekopieerd van vorkan/mad_doctor (item-condities, take,
+  delay-timer, tags, journal, ❗/❓ hologram, notify io:title). Accept ->
+  craft 4× simpel papier -> inleveren -> 300 cash + 10 elitecoins
+  (em money add) + tringeling; herhaalbaar met 15 min cooldown (150 + 2).
+- **Echte gesproken stemmen**: sounds/make_voices.py + sounds/voices/<npc>.txt
+  (id|tekst) - edge-tts (en-IE-ConnorNeural voor Milo, en-US-GuyNeural
+  machine), ffmpeg naar ogg mono 44,1k, events <npc>.<id> toegevoegd aan
+  steamworks/sounds.json. 9 regels ≈ 500 KB. HEILIGE VOLGORDE:
+  make_sounds -> make_voices -> make_blocks_pack -> merge (states in
+  audio-craft skill).
+- **Pack build16 gebouwd**: 17,25 MB, 6187 files, audit 0/0,
+  sha1 568df8c1b5b067e984b306675b2f5afe86d5d9f6 (vervangt build15 - nooit
+  live geweest). TE-DEPLOYEN: punt 43 herschreven + nieuw punt 51
+  (Milo plaatsen: /npc create (id 129 voorgevuld), skin/item-drop-truc,
+  sftp mapje, /bq reload, test).
+- Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
+  later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
+
 ### Alles Engels + StaffHub 0.4.10 (30-10)
 
 - Eigenaar: alle staff-content in het Engels. De 8 quests-gidsen zijn

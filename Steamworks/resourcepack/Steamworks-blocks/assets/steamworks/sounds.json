@@ -126,5 +126,78 @@
    "steamworks:machine/hum_2"
   ],
   "subtitle": "subtitles.steamworks.machine.hum"
+ },
+ "voice.milo": {
+  "sounds": [
+   "steamworks:voice/milo_1",
+   "steamworks:voice/milo_2",
+   "steamworks:voice/milo_3"
+  ],
+  "subtitle": "subtitles.steamworks.voice.milo"
+ },
+ "voice.machine": {
+  "sounds": [
+   "steamworks:voice/machine_1",
+   "steamworks:voice/machine_2",
+   "steamworks:voice/machine_3"
+  ],
+  "subtitle": "subtitles.steamworks.voice.machine"
+ },
+ "quest.complete": {
+  "sounds": [
+   "steamworks:quest/complete_1"
+  ],
+  "subtitle": "subtitles.steamworks.quest.complete"
+ },
+ "quest.click": {
+  "sounds": [
+   "steamworks:quest/click_1"
+  ],
+  "subtitle": "subtitles.steamworks.quest.click"
+ },
+ "milo.line01": {
+  "sounds": [
+   "steamworks:milo/line01"
+  ]
+ },
+ "milo.line02": {
+  "sounds": [
+   "steamworks:milo/line02"
+  ]
+ },
+ "milo.line03": {
+  "sounds": [
+   "steamworks:milo/line03"
+  ]
+ },
+ "milo.line04": {
+  "sounds": [
+   "steamworks:milo/line04"
+  ]
+ },
+ "milo.line05": {
+  "sounds": [
+   "steamworks:milo/line05"
+  ]
+ },
+ "milo.line06": {
+  "sounds": [
+   "steamworks:milo/line06"
+  ]
+ },
+ "milo.line07": {
+  "sounds": [
+   "steamworks:milo/line07"
+  ]
+ },
+ "milo.line08": {
+  "sounds": [
+   "steamworks:milo/line08"
+  ]
+ },
+ "milo.line09": {
+  "sounds": [
+   "steamworks:milo/line09"
+  ]
  }
 }

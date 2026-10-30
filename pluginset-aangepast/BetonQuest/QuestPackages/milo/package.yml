@@ -1,0 +1,183 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+# ============================================================================
+# MILO - THE LOST CARAVAN (new quest, 30-10)
+# NPC: Citizens id 129 - "Milo the Wandering Trader" (create in game with
+#      /npc create, then check the id the chat prints; if it is NOT 129,
+#      change the two lines in npcs: and npc_conversations: - nothing else).
+# Style: REAL SPEAKING voices - 9 lines rendered by sounds/make_voices.py
+#      (edge-tts, en-IE-ConnorNeural) into pack build16 as
+#      steamworks:milo.line01..line09. Without pack 16 the lines stay
+#      silent; the quest itself works either way. Blip fallbacks
+#      (voice.milo / voice.machine / quest.complete / quest.click) live in
+#      the same pack. Mechanics copied 1:1 from vorkan_kross + mad_doctor.
+# ============================================================================
+
+npcs:
+  '129': citizens 129
+
+npc_conversations:
+  '129': milo_conv
+
+items:
+  milo_label: simple paper
+
+conditions:
+  milo_started: tag milo_started
+  milo_done: tag milo_done
+  milo_has_labels: item milo_label:4
+  milo_rep_cool: tag milo_rep_cool
+
+actions:
+  # ---- start ----------------------------------------------------------------
+  milo_accept: folder milo_accept_tag,milo_journal_start,milo_title,milo_obj,milo_say_go
+  milo_accept_tag: tag add milo_started
+  milo_journal_start: journal add milo_1
+  milo_title: notify &6The Lost Caravan\n&7Craft 4 blank shipping labels io:title fadeIn:0 stay:60 fadeOut:20
+  milo_obj: objective add milo_craft_labels
+  milo_say_go: notify io:sound sound:steamworks:milo.line06 soundvolume:0.8
+
+  # ---- stage 1 done (objective fires this) ---------------------------------
+  milo_labels_complete: folder milo_labels_notify,milo_labels_chime
+  milo_labels_notify: notify &eMilo&7: &fBring those four labels back to me! io:chat
+  milo_labels_chime: notify io:sound sound:steamworks:quest.complete soundvolume:0.5
+
+  # ---- stage 2: turn in -> quest complete ----------------------------------
+  milo_complete: folder milo_take,milo_give_money,milo_give_ecoins,milo_done_tag,milo_journal_done,milo_title_done,milo_say_thanks
+  milo_take: take milo_label:4
+  milo_give_money: command cmi money give %player% -s 300
+  milo_give_ecoins: command em money add %player% 10
+  milo_done_tag: tag add milo_done
+  milo_journal_done: journal delete milo_1
+  milo_title_done: notify &aQUEST COMPLETE\n&7Milo waves his hat. +300 +10 elitecoins io:title fadeIn:0 stay:60 fadeOut:20
+  milo_say_thanks: notify io:sound sound:steamworks:milo.line08 soundvolume:0.8
+
+  # ---- repeatable aftercare: 4 labels -> small coin, 15 min cooldown -------
+  milo_rep_turn: folder milo_rep_take,milo_rep_money,milo_rep_ecoins,milo_rep_cool_tag,milo_rep_timer,milo_rep_thanks
+  milo_rep_take: take milo_label:4
+  milo_rep_money: command cmi money give %player% -s 150
+  milo_rep_ecoins: command em money add %player% 2
+  milo_rep_cool_tag: tag add milo_rep_cool
+  milo_rep_timer: objective add milo_rep_timer
+  milo_rep_thanks: notify io:sound sound:steamworks:milo.line09 soundvolume:0.8
+  milo_rep_over: folder milo_rep_clear,milo_rep_msg
+  milo_rep_clear: tag del milo_rep_cool
+  milo_rep_msg: notify &eMilo&7: &fFresh stock! Ask me again about labels. io:chat
+
+  # ---- voice blips & real speech (needs pack 16: make_voices.py) -----------
+  milo_voice: notify io:sound sound:steamworks:milo.line01 soundvolume:0.8
+  milo_click: notify io:sound sound:steamworks:quest.click soundvolume:0.6
+  machine_voice: notify io:sound sound:steamworks:voice.machine soundvolume:0.5
+  v_intro_started: notify io:sound sound:steamworks:milo.line02 soundvolume:0.8
+  v_intro_has: notify io:sound sound:steamworks:milo.line03 soundvolume:0.8
+  v_intro_cool: notify io:sound sound:steamworks:milo.line04 soundvolume:0.8
+  v_intro_done: notify io:sound sound:steamworks:milo.line05 soundvolume:0.8
+  v_declined: notify io:sound sound:steamworks:milo.line07 soundvolume:0.8
+
+objectives:
+  milo_craft_labels: craft milo_label 4 actions:milo_labels_complete
+  milo_rep_timer: delay 900 events:milo_rep_over
+
+journal:
+  milo_1:
+    en-US: |
+      &6The Lost Caravan
+      &6Stage I — Labels
+
+      &7Craft &b4 blank shipping labels&7 (plain paper) and bring them back to &eMilo&7.
+    en: |
+      &6The Lost Caravan
+      &6Stage I — Labels
+
+      &7Craft &b4 blank shipping labels&7 (plain paper) and bring them back to &eMilo&7.
+
+conversations:
+  milo_conv:
+    quester: Milo the Wandering Trader
+    first: intro_done,intro_cool,intro_has,intro_started,intro_new
+    stop: true
+
+    NPC_options:
+      intro_new:
+        text: Ah, a kind traveller! My caravan spilled its cargo on the road and I have
+          NOT a single blank shipping label left. Craft me four plain paper labels and
+          I will make it worth your while - coin AND elite coins.
+        conditions: '!milo_started'
+        actions: milo_voice
+        pointers: accept,decline
+      intro_started:
+        text: The labels, friend - four plain sheets of paper. Find sugar cane, craft
+          paper, and you have my rescue in your pockets.
+        conditions: milo_started,!milo_has_labels,!milo_done
+        actions: v_intro_started
+        pointers: leave
+      intro_has:
+        text: You carry four blank labels - I can smell fresh pulp from here! Hand
+          them over and Milo remembers his friends.
+        conditions: milo_started,!milo_done,milo_has_labels
+        actions: v_intro_has
+        pointers: turn_in
+      intro_cool:
+        text: Back so soon? My paper is still settling - come find me a little later,
+          friend.
+        conditions: milo_done,milo_rep_cool
+        actions: v_intro_cool
+        pointers: leave
+      intro_done:
+        text: Milo's finest customer! More blank labels for a small purse - coin plus
+          elite coins, no strings.
+        conditions: milo_done,!milo_rep_cool
+        actions: v_intro_done
+        pointers: repeat,leave
+      accepted:
+        text: Bless your crafting hands! Four blank sheets, that is all.
+        actions: milo_accept
+        pointers: leave
+      declined:
+        text: Fair winds either way. The road keeps its secrets until someone needs them.
+        actions: v_declined
+
+    player_options:
+      accept:
+        text: I'll craft you four labels.
+        actions: milo_click
+        pointers: accepted
+      decline:
+        text: Not right now.
+      turn_in:
+        text: Here are your four labels.
+        actions: milo_complete,milo_click
+        pointers: turn_done
+      turn_done:
+        text: The labels! My caravan can ride again - Milo pays his debt: coin AND
+          elite coins. Take the thanks of a wandering trader.
+      repeat:
+        text: Four more labels for the purse, then.
+        actions: milo_click
+        pointers: rep_done
+      rep_done:
+        text: Stacked, stamped, splendid! See you in a quarter of an hour - Milo's
+          paper needs to breathe.
+        actions: milo_rep_turn
+      leave:
+        text: 'Goodbye.'
+
+npc_holograms:
+  milo_available:
+    lines:
+    - '&d&l❗'
+    npcs: '129'
+    conditions: '!milo_done'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  milo_rep:
+    lines:
+    - '&e&l❓'
+    npcs: '129'
+    conditions: milo_done
+    follow: true
+    check_interval: 20
+    max_range: 25

@@ -1,0 +1,13 @@
+# Milo the Wandering Trader - gesproken regels (30-10).
+# id|tekst ; de id komt overeen met de BQ-action in QuestPackages/milo.
+# Taal: Engels (spelers + staff international).
+
+line01|Ah, a kind traveller! My caravan spilled its cargo on the road and I have not a single blank shipping label left. Craft me four plain paper labels, and I will make it worth your while. Coin, and elite coins!
+line02|The labels, friend. Four plain sheets of paper. Find sugar cane, craft paper, and you have my rescue in your pockets.
+line03|You carry four blank labels. I can smell fresh pulp from here! Hand them over, and Milo remembers his friends.
+line04|Back so soon? My paper is still settling. Come find me a little later, friend.
+line05|Milo's finest customer! More blank labels for a small purse? Coin plus elite coins, no strings.
+line06|Bless your crafting hands! Four blank sheets, that is all.
+line07|Fair winds either way. The road keeps its secrets until someone needs them.
+line08|The labels! My caravan can ride again. Milo pays his debt, coin and elite coins. Take the thanks of a wandering trader!
+line09|Stacked, stamped, splendid! See you in a quarter of an hour. Milo's paper needs to breathe.

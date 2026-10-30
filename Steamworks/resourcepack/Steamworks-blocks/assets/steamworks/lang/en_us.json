@@ -16,5 +16,9 @@
  "subtitles.steamworks.train.brake": "Train brakes",
  "subtitles.steamworks.train.clack": "Rails clack",
  "subtitles.steamworks.station.bell": "Station bell rings",
- "subtitles.steamworks.machine.hum": "Machines hum"
+ "subtitles.steamworks.machine.hum": "Machines hum",
+ "subtitles.steamworks.voice.milo": "Milo chatters",
+ "subtitles.steamworks.voice.machine": "A machine chatters",
+ "subtitles.steamworks.quest.complete": "Quest complete",
+ "subtitles.steamworks.quest.click": "A choice is made"
 }
