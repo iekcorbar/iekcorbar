@@ -1,0 +1,100 @@
+# IekQuests - quest-definities (30-10)
+#
+# per quest:  title/subtitle/icon, npc-id (Citizens; -1 = alleen uit het menu),
+#             stages op volgorde, rewards (eenmalig bij finish) en herhaalbare contracten.
+# stage types: talk (klik verder) | craft (X van material maken) | deliver (X afgeven)
+#              | walk (naar location met radius; compass-knop verschijnt)
+# reward regels: money <bedrag> | eco <elitecoins> | title <titel|sub> | sound <ns:key>
+#                | say <tekst> | of een rauw console-commando met %player%.
+# voice: geluid uit het iekcorbar-pack, bv. steamworks:milo.line01
+
+quests:
+  milo:
+    title: "&6The Lost Caravan"
+    subtitle: "Milo the Wandering Trader"
+    icon: BOOK
+    npc-id: 136
+    order: 10
+    stages:
+      talk:
+        type: talk
+        label: "&aIk help je, Milo."
+        voice: steamworks:milo.line01
+        lines:
+          - "&fMilo: &7mijn karavaan is de labelkoffer kwijtgeraakt op"
+          - "&7de route. Vier blanco's van papier en ik kan weer"
+          - "&7dichtbij huis bezorgen. Munt en elitecoins eraan vast!"
+      labels:
+        type: craft
+        material: PAPER
+        amount: 4
+        label: "&aLever de vier labels"
+        voice: steamworks:milo.line02
+        lines:
+          - "&fMilo: &7Vier blanco vellen - knip wat papier uit"
+          - "&7wat je maar vinden kunt (suikerriet voor suiker, of"
+          - "&7gewoon uit een boek). Ik wacht hier."
+    rewards:
+      - "money 300"
+      - "eco 10"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&7Milo betaalt je uit: 300 + 10 elitecoins"
+      - "say &eMilo: &aBless your crafting hands!"
+    repeat:
+      labels:
+        label: "&aNog vier labels"
+        material: PAPER
+        amount: 4
+        cooldown: 900
+        money: 150
+        eco: 2
+        voice: steamworks:milo.line09
+
+  igor:
+    title: "&5Halloween Lanterns"
+    subtitle: "Igor Nightgrave - Halloween Town"
+    icon: CARVED_PUMPKIN
+    npc-id: -1            # nog niet geplaatst; zet hier het Citizens-id van Igor neer
+    order: 20
+    stages:
+      praat:
+        type: talk
+        label: "&aDe lantarens aansteken"
+        voice: steamworks:igor.line01
+        lines:
+          - "&fIgor: &7Heeeeeey, klein pompoentje. De lantarens van"
+          - "&7het dorp doven uit en de geesten worden onrustig."
+          - "&7Acht kaarsen en zes pompoenen - dan brandt het weer."
+      kaarsen:
+        type: craft
+        material: CANDLE
+        amount: 8
+        label: "&aLever de acht kaarsen"
+        voice: steamworks:igor.line03
+        lines:
+          - "&fIgor: &7Kaarsen! Honingraat en draad - de wereld"
+          - "&7herinnert zich zoiets altijd wel."
+      pompoenen:
+        type: deliver
+        material: PUMPKIN
+        amount: 6
+        label: "&aZes pompoenen op de brandstapel"
+        voice: steamworks:igor.line09
+        lines:
+          - "&fIgor: &7Zes volle ronde pompoenen. Snij ze gerust"
+          - "&7aan met een schaar - de hele werken toch het best."
+    rewards:
+      - "money 400"
+      - "eco 15"
+      - "give %player% carved_pumpkin 1"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&7Halloween Town brandt weer - 400 + 15 elitecoins"
+    repeat:
+      trick_or_treat:
+        label: "&aTrick or treat (2 pompoenen)"
+        material: PUMPKIN
+        amount: 2
+        cooldown: 600
+        money: 120
+        eco: 2
+        voice: steamworks:igor.line11

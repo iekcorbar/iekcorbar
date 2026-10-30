@@ -1,0 +1,21 @@
+name: IekQuests
+version: '${project.version}'
+main: com.iekcorbar.quests.IekQuestsPlugin
+api-version: '26.2'
+description: Eigen quest-engine: gesprekken, doelen, beloningen, compass en een klickbare GUI.
+author: iekcorbar
+softdepend: [Citizens]
+
+commands:
+  questbook:
+    description: Open the quest menu (or admin operations)
+    usage: /questbook [reload|reset <player> [quest]]
+    aliases: [questsui, iquests]
+
+permissions:
+  iekquests.use:
+    description: Open the quest book and do quests
+    default: true
+  iekquests.admin:
+    description: Reload configs and reset player progress
+    default: op

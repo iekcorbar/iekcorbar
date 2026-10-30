@@ -1756,6 +1756,34 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.1.0 - eigen quest-plugin (30-10, ~/3 uur werk)
+
+- Eigenaar: "helemaal van BQ af, eigen plugin met 'quests' in de naam". Gebuild:
+  **IekQuests** (com.iekcorbar.quests.IekQuestsPlugin) - los van BetonQuest,
+  BQ blijft voorlopig naast ons draaien voor greyarts' quests.
+- Werking: quests.yml = gespreksregels + stages (talk/craft/deliver/walk) +
+  rewards (money|eco|title|sound|say|rauwe commando's) + herhaalbare contracten
+  met eigen cooldown. GUI /questbook (hoofdmenu + per-quest boekvenster met
+  live tellers); NPC-klik via reflectie op Citizens-id (geen harde dep);
+  compass-knop per walk-stage (MetaCompass via reflectie); NPC-stemmen spelen
+  steamworks:milo.lineXX / igor.lineXX uit pack build19. Data: data.yml.
+- Compileerlessen (stonden allemaal in de weg): Paper 26.2 API kent
+  PlayerRecipeCraftEvent NIET -> org.bukkit.event.inventory.CraftItemEvent +
+  getInventory().getResult(); geen ITEM_COMPASS_CLICK -> BLOCK_NOTE_BLOCK_PLING;
+  executor-signatuur is (sender, command, label, args) - eerst omgedraaid;
+  UI-tags gaan op het PDC (onzichtbaar), niet in de lore; geen config.yml →
+  geen saveDefaultConfig() (gooit exception anders).
+- Voorbeeldquests mee: milo (npc-id 136, craft 4 papier → deliver → 300+10,
+  herhaal 900s) en igor (Halloween: 8 kaarsen craften + 6 pompoenen → 400+15+
+  pompoenhoofd, trick-or-treat herhaal 600s; npc-id nog -1 tot Igor geplaatst).
+- JAR: deploy/IekQuests-0.1.0.jar sha1 1ef828df11ce7e30ab7939856da57272fe40d923;
+  TE-DEPLOYEN punt 53 (incl. waarschuwing dubbele Milo: BQ-kopieën milo/
+  halloween_lanterns bij deploy naar QuestPackages-offline).
+- Notities voor 0.2: status via BQ-punten/tags als we die willen lenen; meer
+  doeltypes (kill/visit-meerplekken); icoon-heads; en de grote migratie van
+  greyarts' 18 pakketten - NIET vanavond meer.
+
+
 ### Alles Engels + StaffHub 0.4.10 (30-10)
 
 - Eigenaar: alle staff-content in het Engels. De 8 quests-gidsen zijn

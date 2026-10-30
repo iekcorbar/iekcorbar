@@ -19,11 +19,11 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
 | StaffHub 0.4.10 uitrollen (vertaalbalk mobiel) | TE-DEPLOYEN punt 49 | /opt/staffhub bijwerken + container rebuilden (zelfde als 0.4.9) |
-| Milo's quest + COMPASS: upload staat, reload te doen | TE-DEPLOYEN punten 51 + 43 | console: /bq reload → preek Milo's quest aan → selecteer "Milo" met /compass; pack build19 geeft boekmodel + stemmen |
+| IekQuests 0.1.0 klaar (eigen quest-engine) | TE-DEPLOYEN punt 53 | jar in deploy/ (sha1 1ef828df); BQ draait door voor greyarts' quests; bij deploy: BQ-milo/halloween naar QuestPackages-offline |
 | Halloween-quest plaatsen (morgen is het zo ver!) | TE-DEPLOYEN punt 52 | /npc create Igor Nightgrave → mapje uploaden → /bq reload |
 | Steamworks 0.3.26 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
 | Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | grijs-bericht VERSTUURD door eigenaar (30-10, DM) → wacht op antwoord; daarna ja/nee lockplan + klasse-keus |
-| iekcorbar-pack-build16.zip (woosh + quest-blips + Milo's stem) | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
+| iekcorbar-pack-build19.zip (woosh + blips + Milo/Igor-stem + questboek-model) | TE-DEPLOYEN punt 43 | samen met punt 42; build14 uit mixer |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |
 | AfkCinema 0.3.0 (klikbare zwevende menu's) | TE-DEPLOYEN punt 44 | bij dezelfde herstart-batch; jar staat ook al in de testbank (E:) |
 | NDA ondertekenen | docs/nda/signed/ (3 pdf's) | zelf tekenen → per DM naar kooyer, iekjebr36, greyarts91; getekend terug in dezelfde map. (afriendlystomach resigned - PDF ingetrokken) |
