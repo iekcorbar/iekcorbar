@@ -25,6 +25,19 @@ items:
   halloween_cookie: simple cookie
   halloween_pumpkin_head: simple carved_pumpkin
 
+# COMPASS: uncomment this block AFTER Igor is created, and fill in his
+# location (look at him, /bq version? nee: coordinates in the F3 screen, or
+# have the agent read them from Citizens/saves.yml). Then add
+# `igor_compass: compass add igor` to the hl_start folder and
+# `igor_compass_off: compass del igor` to the hl_complete folder.
+#
+# compass:
+#   igor:
+#     name:
+#       en-US: Igor Nightgrave
+#       en: Igor Nightgrave
+#     location: X;Y;Z;iekcorbarSeason2
+
 conditions:
   hl_started: tag hl_started
   hl_candles_done: tag hl_candles_done

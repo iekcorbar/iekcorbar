@@ -24,6 +24,13 @@ npc_conversations:
 items:
   milo_label: simple paper
 
+compass:
+  milo:
+    name:
+      en-US: Milo the Wandering Trader
+      en: Milo the Wandering Trader
+    location: 2902;88;-408;iekcorbarSeason2
+
 conditions:
   milo_started: tag milo_started
   milo_done: tag milo_done
@@ -32,8 +39,9 @@ conditions:
 
 actions:
   # ---- start ----------------------------------------------------------------
-  milo_accept: folder milo_accept_tag,milo_journal_start,milo_title,milo_obj,milo_say_go
+  milo_accept: folder milo_accept_tag,milo_journal_start,milo_title,milo_obj,milo_compass,milo_say_go
   milo_accept_tag: tag add milo_started
+  milo_compass: compass add milo
   milo_journal_start: journal add milo_1
   milo_title: notify &6The Lost Caravan\n&7Craft 4 blank shipping labels io:title fadeIn:0 stay:60 fadeOut:20
   milo_obj: objective add milo_craft_labels
@@ -45,7 +53,8 @@ actions:
   milo_labels_chime: notify io:sound sound:steamworks:quest.complete soundvolume:0.5
 
   # ---- stage 2: turn in -> quest complete ----------------------------------
-  milo_complete: folder milo_take,milo_give_money,milo_give_ecoins,milo_done_tag,milo_journal_done,milo_title_done,milo_say_thanks
+  milo_complete: folder milo_take,milo_give_money,milo_give_ecoins,milo_done_tag,milo_journal_done,milo_compass_off,milo_title_done,milo_say_thanks
+  milo_compass_off: compass del milo
   milo_take: take milo_label:4
   milo_give_money: command cmi money give %player% -s 300
   milo_give_ecoins: command em money add %player% 10

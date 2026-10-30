@@ -1708,6 +1708,32 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
   (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
 
+### Quest-book model + BetonQuest COMPASS (30-10)
+
+- **Core-pack voor het journaal-boek**: nieuwe generator
+  scripts/make_core_pack.py -> scripts/core-pack/Core-pack.zip. Rode lederen
+  tome met messing hoeken/rugband/slot (4 vierkante UV-regio's op een 32x32
+  textuur, alles binnen de 0..32 audit-grens). Werkt via
+  assets/minecraft/items/written_book.json range_dispatch op
+  custom_model_data[0]>=100; BQ config journal.custom_model_data=101 geeft het
+  journaal die drager. Alle andere boeken blijven vanilla.
+- **Pack build19**: Core-pack.zip als 15e bron in merge-packs SOURCES; audit
+  0 problems; sha1 1e6066a8bd5301079b063e1d6a63ca778dda3e09 (17.85 MB).
+  build17 was nog nooit live - alle losse build17-verwijzingen in TE-DEPLOYEN
+  naar 19 getrokken, 43 herschreven met item (d).
+- **COMPASS (inzetten = klaar)**: Milo-pakket krijgt compass-sectie
+  (naam+location 2902;88;-408;iekcorbarSeason2, uit Citizens/saves.yml ID 136)
+  en de accept/complete acties doen compass add/del milo. Draait op de server
+  (scp + grep 5x compass bevestigd); nog /bq reload door de eigenaar.
+  Backpack-compassknop blijft UIT (compass_button: '') - die waarde moet een
+  package-item zijn en een vanilla-referentie riskeert een config-fout bij
+  reload; de spelerroute is gewoon het commando /compass.
+- **Igor-compass klaar gezet**: in halloween_lanterns staat de compass-sectie
+  UITgeschakeld met instructie (na /npc create Igor: location invullen +
+  compass add/del in hl_start/hl_complete).
+- Leerpunt opgeslagen in audio/pack-skills: uv 0..32, geen minecraft:compass
+  als backpack-knop zonder item-geresolveerd.
+
 ### Milo's quest + echte NPC-stemmen + pack build16 (30-10)
 
 - Eerste eigen quest gebouwd: **De verdwaalde karavaan (Milo)**. Pakket in

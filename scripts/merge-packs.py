@@ -40,9 +40,10 @@ SOURCES = [
     "Hihou/resourcepack/Hihou-pack.zip",
     "SteamworksAdditions/resourcepack/Additions-pack.zip",
     "IekcorbarSiteSync/resourcepack/Mmo-pack.zip",
+    "scripts/core-pack/Core-pack.zip",
 ]
 OUT_DIR = "deploy"
-BUILD = 17  # bump this EVERY rebuild: the pack name, the in-game description stamp and the
+BUILD = 19  # bump this EVERY rebuild: the pack name, the in-game description stamp and the
            # old-file cleanup all follow it, so there is never a nameless pile of twins.
 OUT = os.path.join(OUT_DIR, "iekcorbar-pack-build%d.zip" % BUILD)
 FIXED = (2026, 1, 1, 0, 0, 0)
