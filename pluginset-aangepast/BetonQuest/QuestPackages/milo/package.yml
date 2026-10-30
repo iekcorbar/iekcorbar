@@ -138,6 +138,13 @@ conversations:
       declined:
         text: Fair winds either way. The road keeps its secrets until someone needs them.
         actions: v_declined
+      turn_done:
+        text: The labels! My caravan can ride again - Milo pays his debt in coin AND
+          elite coins. Take the thanks of a wandering trader.
+      rep_done:
+        text: Stacked, stamped, splendid! See you in a quarter of an hour - Milo's
+          paper needs to breathe.
+        actions: milo_rep_turn
 
     player_options:
       accept:
@@ -150,17 +157,10 @@ conversations:
         text: Here are your four labels.
         actions: milo_complete,milo_click
         pointers: turn_done
-      turn_done:
-        text: The labels! My caravan can ride again - Milo pays his debt in coin AND
-          elite coins. Take the thanks of a wandering trader.
       repeat:
         text: Four more labels for the purse, then.
         actions: milo_click
         pointers: rep_done
-      rep_done:
-        text: Stacked, stamped, splendid! See you in a quarter of an hour - Milo's
-          paper needs to breathe.
-        actions: milo_rep_turn
       leave:
         text: 'Goodbye.'
 
