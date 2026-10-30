@@ -76,6 +76,20 @@ millstone:
 
 # Steam hammer: one item per strike (speed sets how often it strikes,
 # see config.yml). Items must lie in the block under the hammer.
+sieve:
+  - input: GRAVEL
+    time: 160
+    output: [SAND, FLINT 1 20%]
+  - input: SAND
+    time: 120
+    output: [GRAVEL 1 10%]
+  - input: DIRT
+    time: 120
+    output: [GRAVEL 1 5%]
+  - input: COBBLESTONE
+    time: 200
+    output: [GRAVEL]
+
 steam_hammer:
   # mochitsuki: pound steamed rice into mochi (needs the Kitchen plugin; skipped without it)
   - {input: kitchen:steamed_rice, output: [kitchen:mochi 2]}

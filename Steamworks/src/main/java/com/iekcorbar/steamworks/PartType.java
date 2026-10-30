@@ -81,6 +81,16 @@ public enum PartType {
             "A pipe gate: fluid passes only while this", "turns. Stop the network, cut the line."),
     WHISTLE("Steam Whistle", Material.COPPER_BLOCK, Kind.METAL,
             "Right-click: toot. A machine works better", "when it can say so."),
+    SIEVE("Sieve", Material.IRON_BLOCK, Kind.METAL,
+            "Sifts items: gravel gives flint, sand gives", "stones. Powered from the side, faster = better."),
+    ITEM_FILTER("Item Filter", Material.IRON_BLOCK, Kind.METAL,
+            "On a belt: only lets matching items through.", "Right-click to set the filter item."),
+    HARVESTER("Mechanical Harvester", Material.IRON_BLOCK, Kind.METAL,
+            "Harvests crops in front of it. Power it", "from behind. Faster = quicker."),
+    PLOUGH("Mechanical Plough", Material.IRON_BLOCK, Kind.METAL,
+            "Tills dirt into farmland in front of it.", "Power it from behind."),
+    ROLLER("Mechanical Roller", Material.IRON_BLOCK, Kind.METAL,
+            "Compacts concrete powder into concrete.", "Power it from behind."),
     /**
      * Not a real part: nodes with this type get their answers from the {@code com.iekcorbar.steamworks.api}
      * registry, so other plugins (add-ons) can add machines to the network. Nothing builds or gives CUSTOM.

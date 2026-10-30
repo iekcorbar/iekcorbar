@@ -120,6 +120,9 @@ final class PartListener implements Listener {
             } else if (n.type == PartType.MILLSTONE && plugin.millstones().find(hand) != null) {
                 e.setCancelled(true);
                 if (plugin.millstones().interact(n, p, hand)) plugin.saveSoon(n);
+            } else if (n.type == PartType.SIEVE && plugin.sieves().find(hand) != null) {
+                e.setCancelled(true);
+                if (plugin.sieves().interact(n, p, hand)) plugin.saveSoon(n);
             } else if (n.type == PartType.SPROCKET && (Chains.isChain(hand) || (p.isSneaking() && (hand == null || hand.isEmpty()) && n.chain != null))) {
                 e.setCancelled(true);
                 plugin.chains().interact(n, p, hand);
@@ -159,6 +162,7 @@ final class PartListener implements Listener {
                     p.sendActionBar(net.kyori.adventure.text.Component.text("Station renamed to " + n.label, net.kyori.adventure.text.format.NamedTextColor.GOLD));
                 }
                 else if (n.type == PartType.MILLSTONE && plugin.millstones().interact(n, p, hand)) plugin.saveSoon(n);
+                else if (n.type == PartType.SIEVE && plugin.sieves().interact(n, p, hand)) plugin.saveSoon(n);
                 else plugin.showInfo(n, p);
             }
             return;
@@ -248,7 +252,7 @@ final class PartListener implements Listener {
                 facing = p.getFacing().getOppositeFace(); // the board faces the player
             }
             // shaft runs sideways: in line with what it was placed against, else left-right as the player sees it
-            case STEAM_HAMMER, PUMPJACK, STEAM_ENGINE, CRUSHING_WHEEL, MILLSTONE -> axis = faceAxis != Axis.Y ? faceAxis
+            case STEAM_HAMMER, PUMPJACK, STEAM_ENGINE, CRUSHING_WHEEL, MILLSTONE, SIEVE -> axis = faceAxis != Axis.Y ? faceAxis
                     : Kinetics.axisOf(p.getFacing()) == Axis.X ? Axis.Z : Axis.X;
             // blows away from what it was placed against (shaft behind it); sneak = blow toward it
             case BELT, CHUTE, FUNNEL -> {

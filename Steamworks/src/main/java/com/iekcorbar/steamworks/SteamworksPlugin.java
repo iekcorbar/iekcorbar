@@ -27,6 +27,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
     private Manual manual;
     private NodeStorage storage;
     private Millstones millstones;
+    private Sieves sieves;
     private Hammers hammers;
     private Fans fans;
     private Mixers mixers;
@@ -57,6 +58,8 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         storage = new NodeStorage(this);
         millstones = new Millstones(this);
         millstones.load(new File(getDataFolder(), "machines.yml"));
+        sieves = new Sieves(this);
+        sieves.load(new File(getDataFolder(), "machines.yml"));
         hammers = new Hammers(this);
         hammers.load(new File(getDataFolder(), "machines.yml"));
         fans = new Fans(this);
@@ -148,14 +151,17 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
             if (kinetics.tick % 5 == 0) crushers.tick();
             if (kinetics.tick % 5 == 0) {
                 millstones.tick(kinetics.tick);
+                sieves.tick(kinetics.tick);
                 hammers.tick();
                 fans.tick(kinetics.tick);
                 mixers.tick(kinetics.tick);
+                sieves.pushOut();
             }
             if (kinetics.tick % 30 == 0) machineSounds();
             kinetics.tickCustoms(kinetics.tick);
             if (kinetics.tick % 1200 == 0) {
                 for (KNode m : kinetics.mills) saveQueue.add(m.world.getChunkAt(m.x >> 4, m.z >> 4));
+                for (KNode m : kinetics.sieves) saveQueue.add(m.world.getChunkAt(m.x >> 4, m.z >> 4));
                 for (KNode m : kinetics.kettles) saveQueue.add(m.world.getChunkAt(m.x >> 4, m.z >> 4));
             }
             if (!saveQueue.isEmpty() && kinetics.tick % 20 == 0) {
@@ -248,6 +254,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
     Adv adv() { return adv; }
     EasterEggs eggs() { return eggs; }
     Millstones millstones() { return millstones; }
+    Sieves sieves() { return sieves; }
     Hammers hammers() { return hammers; }
     Fans fans() { return fans; }
     Mixers mixers() { return mixers; }
@@ -367,6 +374,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
             else n.world.dropItemNaturally(n.center(), part);
         }
         for (ItemStack s : Millstones.contents(n)) n.world.dropItemNaturally(n.center(), s);
+        for (ItemStack s : Sieves.contents(n)) n.world.dropItemNaturally(n.center(), s);
         for (ItemStack s : n.kettleItems) n.world.dropItemNaturally(n.center(), s);
         if (n.type == PartType.SPROCKET && n.chain != null) chains.unlink(n, true);
         if (n.type == PartType.ARM) {

@@ -1287,6 +1287,20 @@ def whistle():
     return m
 
 
+def sieve():
+    m = Model("sw_sieve")
+    m.cube("frame_n", (-8, 4, -8), (8, 6, -6), "darkwood")
+    m.cube("frame_s", (-8, 4, 6), (8, 6, 8), "darkwood")
+    m.cube("frame_e", (6, 4, -8), (8, 6, 8), "darkwood")
+    m.cube("frame_w", (-8, 4, -8), (-6, 6, 8), "darkwood")
+    m.cube("mesh", (-6, 3.8, -6), (6, 4.2, 6), "steel")
+    for x in (-6, 6):
+        for z in (-6, 6):
+            m.cube(f"leg_{x}_{z}", (x - 1, -8, z - 1), (x + 1, 4, z + 1), "darkwood")
+    m.cube("mouth", (-3, 6, -3), (3, 8, 3), "brass")
+    return m
+
+
 def build():
     parts = [shaft(), cogwheel(), large_cogwheel(), gearbox(), hand_crank(), water_wheel(),
              gauge_body("sw_speed_gauge_body", "brass"), gauge_body("sw_stress_gauge_body", "copper"),
@@ -1314,7 +1328,8 @@ def build():
              alloy_lump(), casing("sw_andesite_casing", "stone"), casing("sw_brass_casing", "brass"),
              whisk(), propeller(), zinc_nugget(),
              chute(), funnel(), depot(), ejector(), pump(), valve(), whistle(),
-             track_straight(), track_slope(), track_curve()]
+             track_straight(), track_slope(), track_curve(),
+             sieve()]
     for part, metal, frame in (("clutch", "steel", "brass"), ("gearshift", "darkwood", "copper")):
         parts.append(switch_casing(f"sw_{part}_casing", metal, frame, False))
         parts.append(switch_casing(f"sw_{part}_casing_on", metal, frame, True))

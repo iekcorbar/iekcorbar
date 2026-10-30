@@ -71,6 +71,9 @@ final class Visuals {
                 add(n, n.type.model() + "_body", Role.STATIC, orient, sign);
                 add(n, "sw_gauge_needle", Role.NEEDLE, orient, sign);
             }
+            case SIEVE -> {
+                add(n, "sw_sieve", Role.STATIC, orient, 1);
+            }
             case MILLSTONE -> {
                 // the stone wheel stands upright in its frame and the drive shaft plugs into the
                 // axle on either side: the frame stays world-upright (model X along the axle, like

@@ -47,6 +47,11 @@ final class KNode {
     final List<ItemStack> millOutput = new ArrayList<>();
     double millProgress;
 
+    // sieve
+    ItemStack sieveInput;
+    final List<ItemStack> sieveOutput = new ArrayList<>();
+    double sieveProgress;
+
     // steam hammer
     double hammerProgress;
 

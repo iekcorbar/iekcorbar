@@ -276,6 +276,11 @@ final class PartItems {
         r.put(PartType.PUMP, new Object[]{1, new String[]{"C", "P"}, 'C', PartType.COGWHEEL, 'P', PartType.PIPE});   // Create: shapeless cog + pipe, as a column here
         r.put(PartType.VALVE, new Object[]{1, new String[]{"I", "P"}, 'I', MaterialType.IRON_PLATE, 'P', PartType.PIPE});
         r.put(PartType.WHISTLE, new Object[]{1, new String[]{"P", "C"}, 'P', MaterialType.GOLDEN_PLATE, 'C', Material.COPPER_INGOT});
+        r.put(PartType.SIEVE, new Object[]{1, new String[]{"I", "C"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL});
+        r.put(PartType.ITEM_FILTER, new Object[]{1, new String[]{"I", "P"}, 'I', MaterialType.IRON_PLATE, 'P', PartType.PIPE});
+        r.put(PartType.HARVESTER, new Object[]{1, new String[]{"I", "C", "I"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL});
+        r.put(PartType.PLOUGH, new Object[]{1, new String[]{"I", "C"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL});
+        r.put(PartType.ROLLER, new Object[]{1, new String[]{"I", "I", "I"}, 'I', MaterialType.IRON_PLATE});
 
         for (Map.Entry<PartType, Object[]> e : r.entrySet()) addRecipe(e.getKey().id(), create(e.getKey(), (int) e.getValue()[0]), e.getValue());
         addRecipe("large_cogwheel_from_little", create(PartType.LARGE_COGWHEEL, 1), new Object[]{1, new String[]{"P", "C"}, 'P', planks, 'C', PartType.COGWHEEL});

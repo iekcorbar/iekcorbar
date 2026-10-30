@@ -66,6 +66,15 @@ final class NodeStorage {
                 mill.set(progressKey, PersistentDataType.DOUBLE, n.millProgress);
                 pdc.set(millKey(n), PersistentDataType.TAG_CONTAINER, mill);
             }
+            if (n.type == PartType.SIEVE) {
+                List<ItemStack> items = new ArrayList<>();
+                items.add(n.sieveInput == null ? ItemStack.empty() : n.sieveInput);
+                items.addAll(n.sieveOutput);
+                PersistentDataContainer sieve = pdc.getAdapterContext().newPersistentDataContainer();
+                sieve.set(itemsKey, PersistentDataType.BYTE_ARRAY, ItemStack.serializeItemsAsBytes(items));
+                sieve.set(progressKey, PersistentDataType.DOUBLE, n.sieveProgress);
+                pdc.set(millKey(n), PersistentDataType.TAG_CONTAINER, sieve);
+            }
             if (n.type == PartType.TANK && n.fluid != null && n.fluidAmount > 0) {
                 PersistentDataContainer k = pdc.getAdapterContext().newPersistentDataContainer();
                 k.set(labelKey, PersistentDataType.STRING, n.fluid.name());
@@ -160,6 +169,22 @@ final class NodeStorage {
                         }
                         Double prog = mill.get(progressKey, PersistentDataType.DOUBLE);
                         n.millProgress = prog == null ? 0 : prog;
+                    }
+                }
+                if (type == PartType.SIEVE) {
+                    PersistentDataContainer sieve = pdc.get(millKey(n), PersistentDataType.TAG_CONTAINER);
+                    if (sieve != null) {
+                        byte[] bytes = sieve.get(itemsKey, PersistentDataType.BYTE_ARRAY);
+                        if (bytes != null) {
+                            List<ItemStack> items = new ArrayList<>(Arrays.asList(ItemStack.deserializeItemsFromBytes(bytes)));
+                            if (!items.isEmpty()) {
+                                ItemStack in = items.remove(0);
+                                n.sieveInput = in == null || in.isEmpty() ? null : in;
+                            }
+                            for (ItemStack i : items) if (i != null && !i.isEmpty()) n.sieveOutput.add(i);
+                        }
+                        Double prog = sieve.get(progressKey, PersistentDataType.DOUBLE);
+                        n.sieveProgress = prog == null ? 0 : prog;
                     }
                 }
                 if (type == PartType.TANK) {
