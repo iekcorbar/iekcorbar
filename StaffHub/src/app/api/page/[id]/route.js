@@ -2,7 +2,7 @@
 // voor de zoekindex.
 import { getDb, now } from '@/lib/db';
 import { me } from '@/lib/auth';
-import { canSee, canWrite } from '@/lib/acl';
+import { canSee, canWrite, may } from '@/lib/acl';
 import { htmlToMd } from '@/lib/docconv';
 
 export function stripHtml(html) {
@@ -65,6 +65,7 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   const u = await me();
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
+  if (!may(u, 'pages')) return Response.json({ error: 'verboden' }, { status: 403 });    // cap 'pages' (lib/caps)
   const { id } = await params;
   const { html } = await req.json().catch(() => ({}));
   const d = getDb();

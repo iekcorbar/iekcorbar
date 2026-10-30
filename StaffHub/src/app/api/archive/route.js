@@ -17,7 +17,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { getDb, DATA_DIR, clean, uniqueName, findChild, storeBlob, now, logAudit } from '@/lib/db';
 import { me } from '@/lib/auth';
-import { canSee, canWrite } from '@/lib/acl';
+import { canSee, canWrite, may } from '@/lib/acl';
 import { plan, data, ZipFout } from '@/lib/unzip';
 
 export const dynamic = 'force-dynamic';
@@ -71,6 +71,7 @@ async function mapCheck(u, parentId) {
 export async function POST(req) {
   const u = await me();
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
+  if (!may(u, 'upload')) return Response.json({ error: 'verboden' }, { status: 403 });  // uitpakken = massaal uploaden
   ruimOp();
   const isJson = String(req.headers.get('content-type') || '').includes('application/json');
   return isJson ? bevestigen(req, u) : plannen(req, u);

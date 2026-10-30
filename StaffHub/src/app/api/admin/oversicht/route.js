@@ -1,14 +1,19 @@
-// Admin-ruimte, ALLEEN voor owners: wie zit er in de hub (met apparaat en
-// verval), hoeveel plaats het kost, en welke sessies zijn in te trekken.
+// Admin-ruimte: wie zit er in de hub (met apparaat en verval), hoeveel plaats
+// het kost, en welke sessies zijn in te trekken.
 //
 // Waarom dit bestaat: de eigenaar kon vanmiddag niet raden wat er met z'n
 // sessies gebeurde - er staan er simpelweg dertien in een tabel die niemand
 // ziet. Dit maakt die tabel zichtbaar. Tokens zelf worden NOOIT meegestuurd
 // (retracten gaat op rowid), want een gelekte token is een ingelogd account.
+//
+// Sinds 0.5.0: KIJKEN mag ook met de cap 'admin' (door de eigenaar uitgereikt),
+// maar intrekken (DELETE) blijft persoonsgebonden aan owners - iemand anders
+// zijn sessies schrappen is te gevaarlijk om weg te geven.
 import fs from 'node:fs';
 import path from 'node:path';
 import { getDb, now, DATA_DIR, BLOBS } from '@/lib/db';
 import { me } from '@/lib/auth';
+import { may } from '@/lib/acl';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +21,13 @@ async function ownerOnly() {
   const u = await me();
   if (!u) return { err: Response.json({ error: 'login' }, { status: 401 }) };
   if (u.role !== 'owner') return { err: Response.json({ error: 'alleen owners' }, { status: 403 }) };
+  return { u };
+}
+
+async function adminKijk() {
+  const u = await me();
+  if (!u) return { err: Response.json({ error: 'login' }, { status: 401 }) };
+  if (!may(u, 'admin')) return { err: Response.json({ error: 'alleen owners' }, { status: 403 }) };
   return { u };
 }
 
@@ -43,7 +55,7 @@ function opslag() {
 }
 
 export async function GET() {
-  const { err } = await ownerOnly();
+  const { err } = await adminKijk();
   if (err) return err;
   const d = getDb();
   const nu = now();

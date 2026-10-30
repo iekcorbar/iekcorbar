@@ -4,7 +4,7 @@
 // Pas 'legenen' maakt ze echt weg (deleteNodeTree + gcBlobs zoals toen).
 import { getDb, findChild, uniqueName, now, deleteNodeTree, gcBlobs } from '@/lib/db';
 import { me } from '@/lib/auth';
-import { canWrite, canSee, visibleChildren } from '@/lib/acl';
+import { canWrite, canSee, visibleChildren, may } from '@/lib/acl';
 
 export const dynamic = 'force-dynamic';
 
@@ -62,6 +62,7 @@ export async function POST(req) {
   const ton = trashNode(d, u);
 
   if (actie === 'prullen') {
+    if (!may(u, 'trash')) return Response.json({ error: 'verboden', gedaan: 0 }, { status: 403 });   // cap 'trash'
     let gedaan = 0;
     for (const id of lijst) {
       const n = d.prepare('SELECT * FROM nodes WHERE id = ?').get(id);
@@ -78,6 +79,7 @@ export async function POST(req) {
   }
 
   if (actie === 'herstel') {
+    if (!may(u, 'trash')) return Response.json({ error: 'verboden', gedaan: 0, mislukt: 0 }, { status: 403 });
     let gedaan = 0, mislukt = 0;
     for (const id of lijst) {
       const n = d.prepare('SELECT * FROM nodes WHERE id = ?').get(id);
@@ -97,9 +99,10 @@ export async function POST(req) {
   }
 
   if (actie === 'legenen') {
-    if (u.role !== 'owner' && u.role !== 'admin') {
-      // elk staff-lid dat de bak mag wissen mag ook legen; canWrite per kind dekt het
-    }
+    // Legen ís echt verwijderen: daarvoor is de cap 'purge' nodig (uitgereikt
+    // door de eigenaar of vanzelfsprekend de eigenaar zelf). Vóór 0.5.0 mocht
+    // dit van iedereen met schrijfrechten - te breed voor een onomkeerbare daad.
+    if (!may(u, 'purge')) return Response.json({ error: 'verboden', gedaan: 0 }, { status: 403 });
     let gedaan = 0;
     for (const kind of d.prepare('SELECT * FROM nodes WHERE parent = ?').all(ton.id)) {
       if (!canWrite(u, kind) || !canSee(u, kind)) continue;

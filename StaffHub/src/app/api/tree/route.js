@@ -9,9 +9,18 @@ export async function GET(req) {
   const parent = new URL(req.url).searchParams.get('parent');
   const pid = parent && /^\d+$/.test(parent) ? Number(parent) : null;
   const d = getDb();
-  const kids = visibleChildren(u, pid).map((n) => {
+  const kidsRaw = visibleChildren(u, pid);
+  // Aantallen per map in ENE query: de tegels in de nieuwe hub tonen "7 items"
+  // en dat mag niet per tegel een losse up-vraag worden.
+  const mapIds = kidsRaw.filter((n) => n.type === 'folder').map((n) => n.id);
+  const teller = new Map();
+  if (mapIds.length) {
+    for (const r of d.prepare(`SELECT parent, COUNT(*) AS c FROM nodes WHERE parent IN (${mapIds.map(() => '?').join(',')}) GROUP BY parent`).all(...mapIds))
+      teller.set(r.parent, r.c);
+  }
+  const kids = kidsRaw.map((n) => {
     const v = n.type === 'file' ? latestVersion(n.id) : null;
-    const out = { id: n.id, name: n.name, type: n.type, parent: n.parent, vis: n.vis, team: n.team, owner: n.owner, updated: n.updated, children: n.type === 'folder' && !!d.prepare('SELECT 1 AS x FROM nodes WHERE parent = ? LIMIT 1').get(n.id) };
+    const out = { id: n.id, name: n.name, type: n.type, parent: n.parent, vis: n.vis, team: n.team, owner: n.owner, updated: n.updated, children: n.type === 'folder' && (teller.get(n.id) || 0) > 0, items: n.type === 'folder' ? (teller.get(n.id) || 0) : null };
     if (v) out.size = v.size;
     return out;
   });

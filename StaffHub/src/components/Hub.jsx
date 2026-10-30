@@ -4,13 +4,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Anchor, Folder, FolderPlus, FileText, File as FileIcon, Image as ImageIcon, Download, Trash2,
   Pencil, MoveRight, Search, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
-  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield, RotateCcw,
+  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield, RotateCcw, Bot, ChevronRight,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
 import Vertaal from '@/components/Vertaal';
 import { useLang, useDt, trServer, LangToggle, LANGS, setLeesbaar, leesbaarStand } from '@/lib/i18n';
+import { may, CAPS, PRIV, effectieveCaps } from '@/lib/caps';
 
 const fmt = (n) => n == null ? '' : n > 1e9 ? (n / 1e9).toFixed(1) + ' GB' : n > 1e6 ? (n / 1e6).toFixed(1) + ' MB' : n > 1000 ? (n / 1000).toFixed(0) + ' KB' : n + ' B';
 
@@ -25,11 +26,11 @@ export default function Hub({ me, onLogout }) {
   const [parent, setParent] = useState(null);
   const [trail, setTrail] = useState([]);
   const [kids, setKids] = useState([]);
-  const [sel, setSel] = useState(null);           // geselecteerd node (rechts-voorbeeld)
-  const [expanded, setExpanded] = useState({});   // boom: id -> kinderen
+  const [sel, setSel] = useState(null);           // geopend document (popup)
+  const [kiesBestemming, setKiesBestemming] = useState(false);  // mapkiezer voor verplaatsen
   const [q, setQ] = useState('');
   const [results, setResults] = useState(null);
-  const [modal, setModal] = useState(null);       // 'users' | 'tokens' | 'dav'
+  const [modal, setModal] = useState(null);       // 'users' | 'admin' | 'tokens' | 'dav' | 'desktop' | 'profiel' | 'ai'
   const [moveFrom, setMoveFrom] = useState(null);  // node die verplaatst wordt
   const [err, setErr] = useState('');
   const [archief, setArchief] = useState(null);     // {plan, file} van een zip-dry-run
@@ -57,8 +58,8 @@ export default function Hub({ me, onLogout }) {
   function toggleSel(id) { const s = new Set(aan); if (s.has(id)) s.delete(id); else s.add(id); setAan(s); }
   function allesSel() {
     const s = new Set(aan);
-    const alles = kids.length > 0 && kids.every((k) => s.has(k.id));
-    for (const k of kids) { if (alles) s.delete(k.id); else s.add(k.id); }
+    const alles = stuk.length > 0 && stuk.every((k) => s.has(k.id));
+    for (const k of stuk) { if (alles) s.delete(k.id); else s.add(k.id); }
     setAan(s);
   }
   function laatUndo(l) { setLaatste(l); setTimeout(() => setLaatste((v) => (v === l ? null : v)), 15000); }
@@ -224,8 +225,9 @@ export default function Hub({ me, onLogout }) {
     try { await jsend('/api/nodes/' + n.id, 'PATCH', { name }); await refresh(); if (sel?.id === n.id) setSel({ ...sel, name }); } catch (e) { setErr(e.message); }
   }
   async function toggleVis(n) {
-    const order = [null, 'all', 'team', 'owner'];
-    const next = order[(order.indexOf(n.vis ?? null) + 1) % order.length];
+    // 'owner' zit alleen in de cyclus als het lid het doorlaatrecht heeft (cap ownervis).
+    const volgorde = may(me, 'ownervis') ? [null, 'all', 'team', 'owner'] : [null, 'all', 'team'];
+    const next = volgorde[(volgorde.indexOf(n.vis ?? null) + 1) % volgorde.length];
     try { await jsend('/api/nodes/' + n.id, 'PATCH', { vis: next }); await refresh(); } catch (e) { setErr(e.message); }
   }
   async function remove(n) {
@@ -277,37 +279,26 @@ export default function Hub({ me, onLogout }) {
     return () => clearTimeout(tm);
   }, [q]);
 
-  // ---------- mappenboom links ----------
-  async function toggleDir(id) {
-    if (expanded[id]) { const { [id]: _, ...rest } = expanded; setExpanded(rest); return; }
-    try { const j = await (await fetch('/api/tree?parent=' + id)).json(); setExpanded((e) => ({ ...e, [id]: (j.kids || []).filter((k) => k.type === 'folder') })); } catch { }
-  }
-  function TreeRow({ n, depth }) {
-    const open = !!expanded[n.id];
-    return (
-      <div>
-        <div draggable
-          onDragStart={(e) => { setSleepNode(n); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(n.id)); } catch { } }}
-          onDragEnd={() => { setSleepNode(null); setSleepOver(null); }}
-          onDragOver={(e) => { if (sleepNode && sleepNode.id !== n.id) { e.preventDefault(); e.stopPropagation(); setSleepOver(n.id); } }}
-          onDragLeave={() => setSleepOver((v) => (v === n.id ? null : v))}
-          onDrop={(e) => { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); }}
-          className={`flex items-center gap-1 text-[12px] hover:bg-white/5 rounded px-1 cursor-pointer ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/20' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''} ${moveFrom ? 'outline outline-1 outline-dashed outline-copper/40' : ''}`} style={{ paddingLeft: depth * 12 }}
-          onClick={() => { if (moveFrom) { moveTo(n.id); return; } setParent(n.id); setSel(null); }} onDoubleClick={() => toggleDir(n.id)}>
-          <button onClick={(e) => { e.stopPropagation(); toggleDir(n.id); }} className="w-4 text-parch/40">{open ? '▾' : '▸'}</button>
-          <Folder className="size-3.5 text-gold/70 shrink-0" />
-          <span className="truncate">{n.name}</span>
-          {n.vis === 'owner' && <Lock className="size-3 text-red-300/70 shrink-0" />}
-          {n.vis === 'team' && <span className="text-[9px] text-copper shrink-0">{n.team}</span>}
-        </div>
-        {open && (expanded[n.id] || []).map((k) => <TreeRow key={k.id} n={k} depth={depth + 1} />)}
-      </div>
-    );
-  }
-  const rootDirs = kids.filter((k) => k.type === 'folder');
-
   const TypeIcon = (n) => (ICONS[n.type] || FileIcon);
   const visBadge = (n) => n.vis === 'owner' ? <Lock className="inline size-3 text-red-300/70" /> : n.vis === 'team' ? <span className="text-[9px] text-copper">{n.team || 'team'}</span> : n.vis === 'all' ? <Globe className="inline size-3 text-emerald-300/60" /> : null;
+
+  // Klantkantige blik op de caps (lib/caps) - alleen voor knoppen verbergen,
+  // de echte poort staat in elke API-route.
+  const kan = (cap) => may(me, cap);
+  const mappen = kids.filter((k) => k.type === 'folder');
+  const stuk = kids.filter((k) => k.type !== 'folder');
+
+  // Esc: eerst de diepste laag dicht (kiezer > modal > popup), nooit alles tegelijk.
+  useEffect(() => {
+    const opKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (kiesBestemming) setKiesBestemming(false);
+      else if (modal) setModal(null);
+      else if (sel) setSel(null);
+    };
+    window.addEventListener('keydown', opKey);
+    return () => window.removeEventListener('keydown', opKey);
+  }, [kiesBestemming, modal, sel]);
 
   return (
     <div className="h-screen flex flex-col">
@@ -324,7 +315,7 @@ export default function Hub({ me, onLogout }) {
               {results.length === 0 && <p className="p-3 text-xs text-parch/50">{t('search.none')}</p>}
               {results.map((r) => (
                 <button key={r.id} className="w-full text-left px-3 py-2 text-xs hover:bg-white/5 flex items-center gap-2"
-                  onClick={() => { setQ(''); setResults(null); setSel({ id: r.id, name: r.name, type: r.type }); }}>
+                  onClick={() => { setQ(''); setResults(null); if (r.type === 'folder') setParent(r.id); else setSel({ id: r.id, name: r.name, type: r.type }); }}>
                   {(() => { const I = TypeIcon(r); return <I className="size-3.5 text-gold/70" />; })()}{r.name}
                   <span className="text-parch/40 ml-auto">{t('why.' + r.why)}</span>
                 </button>
@@ -337,10 +328,10 @@ export default function Hub({ me, onLogout }) {
           <LangToggle vast={kiesTaal} />
           <button title={t('tip.profile')} onClick={() => setModal('profiel')} className="p-1.5 rounded hover:bg-white/10"><UserCog className="size-4" /></button>
           <button title={t('tip.desktop')} onClick={() => setModal('desktop')} className="p-1.5 rounded hover:bg-white/10"><Download className="size-4" /></button>
-          <button title={t('tip.disk')} onClick={() => setModal('dav')} className="p-1.5 rounded hover:bg-white/10"><Server className="size-4" /></button>
-          <button title={t('tip.tokens')} onClick={() => setModal('tokens')} className="p-1.5 rounded hover:bg-white/10"><KeyRound className="size-4" /></button>
-          {me.role === 'owner' && <button title={t('adm.titel')} onClick={() => setModal('admin')} className="p-1.5 rounded hover:bg-white/10"><Shield className="size-4" /></button>}
-          {me.role === 'owner' && <button title={t('tip.accounts')} onClick={() => setModal('users')} className="p-1.5 rounded hover:bg-white/10"><Users className="size-4" /></button>}
+          {kan('tokens') && <button title={t('tip.disk')} onClick={() => setModal('dav')} className="p-1.5 rounded hover:bg-white/10"><Server className="size-4" /></button>}
+          {kan('tokens') && <button title={t('tip.tokens')} onClick={() => setModal('tokens')} className="p-1.5 rounded hover:bg-white/10"><KeyRound className="size-4" /></button>}
+          {kan('admin') && <button title={t('adm.titel')} onClick={() => setModal('admin')} className="p-1.5 rounded hover:bg-white/10"><Shield className="size-4" /></button>}
+          {kan('users') && <button title={t('tip.accounts')} onClick={() => setModal('users')} className="p-1.5 rounded hover:bg-white/10"><Users className="size-4" /></button>}
           <button title={t('tip.logout')} onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); onLogout(); }} className="p-1.5 rounded hover:bg-white/10"><LogOut className="size-4" /></button>
         </div>
       </header>
@@ -355,56 +346,75 @@ export default function Hub({ me, onLogout }) {
         </div>
       )}
 
-      <div className="flex-1 grid grid-cols-[230px_1fr] md:grid-cols-[250px_1fr_400px] overflow-hidden">
-        {/* boom */}
-        <nav className="border-r border-bronze/20 bg-black/20 p-2 overflow-auto">
-          <div className={`flex items-center gap-1 text-[12px] rounded px-1 cursor-pointer ${parent === null ? 'bg-gold/15 text-gold' : 'hover:bg-white/5'} ${sleepOver === 'root' ? 'outline outline-1 outline-gold bg-gold/20' : ''}`}
-            onDragOver={(e) => { if (sleepNode) { e.preventDefault(); e.stopPropagation(); setSleepOver('root'); } }}
-            onDragLeave={() => setSleepOver((v) => (v === 'root' ? null : v))}
-            onDrop={(e) => { e.preventDefault(); e.stopPropagation(); dropNaar(null); }}
-            onClick={() => { setParent(null); setSel(null); }}>
-            <Folder className="size-3.5" /> <b>{t('nav.all')}</b>
-            {moveFrom && <button className="ml-auto text-[9px] bg-copper text-ink rounded px-1" onClick={() => moveTo(null)}>{t('nav.here')}</button>}
-          </div>
-          {rootDirs.map((n) => <TreeRow key={n.id} n={n} depth={0} />)}
-          {moveFrom && <p className="text-[10px] text-copper mt-2 px-1">{t('nav.move_hint_a')}<b>{moveFrom.name}</b>{t('nav.move_hint_b')}</p>}
-        </nav>
-
-        {/* lijst */}
+      {/* Geen zijbalk meer (eigenaar 30-10): je navigeert door mappen te openen.
+          Het broodkruimel bovenaan is het kompas, de AI heeft nu een eigen,
+          volle kolom aan de rechterkant. */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_430px] overflow-hidden">
         <main className="overflow-auto p-3" onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
           <div className="flex items-center gap-2 flex-wrap mb-3">
             {parent !== null && <button onClick={() => setParent(trail.length > 1 ? trail[trail.length - 2].id : null)} className="p-1.5 rounded hover:bg-white/10"><ArrowLeft className="size-4" /></button>}
+            <button onClick={() => { setParent(null); setSel(null); }} className={`p-1.5 rounded hover:bg-white/10 ${parent === null ? 'text-gold' : 'text-parch/60'}`} title={t('nav.all')}><Folder className="size-4" /></button>
             <div className="text-sm truncate">{trail.map((tr, i) => <span key={tr.id}>{i > 0 && <span className="text-parch/30"> / </span>}<button className="text-gold/80 hover:underline" onClick={() => setParent(tr.id)}>{tr.name}</button></span>)}{!trail.length && <span className="text-parch/50">{t('dir.welcome')}</span>}</div>
             <div className="ml-auto flex gap-2">
-              <button onClick={newFolder} className="flex items-center gap-1 text-xs bg-white/5 border border-bronze/30 rounded-lg px-2.5 py-1.5 hover:bg-white/10"><FolderPlus className="size-3.5" /> {t('btn.map')}</button>
-              <button onClick={newPage} className="flex items-center gap-1 text-xs bg-white/5 border border-bronze/30 rounded-lg px-2.5 py-1.5 hover:bg-white/10"><FileText className="size-3.5" /> {t('btn.page')}</button>
-              <button onClick={() => upRef.current?.click()} className="flex items-center gap-1 text-xs bg-gold/90 text-ink rounded-lg px-2.5 py-1.5 font-bold hover:bg-gold"><Upload className="size-3.5" /> {t('btn.upload')}</button>
+              {moveFrom && <button onClick={() => setKiesBestemming(true)} className="flex items-center gap-1 text-xs bg-copper text-ink rounded-lg px-2.5 py-1.5 font-bold hover:brightness-110"><MoveRight className="size-3.5" /> {t('nav.here')}…</button>}
+              {kan('upload') && <button onClick={newFolder} className="flex items-center gap-1 text-xs bg-white/5 border border-bronze/30 rounded-lg px-2.5 py-1.5 hover:bg-white/10"><FolderPlus className="size-3.5" /> {t('btn.map')}</button>}
+              {kan('pages') && <button onClick={newPage} className="flex items-center gap-1 text-xs bg-white/5 border border-bronze/30 rounded-lg px-2.5 py-1.5 hover:bg-white/10"><FileText className="size-3.5" /> {t('btn.page')}</button>}
+              {kan('upload') && <button onClick={() => upRef.current?.click()} className="flex items-center gap-1 text-xs bg-gold/90 text-ink rounded-lg px-2.5 py-1.5 font-bold hover:bg-gold"><Upload className="size-3.5" /> {t('btn.upload')}</button>}
               <input ref={upRef} type="file" multiple hidden onChange={onPick} />
-              {moveFrom && <button onClick={() => moveTo(parent)} className="flex items-center gap-1 text-xs bg-copper text-ink rounded-lg px-2.5 py-1.5 font-bold hover:brightness-110">{t('nav.here')}</button>}
-              {isTon && kids.length > 0 && <button onClick={legeTon} className="flex items-center gap-1 text-xs bg-white/5 border border-red-300/40 text-red-200/80 rounded-lg px-2.5 py-1.5 hover:bg-red-900/30"><Trash2 className="size-3.5" /> {t('btn.lege')}</button>}
+              {isTon && kan('purge') && kids.length > 0 && <button onClick={legeTon} className="flex items-center gap-1 text-xs bg-white/5 border border-red-300/40 text-red-200/80 rounded-lg px-2.5 py-1.5 hover:bg-red-900/30"><Trash2 className="size-3.5" /> {t('btn.lege')}</button>}
               <button onClick={refresh} className="p-1.5 rounded hover:bg-white/10" title={t('tip.refresh')}><RefreshCw className="size-4" /></button>
             </div>
           </div>
+          {moveFrom && <p className="text-[11px] text-copper mb-2 px-1">{t('nav.move_hint_a')}<b>{moveFrom.name}</b>{t('nav.move_hint_b')}</p>}
           {aan.size > 0 && (
             <div className="flex items-center gap-2 flex-wrap mb-2 px-2.5 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-xs">
               <b className="text-gold">{t('sel.n', { n: aan.size })}</b>
               <button className="text-parch/60 hover:text-parch underline underline-offset-2" onClick={() => setAan(new Set())}>{t('sel.geen')}</button>
               <span className="flex-1" />
-              <button onClick={() => setMoveFrom({ ids: [...aan], name: t('sel.n', { n: aan.size }) })} className="flex items-center gap-1 rounded-lg border border-bronze/40 px-2 py-1 hover:border-gold/60"><MoveRight className="size-3.5" /> {t('btn.moveSel')}</button>
+              {kan('move') && <button onClick={() => setMoveFrom({ ids: [...aan], name: t('sel.n', { n: aan.size }) })} className="flex items-center gap-1 rounded-lg border border-bronze/40 px-2 py-1 hover:border-gold/60"><MoveRight className="size-3.5" /> {t('btn.moveSel')}</button>}
               {isTon
-                ? <button onClick={async () => { const j = await trashActie('herstel', [...aan]); if (j?.mislukt) setErr(t('msg.herstel-fout', { n: j.mislukt })); }} className="flex items-center gap-1 rounded-lg border border-bronze/40 px-2 py-1 hover:border-gold/60"><RotateCcw className="size-3.5" /> {t('btn.herstelSel')}</button>
-                : <button onClick={() => prullen([...aan])} className="flex items-center gap-1 rounded-lg border border-red-300/40 text-red-200/80 px-2 py-1 hover:bg-red-900/30"><Trash2 className="size-3.5" /> {t('btn.trashSel')}</button>}
-              {isTon && <button onClick={async () => { if (!window.confirm(t('confirm.purgeSel', { n: aan.size }))) return; for (const id of [...aan]) { try { await jsend('/api/nodes/' + id, 'DELETE'); } catch { } } setAan(new Set()); await refresh(); await verversTon(); }} className="flex items-center gap-1 rounded-lg border border-red-300/40 text-red-300 px-2 py-1 hover:bg-red-900/40"><X className="size-3.5" /> {t('btn.purgeSel')}</button>}
+                ? kan('trash') && <button onClick={async () => { const j = await trashActie('herstel', [...aan]); if (j?.mislukt) setErr(t('msg.herstel-fout', { n: j.mislukt })); }} className="flex items-center gap-1 rounded-lg border border-bronze/40 px-2 py-1 hover:border-gold/60"><RotateCcw className="size-3.5" /> {t('btn.herstelSel')}</button>
+                : kan('trash') && <button onClick={() => prullen([...aan])} className="flex items-center gap-1 rounded-lg border border-red-300/40 text-red-200/80 px-2 py-1 hover:bg-red-900/30"><Trash2 className="size-3.5" /> {t('btn.trashSel')}</button>}
+              {isTon && kan('purge') && <button onClick={async () => { if (!window.confirm(t('confirm.purgeSel', { n: aan.size }))) return; for (const id of [...aan]) { try { await jsend('/api/nodes/' + id, 'DELETE'); } catch { } } setAan(new Set()); await refresh(); await verversTon(); }} className="flex items-center gap-1 rounded-lg border border-red-300/40 text-red-300 px-2 py-1 hover:bg-red-900/40"><X className="size-3.5" /> {t('btn.purgeSel')}</button>}
             </div>
           )}
+
+          {/* mappen als tegels: groter, met hoeveelheid erin - eerst de ruimtes,
+              dan de spullen. Een klik opent de map; slepen naar een tegel verplaatst. */}
+          {mappen.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2 mb-4">
+              {mappen.map((n) => (
+                <div key={n.id}
+                  draggable={!moveFrom && kan('move')}
+                  onDragStart={(e) => { setSleepNode(n); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(n.id)); } catch { } }}
+                  onDragEnd={() => { setSleepNode(null); setSleepOver(null); }}
+                  onDragOver={(e) => { if (sleepNode && sleepNode.id !== n.id) { e.preventDefault(); e.stopPropagation(); setSleepOver(n.id); } }}
+                  onDragLeave={() => setSleepOver((v) => (v === n.id ? null : v))}
+                  onDrop={(e) => { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); }}
+                  onClick={() => { if (moveFrom) { moveTo(n.id); return; } setParent(n.id); }}
+                  className={`group rounded-xl border p-3 cursor-pointer transition-colors ${sleepOver === n.id ? 'border-gold bg-gold/15' : moveFrom ? 'border-dashed border-copper/50 bg-black/25 hover:border-gold hover:bg-gold/10' : 'border-bronze/25 bg-black/25 hover:border-gold/60 hover:bg-white/5'}`}>
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Folder className="size-5 text-gold/80 shrink-0" />
+                    <span className="truncate text-[13px] font-semibold text-parch">{n.name}</span>
+                    <span className="ml-auto shrink-0">{visBadge(n)}</span>
+                  </div>
+                  <p className="text-[10px] text-parch/45 mt-1.5 tabular-nums">{t('dir.items', { n: n.items ?? 0 })} · {dt(n.updated)}</p>
+                  {moveFrom && <p className="text-[10px] text-copper mt-1 font-bold">{t('nav.here')} →</p>}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* bestanden en handleidingen onder de tegels */}
           <div
             onDragOver={(e) => e.preventDefault()} onDrop={onDrop}
-            className="rounded-xl border border-dashed border-bronze/25 min-h-[60vh] p-1">
-            {kids.length === 0 && <div className="grid place-items-center h-64 text-parch/40 text-sm">{t('dir.empty')}</div>}
+            className="rounded-xl border border-dashed border-bronze/25 min-h-[40vh] p-1">
+            {stuk.length === 0 && mappen.length === 0 && <div className="grid place-items-center h-64 text-parch/40 text-sm">{t('dir.empty')}</div>}
+            {stuk.length > 0 && (
             <table className="w-full text-[13px]">
               <thead>
                 <tr className="text-[10px] uppercase tracking-wider text-parch/40">
-                  <th className="w-6 pl-2 py-1.5"><button title={t('tip.selectAll')} onClick={allesSel} className="text-[13px] leading-none text-parch/50 hover:text-gold">{kids.length > 0 && kids.every((k) => aan.has(k.id)) ? '☑' : '☐'}</button></th>
+                  <th className="w-6 pl-2 py-1.5"><button title={t('tip.selectAll')} onClick={allesSel} className="text-[13px] leading-none text-parch/50 hover:text-gold">{stuk.length > 0 && stuk.every((k) => aan.has(k.id)) ? '☑' : '☐'}</button></th>
                   <th className="text-left font-semibold py-1.5 pl-2"></th>
                   <th className="text-left font-semibold py-1.5">{t('why.naam')}</th>
                   <th className="text-right font-semibold py-1.5 w-20">{t('col.grootte')}</th>
@@ -413,17 +423,14 @@ export default function Hub({ me, onLogout }) {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {kids.map((n) => {
+                {stuk.map((n) => {
                   const I = TypeIcon(n);
                   return (
-                    <tr key={n.id} draggable
+                    <tr key={n.id} draggable={kan('move')}
                       onDragStart={(e) => { setSleepNode(n); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(n.id)); } catch { } }}
                       onDragEnd={() => { setSleepNode(null); setSleepOver(null); }}
-                      onDragOver={(e) => { if (n.type === 'folder' && sleepNode && sleepNode.id !== n.id) { e.preventDefault(); e.stopPropagation(); setSleepOver(n.id); } }}
-                      onDragLeave={() => setSleepOver((v) => (v === n.id ? null : v))}
-                      onDrop={(e) => { if (n.type === 'folder') { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); } }}
-                      className={`group cursor-pointer hover:bg-white/5 ${sel?.id === n.id ? 'bg-gold/10' : ''} ${sleepOver === n.id ? 'outline outline-1 outline-gold bg-gold/15' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`}
-                      onClick={() => setSel(n)} onDoubleClick={() => n.type === 'folder' && setParent(n.id)}>
+                      className={`group cursor-pointer hover:bg-white/5 ${sel?.id === n.id ? 'bg-gold/10' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`}
+                      onClick={() => setSel(n)}>
                       <td className="py-2 pl-2 w-6" onClick={(e) => e.stopPropagation()}>
                         <button title={t('tip.sel')} onClick={() => toggleSel(n.id)} className={`size-3.5 rounded border inline-block align-middle ${aan.has(n.id) ? 'bg-gold border-gold' : 'border-parch/40 hover:border-gold'}`} />
                       </td>
@@ -433,55 +440,85 @@ export default function Hub({ me, onLogout }) {
                       <td className="py-2 text-right text-parch/40 w-36 hidden md:table-cell tabular-nums">{dt(n.updated)}</td>
                       <td className="py-2 pr-2 w-32 text-right opacity-0 group-hover:opacity-100">
                         {n.type === 'file' && <a href={'/api/file/' + n.id} download title={t('tip.download')} className="p-1 hover:text-gold inline-block"><Download className="size-3.5" /></a>}
-                        <button title={t('tip.rename')} onClick={(e) => { e.stopPropagation(); rename(n); }} className="p-1 hover:text-gold inline-block"><Pencil className="size-3.5" /></button>
+                        {kan('move') && <button title={t('tip.rename')} onClick={(e) => { e.stopPropagation(); rename(n); }} className="p-1 hover:text-gold inline-block"><Pencil className="size-3.5" /></button>}
                         <button title={t('tip.vis')} onClick={(e) => { e.stopPropagation(); toggleVis(n); }} className="p-1 hover:text-gold inline-block">{n.vis === 'owner' ? <Eye className="size-3.5" /> : <EyeOff className="size-3.5" />}</button>
-                        <button title={t('tip.move')} onClick={(e) => { e.stopPropagation(); setMoveFrom(n); }} className="p-1 hover:text-gold inline-block"><MoveRight className="size-3.5" /></button>
+                        {kan('move') && <button title={t('tip.move')} onClick={(e) => { e.stopPropagation(); setMoveFrom(n); }} className="p-1 hover:text-gold inline-block"><MoveRight className="size-3.5" /></button>}
                         {isTon
-                          ? <button title={t('tip.restore')} onClick={(e) => { e.stopPropagation(); trashActie('herstel', [n.id]); }} className="p-1 hover:text-gold inline-block"><RotateCcw className="size-3.5" /></button>
-                          : <button title={t('tip.trash')} onClick={(e) => { e.stopPropagation(); remove(n); }} className="p-1 hover:text-red-300 inline-block"><Trash2 className="size-3.5" /></button>}
+                          ? kan('trash') && <button title={t('tip.restore')} onClick={(e) => { e.stopPropagation(); trashActie('herstel', [n.id]); }} className="p-1 hover:text-gold inline-block"><RotateCcw className="size-3.5" /></button>
+                          : kan('trash') && <button title={t('tip.trash')} onClick={(e) => { e.stopPropagation(); remove(n); }} className="p-1 hover:text-red-300 inline-block"><Trash2 className="size-3.5" /></button>}
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
+            )}
           </div>
         </main>
 
-        {/* voorbeeld */}
-        <aside className="hidden md:flex md:flex-col border-l border-bronze/20 bg-black/20 overflow-hidden">
+        {/* De AI-man: uitgebreid, de volle hoogte van de hub. Bronnen klik je
+            open - het document verschijnt dan als popup voor je neus. */}
+        <aside className="hidden lg:flex flex-col border-l border-bronze/20 bg-black/20 overflow-hidden">
           <Assistant onOpen={(n) => setSel(n)} />
-          <Vertaal node={sel} />
-          <div className="flex-1 overflow-auto min-h-0">
-            {!sel && <p className="p-4 text-xs text-parch/40">{t('aside.hint')}</p>}
-            {sel?.type === 'page' && <PageEditor node={sel} onRenamed={refresh} />}
-            {sel?.type === 'file' && <FilePane n={sel} onChanged={refresh} lijst={kids.filter((k) => k.type === 'file' && mediaKind(k.name) === mediaKind(sel.name))} />}
-            {sel?.type === 'folder' && <FolderPane n={sel} open={() => { setParent(sel.id); setSel(null); }} />}
-          </div>
         </aside>
+
+        {/* Telefoon/tablet: géén vaste kolom, maar een knop die de assistent
+            fullscreen opent. */}
+        <button onClick={() => setModal('ai')} title={t('ai.title')}
+          className="lg:hidden fixed bottom-4 right-4 z-30 flex items-center gap-2 bg-gold text-ink rounded-full px-4 py-3 shadow-2xl font-bold text-xs">
+          <Bot className="size-5" /> {t('ai.title')}
+        </button>
       </div>
 
-      {/* Telefoon/tablet: de ruit hierboven is md+ only, dus zonder dit blok is
-          een document aanklikken op iOS/Android gewoon niets - leeg scherm,
-          geen foutmelding. Zelfde inhoud, nu als vel_over de rest met een
-          dichtknop. */}
+      {/* Documenten popup: het blad vult bijna het hele scherm. Dicht met Esc,
+          het kruis of een klik buiten het blad. */}
       {sel && (
-        <div className="md:hidden fixed inset-0 z-40 bg-ink overflow-auto">
-          <div className="sticky top-0 z-50 flex justify-end bg-gradient-to-b from-black/80 to-transparent p-2">
-            <button onClick={() => setSel(null)} title={t('dt.close')} className="p-2 rounded-lg bg-black/60 border border-bronze/30"><X className="size-4" /></button>
+        <div className="fixed inset-0 z-40 bg-black/70 p-1.5 sm:p-4 lg:p-8" onClick={() => setSel(null)}>
+          <div className="mx-auto h-full w-full max-w-5xl bg-panel border border-bronze/40 rounded-2xl flex flex-col overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-2 px-3 py-2 border-b border-bronze/25 bg-black/30 shrink-0">
+              {(() => { const I = TypeIcon(sel); return <I className="size-4 text-gold shrink-0" />; })()}
+              <b className="text-parch text-sm truncate" title={sel.name}>{sel.name}</b>
+              <span className="shrink-0">{visBadge(sel)}</span>
+              <div className="ml-auto flex items-center gap-0.5 shrink-0">
+                {sel.type === 'file' && <a href={'/api/file/' + sel.id} download title={t('tip.download')} className="p-1.5 rounded hover:bg-white/10"><Download className="size-4" /></a>}
+                {kan('move') && <button title={t('tip.rename')} onClick={() => rename(sel)} className="p-1.5 rounded hover:bg-white/10"><Pencil className="size-4" /></button>}
+                <button title={t('tip.vis')} onClick={() => toggleVis(sel)} className="p-1.5 rounded hover:bg-white/10">{sel.vis === 'owner' ? <Eye className="size-4" /> : <EyeOff className="size-4" />}</button>
+                {kan('move') && <button title={t('tip.move')} onClick={() => { setMoveFrom(sel); }} className="p-1.5 rounded hover:bg-white/10"><MoveRight className="size-4" /></button>}
+                {kan('trash') && (isTon
+                  ? <button title={t('tip.restore')} onClick={() => { trashActie('herstel', [sel.id]); setSel(null); }} className="p-1.5 rounded hover:bg-white/10"><RotateCcw className="size-4" /></button>
+                  : <button title={t('tip.trash')} onClick={() => { remove(sel); setSel(null); }} className="p-1.5 rounded hover:text-red-300"><Trash2 className="size-4" /></button>)}
+                <button onClick={() => setSel(null)} title={t('dt.close')} className="p-1.5 rounded hover:bg-white/10 ml-1"><X className="size-4" /></button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-auto min-h-0">
+              {sel.type === 'page' && <Vertaal node={sel} />}
+              {sel.type === 'page' && <PageEditor key={sel.id} node={sel} onRenamed={refresh} />}
+              {sel.type === 'file' && <FilePane key={sel.id} n={sel} onChanged={refresh} lijst={kids.filter((k) => k.type === 'file' && mediaKind(k.name) === mediaKind(sel.name))} />}
+            </div>
           </div>
-          {/* Vertaal hoort ook op telefoon/tablet zichtbaar zijn - op de desktop
-            staat hij in de aside. Without this line the translate bar was simply
-            gone on small screens (owner-melding 30-10). */}
-          {sel.type === 'page' && <Vertaal node={sel} />}
-          {sel.type === 'page' && <PageEditor key={sel.id} node={sel} onRenamed={refresh} />}
-          {sel.type === 'file' && <FilePane key={sel.id} n={sel} onChanged={refresh} lijst={kids.filter((k) => k.type === 'file' && mediaKind(k.name) === mediaKind(sel.name))} />}
-          {sel.type === 'folder' && <FolderPane n={sel} open={() => { setParent(sel.id); setSel(null); }} />}
         </div>
       )}
 
-      {modal === 'users' && <UsersModal onClose={() => setModal(null)} />}
-      {modal === 'admin' && <AdminModal onClose={() => setModal(null)} openAccounts={() => setModal('users')} />}
+      {/* Telefoon: de assistent als fullscreen-laag (desktop heeft de vaste kolom). */}
+      {modal === 'ai' && (
+        <div className="lg:hidden fixed inset-0 z-40 bg-panel flex flex-col">
+          <div className="flex items-center gap-2 px-3 py-2 border-b border-bronze/25 shrink-0">
+            <Bot className="size-4 text-gold" /><b className="text-gold">{t('ai.title')}</b>
+            <button onClick={() => setModal(null)} title={t('dt.close')} className="ml-auto p-2 rounded hover:bg-white/10"><X className="size-4" /></button>
+          </div>
+          <Assistant onOpen={(n) => { setModal(null); setSel(n); }} />
+        </div>
+      )}
+
+      {/* Verplaatsen zonder boom: een kiezer die door de mappen bladerde. */}
+      {kiesBestemming && moveFrom && (
+        <MoveModal
+          afbreken={() => setKiesBestemming(false)}
+          kies={(id) => { setKiesBestemming(false); moveTo(id); }} />
+      )}
+
+      {modal === 'users' && <UsersModal onClose={() => setModal(null)} me={me} />}
+      {modal === 'admin' && <AdminModal onClose={() => setModal(null)} me={me} openAccounts={() => setModal('users')} />}
       {modal === 'tokens' && <TokensModal onClose={() => setModal(null)} />}
       {archief && <ArchiveModal archief={archief} sluit={() => setArchief(null)} ververst={refresh} bewaar={arBewaar} />}
       {modal === 'dav' && <DavModal onClose={() => setModal(null)} />}
@@ -531,7 +568,7 @@ function FilePane({ n, onChanged, lijst = [] }) {
       {isText && !isPdf && <pre className="max-h-72 overflow-auto bg-black/40 border border-bronze/20 rounded-lg p-2 whitespace-pre-wrap">{text ?? '…'}</pre>}
       {!isImg && !isPdf && !isText && !kind && <div className="text-parch/50">{t('fp.nopreview')}</div>}
       {(kind === 'audio' || kind === 'video') && <MediaPlayer kind={kind} id={n.id} naam={n.name} lijst={lijst} />}
-      {kind === '3d' && <Model3D url={url} naam={n.name} />}
+      {kind === '3d' && <Model3D url={url} naam={n.name} groot />}
       <div className="flex gap-2">
         <a href={url} download className="flex items-center gap-1 bg-gold/90 text-ink rounded-lg px-2.5 py-1.5 font-bold"><Download className="size-3.5" /> {t('fp.download')}</a>
       </div>
@@ -553,14 +590,41 @@ function FilePane({ n, onChanged, lijst = [] }) {
   );
 }
 
-function FolderPane({ n, open }) {
+// Bestemmingsvenster voor verplaatsen. De oudeste boom is weg, dus verplaatsen
+// bladdert nu zélf door de mappen: in een tegel klikken = erin kijken, de gouden
+// knop zet de spullen in de map waar je nu staat (root meegerekend).
+function MoveModal({ afbreken, kies }) {
   const { t } = useLang();
+  const [pid, setPid] = useState(null);
+  const [spoor, setSpoor] = useState([]);
+  const [mappen, setMappen] = useState([]);
+  function laad(id) {
+    fetch('/api/tree?parent=' + (id ?? '')).then((r) => r.json())
+      .then((j) => { if (!j.error) { setPid(id); setSpoor(j.trail || []); setMappen((j.kids || []).filter((k) => k.type === 'folder')); } })
+      .catch(() => { });
+  }
+  useEffect(() => { laad(null); }, []); // eslint-disable-line
   return (
-    <div className="p-3 text-xs space-y-3">
-      <h3 className="text-gold font-bold text-sm flex items-center gap-2"><Folder className="size-4" /> {n.name}</h3>
-      <button onClick={open} className="bg-white/5 border border-bronze/30 rounded-lg px-2.5 py-1.5 hover:bg-white/10">{t('fp.open')}</button>
-      <p className="text-parch/40">{t('fp.vis')} {n.vis === 'owner' ? t('vis.owner') : n.vis === 'team' ? `team ${n.team || '?'}` : n.vis === 'all' ? t('vis.all') : t('vis.inherit')}</p>
-    </div>
+    <Modal title={t('mv.title')} onClose={afbreken} wide>
+      <div className="flex items-center gap-1 text-xs mb-3 flex-wrap">
+        {spoor.length > 0 && <button onClick={() => laad(spoor.length > 1 ? spoor[spoor.length - 2].id : null)} className="p-1 rounded hover:bg-white/10"><ArrowLeft className="size-3.5" /></button>}
+        <button onClick={() => laad(null)} className={`px-1.5 py-0.5 rounded ${pid === null ? 'bg-gold/15 text-gold' : 'text-parch/60 hover:bg-white/5'}`}>{t('nav.all')}</button>
+        {spoor.map((s) => <span key={s.id}><span className="text-parch/30"> / </span><button className="px-1.5 py-0.5 rounded text-gold/80 hover:underline" onClick={() => laad(s.id)}>{s.name}</button></span>)}
+        <button onClick={() => kies(pid)} className="ml-auto bg-gold/90 text-ink rounded-lg px-3 py-1.5 font-bold whitespace-nowrap">{t('nav.here')} →</button>
+      </div>
+      {mappen.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {mappen.map((n) => (
+            <button key={n.id} onClick={() => laad(n.id)} className="flex items-center gap-2 rounded-xl border border-bronze/25 bg-black/25 p-2.5 text-left hover:border-gold/60 hover:bg-white/5">
+              <Folder className="size-4 text-gold/80 shrink-0" />
+              <span className="truncate text-xs text-parch">{n.name}</span>
+              <span className="ml-auto text-[9px] text-parch/40 shrink-0">{n.items ?? 0}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      {!mappen.length && <p className="text-xs text-parch/40 py-6 text-center">{t('dir.empty')}</p>}
+    </Modal>
   );
 }
 
@@ -609,7 +673,7 @@ function Modal({ title, onClose, children, wide }) {
 // geeft tellingen, opslag, alle sessies én het audit-logboek; intrekken gaat
 // op rowid, want een getoond token is een ingelogd account. Alleen eigenaars
 // zien dit (knop noch data: de API weigert andere rollen met 403).
-function AdminModal({ onClose, openAccounts }) {
+function AdminModal({ onClose, me, openAccounts }) {
   const { t } = useLang();
   const dt = useDt();
   const [ov, setOv] = useState(null);
@@ -665,7 +729,7 @@ function AdminModal({ onClose, openAccounts }) {
                       <td className="px-2 py-1 text-parch/60 truncate" title={s.agent}>{s.agent}</td>
                       <td className="px-2 py-1 text-parch/50 whitespace-nowrap tabular-nums">{dt(s.expires)}</td>
                       <td className="px-2 py-1 text-parch/40 whitespace-nowrap">{s.verlopen ? t('adm.verlopen') : s.over + ' d'}</td>
-                      <td className="px-2 py-1 text-right w-8"><button onClick={() => trek(s.id)} title={t('tip.remove')} className="hover:text-red-300"><X className="size-3.5" /></button></td>
+                      {me.role === 'owner' && <td className="px-2 py-1 text-right w-8"><button onClick={() => trek(s.id)} title={t('tip.remove')} className="hover:text-red-300"><X className="size-3.5" /></button></td>}
                     </tr>
                   ))}
                   {!ov.sessies.length && <tr><td className="px-2 py-2 text-parch/40">{t('adm.leeg')}</td></tr>}
@@ -695,34 +759,112 @@ function AdminModal({ onClose, openAccounts }) {
   );
 }
 
-function UsersModal({ onClose }) {
+// Accounts beheren. Sinds 0.5.0 het hart van dit venster: per lid aanvinken
+// wat hij mag (caps, lib/caps). Drie lagen, en de UI laat ze zien:
+//   - een lid ZONDER ingestelde permissies heeft de oude staffrechten;
+//     de vinkjes bij zo'n rij weergeven die stilzwijgende standaard;
+//   - de eigenaar zet élk vinkje, ook de vier vorendrechten (gearceerd);
+//   - een lid met cap 'users' beheert wél accounts, maar kan per definitie
+//     geen vorendrechten verlenen en geen eigenaars aanraken - dat filtert
+//     de API (sanitizePerms); de knoppen zijn hier al half dicht.
+function UsersModal({ onClose, me }) {
   const { t } = useLang();
   const [users, setUsers] = useState([]);
   const [form, setForm] = useState({ username: '', password: '', team: '', role: 'staff' });
   const [msg, setMsg] = useState('');
-  useEffect(() => { fetch('/api/admin/users').then((r) => r.json()).then((j) => setUsers(j.users || [])); }, []);
+  const [uit, setUit] = useState(null);          // opengeklapt account
+  const [wacht, setWacht] = useState({});        // id -> nieuw wachtwoord
+  const [team, setTeam] = useState({});          // id -> teamtekst
+  const eigenaar = me.role === 'owner';
+  const magBeheren = eigenaar || may(me, 'users');
+  const herhaal = () => fetch('/api/admin/users').then((r) => r.json()).then((j) => setUsers(j.users || [])).catch(() => { });
+  useEffect(() => { herhaal(); }, []); // eslint-disable-line
   async function add() {
     setMsg('');
-    try { await jsend('/api/admin/users', 'POST', form); setForm({ ...form, username: '', password: '' }); setUsers(await (await fetch('/api/admin/users')).json().then((j) => j.users || [])); }
+    try {
+      await jsend('/api/admin/users', 'POST', form);
+      setForm({ ...form, username: '', password: '' });
+      await herhaal();
+    } catch (e) { setMsg(e.message); }
+  }
+  async function del(u) {
+    if (!confirm(t('usr.confirm', { name: u.username }))) return;
+    try { await jsend('/api/admin/users?id=' + u.id, 'DELETE'); await herhaal(); } catch (e) { setMsg(e.message); }
+  }
+  async function patch(id, v) {
+    setMsg('');
+    try { await jsend('/api/admin/users', 'PATCH', { id, ...v }); await herhaal(); }
     catch (e) { setMsg(e.message); }
   }
-  async function del(u) { if (!confirm(t('usr.confirm', { name: u.username }))) return; await jsend('/api/admin/users?id=' + u.id, 'DELETE'); setUsers(await (await fetch('/api/admin/users')).json().then((j) => j.users || [])); }
+  function zetCap(u, cap, aan) {
+    const set = new Set(effectieveCaps(u));
+    if (aan) set.add(cap); else set.delete(cap);
+    patch(u.id, { perms: [...set] });
+  }
   return (
-    <Modal title="Accounts" onClose={onClose}>
-      <div className="space-y-2 text-xs mb-4">
-        {users.map((u) => (
-          <div key={u.id} className="flex items-center gap-2 bg-black/30 border border-bronze/20 rounded px-2 py-1.5">
-            <b className="text-parch">{u.username}</b><span className="text-parch/50">{u.role}</span><span className="text-copper">{u.team || ''}</span>
-            <button onClick={() => del(u)} className="ml-auto hover:text-red-300"><Trash2 className="size-3.5" /></button>
-          </div>
-        ))}
+    <Modal title={t('adm.beheren')} onClose={onClose} wide>
+      <div className="space-y-1.5 text-xs mb-4">
+        {users.map((u) => {
+          const caps = new Set(effectieveCaps(u));
+          const raak = eigenaar || (magBeheren && u.role !== 'owner');   // eigenaars alleen door de eigenaar
+          const open = uit === u.id;
+          return (
+            <div key={u.id} className="rounded-lg border border-bronze/20 bg-black/30">
+              <div className="flex items-center gap-2 px-2 py-1.5">
+                <button disabled={!raak} onClick={() => setUit(open ? null : u.id)} className={`p-0.5 text-parch/50 ${raak ? 'hover:text-gold' : 'opacity-30'} ${u.role === 'owner' ? 'invisible' : ''}`}><ChevronRight className={`size-3.5 transition-transform ${open ? 'rotate-90' : ''}`} /></button>
+                <b className="text-parch">{u.username}</b>
+                <span className={`text-[10px] rounded-full px-1.5 py-0.5 ${u.role === 'owner' ? 'bg-gold/20 text-gold' : 'bg-white/5 text-parch/60'}`}>{u.role}</span>
+                <span className="text-copper text-[11px]">{u.team || ''}</span>
+                <span className="text-parch/40 ml-auto text-[10px]">{u.perms == null ? t('usr.standaard') : caps.size + ' ' + t('usr.caps_kort')}</span>
+                {raak && <button onClick={() => del(u)} className="hover:text-red-300 p-1"><Trash2 className="size-3.5" /></button>}
+              </div>
+              {open && raak && (
+                <div className="border-t border-white/5 px-3 py-2 space-y-3">
+                  <section>
+                    <h4 className="text-gold/80 font-bold mb-1">{t('usr.caps_titel')}</h4>
+                    <div className="grid sm:grid-cols-2 gap-x-3 gap-y-1">
+                      {CAPS.map(([cap, en]) => {
+                        const prive = PRIV.has(cap);
+                        const kanZetten = eigenaar || !prive;
+                        return (
+                          <label key={cap} className={`flex items-start gap-2 text-[11px] ${kanZetten ? 'cursor-pointer' : 'opacity-45 cursor-not-allowed'}`} title={kanZetten ? '' : t('usr.priv_only')}>
+                            <input type="checkbox" className="mt-0.5 accent-gold" checked={caps.has(cap)} disabled={!kanZetten} onChange={(e) => zetCap(u, cap, e.target.checked)} />
+                            <span className="text-parch/85">{t('cap.' + cap)}{prive && <span className="text-copper"> · ★</span>}<span className="block text-[9px] text-parch/40">{en}</span></span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    <p className="text-[10px] text-parch/45 mt-1.5">{u.perms == null ? t('usr.perms_hint_standaard') : t('usr.perms_hint_aangepast')}</p>
+                    {u.perms != null && <button onClick={() => patch(u.id, { perms: null })} className="text-[10px] text-copper underline underline-offset-2 hover:text-gold">{t('usr.perms_reset')}</button>}
+                  </section>
+                  <section className="flex flex-wrap items-center gap-2">
+                    <input placeholder={t('usr.ph_team')} value={team[u.id] ?? u.team ?? ''} onChange={(e) => setTeam({ ...team, [u.id]: e.target.value })} className="bg-black/40 border border-bronze/30 rounded px-2 py-1.5 w-32" />
+                    <button onClick={() => patch(u.id, { team: team[u.id] ?? '' })} className="bg-white/5 border border-bronze/30 rounded px-2 py-1.5 hover:bg-white/10">{t('usr.team_set')}</button>
+                    <input placeholder={t('usr.pw_ph')} type="password" value={wacht[u.id] ?? ''} onChange={(e) => setWacht({ ...wacht, [u.id]: e.target.value })} className="bg-black/40 border border-bronze/30 rounded px-2 py-1.5 w-40" />
+                    <button disabled={(wacht[u.id] || '').length < 10} onClick={async () => { await patch(u.id, { password: wacht[u.id] }); setWacht({ ...wacht, [u.id]: '' }); }}
+                      className="bg-white/5 border border-bronze/30 rounded px-2 py-1.5 hover:bg-white/10 disabled:opacity-40">{t('usr.pw_set')}</button>
+                  </section>
+                  {eigenaar && (
+                    <section className="flex items-center gap-2">
+                      <span className="text-parch/60">{t('usr.role')}:</span>
+                      <select value={u.role} onChange={(e) => patch(u.id, { role: e.target.value })} className="bg-black/40 border border-bronze/30 rounded px-2 py-1">
+                        <option value="staff">staff</option><option value="owner">owner</option>
+                      </select>
+                    </section>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
+      <h4 className="text-gold font-bold text-xs mb-2">{t('usr.create')}</h4>
       <div className="grid grid-cols-2 gap-2 text-xs">
         <input placeholder={t('usr.ph_user')} value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} className="bg-black/40 border border-bronze/30 rounded px-2 py-1.5" />
         <input placeholder={t('usr.ph_pass')} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="bg-black/40 border border-bronze/30 rounded px-2 py-1.5" />
         <input placeholder={t('usr.ph_team')} value={form.team} onChange={(e) => setForm({ ...form, team: e.target.value })} className="bg-black/40 border border-bronze/30 rounded px-2 py-1.5" />
         <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className="bg-black/40 border border-bronze/30 rounded px-2 py-1.5">
-          <option value="staff">staff</option><option value="owner">owner</option>
+          <option value="staff">staff</option>{eigenaar && <option value="owner">owner</option>}
         </select>
         <button onClick={add} className="col-span-2 bg-gold/90 text-ink rounded-lg py-1.5 font-bold">{t('usr.create')}</button>
       </div>

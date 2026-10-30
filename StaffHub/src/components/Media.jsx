@@ -13,7 +13,7 @@
 // model opent, sleepdt nooit 600 KB mee.
 
 import { useEffect, useRef, useState } from 'react';
-import { Play, Pause, Square, SkipBack, SkipForward, Shuffle, Repeat, Move3d } from 'lucide-react';
+import { Play, Pause, Square, SkipBack, SkipForward, Shuffle, Repeat, Move3d, Maximize2 } from 'lucide-react';
 import { useLang } from '@/lib/i18n';
 
 export const AUDIO_EXT = ['mp3', 'ogg', 'oga', 'opus', 'wav', 'm4a', 'aac', 'flac'];
@@ -148,18 +148,37 @@ export function MediaPlayer({ kind, id, naam, lijst }) {
 
 /**
  * 3D-kijker voor .glb/.gltf én .bbmodel (three.js, lui geladen). Sleep draait,
- * scroll zoomt, animaties uit Blockbench/Blender spoelen vanzelf; knop voor
- * automatisch draaien en herframe. .bbmodel (Blockbench-PROJECT, json met cubes
- * + base64-texturen) wordt door eigen builder naar meshes omgezet: statische
- * pose, per textuur één mesh - voldoende om een model te beoordelen.
+ * scroll zoomt, animaties uit Blockbench/Blender spoelen vanzelf.
+ *
+ * Sinds 0.5.0 is dit méér dan een raampje: de kijker is dé plek waar een
+ * staff-lid een model BEOORDEELT, dus hij heeft
+ *   - drie weergaven: textuur (hoe het eruitziet), klei (hoe het GEBOUWD is,
+ *     zonder ruis van textuur) en draadmodel (kaal skelet, voor overlap);
+ *   - bij .bbmodel een textuurpaneel: elke atlas als thumbnail, klikbaar om
+ *     die textuur te verbergen - zo zie je in één draai welke cube bij welke
+ *     plaat hoort en of een UV-verkeerd zit;
+ *   - een fullscreen-knop (de popup eromheen is al groot, maar een model op
+ *     de volle hoogte van het scherm beoordelen is nét even prettiger);
+ *   - een inforegeltje: elementen, texturen en de resolution van het
+ *     project, want "12 elementen, 1 textuur" verraadt een luie textuurbeurt.
+ *
+ * .bbmodel (Blockbench-PROJECT, json met cubes + base64-texturen) wordt door
+ * eigen builder (lib/bbmodel) naar meshes omgezet: statische pose, per textuur
+ * één mesh.
+ *
+ * @param groot  groter canvas (62% van het scherm) - de popup-setting
  */
-export function Model3D({ url, naam }) {
+export function Model3D({ url, naam, groot = false }) {
   const { t } = useLang();
   const doosRef = useRef(null);
   const [klaar, setKlaar] = useState(false);
   const [fout, setFout] = useState('');
   const apiRef = useRef(null);
   const [spin, setSpin] = useState(true);
+  const [modus, setModus] = useState('textuur');       // textuur | klei | draad
+  const [texturen, setTexturen] = useState([]);         // bbmodel-only: [{idx,naam,src}]
+  const [meta, setMeta] = useState(null);               // bbmodel-only: {elementen, texturen, res}
+  const [verberg, setVerberg] = useState(() => new Set());
 
   useEffect(() => {
     let weg = false;
@@ -171,7 +190,7 @@ export function Model3D({ url, naam }) {
         const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
         if (weg) return;
         const breed = () => doos.clientWidth || 380;
-        const hoog = () => Math.max(240, Math.min(420, window.innerHeight * 0.45));
+        const hoog = () => Math.max(groot ? 360 : 240, Math.min(window.innerHeight * (groot ? 0.62 : 0.45), groot ? 1400 : 420));
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, breed() / hoog(), 0.01, 2000);
         camera.position.set(2.2, 1.8, 2.6);
@@ -210,6 +229,10 @@ export function Model3D({ url, naam }) {
           object.position.y -= bb.min.y;                            // op het raster zetten
           scene.add(object);
         }
+        // kleimateriaal: één gedeeld, goedkoop, lichtgevoelig (standaard Lambert)
+        const klei = new THREE.MeshLambertMaterial({ color: 0xd8dee9 });
+        const meshList = [];
+        if (object) object.traverse((m) => { if (m.isMesh) { m.userData.orgMat = m.material; meshList.push(m); } });
         const hor = () => {
           if (weg) return;
           requestAnimationFrame(hor);
@@ -219,7 +242,23 @@ export function Model3D({ url, naam }) {
           renderer.render(scene, camera);
         };
         requestAnimationFrame(hor);
-        apiRef.current = { spin, herstel: () => { camera.position.set(2.2, 1.8, 2.6); controls.target.set(0, 0, 0); controls.update(); } };
+        const herframe = () => {
+          // canvas-grootte volgt de doos: ook na fullscreen-wissel en ruit-schaal
+          const b = breed(), h = hoog();
+          renderer.setSize(b, h);
+          camera.aspect = b / h; camera.updateProjectionMatrix();
+        };
+        window.addEventListener('resize', herframe);
+        const ws = () => { if (!document.fullscreenElement) window.removeEventListener('resize', herframe); };
+        document.addEventListener('fullscreenchange', herframe);
+        document.addEventListener('fullscreenchange', ws);
+        apiRef.current = {
+          spin, herstel: () => { camera.position.set(2.2, 1.8, 2.6); controls.target.set(0, 0, 0); controls.update(); },
+          meshes: meshList, klei,
+          full: () => { const d = doosRef.current; if (d?.requestFullscreen) d.requestFullscreen().then(herframe).catch(() => { }); },
+        };
+        setTexturen(object?.userData?.bb?.texturen || []);
+        setMeta(object?.userData?.bb ? { elementen: object.userData.bb.elementen, texturen: object.userData.bb.texturen.length, res: object.userData.bb.res } : null);
         setKlaar(true);
       } catch (e) { if (!weg) setFout(String(e?.message || e)); }
     })();
@@ -230,20 +269,65 @@ export function Model3D({ url, naam }) {
     };
   }, [url, naam]); // eslint-disable-line
 
+  // weergave-modus doorzetten naar de levende meshes (de scène leeft in apiRef)
+  useEffect(() => {
+    const api = apiRef.current; if (!api?.meshes) return;
+    for (const m of api.meshes) {
+      const org = m.userData.orgMat;
+      if (modus === 'klei') m.material = api.klei;
+      else { m.material = org; if (org) org.wireframe = modus === 'draad'; }
+    }
+  }, [modus, klaar]);
+
+  // textuur-aan/uit (bbmodel): de mesh van dát atlas wegtoveren, rest blijft
+  useEffect(() => {
+    const api = apiRef.current; if (!api?.meshes) return;
+    for (const m of api.meshes) if (m.userData.tex !== undefined) m.visible = !verberg.has(m.userData.tex);
+  }, [verberg, klaar]);
+
   if (fout === 'bbmodel') return <p className="text-[11px] text-parch/60 bg-black/30 border border-bronze/25 rounded-lg p-2">{t('med.bbmodel')}</p>;
+  const MOD = [['textuur', t('med.mod_tex')], ['klei', t('med.mod_clay')], ['draad', t('med.mod_wire')]];
   return (
-    <div className="space-y-1">
-      <div ref={doosRef} className="relative w-full rounded-lg border border-bronze/30 bg-black/50 overflow-hidden">
-        {!klaar && !fout && <div className="absolute inset-0 grid place-items-center text-[11px] text-parch/50">…</div>}
-        {fout && <div className="absolute inset-0 grid place-items-center text-[11px] text-red-300/80 p-2 text-center">{fout}</div>}
+    <div className="flex gap-2 items-start">
+      <div className="flex-1 min-w-0 space-y-1">
+        <div ref={doosRef} className={`relative w-full rounded-lg border border-bronze/30 bg-black/50 overflow-hidden ${groot ? 'min-h-[360px]' : ''}`}>
+          {!klaar && !fout && <div className="absolute inset-0 grid place-items-center text-[11px] text-parch/50">…</div>}
+          {fout && <div className="absolute inset-0 grid place-items-center text-[11px] text-red-300/80 p-2 text-center">{fout}</div>}
+        </div>
+        <div className="flex items-center gap-1 flex-wrap">
+          {MOD.map(([k, lab]) => (
+            <button key={k} className={`px-2 py-1 rounded text-[10px] border ${modus === k ? 'bg-gold/15 border-gold/60 text-gold' : 'border-bronze/30 text-parch/60 hover:border-gold/50'}`} onClick={() => setModus(k)} title={lab}>{lab}</button>
+          ))}
+          <span className="w-1" />
+          <button className={`${BNA} ${spin ? 'text-gold bg-gold/10' : ''}`} title={t('med.draaien')} onClick={() => { const aan = !spin; setSpin(aan); if (apiRef.current) apiRef.current.spin = aan; }}><Move3d className="size-4" /></button>
+          <button className={BNA} title={t('med.herframe')} onClick={() => apiRef.current?.herstel()}>
+            <span className="text-sm leading-none">⟲</span>
+          </button>
+          <button className={BNA} title={t('med.full')} onClick={() => apiRef.current?.full()}><Maximize2 className="size-4" /></button>
+          <span className="text-[10px] text-parch/45 ml-1">{meta ? `${meta.elementen} ${t('med.el')} · ${meta.texturen} ${t('med.tx')} · ${meta.res} px` : t('med.draai_hint')}</span>
+        </div>
       </div>
-      <div className="flex items-center gap-1">
-        <button className={`${BNA} ${spin ? 'text-gold bg-gold/10' : ''}`} title={t('med.draaien')} onClick={() => { const aan = !spin; setSpin(aan); if (apiRef.current) apiRef.current.spin = aan; }}><Move3d className="size-4" /></button>
-        <button className={BNA} title={t('med.herframe')} onClick={() => apiRef.current?.herstel()}>
-          <span className="text-sm leading-none">⟲</span>
-        </button>
-        <span className="text-[10px] text-parch/45 ml-1">{t('med.draai_hint')}</span>
-      </div>
+      {/* textuurpaneel: alleen bij bbmodels die texturen meekregen */}
+      {klaar && texturen.length > 0 && (
+        <div className="w-40 shrink-0 space-y-1">
+          <p className="text-[9px] uppercase tracking-wider text-parch/45">{t('med.texturen')}</p>
+          <div className="max-h-[46vh] overflow-auto space-y-1 pr-0.5">
+            {texturen.map((tx) => (
+              <button key={tx.idx}
+                onClick={() => setVerberg((v) => { const s = new Set(v); if (s.has(tx.idx)) s.delete(tx.idx); else s.add(tx.idx); return s; })}
+                title={verberg.has(tx.idx) ? t('med.tex_show') : t('med.tex_hide')}
+                className={`w-full rounded-lg border p-1 text-left transition-colors ${verberg.has(tx.idx) ? 'border-bronze/20 bg-black/20 opacity-45' : 'border-gold/40 bg-black/40'}`}>
+                {tx.src
+                  ? <img src={tx.src} alt="" className="w-full h-14 object-contain rounded bg-black/60 [image-rendering:pixelated]" />
+                  : <div className="w-full h-14 rounded bg-black/60 grid place-items-center text-[9px] text-parch/40">{t('fp.unreadable')}</div>}
+                <p className="text-[9px] text-parch/70 truncate mt-0.5">{tx.naam}</p>
+                <p className="text-[8px] text-parch/40 tabular-nums">{tx.vlakken} × {t('med.vlakken')}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

@@ -14,7 +14,7 @@
 //  - bronnen als chips: een antwoord zonder aanwijsbare gids is hier niets waard;
 //  - geschiedenis in localStorage: een herladen wisste het hele gesprek.
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Bot, ChevronDown, ChevronRight, Search, Sparkles, FileText, Folder, File as FileIcon, RefreshCw } from 'lucide-react';
+import { Bot, Search, Sparkles, FileText, Folder, File as FileIcon, RefreshCw } from 'lucide-react';
 import { useLang, trServer } from '@/lib/i18n';
 import { mdNaarJSX } from '@/lib/mdLite';
 
@@ -23,7 +23,6 @@ const SLEUTEL = 'staffhub_board';
 
 export default function Assistant({ onOpen }) {
   const { t, lang } = useLang();
-  const [open, setOpen] = useState(true);
   const [mode, setMode] = useState('zoek');
   const [q, setQ] = useState('');
   const [log, setLog] = useState([]);
@@ -93,22 +92,23 @@ export default function Assistant({ onOpen }) {
   const lamp = !st ? 'bg-parch/30' : st.on ? 'bg-emerald-400' : 'bg-red-400';
   const lampTekst = !st ? t('ai.check') : st.on ? `${t('ai.aan')} · ${st.model || ''}` : `${t('ai.uit')} · ${trServer(st.reden || '')}`;
 
+  // Sinds 0.5.0 vult de assistent zijn eigen kolom: geen inklapbare doos meer
+  // boven een voorbeeld-ruite, maar het gesprek als hoofdonderwerp - de hele
+  // dag door, met de invoer onderaan plakt en het log erboven scrollbar-end.
   return (
-    <div className="border-b border-bronze/20 bg-black/10">
+    <div className="flex-1 flex flex-col min-h-0 bg-black/10">
       {/* kop */}
-      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 px-3 py-2 text-xs hover:bg-white/5">
+      <div className="flex items-center gap-2 px-3 py-2.5 text-xs border-b border-bronze/20 shrink-0">
         <Bot className="size-4 text-gold shrink-0" />
-        <b className="text-gold shrink-0">{t('ai.title')}</b>
+        <b className="text-gold shrink-0 text-sm">{t('ai.title')}</b>
         <span className={`size-2 rounded-full shrink-0 ${lamp}`} title={lampTekst} />
         <span className="text-parch/40 truncate">{lampTekst}</span>
         {log.length > 0 && (
-          <span onClick={(e) => { e.stopPropagation(); wissen(); }} title={t('ai.nieuw')} className="ml-auto shrink-0 p-1 rounded hover:bg-white/10"><RefreshCw className="size-3.5" /></span>
+          <button onClick={wissen} title={t('ai.nieuw')} className="ml-auto shrink-0 p-1 rounded hover:bg-white/10"><RefreshCw className="size-3.5" /></button>
         )}
-        {open ? <ChevronDown className={`size-3.5 ${log.length ? '' : 'ml-auto'} text-parch/50 shrink-0`} /> : <ChevronRight className={`size-3.5 ${log.length ? '' : 'ml-auto'} text-parch/50 shrink-0`} />}
-      </button>
+      </div>
 
-      {open && (
-        <div className="px-3 pb-3">
+      <div className="flex-1 flex flex-col min-h-0 px-3 pb-3 pt-2">
           {/* modus */}
           <div className="flex gap-1 mb-2">
             <button onClick={() => setMode('zoek')} title={t('ai.hint')} className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] border ${mode === 'zoek' ? 'bg-gold/20 border-gold/50 text-gold' : 'bg-white/5 border-bronze/30 text-parch/60'}`}>
@@ -135,7 +135,7 @@ export default function Assistant({ onOpen }) {
               </div>
             </div>
           ) : (
-            <div className="space-y-2 max-h-[40vh] overflow-auto mb-2 pr-1">
+            <div className="space-y-2 flex-1 min-h-0 overflow-auto mb-2 pr-1">
               {log.map((m, i) => (
                 <div key={i}>
                   <div className="bg-gold/10 border border-gold/25 rounded-lg px-2.5 py-1.5 text-xs text-parch/90">{m.ask}</div>
@@ -202,7 +202,7 @@ export default function Assistant({ onOpen }) {
             </div>
           )}
 
-          <form onSubmit={(e) => { e.preventDefault(); vraag(); }} className="flex gap-1">
+          <form onSubmit={(e) => { e.preventDefault(); vraag(); }} className="flex gap-1 shrink-0">
             <div className="relative flex-1">
               <Search className="absolute left-2 top-2 size-3.5 text-parch/40" />
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={mode === 'ai' ? t('ai.ph_ai') : t('ai.ph')}
@@ -213,7 +213,6 @@ export default function Assistant({ onOpen }) {
             </button>
           </form>
         </div>
-      )}
     </div>
   );
 }

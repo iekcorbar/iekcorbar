@@ -1,7 +1,7 @@
 // Versiegeschiedenis: lijst + terugdraaien (terugdraaien = oude versie als nieuwste bovenop).
 import { getDb, now } from '@/lib/db';
 import { me } from '@/lib/auth';
-import { canSee, canWrite } from '@/lib/acl';
+import { canSee, canWrite, may } from '@/lib/acl';
 
 export async function GET(req, { params }) {
   const u = await me();
@@ -19,6 +19,7 @@ export async function POST(req, { params }) {
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
   const { id } = await params;
   const { version } = await req.json().catch(() => ({}));
+  if (!may(u, 'upload')) return Response.json({ error: 'verboden' }, { status: 403 });    // terugdraaien = bestandsinhoud wijzigen
   const d = getDb();
   const n = d.prepare('SELECT * FROM nodes WHERE id = ?').get(Number(id));
   if (!n || n.type !== 'file' || !canWrite(u, n)) return Response.json({ error: 'verboden' }, { status: 403 });

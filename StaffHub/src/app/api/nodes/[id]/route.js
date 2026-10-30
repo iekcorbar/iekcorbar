@@ -3,7 +3,7 @@
 // begint buiten elke map en de hub moet dan weten wát het is en waar het woont.
 import { getDb, clean, uniqueName, findChild, now, deleteNodeTree, gcBlobs, latestVersion } from '@/lib/db';
 import { me } from '@/lib/auth';
-import { canSee, canWrite, effectiveVis } from '@/lib/acl';
+import { canSee, canWrite, effectiveVis, may } from '@/lib/acl';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,6 +32,10 @@ export async function PATCH(req, { params }) {
   if (!canWrite(u, n)) return Response.json({ error: 'verboden' }, { status: 403 });
   const body = await req.json().catch(() => ({}));
 
+  // naam/ouder = schuiven met de inboedel: cap 'move' (standaand aan voor staff)
+  if ((body.name != null || body.parent !== undefined) && !may(u, 'move'))
+    return Response.json({ error: 'verboden' }, { status: 403 });
+
   if (body.name != null) {
     const nm = clean(body.name);
     if (!nm) return Response.json({ error: 'lege naam' }, { status: 400 });
@@ -57,7 +61,7 @@ export async function PATCH(req, { params }) {
     if (n.type === 'folder') d.prepare('UPDATE nodes SET vis = NULL, team = NULL WHERE parent = ?').run(n.id); // kinderen erven opnieuw
   }
   if (body.vis !== undefined) {
-    if (u.role !== 'owner' && body.vis === 'owner') return Response.json({ error: 'verboden' }, { status: 403 });
+    if (!may(u, 'ownervis') && body.vis === 'owner') return Response.json({ error: 'verboden' }, { status: 403 });
     const vis = ['all', 'team', 'owner', null].includes(body.vis) ? body.vis : null;
     d.prepare('UPDATE nodes SET vis = ?, team = ?, updated = ? WHERE id = ?').run(vis, vis === 'team' ? (body.team || u.team || null) : null, now(), n.id);
   }
@@ -67,6 +71,7 @@ export async function PATCH(req, { params }) {
 export async function DELETE(req, { params }) {
   const u = await me();
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
+  if (!may(u, 'purge')) return Response.json({ error: 'verboden' }, { status: 403 });   // echt verwijderen, niet terug te draaien
   const { id } = await params;
   const n = getDb().prepare('SELECT * FROM nodes WHERE id = ?').get(Number(id));
   if (!n) return Response.json({ ok: true });

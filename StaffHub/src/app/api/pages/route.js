@@ -1,11 +1,12 @@
 // Nieuwe handleiding-pagina aanmaken (type 'page' in de mappenboom).
 import { getDb, clean, uniqueName, findChild, now } from '@/lib/db';
 import { me } from '@/lib/auth';
-import { canSee, canWrite } from '@/lib/acl';
+import { canSee, canWrite, may } from '@/lib/acl';
 
 export async function POST(req) {
   const u = await me();
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
+  if (!may(u, 'pages')) return Response.json({ error: 'verboden' }, { status: 403 });    // cap 'pages' (lib/caps)
   const { parent, name, html } = await req.json().catch(() => ({}));
   const d = getDb();
   const nm = clean(name) || 'Nieuwe handleiding';

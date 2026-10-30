@@ -109,6 +109,7 @@ function migrate(d) {
   // deep-sync-kolommen doet. hasColumn() is hier want SQLite kent geen
   // "ADD COLUMN IF NOT EXISTS".
   if (!hasColumn(d, 'users', 'prefs')) d.exec('ALTER TABLE users ADD COLUMN prefs TEXT');
+  if (!hasColumn(d, 'users', 'perms')) d.exec('ALTER TABLE users ADD COLUMN perms TEXT');
   if (!hasColumn(d, 'sessions', 'agent')) d.exec('ALTER TABLE sessions ADD COLUMN agent TEXT');
 }
 

@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import { getDb, clean, uniqueName, findChild, storeBlob, now } from '@/lib/db';
 import { me } from '@/lib/auth';
-import { canSee, canWrite } from '@/lib/acl';
+import { canSee, canWrite, may } from '@/lib/acl';
 
 const MAX = 512 * 1024 * 1024;
 
@@ -27,6 +27,7 @@ async function ensurePath(u, base, parts) {
 export async function POST(req) {
   const u = await me();
   if (!u) return Response.json({ error: 'login' }, { status: 401 });
+  if (!may(u, 'upload')) return Response.json({ error: 'verboden' }, { status: 403 });   // cap 'upload' (lib/caps)
   const form = await req.formData().catch(() => null);
   if (!form) return Response.json({ error: 'verwacht multipart/form-data' }, { status: 400 });
   const parentRaw = form.get('parent');

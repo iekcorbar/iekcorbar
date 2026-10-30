@@ -33,15 +33,15 @@ function textureVan(THREE, entry, base64map) {
     const b64 = base64map[entry.path];
     src = b64.startsWith('data:') ? b64 : 'data:image/png;base64,' + b64;
   }
-  if (!src || !src.startsWith('data:')) return null;
+  if (!src || !src.startsWith('data:')) return { tex: null, src: '' };
   try {
     const tex = new THREE.TextureLoader().load(src);
     tex.magFilter = THREE.NearestFilter;         // blok-textuur: scherp, geen blur
     tex.minFilter = THREE.NearestFilter;
     tex.generateMipmaps = false;
     if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-    return tex;
-  } catch { return null; }                       // outside the browser (smoke test): gray substitute
+    return { tex, src };
+  } catch { return { tex: null, src }; }        // outside the browser (smoke test): gray substitute
 }
 
 /**
@@ -55,10 +55,13 @@ export function bouwBbmodel(THREE, data) {
   const b64 = data?.textures_base64 || {};
   const groep = new THREE.Group();
   const bakken = new Map();                    // textuur-index -> {pos[], uv[], entry}
+  const lijst = [];                            // per gebruikte textuur: naam + base64 + vlakken (de kijker toont dit)
+  let teller = 0;                              // meegenomen kubussen
 
   for (const el of data?.elements || []) {
     if ((el.type || 'cube') !== 'cube') continue;              // cilinders/meshes: overslaan
     if (!el.from || !el.to || !el.faces) continue;
+    teller++;
     const f = el.from, t = el.to;
     const x0 = Math.min(f[0], t[0]) / res, x1 = Math.max(f[0], t[0]) / res;
     const y0 = Math.min(f[1], t[1]) / res, y1 = Math.max(f[1], t[1]) / res;
@@ -97,12 +100,12 @@ export function bouwBbmodel(THREE, data) {
     }
   }
 
-  for (const { pos, uv, entry } of bakken.values()) {
+  for (const [idx, { pos, uv, entry }] of [...bakken.entries()]) {
     if (!pos.length) continue;
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
-    const map = textureVan(THREE, entry, b64);
+    const { tex: map, src } = textureVan(THREE, entry, b64);
     const mat = new THREE.MeshBasicMaterial({
       map: map || undefined,
       color: map ? 0xffffff : 0x9aa4b2,          // geen textuur: staalgris
@@ -110,7 +113,16 @@ export function bouwBbmodel(THREE, data) {
       alphaTest: 0.5,
       side: THREE.DoubleSide,
     });
-    groep.add(new THREE.Mesh(geo, mat));
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.userData.tex = idx;                     // de kijker zet hier zichtbaarheid op
+    groep.add(mesh);
+    lijst.push({
+      idx,
+      naam: String(entry?.name || entry?.path || 'texture ' + idx).split(/[\\/]/).pop(),
+      src,
+      vlakken: pos.length / 18,                   // 3 hoekpunten x 2 driehoeken x 3 coordinaten = 18 pos-getallen per vlak
+    });
   }
+  groep.userData.bb = { res, elementen: teller, texturen: lijst };
   return groep;
 }

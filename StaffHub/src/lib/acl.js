@@ -1,6 +1,11 @@
 // Zichtbaarheid: een node erft van zijn ouders tenzij hij zelf iets stelt in.
 // 'all' = iedereen, 'team' = alleen dat team, 'owner' = alleen eigenaar + owners.
+// Sinds 0.5.0 kan de eigenaar het 'owner'-doorlatrecht weggeven aan een lid
+// (cap 'ownervis', zie lib/caps) - verder blijft alles ouderwets.
 import { getDb, ancestors } from './db.js';
+import { may } from './caps.js';
+
+export { may } from './caps.js';
 
 export function effectiveVis(node) {
   if (node.vis) return { vis: node.vis, team: node.team };
@@ -15,7 +20,7 @@ export function canSee(user, node) {
   const { vis, team } = effectiveVis(node);
   if (vis === 'all') return true;
   if (vis === 'team') return !!team && user.team === team;
-  return false; // 'owner'-map: alleen de eigenaar (hierboven) of een site-owner
+  return may(user, 'ownervis'); // 'owner'-plaats: alleen met uitgereikt doorlaatrecht
 }
 
 export function canWrite(user, node) {

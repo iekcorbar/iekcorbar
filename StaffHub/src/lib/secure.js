@@ -38,12 +38,14 @@ export function userFromSid(token) {
   const d = getDb();
   const s = d.prepare('SELECT * FROM sessions WHERE token = ? AND expires > ?').get(token, now());
   if (!s) return null;
-  const u = d.prepare('SELECT id,username,role,team,prefs FROM users WHERE id = ?').get(s.user);
+  const u = d.prepare('SELECT id,username,role,team,prefs,perms FROM users WHERE id = ?').get(s.user);
   if (!u) return null;
   let prefs = null;
   try { prefs = u.prefs ? JSON.parse(u.prefs) : null; } catch { prefs = null; }
-  const { prefs: _weg, ...rest } = u;
-  return { ...rest, prefs };
+  let perms = null;                            // uitgereikte bekwaamheden (lib/caps)
+  try { perms = u.perms ? JSON.parse(u.perms) : null; } catch { perms = null; }
+  const { prefs: _weg, perms: _perms, ...rest } = u;
+  return { ...rest, prefs, perms };
 }
 
 /** Basic-auth (wachtwoord óf WebDAV-token) voor /dav. */
@@ -52,11 +54,14 @@ export function userFromBasic(header) {
   try {
     const [u, p] = Buffer.from(header.slice(6), 'base64').toString('utf8').split(':');
     const d = getDb();
-    const user = d.prepare('SELECT id,username,role,team,pass FROM users WHERE username = ?').get(String(u).toLowerCase());
+    const user = d.prepare('SELECT id,username,role,team,pass,perms FROM users WHERE username = ?').get(String(u).toLowerCase());
     if (!user) return null;
-    if (checkPass(p, user.pass)) return { id: user.id, username: user.username, role: user.role, team: user.team };
+    let perms = null;                          // meenemen: /dav checkt dezelfde caps als de web-UI
+    try { perms = user.perms ? JSON.parse(user.perms) : null; } catch { perms = null; }
+    const basis = { id: user.id, username: user.username, role: user.role, team: user.team, perms };
+    if (checkPass(p, user.pass)) return basis;
     const t = d.prepare('SELECT * FROM davtokens WHERE token = ? AND user = ?').get(p, user.id);
-    if (t) return { id: user.id, username: user.username, role: user.role, team: user.team };
+    if (t) return basis;
     return null;
   } catch { return null; }
 }

@@ -1,10 +1,11 @@
 import { getDb, clean, uniqueName, findChild, now } from '@/lib/db';
 import { me, needUser } from '@/lib/auth';
-import { canWrite, canSee } from '@/lib/acl';
+import { canWrite, canSee, may } from '@/lib/acl';
 
 export async function POST(req) {
   const u = await me();
   try { needUser(u); } catch { return Response.json({ error: 'login' }, { status: 401 }); }
+  if (!may(u, 'upload')) return Response.json({ error: 'verboden' }, { status: 403 });   // mappen maken hoort bij uploaden
   const { parent, name, vis, team } = await req.json().catch(() => ({}));
   const d = getDb();
   const nm = clean(name);
@@ -15,7 +16,7 @@ export async function POST(req) {
     const p = d.prepare('SELECT * FROM nodes WHERE id = ?').get(pid);
     if (!p || p.type !== 'folder') return Response.json({ error: 'Ouder bestaat niet' }, { status: 400 });
     if (!canSee(u, p) || !canWrite(u, p)) return Response.json({ error: 'Verboden' }, { status: 403 });
-  } else if (u.role !== 'owner' && (vis === 'owner')) {
+  } else if (!may(u, 'ownervis') && (vis === 'owner')) {
     return Response.json({ error: 'Alleen owners maken besloten mappen' }, { status: 403 });
   }
   const dup = findChild(pid, nm);
