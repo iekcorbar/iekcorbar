@@ -1756,6 +1756,46 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### StaffHub 0.5.0 - permissies per lid + de grote UX-ronde (30-10, ~13:05 live)
+
+- Eigenaarswish: "permissies per lid instellen (wat ik alleen kan doen);
+  documenten als popup; AI uitgebreid; zijbalk weg; mappen intuïtiever; andere
+  manier om bbmodels te tonen" - alles gebouwd en uitgerold (13:05 hosttijd).
+- PERMISSIES: `lib/caps.js` = de caplijst (9 stuks). Twee lagen: werkrechten
+  (upload/pages/trash/move/tokens) heeft staff vanzelf zolang de eigenaar
+  NIETS instelt (users.perms NULL = oude gedrag, geen verrassing); de vier
+  vorendrechten (ownervis/purge/users/admin) staan UIT en kunnen ALLÉÉN door
+  de eigenaar worden weggegeven. Anti-escalatie in de API: een 'users'-houder
+  maakt geen eigenaars, raakt geen eigenaarsaccounts en filtert Priv-caps uit
+  elk voorstel (sanitizePerms). Alle schrijfwachten op de routes gezet
+  (upload/folders/pages/page/nodes/trash/tokens/archive/versions + admin/oversicht
+  kijk-recht; sessies intrekken blijft eigenaar-persoonlijk). WebDAV-basis
+  draagt perms mee. Bewaken: 'legenen' was vroeger voor iedereen met schrijf-
+  recht - sinds nu expliciete 'purge'-cap (aanscherping, bewust).
+- UI permissies: Accounts-venster heeft per rij een uitklapper met 9 vinkjes
+  (priv gearceerd ★ + tooltip), team/wachtwoord-reset, rol-zetters voor de
+  eigenaar, plus "terug naar standaardrechten".
+- LAYOUT: zijbalk/boom WEG. Mappen = tegels met item-aantallen (tree-route
+  telt in één GROUP BY), broodkruimel + home-knop bovenaan, documenten openen
+  als vrijwel-vullende popup (Esc sluit, laag-voor-laag), verplaatsen via een
+  MoveModal die zélf door de mappen bladdert (slepen-naar-tegel blijft werken).
+- AI: de assistent vult nu een eigen rechterkolom (430px) - gesprek groeit,
+  invoer plakt onderaan; bron-chips openen het document in de popup. Mobiel:
+  gouden zwevende knop → assistent fullscreen. Vertaalbalk mee de popup in.
+- BBMODEL-KIJKER (Media.jsx Model3D + lib/bbmodel metadata): drie weergaven
+  (textuur/klei/draad), textuurpaneel met per-atlas thumbnail + klikbaar
+  verbergen, fullscreen-knop, inforegel elementen/texturen/resolutie. De
+  bbmodel-bouwer geeft nu `groep.userData.bb` mee (één mesh per atlas met
+  userData.tex). Groepen worden nog steeds niet hiërarchisch getoond -
+  statische pose als voorheen, wél per textuur aan/uit.
+- i18n: 274 toetsen × 4 talen, check_i18n groen. Versie 0.4.11 → 0.5.0.
+- UITGEROLD als telkens: tar (src+public+config) → /opt/staffhub, compose
+  up -d --build. Meten: homepage 200, /api/trash + tree + upload anoniem 401,
+  dav PROPFIND 401, perms-kolom AUTO-MIGREERD in de live-bak
+  (PRAGMA toont ...prefs,perms), nieuwe strings in de built bundle.
+  Niets anoniems kan méér: caps-live-gedrag test je eigen account (inloggen,
+  Accounts-venster openen, vinkje op een collega zetten).
+
 ### Relics 0.5.0 - shop-crates + shadow-set naar shop-only (30-10, ~12:25)
 
 - Kits voor de site-shop: /relics crate <speler> <naam>, bundels uit crates.yml
