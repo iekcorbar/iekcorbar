@@ -4,11 +4,11 @@ package:
 
 # ============================================================================
 # MILO - THE LOST CARAVAN (new quest, 30-10)
-# NPC: Citizens id 129 - "Milo the Wandering Trader" (create in game with
-#      /npc create, then check the id the chat prints; if it is NOT 129,
+# NPC: Citizens id 136 - "Milo the Wandering Trader" (create in game with
+#      /npc create, then check the id the chat prints; if it is NOT 136,
 #      change the two lines in npcs: and npc_conversations: - nothing else).
 # Style: REAL SPEAKING voices - 9 lines rendered by sounds/make_voices.py
-#      (edge-tts, en-IE-ConnorNeural) into pack build16 as
+#      (edge-tts, en-IE-ConnorNeural) into pack build17 as
 #      steamworks:milo.line01..line09. Without pack 16 the lines stay
 #      silent; the quest itself works either way. Blip fallbacks
 #      (voice.milo / voice.machine / quest.complete / quest.click) live in
@@ -16,10 +16,10 @@ package:
 # ============================================================================
 
 npcs:
-  '129': citizens 129
+  '136': citizens 136
 
 npc_conversations:
-  '129': milo_conv
+  '136': milo_conv
 
 items:
   milo_label: simple paper
@@ -41,7 +41,7 @@ actions:
 
   # ---- stage 1 done (objective fires this) ---------------------------------
   milo_labels_complete: folder milo_labels_notify,milo_labels_chime
-  milo_labels_notify: notify &eMilo&7: &fBring those four labels back to me! io:chat
+  milo_labels_notify: 'notify &eMilo&7: &fBring those four labels back to me! io:chat'
   milo_labels_chime: notify io:sound sound:steamworks:quest.complete soundvolume:0.5
 
   # ---- stage 2: turn in -> quest complete ----------------------------------
@@ -64,7 +64,7 @@ actions:
   milo_rep_thanks: notify io:sound sound:steamworks:milo.line09 soundvolume:0.8
   milo_rep_over: folder milo_rep_clear,milo_rep_msg
   milo_rep_clear: tag del milo_rep_cool
-  milo_rep_msg: notify &eMilo&7: &fFresh stock! Ask me again about labels. io:chat
+  milo_rep_msg: 'notify &eMilo&7: &fFresh stock! Ask me again about labels. io:chat'
 
   # ---- voice blips & real speech (needs pack 16: make_voices.py) -----------
   milo_voice: notify io:sound sound:steamworks:milo.line01 soundvolume:0.8
@@ -151,7 +151,7 @@ conversations:
         actions: milo_complete,milo_click
         pointers: turn_done
       turn_done:
-        text: The labels! My caravan can ride again - Milo pays his debt: coin AND
+        text: The labels! My caravan can ride again - Milo pays his debt in coin AND
           elite coins. Take the thanks of a wandering trader.
       repeat:
         text: Four more labels for the purse, then.
@@ -168,7 +168,7 @@ npc_holograms:
   milo_available:
     lines:
     - '&d&l❗'
-    npcs: '129'
+    npcs: '136'
     conditions: '!milo_done'
     follow: true
     check_interval: 20
@@ -176,7 +176,7 @@ npc_holograms:
   milo_rep:
     lines:
     - '&e&l❓'
-    npcs: '129'
+    npcs: '136'
     conditions: milo_done
     follow: true
     check_interval: 20

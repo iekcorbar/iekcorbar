@@ -1,0 +1,15 @@
+# Igor Nightgrave - gesproken regels (30-10, Halloween quest).
+# id|tekst ; id's komen overeen met steamworks:igor.lineXX in het BQ-pakket.
+
+line01|Heeeey... welcome to Halloween Town, little pumpkin. The lanterns are dying and the spirits grow restless. Lend a hand before the night creeps in?
+line02|Candles first, friend. Eight of them. String and honeycomb, the world remembers. The town cannot glow on dark alone.
+line03|You smell of wax and harvest! Hand the candles over. Igor knows a good flame when he carries one.
+line04|Eight lanterns for eight poles! Now six pumpkins from your fields. The patch, the farm, whatever ghosts you must bargain with.
+line05|Six pumpkins, little ghoul. Carve them with shears if you like, but the whole round ones make the best lanterns.
+line06|Bless your spooky hands! Light the town, and mind... don't let the shadows bite.
+line07|Run along then... the dark will wait for no one. Tonight, it is patient.
+line08|Trick or treat, little ghoul! Two pumpkins or two cookies feed the cauldron, and the cauldron feeds your purse. No questions asked.
+line09|Pumpkins piled high! I can see them glowing through your bag. Bring them to the pyre, and Halloween Town will blaze tonight!
+line10|The lanterns blaze! Halloween Town owes you a debt. Coin, elite coins, and this fine pumpkin head to wear among friends. Take the thanks of the night!
+line11|Sweet! The spirits are pleased and your purse grows. The cauldron simmers. Back in ten minutes, friend.
+line12|Patience, bat. The cauldron needs time to boil. Come find me again soon...

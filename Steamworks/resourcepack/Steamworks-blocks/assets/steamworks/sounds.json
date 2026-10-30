@@ -199,5 +199,65 @@
   "sounds": [
    "steamworks:milo/line09"
   ]
+ },
+ "igor.line01": {
+  "sounds": [
+   "steamworks:igor/line01"
+  ]
+ },
+ "igor.line02": {
+  "sounds": [
+   "steamworks:igor/line02"
+  ]
+ },
+ "igor.line03": {
+  "sounds": [
+   "steamworks:igor/line03"
+  ]
+ },
+ "igor.line04": {
+  "sounds": [
+   "steamworks:igor/line04"
+  ]
+ },
+ "igor.line05": {
+  "sounds": [
+   "steamworks:igor/line05"
+  ]
+ },
+ "igor.line06": {
+  "sounds": [
+   "steamworks:igor/line06"
+  ]
+ },
+ "igor.line07": {
+  "sounds": [
+   "steamworks:igor/line07"
+  ]
+ },
+ "igor.line08": {
+  "sounds": [
+   "steamworks:igor/line08"
+  ]
+ },
+ "igor.line09": {
+  "sounds": [
+   "steamworks:igor/line09"
+  ]
+ },
+ "igor.line10": {
+  "sounds": [
+   "steamworks:igor/line10"
+  ]
+ },
+ "igor.line11": {
+  "sounds": [
+   "steamworks:igor/line11"
+  ]
+ },
+ "igor.line12": {
+  "sounds": [
+   "steamworks:igor/line12"
+  ]
  }
 }

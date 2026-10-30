@@ -1,0 +1,228 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+# ============================================================================
+# HALLOWEEN LANTERNS - Igor Nightgrave (30-10, seizoen: Halloween Town)
+# NPC: Citizens id 137 - "Igor Nightgrave" (create in game with /npc create;
+#      if Citizens prints a different id, change the two '137' lines below or
+#      tell the agent).
+# Real speaking voice: steamworks:igor.line01..11 (sounds/make_voices.py,
+#      en-US-ChristopherNeural) - needs pack build17; silent without it.
+# Mechanics 1:1 from vorkan_kross + mad_doctor (proven on this server).
+# After the season: remove the folder from QuestPackages and /bq reload.
+# ============================================================================
+
+npcs:
+  '137': citizens 137
+
+npc_conversations:
+  '137': igor_conv
+
+items:
+  halloween_candle: simple candle
+  halloween_pumpkin: simple pumpkin
+  halloween_cookie: simple cookie
+  halloween_pumpkin_head: simple carved_pumpkin
+
+conditions:
+  hl_started: tag hl_started
+  hl_candles_done: tag hl_candles_done
+  hl_done: tag hl_done
+  hl_treat_cool: tag hl_treat_cool
+  hl_has_candles: item halloween_candle:8
+  hl_has_pumpkins: item halloween_pumpkin:6
+  hl_has_treat_p: item halloween_pumpkin:2
+  hl_has_treat_c: item halloween_cookie:2
+
+actions:
+  # ---- start -----------------------------------------------------------------
+  hl_start: folder hl_tag,hl_journal1,hl_title,hl_obj,v_accept
+  hl_tag: tag add hl_started
+  hl_journal1: journal add hl_1
+  hl_title: notify &6Halloween Lanterns\n&7Craft 8 candles for the town io:title fadeIn:0 stay:60 fadeOut:20
+  hl_obj: objective add hl_craft_candles
+  v_accept: notify io:sound sound:steamworks:igor.line06 soundvolume:0.8
+  hl_candles_notify: 'notify &5Igor&7: &fThe candles glow! Bring all eight to me, friend. io:chat'
+  v_greet: notify io:sound sound:steamworks:igor.line01 soundvolume:0.8
+  v_s1: notify io:sound sound:steamworks:igor.line02 soundvolume:0.8
+  v_s1_ready: notify io:sound sound:steamworks:igor.line03 soundvolume:0.8
+  v_declined: notify io:sound sound:steamworks:igor.line07 soundvolume:0.8
+
+  # ---- stage 1 turn-in (candles) ----------------------------------------------
+  hl_deliver1: folder hl_take_candles,hl_s2_tag,hl_journal_swap,hl_s2_notify
+  hl_take_candles: take halloween_candle:8
+  hl_s2_tag: tag add hl_candles_done
+  hl_journal_swap: journal delete hl_1,journal add hl_2
+  hl_s2_notify: 'notify &5Igor&7: &fEight lanterns for eight poles - now SIX pumpkins from your fields! io:chat'
+  v_s2: notify io:sound sound:steamworks:igor.line04 soundvolume:0.8
+  v_s2b: notify io:sound sound:steamworks:igor.line05 soundvolume:0.8
+  v_s2_ready: notify io:sound sound:steamworks:igor.line09 soundvolume:0.8
+  v_cool: notify io:sound sound:steamworks:igor.line12 soundvolume:0.8
+
+  # ---- stage 2 + quest complete (pumpkins) -------------------------------------
+  hl_complete: folder hl_take_pumpkins,hl_money,hl_ecoins,hl_head,hl_vision,hl_done_tag,hl_journal_del,hl_title_done
+  hl_take_pumpkins: take halloween_pumpkin:6
+  hl_money: command cmi money give %player% -s 400
+  hl_ecoins: command em money add %player% 15
+  hl_head: give halloween_pumpkin_head:1
+  hl_vision: effect NIGHT_VISION 60 1 hidden noicon
+  hl_done_tag: tag add hl_done
+  hl_journal_del: journal delete hl_2
+  hl_title_done: notify &aQUEST COMPLETE\n&7Halloween Town blazes on! +400 +15 elitecoins io:title fadeIn:0 stay:60 fadeOut:20
+  v_done: notify io:sound sound:steamworks:igor.line10 soundvolume:0.8
+
+  # ---- trick or treat loop ------------------------------------------------------
+  hl_treat_p: folder hl_t_take_p,hl_t_money,hl_t_eco,hl_t_cool,hl_t_timer
+  hl_t_take_p: take halloween_pumpkin:2
+  hl_treat_c: folder hl_t_take_c,hl_t_money,hl_t_eco,hl_t_cool,hl_t_timer
+  hl_t_take_c: take halloween_cookie:2
+  hl_t_money: command cmi money give %player% -s 120
+  hl_t_eco: command em money add %player% 2
+  hl_t_cool: tag add hl_treat_cool
+  hl_t_timer: objective add hl_treat_timer
+  v_treat: notify io:sound sound:steamworks:igor.line08 soundvolume:0.8
+  v_treat_done: notify io:sound sound:steamworks:igor.line11 soundvolume:0.8
+  hl_treat_over: folder hl_t_clear,hl_t_msg
+  hl_t_clear: tag del hl_treat_cool
+  hl_t_msg: 'notify &5Igor&7: &fThe cauldron boils again - trick or treat me any time! io:chat'
+
+objectives:
+  hl_craft_candles: craft halloween_candle 8 actions:hl_candles_notify
+  hl_treat_timer: delay 600 events:hl_treat_over
+
+journal:
+  hl_1:
+    en-US: |
+      &6Halloween Lanterns
+      &6Stage I — Candles
+
+      &7Craft &b8 candles&7 (honeycomb + string) and bring them to &5Igor&7 in Halloween Town.
+    en: |
+      &6Halloween Lanterns
+      &6Stage I — Candles
+
+      &7Craft &b8 candles&7 (honeycomb + string) and bring them to &5Igor&7 in Halloween Town.
+  hl_2:
+    en-US: |
+      &6Halloween Lanterns
+      &6Stage II — Pumpkins
+
+      &7Collect &b6 pumpkins&7 and bring them to &5Igor&7. The town must glow tonight.
+    en: |
+      &6Halloween Lanterns
+      &6Stage II — Pumpkins
+
+      &7Collect &b6 pumpkins&7 and bring them to &5Igor&7. The town must glow tonight.
+
+conversations:
+  igor_conv:
+    quester: Igor Nightgrave
+    first: intro_treat_cool,intro_treat,intro_s2_ready,intro_s2,intro_s1_ready,intro_s1,intro_new
+    stop: true
+
+    NPC_options:
+      intro_new:
+        text: Heeeey... welcome to Halloween Town, little pumpkin. The lanterns are
+          dying and the spirits grow restless. Lend a hand before the night creeps in?
+        conditions: '!hl_started'
+        actions: v_greet
+        pointers: accept,decline
+      intro_s1:
+        text: Candles first, friend - eight of them. String and honeycomb, the world
+          remembers. The town cannot glow on dark alone.
+        conditions: hl_started,!hl_candles_done,!hl_has_candles
+        actions: v_s1
+        pointers: leave
+      intro_s1_ready:
+        text: You smell of wax and harvest! Hand the candles over - Igor knows a good
+          flame when he carries one.
+        conditions: hl_started,!hl_candles_done,hl_has_candles
+        actions: v_s1_ready
+        pointers: deliver_candles
+      candles_done:
+        text: Eight lanterns for eight poles! Now SIX pumpkins from your fields - the
+          patch, the farm, a trader - whatever ghosts you must bargain with.
+        actions: hl_deliver1,v_s2
+      intro_s2:
+        text: Six pumpkins, little ghoul. Carve them with shears if you like, but the
+          whole round ones make the best lanterns.
+        conditions: hl_started,hl_candles_done,!hl_has_pumpkins
+        actions: v_s2b
+        pointers: leave
+      intro_s2_ready:
+        text: Pumpkins piled high - I can SEE them glowing through your bag! Bring
+          them to the pyre and Halloween Town will blaze tonight!
+        conditions: hl_started,hl_candles_done,hl_has_pumpkins
+        actions: v_s2_ready
+        pointers: deliver_pumpkins
+      pumpkins_done:
+        text: The lanterns blaze! Halloween Town owes you a debt - coin, elite coins,
+          and this fine pumpkin head to wear among friends. Take the thanks of the night!
+        actions: hl_complete,v_done
+      intro_treat:
+        text: Trick or treat, little ghoul! Two pumpkins OR two cookies feed the
+          cauldron, and the cauldron feeds your purse. No questions asked.
+        conditions: hl_done,!hl_treat_cool
+        actions: v_treat
+        pointers: treat_pumpkins,treat_cookies,leave
+      intro_treat_cool:
+        text: Patience, bat. The cauldron needs time to boil. Come find me again soon...
+        conditions: hl_done,hl_treat_cool
+        actions: v_cool
+        pointers: leave
+      accepted:
+        text: Bless your spooky hands! Light the town, and mind - don't let the
+          shadows bite.
+        actions: hl_start
+      declined:
+        text: Run along then... the dark will wait for no one. Tonight, it is patient.
+        actions: v_declined
+      treat_done:
+        text: Sweet! The spirits are pleased and your purse grows. The cauldron
+          simmers - back in ten minutes, friend.
+        actions: v_treat_done
+
+    player_options:
+      accept:
+        text: The town shall glow. I'll help.
+        pointers: accepted
+      decline:
+        text: The shadows bite. No thank you.
+        pointers: declined
+      deliver_candles:
+        text: Here - eight candles, still warm.
+        pointers: candles_done
+      deliver_pumpkins:
+        text: Six pumpkins for the pyre!
+        pointers: pumpkins_done
+      treat_pumpkins:
+        text: Trick! Two pumpkins.
+        conditions: hl_has_treat_p
+        pointers: treat_done
+        actions: hl_treat_p
+      treat_cookies:
+        text: Treat! Two cookies.
+        conditions: hl_has_treat_c
+        pointers: treat_done
+        actions: hl_treat_c
+      leave:
+        text: 'Goodbye.'
+
+npc_holograms:
+  igor_available:
+    lines:
+    - '&d&l❗'
+    npcs: '137'
+    conditions: '!hl_done'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  igor_rep:
+    lines:
+    - '&e&l❓'
+    npcs: '137'
+    conditions: hl_done
+    follow: true
+    check_interval: 20
+    max_range: 25
