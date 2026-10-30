@@ -30,6 +30,12 @@ final class Achievements {
         a.add("dragon_tame", "root", "coal", "Soot and Seat", "Tame a wild dragon with a lump of coal.", "goal");
         a.add("dragon_rider", "dragon_tame", "feather", "Up She Goes", "Ride a tamed dragon.", "goal");
         a.add("dragon_flight", "dragon_rider", "elytra", "A New Machine in the Sky", "Fly a dragon above the clouds (Y 100+).", "challenge");
+        // the dragon line grows deeper (0.8.1): sit, second seat, the underground route, and the voice in the dark
+        a.add("dragon_sit", "dragon_tame", "oak_sign", "Sit, Girl", "Teach a tamed dragon to sit.", "task");
+        a.add("dragon_hoarder", "dragon_tame", "charcoal", "Two Seats", "Tame two different dragons.", "goal");
+        a.add("dragon_caver", "dragon_rider", "deepslate", "Underground Express", "Ride a dragon below Y 40 - through the caverns it calls home.", "goal");
+        a.add("dragon_wild", "root", "sculk_sensor", "Follow the Hiss", "Stand close enough to a wild dragon to hear it roar.", "task").hidden();
+        a.add("dragon_reunion", "dragon_tame", "ender_pearl", "Loyal Engine", "Let a tamed dragon catch up the long way - watch it find you in the dark.", "task").hidden();
 
         NamespacedKey decor = new NamespacedKey(plugin, "decor");
         a.scanner(it -> {

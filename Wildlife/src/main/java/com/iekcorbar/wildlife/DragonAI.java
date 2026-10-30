@@ -40,7 +40,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 final class DragonAI implements Listener {
     private final WildlifePlugin plugin;
-    private final NamespacedKey tamerKey, sittingKey;
+    private final NamespacedKey tamerKey, sittingKey, dragonsKey;
     private final Map<UUID, Input> inputs = new HashMap<>();
     private final Map<UUID, Long> lastRoar = new HashMap<>();
 
@@ -72,6 +72,7 @@ final class DragonAI implements Listener {
         this.plugin = plugin;
         Keeps.TAMER = tamerKey = new NamespacedKey(plugin, "dragon_tamer");
         Keeps.SIT = sittingKey = new NamespacedKey(plugin, "dragon_sitting");
+        dragonsKey = new NamespacedKey(plugin, "dragons_tamed");
     }
 
     // ------------------------------------------------------------ right-click (from Animals.onInteract)
@@ -95,7 +96,10 @@ final class DragonAI implements Listener {
         if (sneaking) {
             boolean sit = !isSitting(e);
             e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) (sit ? 1 : 0));
-            if (sit) plugin.fmm().play(e, "sit", true); else plugin.fmm().stop(e);
+            if (sit) {
+                plugin.fmm().play(e, "sit", true);
+                plugin.adv().grant(p, "dragon_sit");
+            } else plugin.fmm().stop(e);
             p.sendActionBar(Component.text(sit ? "The dragon sits." : "The dragon gets up.", NamedTextColor.GRAY));
             return true;
         }
@@ -124,6 +128,10 @@ final class DragonAI implements Listener {
         e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 1f, 0.65f);
         p.sendMessage(Component.text("The dragon folds its wings and bows its helmeted head - it is yours.", NamedTextColor.GOLD));
         plugin.adv().grant(p, "dragon_tame");
+        var pdc = p.getPersistentDataContainer();
+        int n = 1 + (pdc.get(dragonsKey, PersistentDataType.INTEGER) == null ? 0 : pdc.get(dragonsKey, PersistentDataType.INTEGER));
+        pdc.set(dragonsKey, PersistentDataType.INTEGER, n);
+        if (n >= 2) plugin.adv().grant(p, "dragon_hoarder");
     }
 
     // ------------------------------------------------------------ input + physics
@@ -157,6 +165,7 @@ final class DragonAI implements Listener {
             if (rider != null) {
                 steer(e, rider, r);
                 if (e.getLocation().getY() > 100) plugin.adv().grant(rider, "dragon_flight");
+                else if (e.getLocation().getY() < 40) plugin.adv().grant(rider, "dragon_caver");
             } else if (tamer(e) == null) {                                 // wild: roar at anyone too close
                 long now = e.getWorld().getFullTime();
                 Player near = nearest(e, 4.0);
@@ -164,6 +173,7 @@ final class DragonAI implements Listener {
                     lastRoar.put(e.getUniqueId(), now);
                     plugin.fmm().play(e, "roar", false);
                     e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 1f, 0.5f);
+                    plugin.adv().grant(near, "dragon_wild");
                 }
             } else {
                 follow(e);
@@ -210,6 +220,7 @@ final class DragonAI implements Listener {
             Location to = owner.getLocation().add(0, 1.2, 0);
             e.teleport(to);
             e.getWorld().spawnParticle(Particle.CLOUD, to, 6, 0.3, 0.2, 0.3, 0.01);
+            plugin.adv().grant(owner, "dragon_reunion");
         }
     }
 
