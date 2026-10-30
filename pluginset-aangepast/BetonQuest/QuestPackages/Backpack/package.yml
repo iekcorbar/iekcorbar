@@ -1,0 +1,2702 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+npcs:
+  '90': citizens 90
+  '91': citizens 91
+  '92': citizens 92
+  '97': citizens 97
+items:
+  bp_leather: simple leather
+  bp_string: simple string
+  bp_white_wool: simple white_wool
+  bp_iron_ingot: simple iron_ingot
+  bp_copper_ingot: simple copper_ingot
+  bp_chest: simple chest
+  bp_gold_ingot: simple gold_ingot
+  bp2_emerald: simple emerald
+  bp2_obsidian: simple obsidian
+  bp2_bread: simple bread
+  bp2_golden_apple: simple golden_apple
+  bp2_book: simple book
+  bp2_amethyst: simple amethyst_shard
+  bp2_glowstone: simple glowstone_dust
+  bp2_ghast_tear: simple ghast_tear
+  bp3_coal: simple coal
+  bp3_redstone: simple redstone
+  bp3_rotten_flesh: simple rotten_flesh
+  bp3_bone: simple bone
+  bp3_ender_pearl: simple ender_pearl
+  bp3_blaze_rod: simple blaze_rod
+  bp3_prismarine_shard: simple prismarine_shard
+  bp3_nautilus_shell: simple nautilus_shell
+  bp3_phantom_membrane: simple phantom_membrane
+  bp3_diamond: simple diamond
+  bp3_echo_shard: simple echo_shard
+journal:
+  backpack_main:
+    en: |-
+      &bA Pack for the Road
+
+      &7Elias Packwright has agreed to craft your first backpack, but he will not hand it out for free.
+      &7Explore the four marked landmarks, speak with Mara, speak with Brann, prove yourself, then return to Elias.
+    en-US: |-
+      &bA Pack for the Road
+
+      &7Elias Packwright has agreed to craft your first backpack, but he will not hand it out for free.
+      &7Explore the four marked landmarks, speak with Mara, speak with Brann, prove yourself, then return to Elias.
+  backpack_explore:
+    en: |-
+      &bChapter I - First Steps
+
+      &7Visit the four landmarks in any order:
+      &aForest Shrine &7(X: 2714, Z: -118)
+      &bRiver Bend &7(X: 3217, Z: -225)
+      &2Open Plains &7(X: 3144, Z: -1359)
+      &bOld Mountain Pass &7(X: 2778, Z: -217)
+    en-US: |-
+      &bChapter I - First Steps
+
+      &7Visit the four landmarks in any order:
+      &aForest Shrine &7(X: 2714, Z: -118)
+      &bRiver Bend &7(X: 3217, Z: -225)
+      &2Open Plains &7(X: 3144, Z: -1359)
+      &bOld Mountain Pass &7(X: 2778, Z: -217)
+  backpack_canvas:
+    en: |-
+      &bChapter II - Woven Strength
+
+      &7Mara Threadneedle needs &b24 Leather&7, &b32 String&7 and &b16 White Wool&7.
+    en-US: |-
+      &bChapter II - Woven Strength
+
+      &7Mara Threadneedle needs &b24 Leather&7, &b32 String&7 and &b16 White Wool&7.
+  backpack_frame:
+    en: |-
+      &bChapter III - Iron Frame
+
+      &7Brann Gearlock needs &b12 Iron Ingots&7, &b16 Copper Ingots&7 and &b1 Chest&7.
+    en-US: |-
+      &bChapter III - Iron Frame
+
+      &7Brann Gearlock needs &b12 Iron Ingots&7, &b16 Copper Ingots&7 and &b1 Chest&7.
+  backpack_combat:
+    en: |-
+      &bChapter IV - Trial of Courage
+
+      &7Defeat &b5 Vindicators&7, &b5 Witches&7 and &b10 Skeletons&7.
+    en-US: |-
+      &bChapter IV - Trial of Courage
+
+      &7Defeat &b5 Vindicators&7, &b5 Witches&7 and &b10 Skeletons&7.
+  backpack_final:
+    en: |-
+      &bChapter V - Final Fittings
+
+      &7Return to Elias with &b16 Leather&7, &b16 String&7, &b8 Iron Ingots&7 and &b2 Gold Ingots&7.
+    en-US: |-
+      &bChapter V - Final Fittings
+
+      &7Return to Elias with &b16 Leather&7, &b16 String&7, &b8 Iron Ingots&7 and &b2 Gold Ingots&7.
+  backpack2_main:
+    en: |-
+      &bA Pack Worth Improving
+      &7Elias will upgrade your backpack only after three trials shaped by the answers you gave him.
+    en-US: |-
+      &bA Pack Worth Improving
+      &7Elias will upgrade your backpack only after three trials shaped by the answers you gave him.
+  backpack2_calling_explorer:
+    en: |-
+      &bTrial I - The Explorer
+      &7Travel to the Ancient Castle near &bX: -792, Y: 65, Z: -501&7. Reach all three marked heights: &b-724, 97, -514 &b-737, 129, -514 &b-759, 169, -526
+    en-US: |-
+      &bTrial I - The Explorer
+      &7Travel to the Ancient Castle near &bX: -792, Y: 65, Z: -501&7. Reach all three marked heights: &b-724, 97, -514 &b-737, 129, -514 &b-759, 169, -526
+  backpack2_calling_wealth:
+    en: |-
+      &bTrial I - The Seeker
+      &7Travel to the Ancient Castle near &bX: -792, Y: 65, Z: -501&7. Find and open the chest at &bX: -791, Y: 119, Z: -595&7.
+    en-US: |-
+      &bTrial I - The Seeker
+      &7Travel to the Ancient Castle near &bX: -792, Y: 65, Z: -501&7. Find and open the chest at &bX: -791, Y: 119, Z: -595&7.
+  backpack2_calling_courage:
+    en: |-
+      &bTrial I - The Fighter
+      &7Travel to the Ancient Castle near &bX: -792, Y: 65, Z: -501&7. Enter the castle and defeat a &bWarden&7 while inside the region.
+    en-US: |-
+      &bTrial I - The Fighter
+      &7Travel to the Ancient Castle near &bX: -792, Y: 65, Z: -501&7. Enter the castle and defeat a &bWarden&7 while inside the region.
+  backpack2_method_prepared:
+    en: |-
+      &bTrial II - Preparation
+      &7Bring Elias &b32 Iron Ingots&7, &b32 String&7 and &b2 Chests&7.
+    en-US: |-
+      &bTrial II - Preparation
+      &7Bring Elias &b32 Iron Ingots&7, &b32 String&7 and &b2 Chests&7.
+  backpack2_method_instinct:
+    en: |-
+      &bTrial II - Instinct
+      &7Defeat &b8 Endermen&7 and &b12 Cave Spiders&7.
+    en-US: |-
+      &bTrial II - Instinct
+      &7Defeat &b8 Endermen&7 and &b12 Cave Spiders&7.
+  backpack2_method_teamwork:
+    en: |-
+      &bTrial II - Companionship
+      &7Bring Elias &b32 Bread&7 and &b4 Golden Apples&7, supplies meant to keep a group alive.
+    en-US: |-
+      &bTrial II - Companionship
+      &7Bring Elias &b32 Bread&7 and &b4 Golden Apples&7, supplies meant to keep a group alive.
+  backpack2_power_knowledge:
+    en: |-
+      &bTrial III - Knowledge
+      &7Bring Elias &b24 Books&7 and &b16 Amethyst Shards&7.
+    en-US: |-
+      &bTrial III - Knowledge
+      &7Bring Elias &b24 Books&7 and &b16 Amethyst Shards&7.
+  backpack2_power_strength:
+    en: |-
+      &bTrial III - Strength
+      &7Bring Elias &b16 Obsidian&7 and &b32 Iron Ingots&7.
+    en-US: |-
+      &bTrial III - Strength
+      &7Bring Elias &b16 Obsidian&7 and &b32 Iron Ingots&7.
+  backpack2_power_hope:
+    en: |-
+      &bTrial III - Hope
+      &7Bring Elias &b32 Glowstone Dust&7 and &b2 Ghast Tears&7.
+    en-US: |-
+      &bTrial III - Hope
+      &7Bring Elias &b32 Glowstone Dust&7 and &b2 Ghast Tears&7.
+  backpack3_main:
+    en: |-
+      &6The City Below
+
+      &7The city's underground passages were built as a secure bunker, but terrible creatures have claimed them.
+      &7Only the finest adventurers descend in search of forgotten treasure.
+      &7Enter at &bX: 2874, Y: 67, Z: -589&7, find &bOrion the Adventurer&7, and prepare well before going below.
+    en-US: |-
+      &6The City Below
+
+      &7The city's underground passages were built as a secure bunker, but terrible creatures have claimed them.
+      &7Only the finest adventurers descend in search of forgotten treasure.
+      &7Enter at &bX: 2874, Y: 67, Z: -589&7, find &bOrion the Adventurer&7, and prepare well before going below.
+  backpack3_repeat_1:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b32 Leather&7 and &b32 String&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b32 Leather&7 and &b32 String&7.
+  backpack3_repeat_2:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b48 Iron Ingots&7 and &b32 Coal&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b48 Iron Ingots&7 and &b32 Coal&7.
+  backpack3_repeat_3:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b32 Copper Ingots&7 and &b24 Redstone Dust&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b32 Copper Ingots&7 and &b24 Redstone Dust&7.
+  backpack3_repeat_4:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b12 Gold Ingots&7 and &b8 Emeralds&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b12 Gold Ingots&7 and &b8 Emeralds&7.
+  backpack3_repeat_5:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b24 Rotten Flesh&7 and &b24 Bones&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b24 Rotten Flesh&7 and &b24 Bones&7.
+  backpack3_repeat_6:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b12 Ender Pearls&7 and &b8 Blaze Rods&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b12 Ender Pearls&7 and &b8 Blaze Rods&7.
+  backpack3_repeat_7:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b32 Prismarine Shards&7 and &b4 Nautilus Shells&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b32 Prismarine Shards&7 and &b4 Nautilus Shells&7.
+  backpack3_repeat_8:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b16 Amethyst Shards&7 and &b32 Glowstone Dust&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b16 Amethyst Shards&7 and &b32 Glowstone Dust&7.
+  backpack3_repeat_9:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b4 Phantom Membranes&7 and &b2 Ghast Tears&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b4 Phantom Membranes&7 and &b2 Ghast Tears&7.
+  backpack3_repeat_10:
+    en: |-
+      &6Orion's Request
+      &7Bring Orion &b2 Diamonds&7 and &b1 Echo Shard&7.
+    en-US: |-
+      &6Orion's Request
+      &7Bring Orion &b2 Diamonds&7 and &b1 Echo Shard&7.
+conditions:
+  bp_started: tag bp_started
+  bp_finished: tag bp_finished
+  bp_repeat: tag bp_repeat
+  bp_explore_phase: tag bp_explore_phase
+  bp_explore_done: tag bp_explore_done
+  bp_forest_done: tag bp_forest_done
+  bp_river_done: tag bp_river_done
+  bp_plains_done: tag bp_plains_done
+  bp_mountain_done: tag bp_mountain_done
+  bp_all_locations: and bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done
+  bp_canvas_phase: tag bp_canvas_phase
+  bp_canvas_done: tag bp_canvas_done
+  bp_frame_phase: tag bp_frame_phase
+  bp_frame_done: tag bp_frame_done
+  bp_combat_phase: tag bp_combat_phase
+  bp_combat_done: tag bp_combat_done
+  bp_final_phase: tag bp_final_phase
+  bp_questions_phase: tag bp_questions_phase
+  bp_has_canvas_items: and bp_has_leather_canvas,bp_has_string_canvas,bp_has_wool_canvas
+  bp_has_frame_items: and bp_has_iron_frame,bp_has_copper_frame,bp_has_chest_frame
+  bp_has_final_items: and bp_has_leather_final,bp_has_string_final,bp_has_iron_final,bp_has_gold_final
+  bp_has_leather_canvas: item bp_leather:24
+  bp_has_string_canvas: item bp_string:32
+  bp_has_wool_canvas: item bp_white_wool:16
+  bp_has_iron_frame: item bp_iron_ingot:12
+  bp_has_copper_frame: item bp_copper_ingot:16
+  bp_has_chest_frame: item bp_chest:1
+  bp_has_leather_final: item bp_leather:16
+  bp_has_string_final: item bp_string:16
+  bp_has_iron_final: item bp_iron_ingot:8
+  bp_has_gold_final: item bp_gold_ingot:2
+  bp_path_explorer: tag bp_path_explorer
+  bp_path_wealth: tag bp_path_wealth
+  bp_path_courage: tag bp_path_courage
+  bp_mind_prepared: tag bp_mind_prepared
+  bp_mind_instinct: tag bp_mind_instinct
+  bp_mind_teamwork: tag bp_mind_teamwork
+  bp_power_knowledge: tag bp_power_knowledge
+  bp_power_strength: tag bp_power_strength
+  bp_power_hope: tag bp_power_hope
+  bp_vindicator_1: tag bp_vindicator_1
+  bp_vindicator_2: tag bp_vindicator_2
+  bp_vindicator_3: tag bp_vindicator_3
+  bp_vindicator_4: tag bp_vindicator_4
+  bp_vindicator_5: tag bp_vindicator_5
+  bp_witch_1: tag bp_witch_1
+  bp_witch_2: tag bp_witch_2
+  bp_witch_3: tag bp_witch_3
+  bp_witch_4: tag bp_witch_4
+  bp_witch_5: tag bp_witch_5
+  bp_skeleton_1: tag bp_skeleton_1
+  bp_skeleton_2: tag bp_skeleton_2
+  bp_skeleton_3: tag bp_skeleton_3
+  bp_skeleton_4: tag bp_skeleton_4
+  bp_skeleton_5: tag bp_skeleton_5
+  bp_skeleton_6: tag bp_skeleton_6
+  bp_skeleton_7: tag bp_skeleton_7
+  bp_skeleton_8: tag bp_skeleton_8
+  bp_skeleton_9: tag bp_skeleton_9
+  bp_skeleton_10: tag bp_skeleton_10
+  bp_all_kills_done: and bp_vindicator_done,bp_witch_done,bp_skeleton_done
+  bp_vindicator_done: tag bp_vindicator_done
+  bp_witch_done: tag bp_witch_done
+  bp_skeleton_done: tag bp_skeleton_done
+  bp_q1_done: or bp_path_explorer,bp_path_wealth,bp_path_courage
+  bp_q2_done: or bp_mind_prepared,bp_mind_instinct,bp_mind_teamwork
+  bp_admin_perm: permission betonquest.admin
+  bp2_started: tag bp2_started
+  bp2_finished: tag bp2_finished
+  bp2_repeat: tag bp2_repeat
+  bp2_trial1_phase: tag bp2_trial1_phase
+  bp2_trial2_phase: tag bp2_trial2_phase
+  bp2_trial3_phase: tag bp2_trial3_phase
+  bp2_reward_ready: tag bp2_reward_ready
+  bp2_castle_explorer_1_done: tag bp2_castle_explorer_1_done
+  bp2_castle_explorer_2_done: tag bp2_castle_explorer_2_done
+  bp2_castle_explorer_3_done: tag bp2_castle_explorer_3_done
+  bp2_castle_explorer_all: and bp2_castle_explorer_1_done,bp2_castle_explorer_2_done,bp2_castle_explorer_3_done
+  bp2_in_ancient_castle: region Ancient_castel
+  bp2_questions_phase: tag bp2_questions_phase
+  bp2_q4_1_done: or bp2_q4_duty,bp2_q4_compassion,bp2_q4_freedom
+  bp2_q4_2_done: or bp2_q5_preserve,bp2_q5_use,bp2_q5_destroy
+  bp2_q4_3_done: or bp2_q6_lead,bp2_q6_support,bp2_q6_alone
+  bp2_q4_4_done: or bp2_q7_retry,bp2_q7_adapt,bp2_q7_accept
+  bp2_q4_duty: tag bp2_q4_duty
+  bp2_q4_compassion: tag bp2_q4_compassion
+  bp2_q4_freedom: tag bp2_q4_freedom
+  bp2_q5_preserve: tag bp2_q5_preserve
+  bp2_q5_use: tag bp2_q5_use
+  bp2_q5_destroy: tag bp2_q5_destroy
+  bp2_q6_lead: tag bp2_q6_lead
+  bp2_q6_support: tag bp2_q6_support
+  bp2_q6_alone: tag bp2_q6_alone
+  bp2_q7_retry: tag bp2_q7_retry
+  bp2_q7_adapt: tag bp2_q7_adapt
+  bp2_q7_accept: tag bp2_q7_accept
+  bp2_q8_fame: tag bp2_q8_fame
+  bp2_q8_protection: tag bp2_q8_protection
+  bp2_q8_freedom: tag bp2_q8_freedom
+  bp2_instinct_enderman_done: tag bp2_instinct_enderman_done
+  bp2_instinct_cavespider_done: tag bp2_instinct_cavespider_done
+  bp2_instinct_done: and bp2_instinct_enderman_done,bp2_instinct_cavespider_done
+  bp2_has_wealth_items: and bp2_has_emeralds,bp2_has_gold
+  bp2_has_emeralds: item bp2_emerald:16
+  bp2_has_gold: item bp_gold_ingot:24
+  bp2_has_prepared_items: and bp2_has_prepared_iron,bp2_has_prepared_string,bp2_has_prepared_chests
+  bp2_has_prepared_iron: item bp_iron_ingot:32
+  bp2_has_prepared_string: item bp_string:32
+  bp2_has_prepared_chests: item bp_chest:2
+  bp2_has_teamwork_items: and bp2_has_bread,bp2_has_golden_apples
+  bp2_has_bread: item bp2_bread:32
+  bp2_has_golden_apples: item bp2_golden_apple:4
+  bp2_has_knowledge_items: and bp2_has_books,bp2_has_amethyst
+  bp2_has_books: item bp2_book:24
+  bp2_has_amethyst: item bp2_amethyst:16
+  bp2_has_strength_items: and bp2_has_obsidian,bp2_has_strength_iron
+  bp2_has_obsidian: item bp2_obsidian:16
+  bp2_has_strength_iron: item bp_iron_ingot:32
+  bp2_has_hope_items: and bp2_has_glowstone,bp2_has_ghast_tears
+  bp2_has_glowstone: item bp2_glowstone:32
+  bp2_has_ghast_tears: item bp2_ghast_tear:2
+  bp3_started: tag bp3_started
+  bp3_finished: tag bp3_finished
+  bp3_questions_phase: tag bp3_questions_phase
+  bp3_repeat_started: tag bp3_repeat_started
+  bp3_repeat_assigned: tag bp3_repeat_assigned
+  bp3_request_1: tag bp3_request_1
+  bp3_request_2: tag bp3_request_2
+  bp3_request_3: tag bp3_request_3
+  bp3_request_4: tag bp3_request_4
+  bp3_request_5: tag bp3_request_5
+  bp3_request_6: tag bp3_request_6
+  bp3_request_7: tag bp3_request_7
+  bp3_request_8: tag bp3_request_8
+  bp3_request_9: tag bp3_request_9
+  bp3_request_10: tag bp3_request_10
+  bp3_q1_done: or bp3_q1_discovery,bp3_q1_treasure,bp3_q1_protection
+  bp3_q2_done: or bp3_q2_rescue,bp3_q2_plan,bp3_q2_mission
+  bp3_q3_done: or bp3_q3_seal,bp3_q3_study,bp3_q3_use
+  bp3_q4_done: or bp3_q4_lead,bp3_q4_support,bp3_q4_alone
+  bp3_q1_discovery: tag bp3_q1_discovery
+  bp3_q1_treasure: tag bp3_q1_treasure
+  bp3_q1_protection: tag bp3_q1_protection
+  bp3_q2_rescue: tag bp3_q2_rescue
+  bp3_q2_plan: tag bp3_q2_plan
+  bp3_q2_mission: tag bp3_q2_mission
+  bp3_q3_seal: tag bp3_q3_seal
+  bp3_q3_study: tag bp3_q3_study
+  bp3_q3_use: tag bp3_q3_use
+  bp3_q4_lead: tag bp3_q4_lead
+  bp3_q4_support: tag bp3_q4_support
+  bp3_q4_alone: tag bp3_q4_alone
+  bp3_q5_fame: tag bp3_q5_fame
+  bp3_q5_protection: tag bp3_q5_protection
+  bp3_q5_freedom: tag bp3_q5_freedom
+  bp3_has_request_1: and bp3_has_r1_leather,bp3_has_r1_string
+  bp3_has_r1_leather: item bp_leather:32
+  bp3_has_r1_string: item bp_string:32
+  bp3_has_request_2: and bp3_has_r2_iron,bp3_has_r2_coal
+  bp3_has_r2_iron: item bp_iron_ingot:48
+  bp3_has_r2_coal: item bp3_coal:32
+  bp3_has_request_3: and bp3_has_r3_copper,bp3_has_r3_redstone
+  bp3_has_r3_copper: item bp_copper_ingot:32
+  bp3_has_r3_redstone: item bp3_redstone:24
+  bp3_has_request_4: and bp3_has_r4_gold,bp3_has_r4_emerald
+  bp3_has_r4_gold: item bp_gold_ingot:12
+  bp3_has_r4_emerald: item bp2_emerald:8
+  bp3_has_request_5: and bp3_has_r5_flesh,bp3_has_r5_bone
+  bp3_has_r5_flesh: item bp3_rotten_flesh:24
+  bp3_has_r5_bone: item bp3_bone:24
+  bp3_has_request_6: and bp3_has_r6_pearl,bp3_has_r6_blaze
+  bp3_has_r6_pearl: item bp3_ender_pearl:12
+  bp3_has_r6_blaze: item bp3_blaze_rod:8
+  bp3_has_request_7: and bp3_has_r7_prismarine,bp3_has_r7_nautilus
+  bp3_has_r7_prismarine: item bp3_prismarine_shard:32
+  bp3_has_r7_nautilus: item bp3_nautilus_shell:4
+  bp3_has_request_8: and bp3_has_r8_amethyst,bp3_has_r8_glowstone
+  bp3_has_r8_amethyst: item bp2_amethyst:16
+  bp3_has_r8_glowstone: item bp2_glowstone:32
+  bp3_has_request_9: and bp3_has_r9_phantom,bp3_has_r9_ghast
+  bp3_has_r9_phantom: item bp3_phantom_membrane:4
+  bp3_has_r9_ghast: item bp2_ghast_tear:2
+  bp3_has_request_10: and bp3_has_r10_diamond,bp3_has_r10_echo
+  bp3_has_r10_diamond: item bp3_diamond:2
+  bp3_has_r10_echo: item bp3_echo_shard:1
+objectives:
+  bp_explore_forest: region backpack_forest entry actions:bp_explore_found_forest
+  bp_explore_river: region backpack_river entry actions:bp_explore_found_river
+  bp_explore_plains: region backpack_plains entry actions:bp_explore_found_plains
+  bp_explore_mountain: region backpack_mountain entry actions:bp_explore_found_mountain
+  bp_obj_vindicator: mobkill VINDICATOR 5 actions:bp_vindicator_done notify:1
+  bp_obj_witch: mobkill WITCH 5 actions:bp_witch_done notify:1
+  bp_obj_skeleton: mobkill SKELETON 10 actions:bp_skeleton_done notify:1
+  bp2_obj_castle_explorer_1: region Ancient_castel_explorer_1 entry actions:bp2_found_castle_explorer_1
+  bp2_obj_castle_explorer_2: region Ancient_castel_explorer_2 entry actions:bp2_found_castle_explorer_2
+  bp2_obj_castle_explorer_3: region Ancient_castel_explorer_3 entry actions:bp2_found_castle_explorer_3
+  bp2_obj_castle_chest: action right CHEST loc:-791;119;-595;iekcorbarSeason2 range:1
+    actions:bp2_trial1_complete
+  bp2_obj_castle_warden: mobkill WARDEN 1 conditions:bp2_in_ancient_castle actions:bp2_trial1_complete
+    notify:1
+  bp2_obj_enderman: mobkill ENDERMAN 8 actions:bp2_enderman_done notify:1
+  bp2_obj_cavespider: mobkill CAVE_SPIDER 12 actions:bp2_cavespider_done notify:1
+actions:
+  bp_start_first: folder bp_tag_started,bp_tag_explore_phase,bp_journal_main,bp_journal_explore,bp_objectives_explore_start,bp_title_start,bp_msg_explore_coords_delayed
+  bp_start_repeat: folder bp_tag_started,bp_tag_repeat,bp_reset_temporary_tags,bp_tag_explore_phase,bp_journal_main,bp_journal_explore,bp_objectives_explore_start,bp_title_start,bp_msg_explore_coords_delayed
+  bp_tag_started: tag add bp_started
+  bp_tag_repeat: tag add bp_repeat
+  bp_tag_explore_phase: tag add bp_explore_phase
+  bp_objectives_explore_start: objective add bp_explore_forest,bp_explore_river,bp_explore_plains,bp_explore_mountain
+  bp_title_start: notify Chapter I - First Steps\nExplore the surrounding lands io:title
+    fadeIn:0 stay:70 fadeOut:10
+  bp_msg_explore_coords: 'notify &6&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ \n&6Travel to
+    these locations: \n&a• Forest Shrine &7(X: 2714, Z: -118 \n&b• River Bend &7(X:
+    3217, Z: -225) \n&2• Open Plains &7(X: 3144, Z: -1359) \n&b• Old Mountain Pass
+    &7(X: 2778, Z: -217) \n&7You may visit them in any order. \n&6&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    io:chat'
+  bp_msg_explore_coords_delayed: folder bp_msg_explore_coords delay:4
+  bp_journal_main: journal add backpack_main
+  bp_journal_explore: journal add backpack_explore
+  bp_journal_canvas: journal add backpack_canvas
+  bp_journal_frame: journal add backpack_frame
+  bp_journal_combat: journal add backpack_combat
+  bp_journal_final: journal add backpack_final
+  bp_remove_journal_main: journal delete backpack_main
+  bp_remove_journal_explore: journal delete backpack_explore
+  bp_remove_journal_canvas: journal delete backpack_canvas
+  bp_remove_journal_frame: journal delete backpack_frame
+  bp_remove_journal_combat: journal delete backpack_combat
+  bp_remove_journal_final: journal delete backpack_final
+  bp_explore_found_forest: folder bp_tag_forest_done,bp_show_forest_remaining,bp_explore_try_complete
+  bp_explore_found_river: folder bp_tag_river_done,bp_show_river_remaining,bp_explore_try_complete
+  bp_explore_found_plains: folder bp_tag_plains_done,bp_show_plains_remaining,bp_explore_try_complete
+  bp_explore_found_mountain: folder bp_tag_mountain_done,bp_show_mountain_remaining,bp_explore_try_complete
+  bp_tag_forest_done: tag add bp_forest_done
+  bp_tag_river_done: tag add bp_river_done
+  bp_tag_plains_done: tag add bp_plains_done
+  bp_tag_mountain_done: tag add bp_mountain_done
+  bp_show_forest_remaining: folder bp_title_forest_0,bp_title_forest_1,bp_title_forest_2,bp_title_forest_3,bp_title_forest_4,bp_title_forest_5,bp_title_forest_6,bp_title_forest_7
+  bp_title_forest_0: 'notify Forest Shrine Explored\nRemaining: River Bend - Open
+    Plains - Old Mountain Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,!bp_plains_done,!bp_mountain_done'
+  bp_title_forest_1: 'notify Forest Shrine Explored\nRemaining: Open Plains - Old
+    Mountain Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,!bp_plains_done,!bp_mountain_done'
+  bp_title_forest_2: 'notify Forest Shrine Explored\nRemaining: River Bend - Old Mountain
+    Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_forest_3: 'notify Forest Shrine Explored\nRemaining: River Bend - Open
+    Plains io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_forest_4: 'notify Forest Shrine Explored\nRemaining: Old Mountain Pass
+    io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_forest_5: 'notify Forest Shrine Explored\nRemaining: Open Plains io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_forest_6: 'notify Forest Shrine Explored\nRemaining: River Bend io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_forest_7: notify Forest Shrine Explored\nReturn to Elias io:title fadeIn:0
+    stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done
+  bp_show_river_remaining: folder bp_title_river_0,bp_title_river_1,bp_title_river_2,bp_title_river_3,bp_title_river_4,bp_title_river_5,bp_title_river_6,bp_title_river_7
+  bp_title_river_0: 'notify River Bend Explored\nRemaining: Forest Shrine - Open Plains
+    - Old Mountain Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,!bp_plains_done,!bp_mountain_done'
+  bp_title_river_1: 'notify River Bend Explored\nRemaining: Open Plains - Old Mountain
+    Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,!bp_plains_done,!bp_mountain_done'
+  bp_title_river_2: 'notify River Bend Explored\nRemaining: Forest Shrine - Old Mountain
+    Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_river_3: 'notify River Bend Explored\nRemaining: Forest Shrine - Open Plains
+    io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_river_4: 'notify River Bend Explored\nRemaining: Old Mountain Pass io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_river_5: 'notify River Bend Explored\nRemaining: Open Plains io:title fadeIn:0
+    stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_river_6: 'notify River Bend Explored\nRemaining: Forest Shrine io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_river_7: notify River Bend Explored\nReturn to Elias io:title fadeIn:0
+    stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done
+  bp_show_plains_remaining: folder bp_title_plains_0,bp_title_plains_1,bp_title_plains_2,bp_title_plains_3,bp_title_plains_4,bp_title_plains_5,bp_title_plains_6,bp_title_plains_7
+  bp_title_plains_0: 'notify Open Plains Explored\nRemaining: Forest Shrine - River
+    Bend - Old Mountain Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,!bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_plains_1: 'notify Open Plains Explored\nRemaining: River Bend - Old Mountain
+    Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_plains_2: 'notify Open Plains Explored\nRemaining: Forest Shrine - Old
+    Mountain Pass io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_plains_3: 'notify Open Plains Explored\nRemaining: Forest Shrine - River
+    Bend io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,!bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_plains_4: 'notify Open Plains Explored\nRemaining: Old Mountain Pass io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,bp_plains_done,!bp_mountain_done'
+  bp_title_plains_5: 'notify Open Plains Explored\nRemaining: River Bend io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_plains_6: 'notify Open Plains Explored\nRemaining: Forest Shrine io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_plains_7: notify Open Plains Explored\nReturn to Elias io:title fadeIn:0
+    stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done
+  bp_show_mountain_remaining: folder bp_title_mountain_0,bp_title_mountain_1,bp_title_mountain_2,bp_title_mountain_3,bp_title_mountain_4,bp_title_mountain_5,bp_title_mountain_6,bp_title_mountain_7
+  bp_title_mountain_0: 'notify Old Mountain Pass Explored\nRemaining: Forest Shrine
+    - River Bend - Open Plains io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,!bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_mountain_1: 'notify Old Mountain Pass Explored\nRemaining: River Bend -
+    Open Plains io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_mountain_2: 'notify Old Mountain Pass Explored\nRemaining: Forest Shrine
+    - Open Plains io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_mountain_3: 'notify Old Mountain Pass Explored\nRemaining: Forest Shrine
+    - River Bend io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,!bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_mountain_4: 'notify Old Mountain Pass Explored\nRemaining: Open Plains
+    io:title fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,!bp_plains_done,bp_mountain_done'
+  bp_title_mountain_5: 'notify Old Mountain Pass Explored\nRemaining: River Bend io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,!bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_mountain_6: 'notify Old Mountain Pass Explored\nRemaining: Forest Shrine
+    io:title fadeIn:0 stay:60 fadeOut:10 conditions:!bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done'
+  bp_title_mountain_7: notify Old Mountain Pass Explored\nReturn to Elias io:title
+    fadeIn:0 stay:60 fadeOut:10 conditions:bp_forest_done,bp_river_done,bp_plains_done,bp_mountain_done
+  bp_explore_try_complete: folder bp_explore_complete conditions:bp_all_locations
+  bp_explore_complete: folder bp_tag_explore_done,bp_del_explore_phase,bp_remove_journal_explore,bp_msg_return_elias_delayed
+  bp_tag_explore_done: tag add bp_explore_done
+  bp_del_explore_phase: tag del bp_explore_phase
+  bp_msg_return_elias: 'notify &6Elias Packwright&7: &bYou have discovered every landmark.
+    Return to me. io:chat'
+  bp_msg_return_elias_delayed: folder bp_msg_return_elias delay:2
+  bp_start_canvas_phase: folder bp_tag_canvas_phase,bp_journal_canvas,bp_title_canvas_start,bp_msg_canvas_start_delayed
+  bp_tag_canvas_phase: tag add bp_canvas_phase
+  bp_title_canvas_start: notify Chapter II - Woven Strength\nSpeak with Mara Threadneedle
+    io:title fadeIn:0 stay:70 fadeOut:10
+  bp_msg_canvas_start: 'notify &6Elias Packwright&7: &bSpeak with &6Mara Threadneedle&b.
+    She can stitch the travelling canvas. io:chat'
+  bp_msg_canvas_start_delayed: folder bp_msg_canvas_start delay:2
+  bp_canvas_take: folder bp_take_canvas_leather,bp_take_canvas_string,bp_take_canvas_wool
+  bp_take_canvas_leather: take bp_leather:24
+  bp_take_canvas_string: take bp_string:32
+  bp_take_canvas_wool: take bp_white_wool:16
+  bp_canvas_complete: folder bp_canvas_take,bp_tag_canvas_done,bp_del_canvas_phase,bp_remove_journal_canvas,bp_title_canvas_done,bp_msg_canvas_done_delayed
+  bp_tag_canvas_done: tag add bp_canvas_done
+  bp_del_canvas_phase: tag del bp_canvas_phase
+  bp_title_canvas_done: notify Travelling Canvas Complete\nReturn to Elias Packwright
+    io:title fadeIn:0 stay:60 fadeOut:10
+  bp_msg_canvas_done: 'notify &6Mara Threadneedle&7: &bThe canvas is ready. Return
+    to &6Elias Packwright&b. io:chat'
+  bp_msg_canvas_done_delayed: folder bp_msg_canvas_done delay:2
+  bp_start_frame_phase: folder bp_tag_frame_phase,bp_journal_frame,bp_title_frame_start,bp_msg_frame_phase_delayed
+  bp_tag_frame_phase: tag add bp_frame_phase
+  bp_title_frame_start: notify Chapter III - Iron Frame\nSpeak with Brann Gearlock
+    io:title fadeIn:0 stay:70 fadeOut:10
+  bp_msg_frame_phase: 'notify &6Elias Packwright&7: &bNow speak with &6Brann Gearlock&b
+    for the reinforced frame. io:chat'
+  bp_msg_frame_phase_delayed: folder bp_msg_frame_phase delay:2
+  bp_frame_take: folder bp_take_frame_iron,bp_take_frame_copper,bp_take_frame_chest
+  bp_take_frame_iron: take bp_iron_ingot:12
+  bp_take_frame_copper: take bp_copper_ingot:16
+  bp_take_frame_chest: take bp_chest:1
+  bp_frame_complete: folder bp_frame_take,bp_tag_frame_done,bp_del_frame_phase,bp_remove_journal_frame,bp_title_frame_done,bp_msg_frame_done_delayed
+  bp_tag_frame_done: tag add bp_frame_done
+  bp_del_frame_phase: tag del bp_frame_phase
+  bp_title_frame_done: notify Reinforced Frame Complete\nReturn to Elias Packwright
+    io:title fadeIn:0 stay:60 fadeOut:10
+  bp_msg_frame_done: 'notify &6Brann Gearlock&7: &bThe frame is finished. Return to
+    &6Elias Packwright&b. io:chat'
+  bp_msg_frame_done_delayed: folder bp_msg_frame_done delay:2
+  bp_start_combat_phase: folder bp_tag_combat_phase,bp_journal_combat,bp_objectives_combat_start,bp_title_combat_start,bp_msg_combat_start_delayed
+  bp_tag_combat_phase: tag add bp_combat_phase
+  bp_objectives_combat_start: objective add bp_obj_vindicator,bp_obj_witch,bp_obj_skeleton
+  bp_title_combat_start: notify Chapter IV - Trial of Courage\nDefeat the required
+    enemies io:title fadeIn:0 stay:70 fadeOut:10
+  bp_msg_combat_start: 'notify &6Elias Packwright&7: &bYou still lack field experience.
+    Defeat &65 Vindicators&b, &65 Witches&b and &610 Skeletons&b. io:chat'
+  bp_msg_combat_start_delayed: folder bp_msg_combat_start delay:2
+  bp_kill_progress_show: notify &6%objective.bp_obj_vindicator.amount%/5 Vindicators
+    &7| &6%objective.bp_obj_witch.amount%/5 Witches &7| &6%objective.bp_obj_skeleton.amount%/10
+    Skeletons io:chat
+  bp_kill_progress_0_0_0: notify &60/5 Vindicators &7| &60/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,!bp_skeleton_1
+  bp_kill_progress_0_0_1: notify &60/5 Vindicators &7| &60/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_1,!bp_skeleton_2
+  bp_kill_progress_0_0_2: notify &60/5 Vindicators &7| &60/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_2,!bp_skeleton_3
+  bp_kill_progress_0_0_3: notify &60/5 Vindicators &7| &60/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_3,!bp_skeleton_4
+  bp_kill_progress_0_0_4: notify &60/5 Vindicators &7| &60/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_4,!bp_skeleton_5
+  bp_kill_progress_0_0_5: notify &60/5 Vindicators &7| &60/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_5,!bp_skeleton_6
+  bp_kill_progress_0_0_6: notify &60/5 Vindicators &7| &60/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_6,!bp_skeleton_7
+  bp_kill_progress_0_0_7: notify &60/5 Vindicators &7| &60/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_7,!bp_skeleton_8
+  bp_kill_progress_0_0_8: notify &60/5 Vindicators &7| &60/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_8,!bp_skeleton_9
+  bp_kill_progress_0_0_9: notify &60/5 Vindicators &7| &60/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_9,!bp_skeleton_10
+  bp_kill_progress_0_0_10: notify &60/5 Vindicators &7| &60/5 Witches &7| &610/10
+    Skeletons io:chat conditions:!bp_vindicator_1,!bp_witch_1,bp_skeleton_10
+  bp_kill_progress_0_1_0: notify &60/5 Vindicators &7| &61/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,!bp_skeleton_1,!bp_witch_2
+  bp_kill_progress_0_1_1: notify &60/5 Vindicators &7| &61/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_1,!bp_witch_2,!bp_skeleton_2
+  bp_kill_progress_0_1_2: notify &60/5 Vindicators &7| &61/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_2,!bp_witch_2,!bp_skeleton_3
+  bp_kill_progress_0_1_3: notify &60/5 Vindicators &7| &61/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_3,!bp_witch_2,!bp_skeleton_4
+  bp_kill_progress_0_1_4: notify &60/5 Vindicators &7| &61/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_4,!bp_witch_2,!bp_skeleton_5
+  bp_kill_progress_0_1_5: notify &60/5 Vindicators &7| &61/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_5,!bp_witch_2,!bp_skeleton_6
+  bp_kill_progress_0_1_6: notify &60/5 Vindicators &7| &61/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_6,!bp_witch_2,!bp_skeleton_7
+  bp_kill_progress_0_1_7: notify &60/5 Vindicators &7| &61/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_7,!bp_witch_2,!bp_skeleton_8
+  bp_kill_progress_0_1_8: notify &60/5 Vindicators &7| &61/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_8,!bp_witch_2,!bp_skeleton_9
+  bp_kill_progress_0_1_9: notify &60/5 Vindicators &7| &61/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_9,!bp_witch_2,!bp_skeleton_10
+  bp_kill_progress_0_1_10: notify &60/5 Vindicators &7| &61/5 Witches &7| &610/10
+    Skeletons io:chat conditions:!bp_vindicator_1,bp_witch_1,bp_skeleton_10,!bp_witch_2
+  bp_kill_progress_0_2_0: notify &60/5 Vindicators &7| &62/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,!bp_skeleton_1,!bp_witch_3
+  bp_kill_progress_0_2_1: notify &60/5 Vindicators &7| &62/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_1,!bp_witch_3,!bp_skeleton_2
+  bp_kill_progress_0_2_2: notify &60/5 Vindicators &7| &62/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_2,!bp_witch_3,!bp_skeleton_3
+  bp_kill_progress_0_2_3: notify &60/5 Vindicators &7| &62/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_3,!bp_witch_3,!bp_skeleton_4
+  bp_kill_progress_0_2_4: notify &60/5 Vindicators &7| &62/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_4,!bp_witch_3,!bp_skeleton_5
+  bp_kill_progress_0_2_5: notify &60/5 Vindicators &7| &62/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_5,!bp_witch_3,!bp_skeleton_6
+  bp_kill_progress_0_2_6: notify &60/5 Vindicators &7| &62/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_6,!bp_witch_3,!bp_skeleton_7
+  bp_kill_progress_0_2_7: notify &60/5 Vindicators &7| &62/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_7,!bp_witch_3,!bp_skeleton_8
+  bp_kill_progress_0_2_8: notify &60/5 Vindicators &7| &62/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_8,!bp_witch_3,!bp_skeleton_9
+  bp_kill_progress_0_2_9: notify &60/5 Vindicators &7| &62/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_9,!bp_witch_3,!bp_skeleton_10
+  bp_kill_progress_0_2_10: notify &60/5 Vindicators &7| &62/5 Witches &7| &610/10
+    Skeletons io:chat conditions:!bp_vindicator_1,bp_witch_2,bp_skeleton_10,!bp_witch_3
+  bp_kill_progress_0_3_0: notify &60/5 Vindicators &7| &63/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,!bp_skeleton_1,!bp_witch_4
+  bp_kill_progress_0_3_1: notify &60/5 Vindicators &7| &63/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_1,!bp_witch_4,!bp_skeleton_2
+  bp_kill_progress_0_3_2: notify &60/5 Vindicators &7| &63/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_2,!bp_witch_4,!bp_skeleton_3
+  bp_kill_progress_0_3_3: notify &60/5 Vindicators &7| &63/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_3,!bp_witch_4,!bp_skeleton_4
+  bp_kill_progress_0_3_4: notify &60/5 Vindicators &7| &63/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_4,!bp_witch_4,!bp_skeleton_5
+  bp_kill_progress_0_3_5: notify &60/5 Vindicators &7| &63/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_5,!bp_witch_4,!bp_skeleton_6
+  bp_kill_progress_0_3_6: notify &60/5 Vindicators &7| &63/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_6,!bp_witch_4,!bp_skeleton_7
+  bp_kill_progress_0_3_7: notify &60/5 Vindicators &7| &63/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_7,!bp_witch_4,!bp_skeleton_8
+  bp_kill_progress_0_3_8: notify &60/5 Vindicators &7| &63/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_8,!bp_witch_4,!bp_skeleton_9
+  bp_kill_progress_0_3_9: notify &60/5 Vindicators &7| &63/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_9,!bp_witch_4,!bp_skeleton_10
+  bp_kill_progress_0_3_10: notify &60/5 Vindicators &7| &63/5 Witches &7| &610/10
+    Skeletons io:chat conditions:!bp_vindicator_1,bp_witch_3,bp_skeleton_10,!bp_witch_4
+  bp_kill_progress_0_4_0: notify &60/5 Vindicators &7| &64/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,!bp_skeleton_1,!bp_witch_5
+  bp_kill_progress_0_4_1: notify &60/5 Vindicators &7| &64/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_1,!bp_witch_5,!bp_skeleton_2
+  bp_kill_progress_0_4_2: notify &60/5 Vindicators &7| &64/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_2,!bp_witch_5,!bp_skeleton_3
+  bp_kill_progress_0_4_3: notify &60/5 Vindicators &7| &64/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_3,!bp_witch_5,!bp_skeleton_4
+  bp_kill_progress_0_4_4: notify &60/5 Vindicators &7| &64/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_4,!bp_witch_5,!bp_skeleton_5
+  bp_kill_progress_0_4_5: notify &60/5 Vindicators &7| &64/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_5,!bp_witch_5,!bp_skeleton_6
+  bp_kill_progress_0_4_6: notify &60/5 Vindicators &7| &64/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_6,!bp_witch_5,!bp_skeleton_7
+  bp_kill_progress_0_4_7: notify &60/5 Vindicators &7| &64/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_7,!bp_witch_5,!bp_skeleton_8
+  bp_kill_progress_0_4_8: notify &60/5 Vindicators &7| &64/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_8,!bp_witch_5,!bp_skeleton_9
+  bp_kill_progress_0_4_9: notify &60/5 Vindicators &7| &64/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_9,!bp_witch_5,!bp_skeleton_10
+  bp_kill_progress_0_4_10: notify &60/5 Vindicators &7| &64/5 Witches &7| &610/10
+    Skeletons io:chat conditions:!bp_vindicator_1,bp_witch_4,bp_skeleton_10,!bp_witch_5
+  bp_kill_progress_0_5_0: notify &60/5 Vindicators &7| &65/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,!bp_skeleton_1
+  bp_kill_progress_0_5_1: notify &60/5 Vindicators &7| &65/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_1,!bp_skeleton_2
+  bp_kill_progress_0_5_2: notify &60/5 Vindicators &7| &65/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_2,!bp_skeleton_3
+  bp_kill_progress_0_5_3: notify &60/5 Vindicators &7| &65/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_3,!bp_skeleton_4
+  bp_kill_progress_0_5_4: notify &60/5 Vindicators &7| &65/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_4,!bp_skeleton_5
+  bp_kill_progress_0_5_5: notify &60/5 Vindicators &7| &65/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_5,!bp_skeleton_6
+  bp_kill_progress_0_5_6: notify &60/5 Vindicators &7| &65/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_6,!bp_skeleton_7
+  bp_kill_progress_0_5_7: notify &60/5 Vindicators &7| &65/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_7,!bp_skeleton_8
+  bp_kill_progress_0_5_8: notify &60/5 Vindicators &7| &65/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_8,!bp_skeleton_9
+  bp_kill_progress_0_5_9: notify &60/5 Vindicators &7| &65/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_9,!bp_skeleton_10
+  bp_kill_progress_0_5_10: notify &60/5 Vindicators &7| &65/5 Witches &7| &610/10
+    Skeletons io:chat conditions:!bp_vindicator_1,bp_witch_5,bp_skeleton_10
+  bp_kill_progress_1_0_0: notify &61/5 Vindicators &7| &60/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,!bp_skeleton_1,!bp_vindicator_2
+  bp_kill_progress_1_0_1: notify &61/5 Vindicators &7| &60/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_1,!bp_vindicator_2,!bp_skeleton_2
+  bp_kill_progress_1_0_2: notify &61/5 Vindicators &7| &60/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_2,!bp_vindicator_2,!bp_skeleton_3
+  bp_kill_progress_1_0_3: notify &61/5 Vindicators &7| &60/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_3,!bp_vindicator_2,!bp_skeleton_4
+  bp_kill_progress_1_0_4: notify &61/5 Vindicators &7| &60/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_4,!bp_vindicator_2,!bp_skeleton_5
+  bp_kill_progress_1_0_5: notify &61/5 Vindicators &7| &60/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_5,!bp_vindicator_2,!bp_skeleton_6
+  bp_kill_progress_1_0_6: notify &61/5 Vindicators &7| &60/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_6,!bp_vindicator_2,!bp_skeleton_7
+  bp_kill_progress_1_0_7: notify &61/5 Vindicators &7| &60/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_7,!bp_vindicator_2,!bp_skeleton_8
+  bp_kill_progress_1_0_8: notify &61/5 Vindicators &7| &60/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_8,!bp_vindicator_2,!bp_skeleton_9
+  bp_kill_progress_1_0_9: notify &61/5 Vindicators &7| &60/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_9,!bp_vindicator_2,!bp_skeleton_10
+  bp_kill_progress_1_0_10: notify &61/5 Vindicators &7| &60/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_1,!bp_witch_1,bp_skeleton_10,!bp_vindicator_2
+  bp_kill_progress_1_1_0: notify &61/5 Vindicators &7| &61/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,!bp_skeleton_1,!bp_vindicator_2,!bp_witch_2
+  bp_kill_progress_1_1_1: notify &61/5 Vindicators &7| &61/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_1,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_2
+  bp_kill_progress_1_1_2: notify &61/5 Vindicators &7| &61/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_2,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_3
+  bp_kill_progress_1_1_3: notify &61/5 Vindicators &7| &61/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_3,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_4
+  bp_kill_progress_1_1_4: notify &61/5 Vindicators &7| &61/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_4,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_5
+  bp_kill_progress_1_1_5: notify &61/5 Vindicators &7| &61/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_5,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_6
+  bp_kill_progress_1_1_6: notify &61/5 Vindicators &7| &61/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_6,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_7
+  bp_kill_progress_1_1_7: notify &61/5 Vindicators &7| &61/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_7,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_8
+  bp_kill_progress_1_1_8: notify &61/5 Vindicators &7| &61/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_8,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_9
+  bp_kill_progress_1_1_9: notify &61/5 Vindicators &7| &61/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_9,!bp_vindicator_2,!bp_witch_2,!bp_skeleton_10
+  bp_kill_progress_1_1_10: notify &61/5 Vindicators &7| &61/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_1,bp_witch_1,bp_skeleton_10,!bp_vindicator_2,!bp_witch_2
+  bp_kill_progress_1_2_0: notify &61/5 Vindicators &7| &62/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,!bp_skeleton_1,!bp_vindicator_2,!bp_witch_3
+  bp_kill_progress_1_2_1: notify &61/5 Vindicators &7| &62/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_1,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_2
+  bp_kill_progress_1_2_2: notify &61/5 Vindicators &7| &62/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_2,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_3
+  bp_kill_progress_1_2_3: notify &61/5 Vindicators &7| &62/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_3,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_4
+  bp_kill_progress_1_2_4: notify &61/5 Vindicators &7| &62/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_4,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_5
+  bp_kill_progress_1_2_5: notify &61/5 Vindicators &7| &62/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_5,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_6
+  bp_kill_progress_1_2_6: notify &61/5 Vindicators &7| &62/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_6,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_7
+  bp_kill_progress_1_2_7: notify &61/5 Vindicators &7| &62/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_7,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_8
+  bp_kill_progress_1_2_8: notify &61/5 Vindicators &7| &62/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_8,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_9
+  bp_kill_progress_1_2_9: notify &61/5 Vindicators &7| &62/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_9,!bp_vindicator_2,!bp_witch_3,!bp_skeleton_10
+  bp_kill_progress_1_2_10: notify &61/5 Vindicators &7| &62/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_1,bp_witch_2,bp_skeleton_10,!bp_vindicator_2,!bp_witch_3
+  bp_kill_progress_1_3_0: notify &61/5 Vindicators &7| &63/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,!bp_skeleton_1,!bp_vindicator_2,!bp_witch_4
+  bp_kill_progress_1_3_1: notify &61/5 Vindicators &7| &63/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_1,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_2
+  bp_kill_progress_1_3_2: notify &61/5 Vindicators &7| &63/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_2,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_3
+  bp_kill_progress_1_3_3: notify &61/5 Vindicators &7| &63/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_3,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_4
+  bp_kill_progress_1_3_4: notify &61/5 Vindicators &7| &63/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_4,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_5
+  bp_kill_progress_1_3_5: notify &61/5 Vindicators &7| &63/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_5,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_6
+  bp_kill_progress_1_3_6: notify &61/5 Vindicators &7| &63/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_6,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_7
+  bp_kill_progress_1_3_7: notify &61/5 Vindicators &7| &63/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_7,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_8
+  bp_kill_progress_1_3_8: notify &61/5 Vindicators &7| &63/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_8,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_9
+  bp_kill_progress_1_3_9: notify &61/5 Vindicators &7| &63/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_9,!bp_vindicator_2,!bp_witch_4,!bp_skeleton_10
+  bp_kill_progress_1_3_10: notify &61/5 Vindicators &7| &63/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_1,bp_witch_3,bp_skeleton_10,!bp_vindicator_2,!bp_witch_4
+  bp_kill_progress_1_4_0: notify &61/5 Vindicators &7| &64/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,!bp_skeleton_1,!bp_vindicator_2,!bp_witch_5
+  bp_kill_progress_1_4_1: notify &61/5 Vindicators &7| &64/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_1,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_2
+  bp_kill_progress_1_4_2: notify &61/5 Vindicators &7| &64/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_2,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_3
+  bp_kill_progress_1_4_3: notify &61/5 Vindicators &7| &64/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_3,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_4
+  bp_kill_progress_1_4_4: notify &61/5 Vindicators &7| &64/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_4,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_5
+  bp_kill_progress_1_4_5: notify &61/5 Vindicators &7| &64/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_5,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_6
+  bp_kill_progress_1_4_6: notify &61/5 Vindicators &7| &64/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_6,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_7
+  bp_kill_progress_1_4_7: notify &61/5 Vindicators &7| &64/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_7,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_8
+  bp_kill_progress_1_4_8: notify &61/5 Vindicators &7| &64/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_8,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_9
+  bp_kill_progress_1_4_9: notify &61/5 Vindicators &7| &64/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_9,!bp_vindicator_2,!bp_witch_5,!bp_skeleton_10
+  bp_kill_progress_1_4_10: notify &61/5 Vindicators &7| &64/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_1,bp_witch_4,bp_skeleton_10,!bp_vindicator_2,!bp_witch_5
+  bp_kill_progress_1_5_0: notify &61/5 Vindicators &7| &65/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,!bp_skeleton_1,!bp_vindicator_2
+  bp_kill_progress_1_5_1: notify &61/5 Vindicators &7| &65/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_1,!bp_vindicator_2,!bp_skeleton_2
+  bp_kill_progress_1_5_2: notify &61/5 Vindicators &7| &65/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_2,!bp_vindicator_2,!bp_skeleton_3
+  bp_kill_progress_1_5_3: notify &61/5 Vindicators &7| &65/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_3,!bp_vindicator_2,!bp_skeleton_4
+  bp_kill_progress_1_5_4: notify &61/5 Vindicators &7| &65/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_4,!bp_vindicator_2,!bp_skeleton_5
+  bp_kill_progress_1_5_5: notify &61/5 Vindicators &7| &65/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_5,!bp_vindicator_2,!bp_skeleton_6
+  bp_kill_progress_1_5_6: notify &61/5 Vindicators &7| &65/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_6,!bp_vindicator_2,!bp_skeleton_7
+  bp_kill_progress_1_5_7: notify &61/5 Vindicators &7| &65/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_7,!bp_vindicator_2,!bp_skeleton_8
+  bp_kill_progress_1_5_8: notify &61/5 Vindicators &7| &65/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_8,!bp_vindicator_2,!bp_skeleton_9
+  bp_kill_progress_1_5_9: notify &61/5 Vindicators &7| &65/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_9,!bp_vindicator_2,!bp_skeleton_10
+  bp_kill_progress_1_5_10: notify &61/5 Vindicators &7| &65/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_1,bp_witch_5,bp_skeleton_10,!bp_vindicator_2
+  bp_kill_progress_2_0_0: notify &62/5 Vindicators &7| &60/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,!bp_skeleton_1,!bp_vindicator_3
+  bp_kill_progress_2_0_1: notify &62/5 Vindicators &7| &60/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_1,!bp_vindicator_3,!bp_skeleton_2
+  bp_kill_progress_2_0_2: notify &62/5 Vindicators &7| &60/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_2,!bp_vindicator_3,!bp_skeleton_3
+  bp_kill_progress_2_0_3: notify &62/5 Vindicators &7| &60/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_3,!bp_vindicator_3,!bp_skeleton_4
+  bp_kill_progress_2_0_4: notify &62/5 Vindicators &7| &60/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_4,!bp_vindicator_3,!bp_skeleton_5
+  bp_kill_progress_2_0_5: notify &62/5 Vindicators &7| &60/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_5,!bp_vindicator_3,!bp_skeleton_6
+  bp_kill_progress_2_0_6: notify &62/5 Vindicators &7| &60/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_6,!bp_vindicator_3,!bp_skeleton_7
+  bp_kill_progress_2_0_7: notify &62/5 Vindicators &7| &60/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_7,!bp_vindicator_3,!bp_skeleton_8
+  bp_kill_progress_2_0_8: notify &62/5 Vindicators &7| &60/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_8,!bp_vindicator_3,!bp_skeleton_9
+  bp_kill_progress_2_0_9: notify &62/5 Vindicators &7| &60/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_9,!bp_vindicator_3,!bp_skeleton_10
+  bp_kill_progress_2_0_10: notify &62/5 Vindicators &7| &60/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_2,!bp_witch_1,bp_skeleton_10,!bp_vindicator_3
+  bp_kill_progress_2_1_0: notify &62/5 Vindicators &7| &61/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,!bp_skeleton_1,!bp_vindicator_3,!bp_witch_2
+  bp_kill_progress_2_1_1: notify &62/5 Vindicators &7| &61/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_1,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_2
+  bp_kill_progress_2_1_2: notify &62/5 Vindicators &7| &61/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_2,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_3
+  bp_kill_progress_2_1_3: notify &62/5 Vindicators &7| &61/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_3,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_4
+  bp_kill_progress_2_1_4: notify &62/5 Vindicators &7| &61/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_4,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_5
+  bp_kill_progress_2_1_5: notify &62/5 Vindicators &7| &61/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_5,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_6
+  bp_kill_progress_2_1_6: notify &62/5 Vindicators &7| &61/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_6,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_7
+  bp_kill_progress_2_1_7: notify &62/5 Vindicators &7| &61/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_7,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_8
+  bp_kill_progress_2_1_8: notify &62/5 Vindicators &7| &61/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_8,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_9
+  bp_kill_progress_2_1_9: notify &62/5 Vindicators &7| &61/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_9,!bp_vindicator_3,!bp_witch_2,!bp_skeleton_10
+  bp_kill_progress_2_1_10: notify &62/5 Vindicators &7| &61/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_2,bp_witch_1,bp_skeleton_10,!bp_vindicator_3,!bp_witch_2
+  bp_kill_progress_2_2_0: notify &62/5 Vindicators &7| &62/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,!bp_skeleton_1,!bp_vindicator_3,!bp_witch_3
+  bp_kill_progress_2_2_1: notify &62/5 Vindicators &7| &62/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_1,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_2
+  bp_kill_progress_2_2_2: notify &62/5 Vindicators &7| &62/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_2,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_3
+  bp_kill_progress_2_2_3: notify &62/5 Vindicators &7| &62/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_3,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_4
+  bp_kill_progress_2_2_4: notify &62/5 Vindicators &7| &62/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_4,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_5
+  bp_kill_progress_2_2_5: notify &62/5 Vindicators &7| &62/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_5,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_6
+  bp_kill_progress_2_2_6: notify &62/5 Vindicators &7| &62/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_6,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_7
+  bp_kill_progress_2_2_7: notify &62/5 Vindicators &7| &62/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_7,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_8
+  bp_kill_progress_2_2_8: notify &62/5 Vindicators &7| &62/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_8,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_9
+  bp_kill_progress_2_2_9: notify &62/5 Vindicators &7| &62/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_9,!bp_vindicator_3,!bp_witch_3,!bp_skeleton_10
+  bp_kill_progress_2_2_10: notify &62/5 Vindicators &7| &62/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_2,bp_witch_2,bp_skeleton_10,!bp_vindicator_3,!bp_witch_3
+  bp_kill_progress_2_3_0: notify &62/5 Vindicators &7| &63/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,!bp_skeleton_1,!bp_vindicator_3,!bp_witch_4
+  bp_kill_progress_2_3_1: notify &62/5 Vindicators &7| &63/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_1,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_2
+  bp_kill_progress_2_3_2: notify &62/5 Vindicators &7| &63/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_2,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_3
+  bp_kill_progress_2_3_3: notify &62/5 Vindicators &7| &63/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_3,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_4
+  bp_kill_progress_2_3_4: notify &62/5 Vindicators &7| &63/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_4,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_5
+  bp_kill_progress_2_3_5: notify &62/5 Vindicators &7| &63/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_5,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_6
+  bp_kill_progress_2_3_6: notify &62/5 Vindicators &7| &63/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_6,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_7
+  bp_kill_progress_2_3_7: notify &62/5 Vindicators &7| &63/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_7,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_8
+  bp_kill_progress_2_3_8: notify &62/5 Vindicators &7| &63/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_8,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_9
+  bp_kill_progress_2_3_9: notify &62/5 Vindicators &7| &63/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_9,!bp_vindicator_3,!bp_witch_4,!bp_skeleton_10
+  bp_kill_progress_2_3_10: notify &62/5 Vindicators &7| &63/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_2,bp_witch_3,bp_skeleton_10,!bp_vindicator_3,!bp_witch_4
+  bp_kill_progress_2_4_0: notify &62/5 Vindicators &7| &64/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,!bp_skeleton_1,!bp_vindicator_3,!bp_witch_5
+  bp_kill_progress_2_4_1: notify &62/5 Vindicators &7| &64/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_1,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_2
+  bp_kill_progress_2_4_2: notify &62/5 Vindicators &7| &64/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_2,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_3
+  bp_kill_progress_2_4_3: notify &62/5 Vindicators &7| &64/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_3,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_4
+  bp_kill_progress_2_4_4: notify &62/5 Vindicators &7| &64/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_4,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_5
+  bp_kill_progress_2_4_5: notify &62/5 Vindicators &7| &64/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_5,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_6
+  bp_kill_progress_2_4_6: notify &62/5 Vindicators &7| &64/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_6,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_7
+  bp_kill_progress_2_4_7: notify &62/5 Vindicators &7| &64/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_7,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_8
+  bp_kill_progress_2_4_8: notify &62/5 Vindicators &7| &64/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_8,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_9
+  bp_kill_progress_2_4_9: notify &62/5 Vindicators &7| &64/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_9,!bp_vindicator_3,!bp_witch_5,!bp_skeleton_10
+  bp_kill_progress_2_4_10: notify &62/5 Vindicators &7| &64/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_2,bp_witch_4,bp_skeleton_10,!bp_vindicator_3,!bp_witch_5
+  bp_kill_progress_2_5_0: notify &62/5 Vindicators &7| &65/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,!bp_skeleton_1,!bp_vindicator_3
+  bp_kill_progress_2_5_1: notify &62/5 Vindicators &7| &65/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_1,!bp_vindicator_3,!bp_skeleton_2
+  bp_kill_progress_2_5_2: notify &62/5 Vindicators &7| &65/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_2,!bp_vindicator_3,!bp_skeleton_3
+  bp_kill_progress_2_5_3: notify &62/5 Vindicators &7| &65/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_3,!bp_vindicator_3,!bp_skeleton_4
+  bp_kill_progress_2_5_4: notify &62/5 Vindicators &7| &65/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_4,!bp_vindicator_3,!bp_skeleton_5
+  bp_kill_progress_2_5_5: notify &62/5 Vindicators &7| &65/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_5,!bp_vindicator_3,!bp_skeleton_6
+  bp_kill_progress_2_5_6: notify &62/5 Vindicators &7| &65/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_6,!bp_vindicator_3,!bp_skeleton_7
+  bp_kill_progress_2_5_7: notify &62/5 Vindicators &7| &65/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_7,!bp_vindicator_3,!bp_skeleton_8
+  bp_kill_progress_2_5_8: notify &62/5 Vindicators &7| &65/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_8,!bp_vindicator_3,!bp_skeleton_9
+  bp_kill_progress_2_5_9: notify &62/5 Vindicators &7| &65/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_9,!bp_vindicator_3,!bp_skeleton_10
+  bp_kill_progress_2_5_10: notify &62/5 Vindicators &7| &65/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_2,bp_witch_5,bp_skeleton_10,!bp_vindicator_3
+  bp_kill_progress_3_0_0: notify &63/5 Vindicators &7| &60/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,!bp_skeleton_1,!bp_vindicator_4
+  bp_kill_progress_3_0_1: notify &63/5 Vindicators &7| &60/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_1,!bp_vindicator_4,!bp_skeleton_2
+  bp_kill_progress_3_0_2: notify &63/5 Vindicators &7| &60/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_2,!bp_vindicator_4,!bp_skeleton_3
+  bp_kill_progress_3_0_3: notify &63/5 Vindicators &7| &60/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_3,!bp_vindicator_4,!bp_skeleton_4
+  bp_kill_progress_3_0_4: notify &63/5 Vindicators &7| &60/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_4,!bp_vindicator_4,!bp_skeleton_5
+  bp_kill_progress_3_0_5: notify &63/5 Vindicators &7| &60/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_5,!bp_vindicator_4,!bp_skeleton_6
+  bp_kill_progress_3_0_6: notify &63/5 Vindicators &7| &60/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_6,!bp_vindicator_4,!bp_skeleton_7
+  bp_kill_progress_3_0_7: notify &63/5 Vindicators &7| &60/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_7,!bp_vindicator_4,!bp_skeleton_8
+  bp_kill_progress_3_0_8: notify &63/5 Vindicators &7| &60/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_8,!bp_vindicator_4,!bp_skeleton_9
+  bp_kill_progress_3_0_9: notify &63/5 Vindicators &7| &60/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_9,!bp_vindicator_4,!bp_skeleton_10
+  bp_kill_progress_3_0_10: notify &63/5 Vindicators &7| &60/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_3,!bp_witch_1,bp_skeleton_10,!bp_vindicator_4
+  bp_kill_progress_3_1_0: notify &63/5 Vindicators &7| &61/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,!bp_skeleton_1,!bp_vindicator_4,!bp_witch_2
+  bp_kill_progress_3_1_1: notify &63/5 Vindicators &7| &61/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_1,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_2
+  bp_kill_progress_3_1_2: notify &63/5 Vindicators &7| &61/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_2,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_3
+  bp_kill_progress_3_1_3: notify &63/5 Vindicators &7| &61/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_3,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_4
+  bp_kill_progress_3_1_4: notify &63/5 Vindicators &7| &61/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_4,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_5
+  bp_kill_progress_3_1_5: notify &63/5 Vindicators &7| &61/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_5,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_6
+  bp_kill_progress_3_1_6: notify &63/5 Vindicators &7| &61/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_6,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_7
+  bp_kill_progress_3_1_7: notify &63/5 Vindicators &7| &61/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_7,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_8
+  bp_kill_progress_3_1_8: notify &63/5 Vindicators &7| &61/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_8,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_9
+  bp_kill_progress_3_1_9: notify &63/5 Vindicators &7| &61/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_9,!bp_vindicator_4,!bp_witch_2,!bp_skeleton_10
+  bp_kill_progress_3_1_10: notify &63/5 Vindicators &7| &61/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_3,bp_witch_1,bp_skeleton_10,!bp_vindicator_4,!bp_witch_2
+  bp_kill_progress_3_2_0: notify &63/5 Vindicators &7| &62/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,!bp_skeleton_1,!bp_vindicator_4,!bp_witch_3
+  bp_kill_progress_3_2_1: notify &63/5 Vindicators &7| &62/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_1,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_2
+  bp_kill_progress_3_2_2: notify &63/5 Vindicators &7| &62/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_2,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_3
+  bp_kill_progress_3_2_3: notify &63/5 Vindicators &7| &62/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_3,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_4
+  bp_kill_progress_3_2_4: notify &63/5 Vindicators &7| &62/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_4,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_5
+  bp_kill_progress_3_2_5: notify &63/5 Vindicators &7| &62/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_5,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_6
+  bp_kill_progress_3_2_6: notify &63/5 Vindicators &7| &62/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_6,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_7
+  bp_kill_progress_3_2_7: notify &63/5 Vindicators &7| &62/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_7,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_8
+  bp_kill_progress_3_2_8: notify &63/5 Vindicators &7| &62/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_8,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_9
+  bp_kill_progress_3_2_9: notify &63/5 Vindicators &7| &62/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_9,!bp_vindicator_4,!bp_witch_3,!bp_skeleton_10
+  bp_kill_progress_3_2_10: notify &63/5 Vindicators &7| &62/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_3,bp_witch_2,bp_skeleton_10,!bp_vindicator_4,!bp_witch_3
+  bp_kill_progress_3_3_0: notify &63/5 Vindicators &7| &63/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,!bp_skeleton_1,!bp_vindicator_4,!bp_witch_4
+  bp_kill_progress_3_3_1: notify &63/5 Vindicators &7| &63/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_1,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_2
+  bp_kill_progress_3_3_2: notify &63/5 Vindicators &7| &63/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_2,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_3
+  bp_kill_progress_3_3_3: notify &63/5 Vindicators &7| &63/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_3,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_4
+  bp_kill_progress_3_3_4: notify &63/5 Vindicators &7| &63/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_4,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_5
+  bp_kill_progress_3_3_5: notify &63/5 Vindicators &7| &63/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_5,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_6
+  bp_kill_progress_3_3_6: notify &63/5 Vindicators &7| &63/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_6,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_7
+  bp_kill_progress_3_3_7: notify &63/5 Vindicators &7| &63/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_7,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_8
+  bp_kill_progress_3_3_8: notify &63/5 Vindicators &7| &63/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_8,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_9
+  bp_kill_progress_3_3_9: notify &63/5 Vindicators &7| &63/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_9,!bp_vindicator_4,!bp_witch_4,!bp_skeleton_10
+  bp_kill_progress_3_3_10: notify &63/5 Vindicators &7| &63/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_3,bp_witch_3,bp_skeleton_10,!bp_vindicator_4,!bp_witch_4
+  bp_kill_progress_3_4_0: notify &63/5 Vindicators &7| &64/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,!bp_skeleton_1,!bp_vindicator_4,!bp_witch_5
+  bp_kill_progress_3_4_1: notify &63/5 Vindicators &7| &64/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_1,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_2
+  bp_kill_progress_3_4_2: notify &63/5 Vindicators &7| &64/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_2,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_3
+  bp_kill_progress_3_4_3: notify &63/5 Vindicators &7| &64/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_3,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_4
+  bp_kill_progress_3_4_4: notify &63/5 Vindicators &7| &64/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_4,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_5
+  bp_kill_progress_3_4_5: notify &63/5 Vindicators &7| &64/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_5,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_6
+  bp_kill_progress_3_4_6: notify &63/5 Vindicators &7| &64/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_6,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_7
+  bp_kill_progress_3_4_7: notify &63/5 Vindicators &7| &64/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_7,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_8
+  bp_kill_progress_3_4_8: notify &63/5 Vindicators &7| &64/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_8,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_9
+  bp_kill_progress_3_4_9: notify &63/5 Vindicators &7| &64/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_9,!bp_vindicator_4,!bp_witch_5,!bp_skeleton_10
+  bp_kill_progress_3_4_10: notify &63/5 Vindicators &7| &64/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_3,bp_witch_4,bp_skeleton_10,!bp_vindicator_4,!bp_witch_5
+  bp_kill_progress_3_5_0: notify &63/5 Vindicators &7| &65/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,!bp_skeleton_1,!bp_vindicator_4
+  bp_kill_progress_3_5_1: notify &63/5 Vindicators &7| &65/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_1,!bp_vindicator_4,!bp_skeleton_2
+  bp_kill_progress_3_5_2: notify &63/5 Vindicators &7| &65/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_2,!bp_vindicator_4,!bp_skeleton_3
+  bp_kill_progress_3_5_3: notify &63/5 Vindicators &7| &65/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_3,!bp_vindicator_4,!bp_skeleton_4
+  bp_kill_progress_3_5_4: notify &63/5 Vindicators &7| &65/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_4,!bp_vindicator_4,!bp_skeleton_5
+  bp_kill_progress_3_5_5: notify &63/5 Vindicators &7| &65/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_5,!bp_vindicator_4,!bp_skeleton_6
+  bp_kill_progress_3_5_6: notify &63/5 Vindicators &7| &65/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_6,!bp_vindicator_4,!bp_skeleton_7
+  bp_kill_progress_3_5_7: notify &63/5 Vindicators &7| &65/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_7,!bp_vindicator_4,!bp_skeleton_8
+  bp_kill_progress_3_5_8: notify &63/5 Vindicators &7| &65/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_8,!bp_vindicator_4,!bp_skeleton_9
+  bp_kill_progress_3_5_9: notify &63/5 Vindicators &7| &65/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_9,!bp_vindicator_4,!bp_skeleton_10
+  bp_kill_progress_3_5_10: notify &63/5 Vindicators &7| &65/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_3,bp_witch_5,bp_skeleton_10,!bp_vindicator_4
+  bp_kill_progress_4_0_0: notify &64/5 Vindicators &7| &60/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,!bp_skeleton_1,!bp_vindicator_5
+  bp_kill_progress_4_0_1: notify &64/5 Vindicators &7| &60/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_1,!bp_vindicator_5,!bp_skeleton_2
+  bp_kill_progress_4_0_2: notify &64/5 Vindicators &7| &60/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_2,!bp_vindicator_5,!bp_skeleton_3
+  bp_kill_progress_4_0_3: notify &64/5 Vindicators &7| &60/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_3,!bp_vindicator_5,!bp_skeleton_4
+  bp_kill_progress_4_0_4: notify &64/5 Vindicators &7| &60/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_4,!bp_vindicator_5,!bp_skeleton_5
+  bp_kill_progress_4_0_5: notify &64/5 Vindicators &7| &60/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_5,!bp_vindicator_5,!bp_skeleton_6
+  bp_kill_progress_4_0_6: notify &64/5 Vindicators &7| &60/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_6,!bp_vindicator_5,!bp_skeleton_7
+  bp_kill_progress_4_0_7: notify &64/5 Vindicators &7| &60/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_7,!bp_vindicator_5,!bp_skeleton_8
+  bp_kill_progress_4_0_8: notify &64/5 Vindicators &7| &60/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_8,!bp_vindicator_5,!bp_skeleton_9
+  bp_kill_progress_4_0_9: notify &64/5 Vindicators &7| &60/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_9,!bp_vindicator_5,!bp_skeleton_10
+  bp_kill_progress_4_0_10: notify &64/5 Vindicators &7| &60/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_4,!bp_witch_1,bp_skeleton_10,!bp_vindicator_5
+  bp_kill_progress_4_1_0: notify &64/5 Vindicators &7| &61/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,!bp_skeleton_1,!bp_vindicator_5,!bp_witch_2
+  bp_kill_progress_4_1_1: notify &64/5 Vindicators &7| &61/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_1,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_2
+  bp_kill_progress_4_1_2: notify &64/5 Vindicators &7| &61/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_2,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_3
+  bp_kill_progress_4_1_3: notify &64/5 Vindicators &7| &61/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_3,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_4
+  bp_kill_progress_4_1_4: notify &64/5 Vindicators &7| &61/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_4,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_5
+  bp_kill_progress_4_1_5: notify &64/5 Vindicators &7| &61/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_5,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_6
+  bp_kill_progress_4_1_6: notify &64/5 Vindicators &7| &61/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_6,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_7
+  bp_kill_progress_4_1_7: notify &64/5 Vindicators &7| &61/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_7,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_8
+  bp_kill_progress_4_1_8: notify &64/5 Vindicators &7| &61/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_8,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_9
+  bp_kill_progress_4_1_9: notify &64/5 Vindicators &7| &61/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_9,!bp_vindicator_5,!bp_witch_2,!bp_skeleton_10
+  bp_kill_progress_4_1_10: notify &64/5 Vindicators &7| &61/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_4,bp_witch_1,bp_skeleton_10,!bp_vindicator_5,!bp_witch_2
+  bp_kill_progress_4_2_0: notify &64/5 Vindicators &7| &62/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,!bp_skeleton_1,!bp_vindicator_5,!bp_witch_3
+  bp_kill_progress_4_2_1: notify &64/5 Vindicators &7| &62/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_1,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_2
+  bp_kill_progress_4_2_2: notify &64/5 Vindicators &7| &62/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_2,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_3
+  bp_kill_progress_4_2_3: notify &64/5 Vindicators &7| &62/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_3,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_4
+  bp_kill_progress_4_2_4: notify &64/5 Vindicators &7| &62/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_4,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_5
+  bp_kill_progress_4_2_5: notify &64/5 Vindicators &7| &62/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_5,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_6
+  bp_kill_progress_4_2_6: notify &64/5 Vindicators &7| &62/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_6,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_7
+  bp_kill_progress_4_2_7: notify &64/5 Vindicators &7| &62/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_7,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_8
+  bp_kill_progress_4_2_8: notify &64/5 Vindicators &7| &62/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_8,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_9
+  bp_kill_progress_4_2_9: notify &64/5 Vindicators &7| &62/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_9,!bp_vindicator_5,!bp_witch_3,!bp_skeleton_10
+  bp_kill_progress_4_2_10: notify &64/5 Vindicators &7| &62/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_4,bp_witch_2,bp_skeleton_10,!bp_vindicator_5,!bp_witch_3
+  bp_kill_progress_4_3_0: notify &64/5 Vindicators &7| &63/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,!bp_skeleton_1,!bp_vindicator_5,!bp_witch_4
+  bp_kill_progress_4_3_1: notify &64/5 Vindicators &7| &63/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_1,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_2
+  bp_kill_progress_4_3_2: notify &64/5 Vindicators &7| &63/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_2,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_3
+  bp_kill_progress_4_3_3: notify &64/5 Vindicators &7| &63/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_3,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_4
+  bp_kill_progress_4_3_4: notify &64/5 Vindicators &7| &63/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_4,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_5
+  bp_kill_progress_4_3_5: notify &64/5 Vindicators &7| &63/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_5,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_6
+  bp_kill_progress_4_3_6: notify &64/5 Vindicators &7| &63/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_6,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_7
+  bp_kill_progress_4_3_7: notify &64/5 Vindicators &7| &63/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_7,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_8
+  bp_kill_progress_4_3_8: notify &64/5 Vindicators &7| &63/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_8,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_9
+  bp_kill_progress_4_3_9: notify &64/5 Vindicators &7| &63/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_9,!bp_vindicator_5,!bp_witch_4,!bp_skeleton_10
+  bp_kill_progress_4_3_10: notify &64/5 Vindicators &7| &63/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_4,bp_witch_3,bp_skeleton_10,!bp_vindicator_5,!bp_witch_4
+  bp_kill_progress_4_4_0: notify &64/5 Vindicators &7| &64/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,!bp_skeleton_1,!bp_vindicator_5,!bp_witch_5
+  bp_kill_progress_4_4_1: notify &64/5 Vindicators &7| &64/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_1,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_2
+  bp_kill_progress_4_4_2: notify &64/5 Vindicators &7| &64/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_2,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_3
+  bp_kill_progress_4_4_3: notify &64/5 Vindicators &7| &64/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_3,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_4
+  bp_kill_progress_4_4_4: notify &64/5 Vindicators &7| &64/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_4,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_5
+  bp_kill_progress_4_4_5: notify &64/5 Vindicators &7| &64/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_5,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_6
+  bp_kill_progress_4_4_6: notify &64/5 Vindicators &7| &64/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_6,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_7
+  bp_kill_progress_4_4_7: notify &64/5 Vindicators &7| &64/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_7,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_8
+  bp_kill_progress_4_4_8: notify &64/5 Vindicators &7| &64/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_8,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_9
+  bp_kill_progress_4_4_9: notify &64/5 Vindicators &7| &64/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_9,!bp_vindicator_5,!bp_witch_5,!bp_skeleton_10
+  bp_kill_progress_4_4_10: notify &64/5 Vindicators &7| &64/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_4,bp_witch_4,bp_skeleton_10,!bp_vindicator_5,!bp_witch_5
+  bp_kill_progress_4_5_0: notify &64/5 Vindicators &7| &65/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,!bp_skeleton_1,!bp_vindicator_5
+  bp_kill_progress_4_5_1: notify &64/5 Vindicators &7| &65/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_1,!bp_vindicator_5,!bp_skeleton_2
+  bp_kill_progress_4_5_2: notify &64/5 Vindicators &7| &65/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_2,!bp_vindicator_5,!bp_skeleton_3
+  bp_kill_progress_4_5_3: notify &64/5 Vindicators &7| &65/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_3,!bp_vindicator_5,!bp_skeleton_4
+  bp_kill_progress_4_5_4: notify &64/5 Vindicators &7| &65/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_4,!bp_vindicator_5,!bp_skeleton_5
+  bp_kill_progress_4_5_5: notify &64/5 Vindicators &7| &65/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_5,!bp_vindicator_5,!bp_skeleton_6
+  bp_kill_progress_4_5_6: notify &64/5 Vindicators &7| &65/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_6,!bp_vindicator_5,!bp_skeleton_7
+  bp_kill_progress_4_5_7: notify &64/5 Vindicators &7| &65/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_7,!bp_vindicator_5,!bp_skeleton_8
+  bp_kill_progress_4_5_8: notify &64/5 Vindicators &7| &65/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_8,!bp_vindicator_5,!bp_skeleton_9
+  bp_kill_progress_4_5_9: notify &64/5 Vindicators &7| &65/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_9,!bp_vindicator_5,!bp_skeleton_10
+  bp_kill_progress_4_5_10: notify &64/5 Vindicators &7| &65/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_4,bp_witch_5,bp_skeleton_10,!bp_vindicator_5
+  bp_kill_progress_5_0_0: notify &65/5 Vindicators &7| &60/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,!bp_skeleton_1
+  bp_kill_progress_5_0_1: notify &65/5 Vindicators &7| &60/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_1,!bp_skeleton_2
+  bp_kill_progress_5_0_2: notify &65/5 Vindicators &7| &60/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_2,!bp_skeleton_3
+  bp_kill_progress_5_0_3: notify &65/5 Vindicators &7| &60/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_3,!bp_skeleton_4
+  bp_kill_progress_5_0_4: notify &65/5 Vindicators &7| &60/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_4,!bp_skeleton_5
+  bp_kill_progress_5_0_5: notify &65/5 Vindicators &7| &60/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_5,!bp_skeleton_6
+  bp_kill_progress_5_0_6: notify &65/5 Vindicators &7| &60/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_6,!bp_skeleton_7
+  bp_kill_progress_5_0_7: notify &65/5 Vindicators &7| &60/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_7,!bp_skeleton_8
+  bp_kill_progress_5_0_8: notify &65/5 Vindicators &7| &60/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_8,!bp_skeleton_9
+  bp_kill_progress_5_0_9: notify &65/5 Vindicators &7| &60/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_9,!bp_skeleton_10
+  bp_kill_progress_5_0_10: notify &65/5 Vindicators &7| &60/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_5,!bp_witch_1,bp_skeleton_10
+  bp_kill_progress_5_1_0: notify &65/5 Vindicators &7| &61/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,!bp_skeleton_1,!bp_witch_2
+  bp_kill_progress_5_1_1: notify &65/5 Vindicators &7| &61/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_1,!bp_witch_2,!bp_skeleton_2
+  bp_kill_progress_5_1_2: notify &65/5 Vindicators &7| &61/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_2,!bp_witch_2,!bp_skeleton_3
+  bp_kill_progress_5_1_3: notify &65/5 Vindicators &7| &61/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_3,!bp_witch_2,!bp_skeleton_4
+  bp_kill_progress_5_1_4: notify &65/5 Vindicators &7| &61/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_4,!bp_witch_2,!bp_skeleton_5
+  bp_kill_progress_5_1_5: notify &65/5 Vindicators &7| &61/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_5,!bp_witch_2,!bp_skeleton_6
+  bp_kill_progress_5_1_6: notify &65/5 Vindicators &7| &61/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_6,!bp_witch_2,!bp_skeleton_7
+  bp_kill_progress_5_1_7: notify &65/5 Vindicators &7| &61/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_7,!bp_witch_2,!bp_skeleton_8
+  bp_kill_progress_5_1_8: notify &65/5 Vindicators &7| &61/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_8,!bp_witch_2,!bp_skeleton_9
+  bp_kill_progress_5_1_9: notify &65/5 Vindicators &7| &61/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_9,!bp_witch_2,!bp_skeleton_10
+  bp_kill_progress_5_1_10: notify &65/5 Vindicators &7| &61/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_5,bp_witch_1,bp_skeleton_10,!bp_witch_2
+  bp_kill_progress_5_2_0: notify &65/5 Vindicators &7| &62/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,!bp_skeleton_1,!bp_witch_3
+  bp_kill_progress_5_2_1: notify &65/5 Vindicators &7| &62/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_1,!bp_witch_3,!bp_skeleton_2
+  bp_kill_progress_5_2_2: notify &65/5 Vindicators &7| &62/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_2,!bp_witch_3,!bp_skeleton_3
+  bp_kill_progress_5_2_3: notify &65/5 Vindicators &7| &62/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_3,!bp_witch_3,!bp_skeleton_4
+  bp_kill_progress_5_2_4: notify &65/5 Vindicators &7| &62/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_4,!bp_witch_3,!bp_skeleton_5
+  bp_kill_progress_5_2_5: notify &65/5 Vindicators &7| &62/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_5,!bp_witch_3,!bp_skeleton_6
+  bp_kill_progress_5_2_6: notify &65/5 Vindicators &7| &62/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_6,!bp_witch_3,!bp_skeleton_7
+  bp_kill_progress_5_2_7: notify &65/5 Vindicators &7| &62/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_7,!bp_witch_3,!bp_skeleton_8
+  bp_kill_progress_5_2_8: notify &65/5 Vindicators &7| &62/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_8,!bp_witch_3,!bp_skeleton_9
+  bp_kill_progress_5_2_9: notify &65/5 Vindicators &7| &62/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_9,!bp_witch_3,!bp_skeleton_10
+  bp_kill_progress_5_2_10: notify &65/5 Vindicators &7| &62/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_5,bp_witch_2,bp_skeleton_10,!bp_witch_3
+  bp_kill_progress_5_3_0: notify &65/5 Vindicators &7| &63/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,!bp_skeleton_1,!bp_witch_4
+  bp_kill_progress_5_3_1: notify &65/5 Vindicators &7| &63/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_1,!bp_witch_4,!bp_skeleton_2
+  bp_kill_progress_5_3_2: notify &65/5 Vindicators &7| &63/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_2,!bp_witch_4,!bp_skeleton_3
+  bp_kill_progress_5_3_3: notify &65/5 Vindicators &7| &63/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_3,!bp_witch_4,!bp_skeleton_4
+  bp_kill_progress_5_3_4: notify &65/5 Vindicators &7| &63/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_4,!bp_witch_4,!bp_skeleton_5
+  bp_kill_progress_5_3_5: notify &65/5 Vindicators &7| &63/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_5,!bp_witch_4,!bp_skeleton_6
+  bp_kill_progress_5_3_6: notify &65/5 Vindicators &7| &63/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_6,!bp_witch_4,!bp_skeleton_7
+  bp_kill_progress_5_3_7: notify &65/5 Vindicators &7| &63/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_7,!bp_witch_4,!bp_skeleton_8
+  bp_kill_progress_5_3_8: notify &65/5 Vindicators &7| &63/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_8,!bp_witch_4,!bp_skeleton_9
+  bp_kill_progress_5_3_9: notify &65/5 Vindicators &7| &63/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_9,!bp_witch_4,!bp_skeleton_10
+  bp_kill_progress_5_3_10: notify &65/5 Vindicators &7| &63/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_5,bp_witch_3,bp_skeleton_10,!bp_witch_4
+  bp_kill_progress_5_4_0: notify &65/5 Vindicators &7| &64/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,!bp_skeleton_1,!bp_witch_5
+  bp_kill_progress_5_4_1: notify &65/5 Vindicators &7| &64/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_1,!bp_witch_5,!bp_skeleton_2
+  bp_kill_progress_5_4_2: notify &65/5 Vindicators &7| &64/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_2,!bp_witch_5,!bp_skeleton_3
+  bp_kill_progress_5_4_3: notify &65/5 Vindicators &7| &64/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_3,!bp_witch_5,!bp_skeleton_4
+  bp_kill_progress_5_4_4: notify &65/5 Vindicators &7| &64/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_4,!bp_witch_5,!bp_skeleton_5
+  bp_kill_progress_5_4_5: notify &65/5 Vindicators &7| &64/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_5,!bp_witch_5,!bp_skeleton_6
+  bp_kill_progress_5_4_6: notify &65/5 Vindicators &7| &64/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_6,!bp_witch_5,!bp_skeleton_7
+  bp_kill_progress_5_4_7: notify &65/5 Vindicators &7| &64/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_7,!bp_witch_5,!bp_skeleton_8
+  bp_kill_progress_5_4_8: notify &65/5 Vindicators &7| &64/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_8,!bp_witch_5,!bp_skeleton_9
+  bp_kill_progress_5_4_9: notify &65/5 Vindicators &7| &64/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_9,!bp_witch_5,!bp_skeleton_10
+  bp_kill_progress_5_4_10: notify &65/5 Vindicators &7| &64/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_5,bp_witch_4,bp_skeleton_10,!bp_witch_5
+  bp_kill_progress_5_5_0: notify &65/5 Vindicators &7| &65/5 Witches &7| &60/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,!bp_skeleton_1
+  bp_kill_progress_5_5_1: notify &65/5 Vindicators &7| &65/5 Witches &7| &61/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_1,!bp_skeleton_2
+  bp_kill_progress_5_5_2: notify &65/5 Vindicators &7| &65/5 Witches &7| &62/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_2,!bp_skeleton_3
+  bp_kill_progress_5_5_3: notify &65/5 Vindicators &7| &65/5 Witches &7| &63/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_3,!bp_skeleton_4
+  bp_kill_progress_5_5_4: notify &65/5 Vindicators &7| &65/5 Witches &7| &64/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_4,!bp_skeleton_5
+  bp_kill_progress_5_5_5: notify &65/5 Vindicators &7| &65/5 Witches &7| &65/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_5,!bp_skeleton_6
+  bp_kill_progress_5_5_6: notify &65/5 Vindicators &7| &65/5 Witches &7| &66/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_6,!bp_skeleton_7
+  bp_kill_progress_5_5_7: notify &65/5 Vindicators &7| &65/5 Witches &7| &67/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_7,!bp_skeleton_8
+  bp_kill_progress_5_5_8: notify &65/5 Vindicators &7| &65/5 Witches &7| &68/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_8,!bp_skeleton_9
+  bp_kill_progress_5_5_9: notify &65/5 Vindicators &7| &65/5 Witches &7| &69/10 Skeletons
+    io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_9,!bp_skeleton_10
+  bp_kill_progress_5_5_10: notify &65/5 Vindicators &7| &65/5 Witches &7| &610/10
+    Skeletons io:chat conditions:bp_vindicator_5,bp_witch_5,bp_skeleton_10
+  bp_combat_try_complete: folder bp_combat_complete conditions:bp_all_kills_done
+  bp_combat_complete: folder bp_tag_combat_done,bp_del_combat_phase,bp_remove_journal_combat,bp_title_combat_done,bp_msg_combat_done_delayed
+  bp_tag_combat_done: tag add bp_combat_done
+  bp_del_combat_phase: tag del bp_combat_phase
+  bp_title_combat_done: notify Trial Complete\nReturn to Elias Packwright io:title
+    fadeIn:0 stay:70 fadeOut:10
+  bp_msg_combat_done: 'notify &6Elias Packwright&7: &bYou have proven your courage.
+    Return to me. io:chat'
+  bp_msg_combat_done_delayed: folder bp_msg_combat_done delay:2
+  bp_start_final_phase: folder bp_tag_final_phase,bp_journal_final,bp_title_final_start,bp_msg_final_phase_delayed
+  bp_tag_final_phase: tag add bp_final_phase
+  bp_title_final_start: notify Chapter V - Final Fittings\nBring the last materials
+    to Elias io:title fadeIn:0 stay:70 fadeOut:10
+  bp_msg_final_phase: 'notify &6Elias Packwright&7: &bFinal fittings need &616 Leather&b,
+    &616 String&b, &68 Iron Ingots&b and &62 Gold Ingots&b. io:chat'
+  bp_msg_final_phase_delayed: folder bp_msg_final_phase delay:2
+  bp_final_take: folder bp_take_final_leather,bp_take_final_string,bp_take_final_iron,bp_take_final_gold
+  bp_take_final_leather: take bp_leather:16
+  bp_take_final_string: take bp_string:16
+  bp_take_final_iron: take bp_iron_ingot:8
+  bp_take_final_gold: take bp_gold_ingot:2
+  bp_final_materials_done_first: folder bp_final_take,bp_del_final_phase,bp_remove_journal_final,bp_start_questions_phase,bp_title_questions_start
+    conditions:!bp_repeat
+  bp_final_materials_done_repeat: folder bp_final_take,bp_del_final_phase,bp_remove_journal_final,bp_finish_repeat
+    conditions:bp_repeat
+  bp_del_final_phase: tag del bp_final_phase
+  bp_start_questions_phase: tag add bp_questions_phase
+  bp_title_questions_start: notify Chapter VI - The Traveller\nAnswer Elias honestly
+    io:title fadeIn:0 stay:70 fadeOut:10
+  bp_msg_questions_start: 'notify &6Elias Packwright&7: &bEverything is ready. Let
+    me craft something worthy of your journey. But first, tell me what kind of traveller
+    you are. io:chat'
+  bp_msg_questions_start_delayed: folder bp_msg_questions_start delay:2
+  bp_q1_explorer: tag add bp_path_explorer
+  bp_q1_wealth: tag add bp_path_wealth
+  bp_q1_courage: tag add bp_path_courage
+  bp_q2_prepared: tag add bp_mind_prepared
+  bp_q2_instinct: tag add bp_mind_instinct
+  bp_q2_teamwork: tag add bp_mind_teamwork
+  bp_q3_knowledge: tag add bp_power_knowledge
+  bp_q3_strength: tag add bp_power_strength
+  bp_q3_hope: tag add bp_power_hope
+  bp_finish_first: folder bp_give_backpack,bp_tag_finished,bp_cleanup_after_finish,bp_title_complete,bp_msg_complete_delayed
+  bp_finish_repeat: folder bp_give_backpack,bp_cleanup_after_finish,bp_title_repeat_complete,bp_msg_repeat_complete_delayed
+  bp_give_backpack: command satchel give canvas_backpack %player%
+  bp_tag_finished: tag add bp_finished
+  bp_title_complete: notify Backpack Acquired\nYour first backpack is ready io:title
+    fadeIn:0 stay:80 fadeOut:10
+  bp_title_repeat_complete: notify Backpack Crafted\nAnother backpack is ready io:title
+    fadeIn:0 stay:80 fadeOut:10
+  bp_msg_complete: 'notify &aQuest Complete&7: &bYou received your first Backpack.
+    io:chat'
+  bp_msg_complete_delayed: folder bp_msg_complete delay:2
+  bp_msg_repeat_complete: 'notify &aQuest Complete&7: &bYou received another Backpack.
+    io:chat'
+  bp_msg_repeat_complete_delayed: folder bp_msg_repeat_complete delay:2
+  bp_cleanup_after_finish: folder bp_del_started,bp_del_repeat,bp_del_explore_phase,bp_del_canvas_phase,bp_del_frame_phase,bp_del_combat_phase,bp_del_final_phase,bp_del_questions_phase,bp_reset_temporary_tags,bp_remove_journal_main,bp_remove_journal_explore,bp_remove_journal_canvas,bp_remove_journal_frame,bp_remove_journal_combat,bp_remove_journal_final
+  bp_del_started: tag del bp_started
+  bp_del_repeat: tag del bp_repeat
+  bp_del_questions_phase: tag del bp_questions_phase
+  bp_reset_temporary_tags: folder bp_del_explore_done,bp_del_forest_done,bp_del_river_done,bp_del_plains_done,bp_del_mountain_done,bp_del_canvas_done,bp_del_frame_done,bp_del_combat_done,bp_del_vindicator_done,bp_del_witch_done,bp_del_skeleton_done,bp_del_v1,bp_del_v2,bp_del_v3,bp_del_v4,bp_del_v5,bp_del_w1,bp_del_w2,bp_del_w3,bp_del_w4,bp_del_w5,bp_del_s1,bp_del_s2,bp_del_s3,bp_del_s4,bp_del_s5,bp_del_s6,bp_del_s7,bp_del_s8,bp_del_s9,bp_del_s10
+  bp_del_explore_done: tag del bp_explore_done
+  bp_del_forest_done: tag del bp_forest_done
+  bp_del_river_done: tag del bp_river_done
+  bp_del_plains_done: tag del bp_plains_done
+  bp_del_mountain_done: tag del bp_mountain_done
+  bp_del_canvas_done: tag del bp_canvas_done
+  bp_del_frame_done: tag del bp_frame_done
+  bp_del_combat_done: tag del bp_combat_done
+  bp_del_v1: tag del bp_vindicator_1
+  bp_del_v2: tag del bp_vindicator_2
+  bp_del_v3: tag del bp_vindicator_3
+  bp_del_v4: tag del bp_vindicator_4
+  bp_del_v5: tag del bp_vindicator_5
+  bp_del_w1: tag del bp_witch_1
+  bp_del_w2: tag del bp_witch_2
+  bp_del_w3: tag del bp_witch_3
+  bp_del_w4: tag del bp_witch_4
+  bp_del_w5: tag del bp_witch_5
+  bp_del_s1: tag del bp_skeleton_1
+  bp_del_s2: tag del bp_skeleton_2
+  bp_del_s3: tag del bp_skeleton_3
+  bp_del_s4: tag del bp_skeleton_4
+  bp_del_s5: tag del bp_skeleton_5
+  bp_del_s6: tag del bp_skeleton_6
+  bp_del_s7: tag del bp_skeleton_7
+  bp_del_s8: tag del bp_skeleton_8
+  bp_del_s9: tag del bp_skeleton_9
+  bp_del_s10: tag del bp_skeleton_10
+  bp_vindicator_done: folder bp_tag_vindicator_done,bp_msg_vindicator_done_delayed,bp_combat_try_complete
+  bp_witch_done: folder bp_tag_witch_done,bp_msg_witch_done_delayed,bp_combat_try_complete
+  bp_skeleton_done: folder bp_tag_skeleton_done,bp_msg_skeleton_done_delayed,bp_combat_try_complete
+  bp_tag_vindicator_done: tag add bp_vindicator_done
+  bp_tag_witch_done: tag add bp_witch_done
+  bp_tag_skeleton_done: tag add bp_skeleton_done
+  bp_msg_vindicator_done: notify &65/5 Vindicators &7| &6%objective.bp_obj_witch.amount%/5
+    Witches &7| &6%objective.bp_obj_skeleton.amount%/10 Skeletons io:chat
+  bp_msg_witch_done: notify &6%objective.bp_obj_vindicator.amount%/5 Vindicators &7|
+    &65/5 Witches &7| &6%objective.bp_obj_skeleton.amount%/10 Skeletons io:chat
+  bp_msg_skeleton_done: notify &6%objective.bp_obj_vindicator.amount%/5 Vindicators
+    &7| &6%objective.bp_obj_witch.amount%/5 Witches &7| &610/10 Skeletons io:chat
+  bp_msg_vindicator_done_delayed: folder bp_msg_vindicator_done delay:1
+  bp_msg_witch_done_delayed: folder bp_msg_witch_done delay:1
+  bp_msg_skeleton_done_delayed: folder bp_msg_skeleton_done delay:1
+  
+  # BACKPACK LEVEL 2
+  bp2_start: folder bp2_tag_started,bp2_journal_main,bp2_start_trial1,bp2_title_start,bp2_msg_start_delayed
+  bp2_start_repeat: folder bp2_reset_temp,bp2_tag_repeat,bp2_tag_started,bp2_journal_main,bp2_start_trial1,bp2_title_repeat_start,bp2_msg_repeat_start_delayed
+  bp2_tag_started: tag add bp2_started
+  bp2_tag_repeat: tag add bp2_repeat
+  bp2_journal_main: journal add backpack2_main
+  bp2_title_start: notify A Pack Worth Improving\nYour answers will shape the trials
+    io:title fadeIn:0 stay:80 fadeOut:10
+  bp2_title_repeat_start: notify A Pack Worth Repeating\nComplete your three personal
+    trials again io:title fadeIn:0 stay:80 fadeOut:10
+  bp2_msg_start: 'notify &6Elias Packwright&7: &bYour three answers will now become
+    three trials. Complete them and I will craft a Level 2 Backpack. io:chat'
+  bp2_msg_start_delayed: folder bp2_msg_start delay:2
+  bp2_msg_repeat_start: 'notify &6Elias Packwright&7: &bRepeat the same three trials
+    shaped by your original answers. The five questions will not be asked again. io:chat'
+  bp2_msg_repeat_start_delayed: folder bp2_msg_repeat_start delay:2
+  bp2_start_trial1: folder bp2_tag_trial1,bp2_trial1_explorer,bp2_trial1_wealth,bp2_trial1_courage
+  bp2_tag_trial1: tag add bp2_trial1_phase
+  bp2_trial1_explorer: folder bp2_journal_calling_explorer,bp2_add_castle_explorer_objectives,bp2_title_calling_explorer,bp2_msg_castle_explorer_delayed
+    conditions:bp_path_explorer
+  bp2_trial1_wealth: folder bp2_journal_calling_wealth,bp2_add_castle_chest_objective,bp2_title_calling_wealth,bp2_msg_castle_wealth_delayed
+    conditions:bp_path_wealth
+  bp2_trial1_courage: folder bp2_journal_calling_courage,bp2_add_castle_warden_objective,bp2_title_calling_courage,bp2_msg_castle_courage_delayed
+    conditions:bp_path_courage
+  bp2_journal_calling_explorer: journal add backpack2_calling_explorer
+  bp2_journal_calling_wealth: journal add backpack2_calling_wealth
+  bp2_journal_calling_courage: journal add backpack2_calling_courage
+  bp2_add_castle_explorer_objectives: objective add bp2_obj_castle_explorer_1,bp2_obj_castle_explorer_2,bp2_obj_castle_explorer_3
+  bp2_add_castle_chest_objective: objective add bp2_obj_castle_chest
+  bp2_add_castle_warden_objective: objective add bp2_obj_castle_warden
+  bp2_title_calling_explorer: notify Trial I - The Explorer\nClimb to the three heights
+    of the Ancient Castle io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_title_calling_wealth: notify Trial I - The Seeker\nFind and open the hidden
+    chest io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_title_calling_courage: notify Trial I - The Fighter\nDefeat the Warden inside
+    the Ancient Castle io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_msg_castle_explorer: 'notify &6Ancient Castle&7: &bTravel near X: -792, Y: 65,
+    Z: -501. Reach: &b(-724,97,-514)&7, &b(-737,129,-514)&7 and &b(-759,169,-526)&7.
+    io:chat'
+  bp2_msg_castle_explorer_delayed: folder bp2_msg_castle_explorer delay:2
+  bp2_msg_castle_wealth: 'notify &6Ancient Castle&7: &bTravel near X: -792, Y: 65,
+    Z: -501. Open the chest at &bX: -791, Y: 119, Z: -595&7. io:chat'
+  bp2_msg_castle_wealth_delayed: folder bp2_msg_castle_wealth delay:2
+  bp2_msg_castle_courage: 'notify &6Ancient Castle&7: &bTravel near X: -792, Y: 65,
+    Z: -501. Defeat a &bWarden&7 while inside &bAncient_castel&7. io:chat'
+  bp2_msg_castle_courage_delayed: folder bp2_msg_castle_courage delay:2
+  bp2_found_castle_explorer_1: folder bp2_tag_castle_explorer_1,bp2_title_castle_explorer_1,bp2_explorer_remaining,bp2_try_castle_explorer_complete
+  bp2_found_castle_explorer_2: folder bp2_tag_castle_explorer_2,bp2_title_castle_explorer_2,bp2_explorer_remaining,bp2_try_castle_explorer_complete
+  bp2_found_castle_explorer_3: folder bp2_tag_castle_explorer_3,bp2_title_castle_explorer_3,bp2_explorer_remaining,bp2_try_castle_explorer_complete
+  bp2_tag_castle_explorer_1: tag add bp2_castle_explorer_1_done
+  bp2_tag_castle_explorer_2: tag add bp2_castle_explorer_2_done
+  bp2_tag_castle_explorer_3: tag add bp2_castle_explorer_3_done
+  bp2_title_castle_explorer_1: notify Lower Tower Reached\nTwo castle heights remain
+    io:title fadeIn:0 stay:60 fadeOut:10
+  bp2_title_castle_explorer_2: notify Upper Hall Reached\nOne castle height remains
+    io:title fadeIn:0 stay:60 fadeOut:10
+  bp2_title_castle_explorer_3: notify Castle Summit Reached\nThe exploration trial
+    is complete io:title fadeIn:0 stay:60 fadeOut:10
+  bp2_explorer_remaining: folder bp2_explorer_remaining_123,bp2_explorer_remaining_12,bp2_explorer_remaining_13,bp2_explorer_remaining_23,bp2_explorer_remaining_1,bp2_explorer_remaining_2,bp2_explorer_remaining_3,bp2_explorer_remaining_none
+  bp2_explorer_remaining_123: 'notify &6Ancient Castle - Remaining locations&7: &bLower
+    Tower (-724, 97, -514)&7 | &bUpper Hall (-737, 129, -514)&7 | &bCastle Summit
+    (-759, 169, -526) io:chat conditions:!bp2_castle_explorer_1_done,!bp2_castle_explorer_2_done,!bp2_castle_explorer_3_done'
+  bp2_explorer_remaining_12: 'notify &6Ancient Castle - Remaining locations&7: &bLower
+    Tower (-724, 97, -514)&7 | &bUpper Hall (-737, 129, -514) io:chat conditions:!bp2_castle_explorer_1_done,!bp2_castle_explorer_2_done,bp2_castle_explorer_3_done'
+  bp2_explorer_remaining_13: 'notify &6Ancient Castle - Remaining locations&7: &bLower
+    Tower (-724, 97, -514)&7 | &bCastle Summit (-759, 169, -526) io:chat conditions:!bp2_castle_explorer_1_done,bp2_castle_explorer_2_done,!bp2_castle_explorer_3_done'
+  bp2_explorer_remaining_23: 'notify &6Ancient Castle - Remaining locations&7: &bUpper
+    Hall (-737, 129, -514)&7 | &bCastle Summit (-759, 169, -526) io:chat conditions:bp2_castle_explorer_1_done,!bp2_castle_explorer_2_done,!bp2_castle_explorer_3_done'
+  bp2_explorer_remaining_1: 'notify &6Ancient Castle - Remaining location&7: &bLower
+    Tower (-724, 97, -514) io:chat conditions:!bp2_castle_explorer_1_done,bp2_castle_explorer_2_done,bp2_castle_explorer_3_done'
+  bp2_explorer_remaining_2: 'notify &6Ancient Castle - Remaining location&7: &bUpper
+    Hall (-737, 129, -514) io:chat conditions:bp2_castle_explorer_1_done,!bp2_castle_explorer_2_done,bp2_castle_explorer_3_done'
+  bp2_explorer_remaining_3: 'notify &6Ancient Castle - Remaining location&7: &bCastle
+    Summit (-759, 169, -526) io:chat conditions:bp2_castle_explorer_1_done,bp2_castle_explorer_2_done,!bp2_castle_explorer_3_done'
+  bp2_explorer_remaining_none: notify &aAll three Ancient Castle locations have been
+    explored. &7Return to Elias. io:chat conditions:bp2_castle_explorer_all
+  bp2_try_castle_explorer_complete: folder bp2_trial1_complete conditions:bp2_castle_explorer_all
+  bp2_trial1_complete: folder bp2_del_trial1,bp2_remove_trial1_journals,bp2_start_trial2,bp2_title_trial1_done
+  bp2_del_trial1: tag del bp2_trial1_phase
+  bp2_title_trial1_done: notify First Trial Complete\nYour second answer defines the
+    next trial io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_remove_trial1_journals: folder bp2_del_j_calling_explorer,bp2_del_j_calling_wealth,bp2_del_j_calling_courage
+  bp2_del_j_calling_explorer: journal delete backpack2_calling_explorer
+  bp2_del_j_calling_wealth: journal delete backpack2_calling_wealth
+  bp2_del_j_calling_courage: journal delete backpack2_calling_courage
+  bp2_start_trial2: folder bp2_tag_trial2,bp2_trial2_prepared,bp2_trial2_instinct,bp2_trial2_teamwork
+  bp2_tag_trial2: tag add bp2_trial2_phase
+  bp2_trial2_prepared: folder bp2_journal_method_prepared,bp2_title_method_prepared
+    conditions:bp_mind_prepared
+  bp2_trial2_instinct: folder bp2_journal_method_instinct,bp2_add_instinct_objectives,bp2_title_method_instinct
+    conditions:bp_mind_instinct
+  bp2_trial2_teamwork: folder bp2_journal_method_teamwork,bp2_title_method_teamwork
+    conditions:bp_mind_teamwork
+  bp2_journal_method_prepared: journal add backpack2_method_prepared
+  bp2_journal_method_instinct: journal add backpack2_method_instinct
+  bp2_journal_method_teamwork: journal add backpack2_method_teamwork
+  bp2_add_instinct_objectives: objective add bp2_obj_enderman,bp2_obj_cavespider
+  bp2_title_method_prepared: notify Trial II - Preparation\nGather supplies before
+    danger arrives io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_title_method_instinct: notify Trial II - Instinct\nHunt creatures that punish
+    hesitation io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_title_method_teamwork: notify Trial II - Companionship\nGather supplies for
+    fellow travellers io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_take_prepared: folder bp2_take_prepared_iron,bp2_take_prepared_string,bp2_take_prepared_chests,bp2_trial2_complete
+  bp2_take_prepared_iron: take bp_iron_ingot:32
+  bp2_take_prepared_string: take bp_string:32
+  bp2_take_prepared_chests: take bp_chest:2
+  bp2_take_teamwork: folder bp2_take_bread,bp2_take_golden_apples,bp2_trial2_complete
+  bp2_take_bread: take bp2_bread:32
+  bp2_take_golden_apples: take bp2_golden_apple:4
+  bp2_enderman_done: folder bp2_tag_enderman_done,bp2_try_instinct_complete
+  bp2_cavespider_done: folder bp2_tag_cavespider_done,bp2_try_instinct_complete
+  bp2_tag_enderman_done: tag add bp2_instinct_enderman_done
+  bp2_tag_cavespider_done: tag add bp2_instinct_cavespider_done
+  bp2_try_instinct_complete: folder bp2_trial2_complete conditions:bp2_instinct_done
+  bp2_trial2_complete: folder bp2_del_trial2,bp2_remove_trial2_journals,bp2_start_trial3,bp2_title_trial2_done
+  bp2_del_trial2: tag del bp2_trial2_phase
+  bp2_title_trial2_done: notify Second Trial Complete\nYour final answer defines the
+    last trial io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_remove_trial2_journals: folder bp2_del_j_method_prepared,bp2_del_j_method_instinct,bp2_del_j_method_teamwork
+  bp2_del_j_method_prepared: journal delete backpack2_method_prepared
+  bp2_del_j_method_instinct: journal delete backpack2_method_instinct
+  bp2_del_j_method_teamwork: journal delete backpack2_method_teamwork
+  bp2_start_trial3: folder bp2_tag_trial3,bp2_trial3_knowledge,bp2_trial3_strength,bp2_trial3_hope
+  bp2_tag_trial3: tag add bp2_trial3_phase
+  bp2_trial3_knowledge: folder bp2_journal_power_knowledge,bp2_title_power_knowledge
+    conditions:bp_power_knowledge
+  bp2_trial3_strength: folder bp2_journal_power_strength,bp2_title_power_strength
+    conditions:bp_power_strength
+  bp2_trial3_hope: folder bp2_journal_power_hope,bp2_title_power_hope conditions:bp_power_hope
+  bp2_journal_power_knowledge: journal add backpack2_power_knowledge
+  bp2_journal_power_strength: journal add backpack2_power_strength
+  bp2_journal_power_hope: journal add backpack2_power_hope
+  bp2_title_power_knowledge: notify Trial III - Knowledge\nBring materials that preserve
+    learning io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_title_power_strength: notify Trial III - Strength\nBring materials that endure
+    pressure io:title fadeIn:0 stay:70 fadeOut:10
+  bp2_title_power_hope: notify Trial III - Hope\nBring light from hostile places io:title
+    fadeIn:0 stay:70 fadeOut:10
+  bp2_take_knowledge: folder bp2_take_books,bp2_take_amethyst,bp2_trial3_complete
+  bp2_take_books: take bp2_book:24
+  bp2_take_amethyst: take bp2_amethyst:16
+  bp2_take_strength: folder bp2_take_obsidian,bp2_take_strength_iron,bp2_trial3_complete
+  bp2_take_obsidian: take bp2_obsidian:16
+  bp2_take_strength_iron: take bp_iron_ingot:32
+  bp2_take_hope: folder bp2_take_glowstone,bp2_take_ghast_tears,bp2_trial3_complete
+  bp2_take_glowstone: take bp2_glowstone:32
+  bp2_take_ghast_tears: take bp2_ghast_tear:2
+  bp2_trial3_complete: folder bp2_del_trial3,bp2_remove_trial3_journals,bp2_after_trial3_first,bp2_after_trial3_repeat
+  bp2_del_trial3: tag del bp2_trial3_phase
+  bp2_after_trial3_first: folder bp2_tag_questions_phase,bp2_title_questions_ready
+    conditions:!bp2_repeat
+  bp2_after_trial3_repeat: folder bp2_tag_reward_ready,bp2_title_repeat_reward_ready
+    conditions:bp2_repeat
+  bp2_tag_questions_phase: tag add bp2_questions_phase
+  bp2_title_questions_ready: notify All Trials Complete\nReturn to Elias and answer
+    five final questions io:title fadeIn:0 stay:80 fadeOut:10
+  bp2_title_repeat_reward_ready: notify All Trials Complete\nReturn to Elias for another
+    Level 2 Backpack io:title fadeIn:0 stay:80 fadeOut:10
+  bp2_questions_complete: folder bp2_del_questions_phase,bp2_tag_reward_ready
+  bp2_del_questions_phase: tag del bp2_questions_phase
+  bp2_tag_reward_ready: tag add bp2_reward_ready
+  bp2_q4_duty_event: tag add bp2_q4_duty
+  bp2_q4_compassion_event: tag add bp2_q4_compassion
+  bp2_q4_freedom_event: tag add bp2_q4_freedom
+  bp2_q5_preserve_event: tag add bp2_q5_preserve
+  bp2_q5_use_event: tag add bp2_q5_use
+  bp2_q5_destroy_event: tag add bp2_q5_destroy
+  bp2_q6_lead_event: tag add bp2_q6_lead
+  bp2_q6_support_event: tag add bp2_q6_support
+  bp2_q6_alone_event: tag add bp2_q6_alone
+  bp2_q7_retry_event: tag add bp2_q7_retry
+  bp2_q7_adapt_event: tag add bp2_q7_adapt
+  bp2_q7_accept_event: tag add bp2_q7_accept
+  bp2_q8_fame_event: tag add bp2_q8_fame
+  bp2_q8_protection_event: tag add bp2_q8_protection
+  bp2_q8_freedom_event: tag add bp2_q8_freedom
+  bp2_remove_trial3_journals: folder bp2_del_j_power_knowledge,bp2_del_j_power_strength,bp2_del_j_power_hope
+  bp2_del_j_power_knowledge: journal delete backpack2_power_knowledge
+  bp2_del_j_power_strength: journal delete backpack2_power_strength
+  bp2_del_j_power_hope: journal delete backpack2_power_hope
+  bp2_finish: folder bp2_give_backpack,bp2_tag_finished,bp2_cleanup,bp2_title_complete,bp2_msg_complete_delayed
+  bp2_give_backpack: command satchel give copper_backpack %player%
+  bp2_tag_finished: tag add bp2_finished
+  bp2_title_complete: notify Backpack Upgraded\nYou received a Level 2 Backpack io:title
+    fadeIn:0 stay:90 fadeOut:10
+  bp2_msg_complete: 'notify &aQuest Complete&7: &bYou received a Level 2 Backpack
+    shaped by your choices. io:chat'
+  bp2_msg_complete_delayed: folder bp2_msg_complete delay:2
+  bp2_cleanup: folder bp2_del_started,bp2_del_repeat,bp2_del_reward_ready,bp2_del_trial1,bp2_del_trial2,bp2_del_trial3,bp2_del_questions_phase,bp2_remove_all_journals,bp2_reset_temp
+  bp2_del_started: tag del bp2_started
+  bp2_del_repeat: tag del bp2_repeat
+  bp2_del_reward_ready: tag del bp2_reward_ready
+  bp2_remove_all_journals: folder bp2_del_j_main,bp2_remove_trial1_journals,bp2_remove_trial2_journals,bp2_remove_trial3_journals
+  bp2_del_j_main: journal delete backpack2_main
+  bp2_reset_temp: folder bp2_del_castle_explorer_1,bp2_del_castle_explorer_2,bp2_del_castle_explorer_3,bp2_del_enderman,bp2_del_cavespider
+  bp2_del_castle_explorer_1: tag del bp2_castle_explorer_1_done
+  bp2_del_castle_explorer_2: tag del bp2_castle_explorer_2_done
+  bp2_del_castle_explorer_3: tag del bp2_castle_explorer_3_done
+  bp2_del_enderman: tag del bp2_instinct_enderman_done
+  bp2_del_cavespider: tag del bp2_instinct_cavespider_done
+  
+  bp_admin_reset_tags: folder bp_del_started,bp_del_repeat,bp_del_explore_phase,bp_del_canvas_phase,bp_del_frame_phase,bp_del_combat_phase,bp_del_final_phase,bp_del_questions_phase,bp_reset_temporary_tags,bp_del_finished,bp_del_path_explorer,bp_del_path_wealth,bp_del_path_courage,bp_del_mind_prepared,bp_del_mind_instinct,bp_del_mind_teamwork,bp_del_power_knowledge,bp_del_power_strength,bp_del_power_hope,bp2_del_started,bp2_del_reward_ready,bp2_del_trial1,bp2_del_trial2,bp2_del_trial3,bp2_del_questions_phase,bp2_reset_temp,bp2_reset_answer_tags,bp2_del_finished,bp3_admin_reset
+  bp2_reset_answer_tags: folder bp2_del_q4_duty,bp2_del_q4_compassion,bp2_del_q4_freedom,bp2_del_q5_preserve,bp2_del_q5_use,bp2_del_q5_destroy,bp2_del_q6_lead,bp2_del_q6_support,bp2_del_q6_alone,bp2_del_q7_retry,bp2_del_q7_adapt,bp2_del_q7_accept,bp2_del_q8_fame,bp2_del_q8_protection,bp2_del_q8_freedom
+  bp2_del_q4_duty: tag del bp2_q4_duty
+  bp2_del_q4_compassion: tag del bp2_q4_compassion
+  bp2_del_q4_freedom: tag del bp2_q4_freedom
+  bp2_del_q5_preserve: tag del bp2_q5_preserve
+  bp2_del_q5_use: tag del bp2_q5_use
+  bp2_del_q5_destroy: tag del bp2_q5_destroy
+  bp2_del_q6_lead: tag del bp2_q6_lead
+  bp2_del_q6_support: tag del bp2_q6_support
+  bp2_del_q6_alone: tag del bp2_q6_alone
+  bp2_del_q7_retry: tag del bp2_q7_retry
+  bp2_del_q7_adapt: tag del bp2_q7_adapt
+  bp2_del_q7_accept: tag del bp2_q7_accept
+  bp2_del_q8_fame: tag del bp2_q8_fame
+  bp2_del_q8_protection: tag del bp2_q8_protection
+  bp2_del_q8_freedom: tag del bp2_q8_freedom
+  bp_admin_reset_journal: folder bp_remove_journal_main,bp_remove_journal_explore,bp_remove_journal_canvas,bp_remove_journal_frame,bp_remove_journal_combat,bp_remove_journal_final,bp_journal_update,bp2_remove_all_journals,bp3_del_journal_main,bp3_del_all_request_journals
+  bp_journal_update: journal update
+  bp_admin_reset_tags_msg: notify &aBackpack quest tags removed. io:chat
+  bp_admin_reset_journal_msg: notify &aBackpack quest journal entries removed. io:chat
+  bp_del_finished: tag del bp_finished
+  bp2_del_finished: tag del bp2_finished
+  bp_del_path_explorer: tag del bp_path_explorer
+  bp_del_path_wealth: tag del bp_path_wealth
+  bp_del_path_courage: tag del bp_path_courage
+  bp_del_mind_prepared: tag del bp_mind_prepared
+  bp_del_mind_instinct: tag del bp_mind_instinct
+  bp_del_mind_teamwork: tag del bp_mind_teamwork
+  bp_del_power_knowledge: tag del bp_power_knowledge
+  bp_del_power_strength: tag del bp_power_strength
+  bp_del_power_hope: tag del bp_power_hope
+  bp_del_vindicator_done: tag del bp_vindicator_done
+  bp_del_witch_done: tag del bp_witch_done
+  bp_del_skeleton_done: tag del bp_skeleton_done
+  bp3_start_first: folder bp3_tag_started,bp3_journal_main,bp3_title_start,bp3_msg_start_delayed
+  bp3_tag_started: tag add bp3_started
+  bp3_journal_main: journal add backpack3_main
+  bp3_del_journal_main: journal delete backpack3_main
+  bp3_title_start: notify The City Below\nFind Orion in the underground bunker io:title
+    fadeIn:0 stay:90 fadeOut:10
+  bp3_msg_start: 'notify &6&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ \n&dThe City Below \n&7The
+    underground entrance is at: \n&bX: 2874, Y: 67, Z: -589 \n&8Arm yourself and prepare
+    before descending. \n&6&l━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ io:chat'
+  bp3_msg_start_delayed: folder bp3_msg_start delay:2
+  bp3_begin_questions: folder bp3_tag_questions_phase,bp3_del_journal_main
+  bp3_tag_questions_phase: tag add bp3_questions_phase
+  bp3_q1_discovery_event: tag add bp3_q1_discovery
+  bp3_q1_treasure_event: tag add bp3_q1_treasure
+  bp3_q1_protection_event: tag add bp3_q1_protection
+  bp3_q2_rescue_event: tag add bp3_q2_rescue
+  bp3_q2_plan_event: tag add bp3_q2_plan
+  bp3_q2_mission_event: tag add bp3_q2_mission
+  bp3_q3_seal_event: tag add bp3_q3_seal
+  bp3_q3_study_event: tag add bp3_q3_study
+  bp3_q3_use_event: tag add bp3_q3_use
+  bp3_q4_lead_event: tag add bp3_q4_lead
+  bp3_q4_support_event: tag add bp3_q4_support
+  bp3_q4_alone_event: tag add bp3_q4_alone
+  bp3_q5_fame_event: tag add bp3_q5_fame
+  bp3_q5_protection_event: tag add bp3_q5_protection
+  bp3_q5_freedom_event: tag add bp3_q5_freedom
+  bp3_finish_first: folder bp3_give_backpack,bp3_tag_finished,bp3_cleanup_first,bp3_title_complete,bp3_msg_complete_delayed
+  bp3_give_backpack: command satchel give iron_backpack %player%
+  bp3_tag_finished: tag add bp3_finished
+  bp3_cleanup_first: folder bp3_del_started,bp3_del_questions_phase,bp3_del_journal_main
+  bp3_del_started: tag del bp3_started
+  bp3_del_questions_phase: tag del bp3_questions_phase
+  bp3_title_complete: notify Final Backpack Earned\nYou received a Level 3 Backpack
+    io:title fadeIn:0 stay:90 fadeOut:10
+  bp3_msg_complete: 'notify &aQuest Complete&7: &dYou received a Level 3 Backpack.
+    io:chat'
+  bp3_msg_complete_delayed: folder bp3_msg_complete delay:2
+  bp3_start_repeat: folder bp3_clear_repeat,bp3_tag_repeat_started,bp3_title_repeat,bp3_msg_repeat_delayed
+  bp3_tag_repeat_started: tag add bp3_repeat_started
+  bp3_title_repeat: notify Orion's Request\nReturn to Orion beneath the city io:title
+    fadeIn:0 stay:80 fadeOut:10
+  bp3_msg_repeat: notify &7Elias cannot craft another Level 3 Backpack. Find &bOrion
+    the Adventurer&7 beneath the city and ask what he needs. io:chat
+  bp3_msg_repeat_delayed: folder bp3_msg_repeat delay:2
+  bp3_assign_random: folder bp3_assign_1,bp3_assign_2,bp3_assign_3,bp3_assign_4,bp3_assign_5,bp3_assign_6,bp3_assign_7,bp3_assign_8,bp3_assign_9,bp3_assign_10
+    random:1
+  bp3_assign_1: folder bp3_tag_assigned,bp3_tag_request_1,bp3_journal_request_1,bp3_msg_request_1_delayed
+  bp3_assign_2: folder bp3_tag_assigned,bp3_tag_request_2,bp3_journal_request_2,bp3_msg_request_2_delayed
+  bp3_assign_3: folder bp3_tag_assigned,bp3_tag_request_3,bp3_journal_request_3,bp3_msg_request_3_delayed
+  bp3_assign_4: folder bp3_tag_assigned,bp3_tag_request_4,bp3_journal_request_4,bp3_msg_request_4_delayed
+  bp3_assign_5: folder bp3_tag_assigned,bp3_tag_request_5,bp3_journal_request_5,bp3_msg_request_5_delayed
+  bp3_assign_6: folder bp3_tag_assigned,bp3_tag_request_6,bp3_journal_request_6,bp3_msg_request_6_delayed
+  bp3_assign_7: folder bp3_tag_assigned,bp3_tag_request_7,bp3_journal_request_7,bp3_msg_request_7_delayed
+  bp3_assign_8: folder bp3_tag_assigned,bp3_tag_request_8,bp3_journal_request_8,bp3_msg_request_8_delayed
+  bp3_assign_9: folder bp3_tag_assigned,bp3_tag_request_9,bp3_journal_request_9,bp3_msg_request_9_delayed
+  bp3_assign_10: folder bp3_tag_assigned,bp3_tag_request_10,bp3_journal_request_10,bp3_msg_request_10_delayed
+  bp3_msg_request_1: 'notify &bOrion&7 requests: &632 Leather and 32 String&7. Return
+    when you have everything. io:chat'
+  bp3_msg_request_1_delayed: folder bp3_msg_request_1 delay:2
+  bp3_msg_request_2: 'notify &bOrion&7 requests: &648 Iron Ingots and 32 Coal&7. Return
+    when you have everything. io:chat'
+  bp3_msg_request_2_delayed: folder bp3_msg_request_2 delay:2
+  bp3_msg_request_3: 'notify &bOrion&7 requests: &632 Copper Ingots and 24 Redstone
+    Dust&7. Return when you have everything. io:chat'
+  bp3_msg_request_3_delayed: folder bp3_msg_request_3 delay:2
+  bp3_msg_request_4: 'notify &bOrion&7 requests: &612 Gold Ingots and 8 Emeralds&7.
+    Return when you have everything. io:chat'
+  bp3_msg_request_4_delayed: folder bp3_msg_request_4 delay:2
+  bp3_msg_request_5: 'notify &bOrion&7 requests: &624 Rotten Flesh and 24 Bones&7.
+    Return when you have everything. io:chat'
+  bp3_msg_request_5_delayed: folder bp3_msg_request_5 delay:2
+  bp3_msg_request_6: 'notify &bOrion&7 requests: &612 Ender Pearls and 8 Blaze Rods&7.
+    Return when you have everything. io:chat'
+  bp3_msg_request_6_delayed: folder bp3_msg_request_6 delay:2
+  bp3_msg_request_7: 'notify &bOrion&7 requests: &632 Prismarine Shards and 4 Nautilus
+    Shells&7. Return when you have everything. io:chat'
+  bp3_msg_request_7_delayed: folder bp3_msg_request_7 delay:2
+  bp3_msg_request_8: 'notify &bOrion&7 requests: &616 Amethyst Shards and 32 Glowstone
+    Dust&7. Return when you have everything. io:chat'
+  bp3_msg_request_8_delayed: folder bp3_msg_request_8 delay:2
+  bp3_msg_request_9: 'notify &bOrion&7 requests: &64 Phantom Membranes and 2 Ghast
+    Tears&7. Return when you have everything. io:chat'
+  bp3_msg_request_9_delayed: folder bp3_msg_request_9 delay:2
+  bp3_msg_request_10: 'notify &bOrion&7 requests: &62 Diamonds and 1 Echo Shard&7.
+    Return when you have everything. io:chat'
+  bp3_msg_request_10_delayed: folder bp3_msg_request_10 delay:2
+  bp3_tag_assigned: tag add bp3_repeat_assigned
+  bp3_tag_request_1: tag add bp3_request_1
+  bp3_tag_request_2: tag add bp3_request_2
+  bp3_tag_request_3: tag add bp3_request_3
+  bp3_tag_request_4: tag add bp3_request_4
+  bp3_tag_request_5: tag add bp3_request_5
+  bp3_tag_request_6: tag add bp3_request_6
+  bp3_tag_request_7: tag add bp3_request_7
+  bp3_tag_request_8: tag add bp3_request_8
+  bp3_tag_request_9: tag add bp3_request_9
+  bp3_tag_request_10: tag add bp3_request_10
+  bp3_journal_request_1: journal add backpack3_repeat_1
+  bp3_journal_request_2: journal add backpack3_repeat_2
+  bp3_journal_request_3: journal add backpack3_repeat_3
+  bp3_journal_request_4: journal add backpack3_repeat_4
+  bp3_journal_request_5: journal add backpack3_repeat_5
+  bp3_journal_request_6: journal add backpack3_repeat_6
+  bp3_journal_request_7: journal add backpack3_repeat_7
+  bp3_journal_request_8: journal add backpack3_repeat_8
+  bp3_journal_request_9: journal add backpack3_repeat_9
+  bp3_journal_request_10: journal add backpack3_repeat_10
+  bp3_take_request_1: folder bp3_take_r1_leather,bp3_take_r1_string,bp3_finish_repeat
+  bp3_take_r1_leather: take bp_leather:32
+  bp3_take_r1_string: take bp_string:32
+  bp3_take_request_2: folder bp3_take_r2_iron,bp3_take_r2_coal,bp3_finish_repeat
+  bp3_take_r2_iron: take bp_iron_ingot:48
+  bp3_take_r2_coal: take bp3_coal:32
+  bp3_take_request_3: folder bp3_take_r3_copper,bp3_take_r3_redstone,bp3_finish_repeat
+  bp3_take_r3_copper: take bp_copper_ingot:32
+  bp3_take_r3_redstone: take bp3_redstone:24
+  bp3_take_request_4: folder bp3_take_r4_gold,bp3_take_r4_emerald,bp3_finish_repeat
+  bp3_take_r4_gold: take bp_gold_ingot:12
+  bp3_take_r4_emerald: take bp2_emerald:8
+  bp3_take_request_5: folder bp3_take_r5_flesh,bp3_take_r5_bone,bp3_finish_repeat
+  bp3_take_r5_flesh: take bp3_rotten_flesh:24
+  bp3_take_r5_bone: take bp3_bone:24
+  bp3_take_request_6: folder bp3_take_r6_pearl,bp3_take_r6_blaze,bp3_finish_repeat
+  bp3_take_r6_pearl: take bp3_ender_pearl:12
+  bp3_take_r6_blaze: take bp3_blaze_rod:8
+  bp3_take_request_7: folder bp3_take_r7_prismarine,bp3_take_r7_nautilus,bp3_finish_repeat
+  bp3_take_r7_prismarine: take bp3_prismarine_shard:32
+  bp3_take_r7_nautilus: take bp3_nautilus_shell:4
+  bp3_take_request_8: folder bp3_take_r8_amethyst,bp3_take_r8_glowstone,bp3_finish_repeat
+  bp3_take_r8_amethyst: take bp2_amethyst:16
+  bp3_take_r8_glowstone: take bp2_glowstone:32
+  bp3_take_request_9: folder bp3_take_r9_phantom,bp3_take_r9_ghast,bp3_finish_repeat
+  bp3_take_r9_phantom: take bp3_phantom_membrane:4
+  bp3_take_r9_ghast: take bp2_ghast_tear:2
+  bp3_take_request_10: folder bp3_take_r10_diamond,bp3_take_r10_echo,bp3_finish_repeat
+  bp3_take_r10_diamond: take bp3_diamond:2
+  bp3_take_r10_echo: take bp3_echo_shard:1
+  bp3_finish_repeat: folder bp3_give_backpack,bp3_clear_repeat,bp3_title_repeat_complete,bp3_msg_repeat_complete_delayed
+  bp3_title_repeat_complete: notify Orion's Request Complete\nYou received another
+    Level 3 Backpack io:title fadeIn:0 stay:90 fadeOut:10
+  bp3_msg_repeat_complete: 'notify &aRequest Complete&7: &dOrion gave you another
+    Level 3 Backpack. io:chat'
+  bp3_msg_repeat_complete_delayed: folder bp3_msg_repeat_complete delay:2
+  bp3_clear_repeat: folder bp3_del_repeat_started,bp3_del_repeat_assigned,bp3_del_request_1,bp3_del_request_2,bp3_del_request_3,bp3_del_request_4,bp3_del_request_5,bp3_del_request_6,bp3_del_request_7,bp3_del_request_8,bp3_del_request_9,bp3_del_request_10,bp3_del_all_request_journals
+  bp3_del_repeat_started: tag del bp3_repeat_started
+  bp3_del_repeat_assigned: tag del bp3_repeat_assigned
+  bp3_del_request_1: tag del bp3_request_1
+  bp3_del_request_2: tag del bp3_request_2
+  bp3_del_request_3: tag del bp3_request_3
+  bp3_del_request_4: tag del bp3_request_4
+  bp3_del_request_5: tag del bp3_request_5
+  bp3_del_request_6: tag del bp3_request_6
+  bp3_del_request_7: tag del bp3_request_7
+  bp3_del_request_8: tag del bp3_request_8
+  bp3_del_request_9: tag del bp3_request_9
+  bp3_del_request_10: tag del bp3_request_10
+  bp3_del_all_request_journals: folder bp3_del_j_request_1,bp3_del_j_request_2,bp3_del_j_request_3,bp3_del_j_request_4,bp3_del_j_request_5,bp3_del_j_request_6,bp3_del_j_request_7,bp3_del_j_request_8,bp3_del_j_request_9,bp3_del_j_request_10
+  bp3_del_j_request_1: journal delete backpack3_repeat_1
+  bp3_del_j_request_2: journal delete backpack3_repeat_2
+  bp3_del_j_request_3: journal delete backpack3_repeat_3
+  bp3_del_j_request_4: journal delete backpack3_repeat_4
+  bp3_del_j_request_5: journal delete backpack3_repeat_5
+  bp3_del_j_request_6: journal delete backpack3_repeat_6
+  bp3_del_j_request_7: journal delete backpack3_repeat_7
+  bp3_del_j_request_8: journal delete backpack3_repeat_8
+  bp3_del_j_request_9: journal delete backpack3_repeat_9
+  bp3_del_j_request_10: journal delete backpack3_repeat_10
+  orion_shop_say_hi_1: command say hi 1
+  orion_shop_say_hi_2: command say hi 2
+  orion_shop_say_hi_3: command say hi 3
+  bp3_admin_reset: folder bp3_del_started,bp3_del_questions_phase,bp3_clear_repeat,bp3_del_finished,bp3_reset_answers,bp3_del_journal_main
+  bp3_del_finished: tag del bp3_finished
+  bp3_reset_answers: folder bp3_del_q1_discovery,bp3_del_q1_treasure,bp3_del_q1_protection,bp3_del_q2_rescue,bp3_del_q2_plan,bp3_del_q2_mission,bp3_del_q3_seal,bp3_del_q3_study,bp3_del_q3_use,bp3_del_q4_lead,bp3_del_q4_support,bp3_del_q4_alone,bp3_del_q5_fame,bp3_del_q5_protection,bp3_del_q5_freedom
+  bp3_del_q1_discovery: tag del bp3_q1_discovery
+  bp3_del_q1_treasure: tag del bp3_q1_treasure
+  bp3_del_q1_protection: tag del bp3_q1_protection
+  bp3_del_q2_rescue: tag del bp3_q2_rescue
+  bp3_del_q2_plan: tag del bp3_q2_plan
+  bp3_del_q2_mission: tag del bp3_q2_mission
+  bp3_del_q3_seal: tag del bp3_q3_seal
+  bp3_del_q3_study: tag del bp3_q3_study
+  bp3_del_q3_use: tag del bp3_q3_use
+  bp3_del_q4_lead: tag del bp3_q4_lead
+  bp3_del_q4_support: tag del bp3_q4_support
+  bp3_del_q4_alone: tag del bp3_q4_alone
+  bp3_del_q5_fame: tag del bp3_q5_fame
+  bp3_del_q5_protection: tag del bp3_q5_protection
+  bp3_del_q5_freedom: tag del bp3_q5_freedom
+npc_holograms:
+  backpack_available:
+    lines:
+    - '&d&l❗'
+    npcs: '90'
+    conditions: '!bp_started,!bp_finished'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  backpack2_available:
+    lines:
+    - '&d&l❗'
+    - '&7Level 2 backpack'
+    npcs: '90'
+    conditions: bp_finished,!bp2_started,!bp2_finished,!bp_repeat
+    follow: true
+    check_interval: 20
+    max_range: 25
+  backpack2_active:
+    lines:
+    - '&6&l❓'
+    - '&7Personal trials'
+    npcs: '90'
+    conditions: bp2_started,!bp2_finished
+    follow: true
+    check_interval: 20
+    max_range: 25
+  backpack_active_elias:
+    lines:
+    - '&6&l❓'
+    - '&7Backpack quest'
+    npcs: '90'
+    conditions: bp_started
+    follow: true
+    check_interval: 20
+    max_range: 25
+  backpack_active_mara:
+    lines:
+    - '&6&l❓'
+    - '&7Travelling canvas'
+    npcs: '91'
+    conditions: bp_canvas_phase,!bp_canvas_done
+    follow: true
+    check_interval: 20
+    max_range: 25
+  backpack_active_brann:
+    lines:
+    - '&6&l❓'
+    - '&7Reinforced frame'
+    npcs: '92'
+    conditions: bp_frame_phase,!bp_frame_done
+    follow: true
+    check_interval: 20
+    max_range: 25
+npc_conversations:
+  '90': elias_backpack_conv
+  '91': mara_backpack_conv
+  '92': brann_backpack_conv
+  '97': orion_backpack_conv
+conversations:
+  elias_backpack_conv:
+    quester: Elias Packwright
+    first: elias_bp3_repeat_active,elias_bp3_completed_menu,elias_bp3_offer,elias_bp2_questions_5,elias_bp2_questions_4,elias_bp2_questions_3,elias_bp2_questions_2,elias_bp2_questions_1,elias_bp2_reward_repeat,elias_bp2_reward,elias_bp2_trial3_knowledge_ready,elias_bp2_trial3_strength_ready,elias_bp2_trial3_hope_ready,elias_bp2_trial3_knowledge,elias_bp2_trial3_strength,elias_bp2_trial3_hope,elias_bp2_trial2_prepared_ready,elias_bp2_trial2_teamwork_ready,elias_bp2_trial2_prepared,elias_bp2_trial2_instinct,elias_bp2_trial2_teamwork,elias_bp2_trial1_explorer,elias_bp2_trial1_wealth,elias_bp2_trial1_courage,elias_bp2_completed_menu,elias_bp2_offer,elias_questions_3,elias_questions_2,elias_questions_1,elias_final_ready_repeat,elias_final_ready_first,elias_final_missing,elias_after_combat,elias_combat_status,elias_after_frame,elias_after_canvas,elias_after_explore,elias_explore_status,elias_repeat_start,elias_start
+    stop: true
+    NPC_options:
+      elias_bp3_offer:
+        text: You have mastered both backpack trials. I cannot craft the final backpack,
+          but I can tell you how to seek it. You may also repeat either of your previous
+          journeys. What would you like to do?
+        conditions: bp2_finished,!bp3_started,!bp3_finished,!bp_started,!bp2_started
+        pointers: pl_bp3_accept,pl_bp2_repeat,pl_repeat,pl_decline
+      elias_bp3_explanation:
+        text: Long ago, the underground passages beneath the city were built as a
+          secure bunker. Over time, terrible creatures claimed them, and now only
+          the finest adventurers descend there in search of forgotten treasure. Somewhere
+          inside is an adventurer named Orion. I do not know where he is, but he is
+          the only one who can grant you the final backpack. The entrance is beneath
+          the city. Arm yourself and prepare carefully before you descend. Is everything
+          clear?
+        pointers: pl_bp3_clear
+      elias_bp3_completed_menu:
+        text: You have completed every backpack journey. Orion can grant another Level
+          3 Backpack, or you may repeat either of your earlier quests. What would
+          you like to do?
+        conditions: bp3_finished,!bp3_repeat_started,!bp_started,!bp2_started
+        pointers: pl_bp3_repeat,pl_bp2_repeat,pl_repeat,pl_decline
+      elias_bp3_repeat_active:
+        text: Orion is waiting beneath the city. Speak with him to learn his request,
+          or return with the materials he already named.
+        conditions: bp3_finished,bp3_repeat_started
+        pointers: pl_end
+      elias_bp2_offer:
+        text: You have already earned your first backpack. What would you like to
+          do next?
+        conditions: bp_finished,!bp_started,!bp2_started,!bp2_finished
+        pointers: pl_bp2_accept,pl_repeat,pl_decline
+      elias_bp2_completed_menu:
+        text: You have mastered both backpack trials. Which journey would you like
+          to repeat?
+        conditions: bp_finished,bp2_finished,!bp_started,!bp2_started
+        pointers: pl_bp2_repeat,pl_repeat,pl_decline
+      elias_bp2_trial1_explorer:
+        text: You called yourself an explorer. Travel to the Ancient Castle near X
+          -792, Y 65, Z -501. Reach its lower tower, upper hall, and summit. The height
+          of each destination matters.
+        conditions: bp2_started,bp2_trial1_phase,bp_path_explorer
+        pointers: pl_end
+      elias_bp2_trial1_wealth:
+        text: You said you seek treasure and riches. Travel to the Ancient Castle
+          near X -792, Y 65, Z -501. Find the empty chest at X -791, Y 119, Z -595
+          and open it.
+        conditions: bp2_started,bp2_trial1_phase,bp_path_wealth,!bp2_has_wealth_items
+        pointers: pl_end
+      elias_bp2_trial1_wealth_ready:
+        text: You found the hidden chest. The treasure was not its contents, but your
+          ability to reach it. Your second trial can now begin.
+        conditions: bp2_started,bp2_trial1_phase,bp_path_wealth,bp2_has_wealth_items,!bp2_started
+        pointers: pl_end
+      elias_bp2_trial1_courage:
+        text: You chose the path of battle. Travel to the Ancient Castle and defeat
+          a Warden while you are inside the castle region.
+        conditions: bp2_started,bp2_trial1_phase,bp_path_courage
+        pointers: pl_end
+      elias_bp2_trial2_prepared:
+        text: You believe preparation keeps you alive. Bring me 32 Iron Ingots, 32
+          String and 2 Chests.
+        conditions: bp2_started,bp2_trial2_phase,bp_mind_prepared,!bp2_has_prepared_items
+        pointers: pl_end
+      elias_bp2_trial2_prepared_ready:
+        text: Every item has a purpose and every risk has been considered. Hand me
+          the supplies and face your final trial.
+        conditions: bp2_started,bp2_trial2_phase,bp_mind_prepared,bp2_has_prepared_items
+        pointers: pl_bp2_prepared_done,pl_end
+      elias_bp2_trial2_instinct:
+        text: You trust your instincts. Defeat 8 Endermen and 12 Cave Spiders, enemies
+          that punish slow decisions.
+        conditions: bp2_started,bp2_trial2_phase,bp_mind_instinct
+        pointers: pl_end
+      elias_bp2_trial2_teamwork:
+        text: You rely on companions. Bring 32 Bread and 4 Golden Apples, enough to
+          keep a small group standing.
+        conditions: bp2_started,bp2_trial2_phase,bp_mind_teamwork,!bp2_has_teamwork_items
+        pointers: pl_end
+      elias_bp2_trial2_teamwork_ready:
+        text: These supplies could save more than one traveller. Leave them with me
+          and begin the last trial.
+        conditions: bp2_started,bp2_trial2_phase,bp_mind_teamwork,bp2_has_teamwork_items
+        pointers: pl_bp2_teamwork_done,pl_end
+      elias_bp2_trial3_knowledge:
+        text: You named knowledge as true power. Bring me 24 Books and 16 Amethyst
+          Shards.
+        conditions: bp2_started,bp2_trial3_phase,bp_power_knowledge,!bp2_has_knowledge_items
+        pointers: pl_end
+      elias_bp2_trial3_knowledge_ready:
+        text: Knowledge recorded and memory made solid. Give me the materials and
+          I will finish your backpack.
+        conditions: bp2_started,bp2_trial3_phase,bp_power_knowledge,bp2_has_knowledge_items
+        pointers: pl_bp2_knowledge_done,pl_end
+      elias_bp2_trial3_strength:
+        text: You named strength as true power. Bring me 16 Obsidian and 32 Iron Ingots.
+        conditions: bp2_started,bp2_trial3_phase,bp_power_strength,!bp2_has_strength_items
+        pointers: pl_end
+      elias_bp2_trial3_strength_ready:
+        text: These materials will not bend easily. Give them to me and I will finish
+          your backpack.
+        conditions: bp2_started,bp2_trial3_phase,bp_power_strength,bp2_has_strength_items
+        pointers: pl_bp2_strength_done,pl_end
+      elias_bp2_trial3_hope:
+        text: You named hope as true power. Bring me 32 Glowstone Dust and 2 Ghast
+          Tears, light taken from a hostile place.
+        conditions: bp2_started,bp2_trial3_phase,bp_power_hope,!bp2_has_hope_items
+        pointers: pl_end
+      elias_bp2_trial3_hope_ready:
+        text: Even here, you found light. Give me the materials and I will finish
+          your backpack.
+        conditions: bp2_started,bp2_trial3_phase,bp_power_hope,bp2_has_hope_items
+        pointers: pl_bp2_hope_done,pl_end
+      elias_bp2_questions_1:
+        text: Your trials are complete, but I want to understand the person who will
+          carry this backpack. When duty conflicts with mercy, which guides you?
+        conditions: bp2_started,bp2_questions_phase,!bp2_q4_duty,!bp2_q4_compassion,!bp2_q4_freedom
+        pointers: pl_bp2_q4_duty,pl_bp2_q4_compassion,pl_bp2_q4_freedom
+      elias_bp2_questions_2:
+        text: You discover an ancient artifact that could change many lives. What
+          should be done with it?
+        conditions: bp2_started,bp2_questions_phase,bp2_q4_1_done,!bp2_q5_preserve,!bp2_q5_use,!bp2_q5_destroy
+        pointers: pl_bp2_q5_preserve,pl_bp2_q5_use,pl_bp2_q5_destroy
+      elias_bp2_questions_3:
+        text: When a group loses its way, what role do you take?
+        conditions: bp2_started,bp2_questions_phase,bp2_q4_1_done,bp2_q4_2_done,!bp2_q6_lead,!bp2_q6_support,!bp2_q6_alone
+        pointers: pl_bp2_q6_lead,pl_bp2_q6_support,pl_bp2_q6_alone
+      elias_bp2_questions_4:
+        text: When your carefully chosen path ends in failure, what do you do?
+        conditions: bp2_started,bp2_questions_phase,bp2_q4_1_done,bp2_q4_2_done,bp2_q4_3_done,!bp2_q7_retry,!bp2_q7_adapt,!bp2_q7_accept
+        pointers: pl_bp2_q7_retry,pl_bp2_q7_adapt,pl_bp2_q7_accept
+      elias_bp2_questions_5:
+        text: Last question. What legacy would you most want your journey to leave
+          behind?
+        conditions: bp2_started,bp2_questions_phase,bp2_q4_1_done,bp2_q4_2_done,bp2_q4_3_done,bp2_q4_4_done,!bp2_q8_fame,!bp2_q8_protection,!bp2_q8_freedom
+        pointers: pl_bp2_q8_fame,pl_bp2_q8_protection,pl_bp2_q8_freedom
+      elias_bp2_reward_repeat:
+        text: You have completed your three personal trials again. Everything is ready.
+          Let me craft another Level 2 Backpack.
+        conditions: bp2_started,bp2_reward_ready,bp2_finished,bp2_repeat
+        pointers: pl_bp2_reward
+      elias_bp2_reward:
+        text: All three trials reflect the traveller you chose to become. Everything
+          is ready. Let me craft a backpack worthy of that choice.
+        conditions: bp2_started,bp2_reward_ready,!bp2_finished,!bp2_repeat
+        pointers: pl_bp2_reward
+      elias_start:
+        text: You travel light, friend. Too light. A real adventurer needs a proper
+          backpack. Mine are earned, not gifted. Are you willing to work for your
+          first one?
+        conditions: '!bp_started,!bp_finished'
+        pointers: pl_accept,pl_decline
+      elias_repeat_start:
+        text: I can craft another Level 1 Backpack if you are willing to repeat the
+          first journey.
+        conditions: bp_finished,!bp_started,!bp2_started
+        pointers: pl_repeat,pl_decline
+      elias_explore_status:
+        text: You still have places left to discover. I will send the coordinates
+          again after we finish speaking.
+        conditions: bp_explore_phase,!bp_explore_done
+        actions: bp_msg_explore_coords_delayed
+        pointers: pl_end
+      elias_after_explore:
+        text: Excellent. You have seen enough of the world to understand why a good
+          backpack matters. Now speak with Mara Threadneedle. She can stitch the travelling
+          canvas.
+        conditions: bp_explore_done,!bp_canvas_phase,!bp_canvas_done
+        pointers: pl_start_canvas,pl_end
+      elias_after_canvas:
+        text: Good canvas. Now it needs a proper frame, or your backpack will fold
+          like wet paper. Brann Gearlock can build it.
+        conditions: bp_canvas_done,!bp_frame_phase,!bp_frame_done
+        pointers: pl_start_frame,pl_end
+      elias_after_frame:
+        text: The frame is ready, but Brann is right about one thing. Anyone can gather
+          supplies. A backpack belongs to someone who can survive the wild.
+        conditions: bp_frame_done,!bp_combat_phase,!bp_combat_done
+        pointers: pl_start_combat,pl_end
+      elias_combat_status:
+        text: Your trial is not complete yet. Defeat 5 Vindicators, 5 Witches, and
+          10 Skeletons. Each kill will show your current progress.
+        conditions: bp_combat_phase,!bp_combat_done
+        pointers: pl_end
+      elias_after_combat:
+        text: You have proven your courage. Now we finish the work. I still need the
+          final fittings before I can assemble your backpack.
+        conditions: bp_combat_done,!bp_final_phase,!bp_questions_phase
+        pointers: pl_start_final,pl_end
+      elias_final_missing:
+        text: Final assembly still needs 16 Leather, 16 String, 8 Iron Ingots, and
+          2 Gold Ingots.
+        conditions: bp_final_phase,!bp_has_final_items
+        pointers: pl_end
+      elias_final_ready_first:
+        text: You brought everything. Everything is ready. Let me craft something
+          worthy of your journey. Before I finish it, answer me honestly.
+        conditions: bp_final_phase,bp_has_final_items,!bp_repeat
+        pointers: pl_final_first,pl_end
+      elias_final_ready_repeat:
+        text: You brought everything. Everything is ready. Let me craft something
+          worthy of your journey.
+        conditions: bp_final_phase,bp_has_final_items,bp_repeat
+        pointers: pl_final_repeat,pl_end
+      elias_questions_1:
+        text: A backpack reflects the kind of adventurer carrying it. What kind of
+          traveller are you?
+        conditions: bp_questions_phase,!bp_path_explorer,!bp_path_wealth,!bp_path_courage
+        pointers: pl_q1_explorer,pl_q1_wealth,pl_q1_courage
+      elias_questions_2:
+        text: And when the road becomes dangerous, what keeps you alive?
+        conditions: bp_questions_phase,bp_q1_done,!bp_q2_done
+        pointers: pl_q2_prepared,pl_q2_instinct,pl_q2_teamwork
+      elias_questions_3:
+        text: Last question. What do you believe gives an adventurer true power?
+        conditions: bp_questions_phase,bp_q1_done,bp_q2_done,!bp_power_knowledge,!bp_power_strength,!bp_power_hope
+        pointers: pl_q3_knowledge,pl_q3_strength,pl_q3_hope
+    player_options:
+      pl_bp3_accept:
+        text: I want to obtain the final Backpack.
+        pointers: elias_bp3_explanation
+      pl_bp3_clear:
+        text: Clear.
+        actions: bp3_start_first
+      pl_bp3_repeat:
+        text: I will return to Orion for another Level 3 Backpack.
+        actions: bp3_start_repeat
+      pl_bp2_accept:
+        text: I want to try to obtain the Level 2 Backpack.
+        actions: bp2_start
+      pl_bp2_repeat:
+        text: I want to repeat the Level 2 Backpack quest.
+        actions: bp2_start_repeat
+      pl_bp2_prepared_done:
+        text: Take the supplies. I am ready for the final trial.
+        actions: bp2_take_prepared
+      pl_bp2_teamwork_done:
+        text: Take these provisions. I am ready for the final trial.
+        actions: bp2_take_teamwork
+      pl_bp2_knowledge_done:
+        text: Use these materials to complete the trial.
+        actions: bp2_take_knowledge
+      pl_bp2_strength_done:
+        text: Use these materials to complete the trial.
+        actions: bp2_take_strength
+      pl_bp2_hope_done:
+        text: Use these materials to complete the trial.
+        actions: bp2_take_hope
+      pl_bp2_q4_duty:
+        text: Duty must come first.
+        actions: bp2_q4_duty_event
+        pointers: elias_bp2_questions_2
+      pl_bp2_q4_compassion:
+        text: Mercy and compassion must guide me.
+        actions: bp2_q4_compassion_event
+        pointers: elias_bp2_questions_2
+      pl_bp2_q4_freedom:
+        text: No rule should replace personal freedom.
+        actions: bp2_q4_freedom_event
+        pointers: elias_bp2_questions_2
+      pl_bp2_q5_preserve:
+        text: Preserve it and study it carefully.
+        actions: bp2_q5_preserve_event
+        pointers: elias_bp2_questions_3
+      pl_bp2_q5_use:
+        text: Use its power to improve lives.
+        actions: bp2_q5_use_event
+        pointers: elias_bp2_questions_3
+      pl_bp2_q5_destroy:
+        text: Destroy it before its power corrupts anyone.
+        actions: bp2_q5_destroy_event
+        pointers: elias_bp2_questions_3
+      pl_bp2_q6_lead:
+        text: I step forward and lead.
+        actions: bp2_q6_lead_event
+        pointers: elias_bp2_questions_4
+      pl_bp2_q6_support:
+        text: I support whoever is best suited to lead.
+        actions: bp2_q6_support_event
+        pointers: elias_bp2_questions_4
+      pl_bp2_q6_alone:
+        text: I leave the group and find my own way.
+        actions: bp2_q6_alone_event
+        pointers: elias_bp2_questions_4
+      pl_bp2_q7_retry:
+        text: I try again until I succeed.
+        actions: bp2_q7_retry_event
+        pointers: elias_bp2_questions_5
+      pl_bp2_q7_adapt:
+        text: I change my plan and adapt.
+        actions: bp2_q7_adapt_event
+        pointers: elias_bp2_questions_5
+      pl_bp2_q7_accept:
+        text: I accept the failure and learn from it.
+        actions: bp2_q7_accept_event
+        pointers: elias_bp2_questions_5
+      pl_bp2_q8_fame:
+        text: I want my name and deeds to be remembered.
+        actions: bp2_q8_fame_event,bp2_questions_complete
+        pointers: elias_bp2_reward
+      pl_bp2_q8_protection:
+        text: I want others to be safer because I existed.
+        actions: bp2_q8_protection_event,bp2_questions_complete
+        pointers: elias_bp2_reward
+      pl_bp2_q8_freedom:
+        text: I want others to have the freedom to choose their own path.
+        actions: bp2_q8_freedom_event,bp2_questions_complete
+        pointers: elias_bp2_reward
+      pl_bp2_reward:
+        text: Craft the Level 2 Backpack.
+        actions: bp2_finish
+      pl_accept:
+        text: I want to earn my first backpack.
+        actions: bp_start_first
+      pl_repeat:
+        text: I want to repeat the first quest for another Level 1 Backpack.
+        actions: bp_start_repeat
+      pl_decline:
+        text: Maybe another time.
+      pl_start_canvas:
+        text: I will speak with Mara Threadneedle.
+        actions: bp_start_canvas_phase
+      pl_start_frame:
+        text: I will speak with Brann Gearlock.
+        actions: bp_start_frame_phase
+      pl_start_combat:
+        text: I will prove myself.
+        actions: bp_start_combat_phase
+      pl_start_final:
+        text: Tell me what you need for the final fittings.
+        actions: bp_start_final_phase
+      pl_final_first:
+        text: I am ready to answer.
+        actions: bp_final_materials_done_first
+        pointers: elias_questions_1
+      pl_final_repeat:
+        text: Please craft it.
+        actions: bp_final_materials_done_repeat
+      pl_q1_explorer:
+        text: I explore every corner of the world.
+        actions: bp_q1_explorer
+        pointers: elias_questions_2
+      pl_q1_wealth:
+        text: I seek treasure and riches.
+        actions: bp_q1_wealth
+        pointers: elias_questions_2
+      pl_q1_courage:
+        text: I fight whatever stands before me.
+        actions: bp_q1_courage
+        pointers: elias_questions_2
+      pl_q2_prepared:
+        text: Preparation is everything.
+        actions: bp_q2_prepared
+        pointers: elias_questions_3
+      pl_q2_instinct:
+        text: I trust my instincts.
+        actions: bp_q2_instinct
+        pointers: elias_questions_3
+      pl_q2_teamwork:
+        text: I rely on my friends.
+        actions: bp_q2_teamwork
+        pointers: elias_questions_3
+      pl_q3_knowledge:
+        text: Knowledge is power.
+        actions: bp_q3_knowledge,bp_finish_first
+      pl_q3_strength:
+        text: Strength is power.
+        actions: bp_q3_strength,bp_finish_first
+      pl_q3_hope:
+        text: Hope is power.
+        actions: bp_q3_hope,bp_finish_first
+      pl_end:
+        text: I understand.
+  mara_backpack_conv:
+    quester: Mara Threadneedle
+    first: mara_done,mara_ready,mara_missing,mara_wrong
+    stop: true
+    NPC_options:
+      mara_missing:
+        text: Elias sent you? Then we need travelling canvas. Bring me 24 Leather,
+          32 String, and 16 White Wool. It does not need to be pretty. It needs to
+          hold.
+        conditions: bp_canvas_phase,!bp_has_canvas_items,!bp_canvas_done
+        pointers: pl_end
+      mara_ready:
+        text: These materials will do. I can stitch the travelling canvas now.
+        conditions: bp_canvas_phase,bp_has_canvas_items,!bp_canvas_done
+        pointers: pl_make_canvas,pl_end
+      mara_done:
+        text: The canvas is done. Tell Elias it will survive rain, dust, and at least
+          three terrible ideas.
+        conditions: bp_canvas_done
+        pointers: pl_end
+      mara_wrong:
+        text: Need something stitched? Come back when Elias sends you.
+        conditions: '!bp_canvas_phase,!bp_canvas_done'
+        pointers: pl_end
+    player_options:
+      pl_make_canvas:
+        text: Please make the canvas.
+        actions: bp_canvas_complete
+      pl_end:
+        text: I understand.
+  brann_backpack_conv:
+    quester: Brann Gearlock
+    first: brann_done,brann_ready,brann_missing,brann_wrong
+    stop: true
+    NPC_options:
+      brann_missing:
+        text: A backpack without a frame is just a sad sack. Bring me 12 Iron Ingots,
+          16 Copper Ingots, and 1 Chest. I will make it reliable.
+        conditions: bp_frame_phase,!bp_has_frame_items,!bp_frame_done
+        pointers: pl_end
+      brann_ready:
+        text: Good. I can build the reinforced frame now. No unnecessary steam pistons
+          this time. Probably.
+        conditions: bp_frame_phase,bp_has_frame_items,!bp_frame_done
+        pointers: pl_make_frame,pl_end
+      brann_done:
+        text: The frame is ready. Take it to Elias before I decide to improve it into
+          something dangerous.
+        conditions: bp_frame_done
+        pointers: pl_end
+      brann_wrong:
+        text: I fix machines, not empty promises. Come back when Elias actually needs
+          a frame.
+        conditions: '!bp_frame_phase,!bp_frame_done'
+        pointers: pl_end
+    player_options:
+      pl_make_frame:
+        text: Please build the frame.
+        actions: bp_frame_complete
+      pl_end:
+        text: I understand.
+  
+  orion_backpack_conv:
+    quester: Orion the Adventurer
+    first: orion_repeat_ready_1,orion_repeat_ready_2,orion_repeat_ready_3,orion_repeat_ready_4,orion_repeat_ready_5,orion_repeat_ready_6,orion_repeat_ready_7,orion_repeat_ready_8,orion_repeat_ready_9,orion_repeat_ready_10,orion_repeat_status_1,orion_repeat_status_2,orion_repeat_status_3,orion_repeat_status_4,orion_repeat_status_5,orion_repeat_status_6,orion_repeat_status_7,orion_repeat_status_8,orion_repeat_status_9,orion_repeat_status_10,orion_repeat_assign,orion_question_5,orion_question_4,orion_question_3,orion_question_2,orion_question_1,orion_first_found,orion_trade_all,orion_trade_two,orion_trade_one,orion_trade_none
+    stop: true
+    NPC_options:
+      orion_first_found:
+        text: So Elias sent someone into the darkness at last. These tunnels were
+          built to save the city, and now they devour the unprepared. You reached
+          me, which already says more than most promises. Before I give you the final
+          backpack, answer five questions honestly.
+        conditions: bp3_started,!bp3_questions_phase,!bp3_finished
+        pointers: pl_orion_begin_questions,pl_end
+      orion_question_1:
+        text: Why do you enter places that sensible people fear?
+        conditions: bp3_started,bp3_questions_phase,!bp3_q1_done
+        pointers: pl_bp3_q1_discovery,pl_bp3_q1_treasure,pl_bp3_q1_protection
+      orion_question_2:
+        text: A companion falls behind while danger closes in. What do you do?
+        conditions: bp3_started,bp3_questions_phase,bp3_q1_done,!bp3_q2_done
+        pointers: pl_bp3_q2_rescue,pl_bp3_q2_plan,pl_bp3_q2_mission
+      orion_question_3:
+        text: You find a forbidden source of power. What should happen to it?
+        conditions: bp3_started,bp3_questions_phase,bp3_q1_done,bp3_q2_done,!bp3_q3_done
+        pointers: pl_bp3_q3_seal,pl_bp3_q3_study,pl_bp3_q3_use
+      orion_question_4:
+        text: When a group faces uncertainty, which place do you take?
+        conditions: bp3_started,bp3_questions_phase,bp3_q1_done,bp3_q2_done,bp3_q3_done,!bp3_q4_done
+        pointers: pl_bp3_q4_lead,pl_bp3_q4_support,pl_bp3_q4_alone
+      orion_question_5:
+        text: Last question. What should remain after your journey ends?
+        conditions: bp3_started,bp3_questions_phase,bp3_q1_done,bp3_q2_done,bp3_q3_done,bp3_q4_done,!bp3_q5_fame,!bp3_q5_protection,!bp3_q5_freedom
+        pointers: pl_bp3_q5_fame,pl_bp3_q5_protection,pl_bp3_q5_freedom
+      orion_repeat_assign:
+        text: Back for another backpack? Then earn it. I will decide what supplies
+          I need this time.
+        conditions: bp3_finished,bp3_repeat_started,!bp3_repeat_assigned
+        pointers: pl_orion_get_request,pl_end
+      orion_repeat_status_1:
+        text: Bring me 32 Leather and 32 String. Return when you have all of it.
+        conditions: bp3_repeat_started,bp3_request_1,!bp3_has_request_1
+        pointers: pl_end
+      orion_repeat_status_2:
+        text: Bring me 48 Iron Ingots and 32 Coal. Return when you have all of it.
+        conditions: bp3_repeat_started,bp3_request_2,!bp3_has_request_2
+        pointers: pl_end
+      orion_repeat_status_3:
+        text: Bring me 32 Copper Ingots and 24 Redstone Dust. Return when you have
+          all of it.
+        conditions: bp3_repeat_started,bp3_request_3,!bp3_has_request_3
+        pointers: pl_end
+      orion_repeat_status_4:
+        text: Bring me 12 Gold Ingots and 8 Emeralds. Return when you have all of
+          it.
+        conditions: bp3_repeat_started,bp3_request_4,!bp3_has_request_4
+        pointers: pl_end
+      orion_repeat_status_5:
+        text: Bring me 24 Rotten Flesh and 24 Bones. Return when you have all of it.
+        conditions: bp3_repeat_started,bp3_request_5,!bp3_has_request_5
+        pointers: pl_end
+      orion_repeat_status_6:
+        text: Bring me 12 Ender Pearls and 8 Blaze Rods. Return when you have all
+          of it.
+        conditions: bp3_repeat_started,bp3_request_6,!bp3_has_request_6
+        pointers: pl_end
+      orion_repeat_status_7:
+        text: Bring me 32 Prismarine Shards and 4 Nautilus Shells. Return when you
+          have all of it.
+        conditions: bp3_repeat_started,bp3_request_7,!bp3_has_request_7
+        pointers: pl_end
+      orion_repeat_status_8:
+        text: Bring me 16 Amethyst Shards and 32 Glowstone Dust. Return when you have
+          all of it.
+        conditions: bp3_repeat_started,bp3_request_8,!bp3_has_request_8
+        pointers: pl_end
+      orion_repeat_status_9:
+        text: Bring me 4 Phantom Membranes and 2 Ghast Tears. Return when you have
+          all of it.
+        conditions: bp3_repeat_started,bp3_request_9,!bp3_has_request_9
+        pointers: pl_end
+      orion_repeat_status_10:
+        text: Bring me 2 Diamonds and 1 Echo Shard. Return when you have all of it.
+        conditions: bp3_repeat_started,bp3_request_10,!bp3_has_request_10
+        pointers: pl_end
+      orion_repeat_ready_1:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_1,bp3_has_request_1
+        pointers: pl_orion_deliver_1,pl_end
+      orion_repeat_ready_2:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_2,bp3_has_request_2
+        pointers: pl_orion_deliver_2,pl_end
+      orion_repeat_ready_3:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_3,bp3_has_request_3
+        pointers: pl_orion_deliver_3,pl_end
+      orion_repeat_ready_4:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_4,bp3_has_request_4
+        pointers: pl_orion_deliver_4,pl_end
+      orion_repeat_ready_5:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_5,bp3_has_request_5
+        pointers: pl_orion_deliver_5,pl_end
+      orion_repeat_ready_6:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_6,bp3_has_request_6
+        pointers: pl_orion_deliver_6,pl_end
+      orion_repeat_ready_7:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_7,bp3_has_request_7
+        pointers: pl_orion_deliver_7,pl_end
+      orion_repeat_ready_8:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_8,bp3_has_request_8
+        pointers: pl_orion_deliver_8,pl_end
+      orion_repeat_ready_9:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_9,bp3_has_request_9
+        pointers: pl_orion_deliver_9,pl_end
+      orion_repeat_ready_10:
+        text: You brought everything. Hand it over, and the backpack is yours.
+        conditions: bp3_repeat_started,bp3_request_10,bp3_has_request_10
+        pointers: pl_orion_deliver_10,pl_end
+      orion_trade_none:
+        text: What do you want, traveler?
+        conditions: '!bp_finished,!bp3_started,!bp3_repeat_started'
+        pointers: pl_orion_sell_none,pl_end
+      orion_trade_one:
+        text: What do you want, traveler?
+        conditions: bp_finished,!bp2_finished,!bp3_started,!bp3_repeat_started
+        pointers: pl_orion_sell_one,pl_end
+      orion_trade_two:
+        text: What do you want, traveler?
+        conditions: bp_finished,bp2_finished,!bp3_finished,!bp3_started,!bp3_repeat_started
+        pointers: pl_orion_sell_two,pl_end
+      orion_trade_all:
+        text: What do you want, traveler?
+        conditions: bp_finished,bp2_finished,bp3_finished,!bp3_repeat_started
+        pointers: pl_orion_sell_all,pl_end
+      orion_sell_none_response:
+        text: Go to Elias and ask him about the backpacks. For now, I have nothing
+          for you.
+        pointers: pl_end
+      orion_sell_one_response:
+        text: Let me see what I can offer you.
+        actions: orion_shop_say_hi_1
+        pointers: pl_end
+      orion_sell_two_response:
+        text: You have come a long way. Let me show you what I have.
+        actions: orion_shop_say_hi_2
+        pointers: pl_end
+      orion_sell_all_response:
+        text: You completed every backpack trial. You have earned access to everything
+          I keep here.
+        actions: orion_shop_say_hi_3
+        pointers: pl_end
+    player_options:
+      pl_orion_begin_questions:
+        text: Ask your questions.
+        actions: bp3_begin_questions
+        pointers: orion_question_1
+      pl_bp3_q1_discovery:
+        text: I want to discover what others never found.
+        actions: bp3_q1_discovery_event
+        pointers: orion_question_2
+      pl_bp3_q1_treasure:
+        text: I seek treasure worth the risk.
+        actions: bp3_q1_treasure_event
+        pointers: orion_question_2
+      pl_bp3_q1_protection:
+        text: I go where others need protection.
+        actions: bp3_q1_protection_event
+        pointers: orion_question_2
+      pl_bp3_q2_rescue:
+        text: I turn back and rescue them immediately.
+        actions: bp3_q2_rescue_event
+        pointers: orion_question_3
+      pl_bp3_q2_plan:
+        text: I create a plan that saves them without losing everyone.
+        actions: bp3_q2_plan_event
+        pointers: orion_question_3
+      pl_bp3_q2_mission:
+        text: I continue. The mission cannot fail for one person.
+        actions: bp3_q2_mission_event
+        pointers: orion_question_3
+      pl_bp3_q3_seal:
+        text: Seal it where nobody can reach it.
+        actions: bp3_q3_seal_event
+        pointers: orion_question_4
+      pl_bp3_q3_study:
+        text: Study it until its purpose is understood.
+        actions: bp3_q3_study_event
+        pointers: orion_question_4
+      pl_bp3_q3_use:
+        text: Use it. Power is wasted when left untouched.
+        actions: bp3_q3_use_event
+        pointers: orion_question_4
+      pl_bp3_q4_lead:
+        text: I step forward and lead.
+        actions: bp3_q4_lead_event
+        pointers: orion_question_5
+      pl_bp3_q4_support:
+        text: I support the person best suited to lead.
+        actions: bp3_q4_support_event
+        pointers: orion_question_5
+      pl_bp3_q4_alone:
+        text: I trust my own path and move alone.
+        actions: bp3_q4_alone_event
+        pointers: orion_question_5
+      pl_bp3_q5_fame:
+        text: A name that people will remember.
+        actions: bp3_q5_fame_event,bp3_finish_first
+      pl_bp3_q5_protection:
+        text: A safer world for those who follow.
+        actions: bp3_q5_protection_event,bp3_finish_first
+      pl_bp3_q5_freedom:
+        text: The freedom for others to choose their own path.
+        actions: bp3_q5_freedom_event,bp3_finish_first
+      pl_orion_get_request:
+        text: Tell me what you need.
+        actions: bp3_assign_random
+      pl_orion_deliver_1:
+        text: Take the materials.
+        actions: bp3_take_request_1
+      pl_orion_deliver_2:
+        text: Take the materials.
+        actions: bp3_take_request_2
+      pl_orion_deliver_3:
+        text: Take the materials.
+        actions: bp3_take_request_3
+      pl_orion_deliver_4:
+        text: Take the materials.
+        actions: bp3_take_request_4
+      pl_orion_deliver_5:
+        text: Take the materials.
+        actions: bp3_take_request_5
+      pl_orion_deliver_6:
+        text: Take the materials.
+        actions: bp3_take_request_6
+      pl_orion_deliver_7:
+        text: Take the materials.
+        actions: bp3_take_request_7
+      pl_orion_deliver_8:
+        text: Take the materials.
+        actions: bp3_take_request_8
+      pl_orion_deliver_9:
+        text: Take the materials.
+        actions: bp3_take_request_9
+      pl_orion_deliver_10:
+        text: Take the materials.
+        actions: bp3_take_request_10
+      pl_orion_sell_none:
+        text: Do you have anything to sell?
+        pointers: orion_sell_none_response
+      pl_orion_sell_one:
+        text: Do you have anything to sell?
+        pointers: orion_sell_one_response
+      pl_orion_sell_two:
+        text: Do you have anything to sell?
+        pointers: orion_sell_two_response
+      pl_orion_sell_all:
+        text: Do you have anything to sell?
+        pointers: orion_sell_all_response
+      pl_end:
+        text: I understand.

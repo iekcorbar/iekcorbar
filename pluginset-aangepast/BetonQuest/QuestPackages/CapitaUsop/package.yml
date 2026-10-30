@@ -1,0 +1,40 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '126': citizens 126
+
+npc_conversations:
+  '126': captain_usop
+
+actions:
+  usop_travel: teleport 2883;67;-670;iekcorbarSeason2
+
+conversations:
+  captain_usop:
+    quester: Capitan Usop
+    first: start
+    stop: true
+
+    NPC_options:
+      start:
+        text: "&bCapitan Usop: &7I'm setting sail for the capital. Would you like to travel with me?"
+        pointers: accept,refuse
+
+      accepted:
+        text: "&bCapitan Usop: &7Very well. All aboard! We leave at once."
+        actions: usop_travel
+
+      refused:
+        text: "&bCapitan Usop: &7As you wish. Come back if you change your mind."
+
+    player_options:
+      accept:
+        text: "&aYes, take me to the capital."
+        pointers: accepted
+
+      refuse:
+        text: "&cNo, not now."
+        pointers: refused
+

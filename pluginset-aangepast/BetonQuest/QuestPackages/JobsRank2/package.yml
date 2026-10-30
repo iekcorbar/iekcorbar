@@ -1,0 +1,960 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '53': citizens 53
+  '54': citizens 54
+  '55': citizens 55
+  '56': citizens 56
+
+conditions:
+  jr2_quest_available: permission costum.jobsrank.2
+  jr2_citizen_registered: tag jr2_citizen_registered
+  
+  is_digger: tag job_digger
+  is_woodcutter: tag job_woodcutter
+  is_chef: tag job_chef
+  
+  chose_digger: tag chosen_digger
+  chose_woodcutter: tag chosen_woodcutter
+  chose_chef: tag chosen_chef
+  
+  change_to_digger: tag change_to_digger
+  change_to_woodcutter: tag change_to_woodcutter
+  change_to_chef: tag change_to_chef
+  
+  target_digger_npc: tag target_digger_npc
+  target_woodcutter_npc: tag target_woodcutter_npc
+  target_chef_npc: tag target_chef_npc
+  
+  digger_rand_1: random 1-4
+  digger_rand_2: random 1-3
+  digger_rand_3: random 1-2
+  
+  chef_rand_1: random 1-4
+  chef_rand_2: random 1-3
+  chef_rand_3: random 1-2
+  
+  woodcutter_rand_1: random 1-4
+  woodcutter_rand_2: random 1-3
+  woodcutter_rand_3: random 1-2
+
+actions:
+  # Selection tags
+  choose_digger: tag add chosen_digger
+  choose_woodcutter: tag add chosen_woodcutter
+  choose_chef: tag add chosen_chef
+  
+  # Pending change tags
+  select_change_digger: folder jr2_clear_change_choices,select_change_digger_add
+  select_change_woodcutter: folder jr2_clear_change_choices,select_change_woodcutter_add
+  select_change_chef: folder jr2_clear_change_choices,select_change_chef_add
+  select_change_digger_add: tag add change_to_digger
+  select_change_woodcutter_add: tag add change_to_woodcutter
+  select_change_chef_add: tag add change_to_chef
+  
+  # Clear temporary choices
+  clear_choices_jr2: tag del chosen_digger,chosen_woodcutter,chosen_chef,change_to_digger,change_to_woodcutter,change_to_chef
+  
+  # Registration/job tags
+  jr2_add_registered: tag add jr2_citizen_registered
+  add_job_digger: tag add job_digger
+  add_job_woodcutter: tag add job_woodcutter
+  add_job_chef: tag add job_chef
+  
+  del_job_digger: tag del job_digger
+  del_job_woodcutter: tag del job_woodcutter
+  del_job_chef: tag del job_chef
+  
+  jr2_clear_initial_job_choices: tag del chosen_digger,chosen_woodcutter,chosen_chef
+  jr2_clear_change_choices: tag del change_to_digger,change_to_woodcutter,change_to_chef
+  
+  # Commands that must behave like player/op
+  cmd_join_digger: nujobs_joinjob digger
+  cmd_join_woodcutter: nujobs_joinjob woodcutter
+  cmd_join_chef: nujobs_joinjob chef
+  
+  cmd_leave_digger: nujobs_leavejob digger
+  cmd_leave_woodcutter: nujobs_leavejob woodcutter
+  cmd_leave_chef: nujobs_leavejob chef
+  
+  # First assignment folders
+  become_digger: folder cmd_join_digger,jr2_add_registered,add_job_digger,jr2_clear_initial_job_choices,jr2_clear_target_npcs
+  become_woodcutter: folder cmd_join_woodcutter,jr2_add_registered,add_job_woodcutter,jr2_clear_initial_job_choices,jr2_clear_target_npcs
+  become_chef: folder cmd_join_chef,jr2_add_registered,add_job_chef,jr2_clear_initial_job_choices,jr2_clear_target_npcs
+  
+  # Job switches
+  switch_digger_from_woodcutter: folder cmd_leave_woodcutter,cmd_join_digger,del_job_woodcutter,add_job_digger,jr2_clear_change_choices,jr2_clear_target_npcs
+  switch_digger_from_chef: folder cmd_leave_chef,cmd_join_digger,del_job_chef,add_job_digger,jr2_clear_change_choices,jr2_clear_target_npcs
+  
+  switch_woodcutter_from_digger: folder cmd_leave_digger,cmd_join_woodcutter,del_job_digger,add_job_woodcutter,jr2_clear_change_choices,jr2_clear_target_npcs
+  switch_woodcutter_from_chef: folder cmd_leave_chef,cmd_join_woodcutter,del_job_chef,add_job_woodcutter,jr2_clear_change_choices,jr2_clear_target_npcs
+  
+  switch_chef_from_digger: folder cmd_leave_digger,cmd_join_chef,del_job_digger,add_job_chef,jr2_clear_change_choices,jr2_clear_target_npcs
+  switch_chef_from_woodcutter: folder cmd_leave_woodcutter,cmd_join_chef,del_job_woodcutter,add_job_chef,jr2_clear_change_choices,jr2_clear_target_npcs
+  
+  # Targhet NPC
+  jr2_clear_target_npcs: tag del target_digger_npc,target_woodcutter_npc,target_chef_npc
+  
+  set_target_digger_npc: folder jr2_clear_target_npcs,add_target_digger_npc
+  set_target_woodcutter_npc: folder jr2_clear_target_npcs,add_target_woodcutter_npc
+  set_target_chef_npc: folder jr2_clear_target_npcs,add_target_chef_npc
+  
+  add_target_digger_npc: tag add target_digger_npc
+  add_target_woodcutter_npc: tag add target_woodcutter_npc
+  add_target_chef_npc: tag add target_chef_npc
+
+npc_holograms:
+  Mechanical_Craftsman_unregistered:
+    lines:
+    - '&c&l!'
+    - '&c&l❗❗'
+    - '&7New Quest Available'
+    npcs: '53'
+    conditions: jr2_quest_available,!jr2_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  Mechanical_Craftsman_registered:
+    lines:
+    - '&a&l❗'
+    - '&7change Job'
+    npcs: '53'
+    conditions: jr2_quest_available,jr2_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  digger_target:
+    lines:
+    - '&e&l❓'
+    npcs: '54'
+    conditions: target_digger_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  woodcutter_target:
+    lines:
+    - '&e&l❓'
+    npcs: '56'
+    conditions: target_woodcutter_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  chef_target:
+    lines:
+    - '&e&l❓'
+    npcs: '55'
+    conditions: target_chef_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+
+npc_conversations:
+  '53': Mechanical_Craftsman_conv
+  '54': digger_conv
+  '55': chef_conv
+  '56': woodcutter_conv
+
+conversations:
+  Mechanical_Craftsman_conv:
+    quester: Sensei Mechanical Craftsman
+    first: reg_pending_digger_from_woodcutter,reg_pending_chef_from_woodcutter,reg_pending_woodcutter_from_digger,reg_pending_chef_from_digger,reg_pending_digger_from_chef,reg_pending_woodcutter_from_chef,reg_waiting_digger,reg_waiting_woodcutter,reg_waiting_chef,reg_already_digger,reg_already_woodcutter,reg_already_chef,reg_greet_jr2,reg_unavailable_jr2
+    stop: true
+    
+    NPC_options:
+      reg_unavailable_jr2:
+        text: |-
+          &7The Sensei barely looks up.
+
+          &f"Not yet."
+
+          "You are not ready to learn the crafts of this rank."
+        conditions: jr2_quest_available
+        pointers: pl_end_conversation_jr2
+      
+      reg_greet_jr2:
+        text: |-
+          &7The Sensei pauses his work, then looks at you with calm attention.
+
+          &f"Hm… a new face."
+
+          "You’re looking for a place here, aren’t you?"
+
+          "Don’t worry about the Registrar. He cares about names and records…"
+
+          "I care about what you can become."
+
+          "If you wish to stay, you must choose a craft. Work it. Learn it. Let it shape you."
+
+          "Every profession is a path. And every path… will change you."
+
+          "So tell me, %player%… are you ready to begin?"
+        conditions: jr2_quest_available,!jr2_citizen_registered,!chose_digger,!chose_woodcutter,!chose_chef
+        pointers: pl_register_yes_jr2,pl_register_no_jr2
+      
+      reg_choose_second_job:
+        text: |-
+          &7The Sensei nods, satisfied.
+
+          &f"Good."
+
+          "Every craft begins with a single decision."
+
+          "Do not rush it… but do not fear it either."
+
+          "What you choose now will shape how you think… how you work… who you become."
+
+          "So take your first step, %player%."
+        conditions: jr2_quest_available
+        pointers: pl_pick_digger,pl_pick_woodcutter,pl_pick_chef
+      
+      reg_waiting_digger:
+        text: You again? \n\nI already sent you to the Digger Master. \n\nYou can
+          find him on the road.
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_digger
+        pointers: pl_end_conversation_jr2
+      
+      reg_waiting_woodcutter:
+        text: Still here? \n\nI already sent you to the Woodcutter Master. \n\nFind
+          him on the carpentery, at the base of the mountain.
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      reg_waiting_chef:
+        text: go to the Chef, he is waiting you! \n\nYou can find him in kitchens!
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_chef
+        pointers: pl_end_conversation_jr2
+      
+      
+      reg_already_digger:
+        text: |-
+          &7The Sensei watches you for a moment, then nods slowly.
+
+          &f"You’ve walked the path of the earth."
+
+          "That kind of work leaves its mark… on your hands, and on your mind."
+
+          "Changing your craft is not wrong… but it is never without cost."
+
+          "What you’ve built will not vanish… but it will no longer grow."
+
+          "So tell me, %player%… do you leave the earth behind?"
+        conditions: jr2_quest_available,jr2_citizen_registered,is_digger,!change_to_digger,!change_to_woodcutter,!change_to_chef
+        pointers: pl_change_digger_to_woodcutter,pl_change_digger_to_chef,pl_keep_current_job_jr2
+      
+      reg_already_woodcutter:
+        text: |-
+          &7The Sensei gently taps a wooden piece, inspecting its grain.
+
+          &f"You’ve learned to shape what has structure."
+
+          "Not many understand how much precision that requires."
+
+          "If you change your path… that discipline will remain with you."
+
+          "But the craft itself will no longer deepen."
+
+          "So tell me, %player%… do you leave this path behind?"
+        conditions: jr2_quest_available,jr2_citizen_registered,is_woodcutter,!change_to_digger,!change_to_woodcutter,!change_to_chef
+        pointers: pl_change_woodcutter_to_digger,pl_change_woodcutter_to_chef,pl_keep_current_job_jr2
+      
+      reg_already_chef:
+        text: |-
+          &7The Sensei smiles faintly.
+
+          &f"You’ve learned to transform… to bring balance where there was none."
+
+          "That is not a simple path."
+
+          "If you choose another craft… that understanding will stay with you."
+
+          "But you will stop refining it."
+
+          "So tell me, %player%… do you walk away from it?"
+        conditions: jr2_quest_available,jr2_citizen_registered,is_chef,!change_to_digger,!change_to_woodcutter,!change_to_chef
+        pointers: pl_change_chef_to_digger,pl_change_chef_to_woodcutter,pl_keep_current_job_jr2
+      
+      reg_pending_digger_from_woodcutter:
+        text: |-
+          &7The Sensei watches you quietly for a moment.
+
+          &f"You’ve already set your direction…"
+
+          "You chose to leave one craft… and begin another."
+
+          "But now you hesitate."
+
+          "An unfinished change is like a machine left open… it cannot work."
+
+          "So decide, %player%."
+
+          "Move forward… return to what you know… or choose again."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_woodcutter,change_to_digger
+        pointers: pl_continue_digger,pl_cancel_pending_jr2,pl_switch_pending_to_chef
+      
+      reg_pending_chef_from_woodcutter:
+        text: |-
+          &7The Sensei adjusts a small component, then looks at you.
+
+          &f"You made your choice… but not your commitment."
+
+          "That is why you feel uncertain."
+
+          "A change must be completed… or undone."
+
+          "Leaving it unfinished will only slow you down."
+
+          "So decide, %player%."
+
+          "Continue… return… or choose a different path."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_woodcutter,change_to_chef
+        pointers: pl_continue_chef,pl_cancel_pending_jr2,pl_switch_pending_to_digger
+      
+      reg_pending_woodcutter_from_digger:
+        text: |-
+          &7The Sensei folds his arms, studying you.
+
+          &f"You’ve stepped away from the earth… but not fully."
+
+          "That is why you feel divided."
+
+          "A path only shapes you when you walk it completely."
+
+          "Half a step teaches nothing."
+
+          "So decide, %player%."
+
+          "Go forward… return… or choose again."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_digger,change_to_woodcutter
+        pointers: pl_continue_woodcutter,pl_cancel_pending_jr2,pl_switch_pending_to_chef
+      
+      reg_pending_chef_from_digger:
+        text: |-
+          &7The Sensei gives a small, understanding nod.
+
+          &f"You chose to change… but you have not committed to it yet."
+
+          "That hesitation is natural… but it must pass."
+
+          "A craft cannot take shape if you stand between two paths."
+
+          "So decide, %player%."
+
+          "Move forward… step back… or choose again."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_digger,change_to_chef
+        pointers: pl_continue_chef,pl_cancel_pending_jr2,pl_switch_pending_to_woodcutter
+      
+      reg_pending_digger_from_chef:
+        text: |-
+          &7The Sensei watches you with a calm expression.
+
+          &f"You turned toward a new craft… but stopped halfway."
+
+          "That is where doubt grows."
+
+          "Transformation requires completion… not hesitation."
+
+          "So decide, %player%."
+
+          "Continue… return… or choose a new direction."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_chef,change_to_digger
+        pointers: pl_continue_digger,pl_cancel_pending_jr2,pl_switch_pending_to_woodcutter
+      
+      reg_pending_woodcutter_from_chef:
+        text: |-
+          &7The Sensei exhales softly.
+
+          &f"You stand between two paths… and that is never a stable place."
+
+          "A structure cannot hold if its foundation is undecided."
+
+          "Finish what you started… or let it go."
+
+          "But do not remain here."
+
+          "So decide, %player%."
+
+          "Go forward… return… or choose again."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_chef,change_to_woodcutter
+        pointers: pl_continue_woodcutter,pl_cancel_pending_jr2,pl_switch_pending_to_digger
+      
+      reg_send_digger:
+        text: |-
+          &7The Sensei gives a small nod.
+
+          &f"Good."
+
+          "The earth is stubborn… but it teaches those who persist."
+
+          "Go. The Master Digger will show you how to endure… and how to break what resists you."
+        conditions: jr2_quest_available
+        pointers: pl_end_conversation_jr2
+      
+      reg_send_woodcutter:
+        text: |-
+          &7The Sensei adjusts a small gear thoughtfully.
+
+          &f"Good."
+
+          "Wood is not chaos. It has direction… structure… balance."
+
+          "Go. The Master Woodcutter will teach you how to shape it… without wasting it."
+        conditions: jr2_quest_available
+        pointers: pl_end_conversation_jr2
+      
+      reg_send_chef:
+        text: |-
+          &7A faint smile crosses the Sensei’s face.
+
+          &f"Good."
+
+          "Creation is not only force. It is balance… transformation."
+
+          "Go. The Master Chef will teach you how to turn simple things… into something greater."
+        conditions: jr2_quest_available
+        pointers: pl_end_conversation_jr2
+      
+      jr2_reg_goodbye:
+        text: |-
+          &7The Sensei gives you a slow, disappointed nod.
+
+          &f"Very well."
+
+          "A craft cannot shape you if you refuse to begin."
+
+          "If you change your mind, return to me. The path will still be here… but only if you are willing to walk it."
+        actions: clear_choices_jr2
+        conditions: jr2_quest_available
+        pointers: pl_end_conversation_jr2
+    
+    player_options:
+      pl_register_yes_jr2:
+        text: Yes, I want to take a second jobs.
+        conditions: jr2_quest_available
+        pointers: reg_choose_second_job
+      
+      pl_register_no_jr2:
+        text: No, not now.
+        pointers: jr2_reg_goodbye
+      
+      pl_pick_digger:
+        text: I want to become a digger.
+        actions: clear_choices_jr2,choose_digger,set_target_digger_npc
+        pointers: reg_send_digger
+      
+      pl_pick_woodcutter:
+        text: I want to become a woodcutter.
+        actions: clear_choices_jr2,choose_woodcutter,set_target_woodcutter_npc
+        pointers: reg_send_woodcutter
+      
+      pl_pick_chef:
+        text: I want to become a chef.
+        actions: clear_choices_jr2,choose_chef,set_target_chef_npc
+        pointers: reg_send_chef
+      
+      pl_change_digger_to_woodcutter:
+        text: Yes. I want to leave this path and become a woodcutter.
+        actions: select_change_woodcutter,set_target_woodcutter_npc
+        pointers: reg_send_woodcutter
+      
+      pl_change_digger_to_chef:
+        text: Yes. I want to leave this path and become a chef.
+        actions: select_change_chef,set_target_chef_npc
+        pointers: reg_send_chef
+      
+      pl_change_woodcutter_to_digger:
+        text: Yes. I want to leave this path and become a digger.
+        actions: select_change_digger,set_target_digger_npc
+        pointers: reg_send_digger
+      
+      pl_change_woodcutter_to_chef:
+        text: Yes. I want to leave this path and become a chef.
+        actions: select_change_chef,set_target_chef_npc
+        pointers: reg_send_chef
+      
+      pl_change_chef_to_digger:
+        text: Yes. I want to leave this path and become a digger.
+        actions: select_change_digger,set_target_digger_npc
+        pointers: reg_send_digger
+      
+      pl_change_chef_to_woodcutter:
+        text: Yes. I want to leave this path and become a woodcutter.
+        actions: select_change_woodcutter,set_target_woodcutter_npc
+        pointers: reg_send_woodcutter
+      
+      pl_continue_digger:
+        text: I want to continue with my choice.
+        pointers: reg_send_digger
+      
+      pl_continue_woodcutter:
+        text: I want to continue with my choice.
+        pointers: reg_send_woodcutter
+      
+      pl_continue_chef:
+        text: I want to continue with my choice.
+        pointers: reg_send_chef
+      
+      pl_cancel_pending_jr2:
+        text: I want to keep my current profession.
+        pointers: jr2_reg_goodbye
+      
+      pl_switch_pending_to_digger:
+        text: No, I want to become a digger instead.
+        actions: select_change_digger,set_target_digger_npc
+        pointers: reg_send_digger
+      
+      pl_switch_pending_to_woodcutter:
+        text: No, I want to become a woodcutter instead.
+        actions: select_change_woodcutter,set_target_woodcutter_npc
+        pointers: reg_send_woodcutter
+      
+      pl_switch_pending_to_chef:
+        text: No, I want to become a chef instead.
+        actions: select_change_chef,set_target_chef_npc
+        pointers: reg_send_chef
+      
+      pl_keep_current_job_jr2:
+        text: No, I want to keep my current profession.
+        pointers: jr2_reg_goodbye
+      
+      pl_end_conversation_jr2:
+        text: -End conversation-
+  
+  digger_conv:
+    quester: digger Master
+    first: digger_assign_initial,digger_assign_from_woodcutter,digger_assign_from_chef,digger_redirect_initial_woodcutter,digger_redirect_initial_chef,digger_redirect_change_woodcutter,digger_redirect_change_chef,digger_default1,digger_default2,digger_default3,digger_default4
+    stop: true
+    
+    NPC_options:
+      digger_assign_initial:
+        text: |-
+          &7The man barely looks at you.
+
+          &f"So… you’re the new one."
+
+          "Fine."
+
+          "This work isn’t glamorous. Never was."
+
+          "But if you do it right… it gets done."
+
+          "From now on, you dig."
+
+          "Try not to slow the rest of us down."
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_digger
+        actions: become_digger
+        pointers: pl_end_conversation_jr2
+      
+      digger_assign_from_woodcutter:
+        text: |-
+          &7He glances at you, unimpressed.
+
+          &f"Left your old craft behind?"
+
+          "Doesn’t matter."
+
+          "This one’s simpler. Harder… but simpler."
+
+          "You dig. You keep digging."
+
+          "That’s it."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_woodcutter,change_to_digger
+        actions: switch_digger_from_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      digger_assign_from_chef:
+        text: |-
+          &7He exhales slowly.
+
+          &f"Tired of thinking things through?"
+
+          "Good."
+
+          "Here, you don’t think much."
+
+          "You work."
+
+          "Stick with it long enough… and you’ll get good at it."
+
+          "Or at least… good enough."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_chef,change_to_digger
+        actions: switch_digger_from_chef
+        pointers: pl_end_conversation_jr2
+      
+      digger_redirect_initial_woodcutter:
+        text: |-
+          &7He finally looks at you.
+
+          &f"Wrong place."
+
+          "You picked another craft."
+
+          "Go find your own master."
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      digger_redirect_initial_chef:
+        text: |-
+          &7He shakes his head slightly.
+
+          &f"Not your path."
+
+          "Don’t waste time here."
+
+          "Go where you’re supposed to be."
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_chef
+        pointers: pl_end_conversation_jr2
+      
+      digger_redirect_change_woodcutter:
+        text: |-
+          &7He gestures vaguely behind you.
+
+          &f"You already chose something else."
+
+          "Then go."
+
+          "No point standing here."
+        conditions: jr2_quest_available,jr2_citizen_registered,change_to_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      digger_redirect_change_chef:
+        text: |-
+          &7He shrugs.
+
+          &f"Different path, then."
+
+          "Don’t look back."
+
+          "Just go."
+        conditions: jr2_quest_available,jr2_citizen_registered,change_to_chef
+        pointers: pl_end_conversation_jr2
+      
+      digger_default1:
+        text: |-
+          &f"Keep your hands moving."
+
+          "This work doesn’t do itself."
+        conditions: digger_rand_1
+        pointers: pl_end_conversation_jr2
+      
+      digger_default2:
+        text: |-
+          &f"Don’t think too much."
+
+          "It only makes it harder."
+        conditions: '!digger_rand_1,digger_rand_2'
+        pointers: pl_end_conversation_jr2
+      
+      digger_default3:
+        text: |-
+          &f"You get used to it."
+
+          "Not better… just used to it."
+        conditions: '!digger_rand_1,!digger_rand_2,digger_rand_3'
+        pointers: pl_end_conversation_jr2
+      
+      digger_default4:
+        text: |-
+          &f"Keep working."
+
+          "That’s the only way through."
+        conditions: '!digger_rand_1,!digger_rand_2,!digger_rand_3'
+        pointers: pl_end_conversation_jr2
+    
+    player_options:
+      pl_end_conversation_jr2:
+        text: End conversation
+  
+  
+  chef_conv:
+    quester: chef Master
+    first: chef_assign_initial,chef_assign_from_digger,chef_assign_from_woodcutter,chef_redirect_initial_digger,chef_redirect_initial_woodcutter,chef_redirect_change_digger,chef_redirect_change_woodcutter,chef_default1,chef_default2,chef_default3,chef_default4
+    stop: true
+    
+    NPC_options:
+      chef_assign_initial:
+        text: |-
+          &7The Chef turns toward you with a huge grin, hands covered in something… unclear.
+
+          &f"Oh! A new one! Perfect timing!"
+
+          "Tell me… can you cook? No? Doesn’t matter!"
+
+          "Cooking is just… trying things until something works!"
+
+          "Or doesn’t. Sometimes it explodes."
+
+          "From now on, you’re with me!"
+
+          "Come on, we have so many things to try!"
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_chef
+        actions: become_chef
+        pointers: pl_end_conversation_jr2
+      
+      chef_assign_from_digger:
+        text: |-
+          &7The Chef claps excitedly.
+
+          &f"You left all that digging behind? Good!"
+
+          "Here we make things! Better things! Tastier things!"
+
+          "Well… usually."
+
+          "Sometimes worse things. But we learn!"
+
+          "Come on! Let’s see what you can turn into food!"
+        conditions: jr2_quest_available,jr2_citizen_registered,is_digger,change_to_chef
+        actions: switch_chef_from_digger
+        pointers: pl_end_conversation_jr2
+      
+      chef_assign_from_woodcutter:
+        text: |-
+          &7The Chef leans in, inspecting you like an ingredient.
+
+          &f"Hmm… precise hands. I like that!"
+
+          "You can cut things properly! That’s already useful!"
+
+          "Now we just need to make them taste good!"
+
+          "Or at least… interesting."
+
+          "Come on! Let’s cook something!"
+        conditions: jr2_quest_available,jr2_citizen_registered,is_woodcutter,change_to_chef
+        actions: switch_chef_from_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      chef_redirect_initial_digger:
+        text: |-
+          &7The Chef waves a spoon at you.
+
+          &f"Hey hey—no! Not you!"
+
+          "You smell like dirt! That’s not today’s recipe!"
+
+          "Go find your master before I try to cook you!"
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_digger
+        pointers: pl_end_conversation_jr2
+      
+      chef_redirect_initial_woodcutter:
+        text: |-
+          &7The Chef squints at you.
+
+          &f"Hmm… too stiff. Too precise. Not ready yet."
+
+          "Go back. Learn your craft first."
+
+          "Then come back when you’re interesting."
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      chef_redirect_change_digger:
+        text: |-
+          &7The Chef tilts his head.
+
+          &f"Oh? Back to digging?"
+
+          "Strange… but maybe you’ll find something edible down there!"
+
+          "Go on then!"
+        conditions: jr2_quest_available,jr2_citizen_registered,change_to_digger
+        pointers: pl_end_conversation_jr2
+      
+      chef_redirect_change_woodcutter:
+        text: |-
+          &7The Chef waves dismissively.
+
+          &f"Cutting wood instead of food?"
+
+          "Boring… but useful, I guess."
+
+          "Go! And bring me something interesting next time!"
+        conditions: jr2_quest_available,jr2_citizen_registered,change_to_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      chef_default1:
+        text: |-
+          &f"Do you think this is edible?"
+
+          "There’s only one way to find out!"
+        conditions: chef_rand_1
+        pointers: pl_end_conversation_jr2
+      
+      chef_default2:
+        text: |-
+          &f"Everything can be an ingredient."
+
+          "Some things just fight back more than others."
+        conditions: '!chef_rand_1,chef_rand_2'
+        pointers: pl_end_conversation_jr2
+      
+      chef_default3:
+        text: |-
+          &f"If it smells strange… it might be perfect!"
+
+          "Or terrible. Usually both."
+        conditions: '!chef_rand_1,!chef_rand_2,chef_rand_3'
+        pointers: pl_end_conversation_jr2
+      
+      chef_default4:
+        text: |-
+          &f"I had a great idea earlier…"
+
+          "I just don’t remember if it worked or exploded."
+        conditions: '!chef_rand_1,!chef_rand_2,!chef_rand_3'
+        pointers: pl_end_conversation_jr2
+    
+    player_options:
+      pl_end_conversation_jr2:
+        text: End conversation
+  
+  woodcutter_conv:
+    quester: woodcutter Master
+    first: woodcutter_assign_initial,woodcutter_assign_from_digger,woodcutter_assign_from_chef,woodcutter_redirect_initial_digger,woodcutter_redirect_initial_chef,woodcutter_redirect_change_digger,woodcutter_redirect_change_chef,woodcutter_default1,woodcutter_default2,woodcutter_default3,woodcutter_default4
+    stop: true
+    
+    NPC_options:
+      woodcutter_assign_initial:
+        text: |-
+          &7The Woodcutter doesn’t look at you immediately. He runs a hand along a cut surface, inspecting it.
+
+          &f"So… you’re the new one."
+
+          "Look closely."
+
+          "Every cut matters. Direction. Pressure. Timing."
+
+          "Do it wrong… and you waste everything."
+
+          "From now on, you cut properly."
+
+          "Or you don’t cut at all."
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_woodcutter
+        actions: become_woodcutter
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_assign_from_digger:
+        text: |-
+          &7He glances at your hands.
+
+          &f"Force. That’s what you’re used to."
+
+          "That won’t help you here."
+
+          "Wood isn’t broken… it’s guided."
+
+          "Learn the grain. Follow it."
+
+          "If you don’t… you’ll ruin more than you produce."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_digger,change_to_woodcutter
+        actions: switch_woodcutter_from_digger
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_assign_from_chef:
+        text: |-
+          &7He watches you carefully.
+
+          &f"You improvise."
+
+          "That’s a problem."
+
+          "Here, nothing is left to chance."
+
+          "Every movement has a purpose."
+
+          "Every mistake has a cost."
+
+          "If you stay… you’ll learn control."
+        conditions: jr2_quest_available,jr2_citizen_registered,is_chef,change_to_woodcutter
+        actions: switch_woodcutter_from_chef
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_redirect_initial_digger:
+        text: |-
+          &7He shakes his head.
+
+          &f"Wrong craft."
+
+          "You’re not here to cut."
+
+          "Go back to your own work."
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_digger
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_redirect_initial_chef:
+        text: |-
+          &7He looks you up and down.
+
+          &f"Too unpredictable."
+
+          "This work requires control."
+
+          "Go. Come back when you understand that."
+        conditions: jr2_quest_available,!jr2_citizen_registered,chose_chef
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_redirect_change_digger:
+        text: |-
+          &7He nods once.
+
+          &f"You’ve chosen something else."
+
+          "Then commit to it."
+
+          "Don’t stand here."
+        conditions: jr2_quest_available,jr2_citizen_registered,change_to_digger
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_redirect_change_chef:
+        text: |-
+          &7He exhales slowly.
+
+          &f"Back to improvisation, then."
+
+          "Fine."
+
+          "Just don’t expect precision there."
+        conditions: jr2_quest_available,jr2_citizen_registered,change_to_chef
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_default1:
+        text: |-
+          &f"Follow the grain."
+
+          "Always."
+        conditions: woodcutter_rand_1
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_default2:
+        text: |-
+          &f"You cut against it again."
+
+          "That’s why it failed."
+        conditions: '!woodcutter_rand_1,woodcutter_rand_2'
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_default3:
+        text: |-
+          &f"Precision first."
+
+          "Speed comes later."
+        conditions: '!woodcutter_rand_1,!woodcutter_rand_2,woodcutter_rand_3'
+        pointers: pl_end_conversation_jr2
+      
+      woodcutter_default4:
+        text: |-
+          &f"Measure. Adjust. Cut."
+
+          "In that order."
+        conditions: '!woodcutter_rand_1,!woodcutter_rand_2,!woodcutter_rand_3'
+        pointers: pl_end_conversation_jr2
+    
+    player_options:
+      pl_end_conversation_jr2:
+        text: End conversation

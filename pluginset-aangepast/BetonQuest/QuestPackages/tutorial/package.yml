@@ -1,0 +1,1129 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+# ============================================================================
+# TUTORIAL QUEST
+# NPCs:
+# - Citizens ID 122 - &6Tutorial
+# - Citizens ID 123 - Dialogue tutorial
+# - Citizens ID 127 - Race Assignor
+# - Citizens ID 128 - Class Assignor
+# World: iekcorbarSeason2
+#
+# External ItemJoin hooks used by this package:
+# - tutorial_inventory_item_clicked      -> portable crafting table item
+# - tutorial_profile_item_clicked        -> Profile item
+# - tutorial_jobs_menu_item_clicked      -> Jobs Quest menu item
+# ============================================================================
+
+npcs:
+  '122': citizens 122
+  '123': citizens 123
+  '127': citizens 127
+  '128': citizens 128
+
+npc_conversations:
+  '122': tutorial_conv
+  '123': tutorial_dialogue_conv
+  '127': tutorial_race_assignor_conv
+  '128': tutorial_class_assignor_conv
+
+items:
+  tutorial_stick: simple stick
+
+conditions:
+  tutorial_started: tag start_tutorial
+  tutorial_step_1_completed: tag tutorial_step_1_completed
+  tutorial_dialogue_completed: tag tutorial_dialogue_completed
+  tutorial_waiting_for_inventory: tag tutorial_waiting_for_inventory
+  tutorial_inventory_step_active: tag tutorial_inventory_step
+  tutorial_menu_tour_step_active: tag tutorial_menu_tour_step
+  tutorial_profile_step_active: tag tutorial_profile_step
+  tutorial_profile_clicked: tag tutorial_profile_clicked
+  tutorial_crafting_step_active: tag tutorial_crafting_step
+  tutorial_to_valhalla_step_active: tag tutorial_to_valhalla_step
+  tutorial_valhalla_profile_step_active: tag tutorial_valhalla_profile_step
+  tutorial_valhalla_step_active: tag tutorial_valhalla_step
+  tutorial_jobs_step_active: tag tutorial_jobs_step
+  tutorial_to_elitemobs_step_active: tag tutorial_to_elitemobs_step
+  tutorial_elitemobs_step_active: tag tutorial_elitemobs_step
+  tutorial_expanded_systems_step_active: tag tutorial_expanded_systems_step
+  tutorial_race_step_active: tag tutorial_race_step
+  tutorial_race_chosen: tag Choosed_race
+  tutorial_can_choose_race: and tutorial_race_step_active,!tutorial_race_chosen
+
+  tutorial_class_step_active: tag tutorial_class_step
+  tutorial_class_chosen: tag Choosed_class
+  tutorial_can_choose_class: and tutorial_class_step_active,!tutorial_class_chosen
+
+  tutorial_specialization_step_active: tag tutorial_specialization_step
+  tutorial_specialization_chosen: tag Choosed_specialization
+  tutorial_can_choose_specialization: and tutorial_specialization_step_active,!tutorial_specialization_chosen
+
+  tutorial_profession_step_active: tag tutorial_profession_step
+  tutorial_profession_chosen: tag Choosed_profession
+  tutorial_can_choose_profession: and tutorial_profession_step_active,!tutorial_profession_chosen
+  tutorial_all_starting_choices_done: and tutorial_race_chosen,tutorial_class_chosen,tutorial_specialization_chosen,tutorial_profession_chosen
+
+  tutorial_finished: tag tutorial_finished
+  tutorial_hide_dialogue_npc: or !tutorial_step_1_completed,tutorial_dialogue_completed
+
+# NPC 123 is hidden separately for each player. It becomes visible after
+# completing Step 1 and is hidden again after completing its conversation.
+hide_npcs:
+  '123': tutorial_hide_dialogue_npc
+
+actions:
+  # --------------------------------------------------------------------------
+  # AUTOMATIC LOGIN ROUTER
+  # --------------------------------------------------------------------------
+  # `tutorial_login` is a persistent login objective. On every login it runs
+  # this router after a short delay so the player/world are fully available.
+  # Order matters: resume is checked before first-start, preventing a brand-new
+  # player from being handled twice after `tutorial_start` adds start_tutorial.
+  tutorial_handle_login: 'folder tutorial_login_resume_existing,tutorial_login_start_new delay:1'
+  tutorial_login_resume_existing: 'teleport 2815;164;-472;iekcorbarSeason2 conditions:tutorial_started,!tutorial_finished'
+  tutorial_login_start_new: 'folder tutorial_start conditions:!tutorial_started'
+
+  # --------------------------------------------------------------------------
+  # STEP 1 - Start the tutorial and reach the building
+  # --------------------------------------------------------------------------
+  tutorial_start: 'folder tutorial_add_start_tag,tutorial_start_message,tutorial_add_reach_building_journal,tutorial_start_reach_building,tutorial_teleport_start'
+  tutorial_add_start_tag: 'tag add start_tutorial'
+  tutorial_teleport_start: 'teleport 2815;164;-472;iekcorbarSeason2'
+  tutorial_start_message: 'notify "&6Tutorial Started &8» &7The tutorial begins. Reach the &bbuilding&7." io:chat'
+  tutorial_add_reach_building_journal: 'journal add tutorial_reach_building'
+  tutorial_start_reach_building: 'objective start tutorial_reach_building'
+
+  # Restart flow used by NPC 122 when the tutorial is already active or completed.
+  # The package filter `tutorial>` removes every tag, journal entry and active
+  # objective belonging to this Tutorial package before a clean restart.
+  tutorial_restart_confirmed: 'folder tutorial_restart_reset_commands,tutorial_restart_schedule_start'
+  tutorial_restart_reset_commands: 'command bq tag %player% del tutorial>|bq journal %player% del tutorial>|bq objective %player% del tutorial>'
+  tutorial_restart_schedule_start: 'folder tutorial_start delay:1'
+
+  # Step 1 completion.
+  tutorial_complete_step_1: 'folder tutorial_remove_reach_building_journal,tutorial_add_step_1_completed_tag,tutorial_update_npc_visibility,tutorial_step_1_completed_message,tutorial_talk_to_dialogue_message'
+  tutorial_remove_reach_building_journal: 'journal delete tutorial_reach_building'
+  tutorial_add_step_1_completed_tag: 'tag add tutorial_step_1_completed'
+  tutorial_step_1_completed_message: 'notify "&6Quest Updated &8» &a✔ &7You reached the &bbuilding&7." io:chat'
+  tutorial_talk_to_dialogue_message: 'notify "&6Tutorial &8» &7Talk to &bDialogue tutorial&7." io:chat'
+  tutorial_update_npc_visibility: 'updatevisibility'
+
+  # --------------------------------------------------------------------------
+  # STEP 2 - Dialogue tutorial and player inventory
+  # --------------------------------------------------------------------------
+  # Delayed by 2 seconds because these chat messages follow an NPC conversation.
+  tutorial_finish_dialogue: 'folder tutorial_add_dialogue_completed_tag,tutorial_add_waiting_inventory_tag,tutorial_add_inventory_step_tag,tutorial_add_open_inventory_journal,tutorial_update_npc_visibility,tutorial_inventory_instruction,tutorial_schedule_portable_crafting_message delay:2'
+  tutorial_add_dialogue_completed_tag: 'tag add tutorial_dialogue_completed'
+  tutorial_add_waiting_inventory_tag: 'tag add tutorial_waiting_for_inventory'
+  tutorial_add_inventory_step_tag: 'tag add tutorial_inventory_step'
+  tutorial_add_open_inventory_journal: 'journal add tutorial_open_inventory'
+  tutorial_inventory_instruction: 'notify "&6Tutorial &8» &7The main game commands are collected in your inventory menu. Press &bE &7to open it." io:chat'
+  tutorial_schedule_portable_crafting_message: 'folder tutorial_portable_crafting_message delay:5 conditions:tutorial_inventory_step_active'
+  tutorial_portable_crafting_message: 'notify "&6Tutorial &8» &7Click the &dPortable Crafting Table &7in the top-left of the crafting grid. This gives you access to crafting wherever you are." io:chat'
+
+  # ItemJoin calls this action when the player clicks the configured portable crafting item.
+  tutorial_inventory_item_clicked: 'folder tutorial_complete_inventory_step conditions:tutorial_inventory_step_active'
+  tutorial_complete_inventory_step: 'folder tutorial_remove_inventory_journal,tutorial_remove_waiting_inventory_tag,tutorial_remove_inventory_step_tag,tutorial_add_menu_tour_step_tag,tutorial_inventory_step_completed_message,tutorial_jobs_menu_message,tutorial_schedule_warp_menu_message'
+  tutorial_remove_inventory_journal: 'journal delete tutorial_open_inventory'
+  tutorial_remove_waiting_inventory_tag: 'tag delete tutorial_waiting_for_inventory'
+  tutorial_remove_inventory_step_tag: 'tag delete tutorial_inventory_step'
+  tutorial_add_menu_tour_step_tag: 'tag add tutorial_menu_tour_step'
+  tutorial_remove_menu_tour_step_tag: 'tag delete tutorial_menu_tour_step'
+  tutorial_inventory_step_completed_message: 'notify "&6Quest Updated &8» &a✔ &7You found the &dPortable Crafting Table&7. Close this screen and open your inventory menu again." io:chat'
+  tutorial_jobs_menu_message: 'notify "&6Tutorial &8» &7In the top-right corner is the &dJobs Quest menu&7. You do not have a profession yet, but once you obtain one this menu will show its daily quests." io:chat'
+
+  # Timed introduction to the other Inventory/E menus.
+  tutorial_schedule_warp_menu_message: 'folder tutorial_warp_menu_message,tutorial_schedule_lands_menu_message delay:3 conditions:tutorial_menu_tour_step_active'
+  tutorial_warp_menu_message: 'notify "&6Tutorial &8» &7In the bottom-left corner is the &dWarp menu&7. Right-click for available waypoints, left-click for your Homes, and shift-right-click to teleport to the &bAdventurers Guild&7. Do not go there yet; finish the tutorial first." io:chat'
+  tutorial_schedule_lands_menu_message: 'folder tutorial_lands_menu_message,tutorial_schedule_profile_menu_message delay:3 conditions:tutorial_menu_tour_step_active'
+  tutorial_lands_menu_message: 'notify "&6Tutorial &8» &7In the bottom-right corner is your &dLands menu&7. It lets you claim chunks and manage your land." io:chat'
+  tutorial_schedule_profile_menu_message: 'folder tutorial_profile_menu_message,tutorial_remove_menu_tour_step_tag,tutorial_add_profile_step_tag,tutorial_add_profile_journal,tutorial_schedule_click_profile_message delay:2 conditions:tutorial_menu_tour_step_active'
+  tutorial_profile_menu_message: 'notify "&6Tutorial &8» &7Finally, the most important menu: your &dProfile&7. Your head in the crafting result slot opens it. We will use it again later when we discuss ValhallaMMO." io:chat'
+  tutorial_add_profile_step_tag: 'tag add tutorial_profile_step'
+  tutorial_add_profile_journal: 'journal add tutorial_click_profile'
+  tutorial_schedule_click_profile_message: 'folder tutorial_click_profile_message delay:1 conditions:tutorial_profile_step_active'
+  tutorial_click_profile_message: 'notify "&6Tutorial &8» &7Click the &dProfile menu&7." io:chat'
+
+  # ItemJoin calls this same action every time the Profile item is clicked.
+  # The two conditioned branches let us use it once in Chapter II and again in Chapter IV.
+  tutorial_profile_item_clicked: 'folder tutorial_complete_profile_step,tutorial_open_valhalla_profile'
+
+  tutorial_complete_profile_step: 'folder tutorial_remove_profile_journal,tutorial_remove_profile_step_tag,tutorial_add_profile_clicked_tag,tutorial_start_crafting conditions:tutorial_profile_step_active'
+  tutorial_remove_profile_journal: 'journal delete tutorial_click_profile'
+  tutorial_remove_profile_step_tag: 'tag delete tutorial_profile_step'
+  tutorial_add_profile_clicked_tag: 'tag add tutorial_profile_clicked'
+
+  # --------------------------------------------------------------------------
+  # STEP 3 / CHAPTER III - Crafting
+  # --------------------------------------------------------------------------
+  tutorial_start_crafting: 'folder tutorial_add_crafting_step_tag,tutorial_add_crafting_journal,tutorial_give_crafting_materials,tutorial_start_craft_objective,tutorial_crafting_title,tutorial_crafting_message'
+  tutorial_add_crafting_step_tag: 'tag add tutorial_crafting_step'
+  tutorial_add_crafting_journal: 'journal add tutorial_crafting'
+  tutorial_give_crafting_materials: 'command minecraft:give %player% minecraft:oak_planks 2'
+  tutorial_start_craft_objective: 'objective start tutorial_craft_sticks'
+  tutorial_crafting_title: 'notify "&6Chapter III\n&dCrafting" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_crafting_message: 'notify "&6Tutorial &8» &7Close the Profile, open your &dPortable Crafting Table&7, and turn the &d2 Oak Planks &7I gave you into &d4 Sticks&7." io:chat'
+
+  tutorial_complete_craft_step: 'folder tutorial_remove_crafting_journal,tutorial_add_to_valhalla_step_tag,tutorial_crafting_completed_message,tutorial_schedule_valhalla_start'
+  tutorial_remove_crafting_journal: 'journal delete tutorial_crafting'
+  tutorial_remove_crafting_step_tag: 'tag delete tutorial_crafting_step'
+  tutorial_add_to_valhalla_step_tag: 'tag add tutorial_to_valhalla_step'
+  tutorial_remove_to_valhalla_step_tag: 'tag delete tutorial_to_valhalla_step'
+  tutorial_crafting_completed_message: 'notify "&6Quest Updated &8» &a✔ &7Crafting complete. Recipes are not only a way to create items: many server systems can also use crafting as part of your progression." io:chat'
+  tutorial_schedule_valhalla_start: 'folder tutorial_start_valhalla_profile_step delay:2 conditions:tutorial_to_valhalla_step_active'
+
+  # --------------------------------------------------------------------------
+  # STEP 4 / CHAPTER IV - ValhallaMMO
+  # --------------------------------------------------------------------------
+  # First make the player reopen the Profile so the explanation has visual context.
+  tutorial_start_valhalla_profile_step: 'folder tutorial_remove_crafting_step_tag,tutorial_remove_to_valhalla_step_tag,tutorial_add_valhalla_profile_step_tag,tutorial_add_valhalla_profile_journal,tutorial_valhalla_title,tutorial_valhalla_open_profile_message'
+  tutorial_add_valhalla_profile_step_tag: 'tag add tutorial_valhalla_profile_step'
+  tutorial_add_valhalla_profile_journal: 'journal add tutorial_valhalla_profile'
+  tutorial_valhalla_title: 'notify "&6Chapter IV\n&dValhallaMMO" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_valhalla_open_profile_message: 'notify "&6Tutorial &8» &7Press &bE&7, then open your &dProfile &7again. This is where your character progression begins to make sense." io:chat'
+
+  tutorial_open_valhalla_profile: 'folder tutorial_remove_valhalla_profile_journal,tutorial_remove_valhalla_profile_step_tag,tutorial_add_valhalla_step_tag,tutorial_add_valhalla_journal,tutorial_valhalla_message_1,tutorial_schedule_valhalla_message_2 conditions:tutorial_valhalla_profile_step_active'
+  tutorial_remove_valhalla_profile_journal: 'journal delete tutorial_valhalla_profile'
+  tutorial_remove_valhalla_profile_step_tag: 'tag delete tutorial_valhalla_profile_step'
+  tutorial_add_valhalla_step_tag: 'tag add tutorial_valhalla_step'
+  tutorial_add_valhalla_journal: 'journal add tutorial_valhalla'
+
+  tutorial_valhalla_message_1: 'notify "&6ValhallaMMO &8» &7Valhalla is your personal skill progression. Gathering, crafting and combat skills grow separately as you perform the activities connected to them." io:chat'
+  tutorial_schedule_valhalla_message_2: 'folder tutorial_valhalla_message_2,tutorial_schedule_valhalla_message_3 delay:4 conditions:tutorial_valhalla_step_active'
+  tutorial_valhalla_message_2: 'notify "&6ValhallaMMO &8» &7Each skill has its own levels and a skill tree. Progress unlocks perks and bonuses, so two players can develop very different strengths even when they use similar equipment." io:chat'
+  tutorial_schedule_valhalla_message_3: 'folder tutorial_valhalla_message_3,tutorial_schedule_valhalla_message_4 delay:4 conditions:tutorial_valhalla_step_active'
+  tutorial_valhalla_message_3: 'notify "&6ValhallaMMO &8» &7On this server, Mining, Woodcutting, Digging, Farming, Smithing, Enchanting, Alchemy, Archery, light and heavy weapons, and light and heavy armor are active Valhalla skills. Valhalla Fishing is disabled here. &dPower &7is always active." io:chat'
+  tutorial_schedule_valhalla_message_4: 'folder tutorial_valhalla_message_4,tutorial_schedule_valhalla_finish delay:4 conditions:tutorial_valhalla_step_active'
+  tutorial_valhalla_message_4: 'notify "&6ValhallaMMO &8» &7Your Valhalla skills are not the same thing as your Job. Valhalla describes what your character has learned; Jobs describe the profession that pays and assigns work to you." io:chat'
+  tutorial_schedule_valhalla_finish: 'folder tutorial_finish_valhalla_step delay:4 conditions:tutorial_valhalla_step_active'
+  tutorial_finish_valhalla_step: 'folder tutorial_remove_valhalla_journal,tutorial_remove_valhalla_step_tag,tutorial_start_jobs_step'
+  tutorial_remove_valhalla_journal: 'journal delete tutorial_valhalla'
+  tutorial_remove_valhalla_step_tag: 'tag delete tutorial_valhalla_step'
+
+  # --------------------------------------------------------------------------
+  # STEP 5 / CHAPTER V - Jobs
+  # --------------------------------------------------------------------------
+  tutorial_start_jobs_step: 'folder tutorial_add_jobs_step_tag,tutorial_add_jobs_journal,tutorial_jobs_title,tutorial_jobs_message_1,tutorial_schedule_jobs_message_2'
+  tutorial_add_jobs_step_tag: 'tag add tutorial_jobs_step'
+  tutorial_add_jobs_journal: 'journal add tutorial_jobs'
+  tutorial_jobs_title: 'notify "&6Chapter V\n&dJobs" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_jobs_message_1: 'notify "&6Jobs &8» &7A Job is your profession. Its progression is separate from ValhallaMMO and rewards you for doing the activities that belong to that profession." io:chat'
+  tutorial_schedule_jobs_message_2: 'folder tutorial_jobs_message_2,tutorial_schedule_jobs_message_3 delay:4 conditions:tutorial_jobs_step_active'
+  tutorial_jobs_message_2: 'notify "&6Jobs &8» &7Working in your profession grants Job experience and, depending on the activity, can also grant money and Job points. Higher Job levels unlock more profession-specific content." io:chat'
+  tutorial_schedule_jobs_message_3: 'folder tutorial_jobs_message_3 delay:4 conditions:tutorial_jobs_step_active'
+  tutorial_jobs_message_3: 'notify "&6Jobs &8» &7Active Jobs also receive daily quests. Open your inventory with &bE &7and click the &dJobs Quest menu &7in the top-right corner now." io:chat'
+
+  # ItemJoin must call this action when the top-right Jobs Quest item is clicked.
+  tutorial_jobs_menu_item_clicked: 'folder tutorial_complete_jobs_step conditions:tutorial_jobs_step_active'
+  tutorial_complete_jobs_step: 'folder tutorial_remove_jobs_journal,tutorial_remove_jobs_step_tag,tutorial_add_to_elitemobs_step_tag,tutorial_jobs_completed_message,tutorial_schedule_elitemobs_start'
+  tutorial_remove_jobs_journal: 'journal delete tutorial_jobs'
+  tutorial_remove_jobs_step_tag: 'tag delete tutorial_jobs_step'
+  tutorial_add_to_elitemobs_step_tag: 'tag add tutorial_to_elitemobs_step'
+  tutorial_remove_to_elitemobs_step_tag: 'tag delete tutorial_to_elitemobs_step'
+  tutorial_jobs_completed_message: 'notify "&6Quest Updated &8» &a✔ &7Jobs menu opened. Once you obtain a profession, return here often to check its daily objectives." io:chat'
+  tutorial_schedule_elitemobs_start: 'folder tutorial_start_elitemobs_step delay:2 conditions:tutorial_to_elitemobs_step_active'
+
+  # --------------------------------------------------------------------------
+  # STEP 6 / CHAPTER VI - EliteMobs
+  # --------------------------------------------------------------------------
+  tutorial_start_elitemobs_step: 'folder tutorial_remove_to_elitemobs_step_tag,tutorial_add_elitemobs_step_tag,tutorial_add_elitemobs_journal,tutorial_elitemobs_title,tutorial_elitemobs_message_1,tutorial_schedule_elitemobs_message_2'
+  tutorial_add_elitemobs_step_tag: 'tag add tutorial_elitemobs_step'
+  tutorial_add_elitemobs_journal: 'journal add tutorial_elitemobs'
+  tutorial_remove_elitemobs_journal: 'journal delete tutorial_elitemobs'
+  tutorial_remove_elitemobs_step_tag: 'tag delete tutorial_elitemobs_step'
+  tutorial_elitemobs_title: 'notify "&6Chapter VI\n&dEliteMobs" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_elitemobs_message_1: 'notify "&6EliteMobs &8» &7The hostile creatures of Iek Corbar are not simple vanilla targets. EliteMobs can give familiar enemies stronger combat behavior and special powers." io:chat'
+  tutorial_schedule_elitemobs_message_2: 'folder tutorial_elitemobs_message_2,tutorial_schedule_elitemobs_message_3 delay:4 conditions:tutorial_elitemobs_step_active'
+  tutorial_elitemobs_message_2: 'notify "&6EliteMobs &8» &7Natural elites use player-aware scaled combat on this server. Their danger is balanced around the player, so simply travelling farther from spawn is not what makes them stronger; your equipment and build still matter." io:chat'
+  tutorial_schedule_elitemobs_message_3: 'folder tutorial_elitemobs_message_3,tutorial_schedule_elitemobs_message_4 delay:4 conditions:tutorial_elitemobs_step_active'
+  tutorial_elitemobs_message_3: 'notify "&6EliteMobs &8» &7Watch the nameplate, health display and powers before committing to a fight. A familiar creature may behave very differently from its vanilla version." io:chat'
+  tutorial_schedule_elitemobs_message_4: 'folder tutorial_elitemobs_message_4,tutorial_schedule_elitemobs_message_5 delay:4 conditions:tutorial_elitemobs_step_active'
+  tutorial_elitemobs_message_4: 'notify "&6EliteMobs &8» &7For scaled natural elites, &d「⚔」 &7marks the standard threat symbol while &c☠ &7warns of a higher-threat enemy. Dungeon and regional bosses use separate encounter balancing." io:chat'
+  tutorial_schedule_elitemobs_message_5: 'folder tutorial_elitemobs_message_5,tutorial_schedule_expanded_systems_start delay:4 conditions:tutorial_elitemobs_step_active'
+  tutorial_elitemobs_message_5: 'notify "&6EliteMobs &8» &7Observe first, then fight. Learning an enemy''s powers is often more important than attacking it as quickly as possible." io:chat'
+  tutorial_schedule_expanded_systems_start: 'folder tutorial_start_expanded_systems delay:4 conditions:tutorial_elitemobs_step_active'
+
+  # --------------------------------------------------------------------------
+  # STEP 7 / CHAPTER VII - Expanded Gameplay Systems
+  # --------------------------------------------------------------------------
+  tutorial_start_expanded_systems: 'folder tutorial_remove_elitemobs_journal,tutorial_remove_elitemobs_step_tag,tutorial_add_expanded_systems_step_tag,tutorial_add_expanded_systems_journal,tutorial_expanded_systems_title,tutorial_expanded_intro,tutorial_schedule_fishing_1'
+  tutorial_add_expanded_systems_step_tag: 'tag add tutorial_expanded_systems_step'
+  tutorial_add_expanded_systems_journal: 'journal add tutorial_expanded_systems'
+  tutorial_remove_expanded_systems_journal: 'journal delete tutorial_expanded_systems'
+  tutorial_remove_expanded_systems_step_tag: 'tag delete tutorial_expanded_systems_step'
+  tutorial_expanded_systems_title: 'notify "&6Chapter VII\n&dExpanded Gameplay Systems" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_expanded_intro: 'notify "&6Tutorial &8» &7The systems you have learned so far are only the foundation. Many ordinary Minecraft activities have been expanded into complete progression systems on Iek Corbar." io:chat'
+
+  # Custom Fishing
+  tutorial_schedule_fishing_1: 'folder tutorial_fishing_1,tutorial_schedule_fishing_2 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_fishing_1: 'notify "&6Custom Fishing &8» &7Fishing has been redesigned around more than &d150 custom fish&7. Different biomes contain different species, so exploration is part of becoming a successful fisherman." io:chat'
+  tutorial_schedule_fishing_2: 'folder tutorial_fishing_2,tutorial_schedule_fishing_3 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_fishing_2: 'notify "&6Custom Fishing &8» &7When a fish resists, the &dTug &7mechanic begins. Repeatedly interact with your fishing rod until the catch is secured. Stop for too long and the fish can escape." io:chat'
+  tutorial_schedule_fishing_3: 'folder tutorial_fishing_3,tutorial_schedule_fishing_4 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_fishing_3: 'notify "&6Custom Fishing &8» &7Fish rarity also changes resistance: &dBronze 4–7&7, &dSilver 8–12&7, &dGold 13–18&7, &dDiamond 19–27&7, &dPlatinum 28–38&7, and &dMythical 40–55 Tugs&7." io:chat'
+  tutorial_schedule_fishing_4: 'folder tutorial_fishing_4,tutorial_schedule_fishing_5 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_fishing_4: 'notify "&6Fish Monger &8» &7Open the &dE-menu &7to find the Fish Monger. He evaluates the custom fish in your inventory according to the fish and its &dweight&7, then lets you choose whether to sell it or keep it." io:chat'
+  tutorial_schedule_fishing_5: 'folder tutorial_fishing_5,tutorial_schedule_agriculture_1 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_fishing_5: 'notify "&6Fishing Tournaments &8» &7Approximately every &d30 minutes&7, one of &d10 tournament formats &7starts automatically. Use &b/fttop &7to check the leaderboard. In &dGolden Fish&7, normal qualifying fish give 1 point and the selected Golden Fish gives &d10 points&7." io:chat'
+
+  # Custom Agriculture
+  tutorial_schedule_agriculture_1: 'folder tutorial_agriculture_1,tutorial_schedule_agriculture_2 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_agriculture_1: 'notify "&6Custom Agriculture &8» &7Farming also extends beyond vanilla crops. Iek Corbar includes Apple, Blueberry, Cherry, Cranberry, Grape, Lemon, Lime, Orange, Peach, Raspberry and Strawberry plants." io:chat'
+  tutorial_schedule_agriculture_2: 'folder tutorial_agriculture_2,tutorial_schedule_brewing_1 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_agriculture_2: 'notify "&6Custom Agriculture &8» &7Different crops mature at different speeds: berries take about 5 minutes, Grapes about 7, Cherry/Lemon/Lime about 15, while Apple/Orange/Peach take roughly one Minecraft day." io:chat'
+
+  # Brewing
+  tutorial_schedule_brewing_1: 'folder tutorial_brewing_1,tutorial_schedule_brewing_2 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_brewing_1: 'notify "&6Brewing &8» &7Brewing is more than a vanilla Brewing Stand. Drinks can depend on the ingredients, quantities, heat and brewing time. A typical brew begins in a water-filled cauldron over a valid heat source." io:chat'
+  tutorial_schedule_brewing_2: 'folder tutorial_brewing_2,tutorial_schedule_pyromining_1 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_brewing_2: 'notify "&6Brewing &8» &7Some recipes can also be aged in barrels. Wood type and aging time may affect the result, and aging for too long can spoil a drink. One brewing year corresponds to one Minecraft day." io:chat'
+
+  # Advanced Mining / PyroMining
+  tutorial_schedule_pyromining_1: 'folder tutorial_pyromining_1,tutorial_schedule_pyromining_2 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_pyromining_1: 'notify "&6Advanced Mining &8» &7Mining has another progression layer beyond Jobs and your character skills. You can discover &dFluxes, Gemstones, Mysterious Dust &7and other resources that do not exist in vanilla Minecraft." io:chat'
+  tutorial_schedule_pyromining_2: 'folder tutorial_pyromining_2,tutorial_schedule_pyromining_3 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_pyromining_2: 'notify "&6Advanced Mining &8» &7This mining system has its own currency, &dZeta&7, together with Mining Levels and a dedicated Skill Tree. These progress separately from both Valhalla and your Miner Job." io:chat'
+  tutorial_schedule_pyromining_3: 'folder tutorial_pyromining_3,tutorial_schedule_pyromining_4 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_pyromining_3: 'notify "&6Advanced Mining &8» &7Mysterious Dust can be processed through the &dRefinery&7. Rune Dust can lead to Rune Guardians and Runes, connecting ordinary mining to special combat encounters and deeper progression." io:chat'
+  tutorial_schedule_pyromining_4: 'folder tutorial_pyromining_4,tutorial_schedule_techcore_1 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_pyromining_4: 'notify "&6Advanced Mining &8» &7Rare Artifacts can lead toward Fossils and &dVessels&7, while the far end of the system contains dangerous &dOracles&7. You do not need to learn all of this now: begin by mining normally and investigate unfamiliar discoveries as they appear." io:chat'
+
+  # TechCore
+  tutorial_schedule_techcore_1: 'folder tutorial_techcore_1,tutorial_schedule_techcore_2 delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_techcore_1: 'notify "&6TechCore &8» &7Iek Corbar also has an original industrial system built specifically for the server. TechCore lets you construct machines, production lines and automated factories." io:chat'
+  tutorial_schedule_techcore_2: 'folder tutorial_techcore_2,tutorial_schedule_expanded_finish delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_techcore_2: 'notify "&6TechCore &8» &7Industrial progression eventually moves you from manual work to automation. Its machines, energy and transport networks have their own dedicated progression, so they will be explained in a separate guide." io:chat'
+
+  tutorial_schedule_expanded_finish: 'folder tutorial_finish_expanded_systems delay:4 conditions:tutorial_expanded_systems_step_active'
+  tutorial_finish_expanded_systems: 'folder tutorial_remove_expanded_systems_journal,tutorial_expanded_finish_message,tutorial_schedule_race_selection_start'
+  tutorial_expanded_finish_message: 'notify "&6Tutorial &8» &7Fishing, farming, brewing, mining and industry all have systems beyond vanilla Minecraft. When you find an unfamiliar fish, fruit, mineral, artifact or machine component, assume it may be the beginning of a new progression path." io:chat'
+  tutorial_schedule_race_selection_start: 'folder tutorial_start_race_selection delay:4 conditions:tutorial_expanded_systems_step_active'
+
+  # --------------------------------------------------------------------------
+  # RACE SELECTION - prerequisite before Chapters VIII-X
+  # --------------------------------------------------------------------------
+  tutorial_start_race_selection: 'folder tutorial_remove_expanded_systems_step_tag,tutorial_add_race_step_tag,tutorial_add_race_journal,tutorial_race_title,tutorial_race_instruction_message'
+  tutorial_add_race_step_tag: 'tag add tutorial_race_step'
+  tutorial_remove_race_step_tag: 'tag delete tutorial_race_step'
+  tutorial_add_race_journal: 'journal add tutorial_choose_race'
+  tutorial_remove_race_journal: 'journal delete tutorial_choose_race'
+  tutorial_race_title: 'notify "&6Character Creation\n&dChoose Your Race" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_race_instruction_message: 'notify "&6Tutorial &8» &7Before choosing your specializations, speak with the &bRace Assignor &7and choose the race your character will belong to. Read each race carefully before confirming your choice." io:chat'
+
+  # Each race uses the ValhallaRaces command directly; the BQ tag records tutorial progression.
+  tutorial_confirm_gearborn: 'folder tutorial_command_choose_gearborn,tutorial_add_choosed_race_tag,tutorial_schedule_race_selection_finish conditions:tutorial_can_choose_race'
+  tutorial_confirm_cinderbeard: 'folder tutorial_command_choose_cinderbeard,tutorial_add_choosed_race_tag,tutorial_schedule_race_selection_finish conditions:tutorial_can_choose_race'
+  tutorial_confirm_clockmoth: 'folder tutorial_command_choose_clockmoth,tutorial_add_choosed_race_tag,tutorial_schedule_race_selection_finish conditions:tutorial_can_choose_race'
+  tutorial_confirm_rustborn: 'folder tutorial_command_choose_rustborn,tutorial_add_choosed_race_tag,tutorial_schedule_race_selection_finish conditions:tutorial_can_choose_race'
+
+  tutorial_command_choose_gearborn: 'command valhallaraces:races set race %player% gearborn'
+  tutorial_command_choose_cinderbeard: 'command valhallaraces:races set race %player% cinderbeard'
+  tutorial_command_choose_clockmoth: 'command valhallaraces:races set race %player% clockmoth'
+  tutorial_command_choose_rustborn: 'command valhallaraces:races set race %player% rustborn'
+  tutorial_add_choosed_race_tag: 'tag add Choosed_race'
+
+  # Delayed because these messages happen after the NPC conversation closes.
+  tutorial_schedule_race_selection_finish: 'folder tutorial_finish_race_selection delay:2 conditions:tutorial_race_chosen'
+  tutorial_finish_race_selection: 'folder tutorial_remove_race_journal,tutorial_remove_race_step_tag,tutorial_race_selected_message,tutorial_start_class_selection'
+  tutorial_race_selected_message: 'notify "&6Quest Updated &8» &a✔ &7Your race has been chosen. Now speak with the &bClass Assignor &7to define your starting specializations." io:chat'
+
+  # --------------------------------------------------------------------------
+  # STEP 8 / CHAPTER VIII - Primary Class
+  # NPC 128 - Class Assignor
+  # --------------------------------------------------------------------------
+  tutorial_start_class_selection: 'folder tutorial_add_class_step_tag,tutorial_add_class_journal,tutorial_class_title,tutorial_class_instruction_message'
+  tutorial_add_class_step_tag: 'tag add tutorial_class_step'
+  tutorial_remove_class_step_tag: 'tag delete tutorial_class_step'
+  tutorial_add_class_journal: 'journal add tutorial_choose_class'
+  tutorial_remove_class_journal: 'journal delete tutorial_choose_class'
+  tutorial_class_title: 'notify "&6Chapter VIII\n&dPrimary Class" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_class_instruction_message: 'notify "&6Tutorial &8» &7After selecting your race, speak with the &bClass Assignor &7and choose your main combat specialization." io:chat'
+
+  tutorial_confirm_warrior: 'folder tutorial_command_choose_warrior,tutorial_add_choosed_class_tag,tutorial_schedule_class_selection_finish conditions:tutorial_can_choose_class'
+  tutorial_confirm_barbarian: 'folder tutorial_command_choose_barbarian,tutorial_add_choosed_class_tag,tutorial_schedule_class_selection_finish conditions:tutorial_can_choose_class'
+  tutorial_confirm_ranger: 'folder tutorial_command_choose_ranger,tutorial_add_choosed_class_tag,tutorial_schedule_class_selection_finish conditions:tutorial_can_choose_class'
+  tutorial_command_choose_warrior: 'command valhallaraces:races set class %player% warrior'
+  tutorial_command_choose_barbarian: 'command valhallaraces:races set class %player% barbarian'
+  tutorial_command_choose_ranger: 'command valhallaraces:races set class %player% ranger'
+  tutorial_add_choosed_class_tag: 'tag add Choosed_class'
+  tutorial_schedule_class_selection_finish: 'folder tutorial_finish_class_selection delay:2 conditions:tutorial_class_chosen'
+  tutorial_finish_class_selection: 'folder tutorial_remove_class_journal,tutorial_remove_class_step_tag,tutorial_class_selected_message,tutorial_start_specialization_selection'
+  tutorial_class_selected_message: 'notify "&6Quest Updated &8» &a✔ &7Your primary combat class has been chosen. Return to the &bClass Assignor &7for your production specialization." io:chat'
+
+  # --------------------------------------------------------------------------
+  # STEP 9 / CHAPTER IX - Production Specialization
+  # NPC 128 - Class Assignor
+  # --------------------------------------------------------------------------
+  tutorial_start_specialization_selection: 'folder tutorial_add_specialization_step_tag,tutorial_add_specialization_journal,tutorial_specialization_title,tutorial_specialization_instruction_message'
+  tutorial_add_specialization_step_tag: 'tag add tutorial_specialization_step'
+  tutorial_remove_specialization_step_tag: 'tag delete tutorial_specialization_step'
+  tutorial_add_specialization_journal: 'journal add tutorial_choose_specialization'
+  tutorial_remove_specialization_journal: 'journal delete tutorial_choose_specialization'
+  tutorial_specialization_title: 'notify "&6Chapter IX\n&dProduction Specialization" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_specialization_instruction_message: 'notify "&6Tutorial &8» &7Your second specialization focuses on crafting and production. Speak with the &bClass Assignor &7again and choose the discipline that best fits your plans." io:chat'
+
+  tutorial_confirm_alchemist: 'folder tutorial_command_choose_alchemist,tutorial_add_choosed_specialization_tag,tutorial_schedule_specialization_selection_finish conditions:tutorial_can_choose_specialization'
+  tutorial_confirm_enchanter: 'folder tutorial_command_choose_enchanter,tutorial_add_choosed_specialization_tag,tutorial_schedule_specialization_selection_finish conditions:tutorial_can_choose_specialization'
+  tutorial_confirm_blacksmith: 'folder tutorial_command_choose_blacksmith,tutorial_add_choosed_specialization_tag,tutorial_schedule_specialization_selection_finish conditions:tutorial_can_choose_specialization'
+  tutorial_command_choose_alchemist: 'command valhallaraces:races set class %player% alchemist'
+  tutorial_command_choose_enchanter: 'command valhallaraces:races set class %player% enchanter'
+  tutorial_command_choose_blacksmith: 'command valhallaraces:races set class %player% blacksmith'
+  tutorial_add_choosed_specialization_tag: 'tag add Choosed_specialization'
+  tutorial_schedule_specialization_selection_finish: 'folder tutorial_finish_specialization_selection delay:2 conditions:tutorial_specialization_chosen'
+  tutorial_finish_specialization_selection: 'folder tutorial_remove_specialization_journal,tutorial_remove_specialization_step_tag,tutorial_specialization_selected_message,tutorial_start_profession_selection'
+  tutorial_specialization_selected_message: 'notify "&6Quest Updated &8» &a✔ &7Your production specialization has been chosen. Return to the &bClass Assignor &7one final time for your gathering specialization." io:chat'
+
+  # --------------------------------------------------------------------------
+  # STEP 10 / CHAPTER X - Gathering Specialization
+  # NPC 128 - Class Assignor
+  # --------------------------------------------------------------------------
+  tutorial_start_profession_selection: 'folder tutorial_add_profession_step_tag,tutorial_add_profession_journal,tutorial_profession_title,tutorial_profession_instruction_message,tutorial_schedule_profession_crafting_reminder'
+  tutorial_add_profession_step_tag: 'tag add tutorial_profession_step'
+  tutorial_remove_profession_step_tag: 'tag delete tutorial_profession_step'
+  tutorial_add_profession_journal: 'journal add tutorial_choose_profession'
+  tutorial_remove_profession_journal: 'journal delete tutorial_choose_profession'
+  tutorial_profession_title: 'notify "&6Chapter X\n&dGathering Specialization" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_profession_instruction_message: 'notify "&6Tutorial &8» &7Your final starting specialization determines which resource-gathering activities your character performs most efficiently. Speak with the &bClass Assignor &7and make your final choice." io:chat'
+  tutorial_schedule_profession_crafting_reminder: 'folder tutorial_profession_crafting_reminder delay:3 conditions:tutorial_profession_step_active'
+  tutorial_profession_crafting_reminder: 'notify "&6Production Reminder &8» &7If a crafting recipe is locked, it means you do not yet have enough experience in that production discipline. Train the relevant production skill to unlock more advanced crafts." io:chat'
+
+  tutorial_confirm_miner: 'folder tutorial_command_choose_miner,tutorial_add_choosed_profession_tag,tutorial_schedule_profession_selection_finish conditions:tutorial_can_choose_profession'
+  tutorial_confirm_farmer_fisherman: 'folder tutorial_command_choose_farmer_fisherman,tutorial_add_choosed_profession_tag,tutorial_schedule_profession_selection_finish conditions:tutorial_can_choose_profession'
+  tutorial_confirm_terraformer: 'folder tutorial_command_choose_terraformer,tutorial_add_choosed_profession_tag,tutorial_schedule_profession_selection_finish conditions:tutorial_can_choose_profession'
+  tutorial_command_choose_miner: 'command valhallaraces:races set class %player% miner'
+  tutorial_command_choose_farmer_fisherman: 'command valhallaraces:races set class %player% farmer'
+  tutorial_command_choose_terraformer: 'command valhallaraces:races set class %player% terraformer'
+  tutorial_add_choosed_profession_tag: 'tag add Choosed_profession'
+  tutorial_schedule_profession_selection_finish: 'folder tutorial_finish_profession_selection delay:2 conditions:tutorial_profession_chosen'
+  tutorial_finish_profession_selection: 'folder tutorial_remove_profession_journal,tutorial_remove_profession_step_tag,tutorial_profession_selected_message,tutorial_complete conditions:tutorial_all_starting_choices_done'
+  tutorial_profession_selected_message: 'notify "&6Quest Updated &8» &a✔ &7Your final starting specialization has been chosen. Race, combat, production and gathering choices are now complete." io:chat'
+
+  # --------------------------------------------------------------------------
+  # TUTORIAL COMPLETION
+  # --------------------------------------------------------------------------
+  tutorial_complete: 'folder tutorial_add_finished_tag,tutorial_final_cleanup,tutorial_return_to_spawn,tutorial_give_starter_items,tutorial_complete_title,tutorial_complete_message,tutorial_starter_items_message,tutorial_adventurers_guild_message'
+  tutorial_add_finished_tag: 'tag add tutorial_finished'
+
+  # Return the player to the server spawn before granting the starter equipment.
+  tutorial_return_to_spawn: 'command cmi spawn %player%'
+
+  # Starter equipment granted at the end of the tutorial.
+  # MMOItems commands are executed by the console, therefore %player% is explicit.
+  tutorial_give_starter_items: 'folder tutorial_give_leather_boots,tutorial_give_leather_chestplate,tutorial_give_leather_helmet,tutorial_give_leather_leggings,tutorial_give_bamboo_stream_rod,tutorial_give_autosmelt_pickaxe'
+  tutorial_give_leather_boots: 'command mi give ARMOR SHOPARMOR_BOOTS_LEATHER %player%'
+  tutorial_give_leather_chestplate: 'command mi give ARMOR SHOPARMOR_CHESTPLATE_LEATHER %player%'
+  tutorial_give_leather_helmet: 'command mi give ARMOR SHOPARMOR_HELMET_LEATHER %player%'
+  tutorial_give_leather_leggings: 'command mi give ARMOR SHOPARMOR_LEGGINGS_LEATHER %player%'
+  tutorial_give_bamboo_stream_rod: 'command mi give TOOL BAMBOO_STREAM_ROD %player%'
+  tutorial_give_autosmelt_pickaxe: 'command mi give TOOL AUTOSMELT_PICKAXE %player%'
+
+  tutorial_complete_title: 'notify "&6Quest Complete\n&dTutorial" io:title fadeIn:0 stay:60 fadeOut:0'
+  tutorial_complete_message: 'notify "&6Quest Complete &8» &a✔ &7You have completed the basic systems tutorial." io:chat'
+  tutorial_starter_items_message: 'notify "&6Tutorial &8» &7You have been returned to &bspawn &7and received your &dstarter equipment&7: leather armor, a fishing rod and an AutoSmelt Pickaxe." io:chat'
+  tutorial_adventurers_guild_message: 'notify "&6Tutorial &8» &7You can now continue your journey. When you are ready, the &bAdventurers Guild &7is a good place to begin." io:chat'
+
+  # Keep the four character-choice tags, start_tutorial and tutorial_finished as permanent Tutorial state.
+  tutorial_final_cleanup: 'folder tutorial_final_cleanup_journal,tutorial_final_cleanup_tags,tutorial_update_npc_visibility'
+  tutorial_final_cleanup_journal: 'folder tutorial_remove_reach_building_journal,tutorial_remove_inventory_journal,tutorial_remove_profile_journal,tutorial_remove_crafting_journal,tutorial_remove_valhalla_profile_journal,tutorial_remove_valhalla_journal,tutorial_remove_jobs_journal,tutorial_remove_elitemobs_journal,tutorial_remove_expanded_systems_journal,tutorial_remove_race_journal,tutorial_remove_class_journal,tutorial_remove_specialization_journal,tutorial_remove_profession_journal'
+  tutorial_final_cleanup_tags: 'folder tutorial_cleanup_step_1_tag,tutorial_cleanup_dialogue_tag,tutorial_cleanup_waiting_inventory_tag,tutorial_cleanup_inventory_step_tag,tutorial_cleanup_menu_tour_step_tag,tutorial_cleanup_profile_step_tag,tutorial_cleanup_profile_clicked_tag,tutorial_cleanup_crafting_step_tag,tutorial_cleanup_to_valhalla_step_tag,tutorial_cleanup_valhalla_profile_step_tag,tutorial_cleanup_valhalla_step_tag,tutorial_cleanup_jobs_step_tag,tutorial_cleanup_to_elitemobs_step_tag,tutorial_cleanup_elitemobs_step_tag,tutorial_cleanup_expanded_systems_step_tag,tutorial_cleanup_race_step_tag,tutorial_cleanup_class_step_tag,tutorial_cleanup_specialization_step_tag,tutorial_cleanup_profession_step_tag'
+  tutorial_cleanup_step_1_tag: 'tag delete tutorial_step_1_completed'
+  tutorial_cleanup_dialogue_tag: 'tag delete tutorial_dialogue_completed'
+  tutorial_cleanup_waiting_inventory_tag: 'tag delete tutorial_waiting_for_inventory'
+  tutorial_cleanup_inventory_step_tag: 'tag delete tutorial_inventory_step'
+  tutorial_cleanup_menu_tour_step_tag: 'tag delete tutorial_menu_tour_step'
+  tutorial_cleanup_profile_step_tag: 'tag delete tutorial_profile_step'
+  tutorial_cleanup_profile_clicked_tag: 'tag delete tutorial_profile_clicked'
+  tutorial_cleanup_crafting_step_tag: 'tag delete tutorial_crafting_step'
+  tutorial_cleanup_to_valhalla_step_tag: 'tag delete tutorial_to_valhalla_step'
+  tutorial_cleanup_valhalla_profile_step_tag: 'tag delete tutorial_valhalla_profile_step'
+  tutorial_cleanup_valhalla_step_tag: 'tag delete tutorial_valhalla_step'
+  tutorial_cleanup_jobs_step_tag: 'tag delete tutorial_jobs_step'
+  tutorial_cleanup_to_elitemobs_step_tag: 'tag delete tutorial_to_elitemobs_step'
+  tutorial_cleanup_elitemobs_step_tag: 'tag delete tutorial_elitemobs_step'
+  tutorial_cleanup_expanded_systems_step_tag: 'tag delete tutorial_expanded_systems_step'
+  tutorial_cleanup_race_step_tag: 'tag delete tutorial_race_step'
+  tutorial_cleanup_class_step_tag: 'tag delete tutorial_class_step'
+  tutorial_cleanup_specialization_step_tag: 'tag delete tutorial_specialization_step'
+  tutorial_cleanup_profession_step_tag: 'tag delete tutorial_profession_step'
+
+  # --------------------------------------------------------------------------
+  # DEBUG - Reset every Tutorial state implemented in this file
+  # --------------------------------------------------------------------------
+  tutorial_debug_reset: 'folder tutorial_debug_stop_objectives,tutorial_debug_delete_journal,tutorial_debug_delete_tags,tutorial_update_npc_visibility'
+
+  tutorial_debug_stop_objectives: 'folder tutorial_debug_stop_reach_building,tutorial_debug_stop_craft_sticks'
+  tutorial_debug_stop_reach_building: 'objective delete tutorial_reach_building'
+  tutorial_debug_stop_craft_sticks: 'objective delete tutorial_craft_sticks'
+
+  tutorial_debug_delete_journal: 'folder tutorial_debug_delete_reach_building_journal,tutorial_debug_delete_open_inventory_journal,tutorial_debug_delete_profile_journal,tutorial_debug_delete_crafting_journal,tutorial_debug_delete_valhalla_profile_journal,tutorial_debug_delete_valhalla_journal,tutorial_debug_delete_jobs_journal,tutorial_debug_delete_elitemobs_journal,tutorial_debug_delete_expanded_systems_journal,tutorial_debug_delete_race_journal,tutorial_debug_delete_class_journal,tutorial_debug_delete_specialization_journal,tutorial_debug_delete_profession_journal'
+  tutorial_debug_delete_reach_building_journal: 'journal delete tutorial_reach_building'
+  tutorial_debug_delete_open_inventory_journal: 'journal delete tutorial_open_inventory'
+  tutorial_debug_delete_profile_journal: 'journal delete tutorial_click_profile'
+  tutorial_debug_delete_crafting_journal: 'journal delete tutorial_crafting'
+  tutorial_debug_delete_valhalla_profile_journal: 'journal delete tutorial_valhalla_profile'
+  tutorial_debug_delete_valhalla_journal: 'journal delete tutorial_valhalla'
+  tutorial_debug_delete_jobs_journal: 'journal delete tutorial_jobs'
+  tutorial_debug_delete_elitemobs_journal: 'journal delete tutorial_elitemobs'
+  tutorial_debug_delete_expanded_systems_journal: 'journal delete tutorial_expanded_systems'
+  tutorial_debug_delete_race_journal: 'journal delete tutorial_choose_race'
+  tutorial_debug_delete_class_journal: 'journal delete tutorial_choose_class'
+  tutorial_debug_delete_specialization_journal: 'journal delete tutorial_choose_specialization'
+  tutorial_debug_delete_profession_journal: 'journal delete tutorial_choose_profession'
+
+  tutorial_debug_delete_tags: 'folder tutorial_debug_delete_start_tag,tutorial_debug_delete_step_1_tag,tutorial_debug_delete_dialogue_tag,tutorial_debug_delete_waiting_inventory_tag,tutorial_debug_delete_inventory_step_tag,tutorial_debug_delete_menu_tour_step_tag,tutorial_debug_delete_profile_step_tag,tutorial_debug_delete_profile_clicked_tag,tutorial_debug_delete_crafting_step_tag,tutorial_debug_delete_to_valhalla_step_tag,tutorial_debug_delete_valhalla_profile_step_tag,tutorial_debug_delete_valhalla_step_tag,tutorial_debug_delete_jobs_step_tag,tutorial_debug_delete_to_elitemobs_step_tag,tutorial_debug_delete_elitemobs_step_tag,tutorial_debug_delete_expanded_systems_step_tag,tutorial_debug_delete_race_step_tag,tutorial_debug_delete_class_step_tag,tutorial_debug_delete_specialization_step_tag,tutorial_debug_delete_profession_step_tag,tutorial_debug_delete_choosed_race_tag,tutorial_debug_delete_choosed_class_tag,tutorial_debug_delete_choosed_specialization_tag,tutorial_debug_delete_choosed_profession_tag,tutorial_debug_delete_finished_tag'
+  tutorial_debug_delete_start_tag: 'tag delete start_tutorial'
+  tutorial_debug_delete_step_1_tag: 'tag delete tutorial_step_1_completed'
+  tutorial_debug_delete_dialogue_tag: 'tag delete tutorial_dialogue_completed'
+  tutorial_debug_delete_waiting_inventory_tag: 'tag delete tutorial_waiting_for_inventory'
+  tutorial_debug_delete_inventory_step_tag: 'tag delete tutorial_inventory_step'
+  tutorial_debug_delete_menu_tour_step_tag: 'tag delete tutorial_menu_tour_step'
+  tutorial_debug_delete_profile_step_tag: 'tag delete tutorial_profile_step'
+  tutorial_debug_delete_profile_clicked_tag: 'tag delete tutorial_profile_clicked'
+  tutorial_debug_delete_crafting_step_tag: 'tag delete tutorial_crafting_step'
+  tutorial_debug_delete_to_valhalla_step_tag: 'tag delete tutorial_to_valhalla_step'
+  tutorial_debug_delete_valhalla_profile_step_tag: 'tag delete tutorial_valhalla_profile_step'
+  tutorial_debug_delete_valhalla_step_tag: 'tag delete tutorial_valhalla_step'
+  tutorial_debug_delete_jobs_step_tag: 'tag delete tutorial_jobs_step'
+  tutorial_debug_delete_to_elitemobs_step_tag: 'tag delete tutorial_to_elitemobs_step'
+  tutorial_debug_delete_elitemobs_step_tag: 'tag delete tutorial_elitemobs_step'
+  tutorial_debug_delete_expanded_systems_step_tag: 'tag delete tutorial_expanded_systems_step'
+  tutorial_debug_delete_race_step_tag: 'tag delete tutorial_race_step'
+  tutorial_debug_delete_class_step_tag: 'tag delete tutorial_class_step'
+  tutorial_debug_delete_specialization_step_tag: 'tag delete tutorial_specialization_step'
+  tutorial_debug_delete_profession_step_tag: 'tag delete tutorial_profession_step'
+  tutorial_debug_delete_choosed_race_tag: 'tag delete Choosed_race'
+  tutorial_debug_delete_choosed_class_tag: 'tag delete Choosed_class'
+  tutorial_debug_delete_choosed_specialization_tag: 'tag delete Choosed_specialization'
+  tutorial_debug_delete_choosed_profession_tag: 'tag delete Choosed_profession'
+  tutorial_debug_delete_finished_tag: 'tag delete tutorial_finished'
+
+objectives:
+  # Automatically installed for every player and kept persistent so it fires
+  # on every future login. The action router decides whether to start, resume,
+  # or do nothing when the Tutorial is already finished.
+  tutorial_login: 'login actions:tutorial_handle_login auto-once persistent'
+  tutorial_reach_building: 'location 2816;167;-457;iekcorbarSeason2 2 actions:tutorial_complete_step_1'
+  tutorial_craft_sticks: 'craft tutorial_stick 4 actions:tutorial_complete_craft_step'
+
+journal:
+  tutorial_reach_building:
+    en-US: |
+      &6Tutorial
+      &6Chapter I — First Steps
+
+      &7Reach the &bbuilding&7.
+    en: |
+      &6Tutorial
+      &6Chapter I — First Steps
+
+      &7Reach the &bbuilding&7.
+
+  tutorial_open_inventory:
+    en-US: |
+      &6Tutorial
+      &6Chapter II — Game Menu
+
+      &7Press &bE &7to open your inventory.
+    en: |
+      &6Tutorial
+      &6Chapter II — Game Menu
+
+      &7Press &bE &7to open your inventory.
+
+  tutorial_click_profile:
+    en-US: |
+      &6Tutorial
+      &6Chapter II — Game Menu
+
+      &7Click the &dProfile menu&7.
+    en: |
+      &6Tutorial
+      &6Chapter II — Game Menu
+
+      &7Click the &dProfile menu&7.
+
+  tutorial_crafting:
+    en-US: |
+      &6Tutorial
+      &6Chapter III — Crafting
+
+      &7Use the &dPortable Crafting Table &7to craft &d4 Sticks &7from the 2 Oak Planks provided.
+    en: |
+      &6Tutorial
+      &6Chapter III — Crafting
+
+      &7Use the &dPortable Crafting Table &7to craft &d4 Sticks &7from the 2 Oak Planks provided.
+
+  tutorial_valhalla_profile:
+    en-US: |
+      &6Tutorial
+      &6Chapter IV — ValhallaMMO
+
+      &7Open your &dProfile &7again.
+    en: |
+      &6Tutorial
+      &6Chapter IV — ValhallaMMO
+
+      &7Open your &dProfile &7again.
+
+  tutorial_valhalla:
+    en-US: |
+      &6Tutorial
+      &6Chapter IV — ValhallaMMO
+
+      &7Learn how your personal skills, skill trees and Power progression work.
+    en: |
+      &6Tutorial
+      &6Chapter IV — ValhallaMMO
+
+      &7Learn how your personal skills, skill trees and Power progression work.
+
+  tutorial_jobs:
+    en-US: |
+      &6Tutorial
+      &6Chapter V — Jobs
+
+      &7Open the &dJobs Quest menu &7in the top-right corner of your Inventory/E menu.
+    en: |
+      &6Tutorial
+      &6Chapter V — Jobs
+
+      &7Open the &dJobs Quest menu &7in the top-right corner of your Inventory/E menu.
+
+  tutorial_elitemobs:
+    en-US: |
+      &6Tutorial
+      &6Chapter VI — EliteMobs
+
+      &7Read the combat briefing and learn how EliteMobs differ from ordinary vanilla enemies.
+    en: |
+      &6Tutorial
+      &6Chapter VI — EliteMobs
+
+      &7Read the combat briefing and learn how EliteMobs differ from ordinary vanilla enemies.
+
+
+  tutorial_expanded_systems:
+    en-US: |
+      &6Tutorial
+      &6Chapter VII — Expanded Gameplay Systems
+
+      &7Learn about Custom Fishing, agriculture, brewing, advanced mining and TechCore.
+    en: |
+      &6Tutorial
+      &6Chapter VII — Expanded Gameplay Systems
+
+      &7Learn about Custom Fishing, agriculture, brewing, advanced mining and TechCore.
+
+  tutorial_choose_race:
+    en-US: |
+      &6Tutorial
+      &6Character Creation — Choose Your Race
+
+      &7Speak with the &bRace Assignor &7and choose your race.
+      &8Read the race description before confirming your choice.
+    en: |
+      &6Tutorial
+      &6Character Creation — Choose Your Race
+
+      &7Speak with the &bRace Assignor &7and choose your race.
+      &8Read the race description before confirming your choice.
+
+  tutorial_choose_class:
+    en-US: |
+      &6Tutorial
+      &6Chapter VIII — Primary Class
+
+      &7Speak with the &bClass Assignor &7and choose your main combat specialization.
+      &8Read each class description before confirming your choice.
+    en: |
+      &6Tutorial
+      &6Chapter VIII — Primary Class
+
+      &7Speak with the &bClass Assignor &7and choose your main combat specialization.
+      &8Read each class description before confirming your choice.
+
+  tutorial_choose_specialization:
+    en-US: |
+      &6Tutorial
+      &6Chapter IX — Production Specialization
+
+      &7Return to the &bClass Assignor &7and choose your crafting and production specialization.
+      &8Read each specialization before confirming your choice.
+    en: |
+      &6Tutorial
+      &6Chapter IX — Production Specialization
+
+      &7Return to the &bClass Assignor &7and choose your crafting and production specialization.
+      &8Read each specialization before confirming your choice.
+
+  tutorial_choose_profession:
+    en-US: |
+      &6Tutorial
+      &6Chapter X — Gathering Specialization
+
+      &7Return to the &bClass Assignor &7and choose your final gathering specialization.
+      &8If a craft is locked, train the relevant production discipline until you have enough experience to unlock it.
+    en: |
+      &6Tutorial
+      &6Chapter X — Gathering Specialization
+
+      &7Return to the &bClass Assignor &7and choose your final gathering specialization.
+      &8If a craft is locked, train the relevant production discipline until you have enough experience to unlock it.
+
+conversations:
+  tutorial_conv:
+    quester: '&6Tutorial'
+    first: tutorial_restart_finished,tutorial_restart_active,tutorial_start_silent
+    stop: true
+    NPC_options:
+      tutorial_restart_finished:
+        text: 'You have already completed the tutorial. Would you like to restart it from the beginning? Your previous Tutorial progress will be cleared before you return to the tutorial area.'
+        conditions: 'tutorial_finished'
+        pointers: tutorial_player_restart_yes,tutorial_player_restart_no
+      tutorial_restart_active:
+        text: 'You already have the tutorial in progress. Would you like to restart it from the beginning? Your current Tutorial progress will be cleared before you return to the tutorial area.'
+        conditions: 'tutorial_started,!tutorial_finished'
+        pointers: tutorial_player_restart_yes,tutorial_player_restart_no
+      tutorial_start_silent:
+        text: ' '
+        conditions: '!tutorial_started'
+        actions: tutorial_start
+    player_options:
+      tutorial_player_restart_yes:
+        text: 'Yes, restart the tutorial.'
+        actions: tutorial_restart_confirmed
+      tutorial_player_restart_no:
+        text: 'No, keep my current progress.'
+
+  tutorial_dialogue_conv:
+    quester: 'Dialogue tutorial'
+    first: tutorial_dialogue_intro
+    stop: true
+    NPC_options:
+      tutorial_dialogue_intro:
+        text: |-
+          You can interact with the citizens of Iekobar. Use W and S to scroll through the chat when a message is particularly long. You can also use W and S to select one of the available answers, then press <space> to confirm it.
+
+          Be careful during quests and missions: the choices you make will remain part of your character and may lead you to quests created specifically for players who made the same decisions as you.
+
+          Finally, remember that the lore and history of this world will advance according to your choices.
+
+          If everything is clear, answer me.
+        conditions: 'tutorial_step_1_completed,!tutorial_dialogue_completed'
+        pointers: tutorial_player_all_clear
+      tutorial_dialogue_choose_topic:
+        text: 'What would you like to start with? A tutorial about professions, attributes, or commands?'
+        pointers: tutorial_player_professions,tutorial_player_attributes,tutorial_player_commands
+      tutorial_dialogue_wrong_choice:
+        text: 'Wrong choice. In truth, this was a false choice: I decide where you begin, and first we will look at the commands together.'
+        pointers: tutorial_player_close_wrong
+      tutorial_dialogue_wise_choice:
+        text: 'A wise choice. I would have started with the commands too.'
+        pointers: tutorial_player_close_wise
+    player_options:
+      tutorial_player_all_clear:
+        text: 'Everything is clear.'
+        pointers: tutorial_dialogue_choose_topic
+      tutorial_player_professions:
+        text: 'I want to start with professions.'
+        pointers: tutorial_dialogue_wrong_choice
+      tutorial_player_attributes:
+        text: 'I want to start with attributes.'
+        pointers: tutorial_dialogue_wrong_choice
+      tutorial_player_commands:
+        text: 'I want to start with commands.'
+        pointers: tutorial_dialogue_wise_choice
+      tutorial_player_close_wrong:
+        text: 'Close conversation'
+        actions: tutorial_finish_dialogue
+      tutorial_player_close_wise:
+        text: 'Close conversation'
+        actions: tutorial_finish_dialogue
+
+
+  tutorial_race_assignor_conv:
+    quester: '&bRace Assignor'
+    first: tutorial_race_already_chosen,tutorial_race_intro,tutorial_race_not_ready
+    stop: true
+    NPC_options:
+      tutorial_race_already_chosen:
+        text: 'Your race has already been chosen. That decision is now part of your character.'
+        conditions: 'tutorial_race_chosen'
+
+      tutorial_race_not_ready:
+        text: 'Your path is not ready for this choice yet. Complete the previous parts of the tutorial, then return to me.'
+        conditions: '!tutorial_race_step_active,!tutorial_race_chosen'
+
+      tutorial_race_intro:
+        text: |-
+          Your race represents the biological and cultural nature of your character. Every race has its own strengths and weaknesses, and your choice directly influences several statistics.
+
+          Choose a race below to learn about it. You will not be assigned a race until you explicitly confirm your choice.
+        conditions: 'tutorial_can_choose_race'
+        pointers: tutorial_player_race_gearborn,tutorial_player_race_cinderbeard,tutorial_player_race_clockmoth,tutorial_player_race_rustborn
+
+      tutorial_race_gearborn_description:
+        text: |-
+          Gearborn
+
+          The Gearborn are steam-augmented people whose bodies combine flesh and machinery.
+
+          Strengths: Engineering, Smithing and Mechanics, improved explosion resistance, additional armor and increased maximum health.
+
+          Weaknesses: their heavier mechanical bodies reduce movement and swimming speed.
+
+          They are especially suited to technology, industry and crafting.
+        pointers: tutorial_player_race_back,tutorial_player_choose_gearborn
+
+      tutorial_race_cinderbeard_description:
+        text: |-
+          Cinderbeard
+
+          The Cinderbeards are a forge-born people accustomed to underground industry, heat and physical labor.
+
+          Strengths: Smithing and Mining, greater fire resistance, increased melee damage and natural armor.
+
+          Weaknesses: their compact, heavy bodies make them slower on land and particularly poor swimmers.
+
+          They are especially suited to mining, forging and close-range combat.
+        pointers: tutorial_player_race_back,tutorial_player_choose_cinderbeard
+
+      tutorial_race_clockmoth_description:
+        text: |-
+          Clockmoth
+
+          Clockmoths combine lightweight bodies with small clockwork wings and a natural affinity for aether and magic.
+
+          Strengths: Magic and Light Weapons, increased movement speed, improved jumping and resistance to fall damage.
+
+          Weaknesses: reduced maximum health and greater vulnerability to melee attacks.
+
+          They are especially suited to mobile, magical and light-combat characters.
+        pointers: tutorial_player_race_back,tutorial_player_choose_clockmoth
+
+      tutorial_race_rustborn_description:
+        text: |-
+          Rustborn
+
+          The Rustborn are survivors shaped by industrial decay, toxic environments and years of exposure to metal and machinery.
+
+          Strengths: Mining, Heavy Weapons, Poison Resistance, Melee Resistance and Armor.
+
+          Weaknesses: their durability comes at the expense of mobility and attack speed.
+
+          They are especially suited to slow, resilient and heavily armored characters.
+        pointers: tutorial_player_race_back,tutorial_player_choose_rustborn
+
+      tutorial_race_confirmed:
+        text: 'Then it is decided. Your choice has been recorded.'
+
+    player_options:
+      tutorial_player_race_gearborn:
+        text: 'Gearborn'
+        pointers: tutorial_race_gearborn_description
+      tutorial_player_race_cinderbeard:
+        text: 'Cinderbeard'
+        pointers: tutorial_race_cinderbeard_description
+      tutorial_player_race_clockmoth:
+        text: 'Clockmoth'
+        pointers: tutorial_race_clockmoth_description
+      tutorial_player_race_rustborn:
+        text: 'Rustborn'
+        pointers: tutorial_race_rustborn_description
+      tutorial_player_race_back:
+        text: 'Back to the race menu.'
+        pointers: tutorial_race_intro
+
+      tutorial_player_choose_gearborn:
+        text: 'I choose this race.'
+        actions: tutorial_confirm_gearborn
+        pointers: tutorial_race_confirmed
+      tutorial_player_choose_cinderbeard:
+        text: 'I choose this race.'
+        actions: tutorial_confirm_cinderbeard
+        pointers: tutorial_race_confirmed
+      tutorial_player_choose_clockmoth:
+        text: 'I choose this race.'
+        actions: tutorial_confirm_clockmoth
+        pointers: tutorial_race_confirmed
+      tutorial_player_choose_rustborn:
+        text: 'I choose this race.'
+        actions: tutorial_confirm_rustborn
+        pointers: tutorial_race_confirmed
+
+
+
+  tutorial_class_assignor_conv:
+    quester: '&bClass Assignor'
+    first: tutorial_class_assignor_complete,tutorial_profession_intro,tutorial_specialization_intro,tutorial_class_intro,tutorial_class_assignor_not_ready
+    stop: true
+    NPC_options:
+      tutorial_class_assignor_complete:
+        text: 'Your starting combat, production and gathering specializations have already been chosen.'
+        conditions: 'tutorial_all_starting_choices_done'
+
+      tutorial_class_assignor_not_ready:
+        text: 'You are not ready for these choices yet. First complete the previous tutorial steps and choose your race.'
+        conditions: '!tutorial_class_step_active,!tutorial_specialization_step_active,!tutorial_profession_step_active,!tutorial_all_starting_choices_done'
+
+      # Chapter VIII - Primary Class
+      tutorial_class_intro:
+        text: |-
+          Chapter VIII — Primary Class
+
+          After selecting your race, you will choose your main combat specialization.
+
+          There are currently three Primary Classes. Choose one below to read its characteristics. The class will not be assigned until you explicitly confirm it.
+        conditions: 'tutorial_can_choose_class'
+        pointers: tutorial_player_class_warrior,tutorial_player_class_barbarian,tutorial_player_class_ranger
+
+      tutorial_class_warrior_description:
+        text: |-
+          Warrior
+
+          The Warrior focuses on balanced melee combat and protection.
+
+          Bonuses:
+          +10\% Armor effectiveness
+          +5\% Melee Damage
+
+          This is a reliable choice for players who want to fight at close range while maintaining good protection.
+        pointers: tutorial_player_class_back,tutorial_player_choose_warrior
+
+      tutorial_class_barbarian_description:
+        text: |-
+          Barbarian
+
+          The Barbarian favors brute strength and aggressive melee combat.
+
+          Bonuses:
+          +20\% Knockback Resistance
+          +10\% Melee Damage
+
+          Compared with the Warrior, the Barbarian sacrifices the emphasis on armor in favor of greater offensive power and stability during combat.
+        pointers: tutorial_player_class_back,tutorial_player_choose_barbarian
+
+      tutorial_class_ranger_description:
+        text: |-
+          Ranger
+
+          The Ranger specializes in fighting enemies from a distance.
+
+          Bonuses:
+          +2 Accuracy
+          +10\% Ranged Damage
+
+          This specialization favors bows and other ranged approaches, allowing you to engage enemies while avoiding direct confrontation.
+        pointers: tutorial_player_class_back,tutorial_player_choose_ranger
+
+      tutorial_class_confirmed:
+        text: 'Your primary combat class has been recorded. Return to me after this conversation to choose your production specialization.'
+
+      # Chapter IX - Production Specialization
+      tutorial_specialization_intro:
+        text: |-
+          Chapter IX — Production Specialization
+
+          Your second specialization focuses primarily on crafting and production.
+
+          Choose one below to read its characteristics. The specialization will not be assigned until you explicitly confirm it.
+        conditions: 'tutorial_can_choose_specialization'
+        pointers: tutorial_player_specialization_alchemist,tutorial_player_specialization_enchanter,tutorial_player_specialization_blacksmith
+
+      tutorial_specialization_alchemist_description:
+        text: |-
+          Alchemist
+
+          The Alchemist specializes in potions, chemical processes and supportive preparations.
+
+          Bonuses:
+          +25 Potion Quality
+          +50\% Brewing Speed
+
+          An excellent specialization for players who expect potions and alchemical production to become an important part of their progression.
+        pointers: tutorial_player_specialization_back,tutorial_player_choose_alchemist
+
+      tutorial_specialization_enchanter_description:
+        text: |-
+          Enchanter
+
+          The Enchanter specializes in magical enhancement and item enchanting.
+
+          Bonuses:
+          +25 Enchanting Quality
+          +20\% Enchanting Experience
+
+          This specialization favors players who want to develop magical equipment and improve their enchanting capabilities.
+        pointers: tutorial_player_specialization_back,tutorial_player_choose_enchanter
+
+      tutorial_specialization_blacksmith_description:
+        text: |-
+          Blacksmith
+
+          The Blacksmith specializes in metalworking, equipment and durable tools.
+
+          Bonuses:
+          +25 Smithing Quality
+          -20\% Durability Taken
+
+          This makes Blacksmith particularly useful for players interested in equipment production and long-term use of tools and weapons.
+        pointers: tutorial_player_specialization_back,tutorial_player_choose_blacksmith
+
+      tutorial_specialization_confirmed:
+        text: 'Your production specialization has been recorded. Return to me once more to choose your final gathering specialization.'
+
+      # Chapter X - Gathering Specialization
+      tutorial_profession_intro:
+        text: |-
+          Chapter X — Gathering Specialization
+
+          Your final starting specialization determines which resource-gathering activities your character performs most efficiently.
+
+          Remember: if a crafting recipe is locked, it means you do not yet have enough experience in that production discipline. Continue training the relevant production skill to unlock more advanced crafts.
+
+          Choose one gathering specialization below to inspect it before confirming your decision.
+        conditions: 'tutorial_can_choose_profession'
+        pointers: tutorial_player_profession_miner,tutorial_player_profession_farmer_fisherman,tutorial_player_profession_terraformer
+
+      tutorial_profession_miner_description:
+        text: |-
+          Miner
+
+          The Miner specializes in extracting resources from beneath the world.
+
+          Bonuses:
+          +30\% Mining Speed
+          +10\% Mining Drops
+
+          Mining is particularly important for players interested in resources, crafting and industrial progression.
+        pointers: tutorial_player_profession_back,tutorial_player_choose_miner
+
+      tutorial_profession_farmer_fisherman_description:
+        text: |-
+          Farmer-Fisherman
+
+          The Farmer-Fisherman specializes in food production and gathering resources from both land and water.
+
+          Bonuses:
+          +3 Fishing Luck
+          +30\% Farming Drops
+          +20\% Fishing Speed
+
+          This specialization provides advantages across two gathering activities and is ideal for players interested in sustainable resource production.
+        pointers: tutorial_player_profession_back,tutorial_player_choose_farmer_fisherman
+
+      tutorial_profession_terraformer_description:
+        text: |-
+          Terraformer
+
+          The Terraformer specializes in manipulating and gathering the natural resources of the world.
+
+          Bonuses:
+          +50\% Woodcutting Drops
+          +30\% Woodcutting Speed
+          +30\% Digging Speed
+
+          It is particularly useful for builders, resource gatherers and players who regularly reshape large areas of terrain.
+        pointers: tutorial_player_profession_back,tutorial_player_choose_terraformer
+
+      tutorial_profession_confirmed:
+        text: 'Your final starting specialization has been recorded. Your character setup is complete.'
+
+    player_options:
+      # Chapter VIII
+      tutorial_player_class_warrior:
+        text: 'Warrior'
+        pointers: tutorial_class_warrior_description
+      tutorial_player_class_barbarian:
+        text: 'Barbarian'
+        pointers: tutorial_class_barbarian_description
+      tutorial_player_class_ranger:
+        text: 'Ranger'
+        pointers: tutorial_class_ranger_description
+      tutorial_player_class_back:
+        text: 'Back to the class menu.'
+        pointers: tutorial_class_intro
+      tutorial_player_choose_warrior:
+        text: 'I choose this class.'
+        actions: tutorial_confirm_warrior
+        pointers: tutorial_class_confirmed
+      tutorial_player_choose_barbarian:
+        text: 'I choose this class.'
+        actions: tutorial_confirm_barbarian
+        pointers: tutorial_class_confirmed
+      tutorial_player_choose_ranger:
+        text: 'I choose this class.'
+        actions: tutorial_confirm_ranger
+        pointers: tutorial_class_confirmed
+
+      # Chapter IX
+      tutorial_player_specialization_alchemist:
+        text: 'Alchemist'
+        pointers: tutorial_specialization_alchemist_description
+      tutorial_player_specialization_enchanter:
+        text: 'Enchanter'
+        pointers: tutorial_specialization_enchanter_description
+      tutorial_player_specialization_blacksmith:
+        text: 'Blacksmith'
+        pointers: tutorial_specialization_blacksmith_description
+      tutorial_player_specialization_back:
+        text: 'Back to the specialization menu.'
+        pointers: tutorial_specialization_intro
+      tutorial_player_choose_alchemist:
+        text: 'I choose this specialization.'
+        actions: tutorial_confirm_alchemist
+        pointers: tutorial_specialization_confirmed
+      tutorial_player_choose_enchanter:
+        text: 'I choose this specialization.'
+        actions: tutorial_confirm_enchanter
+        pointers: tutorial_specialization_confirmed
+      tutorial_player_choose_blacksmith:
+        text: 'I choose this specialization.'
+        actions: tutorial_confirm_blacksmith
+        pointers: tutorial_specialization_confirmed
+
+      # Chapter X
+      tutorial_player_profession_miner:
+        text: 'Miner'
+        pointers: tutorial_profession_miner_description
+      tutorial_player_profession_farmer_fisherman:
+        text: 'Farmer-Fisherman'
+        pointers: tutorial_profession_farmer_fisherman_description
+      tutorial_player_profession_terraformer:
+        text: 'Terraformer'
+        pointers: tutorial_profession_terraformer_description
+      tutorial_player_profession_back:
+        text: 'Back to the gathering menu.'
+        pointers: tutorial_profession_intro
+      tutorial_player_choose_miner:
+        text: 'I choose this specialization.'
+        actions: tutorial_confirm_miner
+        pointers: tutorial_profession_confirmed
+      tutorial_player_choose_farmer_fisherman:
+        text: 'I choose this specialization.'
+        actions: tutorial_confirm_farmer_fisherman
+        pointers: tutorial_profession_confirmed
+      tutorial_player_choose_terraformer:
+        text: 'I choose this specialization.'
+        actions: tutorial_confirm_terraformer
+        pointers: tutorial_profession_confirmed
+
+# ============================================================================
+# ADMIN CLEANUP COMMANDS
+#
+# Remove all Tutorial tags:
+# /bq tag <player> del tutorial>
+#
+# Remove all Tutorial journal entries:
+# /bq journal <player> del tutorial>
+#
+# Remove active Tutorial objectives:
+# /bq objective <player> del tutorial>
+#
+# Full reset action for testing:
+# /bq action <player> tutorial>tutorial_debug_reset
+# ============================================================================

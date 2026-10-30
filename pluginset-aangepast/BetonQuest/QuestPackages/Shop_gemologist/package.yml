@@ -1,0 +1,862 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+npcs:
+  '78': citizens 78
+items:
+  petra_coal: simple coal
+  petra_raw_copper: simple raw_copper
+  petra_raw_iron: simple raw_iron
+  petra_raw_gold: simple raw_gold
+  petra_amethyst_shard: simple amethyst_shard
+  petra_lapis: simple lapis_lazuli
+  petra_redstone: simple redstone
+  petra_quartz: simple quartz
+  petra_emerald: simple emerald
+  petra_diamond: simple diamond
+  petra_glowstone_dust: simple glowstone_dust
+  petra_prismarine_crystal: simple prismarine_crystals
+  petra_journal: simple WRITTEN_BOOK "author:@[minimessage]Petra Gemstone" "title:@[minimessage]Uncolored
+    Gem" "text:@[minimessage]=== Chapter I - A<br>Child of Stone ===<br><br>I was
+    born in a small<br>mining settlement<br>nestled among gray<br>hills and endless
+    rock.<br>Most children spent<br>their days playing in<br>the streets, but I<br>spent
+    mine exploring<br>abandoned tunnels<br>and searching for<br>unusual stones.|The
+    miners often<br>laughed at me. To<br>them, a stone was<br>worth only the metal<br>hidden
+    inside it. To me,<br>every stone carried a<br>story.<br><br>One evening, an old<br>traveler
+    arrived at<br>our village. around<br>the fire, he spoke of<br>a legendary treasure|known
+    as the<br>Uncolored Gem.<br><br>Unlike emeralds,<br>rubies, or diamonds,<br>this
+    gem possessed no<br>color at all. Yet<br>legends claimed it<br>contained every
+    color<br>that ever existed.<br>It was said that<br>whoever discovered<br>it would
+    understand<br>the hidden language|of the world itself.<br><br>That night I could
+    not<br>sleep.<br><br>I decided that one day<br>I would find it.|=== Chapter II
+    - The<br>Sea of Sand ===<br><br>My journey began in<br>the Great Desert of<br>Khar.<br>For
+    months I crossed<br>dunes taller than<br>castle walls. I followed<br>forgotten
+    maps,<br>explored buried<br>temples, and searched<br>ancient tombs<br>swallowed
+    by the sand.|I found many<br>treasures.<br><br>Golden idols.<br>Ancient coins.<br>Jewels
+    worth small<br>fortunes.<br><br>But never the<br>Uncolored Gem.<br>One day I discovered<br>a
+    ruined shrine buried<br>beneath a<br>storm-carved cliff.|Deep inside, I found<br>an
+    inscription<br><br>\"The Gem cannot be<br>possessed by those<br>who seek wealth.\"<br><br>At
+    the time, I thought it<br>was merely a warning.<br><br>Years later, I<br>understood
+    it was a<br>lesson.|=== Chapter III - The<br>Emerald Jungle ===<br><br>My search
+    led me<br>beyond the desert<br>into the Emerald<br>Jungle.<br><br>There the trees
+    grew<br>so tall that their<br>crowns hid the sky<br>itself.|The jungle was filled<br>with
+    dangers.<br><br>Venomous creatures.<br>Ancient traps.<br>Ruins older than<br>recorded
+    history.<br><br>In the heart of the<br>jungle I discovered a<br>forgotten city<br>overgrown
+    by roots<br>and vines.|Inside a collapsed<br>observatory I found<br>another clue.<br><br>A
+    mural depicted<br>travelers from many<br>lands carrying<br>different gems toward<br>a
+    single light.<br><br>Beneath the mural<br>were written the<br>words:|\"The Gem
+    belongs to<br>all paths and none.\"<br><br>Again I failed to<br>understand.<br><br>Still,
+    I continued<br>onward.|=== Chapter IV - The<br>City Beneath the Earth<br>===<br><br>Many
+    years later I<br>discovered a hidden<br>city beneath the<br>mountains.<br><br>Its
+    halls were carved<br>entirely from crystal.|There I met scholars,<br>explorers,
+    and<br>treasure hunters who<br>had also spent their<br>lives searching for<br>the
+    Uncolored Gem.<br><br>Together we studied<br>countless records.<br><br>Every legend
+    ended<br>the same way.|The Gem was always<br>found.<br><br>And always lost.<br><br>No
+    map could reveal<br>its location.<br><br>No king could possess<br>it.<br><br>No
+    empire could keep<br>it.|For the first time,<br>doubt entered my<br>heart.<br><br>Perhaps
+    the Gem was<br>only a myth.|=== Chapter V - The<br>Ruins at the Edge of<br>the
+    World ===<br><br>Old and weary, I<br>followed one final clue<br>to ruins standing
+    upon<br>cliffs overlooking an<br>endless sea.<br><br>There, within a<br>circular
+    chamber<br>open to the stars,|I discovered a<br>pedestal.<br><br>Upon it rested
+    a<br>single crystal.<br><br>It was clear as glass.<br><br>Colorless.<br><br>Ordinary.<br><br>Or
+    so it seemed.|When moonlight<br>touched its surface,<br>every color imaginable<br>appeared
+    within it for<br>a brief moment.<br><br>The crystal was<br>beautiful.<br><br>Yet
+    I knew immediately<br>it was not the<br>treasure I had<br>sought.|It was only
+    a symbol.<br><br>And at last I<br>understood.|=== Chapter VI - The<br>Meaning
+    of the Gem<br>===<br><br>The Uncolored Gem<br>was never a stone.<br><br>It was
+    the journey<br>itself.<br><br>Every desert<br>crossed.<br>Every jungle<br>explored.|Every
+    ruin uncovered.<br>Every friend met<br>along the way.<br><br>The Gem contained<br>every
+    color because<br>it was made from<br>every experience<br>gathered during a<br>lifetime
+    of exploration.|Yet I possessed<br>something far more<br>valuable.<br>Knowledge.<br>Memories.<br>Stories.<br>And
+    now, dear reader,<br>one final story has<br>been added.|Yours.<br><br>If you hold
+    this book<br>in your hands, then<br>you listened when<br>others did not.<br><br>Perhaps
+    one day you<br>too will discover your<br>own Uncolored Gem."
+journal:
+  petra_q1:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &816 Coal&f. Even the simplest gem needs pressure and carbon.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &816 Coal&f. Even the simplest gem needs pressure and carbon.
+  petra_q2:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &812 Raw Copper&f. Copper remembers the first machines.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &812 Raw Copper&f. Copper remembers the first machines.
+  petra_q3:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &810 Raw Iron&f. I need metal with honest weight.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &810 Raw Iron&f. I need metal with honest weight.
+  petra_q4:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &88 Raw Gold&f. Gold bends easily, but it remembers power.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &88 Raw Gold&f. Gold bends easily, but it remembers power.
+  petra_q5:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &86 Amethyst Shards&f. They hum beautifully under pressure.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &86 Amethyst Shards&f. They hum beautifully under pressure.
+  petra_q6:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &84 Lapis Lazuli&f. Blue stones are excellent for stable fusion.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &84 Lapis Lazuli&f. Blue stones are excellent for stable fusion.
+  petra_q7:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &84 Redstone Dust&f. Controlled instability is still instability.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &84 Redstone Dust&f. Controlled instability is still instability.
+  petra_q8:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &83 Quartz&f. Clean structure, clean fusion.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &83 Quartz&f. Clean structure, clean fusion.
+  petra_q9:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &82 Emeralds&f. Do not ask why. Just do not chip them.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &82 Emeralds&f. Do not ask why. Just do not chip them.
+  petra_q10:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &81 Diamond&f. Some stones deserve respect before they deserve use.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &81 Diamond&f. Some stones deserve respect before they deserve use.
+  petra_q11:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &88 Glowstone Dust&f. Light trapped in powder. Wonderful.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &88 Glowstone Dust&f. Light trapped in powder. Wonderful.
+  petra_q12:
+    en: |-
+      &fPetra's Request
+
+      &7Bring me &84 Prismarine Crystals&f. Sea-born crystals behave strangely in steam chambers.
+    en-US: |-
+      &fPetra's Request
+
+      &7Bring me &84 Prismarine Crystals&f. Sea-born crystals behave strangely in steam chambers.
+conditions:
+  # Petra friendship points are stored as BetonQuest points in the 'petra_friendship' category.
+  # Ranges used by the greeting: 0-30, 31-60, 61-100.
+  petra_friendship_1: point petra_friendship 1
+  petra_friendship_31: point petra_friendship 31
+  petra_friendship_61: point petra_friendship 61
+  petra_friendship_100: point petra_friendship 100
+  petra_daily_cooldown: tag petra_daily_cooldown
+  petra_q1_active: tag petra_q1_active
+  petra_q2_active: tag petra_q2_active
+  petra_q3_active: tag petra_q3_active
+  petra_q4_active: tag petra_q4_active
+  petra_q5_active: tag petra_q5_active
+  petra_q6_active: tag petra_q6_active
+  petra_q7_active: tag petra_q7_active
+  petra_q8_active: tag petra_q8_active
+  petra_q9_active: tag petra_q9_active
+  petra_q10_active: tag petra_q10_active
+  petra_q11_active: tag petra_q11_active
+  petra_q12_active: tag petra_q12_active
+  petra_q1_has_items: item petra_coal:16
+  petra_q2_has_items: item petra_raw_copper:12
+  petra_q3_has_items: item petra_raw_iron:10
+  petra_q4_has_items: item petra_raw_gold:8
+  petra_q5_has_items: item petra_amethyst_shard:6
+  petra_q6_has_items: item petra_lapis:4
+  petra_q7_has_items: item petra_redstone:4
+  petra_q8_has_items: item petra_quartz:3
+  petra_q9_has_items: item petra_emerald:2
+  petra_q10_has_items: item petra_diamond:1
+  petra_q11_has_items: item petra_glowstone_dust:8
+  petra_q12_has_items: item petra_prismarine_crystal:4
+  petra_has_active_quest: or petra_q1_active,petra_q2_active,petra_q3_active,petra_q4_active,petra_q5_active,petra_q6_active,petra_q7_active,petra_q8_active,petra_q9_active,petra_q10_active,petra_q11_active,petra_q12_active
+  petra_story_1_heard: tag petra_story_1_heard
+  petra_story_2_heard: tag petra_story_2_heard
+  petra_story_3_heard: tag petra_story_3_heard
+  petra_story_4_heard: tag petra_story_4_heard
+  petra_story_5_heard: tag petra_story_5_heard
+  petra_story_6_heard: tag petra_story_6_heard
+  petra_story_7_heard: tag petra_story_7_heard
+  petra_story_8_heard: tag petra_story_8_heard
+  petra_current_story_1: tag petra_current_story_1
+  petra_current_story_2: tag petra_current_story_2
+  petra_current_story_3: tag petra_current_story_3
+  petra_current_story_4: tag petra_current_story_4
+  petra_current_story_5: tag petra_current_story_5
+  petra_current_story_6: tag petra_current_story_6
+  petra_current_story_7: tag petra_current_story_7
+  petra_current_story_8: tag petra_current_story_8
+  petra_life_book_received: tag petra_life_book_received
+actions:
+  # Friendship system: +1 on completion, -1 on expiration.
+  # The conditions keep the value inside 0-100.
+  petra_friendship_gain: point petra_friendship 1 action:add conditions:!petra_friendship_100
+  petra_friendship_lose: point petra_friendship 1 action:subtract conditions:petra_friendship_1
+  petra_friendship_gain_msg: 'notify &dPetra Friendship&7: &a+1 &fFriendship with
+    Petra. io:chat'
+  petra_friendship_lose_msg: 'notify &dPetra Friendship&7: &c-1 &fFriendship with
+    Petra. io:chat'
+  petra_story_1_mark_heard: tag add petra_story_1_heard
+  petra_story_2_mark_heard: tag add petra_story_2_heard
+  petra_story_3_mark_heard: tag add petra_story_3_heard
+  petra_story_4_mark_heard: tag add petra_story_4_heard
+  petra_story_5_mark_heard: tag add petra_story_5_heard
+  petra_story_6_mark_heard: tag add petra_story_6_heard
+  petra_story_7_mark_heard: tag add petra_story_7_heard
+  petra_story_8_mark_heard: tag add petra_story_8_heard
+  petra_story_clear_selection: tag del petra_current_story_1,petra_current_story_2,petra_current_story_3,petra_current_story_4,petra_current_story_5,petra_current_story_6,petra_current_story_7,petra_current_story_8
+  petra_story_select_1: tag add petra_current_story_1
+  petra_story_select_2: tag add petra_current_story_2
+  petra_story_select_3: tag add petra_current_story_3
+  petra_story_select_4: tag add petra_current_story_4
+  petra_story_select_5: tag add petra_current_story_5
+  petra_story_select_6: tag add petra_current_story_6
+  petra_story_select_7: tag add petra_current_story_7
+  petra_story_select_8: tag add petra_current_story_8
+  petra_story_choose_random: folder petra_story_select_1,petra_story_select_2,petra_story_select_3,petra_story_select_4,petra_story_select_5,petra_story_select_6,petra_story_select_7,petra_story_select_8
+    random:1
+  petra_story_prepare_random: folder petra_story_clear_selection,petra_story_choose_random
+  petra_life_book_received_tag: tag add petra_life_book_received
+  petra_life_book_reward: give petra_journal:1
+  petra_life_book_msg: 'notify &dGemologist Petra&7\: &fYou listened to every piece
+    of my story. Take this book. It is... more honest than I usually allow myself
+    to be. io:chat'
+  petra_life_book_reward_check: folder petra_life_book_reward,petra_life_book_received_tag,petra_life_book_msg
+    conditions:petra_story_1_heard,petra_story_2_heard,petra_story_3_heard,petra_story_4_heard,petra_story_5_heard,petra_story_6_heard,petra_story_7_heard,petra_story_8_heard,!petra_life_book_received
+  petra_open_shop: command mi stations open shop-gem-1 %player%
+  petra_open_shop_1: command mi stations open shop-gem-2 %player%
+  petra_open_shop_2: command mi stations open shop-gem-3 %player%
+  petra_add_daily_cooldown: tag add petra_daily_cooldown
+  petra_del_daily_cooldown: tag del petra_daily_cooldown
+  petra_start_cooldown_timer: objective start petra_daily_cooldown_timer
+  petra_start_daily_cooldown: folder petra_add_daily_cooldown,petra_start_cooldown_timer
+  petra_assign_random_daily_quest: folder petra_daily_quest_1,petra_daily_quest_2,petra_daily_quest_3,petra_daily_quest_4,petra_daily_quest_5,petra_daily_quest_6,petra_daily_quest_7,petra_daily_quest_8,petra_daily_quest_9,petra_daily_quest_10,petra_daily_quest_11,petra_daily_quest_12
+    random:1
+  petra_clear_active_quests: tag del petra_q1_active,petra_q2_active,petra_q3_active,petra_q4_active,petra_q5_active,petra_q6_active,petra_q7_active,petra_q8_active,petra_q9_active,petra_q10_active,petra_q11_active,petra_q12_active
+  petra_q_title: notify Petra Quest Start io:title fadeIn:0 stay:60 fadeOut:0
+  petra_daily_quest_1: folder petra_clear_active_quests,petra_q1_tag,petra_q1_journal,petra_q_title,petra_q1_msg,petra_q1_start_timer
+  petra_q1_tag: tag add petra_q1_active
+  petra_q1_take_items: take petra_coal:16
+  petra_q1_msg: 'notify &dGemologist Petra&7\: &fBring me &816 Coal&f. Even the simplest
+    gem needs pressure and carbon. io:chat'
+  petra_q1_remove: tag del petra_q1_active
+  petra_q1_complete_msg: 'notify &dGemologist Petra&7\: &fExcellent. This coal still
+    remembers ancient forests. io:chat'
+  petra_q1_reward: command cmi money give %player% -s 250
+  petra_q1_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q1_complete: folder petra_q1_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q1_complete_title,petra_q1_complete_msg,petra_q1_remove,petra_q1_reward,petra_remove_journal_q1,petra_q1_stop_timer
+  petra_daily_quest_2: folder petra_clear_active_quests,petra_q2_tag,petra_q2_journal,petra_q_title,petra_q2_msg,petra_q2_start_timer
+  petra_q2_tag: tag add petra_q2_active
+  petra_q2_take_items: take petra_raw_copper:12
+  petra_q2_msg: 'notify &dGemologist Petra&7\: &fBring me &812 Raw Copper&f. Copper
+    remembers the first machines. io:chat'
+  petra_q2_remove: tag del petra_q2_active
+  petra_q2_complete_msg: 'notify &dGemologist Petra&7\: &fGood copper. Flexible, warm,
+    obedient. io:chat'
+  petra_q2_reward: command cmi money give %player% -s 250
+  petra_q2_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q2_complete: folder petra_q2_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q2_complete_title,petra_q2_complete_msg,petra_q2_remove,petra_q2_reward,petra_remove_journal_q2,petra_q2_stop_timer
+  petra_daily_quest_3: folder petra_clear_active_quests,petra_q3_tag,petra_q3_journal,petra_q_title,petra_q3_msg,petra_q3_start_timer
+  petra_q3_tag: tag add petra_q3_active
+  petra_q3_take_items: take petra_raw_iron:10
+  petra_q3_msg: 'notify &dGemologist Petra&7\: &fBring me &810 Raw Iron&f. I need
+    metal with honest weight. io:chat'
+  petra_q3_remove: tag del petra_q3_active
+  petra_q3_complete_msg: 'notify &dGemologist Petra&7\: &fIron is stubborn. I like
+    stubborn materials. io:chat'
+  petra_q3_reward: command cmi money give %player% -s 250
+  petra_q3_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q3_complete: folder petra_q3_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q3_complete_title,petra_q3_complete_msg,petra_q3_remove,petra_q3_reward,petra_remove_journal_q3,petra_q3_stop_timer
+  petra_daily_quest_4: folder petra_clear_active_quests,petra_q4_tag,petra_q4_journal,petra_q_title,petra_q4_msg,petra_q4_start_timer
+  petra_q4_tag: tag add petra_q4_active
+  petra_q4_take_items: take petra_raw_gold:8
+  petra_q4_msg: 'notify &dGemologist Petra&7\: &fBring me &88 Raw Gold&f. Gold bends
+    easily, but it remembers power. io:chat'
+  petra_q4_remove: tag del petra_q4_active
+  petra_q4_complete_msg: 'notify &dGemologist Petra&7\: &fGold always thinks it is
+    more important than it is. io:chat'
+  petra_q4_reward: command cmi money give %player% -s 400
+  petra_q4_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q4_complete: folder petra_q4_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q4_complete_title,petra_q4_complete_msg,petra_q4_remove,petra_q4_reward,petra_remove_journal_q4,petra_q4_stop_timer
+  petra_daily_quest_5: folder petra_clear_active_quests,petra_q5_tag,petra_q5_journal,petra_q_title,petra_q5_msg,petra_q5_start_timer
+  petra_q5_tag: tag add petra_q5_active
+  petra_q5_take_items: take petra_amethyst_shard:6
+  petra_q5_msg: 'notify &dGemologist Petra&7\: &fBring me &86 Amethyst Shards&f. They
+    hum beautifully under pressure. io:chat'
+  petra_q5_remove: tag del petra_q5_active
+  petra_q5_complete_msg: 'notify &dGemologist Petra&7\: &fListen carefully. The amethyst
+    is still singing. io:chat'
+  petra_q5_reward: command cmi money give %player% -s 400
+  petra_q5_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q5_complete: folder petra_q5_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q5_complete_title,petra_q5_complete_msg,petra_q5_remove,petra_q5_reward,petra_remove_journal_q5,petra_q5_stop_timer
+  petra_daily_quest_6: folder petra_clear_active_quests,petra_q6_tag,petra_q6_journal,petra_q_title,petra_q6_msg,petra_q6_start_timer
+  petra_q6_tag: tag add petra_q6_active
+  petra_q6_take_items: take petra_lapis:4
+  petra_q6_msg: 'notify &dGemologist Petra&7\: &fBring me &84 Lapis Lazuli&f. Blue
+    stones are excellent for stable fusion. io:chat'
+  petra_q6_remove: tag del petra_q6_active
+  petra_q6_complete_msg: 'notify &dGemologist Petra&7\: &fLapis. A quiet blue flame
+    in stone form. io:chat'
+  petra_q6_reward: command cmi money give %player% -s 400
+  petra_q6_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q6_complete: folder petra_q6_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q6_complete_title,petra_q6_complete_msg,petra_q6_remove,petra_q6_reward,petra_remove_journal_q6,petra_q6_stop_timer
+  petra_daily_quest_7: folder petra_clear_active_quests,petra_q7_tag,petra_q7_journal,petra_q_title,petra_q7_msg,petra_q7_start_timer
+  petra_q7_tag: tag add petra_q7_active
+  petra_q7_take_items: take petra_redstone:4
+  petra_q7_msg: 'notify &dGemologist Petra&7\: &fBring me &84 Redstone Dust&f. Controlled
+    instability is still instability. io:chat'
+  petra_q7_remove: tag del petra_q7_active
+  petra_q7_complete_msg: 'notify &dGemologist Petra&7\: &fRedstone dust. Keep it away
+    from open flame and idiots. io:chat'
+  petra_q7_reward: command cmi money give %player% -s 400
+  petra_q7_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q7_complete: folder petra_q7_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q7_complete_title,petra_q7_complete_msg,petra_q7_remove,petra_q7_reward,petra_remove_journal_q7,petra_q7_stop_timer
+  petra_daily_quest_8: folder petra_clear_active_quests,petra_q8_tag,petra_q8_journal,petra_q_title,petra_q8_msg,petra_q8_start_timer
+  petra_q8_tag: tag add petra_q8_active
+  petra_q8_take_items: take petra_quartz:3
+  petra_q8_msg: 'notify &dGemologist Petra&7\: &fBring me &83 Quartz&f. Clean structure,
+    clean fusion. io:chat'
+  petra_q8_remove: tag del petra_q8_active
+  petra_q8_complete_msg: 'notify &dGemologist Petra&7\: &fQuartz is honest. Sharp,
+    clear, and terribly fragile. io:chat'
+  petra_q8_reward: command cmi money give %player% -s 400
+  petra_q8_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q8_complete: folder petra_q8_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q8_complete_title,petra_q8_complete_msg,petra_q8_remove,petra_q8_reward,petra_remove_journal_q8,petra_q8_stop_timer
+  petra_daily_quest_9: folder petra_clear_active_quests,petra_q9_tag,petra_q9_journal,petra_q_title,petra_q9_msg,petra_q9_start_timer
+  petra_q9_tag: tag add petra_q9_active
+  petra_q9_take_items: take petra_emerald:2
+  petra_q9_msg: 'notify &dGemologist Petra&7\: &fBring me &82 Emeralds&f. Do not ask
+    why. Just do not chip them. io:chat'
+  petra_q9_remove: tag del petra_q9_active
+  petra_q9_complete_msg: 'notify &dGemologist Petra&7\: &fEmeralds. Merchants see
+    money. I see potential. io:chat'
+  petra_q9_reward: command cmi money give %player% -s 650
+  petra_q9_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q9_complete: folder petra_q9_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q9_complete_title,petra_q9_complete_msg,petra_q9_remove,petra_q9_reward,petra_remove_journal_q9,petra_q9_stop_timer
+  petra_daily_quest_10: folder petra_clear_active_quests,petra_q10_tag,petra_q10_journal,petra_q_title,petra_q10_msg,petra_q10_start_timer
+  petra_q10_tag: tag add petra_q10_active
+  petra_q10_take_items: take petra_diamond:1
+  petra_q10_msg: 'notify &dGemologist Petra&7\: &fBring me &81 Diamond&f. Some stones
+    deserve respect before they deserve use. io:chat'
+  petra_q10_remove: tag del petra_q10_active
+  petra_q10_complete_msg: 'notify &dGemologist Petra&7\: &fA diamond. Good. Try not
+    to look too proud. io:chat'
+  petra_q10_reward: command cmi money give %player% -s 650
+  petra_q10_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q10_complete: folder petra_q10_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q10_complete_title,petra_q10_complete_msg,petra_q10_remove,petra_q10_reward,petra_remove_journal_q10,petra_q10_stop_timer
+  petra_daily_quest_11: folder petra_clear_active_quests,petra_q11_tag,petra_q11_journal,petra_q_title,petra_q11_msg,petra_q11_start_timer
+  petra_q11_tag: tag add petra_q11_active
+  petra_q11_take_items: take petra_glowstone_dust:8
+  petra_q11_msg: 'notify &dGemologist Petra&7\: &fBring me &88 Glowstone Dust&f. Light
+    trapped in powder. Wonderful. io:chat'
+  petra_q11_remove: tag del petra_q11_active
+  petra_q11_complete_msg: 'notify &dGemologist Petra&7\: &fGlowstone dust. Light reduced
+    to a useful powder. io:chat'
+  petra_q11_reward: command cmi money give %player% -s 400
+  petra_q11_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q11_complete: folder petra_q11_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q11_complete_title,petra_q11_complete_msg,petra_q11_remove,petra_q11_reward,petra_remove_journal_q11,petra_q11_stop_timer
+  petra_daily_quest_12: folder petra_clear_active_quests,petra_q12_tag,petra_q12_journal,petra_q_title,petra_q12_msg,petra_q12_start_timer
+  petra_q12_tag: tag add petra_q12_active
+  petra_q12_take_items: take petra_prismarine_crystal:4
+  petra_q12_msg: 'notify &dGemologist Petra&7\: &fBring me &84 Prismarine Crystals&f.
+    Sea-born crystals behave strangely in steam chambers. io:chat'
+  petra_q12_remove: tag del petra_q12_active
+  petra_q12_complete_msg: 'notify &dGemologist Petra&7\: &fPrismarine crystals. The
+    sea has strange patience. io:chat'
+  petra_q12_reward: command cmi money give %player% -s 650
+  petra_q12_complete_title: notify Quest CompletePetra is pleased io:title fadeIn:0
+    stay:40 fadeOut:0
+  petra_q12_complete: folder petra_q12_take_items,petra_friendship_gain,petra_friendship_gain_msg,petra_q12_complete_title,petra_q12_complete_msg,petra_q12_remove,petra_q12_reward,petra_remove_journal_q12,petra_q12_stop_timer
+  petra_q1_journal: journal add petra_q1
+  petra_q2_journal: journal add petra_q2
+  petra_q3_journal: journal add petra_q3
+  petra_q4_journal: journal add petra_q4
+  petra_q5_journal: journal add petra_q5
+  petra_q6_journal: journal add petra_q6
+  petra_q7_journal: journal add petra_q7
+  petra_q8_journal: journal add petra_q8
+  petra_q9_journal: journal add petra_q9
+  petra_q10_journal: journal add petra_q10
+  petra_q11_journal: journal add petra_q11
+  petra_q12_journal: journal add petra_q12
+  petra_remove_journal_q1: journal delete petra_q1
+  petra_remove_journal_q2: journal delete petra_q2
+  petra_remove_journal_q3: journal delete petra_q3
+  petra_remove_journal_q4: journal delete petra_q4
+  petra_remove_journal_q5: journal delete petra_q5
+  petra_remove_journal_q6: journal delete petra_q6
+  petra_remove_journal_q7: journal delete petra_q7
+  petra_remove_journal_q8: journal delete petra_q8
+  petra_remove_journal_q9: journal delete petra_q9
+  petra_remove_journal_q10: journal delete petra_q10
+  petra_remove_journal_q11: journal delete petra_q11
+  petra_remove_journal_q12: journal delete petra_q12
+  petra_q1_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q1_remove,petra_remove_journal_q1,petra_q1_fail_msg,petra_q1_stop_timer
+  petra_q2_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q2_remove,petra_remove_journal_q2,petra_q2_fail_msg,petra_q2_stop_timer
+  petra_q3_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q3_remove,petra_remove_journal_q3,petra_q3_fail_msg,petra_q3_stop_timer
+  petra_q4_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q4_remove,petra_remove_journal_q4,petra_q4_fail_msg,petra_q4_stop_timer
+  petra_q5_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q5_remove,petra_remove_journal_q5,petra_q5_fail_msg,petra_q5_stop_timer
+  petra_q6_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q6_remove,petra_remove_journal_q6,petra_q6_fail_msg,petra_q6_stop_timer
+  petra_q7_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q7_remove,petra_remove_journal_q7,petra_q7_fail_msg,petra_q7_stop_timer
+  petra_q8_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q8_remove,petra_remove_journal_q8,petra_q8_fail_msg,petra_q8_stop_timer
+  petra_q9_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q9_remove,petra_remove_journal_q9,petra_q9_fail_msg,petra_q9_stop_timer
+  petra_q10_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q10_remove,petra_remove_journal_q10,petra_q10_fail_msg,petra_q10_stop_timer
+  petra_q11_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q11_remove,petra_remove_journal_q11,petra_q11_fail_msg,petra_q11_stop_timer
+  petra_q12_expire: folder petra_friendship_lose,petra_friendship_lose_msg,petra_q12_remove,petra_remove_journal_q12,petra_q12_fail_msg,petra_q12_stop_timer
+  petra_q1_fail_msg: 'notify &cQuest Expired&7: &fYou took too long. Petra has moved
+    on to other customers.'
+  petra_q2_fail_msg: 'notify &cQuest Expired&7: &fTime''s up. The copper will have
+    to wait.'
+  petra_q3_fail_msg: 'notify &cQuest Expired&7: &fToo slow. The iron grows cold.'
+  petra_q4_fail_msg: 'notify &cQuest Expired&7: &fGold waits for no one. Quest expired.'
+  petra_q5_fail_msg: 'notify &cQuest Expired&7: &fThe amethyst has stopped humming.
+    Time is up.'
+  petra_q6_fail_msg: 'notify &cQuest Expired&7: &fLapis lazuli fades. Quest expired.'
+  petra_q7_fail_msg: 'notify &cQuest Expired&7: &fThe redstone has burnt out. Too
+    late.'
+  petra_q8_fail_msg: 'notify &cQuest Expired&7: &fQuartz is unforgiving of delays.
+    Quest failed.'
+  petra_q9_fail_msg: 'notify &cQuest Expired&7: &fThe emeralds have been sold to another.'
+  petra_q10_fail_msg: 'notify &cQuest Expired&7: &fThe diamond is no longer available.'
+  petra_q11_fail_msg: 'notify &cQuest Expired&7: &fThe glowstone dust has lost its
+    light.'
+  petra_q12_fail_msg: 'notify &cQuest Expired&7: &fThe prismarine crystals have returned
+    to the sea.'
+  petra_q1_stop_timer: objective delete petra_q1_timer
+  petra_q2_stop_timer: objective delete petra_q2_timer
+  petra_q3_stop_timer: objective delete petra_q3_timer
+  petra_q4_stop_timer: objective delete petra_q4_timer
+  petra_q5_stop_timer: objective delete petra_q5_timer
+  petra_q6_stop_timer: objective delete petra_q6_timer
+  petra_q7_stop_timer: objective delete petra_q7_timer
+  petra_q8_stop_timer: objective delete petra_q8_timer
+  petra_q9_stop_timer: objective delete petra_q9_timer
+  petra_q10_stop_timer: objective delete petra_q10_timer
+  petra_q11_stop_timer: objective delete petra_q11_timer
+  petra_q12_stop_timer: objective delete petra_q12_timer
+  petra_q1_start_timer: objective start petra_q1_timer
+  petra_q2_start_timer: objective start petra_q2_timer
+  petra_q3_start_timer: objective start petra_q3_timer
+  petra_q4_start_timer: objective start petra_q4_timer
+  petra_q5_start_timer: objective start petra_q5_timer
+  petra_q6_start_timer: objective start petra_q6_timer
+  petra_q7_start_timer: objective start petra_q7_timer
+  petra_q8_start_timer: objective start petra_q8_timer
+  petra_q9_start_timer: objective start petra_q9_timer
+  petra_q10_start_timer: objective start petra_q10_timer
+  petra_q11_start_timer: objective start petra_q11_timer
+  petra_q12_start_timer: objective start petra_q12_timer
+objectives:
+  petra_daily_cooldown_timer: delay 1320 events:petra_del_daily_cooldown
+  petra_q1_timer: delay 1320 events:petra_q1_expire
+  petra_q2_timer: delay 1320 events:petra_q2_expire
+  petra_q3_timer: delay 1320 events:petra_q3_expire
+  petra_q4_timer: delay 1320 events:petra_q4_expire
+  petra_q5_timer: delay 1320 events:petra_q5_expire
+  petra_q6_timer: delay 1320 events:petra_q6_expire
+  petra_q7_timer: delay 1320 events:petra_q7_expire
+  petra_q8_timer: delay 1320 events:petra_q8_expire
+  petra_q9_timer: delay 1320 events:petra_q9_expire
+  petra_q10_timer: delay 1320 events:petra_q10_expire
+  petra_q11_timer: delay 1320 events:petra_q11_expire
+  petra_q12_timer: delay 1320 events:petra_q12_expire
+npc_holograms:
+  petra_available:
+    lines:
+    - '&d&l❗'
+    npcs: '78'
+    conditions: '!petra_daily_cooldown,!petra_has_active_quest'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  petra_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '78'
+    conditions: petra_has_active_quest
+    follow: true
+    check_interval: 20
+    max_range: 25
+npc_conversations:
+  '78': petra_conv
+conversations:
+  petra_conv:
+    quester: Gemologist Petra
+    first: petra_start_close,petra_start_friendly,petra_start
+    stop: true
+    NPC_options:
+      petra_start_close:
+        text: Ah! There you are. I was wondering when my favorite helper would return.
+          \n\nCareful near the fusion chamber, dear friend. I would rather not lose
+          you to an unstable crystal. \n\nTell me, what can Petra do for you today?
+        conditions: petra_friendship_61
+        pointers: pl_open_shop_2,pl_talk_little,pl_about_petra,pl_just_hi
+      petra_start_friendly:
+        text: Welcome back. It is good to see a familiar face among all these merchants
+          and impatient fools. \n\nMind your step near the gems, yes? Some are delicate...
+          and some are dramatic. \n\nWhat can Petra do for you today?
+        conditions: petra_friendship_31,!petra_friendship_61
+        pointers: pl_open_shop_1,pl_talk_little,pl_about_petra,pl_just_hi
+      petra_start:
+        text: Ah, welcome, traveler. \n\nCareful where you step... some gems are worth
+          more than a house. \n\nOthers explode if handled by fools. \n\nWhat can
+          Petra do for you today?
+        conditions: '!petra_friendship_31'
+        pointers: pl_open_shop,pl_talk_little,pl_about_petra,pl_just_hi
+      petra_shop:
+        text: Of course. \n\nLet me open my finest collection.
+        actions: petra_open_shop
+        pointers: pl_end_conversation
+      petra_shop_1:
+        text: Of course. \n\nLet me open my finest collection.
+        actions: petra_open_shop_1
+        pointers: pl_end_conversation
+      petra_shop_2:
+        text: Of course. \n\nLet me open my finest collection.
+        actions: petra_open_shop_2
+        pointers: pl_end_conversation
+      petra_talk_available:
+        text: Hm... you want to talk? \n\nGood. Most people only want to buy. \n\nActually,
+          I may have a small job for you. \n\nBring me some materials, and I will
+          make it worth your time.
+        conditions: '!petra_daily_cooldown,!petra_has_active_quest'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      petra_talk_cooldown:
+        text: We already made a deal recently. \n\nGemstones require patience. \n\nCome
+          back later, and perhaps I will have another request for you.
+        conditions: petra_daily_cooldown,!petra_has_active_quest
+        pointers: pl_end_conversation
+      petra_talk_active:
+        text: You already have a task from me.\n\nIf you brought the materials, hand
+          them over. If not, finish the work first.
+        conditions: petra_has_active_quest
+        pointers: pl_turn_in_materials,pl_end_conversation
+      petra_turnin_q1_ready:
+        text: Coal. Good. This still remembers ancient forests.
+        conditions: petra_q1_active,petra_q1_has_items
+        actions: petra_q1_complete
+        pointers: pl_end_conversation
+      petra_turnin_q1_missing:
+        text: Not enough. I asked for 16 Coal. Return when you actually have them.
+        conditions: petra_q1_active,!petra_q1_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q2_ready:
+        text: Raw Copper. Flexible, warm, obedient.
+        conditions: petra_q2_active,petra_q2_has_items
+        actions: petra_q2_complete
+        pointers: pl_end_conversation
+      petra_turnin_q2_missing:
+        text: Not enough. I asked for 12 Raw Copper.
+        conditions: petra_q2_active,!petra_q2_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q3_ready:
+        text: Raw Iron. Stubborn material. I like stubborn materials.
+        conditions: petra_q3_active,petra_q3_has_items
+        actions: petra_q3_complete
+        pointers: pl_end_conversation
+      petra_turnin_q3_missing:
+        text: Not enough. I asked for 10 Raw Iron.
+        conditions: petra_q3_active,!petra_q3_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q4_ready:
+        text: Raw Gold. Gold always thinks it is more important than it is.
+        conditions: petra_q4_active,petra_q4_has_items
+        actions: petra_q4_complete
+        pointers: pl_end_conversation
+      petra_turnin_q4_missing:
+        text: Not enough. I asked for 8 Raw Gold.
+        conditions: petra_q4_active,!petra_q4_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q5_ready:
+        text: Amethyst Shards. Listen carefully. They are still singing.
+        conditions: petra_q5_active,petra_q5_has_items
+        actions: petra_q5_complete
+        pointers: pl_end_conversation
+      petra_turnin_q5_missing:
+        text: Not enough. I asked for 6 Amethyst Shards.
+        conditions: petra_q5_active,!petra_q5_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q6_ready:
+        text: Lapis Lazuli. A quiet blue flame in stone form.
+        conditions: petra_q6_active,petra_q6_has_items
+        actions: petra_q6_complete
+        pointers: pl_end_conversation
+      petra_turnin_q6_missing:
+        text: Not enough. I asked for 4 Lapis Lazuli.
+        conditions: petra_q6_active,!petra_q6_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q7_ready:
+        text: Redstone Dust. Keep it away from open flame and idiots.
+        conditions: petra_q7_active,petra_q7_has_items
+        actions: petra_q7_complete
+        pointers: pl_end_conversation
+      petra_turnin_q7_missing:
+        text: Not enough. I asked for 4 Redstone Dust.
+        conditions: petra_q7_active,!petra_q7_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q8_ready:
+        text: Quartz. Honest, sharp, clear, and terribly fragile.
+        conditions: petra_q8_active,petra_q8_has_items
+        actions: petra_q8_complete
+        pointers: pl_end_conversation
+      petra_turnin_q8_missing:
+        text: Not enough. I asked for 3 Quartz.
+        conditions: petra_q8_active,!petra_q8_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q9_ready:
+        text: Emeralds. Merchants see money. I see potential.
+        conditions: petra_q9_active,petra_q9_has_items
+        actions: petra_q9_complete
+        pointers: pl_end_conversation
+      petra_turnin_q9_missing:
+        text: Not enough. I asked for 2 Emeralds.
+        conditions: petra_q9_active,!petra_q9_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q10_ready:
+        text: A diamond. Good. Try not to look too proud.
+        conditions: petra_q10_active,petra_q10_has_items
+        actions: petra_q10_complete
+        pointers: pl_end_conversation
+      petra_turnin_q10_missing:
+        text: Not enough. I asked for 1 Diamond.
+        conditions: petra_q10_active,!petra_q10_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q11_ready:
+        text: Glowstone Dust. Light reduced to a useful powder.
+        conditions: petra_q11_active,petra_q11_has_items
+        actions: petra_q11_complete
+        pointers: pl_end_conversation
+      petra_turnin_q11_missing:
+        text: Not enough. I asked for 8 Glowstone Dust.
+        conditions: petra_q11_active,!petra_q11_has_items
+        pointers: pl_end_conversation
+      petra_turnin_q12_ready:
+        text: Prismarine Crystals. The sea has strange patience.
+        conditions: petra_q12_active,petra_q12_has_items
+        actions: petra_q12_complete
+        pointers: pl_end_conversation
+      petra_turnin_q12_missing:
+        text: Not enough. I asked for 4 Prismarine Crystals.
+        conditions: petra_q12_active,!petra_q12_has_items
+        pointers: pl_end_conversation
+      petra_about:
+        text: Me? \n\nI was born among steam pipes, brass engines, and greedy merchants
+          who thought gems were just decorations. \n\nBut gems are not decorations.
+          \n\nThey are memory. Pressure. Fire. Time. \n\nI learned how to create artificial
+          gems by combining rare materials, purified dust, and calibrated steam pressure.
+          \n\nThen, after many accidents, broken machines, and one very angry nobleman,
+          I discovered something special. \n\nTwo gems of the same level can be fused
+          into a stronger one. \n\nOf course... the process is delicate. \n\nAnd expensive.
+        pointers: pl_more_story,pl_end_conversation
+      petra_story_1:
+        text: Once, I tried to fuse two rubies during a thunderstorm. \n\nThe result
+          was beautiful. \n\nIt also burned my eyebrows for three weeks.
+        conditions: petra_current_story_1
+        actions: petra_story_1_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_story_2:
+        text: A noble once asked me to create a gem that could prove his courage.
+          \n\nI gave him a mirror-polished crystal. \n\nHe never came back.
+        conditions: petra_current_story_2
+        actions: petra_story_2_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_story_3:
+        text: I once found a sapphire inside the boiler of an abandoned machine. \n\nNo
+          one knows how it got there. \n\nSometimes I think the machine grew it.
+        conditions: petra_current_story_3
+        actions: petra_story_3_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_story_4:
+        text: My first successful fusion created a gem so bright that every lamp in
+          my workshop went dark. \n\nFor a moment, the gem was the only light in the
+          room.
+        conditions: petra_current_story_4
+        actions: petra_story_4_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_story_5:
+        text: I had a teacher once. \n\nHe said gems do not become stronger by avoiding
+          pressure. \n\nI think about that often.
+        conditions: petra_current_story_5
+        actions: petra_story_5_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_story_6:
+        text: One customer tried to eat an emerald because he thought it was candied
+          fruit. \n\nHe survived. \n\nThe emerald did not.
+        conditions: petra_current_story_6
+        actions: petra_story_6_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_story_7:
+        text: Some gems sing when the pressure is perfect. \n\nNot loudly. \n\nJust
+          enough to make you wonder if the earth is still dreaming.
+        conditions: petra_current_story_7
+        actions: petra_story_7_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_story_8:
+        text: I once traded a flawless topaz for a broken compass. \n\nTerrible trade,
+          everyone said. \n\nBut that compass led me to my first fusion chamber.
+        conditions: petra_current_story_8
+        actions: petra_story_8_mark_heard,petra_life_book_reward_check,petra_story_clear_selection
+        pointers: pl_end_conversation
+      petra_accept:
+        text: Excellent. Let us see what fate requires today.
+        actions: petra_assign_random_daily_quest,petra_start_daily_cooldown
+        pointers: pl_show_assigned_quest
+      petra_assigned_q1:
+        text: Bring me 16 Coal. Even the simplest gem needs pressure and carbon. Return
+          to me when you have them.
+        conditions: petra_q1_active
+        pointers: pl_end_conversation
+      petra_assigned_q2:
+        text: Bring me 12 Raw Copper. Copper remembers the first machines. Return
+          to me when you have them.
+        conditions: petra_q2_active
+        pointers: pl_end_conversation
+      petra_assigned_q3:
+        text: Bring me 10 Raw Iron. I need metal with honest weight. Return to me
+          when you have it.
+        conditions: petra_q3_active
+        pointers: pl_end_conversation
+      petra_assigned_q4:
+        text: Bring me 8 Raw Gold. Gold bends easily, but it remembers power. Return
+          to me when you have it.
+        conditions: petra_q4_active
+        pointers: pl_end_conversation
+      petra_assigned_q5:
+        text: Bring me 6 Amethyst Shards. They hum beautifully under pressure. Return
+          to me when you have them.
+        conditions: petra_q5_active
+        pointers: pl_end_conversation
+      petra_assigned_q6:
+        text: Bring me 4 Lapis Lazuli. Blue stones are excellent for stable fusion.
+          Return to me when you have them.
+        conditions: petra_q6_active
+        pointers: pl_end_conversation
+      petra_assigned_q7:
+        text: Bring me 4 Redstone Dust. Controlled instability is still instability.
+          Return to me when you have it.
+        conditions: petra_q7_active
+        pointers: pl_end_conversation
+      petra_assigned_q8:
+        text: Bring me 3 Quartz. Clean structure, clean fusion. Return to me when
+          you have it.
+        conditions: petra_q8_active
+        pointers: pl_end_conversation
+      petra_assigned_q9:
+        text: Bring me 2 Emeralds. Do not ask why. Just do not chip them. Return to
+          me when you have them.
+        conditions: petra_q9_active
+        pointers: pl_end_conversation
+      petra_assigned_q10:
+        text: Bring me 1 Diamond. Some stones deserve respect before they deserve
+          use. Return to me when you have it.
+        conditions: petra_q10_active
+        pointers: pl_end_conversation
+      petra_assigned_q11:
+        text: Bring me 8 Glowstone Dust. Light trapped in powder. Wonderful. Return
+          to me when you have it.
+        conditions: petra_q11_active
+        pointers: pl_end_conversation
+      petra_assigned_q12:
+        text: Bring me 4 Prismarine Crystals. Sea-born crystals behave strangely in
+          steam chambers. Return to me when you have them.
+        conditions: petra_q12_active
+        pointers: pl_end_conversation
+      petra_refuse:
+        text: Fair enough. \n\nNot everyone has the patience to work with stones.
+        pointers: pl_end_conversation
+      petra_goodbye:
+        text: Then may your path be bright, traveler. \n\nAnd may you never step on
+          an unstable crystal.
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: petra_shop
+      pl_open_shop_1:
+        text: Open the shop.
+        pointers: petra_shop_1
+      pl_open_shop_2:
+        text: Open the shop.
+        pointers: petra_shop_2
+      pl_talk_little:
+        text: Do you want to talk for a while?
+        pointers: petra_talk_active,petra_talk_available,petra_talk_cooldown
+      pl_about_petra:
+        text: Tell me about yourself.
+        pointers: petra_about
+      pl_more_story:
+        text: Tell me one of your stories.
+        actions: petra_story_prepare_random
+        pointers: petra_story_1,petra_story_2,petra_story_3,petra_story_4,petra_story_5,petra_story_6,petra_story_7,petra_story_8
+      pl_accept_random_quest:
+        text: Sure, I can help you.
+        pointers: petra_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: petra_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: petra_turnin_q1_ready,petra_turnin_q2_ready,petra_turnin_q3_ready,petra_turnin_q4_ready,petra_turnin_q5_ready,petra_turnin_q6_ready,petra_turnin_q7_ready,petra_turnin_q8_ready,petra_turnin_q9_ready,petra_turnin_q10_ready,petra_turnin_q11_ready,petra_turnin_q12_ready,petra_turnin_q1_missing,petra_turnin_q2_missing,petra_turnin_q3_missing,petra_turnin_q4_missing,petra_turnin_q5_missing,petra_turnin_q6_missing,petra_turnin_q7_missing,petra_turnin_q8_missing,petra_turnin_q9_missing,petra_turnin_q10_missing,petra_turnin_q11_missing,petra_turnin_q12_missing
+      pl_just_hi:
+        text: Nothing, I just wanted to say hello.
+        pointers: petra_goodbye
+      pl_end_conversation:
+        text: End conversation
+      pl_show_assigned_quest:
+        text: What materials do you need?
+        pointers: petra_assigned_q1,petra_assigned_q2,petra_assigned_q3,petra_assigned_q4,petra_assigned_q5,petra_assigned_q6,petra_assigned_q7,petra_assigned_q8,petra_assigned_q9,petra_assigned_q10,petra_assigned_q11,petra_assigned_q12

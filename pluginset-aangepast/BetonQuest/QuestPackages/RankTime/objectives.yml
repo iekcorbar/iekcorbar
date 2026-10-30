@@ -1,0 +1,5 @@
+objectives:
+  rank_1_to_2: "delay 60 events:promote_to_2"
+  rank_2_to_3: "delay 180 events:promote_to_3"
+  rank_3_to_4: "delay 360 events:promote_to_4"
+  rank_4_to_5: "delay 600 events:promote_to_5"

@@ -1,0 +1,641 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '49': citizens 49
+  '50': citizens 50
+  '51': citizens 51
+  '52': citizens 52
+
+conditions:
+  quest_available: permission costum.jobsrank.1
+  citizen_registered: tag citizen_registered
+  
+  is_farmer: tag job_farmer
+  is_miner: tag job_miner
+  is_fisherman: tag job_fisherman
+  
+  chose_farmer: tag chosen_farmer
+  chose_miner: tag chosen_miner
+  chose_fisherman: tag chosen_fisherman
+  
+  change_to_farmer: tag change_to_farmer
+  change_to_miner: tag change_to_miner
+  change_to_fisherman: tag change_to_fisherman
+  
+  target_farmer_npc: tag target_farmer_npc
+  target_miner_npc: tag target_miner_npc
+  target_fisherman_npc: tag target_fisherman_npc
+  
+  farmer_rand_1: random 1-4
+  farmer_rand_2: random 1-3
+  farmer_rand_3: random 1-2
+  
+  fisherman_rand_1: random 1-4
+  fisherman_rand_2: random 1-3
+  fisherman_rand_3: random 1-2
+  
+  miner_rand_1: random 1-4
+  miner_rand_2: random 1-3
+  miner_rand_3: random 1-2
+
+actions:
+  # Selection tags
+  choose_farmer: tag add chosen_farmer
+  choose_miner: tag add chosen_miner
+  choose_fisherman: tag add chosen_fisherman
+  
+  # Pending change tags
+  select_change_farmer: folder clear_change_choices,select_change_farmer_add
+  select_change_miner: folder clear_change_choices,select_change_miner_add
+  select_change_fisherman: folder clear_change_choices,select_change_fisherman_add
+  select_change_farmer_add: tag add change_to_farmer
+  select_change_miner_add: tag add change_to_miner
+  select_change_fisherman_add: tag add change_to_fisherman
+  
+  # Clear temporary choices
+  clear_choices: tag del chosen_farmer,chosen_miner,chosen_fisherman,change_to_farmer,change_to_miner,change_to_fisherman
+  
+  # Registration/job tags
+  add_registered: tag add citizen_registered
+  add_job_farmer: tag add job_farmer
+  add_job_miner: tag add job_miner
+  add_job_fisherman: tag add job_fisherman
+  
+  del_job_farmer: tag del job_farmer
+  del_job_miner: tag del job_miner
+  del_job_fisherman: tag del job_fisherman
+  
+  clear_initial_job_choices: tag del chosen_farmer,chosen_miner,chosen_fisherman
+  clear_change_choices: tag del change_to_farmer,change_to_miner,change_to_fisherman
+  
+  # Commands that must behave like player/op
+  cmd_join_farmer: nujobs_joinjob Farmer
+  cmd_join_miner: nujobs_joinjob Miner
+  cmd_join_fisherman: nujobs_joinjob Fisherman
+  
+  cmd_leave_farmer: nujobs_leavejob Farmer
+  cmd_leave_miner: nujobs_leavejob Miner
+  cmd_leave_fisherman: nujobs_leavejob Fisherman
+  
+  # Console command for LP
+  cmd_rank1: command lp user %player% parent add rank_1
+  
+  # First assignment folders
+  become_farmer: folder cmd_join_farmer,cmd_rank1,add_registered,add_job_farmer,clear_initial_job_choices,clear_target_npcs,RankTime>start_rank_system
+  become_miner: folder cmd_join_miner,cmd_rank1,add_registered,add_job_miner,clear_initial_job_choices,clear_target_npcs,RankTime>start_rank_system
+  become_fisherman: folder cmd_join_fisherman,cmd_rank1,add_registered,add_job_fisherman,clear_initial_job_choices,clear_target_npcs,RankTime>start_rank_system
+  
+  # Job switches
+  switch_farmer_from_miner: folder cmd_leave_miner,cmd_join_farmer,del_job_miner,add_job_farmer,clear_change_choices,clear_target_npcs
+  switch_farmer_from_fisherman: folder cmd_leave_fisherman,cmd_join_farmer,del_job_fisherman,add_job_farmer,clear_change_choices,clear_target_npcs
+  
+  switch_miner_from_farmer: folder cmd_leave_farmer,cmd_join_miner,del_job_farmer,add_job_miner,clear_change_choices,clear_target_npcs
+  switch_miner_from_fisherman: folder cmd_leave_fisherman,cmd_join_miner,del_job_fisherman,add_job_miner,clear_change_choices,clear_target_npcs
+  
+  switch_fisherman_from_farmer: folder cmd_leave_farmer,cmd_join_fisherman,del_job_farmer,add_job_fisherman,clear_change_choices,clear_target_npcs
+  switch_fisherman_from_miner: folder cmd_leave_miner,cmd_join_fisherman,del_job_miner,add_job_fisherman,clear_change_choices,clear_target_npcs
+  
+  # Targhet NPC
+  clear_target_npcs: tag del target_farmer_npc,target_miner_npc,target_fisherman_npc
+  
+  set_target_farmer_npc: folder clear_target_npcs,add_target_farmer_npc
+  set_target_miner_npc: folder clear_target_npcs,add_target_miner_npc
+  set_target_fisherman_npc: folder clear_target_npcs,add_target_fisherman_npc
+  
+  add_target_farmer_npc: tag add target_farmer_npc
+  add_target_miner_npc: tag add target_miner_npc
+  add_target_fisherman_npc: tag add target_fisherman_npc
+
+npc_holograms:
+  registrar_unregistered:
+    lines:
+    - '&c&l❗❗'
+    - '&7New Quest Available'
+    npcs: '49'
+    conditions: quest_available,!citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  registrar_registered:
+    lines:
+    - '&a&l❗'
+    - '&7change Job'
+    npcs: '49'
+    conditions: quest_available,citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  farmer_target:
+    lines:
+    - '&e&l❓'
+    npcs: '50'
+    conditions: target_farmer_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  miner_target:
+    lines:
+    - '&e&l❓'
+    npcs: '52'
+    conditions: target_miner_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  fisherman_target:
+    lines:
+    - '&e&l❓'
+    npcs: '51'
+    conditions: target_fisherman_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+
+npc_conversations:
+  '49': registrar_conv
+  '50': farmer_conv
+  '51': fisherman_conv
+  '52': miner_conv
+
+conversations:
+  registrar_conv:
+    quester: Registrar
+    first: reg_pending_farmer_from_miner,reg_pending_fisherman_from_miner,reg_pending_miner_from_farmer,reg_pending_fisherman_from_farmer,reg_pending_farmer_from_fisherman,reg_pending_miner_from_fisherman,reg_waiting_farmer,reg_waiting_miner,reg_waiting_fisherman,reg_already_farmer,reg_already_miner,reg_already_fisherman,reg_welcome,reg_unavailable
+    stop: true
+    
+    NPC_options:
+      reg_unavailable:
+        text: You are not allowed to access the city's professions yet.
+      
+      reg_welcome:
+        text: Hm. Another one looking for a place in this city. \n\nListen carefully,
+          %player%… nothing here belongs to you. Not yet. \n\nRegister as a Workshop
+          Apprentice, and you’ll be allowed to work. To earn. To exist. \n\nBut don’t
+          mistake that for freedom. \n\nHere, your value is tested over time. Work
+          enough, survive long enough… and your rank will rise. \n\nWith each rank,
+          new paths will be unlocked. Better professions… and greater expectations.
+          \n\nRefuse… and you’ll stay what you are now... nothing.
+        conditions: quest_available,!citizen_registered,!chose_farmer,!chose_miner,!chose_fisherman
+        pointers: pl_register_yes,pl_register_no
+      
+      reg_choose_first_job:
+        text: Good. \n\nThis is your first step… not your last. \n\nWork long enough,
+          and you may rise. Earn a higher rank… unlock better paths. \n\nBut for now…
+          choose where you begin.
+        conditions: quest_available
+        pointers: pl_pick_farmer,pl_pick_miner,pl_pick_fisherman
+      
+      reg_waiting_farmer:
+        text: You again? \n\nI already sent you to the Farmer Master. \n\nGo to the
+          fields and stop stealing my time.
+        conditions: quest_available,!citizen_registered,chose_farmer
+        pointers: pl_end_conversation
+      
+      reg_waiting_miner:
+        text: Still here? \n\nI already sent you to the Miner Master. \n\nFind the
+          mines before I decide you are useless even for that.
+        conditions: quest_available,!citizen_registered,chose_miner
+        pointers: pl_end_conversation
+      
+      reg_waiting_fisherman:
+        text: Why are you still standing in front of me? \n\nI already sent you to
+          the Fisherman Master. \n\nGo to the harbor and stop wasting my breath.
+        conditions: quest_available,!citizen_registered,chose_fisherman
+        pointers: pl_end_conversation
+      
+      reg_already_farmer:
+        text: You already belong to the fields. \n\nChanging your path is not a simple
+          decision… you will lose part of what you’ve earned. \n\nTime. Effort. Knowledge.
+          \n\nIf you walk away from this… it’s gone. \n\nSo decide, %player%… do you
+          abandon the land?
+        conditions: quest_available,citizen_registered,is_farmer,!change_to_farmer,!change_to_miner,!change_to_fisherman
+        pointers: pl_change_farmer_to_miner,pl_change_farmer_to_fisherman,pl_keep_current_job
+      
+      reg_already_miner:
+        text: You’ve survived the mines this long. \n\nAnd now you want to walk away?
+          \n\nUnderstand this… everything the stone has taught you will be lost. \n\nDown
+          there, nothing is given twice. \n\nSo choose, %player%… do you leave the
+          depths behind?
+        conditions: quest_available,citizen_registered,is_miner,!change_to_farmer,!change_to_miner,!change_to_fisherman
+        pointers: pl_change_miner_to_farmer,pl_change_miner_to_fisherman,pl_keep_current_job
+      
+      reg_already_fisherman:
+        text: The sea has already marked you. \n\nAnd yet… you want another path.
+          \n\nKnow this… what you’ve learned out there will fade the moment you turn
+          your back on it. \n\nThe sea doesn’t return what it gives. \n\nSo decide,
+          %player%… do you abandon it?
+        conditions: quest_available,citizen_registered,is_fisherman,!change_to_farmer,!change_to_miner,!change_to_fisherman
+        pointers: pl_change_fisherman_to_farmer,pl_change_fisherman_to_miner,pl_keep_current_job
+      
+      reg_pending_farmer_from_miner:
+        text: So… you’ve already made your choice. \n\nYou intended to leave the mines
+          and take to the fields. \n\nAnd yet, here you are… hesitating. \n\nDecide,
+          %player%. \n\nDo you follow through… cling to the mines… or change your
+          mind again?
+        conditions: quest_available,citizen_registered,is_miner,change_to_farmer
+        pointers: pl_continue_farmer,pl_cancel_pending,pl_switch_pending_to_fisherman
+      
+      reg_pending_fisherman_from_miner:
+        text: You chose the sea over the mines. \n\nOr at least… you thought you did.
+          \n\nNow you stand here, uncertain. \n\nMake a decision, %player%. \n\nCommit…
+          retreat… or change direction again.
+        conditions: quest_available,citizen_registered,is_miner,change_to_fisherman
+        pointers: pl_continue_fisherman,pl_cancel_pending,pl_switch_pending_to_farmer
+      
+      reg_pending_miner_from_farmer:
+        text: You were ready to abandon the fields for the mines. \n\nAnd now you
+          hesitate. \n\nThe land had its use for you… the stone might not be so patient.
+          \n\nSo decide, %player%. \n\nDo you descend… stay where you are… or turn
+          elsewhere?
+        conditions: quest_available,citizen_registered,is_farmer,change_to_miner
+        pointers: pl_continue_miner,pl_cancel_pending,pl_switch_pending_to_fisherman
+      
+      reg_pending_fisherman_from_farmer:
+        text: You chose to leave the land for the sea. \n\nBut a choice means nothing
+          if you can’t stand by it. \n\nSo here you are… wavering. \n\nDecide, %player%.
+          \n\nMove forward… step back… or change your path again.
+        conditions: quest_available,citizen_registered,is_farmer,change_to_fisherman
+        pointers: pl_continue_fisherman,pl_cancel_pending,pl_switch_pending_to_miner
+      
+      reg_pending_farmer_from_fisherman:
+        text: You turned your back on the sea… for the fields. \n\nAnd yet, you return
+          here, uncertain. \n\nThe sea would call that weakness. \n\nSo decide, %player%.
+          \n\nDo you follow through… return to what you know… or change course again?
+        conditions: quest_available,citizen_registered,is_fisherman,change_to_farmer
+        pointers: pl_continue_farmer,pl_cancel_pending,pl_switch_pending_to_miner
+      
+      reg_pending_miner_from_fisherman:
+        text: You were ready to leave the sea for the depths. \n\nAnd now… doubt.
+          \n\nOut there, hesitation gets you killed. \n\nSo decide, %player%. \n\nGo
+          forward… hold your ground… or change direction again.
+        conditions: quest_available,citizen_registered,is_fisherman,change_to_miner
+        pointers: pl_continue_miner,pl_cancel_pending,pl_switch_pending_to_farmer
+      
+      reg_send_farmer:
+        text: Good. \n\nThe fields will decide what you’re worth. \n\nGo. The Master
+          Farmer is waiting for new hands… or new failures. \n\nYou’ll find them beyond
+          the cultivated land. Don’t keep them waiting. Go talk to the Master Farmer
+          to complete the registration. You can find it on the floating island.
+        conditions: quest_available
+        pointers: pl_end_conversation
+      
+      reg_send_miner:
+        text: Good. \n\nThe mines don’t care who you are. \n\nGo down there and find
+          the Master Miner. If the darkness doesn’t break you… they might accept you.
+          \n\nFollow the tunnels. You’ll hear the hammers before you see them. Go
+          talk to the Miner to complete the registration. You can find it inside the
+          mountain towards the mines.
+        conditions: quest_available
+        pointers: pl_end_conversation
+      
+      reg_send_fisherman:
+        text: Good. \n\nThe sea will test your patience… and your luck. \n\nGo to
+          the harbor and find the Master Fisherman. \n\nIf they see something in you…
+          you might earn your place. Go talk to the fisherman to complete the recording.
+          Can be found at the pier of Ying Yang Pavilion.
+        conditions: quest_available
+        pointers: pl_end_conversation
+      
+      reg_goodbye:
+        text: Then go. \n\nBut understand this… without a name in my registry, you’re
+          nothing here. \n\nNo work. No protection. No future.
+        actions: clear_choices
+        conditions: quest_available
+        pointers: pl_end_conversation
+    
+    player_options:
+      pl_register_yes:
+        text: Yes, I want to register.
+        pointers: reg_choose_first_job
+      
+      pl_register_no:
+        text: No, not now.
+        pointers: reg_goodbye
+      
+      pl_pick_farmer:
+        text: I want to become a Farmer.
+        actions: clear_choices,choose_farmer,set_target_farmer_npc
+        pointers: reg_send_farmer
+      
+      pl_pick_miner:
+        text: I want to become a Miner.
+        actions: clear_choices,choose_miner,set_target_miner_npc
+        pointers: reg_send_miner
+      
+      pl_pick_fisherman:
+        text: I want to become a Fisherman.
+        actions: clear_choices,choose_fisherman,set_target_fisherman_npc
+        pointers: reg_send_fisherman
+      
+      pl_change_farmer_to_miner:
+        text: Yes. I want to leave the fields and become a Miner.
+        actions: select_change_miner,set_target_miner_npc
+        pointers: reg_send_miner
+      
+      pl_change_farmer_to_fisherman:
+        text: Yes. I want to leave the fields and become a Fisherman.
+        actions: select_change_fisherman,set_target_fisherman_npc
+        pointers: reg_send_fisherman
+      
+      pl_change_miner_to_farmer:
+        text: Yes. I want to leave the mines and become a Farmer.
+        actions: select_change_farmer,set_target_farmer_npc
+        pointers: reg_send_farmer
+      
+      pl_change_miner_to_fisherman:
+        text: Yes. I want to leave the mines and become a Fisherman.
+        actions: select_change_fisherman,set_target_fisherman_npc
+        pointers: reg_send_fisherman
+      
+      pl_change_fisherman_to_farmer:
+        text: Yes. I want to leave the harbor and become a Farmer.
+        actions: select_change_farmer,set_target_farmer_npc
+        pointers: reg_send_farmer
+      
+      pl_change_fisherman_to_miner:
+        text: Yes. I want to leave the harbor and become a Miner.
+        actions: select_change_miner,set_target_miner_npc
+        pointers: reg_send_miner
+      
+      pl_continue_farmer:
+        text: I want to continue with my choice.
+        pointers: reg_send_farmer
+      
+      pl_continue_miner:
+        text: I want to continue with my choice.
+        pointers: reg_send_miner
+      
+      pl_continue_fisherman:
+        text: I want to continue with my choice.
+        pointers: reg_send_fisherman
+      
+      pl_cancel_pending:
+        text: I want to keep my current profession.
+        pointers: reg_goodbye
+      
+      pl_switch_pending_to_farmer:
+        text: No, I want to become a Farmer instead.
+        actions: select_change_farmer,set_target_farmer_npc
+        pointers: reg_send_farmer
+      
+      pl_switch_pending_to_miner:
+        text: No, I want to become a Miner instead.
+        actions: select_change_miner,set_target_miner_npc
+        pointers: reg_send_miner
+      
+      pl_switch_pending_to_fisherman:
+        text: No, I want to become a Fisherman instead.
+        actions: select_change_fisherman,set_target_fisherman_npc
+        pointers: reg_send_fisherman
+      
+      pl_keep_current_job:
+        text: No, I want to keep my current profession.
+        pointers: reg_goodbye
+      
+      pl_end_conversation:
+        text: End conversation
+  
+  farmer_conv:
+    quester: Farmer Master
+    first: farmer_assign_initial,farmer_assign_from_miner,farmer_assign_from_fisherman,farmer_redirect_initial_miner,farmer_redirect_initial_fisherman,farmer_redirect_change_miner,farmer_redirect_change_fisherman,farmer_default1,farmer_default2,farmer_default3,farmer_default4
+    stop: true
+    
+    NPC_options:
+      farmer_assign_initial:
+        text: So… you’re the new one. \n\nThe land doesn’t care who you are. \n\nYou
+          work… or you starve. \n\nFrom this moment on, you belong to the fields.
+          \n\nLet’s see if you last.
+        conditions: quest_available,!citizen_registered,chose_farmer
+        actions: become_farmer
+        pointers: pl_end_conversation
+      
+      farmer_assign_from_miner:
+        text: Left the mines, did you? \n\nGood. Down there, men break. \n\nHere…
+          things grow. If you have the patience. \n\nFrom now on, you work the land.
+          \n\nDon’t expect it to be easier.
+        conditions: quest_available,citizen_registered,is_miner,change_to_farmer
+        actions: switch_farmer_from_miner
+        pointers: pl_end_conversation
+      
+      farmer_assign_from_fisherman:
+        text: Tired of chasing the tides? \n\nGood. The land is honest. It gives back
+          what you put into it. \n\nFrom this moment on, you work the fields. \n\nNo
+          luck. No chance. Just effort.
+        conditions: quest_available,citizen_registered,is_fisherman,change_to_farmer
+        actions: switch_farmer_from_fisherman
+        pointers: pl_end_conversation
+      
+      farmer_redirect_initial_miner:
+        text: You don’t belong here. \n\nThe fields are not for you. \n\nGo back to
+          the tunnels. The Master Miner is waiting.
+        conditions: quest_available,!citizen_registered,chose_miner
+        pointers: pl_end_conversation
+      
+      farmer_redirect_initial_fisherman:
+        text: You’re in the wrong place. \n\nThe fields won’t take you. \n\nHead to
+          the harbor. The Master Fisherman will deal with you.
+        conditions: quest_available,!citizen_registered,chose_fisherman
+        pointers: pl_end_conversation
+      
+      farmer_redirect_change_miner:
+        text: So you’ve chosen the mines instead. \n\nThen stop wasting time here.
+          \n\nGo find the Master Miner.
+        conditions: quest_available,citizen_registered,change_to_miner
+        pointers: pl_end_conversation
+      
+      farmer_redirect_change_fisherman:
+        text: The sea, huh? \n\nThen you don’t belong in the fields anymore. \n\nGo.
+          The harbor is waiting.
+        conditions: quest_available,citizen_registered,change_to_fisherman
+        pointers: pl_end_conversation
+      
+      farmer_default1:
+        text: Keep your hands moving. \n\nThe land rewards those who work it… and
+          buries those who don’t.
+        conditions: farmer_rand_1
+        pointers: pl_end_conversation
+      
+      farmer_default2:
+        text: Keep your hands moving. \n\nThe soil remembers every mistake.
+        conditions: '!farmer_rand_1,farmer_rand_2'
+        pointers: pl_end_conversation
+      
+      farmer_default3:
+        text: Keep your hands moving. \n\nWork first. Talk later.
+        conditions: '!farmer_rand_1,!farmer_rand_2,farmer_rand_3'
+        pointers: pl_end_conversation
+      
+      farmer_default4:
+        text: Keep your hands moving. \n\nIf you have time to stand still, you have
+          time to work.
+        conditions: '!farmer_rand_1,!farmer_rand_2,!farmer_rand_3'
+        pointers: pl_end_conversation
+    
+    player_options:
+      pl_end_conversation:
+        text: End conversation
+  
+  fisherman_conv:
+    quester: Fisherman Master
+    first: fisher_assign_initial,fisher_assign_from_farmer,fisher_assign_from_miner,fisher_redirect_initial_farmer,fisher_redirect_initial_miner,fisher_redirect_change_farmer,fisher_redirect_change_miner,fisher_default1,fisher_default2,fisher_default3,fisher_default4
+    stop: true
+    
+    NPC_options:
+      fisher_assign_initial:
+        text: So… the sea called you. \n\nOut there, nothing is certain. \n\nSome
+          days it feeds you. Some days it takes everything. \n\nFrom this moment on…
+          you belong to the harbor. \n\nLet’s see what it decides to do with you.
+        conditions: quest_available,!citizen_registered,chose_fisherman
+        actions: become_fisherman
+        pointers: pl_end_conversation
+      
+      fisher_assign_from_farmer:
+        text: Left the land behind? \n\nGood. The sea doesn’t pretend to be kind.
+          \n\nOut here, effort isn’t always enough. \n\nFrom now on… you fish. \n\nTry
+          not to rely on luck too much.
+        conditions: quest_available,citizen_registered,is_farmer,change_to_fisherman
+        actions: switch_fisherman_from_farmer
+        pointers: pl_end_conversation
+      
+      fisher_assign_from_miner:
+        text: Escaped the depths, did you? \n\nGood. At least out here… you can breathe.
+          \n\nBut don’t be fooled. \n\nThe sea kills just as easily. \n\nFrom now
+          on… you belong to it.
+        conditions: quest_available,citizen_registered,is_miner,change_to_fisherman
+        actions: switch_fisherman_from_miner
+        pointers: pl_end_conversation
+      
+      fisher_redirect_initial_farmer:
+        text: You don’t belong at the harbor. \n\nGo back to the fields. \n\nThe Master
+          Farmer will have work for you.
+        conditions: quest_available,!citizen_registered,chose_farmer
+        pointers: pl_end_conversation
+      
+      fisher_redirect_initial_miner:
+        text: Wrong place. \n\nThe sea has no use for you. \n\nGo back underground.
+          The Master Miner is waiting.
+        conditions: quest_available,!citizen_registered,chose_miner
+        pointers: pl_end_conversation
+      
+      fisher_redirect_change_farmer:
+        text: The land, then. \n\nStrange choice… but not my concern. \n\nGo. The
+          fields are waiting for you.
+        conditions: quest_available,citizen_registered,change_to_farmer
+        pointers: pl_end_conversation
+      
+      fisher_redirect_change_miner:
+        text: Back to the depths? \n\nThen don’t waste time here. \n\nGo find the
+          Master Miner.
+        conditions: quest_available,citizen_registered,change_to_miner
+        pointers: pl_end_conversation
+      
+      fisher_default1:
+        text: Stay quiet… and watch the water. \n\nIt always tells you something…
+          if you’re patient enough.
+        conditions: fisherman_rand_1
+        pointers: pl_end_conversation
+      
+      fisher_default2:
+        text: Stay quiet… and watch the water. \n\nThe sea never forgets a name.
+        conditions: '!fisherman_rand_1,fisherman_rand_2'
+        pointers: pl_end_conversation
+      
+      fisher_default3:
+        text: Stay quiet… and watch the water. \n\nSome men fish… others get pulled
+          under.
+        conditions: '!fisherman_rand_1,!fisherman_rand_2,fisherman_rand_3'
+        pointers: pl_end_conversation
+      
+      fisher_default4:
+        text: Stay quiet… and watch the water. \n\nIf the water goes quiet… you should
+          worry.
+        conditions: '!fisherman_rand_1,!fisherman_rand_2,!fisherman_rand_3'
+        pointers: pl_end_conversation
+    
+    player_options:
+      pl_end_conversation:
+        text: End conversation
+  
+  miner_conv:
+    quester: Miner Master
+    first: miner_assign_initial,miner_assign_from_farmer,miner_assign_from_fisherman,miner_redirect_initial_farmer,miner_redirect_initial_fisherman,miner_redirect_change_farmer,miner_redirect_change_fisherman,miner_default1,miner_default2,miner_default3,miner_default4
+    stop: true
+    
+    NPC_options:
+      miner_assign_initial:
+        text: So… they sent you down here. \n\nGood. \n\nUp there, you still had a
+          choice. \n\nDown here… you work, or you don’t come back. \n\nFrom this moment
+          on… you are a Miner.
+        conditions: quest_available,!citizen_registered,chose_miner
+        actions: become_miner
+        pointers: pl_end_conversation
+      
+      miner_assign_from_farmer:
+        text: Left the fields behind? \n\nThen forget the sun. \n\nDown here, nothing
+          grows… and nothing forgives. \n\nFrom now on, you break stone. \n\nLet’s
+          see how long you last.
+        conditions: quest_available,citizen_registered,is_farmer,change_to_miner
+        actions: switch_miner_from_farmer
+        pointers: pl_end_conversation
+      
+      miner_assign_from_fisherman:
+        text: Tired of the open sea? \n\nGood. You won’t see the sky down here anyway.
+          \n\nThe mines are tighter… quieter… and far less forgiving. \n\nFrom now
+          on, you belong to the depths.
+        conditions: quest_available,citizen_registered,is_fisherman,change_to_miner
+        actions: switch_miner_from_fisherman
+        pointers: pl_end_conversation
+      
+      miner_redirect_initial_farmer:
+        text: You’re not meant for the mines. \n\nGo back to the surface. \n\nThe
+          Master Farmer has use for you there.
+        conditions: quest_available,!citizen_registered,chose_farmer
+        pointers: pl_end_conversation
+      
+      miner_redirect_initial_fisherman:
+        text: You don’t belong down here. \n\nThe tunnels will swallow you whole.
+          \n\nGo back to the harbor.
+        conditions: quest_available,!citizen_registered,chose_fisherman
+        pointers: pl_end_conversation
+      
+      miner_redirect_change_farmer:
+        text: Going back to the fields? \n\nThen stop wasting time underground. \n\nGet
+          out… while you still can.
+        conditions: quest_available,citizen_registered,change_to_farmer
+        pointers: pl_end_conversation
+      
+      miner_redirect_change_fisherman:
+        text: The sea, huh? \n\nBetter than dying in a tunnel collapse, I suppose.
+          \n\nGo. The harbor is that way.
+        conditions: quest_available,citizen_registered,change_to_fisherman
+        pointers: pl_end_conversation
+      
+      miner_default1:
+        text: Keep swinging. \n\nThe mountain always takes something back.
+        conditions: miner_rand_1
+        pointers: pl_end_conversation
+      
+      miner_default2:
+        text: Keep swinging. \n\nIf you stop… the silence gets louder.
+        conditions: '!miner_rand_1,miner_rand_2'
+        pointers: pl_end_conversation
+      
+      miner_default3:
+        text: Keep swinging. \n\nListen closely. The tunnels speak before they collapse.
+        conditions: '!miner_rand_1,!miner_rand_2,miner_rand_3'
+        pointers: pl_end_conversation
+      
+      miner_default4:
+        text: Keep swinging. \n\nThe deeper you go… the less chance you have of coming
+          back.
+        conditions: '!miner_rand_1,!miner_rand_2,!miner_rand_3'
+        pointers: pl_end_conversation
+    
+    player_options:
+      pl_end_conversation:
+        text: End conversation

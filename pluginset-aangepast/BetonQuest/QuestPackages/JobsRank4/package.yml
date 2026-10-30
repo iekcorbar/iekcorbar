@@ -1,0 +1,1165 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '61': citizens 61
+  '62': citizens 62
+  '63': citizens 63
+  '64': citizens 64
+
+conditions:
+  jr4_quest_available: permission costum.jobsrank.4
+  jr4_citizen_registered: tag jr4_citizen_registered
+  
+  is_brewer: tag job_brewer
+  is_enchanter: tag job_enchanter
+  is_crafter: tag job_crafter
+  
+  chose_brewer: tag chosen_brewer
+  chose_enchanter: tag chosen_enchanter
+  chose_crafter: tag chosen_crafter
+  
+  change_to_brewer: tag change_to_brewer
+  change_to_enchanter: tag change_to_enchanter
+  change_to_crafter: tag change_to_crafter
+  
+  target_brewer_npc: tag target_brewer_npc
+  target_enchanter_npc: tag target_enchanter_npc
+  target_crafter_npc: tag target_crafter_npc
+  
+  brewer_rand_1: random 1-4
+  brewer_rand_2: random 1-3
+  brewer_rand_3: random 1-2
+  
+  crafter_rand_1: random 1-4
+  crafter_rand_2: random 1-3
+  crafter_rand_3: random 1-2
+  
+  enchanter_rand_1: random 1-4
+  enchanter_rand_2: random 1-3
+  enchanter_rand_3: random 1-2
+
+actions:
+  # Selection tags
+  choose_brewer: tag add chosen_brewer
+  choose_enchanter: tag add chosen_enchanter
+  choose_crafter: tag add chosen_crafter
+  
+  # Pending change tags
+  select_change_brewer: folder jr4_clear_change_choices,select_change_brewer_add
+  select_change_enchanter: folder jr4_clear_change_choices,select_change_enchanter_add
+  select_change_crafter: folder jr4_clear_change_choices,select_change_crafter_add
+  select_change_brewer_add: tag add change_to_brewer
+  select_change_enchanter_add: tag add change_to_enchanter
+  select_change_crafter_add: tag add change_to_crafter
+  
+  # Clear temporary choices
+  clear_choices_jr4: tag del chosen_brewer,chosen_enchanter,chosen_crafter,change_to_brewer,change_to_enchanter,change_to_crafter
+  
+  # Registration/job tags
+  jr4_add_registered: tag add jr4_citizen_registered
+  add_job_brewer: tag add job_brewer
+  add_job_enchanter: tag add job_enchanter
+  add_job_crafter: tag add job_crafter
+  
+  del_job_brewer: tag del job_brewer
+  del_job_enchanter: tag del job_enchanter
+  del_job_crafter: tag del job_crafter
+  
+  jr4_clear_initial_job_choices: tag del chosen_brewer,chosen_enchanter,chosen_crafter
+  jr4_clear_change_choices: tag del change_to_brewer,change_to_enchanter,change_to_crafter
+  
+  # Commands that must behave like player/op
+  cmd_join_brewer: nujobs_joinjob brewer
+  cmd_join_enchanter: nujobs_joinjob enchanter
+  cmd_join_crafter: nujobs_joinjob crafter
+  
+  cmd_leave_brewer: nujobs_leavejob brewer
+  cmd_leave_enchanter: nujobs_leavejob enchanter
+  cmd_leave_crafter: nujobs_leavejob crafter
+  
+  # First assignment folders
+  become_brewer: folder cmd_join_brewer,jr4_add_registered,add_job_brewer,jr4_clear_initial_job_choices,jr4_clear_target_npcs
+  become_enchanter: folder cmd_join_enchanter,jr4_add_registered,add_job_enchanter,jr4_clear_initial_job_choices,jr4_clear_target_npcs
+  become_crafter: folder cmd_join_crafter,jr4_add_registered,add_job_crafter,jr4_clear_initial_job_choices,jr4_clear_target_npcs
+  
+  # Job switches
+  switch_brewer_from_enchanter: folder cmd_leave_enchanter,cmd_join_brewer,del_job_enchanter,add_job_brewer,jr4_clear_change_choices,jr4_clear_target_npcs
+  switch_brewer_from_crafter: folder cmd_leave_crafter,cmd_join_brewer,del_job_crafter,add_job_brewer,jr4_clear_change_choices,jr4_clear_target_npcs
+  
+  switch_enchanter_from_brewer: folder cmd_leave_brewer,cmd_join_enchanter,del_job_brewer,add_job_enchanter,jr4_clear_change_choices,jr4_clear_target_npcs
+  switch_enchanter_from_crafter: folder cmd_leave_crafter,cmd_join_enchanter,del_job_crafter,add_job_enchanter,jr4_clear_change_choices,jr4_clear_target_npcs
+  
+  switch_crafter_from_brewer: folder cmd_leave_brewer,cmd_join_crafter,del_job_brewer,add_job_crafter,jr4_clear_change_choices,jr4_clear_target_npcs
+  switch_crafter_from_enchanter: folder cmd_leave_enchanter,cmd_join_crafter,del_job_enchanter,add_job_crafter,jr4_clear_change_choices,jr4_clear_target_npcs
+  
+  # Targhet NPC
+  jr4_clear_target_npcs: tag del target_brewer_npc,target_enchanter_npc,target_crafter_npc
+  
+  set_target_brewer_npc: folder jr4_clear_target_npcs,add_target_brewer_npc
+  set_target_enchanter_npc: folder jr4_clear_target_npcs,add_target_enchanter_npc
+  set_target_crafter_npc: folder jr4_clear_target_npcs,add_target_crafter_npc
+  
+  add_target_brewer_npc: tag add target_brewer_npc
+  add_target_enchanter_npc: tag add target_enchanter_npc
+  add_target_crafter_npc: tag add target_crafter_npc
+
+npc_holograms:
+  Machine_Lord_unregistered:
+    lines:
+    - '&c&l!'
+    - '&c&l❗❗'
+    - '&7New Quest Available'
+    npcs: '61'
+    conditions: jr4_quest_available,!jr4_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  Machine_Lord_registered:
+    lines:
+    - '&a&l❗'
+    - '&7change Job'
+    npcs: '61'
+    conditions: jr4_quest_available,jr4_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  brewer_target:
+    lines:
+    - '&e&l❓'
+    npcs: '62'
+    conditions: target_brewer_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  enchanter_target:
+    lines:
+    - '&e&l❓'
+    npcs: '64'
+    conditions: target_enchanter_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  crafter_target:
+    lines:
+    - '&e&l❓'
+    npcs: '63'
+    conditions: target_crafter_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+
+npc_conversations:
+  '61': Machine_Lord_conv
+  '62': brewer_conv
+  '63': crafter_conv
+  '64': enchanter_conv
+
+conversations:
+  Machine_Lord_conv:
+    quester: Sensei Machine Lord
+    first: reg_pending_brewer_from_enchanter,reg_pending_crafter_from_enchanter,reg_pending_enchanter_from_brewer,reg_pending_crafter_from_brewer,reg_pending_brewer_from_crafter,reg_pending_enchanter_from_crafter,reg_waiting_brewer,reg_waiting_enchanter,reg_waiting_crafter,reg_already_brewer,reg_already_enchanter,reg_already_crafter,reg_greet_jr4,reg_unavailable_jr4
+    stop: true
+    
+    NPC_options:
+      reg_unavailable_jr4:
+        text: |-
+          &7The Machine Lord does not turn.
+
+          &f"Input rejected."
+
+          "Your current state is insufficient."
+
+          "Return when your parameters meet the required threshold."
+        conditions: jr4_quest_available
+        pointers: pl_end_conversation_jr4
+      
+      reg_greet_jr4:
+        text: |-
+          &7The Machine Lord stands motionless. Faint mechanical sounds echo around him.
+
+          &f"…analysis complete."
+
+          "You are unstable."
+
+          "Not broken."
+
+          "Unrefined."
+
+          A pause.
+
+          "This level does not deal with effort."
+
+          "It deals with systems."
+
+          "Energy. Matter. Transformation."
+
+          "Three paths. Same principle."
+
+          "Each one will change how you interact with the world."
+
+          "Not what you do…"
+
+          "But how you think."
+
+          Another pause.
+
+          "Select a function, %player%."
+
+          "Optimization begins after choice."
+        conditions: jr4_quest_available,!jr4_citizen_registered,!chose_brewer,!chose_enchanter,!chose_crafter
+        pointers: pl_register_yes_jr4,pl_register_no_jr4
+      
+      reg_choose_fourth_job:
+        text: |-
+          &7A low mechanical hum surrounds you.
+
+          &f"Decision required."
+
+          "Each function specializes a different variable."
+
+          "Enchanter: energy manipulation."
+
+          "Brewer: reaction control."
+
+          "Crafter: structural optimization."
+
+          "No path is superior."
+
+          "Only different outputs."
+
+          "Select."
+        conditions: jr4_quest_available
+        pointers: pl_pick_brewer,pl_pick_enchanter,pl_pick_crafter
+      
+      reg_waiting_brewer:
+        text: |-
+          &7A faint click.
+
+          &f"Brewer path selected."
+
+          "Delay detected."
+
+          "Correct inefficiency."
+
+          "Proceed."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_brewer
+        pointers: pl_end_conversation_jr4
+      
+      reg_waiting_enchanter:
+        text: |-
+          &7The Machine Lord does not move.
+
+          &f"Selection already made."
+
+          "Enchanter path assigned."
+
+          "Proceed to execution node."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      reg_waiting_crafter:
+        text: |-
+          &7The Machine Lord tilts his head slightly.
+
+          &f"Crafter function assigned."
+
+          "You are not processing it."
+
+          "Move to designated node."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_crafter
+        pointers: pl_end_conversation_jr4
+      
+      
+      reg_already_brewer:
+        text: |-
+          &7A low vibration runs through the Machine Lord's frame.
+
+          &f"Reaction control detected."
+
+          "Your system has adapted to instability."
+
+          "Changing function will not erase the process."
+
+          "But it will interrupt refinement."
+
+          "Progress in current branch will halt."
+
+          "Reallocation has a cost."
+
+          "Confirm transition… or maintain current optimization."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_brewer,!change_to_brewer,!change_to_enchanter,!change_to_crafter
+        pointers: pl_change_brewer_to_enchanter,pl_change_brewer_to_crafter,pl_keep_current_job_jr4
+      
+      reg_already_enchanter:
+        text: |-
+          &7A soft mechanical pulse.
+
+          &f"Energy manipulation detected."
+
+          "Your system has adapted to it."
+
+          "Changing function will not reset you."
+
+          "But it will reduce efficiency."
+
+          "Progress in current branch will halt."
+
+          "Reallocation has a cost."
+
+          "Confirm transition… or maintain current optimization."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_enchanter,!change_to_brewer,!change_to_enchanter,!change_to_crafter
+        pointers: pl_change_enchanter_to_brewer,pl_change_enchanter_to_crafter,pl_keep_current_job_jr4
+      
+      reg_already_crafter:
+        text: |-
+          &7A precise metallic click echoes from the Machine Lord.
+
+          &f"Material optimization detected."
+
+          "Your system has adapted to structure."
+
+          "Changing function will not remove the knowledge."
+
+          "But it will reduce specialization."
+
+          "Progress in current branch will halt."
+
+          "Reallocation has a cost."
+
+          "Confirm transition… or maintain current optimization."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_crafter,!change_to_brewer,!change_to_enchanter,!change_to_crafter
+        pointers: pl_change_crafter_to_brewer,pl_change_crafter_to_enchanter,pl_keep_current_job_jr4
+      
+      reg_pending_brewer_from_enchanter:
+        text: |-
+          &7The Machine Lord remains motionless.
+
+          &f"Transition incomplete."
+
+          "Previous function retained."
+
+          "New function not yet initialized."
+
+          "Current state: inefficient."
+
+          "A system divided between two processes cannot stabilize."
+
+          "Resolve pending operation, %player%."
+
+          "Continue. Revert. Or redirect."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_enchanter,change_to_brewer
+        pointers: pl_continue_brewer,pl_cancel_pending_jr4,pl_switch_pending_to_crafter
+      
+      reg_pending_crafter_from_enchanter:
+        text: |-
+          &7The Machine Lord remains motionless.
+
+          &f"Transition incomplete."
+
+          "Previous function retained."
+
+          "New function not yet initialized."
+
+          "Current state: inefficient."
+
+          "A system divided between two processes cannot stabilize."
+
+          "Resolve pending operation, %player%."
+
+          "Continue. Revert. Or redirect."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_enchanter,change_to_crafter
+        pointers: pl_continue_crafter,pl_cancel_pending_jr4,pl_switch_pending_to_brewer
+      
+      reg_pending_enchanter_from_brewer:
+        text: |-
+          &7The Machine Lord remains motionless.
+
+          &f"Transition incomplete."
+
+          "Previous function retained."
+
+          "New function not yet initialized."
+
+          "Current state: inefficient."
+
+          "A system divided between two processes cannot stabilize."
+
+          "Resolve pending operation, %player%."
+
+          "Continue. Revert. Or redirect."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_brewer,change_to_enchanter
+        pointers: pl_continue_enchanter,pl_cancel_pending_jr4,pl_switch_pending_to_crafter
+      
+      reg_pending_crafter_from_brewer:
+        text: |-
+          &7The Machine Lord remains motionless.
+
+          &f"Transition incomplete."
+
+          "Previous function retained."
+
+          "New function not yet initialized."
+
+          "Current state: inefficient."
+
+          "A system divided between two processes cannot stabilize."
+
+          "Resolve pending operation, %player%."
+
+          "Continue. Revert. Or redirect."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_brewer,change_to_crafter
+        pointers: pl_continue_crafter,pl_cancel_pending_jr4,pl_switch_pending_to_enchanter
+      
+      reg_pending_brewer_from_crafter:
+        text: |-
+          &7The Machine Lord remains motionless.
+
+          &f"Transition incomplete."
+
+          "Previous function retained."
+
+          "New function not yet initialized."
+
+          "Current state: inefficient."
+
+          "A system divided between two processes cannot stabilize."
+
+          "Resolve pending operation, %player%."
+
+          "Continue. Revert. Or redirect."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_crafter,change_to_brewer
+        pointers: pl_continue_brewer,pl_cancel_pending_jr4,pl_switch_pending_to_enchanter
+      
+      reg_pending_enchanter_from_crafter:
+        text: |-
+          &7The Machine Lord remains motionless.
+
+          &f"Transition incomplete."
+
+          "Previous function retained."
+
+          "New function not yet initialized."
+
+          "Current state: inefficient."
+
+          "A system divided between two processes cannot stabilize."
+
+          "Resolve pending operation, %player%."
+
+          "Continue. Revert. Or redirect."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_crafter,change_to_enchanter
+        pointers: pl_continue_enchanter,pl_cancel_pending_jr4,pl_switch_pending_to_brewer
+      
+      reg_send_brewer:
+        text: |-
+          &7A faint hiss escapes from the Machine Lord's mechanisms.
+
+          &f"Reaction branch selected."
+
+          "Volatility."
+
+          "Catalysis."
+
+          "Transformation."
+
+          "The Brewer will teach you to control what wants to become unstable."
+
+          "Observe the reaction."
+
+          "Then command it."
+
+          "Proceed."
+        conditions: jr4_quest_available
+        pointers: pl_end_conversation_jr4
+      
+      reg_send_enchanter:
+        text: |-
+          &7A soft arcane pulse moves through the Machine Lord's frame.
+
+          &f"Energy branch selected."
+
+          "Flow."
+
+          "Resonance."
+
+          "Amplification."
+
+          "The Enchanter will teach you to bind force into form."
+
+          "Do not waste power."
+
+          "Direct it."
+
+          "Proceed."
+        conditions: jr4_quest_available
+        pointers: pl_end_conversation_jr4
+      
+      reg_send_crafter:
+        text: |-
+          &7A sequence of small clicks answers your choice.
+
+          &f"Matter branch selected."
+
+          "Assembly."
+
+          "Refinement."
+
+          "Optimization."
+
+          "The Crafter will teach you to turn material into function."
+
+          "Do not simply make."
+
+          "Improve."
+
+          "Proceed."
+        conditions: jr4_quest_available
+        pointers: pl_end_conversation_jr4
+      
+      jr4_reg_goodbye:
+        text: |-
+          &7The Machine Lord returns to silence.
+
+          &f"No selection recorded."
+
+          "No process initiated."
+
+          "Potential remains unused."
+
+          "Return when you are ready to optimize."
+        actions: clear_choices_jr4
+        conditions: jr4_quest_available
+        pointers: pl_end_conversation_jr4
+    
+    player_options:
+      pl_register_yes_jr4:
+        text: Yes, I want to take a fourth jobs.
+        conditions: jr4_quest_available
+        pointers: reg_choose_fourth_job
+      
+      pl_register_no_jr4:
+        text: No, not now.
+        pointers: jr4_reg_goodbye
+      
+      pl_pick_brewer:
+        text: I want to become a brewer.
+        actions: clear_choices_jr4,choose_brewer,set_target_brewer_npc
+        pointers: reg_send_brewer
+      
+      pl_pick_enchanter:
+        text: I want to become a enchanter.
+        actions: clear_choices_jr4,choose_enchanter,set_target_enchanter_npc
+        pointers: reg_send_enchanter
+      
+      pl_pick_crafter:
+        text: I want to become a crafter.
+        actions: clear_choices_jr4,choose_crafter,set_target_crafter_npc
+        pointers: reg_send_crafter
+      
+      pl_change_brewer_to_enchanter:
+        text: Yes. I want to leave this path and become a enchanter.
+        actions: select_change_enchanter,set_target_enchanter_npc
+        pointers: reg_send_enchanter
+      
+      pl_change_brewer_to_crafter:
+        text: Yes. I want to leave this path and become a crafter.
+        actions: select_change_crafter,set_target_crafter_npc
+        pointers: reg_send_crafter
+      
+      pl_change_enchanter_to_brewer:
+        text: Yes. I want to leave this path and become a brewer.
+        actions: select_change_brewer,set_target_brewer_npc
+        pointers: reg_send_brewer
+      
+      pl_change_enchanter_to_crafter:
+        text: Yes. I want to leave this path and become a crafter.
+        actions: select_change_crafter,set_target_crafter_npc
+        pointers: reg_send_crafter
+      
+      pl_change_crafter_to_brewer:
+        text: Yes. I want to leave this path and become a brewer.
+        actions: select_change_brewer,set_target_brewer_npc
+        pointers: reg_send_brewer
+      
+      pl_change_crafter_to_enchanter:
+        text: Yes. I want to leave this path and become a enchanter.
+        actions: select_change_enchanter,set_target_enchanter_npc
+        pointers: reg_send_enchanter
+      
+      pl_continue_brewer:
+        text: I want to continue with my choice.
+        pointers: reg_send_brewer
+      
+      pl_continue_enchanter:
+        text: I want to continue with my choice.
+        pointers: reg_send_enchanter
+      
+      pl_continue_crafter:
+        text: I want to continue with my choice.
+        pointers: reg_send_crafter
+      
+      pl_cancel_pending_jr4:
+        text: I want to keep my current profession.
+        pointers: jr4_reg_goodbye
+      
+      pl_switch_pending_to_brewer:
+        text: No, I want to become a brewer instead.
+        actions: select_change_brewer,set_target_brewer_npc
+        pointers: reg_send_brewer
+      
+      pl_switch_pending_to_enchanter:
+        text: No, I want to become a enchanter instead.
+        actions: select_change_enchanter,set_target_enchanter_npc
+        pointers: reg_send_enchanter
+      
+      pl_switch_pending_to_crafter:
+        text: No, I want to become a crafter instead.
+        actions: select_change_crafter,set_target_crafter_npc
+        pointers: reg_send_crafter
+      
+      pl_keep_current_job_jr4:
+        text: No, I want to keep my current profession.
+        pointers: jr4_reg_goodbye
+      
+      pl_end_conversation_jr4:
+        text: -End conversation-
+  
+  brewer_conv:
+    quester: brewer Master
+    first: brewer_assign_initial,brewer_assign_from_enchanter,brewer_assign_from_crafter,brewer_redirect_initial_enchanter,brewer_redirect_initial_crafter,brewer_redirect_change_enchanter,brewer_redirect_change_crafter,brewer_default1,brewer_default2,brewer_default3,brewer_default4
+    stop: true
+    
+    NPC_options:
+      brewer_assign_initial:
+        text: |-
+          &7The brewer is carefully mixing two substances.
+
+          A faint reaction begins to build… then stops.
+
+          &f"…almost."
+
+          He adjusts a single drop.
+
+          "There."
+
+          He looks at you.
+
+          "You’re new. Good."
+
+          "Most people fear unstable reactions."
+
+          "We study them."
+
+          "Every mixture has a threshold."
+
+          "Too little… nothing happens."
+
+          "Too much… everything changes."
+
+          "From now on… you brew."
+
+          "Learn where balance ends… and transformation begins."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_brewer
+        actions: become_brewer
+        pointers: pl_end_conversation_jr4
+      
+      brewer_assign_from_enchanter:
+        text: |-
+          &7He observes you closely.
+
+          &f"Energy control."
+
+          "Precise. Predictable."
+
+          "Useful… but limited."
+
+          "Here, outcomes are not fixed."
+
+          "Reactions evolve."
+
+          "Variables shift."
+
+          "You don’t impose control…"
+
+          "You adapt to it."
+
+          "If you stay… you will learn to guide instability."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_enchanter,change_to_brewer
+        actions: switch_brewer_from_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      brewer_assign_from_crafter:
+        text: |-
+          &7He watches your hands.
+
+          &f"You build stable systems."
+
+          "Solid. Reliable."
+
+          "But too rigid."
+
+          "Here, nothing remains the same."
+
+          "Every element reacts."
+
+          "Every combination shifts."
+
+          "You must abandon certainty…"
+
+          "And learn transformation."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_crafter,change_to_brewer
+        actions: switch_brewer_from_crafter
+        pointers: pl_end_conversation_jr4
+      
+      brewer_redirect_initial_enchanter:
+        text: |-
+          &7He barely glances at you.
+
+          &f"You seek control."
+
+          "Not reaction."
+
+          "Wrong discipline."
+
+          "Go."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      brewer_redirect_initial_crafter:
+        text: |-
+          &7He shakes his head slightly.
+
+          &f"You prefer structure."
+
+          "We dissolve it."
+
+          "Different approach."
+
+          "Leave."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_crafter
+        pointers: pl_end_conversation_jr4
+      
+      brewer_redirect_change_enchanter:
+        text: |-
+          &7He returns to his mixture.
+
+          &f"Back to control."
+
+          "Then stop chasing instability."
+
+          "Go."
+        conditions: jr4_quest_available,jr4_citizen_registered,change_to_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      brewer_redirect_change_crafter:
+        text: |-
+          &7He exhales softly.
+
+          &f"Back to structure."
+
+          "Then leave the reactions behind."
+
+          "Go."
+        conditions: jr4_quest_available,jr4_citizen_registered,change_to_crafter
+        pointers: pl_end_conversation_jr4
+      
+      brewer_default1:
+        text: |-
+          &f"Every reaction tells you something."
+
+          "If you survive it."
+        conditions: brewer_rand_1
+        pointers: pl_end_conversation_jr4
+      
+      brewer_default2:
+        text: |-
+          &f"Balance is temporary."
+
+          "Change is constant."
+        conditions: '!brewer_rand_1,brewer_rand_2'
+        pointers: pl_end_conversation_jr4
+      
+      brewer_default3:
+        text: |-
+          &f"Too stable…"
+
+          "Means you’re not pushing far enough."
+        conditions: '!brewer_rand_1,!brewer_rand_2,brewer_rand_3'
+        pointers: pl_end_conversation_jr4
+      
+      brewer_default4:
+        text: |-
+          &f"Failure is just data."
+
+          "Use it."
+        conditions: '!brewer_rand_1,!brewer_rand_2,!brewer_rand_3'
+        pointers: pl_end_conversation_jr4
+    
+    player_options:
+      pl_end_conversation_jr4:
+        text: End conversation
+  
+  crafter_conv:
+    quester: crafter Master
+    first: crafter_assign_initial,crafter_assign_from_brewer,crafter_assign_from_enchanter,crafter_redirect_initial_brewer,crafter_redirect_initial_enchanter,crafter_redirect_change_brewer,crafter_redirect_change_enchanter,crafter_default1,crafter_default2,crafter_default3,crafter_default4
+    stop: true
+    
+    NPC_options:
+      crafter_assign_initial:
+        text: |-
+          &7The crafter observes a complex mechanism, adjusting a single component.
+
+          The system stabilizes.
+
+          &f"Correction applied."
+
+          He turns to you.
+
+          "You arrived at the right moment."
+
+          "Most people build."
+
+          "Few understand what they build."
+
+          "Every structure has a purpose."
+
+          "Every component has a function."
+
+          "If one fails… the entire system degrades."
+
+          "We do not accept that."
+
+          "We design."
+
+          "We refine."
+
+          "We optimize."
+
+          "From now on… you craft."
+
+          "Learn to create systems that do not fail."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_crafter
+        actions: become_crafter
+        pointers: pl_end_conversation_jr4
+      
+      crafter_assign_from_brewer:
+        text: |-
+          &7The crafter studies your movements.
+
+          &f"You understand reactions."
+
+          "Unstable systems."
+
+          "Constant change."
+
+          "Useful knowledge."
+
+          "But here… instability is a flaw."
+
+          "Not a tool."
+
+          "We eliminate variables."
+
+          "We reduce uncertainty."
+
+          "If you stay… you will learn control through design."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_brewer,change_to_crafter
+        actions: switch_crafter_from_brewer
+        pointers: pl_end_conversation_jr4
+      
+      crafter_assign_from_enchanter:
+        text: |-
+          &7The crafter observes the flow of your movements.
+
+          &f"You control energy."
+
+          "Efficient."
+
+          "Precise."
+
+          "But incomplete."
+
+          "Energy without structure is temporary."
+
+          "It disperses."
+
+          "It degrades."
+
+          "Here, we bind function to form."
+
+          "We create systems that persist."
+
+          "If you remain… you will understand permanence."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_enchanter,change_to_crafter
+        actions: switch_crafter_from_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      crafter_redirect_initial_brewer:
+        text: |-
+          &7The crafter does not look at you.
+
+          &f"You seek transformation."
+
+          "We prevent it."
+
+          "Different objective."
+
+          "Leave."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_brewer
+        pointers: pl_end_conversation_jr4
+      
+      crafter_redirect_initial_enchanter:
+        text: |-
+          &7The crafter evaluates you briefly.
+
+          &f"You manipulate energy."
+
+          "But you do not anchor it."
+
+          "Without structure… it fades."
+
+          "Return when you understand that."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      crafter_redirect_change_brewer:
+        text: |-
+          &7The crafter adjusts a component without looking at you.
+
+          &f"Returning to instability."
+
+          "Then accept unpredictable results."
+
+          "Go."
+        conditions: jr4_quest_available,jr4_citizen_registered,change_to_brewer
+        pointers: pl_end_conversation_jr4
+      
+      crafter_redirect_change_enchanter:
+        text: |-
+          &7A small mechanical sound.
+
+          &f"Back to energy manipulation."
+
+          "A simpler layer of the system."
+
+          "Go refine it."
+        conditions: jr4_quest_available,jr4_citizen_registered,change_to_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      crafter_default1:
+        text: |-
+          &f"If it fails…"
+
+          "It was poorly designed."
+        conditions: crafter_rand_1
+        pointers: pl_end_conversation_jr4
+      
+      crafter_default2:
+        text: |-
+          &f"Efficiency is not optional."
+
+          "It is the goal."
+        conditions: '!crafter_rand_1,crafter_rand_2'
+        pointers: pl_end_conversation_jr4
+      
+      crafter_default3:
+        text: |-
+          &f"A system is only as strong…"
+
+          "As its weakest component."
+        conditions: '!crafter_rand_1,!crafter_rand_2,crafter_rand_3'
+        pointers: pl_end_conversation_jr4
+      
+      crafter_default4:
+        text: |-
+          &f"Perfection is not created."
+
+          "It is approached… through refinement."
+        conditions: '!crafter_rand_1,!crafter_rand_2,!crafter_rand_3'
+        pointers: pl_end_conversation_jr4
+    
+    player_options:
+      pl_end_conversation_jr4:
+        text: End conversation
+  
+  enchanter_conv:
+    quester: enchanter Master
+    first: enchanter_assign_initial,enchanter_assign_from_brewer,enchanter_assign_from_crafter,enchanter_redirect_initial_brewer,enchanter_redirect_initial_crafter,enchanter_redirect_change_brewer,enchanter_redirect_change_crafter,enchanter_default1,enchanter_default2,enchanter_default3,enchanter_default4
+    stop: true
+    
+    NPC_options:
+      enchanter_assign_initial:
+        text: |-
+          &7The enchanter stands in silence, faint energy pulsing around him.
+
+          &f"Do you feel it?"
+
+          A pause.
+
+          "No."
+
+          "Of course not."
+
+          "Your perception is… untrained."
+
+          He looks at you.
+
+          "Energy flows through everything."
+
+          "Most ignore it."
+
+          "Some misuse it."
+
+          "We understand it."
+
+          "We shape it."
+
+          "We bind it to purpose."
+
+          "From now on… you enchant."
+
+          "Learn to listen… before you try to control."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_enchanter
+        actions: become_enchanter
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_assign_from_brewer:
+        text: |-
+          &7The enchanter studies you quietly.
+
+          &f"You work with reactions."
+
+          "Unstable. Changing."
+
+          "You adapt to outcomes."
+
+          "Here… you prevent them."
+
+          "Energy does not need to react."
+
+          "It needs to be guided."
+
+          "No chaos."
+
+          "No excess."
+
+          "Only flow."
+
+          "If you remain… you will learn control without volatility."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_brewer,change_to_enchanter
+        actions: switch_enchanter_from_brewer
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_assign_from_crafter:
+        text: |-
+          &7The enchanter watches your movements.
+
+          &f"You build structure."
+
+          "Stable. Defined."
+
+          "But limited."
+
+          "Matter resists change."
+
+          "Energy does not."
+
+          "It adapts."
+
+          "It resonates."
+
+          "It expands."
+
+          "If you stay… you will learn to shape what cannot be contained."
+        conditions: jr4_quest_available,jr4_citizen_registered,is_crafter,change_to_enchanter
+        actions: switch_enchanter_from_crafter
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_redirect_initial_brewer:
+        text: |-
+          &7The enchanter does not move.
+
+          &f"You seek reaction."
+
+          "We seek balance."
+
+          "Different discipline."
+
+          "Go."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_brewer
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_redirect_initial_crafter:
+        text: |-
+          &7A faint pulse of energy.
+
+          &f"You rely on structure."
+
+          "We move beyond it."
+
+          "Return when you no longer need form to define function."
+        conditions: jr4_quest_available,!jr4_citizen_registered,chose_crafter
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_redirect_change_brewer:
+        text: |-
+          &7The energy around him fades slightly.
+
+          &f"Back to instability."
+
+          "Then abandon control."
+
+          "Go."
+        conditions: jr4_quest_available,jr4_citizen_registered,change_to_brewer
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_redirect_change_crafter:
+        text: |-
+          &7A calm breath.
+
+          &f"Back to structure."
+
+          "Then accept limitation."
+
+          "Go."
+        conditions: jr4_quest_available,jr4_citizen_registered,change_to_crafter
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_default1:
+        text: |-
+          &f"Energy is never still."
+
+          "Only… balanced."
+        conditions: enchanter_rand_1
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_default2:
+        text: |-
+          &f"If you force it…"
+
+          "You lose control."
+        conditions: '!enchanter_rand_1,enchanter_rand_2'
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_default3:
+        text: '&f"Resonance matters more than power."'
+        conditions: '!enchanter_rand_1,!enchanter_rand_2,enchanter_rand_3'
+        pointers: pl_end_conversation_jr4
+      
+      enchanter_default4:
+        text: |-
+          &f"You don’t command energy."
+
+          "You align with it."
+        conditions: '!enchanter_rand_1,!enchanter_rand_2,!enchanter_rand_3'
+        pointers: pl_end_conversation_jr4
+    
+    player_options:
+      pl_end_conversation_jr4:
+        text: End conversation

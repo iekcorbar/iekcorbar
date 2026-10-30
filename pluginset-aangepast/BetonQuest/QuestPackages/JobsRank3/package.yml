@@ -1,0 +1,1186 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '57': citizens 57
+  '58': citizens 58
+  '59': citizens 59
+  '60': citizens 60
+
+conditions:
+  jr3_quest_available: permission costum.jobsrank.3
+  jr3_citizen_registered: tag jr3_citizen_registered
+  
+  is_explorer: tag job_explorer
+  is_hunter: tag job_hunter
+  is_builder: tag job_builder
+  
+  chose_explorer: tag chosen_explorer
+  chose_hunter: tag chosen_hunter
+  chose_builder: tag chosen_builder
+  
+  change_to_explorer: tag change_to_explorer
+  change_to_hunter: tag change_to_hunter
+  change_to_builder: tag change_to_builder
+  
+  target_explorer_npc: tag target_explorer_npc
+  target_hunter_npc: tag target_hunter_npc
+  target_builder_npc: tag target_builder_npc
+  
+  explorer_rand_1: random 1-4
+  explorer_rand_2: random 1-3
+  explorer_rand_3: random 1-2
+  
+  builder_rand_1: random 1-4
+  builder_rand_2: random 1-3
+  builder_rand_3: random 1-2
+  
+  hunter_rand_1: random 1-4
+  hunter_rand_2: random 1-3
+  hunter_rand_3: random 1-2
+
+actions:
+  # Selection tags
+  choose_explorer: tag add chosen_explorer
+  choose_hunter: tag add chosen_hunter
+  choose_builder: tag add chosen_builder
+  
+  # Pending change tags
+  select_change_explorer: folder jr3_clear_change_choices,select_change_explorer_add
+  select_change_hunter: folder jr3_clear_change_choices,select_change_hunter_add
+  select_change_builder: folder jr3_clear_change_choices,select_change_builder_add
+  select_change_explorer_add: tag add change_to_explorer
+  select_change_hunter_add: tag add change_to_hunter
+  select_change_builder_add: tag add change_to_builder
+  
+  # Clear temporary choices
+  clear_choices_jr3: tag del chosen_explorer,chosen_hunter,chosen_builder,change_to_explorer,change_to_hunter,change_to_builder
+  
+  # Registration/job tags
+  jr3_add_registered: tag add jr3_citizen_registered
+  add_job_explorer: tag add job_explorer
+  add_job_hunter: tag add job_hunter
+  add_job_builder: tag add job_builder
+  
+  del_job_explorer: tag del job_explorer
+  del_job_hunter: tag del job_hunter
+  del_job_builder: tag del job_builder
+  
+  jr3_clear_initial_job_choices: tag del chosen_explorer,chosen_hunter,chosen_builder
+  jr3_clear_change_choices: tag del change_to_explorer,change_to_hunter,change_to_builder
+  
+  # Commands that must behave like player/op
+  cmd_join_explorer: nujobs_joinjob explorer
+  cmd_join_hunter: nujobs_joinjob hunter
+  cmd_join_builder: nujobs_joinjob builder
+  
+  cmd_leave_explorer: nujobs_leavejob explorer
+  cmd_leave_hunter: nujobs_leavejob hunter
+  cmd_leave_builder: nujobs_leavejob builder
+  
+  # First assignment folders
+  become_explorer: folder cmd_join_explorer,jr3_add_registered,add_job_explorer,jr3_clear_initial_job_choices,jr3_clear_target_npcs
+  become_hunter: folder cmd_join_hunter,jr3_add_registered,add_job_hunter,jr3_clear_initial_job_choices,jr3_clear_target_npcs
+  become_builder: folder cmd_join_builder,jr3_add_registered,add_job_builder,jr3_clear_initial_job_choices,jr3_clear_target_npcs
+  
+  # Job switches
+  switch_explorer_from_hunter: folder cmd_leave_hunter,cmd_join_explorer,del_job_hunter,add_job_explorer,jr3_clear_change_choices,jr3_clear_target_npcs
+  switch_explorer_from_builder: folder cmd_leave_builder,cmd_join_explorer,del_job_builder,add_job_explorer,jr3_clear_change_choices,jr3_clear_target_npcs
+  
+  switch_hunter_from_explorer: folder cmd_leave_explorer,cmd_join_hunter,del_job_explorer,add_job_hunter,jr3_clear_change_choices,jr3_clear_target_npcs
+  switch_hunter_from_builder: folder cmd_leave_builder,cmd_join_hunter,del_job_builder,add_job_hunter,jr3_clear_change_choices,jr3_clear_target_npcs
+  
+  switch_builder_from_explorer: folder cmd_leave_explorer,cmd_join_builder,del_job_explorer,add_job_builder,jr3_clear_change_choices,jr3_clear_target_npcs
+  switch_builder_from_hunter: folder cmd_leave_hunter,cmd_join_builder,del_job_hunter,add_job_builder,jr3_clear_change_choices,jr3_clear_target_npcs
+  
+  # Targhet NPC
+  jr3_clear_target_npcs: tag del target_explorer_npc,target_hunter_npc,target_builder_npc
+  
+  set_target_explorer_npc: folder jr3_clear_target_npcs,add_target_explorer_npc
+  set_target_hunter_npc: folder jr3_clear_target_npcs,add_target_hunter_npc
+  set_target_builder_npc: folder jr3_clear_target_npcs,add_target_builder_npc
+  
+  add_target_explorer_npc: tag add target_explorer_npc
+  add_target_hunter_npc: tag add target_hunter_npc
+  add_target_builder_npc: tag add target_builder_npc
+
+npc_holograms:
+  Iron_Samurai_unregistered:
+    lines:
+    - '&c&l!'
+    - '&c&l❗❗'
+    - '&7New Quest Available'
+    npcs: '57'
+    conditions: jr3_quest_available,!jr3_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  Iron_Samurai_registered:
+    lines:
+    - '&a&l❗'
+    - '&7change Job'
+    npcs: '57'
+    conditions: jr3_quest_available,jr3_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  explorer_target:
+    lines:
+    - '&e&l❓'
+    npcs: '58'
+    conditions: target_explorer_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  hunter_target:
+    lines:
+    - '&e&l❓'
+    npcs: '60'
+    conditions: target_hunter_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  builder_target:
+    lines:
+    - '&e&l❓'
+    npcs: '59'
+    conditions: target_builder_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+
+npc_conversations:
+  '57': Iron_Samurai_conv
+  '58': explorer_conv
+  '59': builder_conv
+  '60': hunter_conv
+
+conversations:
+  Iron_Samurai_conv:
+    quester: Sensei Iron Samurai
+    first: reg_pending_explorer_from_hunter,reg_pending_builder_from_hunter,reg_pending_hunter_from_explorer,reg_pending_builder_from_explorer,reg_pending_explorer_from_builder,reg_pending_hunter_from_builder,reg_waiting_explorer,reg_waiting_hunter,reg_waiting_builder,reg_already_explorer,reg_already_hunter,reg_already_builder,reg_greet_jr3,reg_unavailable_jr3
+    stop: true
+    
+    NPC_options:
+      reg_unavailable_jr3:
+        text: |-
+          &7The Sensei does not stop his movement.
+
+          &f"Not yet."
+
+          "Skill is not given. It is earned."
+
+          "Return when you are ready to learn… not to ask."
+        conditions: jr3_quest_available
+        pointers: pl_end_conversation_jr3
+      
+      reg_greet_jr3:
+        text: |-
+          &7The Sensei stands still, then slowly turns his gaze toward you.
+
+          &f"You seek direction."
+
+          "Good."
+
+          "A man without a path is already lost."
+
+          "Down here… no one cares who you were."
+
+          "Only what you choose to become."
+
+          "A craft is not work."
+
+          "It is discipline. Repetition. Transformation."
+
+          "Choose one… and it will shape you."
+
+          "Refuse… and you never improve."
+
+          "So, %player%… will you begin?"
+        conditions: jr3_quest_available,!jr3_citizen_registered,!chose_explorer,!chose_hunter,!chose_builder
+        pointers: pl_register_yes_jr3,pl_register_no_jr3
+      
+      reg_choose_third_job:
+        text: |-
+          &7The Sensei closes his eyes for a moment.
+
+          &f"Every path demands something from you."
+
+          "Time. Effort. Focus."
+
+          "Most fail… because they hesitate."
+
+          "Do not hesitate."
+
+          "Choose… and accept what follows."
+
+          "This is your first step."
+        conditions: jr3_quest_available
+        pointers: pl_pick_explorer,pl_pick_hunter,pl_pick_builder
+      
+      reg_waiting_explorer:
+        text: |-
+          &7The Sensei does not look at you.
+
+          &f"You already chose."
+
+          "The Explorer waits."
+
+          "Movement without purpose is wasted."
+
+          "Go."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_explorer
+        pointers: pl_end_conversation_jr3
+      
+      reg_waiting_hunter:
+        text: |-
+          &7The Sensei slightly tilts his head.
+
+          &f"You were given direction."
+
+          "The Hunter waits."
+
+          "Delay is a form of weakness."
+
+          "Correct it."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_hunter
+        pointers: pl_end_conversation_jr3
+      
+      reg_waiting_builder:
+        text: |-
+          &7The Sensei exhales slowly.
+
+          &f"Your path has been set."
+
+          "The Builder is waiting."
+
+          "A structure cannot rise… if the first step is ignored."
+
+          "Move."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_builder
+        pointers: pl_end_conversation_jr3
+      
+      
+      reg_already_explorer:
+        text: |-
+          &7The Sensei observes your posture.
+
+          &f"You walk the path of endurance."
+
+          "That path changes the body… and the mind."
+
+          "Changing direction is allowed."
+
+          "But nothing is carried forward without cost."
+
+          "You keep the discipline…"
+
+          "You lose the progress."
+
+          "So decide, %player%."
+
+          "Do you continue… or abandon it?"
+        conditions: jr3_quest_available,jr3_citizen_registered,is_explorer,!change_to_explorer,!change_to_hunter,!change_to_builder
+        pointers: pl_change_explorer_to_hunter,pl_change_explorer_to_builder,pl_keep_current_job_jr3
+      
+      reg_already_hunter:
+        text: |-
+          &7The Sensei rests his hand on the hilt of his blade.
+
+          &f"You chose precision."
+
+          "Control. Timing. Efficiency."
+
+          "These are not easily learned."
+
+          "If you leave this path…"
+
+          "The skill remains."
+
+          "The mastery does not."
+
+          "So decide, %player%."
+
+          "Do you stay… or walk away?"
+        conditions: jr3_quest_available,jr3_citizen_registered,is_hunter,!change_to_explorer,!change_to_hunter,!change_to_builder
+        pointers: pl_change_hunter_to_explorer,pl_change_hunter_to_builder,pl_keep_current_job_jr3
+      
+      reg_already_builder:
+        text: |-
+          &7The Sensei studies you in silence.
+
+          &f"You chose creation."
+
+          "To shape… to build… to transform."
+
+          "Few understand that power."
+
+          "If you abandon it…"
+
+          "The knowledge remains."
+
+          "The refinement ends."
+
+          "So decide, %player%."
+
+          "Do you continue… or leave it behind?"
+        conditions: jr3_quest_available,jr3_citizen_registered,is_builder,!change_to_explorer,!change_to_hunter,!change_to_builder
+        pointers: pl_change_builder_to_explorer,pl_change_builder_to_hunter,pl_keep_current_job_jr3
+      
+      reg_pending_explorer_from_hunter:
+        text: |-
+          &7The Sensei stands perfectly still.
+
+          &f"You chose… but you did not finish."
+
+          "This is where most fail."
+
+          "Not in choosing…"
+
+          "But in committing."
+
+          "An unfinished path teaches nothing."
+
+          "It only creates doubt."
+
+          "So decide, %player%."
+
+          "Continue. Return. Or choose again."
+
+          "But do not remain divided."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_hunter,change_to_explorer
+        pointers: pl_continue_explorer,pl_cancel_pending_jr3,pl_switch_pending_to_builder
+      
+      reg_pending_builder_from_hunter:
+        text: |-
+          &7The Sensei stands perfectly still.
+
+          &f"You chose… but you did not finish."
+
+          "This is where most fail."
+
+          "Not in choosing…"
+
+          "But in committing."
+
+          "An unfinished path teaches nothing."
+
+          "It only creates doubt."
+
+          "So decide, %player%."
+
+          "Continue. Return. Or choose again."
+
+          "But do not remain divided."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_hunter,change_to_builder
+        pointers: pl_continue_builder,pl_cancel_pending_jr3,pl_switch_pending_to_explorer
+      
+      reg_pending_hunter_from_explorer:
+        text: |-
+          &7The Sensei stands perfectly still.
+
+          &f"You chose… but you did not finish."
+
+          "This is where most fail."
+
+          "Not in choosing…"
+
+          "But in committing."
+
+          "An unfinished path teaches nothing."
+
+          "It only creates doubt."
+
+          "So decide, %player%."
+
+          "Continue. Return. Or choose again."
+
+          "But do not remain divided."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_explorer,change_to_hunter
+        pointers: pl_continue_hunter,pl_cancel_pending_jr3,pl_switch_pending_to_builder
+      
+      reg_pending_builder_from_explorer:
+        text: |-
+          &7The Sensei stands perfectly still.
+
+          &f"You chose… but you did not finish."
+
+          "This is where most fail."
+
+          "Not in choosing…"
+
+          "But in committing."
+
+          "An unfinished path teaches nothing."
+
+          "It only creates doubt."
+
+          "So decide, %player%."
+
+          "Continue. Return. Or choose again."
+
+          "But do not remain divided."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_explorer,change_to_builder
+        pointers: pl_continue_builder,pl_cancel_pending_jr3,pl_switch_pending_to_hunter
+      
+      reg_pending_explorer_from_builder:
+        text: |-
+          &7The Sensei stands perfectly still.
+
+          &f"You chose… but you did not finish."
+
+          "This is where most fail."
+
+          "Not in choosing…"
+
+          "But in committing."
+
+          "An unfinished path teaches nothing."
+
+          "It only creates doubt."
+
+          "So decide, %player%."
+
+          "Continue. Return. Or choose again."
+
+          "But do not remain divided."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_builder,change_to_explorer
+        pointers: pl_continue_explorer,pl_cancel_pending_jr3,pl_switch_pending_to_hunter
+      
+      reg_pending_hunter_from_builder:
+        text: |-
+          &7The Sensei stands perfectly still.
+
+          &f"You chose… but you did not finish."
+
+          "This is where most fail."
+
+          "Not in choosing…"
+
+          "But in committing."
+
+          "An unfinished path teaches nothing."
+
+          "It only creates doubt."
+
+          "So decide, %player%."
+
+          "Continue. Return. Or choose again."
+
+          "But do not remain divided."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_builder,change_to_hunter
+        pointers: pl_continue_hunter,pl_cancel_pending_jr3,pl_switch_pending_to_explorer
+      
+      reg_send_explorer:
+        text: |-
+          &7The Sensei nods once.
+
+          &f"Endurance."
+
+          "Resistance."
+
+          "Patience."
+
+          "The Explorer will teach you these."
+
+          "Listen more than you speak."
+
+          "Go."
+        conditions: jr3_quest_available
+        pointers: pl_end_conversation_jr3
+      
+      reg_send_hunter:
+        text: |-
+          &7The Sensei adjusts his stance.
+
+          &f"Precision."
+
+          "Control."
+
+          "Efficiency."
+
+          "The Hunter will show you how to act… without waste."
+
+          "Do not miss what matters."
+
+          "Go."
+        conditions: jr3_quest_available
+        pointers: pl_end_conversation_jr3
+      
+      reg_send_builder:
+        text: |-
+          &7The Sensei briefly closes his eyes.
+
+          &f"Balance."
+
+          "Structure."
+
+          "Transformation."
+
+          "The Builder will teach you how to create… not just assemble."
+
+          "Build with purpose."
+
+          "Go."
+        conditions: jr3_quest_available
+        pointers: pl_end_conversation_jr3
+      
+      jr3_reg_goodbye:
+        text: |-
+          &7The Sensei returns to his stance.
+
+          &f"Without action… there is no progress."
+
+          "Without choice… there is no path."
+
+          "Return when you are ready to move forward."
+        actions: clear_choices_jr3
+        conditions: jr3_quest_available
+        pointers: pl_end_conversation_jr3
+    
+    player_options:
+      pl_register_yes_jr3:
+        text: Yes, I want to take a third jobs.
+        conditions: jr3_quest_available
+        pointers: reg_choose_third_job
+      
+      pl_register_no_jr3:
+        text: No, not now.
+        pointers: jr3_reg_goodbye
+      
+      pl_pick_explorer:
+        text: I want to become a explorer.
+        actions: clear_choices_jr3,choose_explorer,set_target_explorer_npc
+        pointers: reg_send_explorer
+      
+      pl_pick_hunter:
+        text: I want to become a hunter.
+        actions: clear_choices_jr3,choose_hunter,set_target_hunter_npc
+        pointers: reg_send_hunter
+      
+      pl_pick_builder:
+        text: I want to become a builder.
+        actions: clear_choices_jr3,choose_builder,set_target_builder_npc
+        pointers: reg_send_builder
+      
+      pl_change_explorer_to_hunter:
+        text: Yes. I want to leave this path and become a hunter.
+        actions: select_change_hunter,set_target_hunter_npc
+        pointers: reg_send_hunter
+      
+      pl_change_explorer_to_builder:
+        text: Yes. I want to leave this path and become a builder.
+        actions: select_change_builder,set_target_builder_npc
+        pointers: reg_send_builder
+      
+      pl_change_hunter_to_explorer:
+        text: Yes. I want to leave this path and become a explorer.
+        actions: select_change_explorer,set_target_explorer_npc
+        pointers: reg_send_explorer
+      
+      pl_change_hunter_to_builder:
+        text: Yes. I want to leave this path and become a builder.
+        actions: select_change_builder,set_target_builder_npc
+        pointers: reg_send_builder
+      
+      pl_change_builder_to_explorer:
+        text: Yes. I want to leave this path and become a explorer.
+        actions: select_change_explorer,set_target_explorer_npc
+        pointers: reg_send_explorer
+      
+      pl_change_builder_to_hunter:
+        text: Yes. I want to leave this path and become a hunter.
+        actions: select_change_hunter,set_target_hunter_npc
+        pointers: reg_send_hunter
+      
+      pl_continue_explorer:
+        text: I want to continue with my choice.
+        pointers: reg_send_explorer
+      
+      pl_continue_hunter:
+        text: I want to continue with my choice.
+        pointers: reg_send_hunter
+      
+      pl_continue_builder:
+        text: I want to continue with my choice.
+        pointers: reg_send_builder
+      
+      pl_cancel_pending_jr3:
+        text: I want to keep my current profession.
+        pointers: jr3_reg_goodbye
+      
+      pl_switch_pending_to_explorer:
+        text: No, I want to become a explorer instead.
+        actions: select_change_explorer,set_target_explorer_npc
+        pointers: reg_send_explorer
+      
+      pl_switch_pending_to_hunter:
+        text: No, I want to become a hunter instead.
+        actions: select_change_hunter,set_target_hunter_npc
+        pointers: reg_send_hunter
+      
+      pl_switch_pending_to_builder:
+        text: No, I want to become a builder instead.
+        actions: select_change_builder,set_target_builder_npc
+        pointers: reg_send_builder
+      
+      pl_keep_current_job_jr3:
+        text: No, I want to keep my current profession.
+        pointers: jr3_reg_goodbye
+      
+      pl_end_conversation_jr3:
+        text: -End conversation-
+  
+  explorer_conv:
+    quester: explorer Master
+    first: explorer_assign_initial,explorer_assign_from_hunter,explorer_assign_from_builder,explorer_redirect_initial_hunter,explorer_redirect_initial_builder,explorer_redirect_change_hunter,explorer_redirect_change_builder,explorer_default1,explorer_default2,explorer_default3,explorer_default4
+    stop: true
+    
+    NPC_options:
+      explorer_assign_initial:
+        text: |-
+          &7The man is examining a broken mechanism, completely focused.
+
+          &f"Wait… wait… almost—"
+
+          *click*
+
+          "Ah. There it is."
+
+          He finally looks at you.
+
+          "You must be the new one."
+
+          "Good timing."
+
+          "Most people see danger and step back."
+
+          "We step closer."
+
+          "We watch. We learn."
+
+          "Every ruin, every trap, every hidden path…"
+
+          "They all have a story."
+
+          "From now on… you explore."
+
+          "Try not to die before you understand what killed you."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_explorer
+        actions: become_explorer
+        pointers: pl_end_conversation_jr3
+      
+      explorer_assign_from_hunter:
+        text: |-
+          &7He studies you with interest.
+
+          &f"Hunter, huh?"
+
+          "You’re used to precision… to control."
+
+          "That helps."
+
+          "But out there… things don’t always behave."
+
+          "Mechanisms fail. Paths collapse."
+
+          "You won’t control everything."
+
+          "You’ll learn by seeing…"
+
+          "Sometimes by triggering."
+
+          "Welcome to exploration."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_hunter,change_to_explorer
+        actions: switch_explorer_from_hunter
+        pointers: pl_end_conversation_jr3
+      
+      explorer_assign_from_builder:
+        text: |-
+          &7He grins slightly.
+
+          &f"Builder?"
+
+          "So you understand how things are made."
+
+          "Good."
+
+          "Now you’ll learn how they break."
+
+          "And why."
+
+          "Structures hide secrets."
+
+          "And the best way to find them…"
+
+          "Is to push them until they respond."
+
+          "Carefully… or not."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_builder,change_to_explorer
+        actions: switch_explorer_from_builder
+        pointers: pl_end_conversation_jr3
+      
+      explorer_redirect_initial_hunter:
+        text: |-
+          &7He glances at you briefly.
+
+          &f"Wrong curiosity."
+
+          "You’re looking for something else."
+
+          "Go find it."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_hunter
+        pointers: pl_end_conversation_jr3
+      
+      explorer_redirect_initial_builder:
+        text: |-
+          &7He taps a wall, listening to the sound.
+
+          &f"Not your kind of work."
+
+          "You build."
+
+          "We uncover."
+
+          "Different instincts."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_builder
+        pointers: pl_end_conversation_jr3
+      
+      explorer_redirect_change_hunter:
+        text: |-
+          &7He waves you off absentmindedly.
+
+          &f"If you’ve chosen precision…"
+
+          "Then stop wandering."
+
+          "Go where that path leads."
+        conditions: jr3_quest_available,jr3_citizen_registered,change_to_hunter
+        pointers: pl_end_conversation_jr3
+      
+      explorer_redirect_change_builder:
+        text: |-
+          &7He does not even turn.
+
+          &f"Creation calls you."
+
+          "Don’t ignore it."
+
+          "Go."
+        conditions: jr3_quest_available,jr3_citizen_registered,change_to_builder
+        pointers: pl_end_conversation_jr3
+      
+      explorer_default1:
+        text: |-
+          &f"You see that crack?"
+
+          "Most ignore it."
+
+          "I want to know what’s behind it."
+        conditions: explorer_rand_1
+        pointers: pl_end_conversation_jr3
+      
+      explorer_default2:
+        text: |-
+          &f"Traps are just questions."
+
+          "If you’re brave enough… they answer."
+        conditions: '!explorer_rand_1,explorer_rand_2'
+        pointers: pl_end_conversation_jr3
+      
+      explorer_default3:
+        text: |-
+          &f"Patience matters."
+
+          "Not for safety…"
+
+          "For understanding."
+        conditions: '!explorer_rand_1,!explorer_rand_2,explorer_rand_3'
+        pointers: pl_end_conversation_jr3
+      
+      explorer_default4:
+        text: |-
+          &f"If nothing ever goes wrong…"
+
+          "You’re not exploring enough."
+        conditions: '!explorer_rand_1,!explorer_rand_2,!explorer_rand_3'
+        pointers: pl_end_conversation_jr3
+    
+    player_options:
+      pl_end_conversation_jr3:
+        text: End conversation
+  
+  builder_conv:
+    quester: builder Master
+    first: builder_assign_initial,builder_assign_from_explorer,builder_assign_from_hunter,builder_redirect_initial_explorer,builder_redirect_initial_hunter,builder_redirect_change_explorer,builder_redirect_change_hunter,builder_default1,builder_default2,builder_default3,builder_default4
+    stop: true
+    
+    NPC_options:
+      builder_assign_initial:
+        text: |-
+          &7The builder is observing a structure, then strikes it once… and a part collapses.
+
+          &f"Wrong angle."
+
+          He turns to you.
+
+          "Good. You’re here."
+
+          "Everything around you is flawed."
+
+          "Walls bend. Supports fail. Designs lie."
+
+          "Most people accept it."
+
+          "We don’t."
+
+          "We break it."
+
+          "We understand it."
+
+          "Then we build it again… better."
+
+          "From now on… you construct."
+
+          "And you correct what should not exist."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_builder
+        actions: become_builder
+        pointers: pl_end_conversation_jr3
+      
+      builder_assign_from_explorer:
+        text: |-
+          &7The builder studies you carefully.
+
+          &f"You’ve seen how things fail."
+
+          "Good."
+
+          "Most only see the surface."
+
+          "You’ve seen what lies beneath."
+
+          "Now you will learn why it fails…"
+
+          "And how to prevent it."
+
+          "Observation is useful."
+
+          "But creation requires precision."
+
+          "Let’s see if you have it."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_explorer,change_to_builder
+        actions: switch_builder_from_explorer
+        pointers: pl_end_conversation_jr3
+      
+      builder_assign_from_hunter:
+        text: |-
+          &7The builder watches your hands.
+
+          &f"Steady. Controlled."
+
+          "You understand precision."
+
+          "That will help you."
+
+          "But here…"
+
+          "Precision is not enough."
+
+          "You must predict failure… before it happens."
+
+          "Every structure hides a weakness."
+
+          "Find it… or create it."
+
+          "Then improve it."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_hunter,change_to_builder
+        actions: switch_builder_from_hunter
+        pointers: pl_end_conversation_jr3
+      
+      builder_redirect_initial_explorer:
+        text: |-
+          &7The builder barely glances at you.
+
+          &f"You seek discovery."
+
+          "Not structure."
+
+          "Go where things are still unknown."
+
+          "Return when you want to define them."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_explorer
+        pointers: pl_end_conversation_jr3
+      
+      builder_redirect_initial_hunter:
+        text: |-
+          &7The builder observes your stance.
+
+          &f"You follow precision."
+
+          "That is not enough here."
+
+          "We design systems… not single actions."
+
+          "Go refine your control first."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_hunter
+        pointers: pl_end_conversation_jr3
+      
+      builder_redirect_change_explorer:
+        text: |-
+          &7The builder taps a block, listening.
+
+          &f"Back to uncertainty."
+
+          "Strange choice."
+
+          "But sometimes… chaos teaches what structure cannot."
+
+          "Go."
+        conditions: jr3_quest_available,jr3_citizen_registered,change_to_explorer
+        pointers: pl_end_conversation_jr3
+      
+      builder_redirect_change_hunter:
+        text: |-
+          &7The builder nods once.
+
+          &f"Back to precision."
+
+          "A simpler path."
+
+          "But necessary for some."
+
+          "Go refine it."
+        conditions: jr3_quest_available,jr3_citizen_registered,change_to_hunter
+        pointers: pl_end_conversation_jr3
+      
+      builder_default1:
+        text: |-
+          &f"If it doesn’t break…"
+
+          "You didn’t test it enough."
+        conditions: builder_rand_1
+        pointers: pl_end_conversation_jr3
+      
+      builder_default2:
+        text: |-
+          &f"Perfection is not built."
+
+          "It is approached… by removing errors."
+        conditions: '!builder_rand_1,builder_rand_2'
+        pointers: pl_end_conversation_jr3
+      
+      builder_default3:
+        text: |-
+          &f"Every structure hides a flaw."
+
+          "The question is… do you see it?"
+        conditions: '!builder_rand_1,!builder_rand_2,builder_rand_3'
+        pointers: pl_end_conversation_jr3
+      
+      builder_default4:
+        text: |-
+          &f"If you never rebuild it…"
+
+          "You never understood it."
+        conditions: '!builder_rand_1,!builder_rand_2,!builder_rand_3'
+        pointers: pl_end_conversation_jr3
+    
+    player_options:
+      pl_end_conversation_jr3:
+        text: End conversation
+  
+  hunter_conv:
+    quester: hunter Master
+    first: hunter_assign_initial,hunter_assign_from_explorer,hunter_assign_from_builder,hunter_redirect_initial_explorer,hunter_redirect_initial_builder,hunter_redirect_change_explorer,hunter_redirect_change_builder,hunter_default1,hunter_default2,hunter_default3,hunter_default4
+    stop: true
+    
+    NPC_options:
+      hunter_assign_initial:
+        text: |-
+          &7The hunter stands completely still.
+
+          For a moment… you’re not even sure he’s breathing.
+
+          &f"Listen."
+
+          "Your breath."
+
+          "Too fast."
+
+          "Too loud."
+
+          "Uncontrolled."
+
+          He finally looks at you.
+
+          "A hunter does not chase."
+
+          "A hunter waits… observes… decides."
+
+          "Every movement has a cost."
+
+          "Every mistake… is final."
+
+          "From now on… you hunt."
+
+          "Learn control."
+
+          "Or become the prey."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_hunter
+        actions: become_hunter
+        pointers: pl_end_conversation_jr3
+      
+      hunter_assign_from_explorer:
+        text: |-
+          &7His eyes track you before you even stop moving.
+
+          &f"Too much motion."
+
+          "Too much noise."
+
+          "You react to everything."
+
+          "That ends now."
+
+          "A hunter does not explore."
+
+          "He selects."
+
+          "He isolates."
+
+          "He strikes once."
+
+          "And it is enough."
+
+          "You will learn to wait."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_explorer,change_to_hunter
+        actions: switch_hunter_from_explorer
+        pointers: pl_end_conversation_jr3
+      
+      hunter_assign_from_builder:
+        text: |-
+          &7He watches your posture in silence.
+
+          &f"You calculate."
+
+          "Good."
+
+          "But you rely on correction."
+
+          "On rebuilding."
+
+          "Here… there is no second attempt."
+
+          "You act once."
+
+          "And it must be right."
+
+          "Control replaces adjustment."
+
+          "Precision replaces revision."
+
+          "If you stay… you will understand."
+        conditions: jr3_quest_available,jr3_citizen_registered,is_builder,change_to_hunter
+        actions: switch_hunter_from_builder
+        pointers: pl_end_conversation_jr3
+      
+      hunter_redirect_initial_explorer:
+        text: |-
+          &7He doesn’t move.
+
+          &f"You follow movement."
+
+          "We remove it."
+
+          "Wrong place."
+
+          "Leave."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_explorer
+        pointers: pl_end_conversation_jr3
+      
+      hunter_redirect_initial_builder:
+        text: |-
+          &7A slow breath.
+
+          &f"You build systems."
+
+          "We end them."
+
+          "Different discipline."
+
+          "Go."
+        conditions: jr3_quest_available,!jr3_citizen_registered,chose_builder
+        pointers: pl_end_conversation_jr3
+      
+      hunter_redirect_change_explorer:
+        text: |-
+          &7His gaze shifts past you.
+
+          &f"Back to uncertainty."
+
+          "Then stop trying to control it."
+
+          "Go."
+        conditions: jr3_quest_available,jr3_citizen_registered,change_to_explorer
+        pointers: pl_end_conversation_jr3
+      
+      hunter_redirect_change_builder:
+        text: |-
+          &7A small exhale.
+
+          &f"Back to correction."
+
+          "There, mistakes are allowed."
+
+          "Here, they are not."
+
+          "Go."
+        conditions: jr3_quest_available,jr3_citizen_registered,change_to_builder
+        pointers: pl_end_conversation_jr3
+      
+      hunter_default1:
+        text: |-
+          &f"Breathe in."
+
+          "Hold."
+
+          "Act."
+
+          "Then breathe again."
+        conditions: hunter_rand_1
+        pointers: pl_end_conversation_jr3
+      
+      hunter_default2:
+        text: |-
+          &f"If you move without purpose…"
+
+          "You’ve already failed."
+        conditions: '!hunter_rand_1,hunter_rand_2'
+        pointers: pl_end_conversation_jr3
+      
+      hunter_default3:
+        text: |-
+          &f"Control the moment."
+
+          "Or the moment controls you."
+        conditions: '!hunter_rand_1,!hunter_rand_2,hunter_rand_3'
+        pointers: pl_end_conversation_jr3
+      
+      hunter_default4:
+        text: |-
+          &f"One action."
+
+          "One result."
+
+          "No waste."
+        conditions: '!hunter_rand_1,!hunter_rand_2,!hunter_rand_3'
+        pointers: pl_end_conversation_jr3
+    
+    player_options:
+      pl_end_conversation_jr3:
+        text: End conversation

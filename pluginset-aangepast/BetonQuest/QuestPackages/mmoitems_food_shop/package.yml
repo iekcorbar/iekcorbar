@@ -1,0 +1,3052 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+npcs:
+  '82': citizens 82
+  '83': citizens 83
+  '84': citizens 84
+  '85': citizens 85
+  '86': citizens 86
+  '87': citizens 87
+  '88': citizens 88
+  '89': citizens 89
+items:
+  teahouse_sugar: simple sugar
+  teahouse_honey_bottle: simple honey_bottle
+  teahouse_sugar_cane: simple sugar_cane
+  teahouse_wheat: simple wheat
+  teahouse_sweet_berries: simple sweet_berries
+  teahouse_bamboo: simple bamboo
+  sakebrewery_wheat: simple wheat
+  sakebrewery_sugar: simple sugar
+  sakebrewery_brown_mushroom: simple brown_mushroom
+  sakebrewery_potato: simple potato
+  sakebrewery_kelp: simple kelp
+  sakebrewery_barrel: simple barrel
+  bbqmaster_beef: simple beef
+  bbqmaster_porkchop: simple porkchop
+  bbqmaster_chicken: simple chicken
+  bbqmaster_mutton: simple mutton
+  bbqmaster_coal: simple coal
+  bbqmaster_charcoal: simple charcoal
+  sushimaster_cod: simple cod
+  sushimaster_salmon: simple salmon
+  sushimaster_dried_kelp: simple dried_kelp
+  sushimaster_seagrass: simple seagrass
+  sushimaster_kelp: simple kelp
+  sushimaster_bowl: simple bowl
+  candymerchant_sugar: simple sugar
+  candymerchant_honey_bottle: simple honey_bottle
+  candymerchant_apple: simple apple
+  candymerchant_glow_berries: simple glow_berries
+  candymerchant_cocoa_beans: simple cocoa_beans
+  candymerchant_paper: simple paper
+  fruitmarket_apple: simple apple
+  fruitmarket_melon_slice: simple melon_slice
+  fruitmarket_sweet_berries: simple sweet_berries
+  fruitmarket_glow_berries: simple glow_berries
+  fruitmarket_pumpkin: simple pumpkin
+  fruitmarket_carrot: simple carrot
+  coffeehouse_cocoa_beans: simple cocoa_beans
+  coffeehouse_sugar: simple sugar
+  coffeehouse_milk_bucket: simple milk_bucket
+  coffeehouse_cookie: simple cookie
+  coffeehouse_paper: simple paper
+  coffeehouse_copper_ingot: simple copper_ingot
+  icecreamcart_snowball: simple snowball
+  icecreamcart_ice: simple ice
+  icecreamcart_packed_ice: simple packed_ice
+  icecreamcart_milk_bucket: simple milk_bucket
+  icecreamcart_sugar: simple sugar
+  icecreamcart_blue_ice: simple blue_ice
+journal:
+  teahouse_q1:
+    en: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &812 Sugar&f. Sweetness keeps bitter tea honest.
+    en-US: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &812 Sugar&f. Sweetness keeps bitter tea honest.
+  teahouse_q2:
+    en: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &84 Honey Bottle&f. Good honey makes even a rainy day taste gentle.
+    en-US: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &84 Honey Bottle&f. Good honey makes even a rainy day taste gentle.
+  teahouse_q3:
+    en: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &820 Sugar Cane&f. Fresh cane gives me syrup, paper wraps, and trade favors.
+    en-US: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &820 Sugar Cane&f. Fresh cane gives me syrup, paper wraps, and trade favors.
+  teahouse_q4:
+    en: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &824 Wheat&f. Tea is better with small cakes, and small cakes begin with wheat.
+    en-US: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &824 Wheat&f. Tea is better with small cakes, and small cakes begin with wheat.
+  teahouse_q5:
+    en: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &816 Sweet Berries&f. Berry tea warms the hands and brightens the heart.
+    en-US: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &816 Sweet Berries&f. Berry tea warms the hands and brightens the heart.
+  teahouse_q6:
+    en: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &818 Bamboo&f. Bamboo whisks and trays do not replace themselves.
+    en-US: |-
+      &fTea House - Aiko Contract
+
+      &7Bring me &818 Bamboo&f. Bamboo whisks and trays do not replace themselves.
+  sakebrewery_q1:
+    en: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &832 Wheat&f. Grain feeds workers and fills tavern bowls.
+    en-US: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &832 Wheat&f. Grain feeds workers and fills tavern bowls.
+  sakebrewery_q2:
+    en: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &816 Sugar&f. A careful sweetness keeps the brew balanced.
+    en-US: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &816 Sugar&f. A careful sweetness keeps the brew balanced.
+  sakebrewery_q3:
+    en: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &812 Brown Mushroom&f. Mushrooms make strong tavern stews for stronger drinkers.
+    en-US: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &812 Brown Mushroom&f. Mushrooms make strong tavern stews for stronger drinkers.
+  sakebrewery_q4:
+    en: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &824 Potato&f. Potatoes keep customers standing after the second cup.
+    en-US: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &824 Potato&f. Potatoes keep customers standing after the second cup.
+  sakebrewery_q5:
+    en: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &820 Kelp&f. Dried kelp gives snacks the taste of the sea.
+    en-US: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &820 Kelp&f. Dried kelp gives snacks the taste of the sea.
+  sakebrewery_q6:
+    en: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &83 Barrel&f. No barrel, no brewery. Simple as that.
+    en-US: |-
+      &fSake Brewery - Goro Contract
+
+      &7Bring me &83 Barrel&f. No barrel, no brewery. Simple as that.
+  bbqmaster_q1:
+    en: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &816 Beef&f. Good beef needs only fire, salt, and patience.
+    en-US: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &816 Beef&f. Good beef needs only fire, salt, and patience.
+  bbqmaster_q2:
+    en: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &816 Porkchop&f. Pork takes smoke better than most nobles take advice.
+    en-US: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &816 Porkchop&f. Pork takes smoke better than most nobles take advice.
+  bbqmaster_q3:
+    en: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &820 Chicken&f. Chicken skewers sell faster than I can grill them.
+    en-US: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &820 Chicken&f. Chicken skewers sell faster than I can grill them.
+  bbqmaster_q4:
+    en: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &814 Mutton&f. Mutton keeps the night watch warm.
+    en-US: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &814 Mutton&f. Mutton keeps the night watch warm.
+  bbqmaster_q5:
+    en: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &824 Coal&f. A weak fire ruins strong meat.
+    en-US: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &824 Coal&f. A weak fire ruins strong meat.
+  bbqmaster_q6:
+    en: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &818 Charcoal&f. Clean charcoal makes clean smoke.
+    en-US: |-
+      &fBBQ Master - Taro Contract
+
+      &7Bring me &818 Charcoal&f. Clean charcoal makes clean smoke.
+  sushimaster_q1:
+    en: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &812 Cod&f. Cod is honest fish. Simple, clean, useful.
+    en-US: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &812 Cod&f. Cod is honest fish. Simple, clean, useful.
+  sushimaster_q2:
+    en: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &810 Salmon&f. Salmon brings color to the plate and strength to the body.
+    en-US: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &810 Salmon&f. Salmon brings color to the plate and strength to the body.
+  sushimaster_q3:
+    en: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &824 Dried Kelp&f. Kelp wraps, seasons, and reminds the rice of the ocean.
+    en-US: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &824 Dried Kelp&f. Kelp wraps, seasons, and reminds the rice of the ocean.
+  sushimaster_q4:
+    en: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &824 Seagrass&f. Fresh greens help balance rich fish.
+    en-US: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &824 Seagrass&f. Fresh greens help balance rich fish.
+  sushimaster_q5:
+    en: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &832 Kelp&f. The best kitchens waste nothing from the sea.
+    en-US: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &832 Kelp&f. The best kitchens waste nothing from the sea.
+  sushimaster_q6:
+    en: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &812 Bowl&f. Rice bowls vanish faster than customers admit.
+    en-US: |-
+      &fSushi Master - Daichi Contract
+
+      &7Bring me &812 Bowl&f. Rice bowls vanish faster than customers admit.
+  candymerchant_q1:
+    en: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &832 Sugar&f. Candy without sugar is just a sad idea.
+    en-US: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &832 Sugar&f. Candy without sugar is just a sad idea.
+  candymerchant_q2:
+    en: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &86 Honey Bottle&f. Honey makes the glaze shine like lantern light.
+    en-US: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &86 Honey Bottle&f. Honey makes the glaze shine like lantern light.
+  candymerchant_q3:
+    en: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &818 Apple&f. Candy apples need crisp fruit, not bruised excuses.
+    en-US: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &818 Apple&f. Candy apples need crisp fruit, not bruised excuses.
+  candymerchant_q4:
+    en: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &812 Glow Berries&f. Glow berries make sweets that look magical at night.
+    en-US: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &812 Glow Berries&f. Glow berries make sweets that look magical at night.
+  candymerchant_q5:
+    en: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &820 Cocoa Beans&f. Chocolate makes customers forgive high prices.
+    en-US: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &820 Cocoa Beans&f. Chocolate makes customers forgive high prices.
+  candymerchant_q6:
+    en: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &824 Paper&f. Every sweet needs a wrapper and every wrapper needs paper.
+    en-US: |-
+      &fCandy Merchant - Momo Contract
+
+      &7Bring me &824 Paper&f. Every sweet needs a wrapper and every wrapper needs paper.
+  fruitmarket_q1:
+    en: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &824 Apple&f. Apples are the backbone of any honest fruit stall.
+    en-US: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &824 Apple&f. Apples are the backbone of any honest fruit stall.
+  fruitmarket_q2:
+    en: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &832 Melon Slice&f. Melon sells well when the streets are hot.
+    en-US: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &832 Melon Slice&f. Melon sells well when the streets are hot.
+  fruitmarket_q3:
+    en: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &824 Sweet Berries&f. Sweet berries stain fingers and make customers smile.
+    en-US: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &824 Sweet Berries&f. Sweet berries stain fingers and make customers smile.
+  fruitmarket_q4:
+    en: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &816 Glow Berries&f. Glow berries catch the eye after sunset.
+    en-US: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &816 Glow Berries&f. Glow berries catch the eye after sunset.
+  fruitmarket_q5:
+    en: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &88 Pumpkin&f. Pumpkins fill carts, soups, and festival displays.
+    en-US: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &88 Pumpkin&f. Pumpkins fill carts, soups, and festival displays.
+  fruitmarket_q6:
+    en: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &828 Carrot&f. Not fruit, I know. Customers still ask for them.
+    en-US: |-
+      &fFruit Market - Sora Contract
+
+      &7Bring me &828 Carrot&f. Not fruit, I know. Customers still ask for them.
+  coffeehouse_q1:
+    en: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &824 Cocoa Beans&f. A dark cup needs deep flavor. Cocoa helps.
+    en-US: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &824 Cocoa Beans&f. A dark cup needs deep flavor. Cocoa helps.
+  coffeehouse_q2:
+    en: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &818 Sugar&f. Some customers are not brave enough for bitter coffee.
+    en-US: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &818 Sugar&f. Some customers are not brave enough for bitter coffee.
+  coffeehouse_q3:
+    en: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &84 Milk Bucket&f. Milk softens the cup and the mood.
+    en-US: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &84 Milk Bucket&f. Milk softens the cup and the mood.
+  coffeehouse_q4:
+    en: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &816 Cookie&f. Coffee without a biscuit is just work in a cup.
+    en-US: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &816 Cookie&f. Coffee without a biscuit is just work in a cup.
+  coffeehouse_q5:
+    en: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &820 Paper&f. Receipts, labels, filters... paper disappears in this place.
+    en-US: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &820 Paper&f. Receipts, labels, filters... paper disappears in this place.
+  coffeehouse_q6:
+    en: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &810 Copper Ingot&f. The coffee machine needs repairs again. Of course it does.
+    en-US: |-
+      &fCoffee House - Ren Contract
+
+      &7Bring me &810 Copper Ingot&f. The coffee machine needs repairs again. Of course it does.
+  icecreamcart_q1:
+    en: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &832 Snowball&f. Cold starts with snow. Simple enough.
+    en-US: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &832 Snowball&f. Cold starts with snow. Simple enough.
+  icecreamcart_q2:
+    en: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &816 Ice&f. Good ice keeps the cart alive through the afternoon.
+    en-US: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &816 Ice&f. Good ice keeps the cart alive through the afternoon.
+  icecreamcart_q3:
+    en: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &88 Packed Ice&f. Packed ice lasts longer when the crowd gets loud.
+    en-US: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &88 Packed Ice&f. Packed ice lasts longer when the crowd gets loud.
+  icecreamcart_q4:
+    en: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &85 Milk Bucket&f. Creamy treats need real milk.
+    en-US: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &85 Milk Bucket&f. Creamy treats need real milk.
+  icecreamcart_q5:
+    en: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &824 Sugar&f. Frozen sweets still need sweetness.
+    en-US: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &824 Sugar&f. Frozen sweets still need sweetness.
+  icecreamcart_q6:
+    en: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &82 Blue Ice&f. Blue ice is expensive, but it keeps miracles frozen.
+    en-US: |-
+      &fIce Cream Cart - Yuki Contract
+
+      &7Bring me &82 Blue Ice&f. Blue ice is expensive, but it keeps miracles frozen.
+conditions:
+  teahouse_reputation_1: point teahouse_reputation 1
+  teahouse_reputation_100: point teahouse_reputation 100
+  teahouse_daily_cooldown_v2: objective teahouse_daily_cooldown_timer
+  teahouse_q1_active: tag teahouse_q1_active
+  teahouse_q1_has_items: item teahouse_sugar:12
+  teahouse_q2_active: tag teahouse_q2_active
+  teahouse_q2_has_items: item teahouse_honey_bottle:4
+  teahouse_q3_active: tag teahouse_q3_active
+  teahouse_q3_has_items: item teahouse_sugar_cane:20
+  teahouse_q4_active: tag teahouse_q4_active
+  teahouse_q4_has_items: item teahouse_wheat:24
+  teahouse_q5_active: tag teahouse_q5_active
+  teahouse_q5_has_items: item teahouse_sweet_berries:16
+  teahouse_q6_active: tag teahouse_q6_active
+  teahouse_q6_has_items: item teahouse_bamboo:18
+  teahouse_has_active_quest_v2: or teahouse_q1_active,teahouse_q2_active,teahouse_q3_active,teahouse_q4_active,teahouse_q5_active,teahouse_q6_active
+  sakebrewery_reputation_1: point sakebrewery_reputation 1
+  sakebrewery_reputation_100: point sakebrewery_reputation 100
+  sakebrewery_daily_cooldown_v2: objective sakebrewery_daily_cooldown_timer
+  sakebrewery_q1_active: tag sakebrewery_q1_active
+  sakebrewery_q1_has_items: item sakebrewery_wheat:32
+  sakebrewery_q2_active: tag sakebrewery_q2_active
+  sakebrewery_q2_has_items: item sakebrewery_sugar:16
+  sakebrewery_q3_active: tag sakebrewery_q3_active
+  sakebrewery_q3_has_items: item sakebrewery_brown_mushroom:12
+  sakebrewery_q4_active: tag sakebrewery_q4_active
+  sakebrewery_q4_has_items: item sakebrewery_potato:24
+  sakebrewery_q5_active: tag sakebrewery_q5_active
+  sakebrewery_q5_has_items: item sakebrewery_kelp:20
+  sakebrewery_q6_active: tag sakebrewery_q6_active
+  sakebrewery_q6_has_items: item sakebrewery_barrel:3
+  sakebrewery_has_active_quest_v2: or sakebrewery_q1_active,sakebrewery_q2_active,sakebrewery_q3_active,sakebrewery_q4_active,sakebrewery_q5_active,sakebrewery_q6_active
+  bbqmaster_reputation_1: point bbqmaster_reputation 1
+  bbqmaster_reputation_100: point bbqmaster_reputation 100
+  bbqmaster_daily_cooldown_v2: objective bbqmaster_daily_cooldown_timer
+  bbqmaster_q1_active: tag bbqmaster_q1_active
+  bbqmaster_q1_has_items: item bbqmaster_beef:16
+  bbqmaster_q2_active: tag bbqmaster_q2_active
+  bbqmaster_q2_has_items: item bbqmaster_porkchop:16
+  bbqmaster_q3_active: tag bbqmaster_q3_active
+  bbqmaster_q3_has_items: item bbqmaster_chicken:20
+  bbqmaster_q4_active: tag bbqmaster_q4_active
+  bbqmaster_q4_has_items: item bbqmaster_mutton:14
+  bbqmaster_q5_active: tag bbqmaster_q5_active
+  bbqmaster_q5_has_items: item bbqmaster_coal:24
+  bbqmaster_q6_active: tag bbqmaster_q6_active
+  bbqmaster_q6_has_items: item bbqmaster_charcoal:18
+  bbqmaster_has_active_quest_v2: or bbqmaster_q1_active,bbqmaster_q2_active,bbqmaster_q3_active,bbqmaster_q4_active,bbqmaster_q5_active,bbqmaster_q6_active
+  sushimaster_reputation_1: point sushimaster_reputation 1
+  sushimaster_reputation_100: point sushimaster_reputation 100
+  sushimaster_daily_cooldown_v2: objective sushimaster_daily_cooldown_timer
+  sushimaster_q1_active: tag sushimaster_q1_active
+  sushimaster_q1_has_items: item sushimaster_cod:12
+  sushimaster_q2_active: tag sushimaster_q2_active
+  sushimaster_q2_has_items: item sushimaster_salmon:10
+  sushimaster_q3_active: tag sushimaster_q3_active
+  sushimaster_q3_has_items: item sushimaster_dried_kelp:24
+  sushimaster_q4_active: tag sushimaster_q4_active
+  sushimaster_q4_has_items: item sushimaster_seagrass:24
+  sushimaster_q5_active: tag sushimaster_q5_active
+  sushimaster_q5_has_items: item sushimaster_kelp:32
+  sushimaster_q6_active: tag sushimaster_q6_active
+  sushimaster_q6_has_items: item sushimaster_bowl:12
+  sushimaster_has_active_quest_v2: or sushimaster_q1_active,sushimaster_q2_active,sushimaster_q3_active,sushimaster_q4_active,sushimaster_q5_active,sushimaster_q6_active
+  candymerchant_reputation_1: point candymerchant_reputation 1
+  candymerchant_reputation_100: point candymerchant_reputation 100
+  candymerchant_daily_cooldown_v2: objective candymerchant_daily_cooldown_timer
+  candymerchant_q1_active: tag candymerchant_q1_active
+  candymerchant_q1_has_items: item candymerchant_sugar:32
+  candymerchant_q2_active: tag candymerchant_q2_active
+  candymerchant_q2_has_items: item candymerchant_honey_bottle:6
+  candymerchant_q3_active: tag candymerchant_q3_active
+  candymerchant_q3_has_items: item candymerchant_apple:18
+  candymerchant_q4_active: tag candymerchant_q4_active
+  candymerchant_q4_has_items: item candymerchant_glow_berries:12
+  candymerchant_q5_active: tag candymerchant_q5_active
+  candymerchant_q5_has_items: item candymerchant_cocoa_beans:20
+  candymerchant_q6_active: tag candymerchant_q6_active
+  candymerchant_q6_has_items: item candymerchant_paper:24
+  candymerchant_has_active_quest_v2: or candymerchant_q1_active,candymerchant_q2_active,candymerchant_q3_active,candymerchant_q4_active,candymerchant_q5_active,candymerchant_q6_active
+  fruitmarket_reputation_1: point fruitmarket_reputation 1
+  fruitmarket_reputation_100: point fruitmarket_reputation 100
+  fruitmarket_daily_cooldown_v2: objective fruitmarket_daily_cooldown_timer
+  fruitmarket_q1_active: tag fruitmarket_q1_active
+  fruitmarket_q1_has_items: item fruitmarket_apple:24
+  fruitmarket_q2_active: tag fruitmarket_q2_active
+  fruitmarket_q2_has_items: item fruitmarket_melon_slice:32
+  fruitmarket_q3_active: tag fruitmarket_q3_active
+  fruitmarket_q3_has_items: item fruitmarket_sweet_berries:24
+  fruitmarket_q4_active: tag fruitmarket_q4_active
+  fruitmarket_q4_has_items: item fruitmarket_glow_berries:16
+  fruitmarket_q5_active: tag fruitmarket_q5_active
+  fruitmarket_q5_has_items: item fruitmarket_pumpkin:8
+  fruitmarket_q6_active: tag fruitmarket_q6_active
+  fruitmarket_q6_has_items: item fruitmarket_carrot:28
+  fruitmarket_has_active_quest_v2: or fruitmarket_q1_active,fruitmarket_q2_active,fruitmarket_q3_active,fruitmarket_q4_active,fruitmarket_q5_active,fruitmarket_q6_active
+  coffeehouse_reputation_1: point coffeehouse_reputation 1
+  coffeehouse_reputation_100: point coffeehouse_reputation 100
+  coffeehouse_daily_cooldown_v2: objective coffeehouse_daily_cooldown_timer
+  coffeehouse_q1_active: tag coffeehouse_q1_active
+  coffeehouse_q1_has_items: item coffeehouse_cocoa_beans:24
+  coffeehouse_q2_active: tag coffeehouse_q2_active
+  coffeehouse_q2_has_items: item coffeehouse_sugar:18
+  coffeehouse_q3_active: tag coffeehouse_q3_active
+  coffeehouse_q3_has_items: item coffeehouse_milk_bucket:4
+  coffeehouse_q4_active: tag coffeehouse_q4_active
+  coffeehouse_q4_has_items: item coffeehouse_cookie:16
+  coffeehouse_q5_active: tag coffeehouse_q5_active
+  coffeehouse_q5_has_items: item coffeehouse_paper:20
+  coffeehouse_q6_active: tag coffeehouse_q6_active
+  coffeehouse_q6_has_items: item coffeehouse_copper_ingot:10
+  coffeehouse_has_active_quest_v2: or coffeehouse_q1_active,coffeehouse_q2_active,coffeehouse_q3_active,coffeehouse_q4_active,coffeehouse_q5_active,coffeehouse_q6_active
+  icecreamcart_reputation_1: point icecreamcart_reputation 1
+  icecreamcart_reputation_100: point icecreamcart_reputation 100
+  icecreamcart_daily_cooldown_v2: objective icecreamcart_daily_cooldown_timer
+  icecreamcart_q1_active: tag icecreamcart_q1_active
+  icecreamcart_q1_has_items: item icecreamcart_snowball:32
+  icecreamcart_q2_active: tag icecreamcart_q2_active
+  icecreamcart_q2_has_items: item icecreamcart_ice:16
+  icecreamcart_q3_active: tag icecreamcart_q3_active
+  icecreamcart_q3_has_items: item icecreamcart_packed_ice:8
+  icecreamcart_q4_active: tag icecreamcart_q4_active
+  icecreamcart_q4_has_items: item icecreamcart_milk_bucket:5
+  icecreamcart_q5_active: tag icecreamcart_q5_active
+  icecreamcart_q5_has_items: item icecreamcart_sugar:24
+  icecreamcart_q6_active: tag icecreamcart_q6_active
+  icecreamcart_q6_has_items: item icecreamcart_blue_ice:2
+  icecreamcart_has_active_quest_v2: or icecreamcart_q1_active,icecreamcart_q2_active,icecreamcart_q3_active,icecreamcart_q4_active,icecreamcart_q5_active,icecreamcart_q6_active
+actions:
+  teahouse_open_shop: command mi stations open mmo-food-shop-tea-house %player%
+  teahouse_reputation_gain: point teahouse_reputation 1 action:add conditions:!teahouse_reputation_100
+  teahouse_reputation_gain_msg: 'notify &6Tea House - Aiko Reputation&7: &a+1 &fReputation.
+    io:chat'
+  teahouse_reputation_lose: point teahouse_reputation 1 action:subtract conditions:teahouse_reputation_1
+  teahouse_reputation_lose_msg: 'notify &6Tea House - Aiko Reputation&7: &c-1 &fReputation.
+    io:chat'
+  teahouse_cleanup_legacy_cooldown: tag del teahouse_daily_cooldown
+  teahouse_start_daily_cooldown: objective start teahouse_daily_cooldown_timer
+  teahouse_q1_tag: tag add teahouse_q1_active
+  teahouse_q1_remove: tag del teahouse_q1_active
+  teahouse_q1_journal: journal add teahouse_q1
+  teahouse_remove_journal_q1: journal delete teahouse_q1
+  teahouse_q1_take_items: take teahouse_sugar:12
+  teahouse_q1_msg: 'notify &6Tea House - Aiko&7: &fBring me &812 Sugar&f. Sweetness
+    keeps bitter tea honest. io:chat'
+  teahouse_q1_complete_msg: 'notify &6Tea House - Aiko&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  teahouse_q1_reward: command cmi money give %player% -s 400
+  teahouse_q1_complete_title: notify Contract CompleteTea House - Aiko is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  teahouse_q1_start_timer: objective start teahouse_q1_timer
+  teahouse_q1_stop_timer: objective delete teahouse_q1_timer
+  teahouse_q1_expire_msg: 'notify &6Tea House - Aiko&7: &cThe contract expired. Come
+    back another day. io:chat'
+  teahouse_q1_expire: folder teahouse_q1_remove,teahouse_remove_journal_q1,teahouse_reputation_lose,teahouse_reputation_lose_msg,teahouse_q1_expire_msg
+  teahouse_daily_quest_1: folder teahouse_clear_active_quests,teahouse_q1_tag,teahouse_q1_journal,teahouse_q1_msg,teahouse_q1_start_timer
+  teahouse_q1_complete: folder teahouse_q1_take_items,teahouse_reputation_gain,teahouse_reputation_gain_msg,teahouse_q1_complete_title,teahouse_q1_complete_msg,teahouse_q1_remove,teahouse_q1_reward,teahouse_remove_journal_q1,teahouse_q1_stop_timer
+  teahouse_q2_tag: tag add teahouse_q2_active
+  teahouse_q2_remove: tag del teahouse_q2_active
+  teahouse_q2_journal: journal add teahouse_q2
+  teahouse_remove_journal_q2: journal delete teahouse_q2
+  teahouse_q2_take_items: take teahouse_honey_bottle:4
+  teahouse_q2_msg: 'notify &6Tea House - Aiko&7: &fBring me &84 Honey Bottle&f. Good
+    honey makes even a rainy day taste gentle. io:chat'
+  teahouse_q2_complete_msg: 'notify &6Tea House - Aiko&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  teahouse_q2_reward: command cmi money give %player% -s 400
+  teahouse_q2_complete_title: notify Contract CompleteTea House - Aiko is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  teahouse_q2_start_timer: objective start teahouse_q2_timer
+  teahouse_q2_stop_timer: objective delete teahouse_q2_timer
+  teahouse_q2_expire_msg: 'notify &6Tea House - Aiko&7: &cThe contract expired. Come
+    back another day. io:chat'
+  teahouse_q2_expire: folder teahouse_q2_remove,teahouse_remove_journal_q2,teahouse_reputation_lose,teahouse_reputation_lose_msg,teahouse_q2_expire_msg
+  teahouse_daily_quest_2: folder teahouse_clear_active_quests,teahouse_q2_tag,teahouse_q2_journal,teahouse_q2_msg,teahouse_q2_start_timer
+  teahouse_q2_complete: folder teahouse_q2_take_items,teahouse_reputation_gain,teahouse_reputation_gain_msg,teahouse_q2_complete_title,teahouse_q2_complete_msg,teahouse_q2_remove,teahouse_q2_reward,teahouse_remove_journal_q2,teahouse_q2_stop_timer
+  teahouse_q3_tag: tag add teahouse_q3_active
+  teahouse_q3_remove: tag del teahouse_q3_active
+  teahouse_q3_journal: journal add teahouse_q3
+  teahouse_remove_journal_q3: journal delete teahouse_q3
+  teahouse_q3_take_items: take teahouse_sugar_cane:20
+  teahouse_q3_msg: 'notify &6Tea House - Aiko&7: &fBring me &820 Sugar Cane&f. Fresh
+    cane gives me syrup, paper wraps, and trade favors. io:chat'
+  teahouse_q3_complete_msg: 'notify &6Tea House - Aiko&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  teahouse_q3_reward: command cmi money give %player% -s 400
+  teahouse_q3_complete_title: notify Contract CompleteTea House - Aiko is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  teahouse_q3_start_timer: objective start teahouse_q3_timer
+  teahouse_q3_stop_timer: objective delete teahouse_q3_timer
+  teahouse_q3_expire_msg: 'notify &6Tea House - Aiko&7: &cThe contract expired. Come
+    back another day. io:chat'
+  teahouse_q3_expire: folder teahouse_q3_remove,teahouse_remove_journal_q3,teahouse_reputation_lose,teahouse_reputation_lose_msg,teahouse_q3_expire_msg
+  teahouse_daily_quest_3: folder teahouse_clear_active_quests,teahouse_q3_tag,teahouse_q3_journal,teahouse_q3_msg,teahouse_q3_start_timer
+  teahouse_q3_complete: folder teahouse_q3_take_items,teahouse_reputation_gain,teahouse_reputation_gain_msg,teahouse_q3_complete_title,teahouse_q3_complete_msg,teahouse_q3_remove,teahouse_q3_reward,teahouse_remove_journal_q3,teahouse_q3_stop_timer
+  teahouse_q4_tag: tag add teahouse_q4_active
+  teahouse_q4_remove: tag del teahouse_q4_active
+  teahouse_q4_journal: journal add teahouse_q4
+  teahouse_remove_journal_q4: journal delete teahouse_q4
+  teahouse_q4_take_items: take teahouse_wheat:24
+  teahouse_q4_msg: 'notify &6Tea House - Aiko&7: &fBring me &824 Wheat&f. Tea is better
+    with small cakes, and small cakes begin with wheat. io:chat'
+  teahouse_q4_complete_msg: 'notify &6Tea House - Aiko&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  teahouse_q4_reward: command cmi money give %player% -s 400
+  teahouse_q4_complete_title: notify Contract CompleteTea House - Aiko is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  teahouse_q4_start_timer: objective start teahouse_q4_timer
+  teahouse_q4_stop_timer: objective delete teahouse_q4_timer
+  teahouse_q4_expire_msg: 'notify &6Tea House - Aiko&7: &cThe contract expired. Come
+    back another day. io:chat'
+  teahouse_q4_expire: folder teahouse_q4_remove,teahouse_remove_journal_q4,teahouse_reputation_lose,teahouse_reputation_lose_msg,teahouse_q4_expire_msg
+  teahouse_daily_quest_4: folder teahouse_clear_active_quests,teahouse_q4_tag,teahouse_q4_journal,teahouse_q4_msg,teahouse_q4_start_timer
+  teahouse_q4_complete: folder teahouse_q4_take_items,teahouse_reputation_gain,teahouse_reputation_gain_msg,teahouse_q4_complete_title,teahouse_q4_complete_msg,teahouse_q4_remove,teahouse_q4_reward,teahouse_remove_journal_q4,teahouse_q4_stop_timer
+  teahouse_q5_tag: tag add teahouse_q5_active
+  teahouse_q5_remove: tag del teahouse_q5_active
+  teahouse_q5_journal: journal add teahouse_q5
+  teahouse_remove_journal_q5: journal delete teahouse_q5
+  teahouse_q5_take_items: take teahouse_sweet_berries:16
+  teahouse_q5_msg: 'notify &6Tea House - Aiko&7: &fBring me &816 Sweet Berries&f.
+    Berry tea warms the hands and brightens the heart. io:chat'
+  teahouse_q5_complete_msg: 'notify &6Tea House - Aiko&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  teahouse_q5_reward: command cmi money give %player% -s 400
+  teahouse_q5_complete_title: notify Contract CompleteTea House - Aiko is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  teahouse_q5_start_timer: objective start teahouse_q5_timer
+  teahouse_q5_stop_timer: objective delete teahouse_q5_timer
+  teahouse_q5_expire_msg: 'notify &6Tea House - Aiko&7: &cThe contract expired. Come
+    back another day. io:chat'
+  teahouse_q5_expire: folder teahouse_q5_remove,teahouse_remove_journal_q5,teahouse_reputation_lose,teahouse_reputation_lose_msg,teahouse_q5_expire_msg
+  teahouse_daily_quest_5: folder teahouse_clear_active_quests,teahouse_q5_tag,teahouse_q5_journal,teahouse_q5_msg,teahouse_q5_start_timer
+  teahouse_q5_complete: folder teahouse_q5_take_items,teahouse_reputation_gain,teahouse_reputation_gain_msg,teahouse_q5_complete_title,teahouse_q5_complete_msg,teahouse_q5_remove,teahouse_q5_reward,teahouse_remove_journal_q5,teahouse_q5_stop_timer
+  teahouse_q6_tag: tag add teahouse_q6_active
+  teahouse_q6_remove: tag del teahouse_q6_active
+  teahouse_q6_journal: journal add teahouse_q6
+  teahouse_remove_journal_q6: journal delete teahouse_q6
+  teahouse_q6_take_items: take teahouse_bamboo:18
+  teahouse_q6_msg: 'notify &6Tea House - Aiko&7: &fBring me &818 Bamboo&f. Bamboo
+    whisks and trays do not replace themselves. io:chat'
+  teahouse_q6_complete_msg: 'notify &6Tea House - Aiko&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  teahouse_q6_reward: command cmi money give %player% -s 400
+  teahouse_q6_complete_title: notify Contract CompleteTea House - Aiko is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  teahouse_q6_start_timer: objective start teahouse_q6_timer
+  teahouse_q6_stop_timer: objective delete teahouse_q6_timer
+  teahouse_q6_expire_msg: 'notify &6Tea House - Aiko&7: &cThe contract expired. Come
+    back another day. io:chat'
+  teahouse_q6_expire: folder teahouse_q6_remove,teahouse_remove_journal_q6,teahouse_reputation_lose,teahouse_reputation_lose_msg,teahouse_q6_expire_msg
+  teahouse_daily_quest_6: folder teahouse_clear_active_quests,teahouse_q6_tag,teahouse_q6_journal,teahouse_q6_msg,teahouse_q6_start_timer
+  teahouse_q6_complete: folder teahouse_q6_take_items,teahouse_reputation_gain,teahouse_reputation_gain_msg,teahouse_q6_complete_title,teahouse_q6_complete_msg,teahouse_q6_remove,teahouse_q6_reward,teahouse_remove_journal_q6,teahouse_q6_stop_timer
+  teahouse_clear_active_quests: tag del teahouse_q1_active,teahouse_q2_active,teahouse_q3_active,teahouse_q4_active,teahouse_q5_active,teahouse_q6_active
+  teahouse_assign_random_daily_quest: folder teahouse_daily_quest_1,teahouse_daily_quest_2,teahouse_daily_quest_3,teahouse_daily_quest_4,teahouse_daily_quest_5,teahouse_daily_quest_6
+    random:1
+  teahouse_accept_random_daily_quest: folder teahouse_assign_random_daily_quest,teahouse_start_daily_cooldown
+  sakebrewery_open_shop: command mi stations open mmo-food-shop-sake-brewery %player%
+  sakebrewery_reputation_gain: point sakebrewery_reputation 1 action:add conditions:!sakebrewery_reputation_100
+  sakebrewery_reputation_gain_msg: 'notify &6Sake Brewery - Goro Reputation&7: &a+1
+    &fReputation. io:chat'
+  sakebrewery_reputation_lose: point sakebrewery_reputation 1 action:subtract conditions:sakebrewery_reputation_1
+  sakebrewery_reputation_lose_msg: 'notify &6Sake Brewery - Goro Reputation&7: &c-1
+    &fReputation. io:chat'
+  sakebrewery_cleanup_legacy_cooldown: tag del sakebrewery_daily_cooldown
+  sakebrewery_start_daily_cooldown: objective start sakebrewery_daily_cooldown_timer
+  sakebrewery_q1_tag: tag add sakebrewery_q1_active
+  sakebrewery_q1_remove: tag del sakebrewery_q1_active
+  sakebrewery_q1_journal: journal add sakebrewery_q1
+  sakebrewery_remove_journal_q1: journal delete sakebrewery_q1
+  sakebrewery_q1_take_items: take sakebrewery_wheat:32
+  sakebrewery_q1_msg: 'notify &6Sake Brewery - Goro&7: &fBring me &832 Wheat&f. Grain
+    feeds workers and fills tavern bowls. io:chat'
+  sakebrewery_q1_complete_msg: 'notify &6Sake Brewery - Goro&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  sakebrewery_q1_reward: command cmi money give %player% -s 400
+  sakebrewery_q1_complete_title: notify Contract CompleteSake Brewery - Goro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  sakebrewery_q1_start_timer: objective start sakebrewery_q1_timer
+  sakebrewery_q1_stop_timer: objective delete sakebrewery_q1_timer
+  sakebrewery_q1_expire_msg: 'notify &6Sake Brewery - Goro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sakebrewery_q1_expire: folder sakebrewery_q1_remove,sakebrewery_remove_journal_q1,sakebrewery_reputation_lose,sakebrewery_reputation_lose_msg,sakebrewery_q1_expire_msg
+  sakebrewery_daily_quest_1: folder sakebrewery_clear_active_quests,sakebrewery_q1_tag,sakebrewery_q1_journal,sakebrewery_q1_msg,sakebrewery_q1_start_timer
+  sakebrewery_q1_complete: folder sakebrewery_q1_take_items,sakebrewery_reputation_gain,sakebrewery_reputation_gain_msg,sakebrewery_q1_complete_title,sakebrewery_q1_complete_msg,sakebrewery_q1_remove,sakebrewery_q1_reward,sakebrewery_remove_journal_q1,sakebrewery_q1_stop_timer
+  sakebrewery_q2_tag: tag add sakebrewery_q2_active
+  sakebrewery_q2_remove: tag del sakebrewery_q2_active
+  sakebrewery_q2_journal: journal add sakebrewery_q2
+  sakebrewery_remove_journal_q2: journal delete sakebrewery_q2
+  sakebrewery_q2_take_items: take sakebrewery_sugar:16
+  sakebrewery_q2_msg: 'notify &6Sake Brewery - Goro&7: &fBring me &816 Sugar&f. A
+    careful sweetness keeps the brew balanced. io:chat'
+  sakebrewery_q2_complete_msg: 'notify &6Sake Brewery - Goro&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  sakebrewery_q2_reward: command cmi money give %player% -s 400
+  sakebrewery_q2_complete_title: notify Contract CompleteSake Brewery - Goro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  sakebrewery_q2_start_timer: objective start sakebrewery_q2_timer
+  sakebrewery_q2_stop_timer: objective delete sakebrewery_q2_timer
+  sakebrewery_q2_expire_msg: 'notify &6Sake Brewery - Goro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sakebrewery_q2_expire: folder sakebrewery_q2_remove,sakebrewery_remove_journal_q2,sakebrewery_reputation_lose,sakebrewery_reputation_lose_msg,sakebrewery_q2_expire_msg
+  sakebrewery_daily_quest_2: folder sakebrewery_clear_active_quests,sakebrewery_q2_tag,sakebrewery_q2_journal,sakebrewery_q2_msg,sakebrewery_q2_start_timer
+  sakebrewery_q2_complete: folder sakebrewery_q2_take_items,sakebrewery_reputation_gain,sakebrewery_reputation_gain_msg,sakebrewery_q2_complete_title,sakebrewery_q2_complete_msg,sakebrewery_q2_remove,sakebrewery_q2_reward,sakebrewery_remove_journal_q2,sakebrewery_q2_stop_timer
+  sakebrewery_q3_tag: tag add sakebrewery_q3_active
+  sakebrewery_q3_remove: tag del sakebrewery_q3_active
+  sakebrewery_q3_journal: journal add sakebrewery_q3
+  sakebrewery_remove_journal_q3: journal delete sakebrewery_q3
+  sakebrewery_q3_take_items: take sakebrewery_brown_mushroom:12
+  sakebrewery_q3_msg: 'notify &6Sake Brewery - Goro&7: &fBring me &812 Brown Mushroom&f.
+    Mushrooms make strong tavern stews for stronger drinkers. io:chat'
+  sakebrewery_q3_complete_msg: 'notify &6Sake Brewery - Goro&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  sakebrewery_q3_reward: command cmi money give %player% -s 400
+  sakebrewery_q3_complete_title: notify Contract CompleteSake Brewery - Goro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  sakebrewery_q3_start_timer: objective start sakebrewery_q3_timer
+  sakebrewery_q3_stop_timer: objective delete sakebrewery_q3_timer
+  sakebrewery_q3_expire_msg: 'notify &6Sake Brewery - Goro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sakebrewery_q3_expire: folder sakebrewery_q3_remove,sakebrewery_remove_journal_q3,sakebrewery_reputation_lose,sakebrewery_reputation_lose_msg,sakebrewery_q3_expire_msg
+  sakebrewery_daily_quest_3: folder sakebrewery_clear_active_quests,sakebrewery_q3_tag,sakebrewery_q3_journal,sakebrewery_q3_msg,sakebrewery_q3_start_timer
+  sakebrewery_q3_complete: folder sakebrewery_q3_take_items,sakebrewery_reputation_gain,sakebrewery_reputation_gain_msg,sakebrewery_q3_complete_title,sakebrewery_q3_complete_msg,sakebrewery_q3_remove,sakebrewery_q3_reward,sakebrewery_remove_journal_q3,sakebrewery_q3_stop_timer
+  sakebrewery_q4_tag: tag add sakebrewery_q4_active
+  sakebrewery_q4_remove: tag del sakebrewery_q4_active
+  sakebrewery_q4_journal: journal add sakebrewery_q4
+  sakebrewery_remove_journal_q4: journal delete sakebrewery_q4
+  sakebrewery_q4_take_items: take sakebrewery_potato:24
+  sakebrewery_q4_msg: 'notify &6Sake Brewery - Goro&7: &fBring me &824 Potato&f. Potatoes
+    keep customers standing after the second cup. io:chat'
+  sakebrewery_q4_complete_msg: 'notify &6Sake Brewery - Goro&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  sakebrewery_q4_reward: command cmi money give %player% -s 400
+  sakebrewery_q4_complete_title: notify Contract CompleteSake Brewery - Goro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  sakebrewery_q4_start_timer: objective start sakebrewery_q4_timer
+  sakebrewery_q4_stop_timer: objective delete sakebrewery_q4_timer
+  sakebrewery_q4_expire_msg: 'notify &6Sake Brewery - Goro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sakebrewery_q4_expire: folder sakebrewery_q4_remove,sakebrewery_remove_journal_q4,sakebrewery_reputation_lose,sakebrewery_reputation_lose_msg,sakebrewery_q4_expire_msg
+  sakebrewery_daily_quest_4: folder sakebrewery_clear_active_quests,sakebrewery_q4_tag,sakebrewery_q4_journal,sakebrewery_q4_msg,sakebrewery_q4_start_timer
+  sakebrewery_q4_complete: folder sakebrewery_q4_take_items,sakebrewery_reputation_gain,sakebrewery_reputation_gain_msg,sakebrewery_q4_complete_title,sakebrewery_q4_complete_msg,sakebrewery_q4_remove,sakebrewery_q4_reward,sakebrewery_remove_journal_q4,sakebrewery_q4_stop_timer
+  sakebrewery_q5_tag: tag add sakebrewery_q5_active
+  sakebrewery_q5_remove: tag del sakebrewery_q5_active
+  sakebrewery_q5_journal: journal add sakebrewery_q5
+  sakebrewery_remove_journal_q5: journal delete sakebrewery_q5
+  sakebrewery_q5_take_items: take sakebrewery_kelp:20
+  sakebrewery_q5_msg: 'notify &6Sake Brewery - Goro&7: &fBring me &820 Kelp&f. Dried
+    kelp gives snacks the taste of the sea. io:chat'
+  sakebrewery_q5_complete_msg: 'notify &6Sake Brewery - Goro&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  sakebrewery_q5_reward: command cmi money give %player% -s 400
+  sakebrewery_q5_complete_title: notify Contract CompleteSake Brewery - Goro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  sakebrewery_q5_start_timer: objective start sakebrewery_q5_timer
+  sakebrewery_q5_stop_timer: objective delete sakebrewery_q5_timer
+  sakebrewery_q5_expire_msg: 'notify &6Sake Brewery - Goro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sakebrewery_q5_expire: folder sakebrewery_q5_remove,sakebrewery_remove_journal_q5,sakebrewery_reputation_lose,sakebrewery_reputation_lose_msg,sakebrewery_q5_expire_msg
+  sakebrewery_daily_quest_5: folder sakebrewery_clear_active_quests,sakebrewery_q5_tag,sakebrewery_q5_journal,sakebrewery_q5_msg,sakebrewery_q5_start_timer
+  sakebrewery_q5_complete: folder sakebrewery_q5_take_items,sakebrewery_reputation_gain,sakebrewery_reputation_gain_msg,sakebrewery_q5_complete_title,sakebrewery_q5_complete_msg,sakebrewery_q5_remove,sakebrewery_q5_reward,sakebrewery_remove_journal_q5,sakebrewery_q5_stop_timer
+  sakebrewery_q6_tag: tag add sakebrewery_q6_active
+  sakebrewery_q6_remove: tag del sakebrewery_q6_active
+  sakebrewery_q6_journal: journal add sakebrewery_q6
+  sakebrewery_remove_journal_q6: journal delete sakebrewery_q6
+  sakebrewery_q6_take_items: take sakebrewery_barrel:3
+  sakebrewery_q6_msg: 'notify &6Sake Brewery - Goro&7: &fBring me &83 Barrel&f. No
+    barrel, no brewery. Simple as that. io:chat'
+  sakebrewery_q6_complete_msg: 'notify &6Sake Brewery - Goro&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  sakebrewery_q6_reward: command cmi money give %player% -s 400
+  sakebrewery_q6_complete_title: notify Contract CompleteSake Brewery - Goro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  sakebrewery_q6_start_timer: objective start sakebrewery_q6_timer
+  sakebrewery_q6_stop_timer: objective delete sakebrewery_q6_timer
+  sakebrewery_q6_expire_msg: 'notify &6Sake Brewery - Goro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sakebrewery_q6_expire: folder sakebrewery_q6_remove,sakebrewery_remove_journal_q6,sakebrewery_reputation_lose,sakebrewery_reputation_lose_msg,sakebrewery_q6_expire_msg
+  sakebrewery_daily_quest_6: folder sakebrewery_clear_active_quests,sakebrewery_q6_tag,sakebrewery_q6_journal,sakebrewery_q6_msg,sakebrewery_q6_start_timer
+  sakebrewery_q6_complete: folder sakebrewery_q6_take_items,sakebrewery_reputation_gain,sakebrewery_reputation_gain_msg,sakebrewery_q6_complete_title,sakebrewery_q6_complete_msg,sakebrewery_q6_remove,sakebrewery_q6_reward,sakebrewery_remove_journal_q6,sakebrewery_q6_stop_timer
+  sakebrewery_clear_active_quests: tag del sakebrewery_q1_active,sakebrewery_q2_active,sakebrewery_q3_active,sakebrewery_q4_active,sakebrewery_q5_active,sakebrewery_q6_active
+  sakebrewery_assign_random_daily_quest: folder sakebrewery_daily_quest_1,sakebrewery_daily_quest_2,sakebrewery_daily_quest_3,sakebrewery_daily_quest_4,sakebrewery_daily_quest_5,sakebrewery_daily_quest_6
+    random:1
+  sakebrewery_accept_random_daily_quest: folder sakebrewery_assign_random_daily_quest,sakebrewery_start_daily_cooldown
+  bbqmaster_open_shop: command mi stations open mmo-food-shop-bbq-master %player%
+  bbqmaster_reputation_gain: point bbqmaster_reputation 1 action:add conditions:!bbqmaster_reputation_100
+  bbqmaster_reputation_gain_msg: 'notify &6BBQ Master - Taro Reputation&7: &a+1 &fReputation.
+    io:chat'
+  bbqmaster_reputation_lose: point bbqmaster_reputation 1 action:subtract conditions:bbqmaster_reputation_1
+  bbqmaster_reputation_lose_msg: 'notify &6BBQ Master - Taro Reputation&7: &c-1 &fReputation.
+    io:chat'
+  bbqmaster_cleanup_legacy_cooldown: tag del bbqmaster_daily_cooldown
+  bbqmaster_start_daily_cooldown: objective start bbqmaster_daily_cooldown_timer
+  bbqmaster_q1_tag: tag add bbqmaster_q1_active
+  bbqmaster_q1_remove: tag del bbqmaster_q1_active
+  bbqmaster_q1_journal: journal add bbqmaster_q1
+  bbqmaster_remove_journal_q1: journal delete bbqmaster_q1
+  bbqmaster_q1_take_items: take bbqmaster_beef:16
+  bbqmaster_q1_msg: 'notify &6BBQ Master - Taro&7: &fBring me &816 Beef&f. Good beef
+    needs only fire, salt, and patience. io:chat'
+  bbqmaster_q1_complete_msg: 'notify &6BBQ Master - Taro&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  bbqmaster_q1_reward: command cmi money give %player% -s 400
+  bbqmaster_q1_complete_title: notify Contract CompleteBBQ Master - Taro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  bbqmaster_q1_start_timer: objective start bbqmaster_q1_timer
+  bbqmaster_q1_stop_timer: objective delete bbqmaster_q1_timer
+  bbqmaster_q1_expire_msg: 'notify &6BBQ Master - Taro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  bbqmaster_q1_expire: folder bbqmaster_q1_remove,bbqmaster_remove_journal_q1,bbqmaster_reputation_lose,bbqmaster_reputation_lose_msg,bbqmaster_q1_expire_msg
+  bbqmaster_daily_quest_1: folder bbqmaster_clear_active_quests,bbqmaster_q1_tag,bbqmaster_q1_journal,bbqmaster_q1_msg,bbqmaster_q1_start_timer
+  bbqmaster_q1_complete: folder bbqmaster_q1_take_items,bbqmaster_reputation_gain,bbqmaster_reputation_gain_msg,bbqmaster_q1_complete_title,bbqmaster_q1_complete_msg,bbqmaster_q1_remove,bbqmaster_q1_reward,bbqmaster_remove_journal_q1,bbqmaster_q1_stop_timer
+  bbqmaster_q2_tag: tag add bbqmaster_q2_active
+  bbqmaster_q2_remove: tag del bbqmaster_q2_active
+  bbqmaster_q2_journal: journal add bbqmaster_q2
+  bbqmaster_remove_journal_q2: journal delete bbqmaster_q2
+  bbqmaster_q2_take_items: take bbqmaster_porkchop:16
+  bbqmaster_q2_msg: 'notify &6BBQ Master - Taro&7: &fBring me &816 Porkchop&f. Pork
+    takes smoke better than most nobles take advice. io:chat'
+  bbqmaster_q2_complete_msg: 'notify &6BBQ Master - Taro&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  bbqmaster_q2_reward: command cmi money give %player% -s 400
+  bbqmaster_q2_complete_title: notify Contract CompleteBBQ Master - Taro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  bbqmaster_q2_start_timer: objective start bbqmaster_q2_timer
+  bbqmaster_q2_stop_timer: objective delete bbqmaster_q2_timer
+  bbqmaster_q2_expire_msg: 'notify &6BBQ Master - Taro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  bbqmaster_q2_expire: folder bbqmaster_q2_remove,bbqmaster_remove_journal_q2,bbqmaster_reputation_lose,bbqmaster_reputation_lose_msg,bbqmaster_q2_expire_msg
+  bbqmaster_daily_quest_2: folder bbqmaster_clear_active_quests,bbqmaster_q2_tag,bbqmaster_q2_journal,bbqmaster_q2_msg,bbqmaster_q2_start_timer
+  bbqmaster_q2_complete: folder bbqmaster_q2_take_items,bbqmaster_reputation_gain,bbqmaster_reputation_gain_msg,bbqmaster_q2_complete_title,bbqmaster_q2_complete_msg,bbqmaster_q2_remove,bbqmaster_q2_reward,bbqmaster_remove_journal_q2,bbqmaster_q2_stop_timer
+  bbqmaster_q3_tag: tag add bbqmaster_q3_active
+  bbqmaster_q3_remove: tag del bbqmaster_q3_active
+  bbqmaster_q3_journal: journal add bbqmaster_q3
+  bbqmaster_remove_journal_q3: journal delete bbqmaster_q3
+  bbqmaster_q3_take_items: take bbqmaster_chicken:20
+  bbqmaster_q3_msg: 'notify &6BBQ Master - Taro&7: &fBring me &820 Chicken&f. Chicken
+    skewers sell faster than I can grill them. io:chat'
+  bbqmaster_q3_complete_msg: 'notify &6BBQ Master - Taro&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  bbqmaster_q3_reward: command cmi money give %player% -s 400
+  bbqmaster_q3_complete_title: notify Contract CompleteBBQ Master - Taro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  bbqmaster_q3_start_timer: objective start bbqmaster_q3_timer
+  bbqmaster_q3_stop_timer: objective delete bbqmaster_q3_timer
+  bbqmaster_q3_expire_msg: 'notify &6BBQ Master - Taro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  bbqmaster_q3_expire: folder bbqmaster_q3_remove,bbqmaster_remove_journal_q3,bbqmaster_reputation_lose,bbqmaster_reputation_lose_msg,bbqmaster_q3_expire_msg
+  bbqmaster_daily_quest_3: folder bbqmaster_clear_active_quests,bbqmaster_q3_tag,bbqmaster_q3_journal,bbqmaster_q3_msg,bbqmaster_q3_start_timer
+  bbqmaster_q3_complete: folder bbqmaster_q3_take_items,bbqmaster_reputation_gain,bbqmaster_reputation_gain_msg,bbqmaster_q3_complete_title,bbqmaster_q3_complete_msg,bbqmaster_q3_remove,bbqmaster_q3_reward,bbqmaster_remove_journal_q3,bbqmaster_q3_stop_timer
+  bbqmaster_q4_tag: tag add bbqmaster_q4_active
+  bbqmaster_q4_remove: tag del bbqmaster_q4_active
+  bbqmaster_q4_journal: journal add bbqmaster_q4
+  bbqmaster_remove_journal_q4: journal delete bbqmaster_q4
+  bbqmaster_q4_take_items: take bbqmaster_mutton:14
+  bbqmaster_q4_msg: 'notify &6BBQ Master - Taro&7: &fBring me &814 Mutton&f. Mutton
+    keeps the night watch warm. io:chat'
+  bbqmaster_q4_complete_msg: 'notify &6BBQ Master - Taro&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  bbqmaster_q4_reward: command cmi money give %player% -s 400
+  bbqmaster_q4_complete_title: notify Contract CompleteBBQ Master - Taro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  bbqmaster_q4_start_timer: objective start bbqmaster_q4_timer
+  bbqmaster_q4_stop_timer: objective delete bbqmaster_q4_timer
+  bbqmaster_q4_expire_msg: 'notify &6BBQ Master - Taro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  bbqmaster_q4_expire: folder bbqmaster_q4_remove,bbqmaster_remove_journal_q4,bbqmaster_reputation_lose,bbqmaster_reputation_lose_msg,bbqmaster_q4_expire_msg
+  bbqmaster_daily_quest_4: folder bbqmaster_clear_active_quests,bbqmaster_q4_tag,bbqmaster_q4_journal,bbqmaster_q4_msg,bbqmaster_q4_start_timer
+  bbqmaster_q4_complete: folder bbqmaster_q4_take_items,bbqmaster_reputation_gain,bbqmaster_reputation_gain_msg,bbqmaster_q4_complete_title,bbqmaster_q4_complete_msg,bbqmaster_q4_remove,bbqmaster_q4_reward,bbqmaster_remove_journal_q4,bbqmaster_q4_stop_timer
+  bbqmaster_q5_tag: tag add bbqmaster_q5_active
+  bbqmaster_q5_remove: tag del bbqmaster_q5_active
+  bbqmaster_q5_journal: journal add bbqmaster_q5
+  bbqmaster_remove_journal_q5: journal delete bbqmaster_q5
+  bbqmaster_q5_take_items: take bbqmaster_coal:24
+  bbqmaster_q5_msg: 'notify &6BBQ Master - Taro&7: &fBring me &824 Coal&f. A weak
+    fire ruins strong meat. io:chat'
+  bbqmaster_q5_complete_msg: 'notify &6BBQ Master - Taro&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  bbqmaster_q5_reward: command cmi money give %player% -s 400
+  bbqmaster_q5_complete_title: notify Contract CompleteBBQ Master - Taro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  bbqmaster_q5_start_timer: objective start bbqmaster_q5_timer
+  bbqmaster_q5_stop_timer: objective delete bbqmaster_q5_timer
+  bbqmaster_q5_expire_msg: 'notify &6BBQ Master - Taro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  bbqmaster_q5_expire: folder bbqmaster_q5_remove,bbqmaster_remove_journal_q5,bbqmaster_reputation_lose,bbqmaster_reputation_lose_msg,bbqmaster_q5_expire_msg
+  bbqmaster_daily_quest_5: folder bbqmaster_clear_active_quests,bbqmaster_q5_tag,bbqmaster_q5_journal,bbqmaster_q5_msg,bbqmaster_q5_start_timer
+  bbqmaster_q5_complete: folder bbqmaster_q5_take_items,bbqmaster_reputation_gain,bbqmaster_reputation_gain_msg,bbqmaster_q5_complete_title,bbqmaster_q5_complete_msg,bbqmaster_q5_remove,bbqmaster_q5_reward,bbqmaster_remove_journal_q5,bbqmaster_q5_stop_timer
+  bbqmaster_q6_tag: tag add bbqmaster_q6_active
+  bbqmaster_q6_remove: tag del bbqmaster_q6_active
+  bbqmaster_q6_journal: journal add bbqmaster_q6
+  bbqmaster_remove_journal_q6: journal delete bbqmaster_q6
+  bbqmaster_q6_take_items: take bbqmaster_charcoal:18
+  bbqmaster_q6_msg: 'notify &6BBQ Master - Taro&7: &fBring me &818 Charcoal&f. Clean
+    charcoal makes clean smoke. io:chat'
+  bbqmaster_q6_complete_msg: 'notify &6BBQ Master - Taro&7: &fPerfect. This will keep
+    the shop running. io:chat'
+  bbqmaster_q6_reward: command cmi money give %player% -s 400
+  bbqmaster_q6_complete_title: notify Contract CompleteBBQ Master - Taro is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  bbqmaster_q6_start_timer: objective start bbqmaster_q6_timer
+  bbqmaster_q6_stop_timer: objective delete bbqmaster_q6_timer
+  bbqmaster_q6_expire_msg: 'notify &6BBQ Master - Taro&7: &cThe contract expired.
+    Come back another day. io:chat'
+  bbqmaster_q6_expire: folder bbqmaster_q6_remove,bbqmaster_remove_journal_q6,bbqmaster_reputation_lose,bbqmaster_reputation_lose_msg,bbqmaster_q6_expire_msg
+  bbqmaster_daily_quest_6: folder bbqmaster_clear_active_quests,bbqmaster_q6_tag,bbqmaster_q6_journal,bbqmaster_q6_msg,bbqmaster_q6_start_timer
+  bbqmaster_q6_complete: folder bbqmaster_q6_take_items,bbqmaster_reputation_gain,bbqmaster_reputation_gain_msg,bbqmaster_q6_complete_title,bbqmaster_q6_complete_msg,bbqmaster_q6_remove,bbqmaster_q6_reward,bbqmaster_remove_journal_q6,bbqmaster_q6_stop_timer
+  bbqmaster_clear_active_quests: tag del bbqmaster_q1_active,bbqmaster_q2_active,bbqmaster_q3_active,bbqmaster_q4_active,bbqmaster_q5_active,bbqmaster_q6_active
+  bbqmaster_assign_random_daily_quest: folder bbqmaster_daily_quest_1,bbqmaster_daily_quest_2,bbqmaster_daily_quest_3,bbqmaster_daily_quest_4,bbqmaster_daily_quest_5,bbqmaster_daily_quest_6
+    random:1
+  bbqmaster_accept_random_daily_quest: folder bbqmaster_assign_random_daily_quest,bbqmaster_start_daily_cooldown
+  sushimaster_open_shop: command mi stations open mmo-food-shop-sushi-master %player%
+  sushimaster_reputation_gain: point sushimaster_reputation 1 action:add conditions:!sushimaster_reputation_100
+  sushimaster_reputation_gain_msg: 'notify &6Sushi Master - Daichi Reputation&7: &a+1
+    &fReputation. io:chat'
+  sushimaster_reputation_lose: point sushimaster_reputation 1 action:subtract conditions:sushimaster_reputation_1
+  sushimaster_reputation_lose_msg: 'notify &6Sushi Master - Daichi Reputation&7: &c-1
+    &fReputation. io:chat'
+  sushimaster_cleanup_legacy_cooldown: tag del sushimaster_daily_cooldown
+  sushimaster_start_daily_cooldown: objective start sushimaster_daily_cooldown_timer
+  sushimaster_q1_tag: tag add sushimaster_q1_active
+  sushimaster_q1_remove: tag del sushimaster_q1_active
+  sushimaster_q1_journal: journal add sushimaster_q1
+  sushimaster_remove_journal_q1: journal delete sushimaster_q1
+  sushimaster_q1_take_items: take sushimaster_cod:12
+  sushimaster_q1_msg: 'notify &6Sushi Master - Daichi&7: &fBring me &812 Cod&f. Cod
+    is honest fish. Simple, clean, useful. io:chat'
+  sushimaster_q1_complete_msg: 'notify &6Sushi Master - Daichi&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  sushimaster_q1_reward: command cmi money give %player% -s 400
+  sushimaster_q1_complete_title: notify Contract CompleteSushi Master - Daichi is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  sushimaster_q1_start_timer: objective start sushimaster_q1_timer
+  sushimaster_q1_stop_timer: objective delete sushimaster_q1_timer
+  sushimaster_q1_expire_msg: 'notify &6Sushi Master - Daichi&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sushimaster_q1_expire: folder sushimaster_q1_remove,sushimaster_remove_journal_q1,sushimaster_reputation_lose,sushimaster_reputation_lose_msg,sushimaster_q1_expire_msg
+  sushimaster_daily_quest_1: folder sushimaster_clear_active_quests,sushimaster_q1_tag,sushimaster_q1_journal,sushimaster_q1_msg,sushimaster_q1_start_timer
+  sushimaster_q1_complete: folder sushimaster_q1_take_items,sushimaster_reputation_gain,sushimaster_reputation_gain_msg,sushimaster_q1_complete_title,sushimaster_q1_complete_msg,sushimaster_q1_remove,sushimaster_q1_reward,sushimaster_remove_journal_q1,sushimaster_q1_stop_timer
+  sushimaster_q2_tag: tag add sushimaster_q2_active
+  sushimaster_q2_remove: tag del sushimaster_q2_active
+  sushimaster_q2_journal: journal add sushimaster_q2
+  sushimaster_remove_journal_q2: journal delete sushimaster_q2
+  sushimaster_q2_take_items: take sushimaster_salmon:10
+  sushimaster_q2_msg: 'notify &6Sushi Master - Daichi&7: &fBring me &810 Salmon&f.
+    Salmon brings color to the plate and strength to the body. io:chat'
+  sushimaster_q2_complete_msg: 'notify &6Sushi Master - Daichi&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  sushimaster_q2_reward: command cmi money give %player% -s 400
+  sushimaster_q2_complete_title: notify Contract CompleteSushi Master - Daichi is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  sushimaster_q2_start_timer: objective start sushimaster_q2_timer
+  sushimaster_q2_stop_timer: objective delete sushimaster_q2_timer
+  sushimaster_q2_expire_msg: 'notify &6Sushi Master - Daichi&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sushimaster_q2_expire: folder sushimaster_q2_remove,sushimaster_remove_journal_q2,sushimaster_reputation_lose,sushimaster_reputation_lose_msg,sushimaster_q2_expire_msg
+  sushimaster_daily_quest_2: folder sushimaster_clear_active_quests,sushimaster_q2_tag,sushimaster_q2_journal,sushimaster_q2_msg,sushimaster_q2_start_timer
+  sushimaster_q2_complete: folder sushimaster_q2_take_items,sushimaster_reputation_gain,sushimaster_reputation_gain_msg,sushimaster_q2_complete_title,sushimaster_q2_complete_msg,sushimaster_q2_remove,sushimaster_q2_reward,sushimaster_remove_journal_q2,sushimaster_q2_stop_timer
+  sushimaster_q3_tag: tag add sushimaster_q3_active
+  sushimaster_q3_remove: tag del sushimaster_q3_active
+  sushimaster_q3_journal: journal add sushimaster_q3
+  sushimaster_remove_journal_q3: journal delete sushimaster_q3
+  sushimaster_q3_take_items: take sushimaster_dried_kelp:24
+  sushimaster_q3_msg: 'notify &6Sushi Master - Daichi&7: &fBring me &824 Dried Kelp&f.
+    Kelp wraps, seasons, and reminds the rice of the ocean. io:chat'
+  sushimaster_q3_complete_msg: 'notify &6Sushi Master - Daichi&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  sushimaster_q3_reward: command cmi money give %player% -s 400
+  sushimaster_q3_complete_title: notify Contract CompleteSushi Master - Daichi is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  sushimaster_q3_start_timer: objective start sushimaster_q3_timer
+  sushimaster_q3_stop_timer: objective delete sushimaster_q3_timer
+  sushimaster_q3_expire_msg: 'notify &6Sushi Master - Daichi&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sushimaster_q3_expire: folder sushimaster_q3_remove,sushimaster_remove_journal_q3,sushimaster_reputation_lose,sushimaster_reputation_lose_msg,sushimaster_q3_expire_msg
+  sushimaster_daily_quest_3: folder sushimaster_clear_active_quests,sushimaster_q3_tag,sushimaster_q3_journal,sushimaster_q3_msg,sushimaster_q3_start_timer
+  sushimaster_q3_complete: folder sushimaster_q3_take_items,sushimaster_reputation_gain,sushimaster_reputation_gain_msg,sushimaster_q3_complete_title,sushimaster_q3_complete_msg,sushimaster_q3_remove,sushimaster_q3_reward,sushimaster_remove_journal_q3,sushimaster_q3_stop_timer
+  sushimaster_q4_tag: tag add sushimaster_q4_active
+  sushimaster_q4_remove: tag del sushimaster_q4_active
+  sushimaster_q4_journal: journal add sushimaster_q4
+  sushimaster_remove_journal_q4: journal delete sushimaster_q4
+  sushimaster_q4_take_items: take sushimaster_seagrass:24
+  sushimaster_q4_msg: 'notify &6Sushi Master - Daichi&7: &fBring me &824 Seagrass&f.
+    Fresh greens help balance rich fish. io:chat'
+  sushimaster_q4_complete_msg: 'notify &6Sushi Master - Daichi&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  sushimaster_q4_reward: command cmi money give %player% -s 400
+  sushimaster_q4_complete_title: notify Contract CompleteSushi Master - Daichi is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  sushimaster_q4_start_timer: objective start sushimaster_q4_timer
+  sushimaster_q4_stop_timer: objective delete sushimaster_q4_timer
+  sushimaster_q4_expire_msg: 'notify &6Sushi Master - Daichi&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sushimaster_q4_expire: folder sushimaster_q4_remove,sushimaster_remove_journal_q4,sushimaster_reputation_lose,sushimaster_reputation_lose_msg,sushimaster_q4_expire_msg
+  sushimaster_daily_quest_4: folder sushimaster_clear_active_quests,sushimaster_q4_tag,sushimaster_q4_journal,sushimaster_q4_msg,sushimaster_q4_start_timer
+  sushimaster_q4_complete: folder sushimaster_q4_take_items,sushimaster_reputation_gain,sushimaster_reputation_gain_msg,sushimaster_q4_complete_title,sushimaster_q4_complete_msg,sushimaster_q4_remove,sushimaster_q4_reward,sushimaster_remove_journal_q4,sushimaster_q4_stop_timer
+  sushimaster_q5_tag: tag add sushimaster_q5_active
+  sushimaster_q5_remove: tag del sushimaster_q5_active
+  sushimaster_q5_journal: journal add sushimaster_q5
+  sushimaster_remove_journal_q5: journal delete sushimaster_q5
+  sushimaster_q5_take_items: take sushimaster_kelp:32
+  sushimaster_q5_msg: 'notify &6Sushi Master - Daichi&7: &fBring me &832 Kelp&f. The
+    best kitchens waste nothing from the sea. io:chat'
+  sushimaster_q5_complete_msg: 'notify &6Sushi Master - Daichi&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  sushimaster_q5_reward: command cmi money give %player% -s 400
+  sushimaster_q5_complete_title: notify Contract CompleteSushi Master - Daichi is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  sushimaster_q5_start_timer: objective start sushimaster_q5_timer
+  sushimaster_q5_stop_timer: objective delete sushimaster_q5_timer
+  sushimaster_q5_expire_msg: 'notify &6Sushi Master - Daichi&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sushimaster_q5_expire: folder sushimaster_q5_remove,sushimaster_remove_journal_q5,sushimaster_reputation_lose,sushimaster_reputation_lose_msg,sushimaster_q5_expire_msg
+  sushimaster_daily_quest_5: folder sushimaster_clear_active_quests,sushimaster_q5_tag,sushimaster_q5_journal,sushimaster_q5_msg,sushimaster_q5_start_timer
+  sushimaster_q5_complete: folder sushimaster_q5_take_items,sushimaster_reputation_gain,sushimaster_reputation_gain_msg,sushimaster_q5_complete_title,sushimaster_q5_complete_msg,sushimaster_q5_remove,sushimaster_q5_reward,sushimaster_remove_journal_q5,sushimaster_q5_stop_timer
+  sushimaster_q6_tag: tag add sushimaster_q6_active
+  sushimaster_q6_remove: tag del sushimaster_q6_active
+  sushimaster_q6_journal: journal add sushimaster_q6
+  sushimaster_remove_journal_q6: journal delete sushimaster_q6
+  sushimaster_q6_take_items: take sushimaster_bowl:12
+  sushimaster_q6_msg: 'notify &6Sushi Master - Daichi&7: &fBring me &812 Bowl&f. Rice
+    bowls vanish faster than customers admit. io:chat'
+  sushimaster_q6_complete_msg: 'notify &6Sushi Master - Daichi&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  sushimaster_q6_reward: command cmi money give %player% -s 400
+  sushimaster_q6_complete_title: notify Contract CompleteSushi Master - Daichi is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  sushimaster_q6_start_timer: objective start sushimaster_q6_timer
+  sushimaster_q6_stop_timer: objective delete sushimaster_q6_timer
+  sushimaster_q6_expire_msg: 'notify &6Sushi Master - Daichi&7: &cThe contract expired.
+    Come back another day. io:chat'
+  sushimaster_q6_expire: folder sushimaster_q6_remove,sushimaster_remove_journal_q6,sushimaster_reputation_lose,sushimaster_reputation_lose_msg,sushimaster_q6_expire_msg
+  sushimaster_daily_quest_6: folder sushimaster_clear_active_quests,sushimaster_q6_tag,sushimaster_q6_journal,sushimaster_q6_msg,sushimaster_q6_start_timer
+  sushimaster_q6_complete: folder sushimaster_q6_take_items,sushimaster_reputation_gain,sushimaster_reputation_gain_msg,sushimaster_q6_complete_title,sushimaster_q6_complete_msg,sushimaster_q6_remove,sushimaster_q6_reward,sushimaster_remove_journal_q6,sushimaster_q6_stop_timer
+  sushimaster_clear_active_quests: tag del sushimaster_q1_active,sushimaster_q2_active,sushimaster_q3_active,sushimaster_q4_active,sushimaster_q5_active,sushimaster_q6_active
+  sushimaster_assign_random_daily_quest: folder sushimaster_daily_quest_1,sushimaster_daily_quest_2,sushimaster_daily_quest_3,sushimaster_daily_quest_4,sushimaster_daily_quest_5,sushimaster_daily_quest_6
+    random:1
+  sushimaster_accept_random_daily_quest: folder sushimaster_assign_random_daily_quest,sushimaster_start_daily_cooldown
+  candymerchant_open_shop: command mi stations open mmo-food-shop-candy-merchant %player%
+  candymerchant_reputation_gain: point candymerchant_reputation 1 action:add conditions:!candymerchant_reputation_100
+  candymerchant_reputation_gain_msg: 'notify &6Candy Merchant - Momo Reputation&7:
+    &a+1 &fReputation. io:chat'
+  candymerchant_reputation_lose: point candymerchant_reputation 1 action:subtract
+    conditions:candymerchant_reputation_1
+  candymerchant_reputation_lose_msg: 'notify &6Candy Merchant - Momo Reputation&7:
+    &c-1 &fReputation. io:chat'
+  candymerchant_cleanup_legacy_cooldown: tag del candymerchant_daily_cooldown
+  candymerchant_start_daily_cooldown: objective start candymerchant_daily_cooldown_timer
+  candymerchant_q1_tag: tag add candymerchant_q1_active
+  candymerchant_q1_remove: tag del candymerchant_q1_active
+  candymerchant_q1_journal: journal add candymerchant_q1
+  candymerchant_remove_journal_q1: journal delete candymerchant_q1
+  candymerchant_q1_take_items: take candymerchant_sugar:32
+  candymerchant_q1_msg: 'notify &6Candy Merchant - Momo&7: &fBring me &832 Sugar&f.
+    Candy without sugar is just a sad idea. io:chat'
+  candymerchant_q1_complete_msg: 'notify &6Candy Merchant - Momo&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  candymerchant_q1_reward: command cmi money give %player% -s 400
+  candymerchant_q1_complete_title: notify Contract CompleteCandy Merchant - Momo is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  candymerchant_q1_start_timer: objective start candymerchant_q1_timer
+  candymerchant_q1_stop_timer: objective delete candymerchant_q1_timer
+  candymerchant_q1_expire_msg: 'notify &6Candy Merchant - Momo&7: &cThe contract expired.
+    Come back another day. io:chat'
+  candymerchant_q1_expire: folder candymerchant_q1_remove,candymerchant_remove_journal_q1,candymerchant_reputation_lose,candymerchant_reputation_lose_msg,candymerchant_q1_expire_msg
+  candymerchant_daily_quest_1: folder candymerchant_clear_active_quests,candymerchant_q1_tag,candymerchant_q1_journal,candymerchant_q1_msg,candymerchant_q1_start_timer
+  candymerchant_q1_complete: folder candymerchant_q1_take_items,candymerchant_reputation_gain,candymerchant_reputation_gain_msg,candymerchant_q1_complete_title,candymerchant_q1_complete_msg,candymerchant_q1_remove,candymerchant_q1_reward,candymerchant_remove_journal_q1,candymerchant_q1_stop_timer
+  candymerchant_q2_tag: tag add candymerchant_q2_active
+  candymerchant_q2_remove: tag del candymerchant_q2_active
+  candymerchant_q2_journal: journal add candymerchant_q2
+  candymerchant_remove_journal_q2: journal delete candymerchant_q2
+  candymerchant_q2_take_items: take candymerchant_honey_bottle:6
+  candymerchant_q2_msg: 'notify &6Candy Merchant - Momo&7: &fBring me &86 Honey Bottle&f.
+    Honey makes the glaze shine like lantern light. io:chat'
+  candymerchant_q2_complete_msg: 'notify &6Candy Merchant - Momo&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  candymerchant_q2_reward: command cmi money give %player% -s 400
+  candymerchant_q2_complete_title: notify Contract CompleteCandy Merchant - Momo is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  candymerchant_q2_start_timer: objective start candymerchant_q2_timer
+  candymerchant_q2_stop_timer: objective delete candymerchant_q2_timer
+  candymerchant_q2_expire_msg: 'notify &6Candy Merchant - Momo&7: &cThe contract expired.
+    Come back another day. io:chat'
+  candymerchant_q2_expire: folder candymerchant_q2_remove,candymerchant_remove_journal_q2,candymerchant_reputation_lose,candymerchant_reputation_lose_msg,candymerchant_q2_expire_msg
+  candymerchant_daily_quest_2: folder candymerchant_clear_active_quests,candymerchant_q2_tag,candymerchant_q2_journal,candymerchant_q2_msg,candymerchant_q2_start_timer
+  candymerchant_q2_complete: folder candymerchant_q2_take_items,candymerchant_reputation_gain,candymerchant_reputation_gain_msg,candymerchant_q2_complete_title,candymerchant_q2_complete_msg,candymerchant_q2_remove,candymerchant_q2_reward,candymerchant_remove_journal_q2,candymerchant_q2_stop_timer
+  candymerchant_q3_tag: tag add candymerchant_q3_active
+  candymerchant_q3_remove: tag del candymerchant_q3_active
+  candymerchant_q3_journal: journal add candymerchant_q3
+  candymerchant_remove_journal_q3: journal delete candymerchant_q3
+  candymerchant_q3_take_items: take candymerchant_apple:18
+  candymerchant_q3_msg: 'notify &6Candy Merchant - Momo&7: &fBring me &818 Apple&f.
+    Candy apples need crisp fruit, not bruised excuses. io:chat'
+  candymerchant_q3_complete_msg: 'notify &6Candy Merchant - Momo&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  candymerchant_q3_reward: command cmi money give %player% -s 400
+  candymerchant_q3_complete_title: notify Contract CompleteCandy Merchant - Momo is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  candymerchant_q3_start_timer: objective start candymerchant_q3_timer
+  candymerchant_q3_stop_timer: objective delete candymerchant_q3_timer
+  candymerchant_q3_expire_msg: 'notify &6Candy Merchant - Momo&7: &cThe contract expired.
+    Come back another day. io:chat'
+  candymerchant_q3_expire: folder candymerchant_q3_remove,candymerchant_remove_journal_q3,candymerchant_reputation_lose,candymerchant_reputation_lose_msg,candymerchant_q3_expire_msg
+  candymerchant_daily_quest_3: folder candymerchant_clear_active_quests,candymerchant_q3_tag,candymerchant_q3_journal,candymerchant_q3_msg,candymerchant_q3_start_timer
+  candymerchant_q3_complete: folder candymerchant_q3_take_items,candymerchant_reputation_gain,candymerchant_reputation_gain_msg,candymerchant_q3_complete_title,candymerchant_q3_complete_msg,candymerchant_q3_remove,candymerchant_q3_reward,candymerchant_remove_journal_q3,candymerchant_q3_stop_timer
+  candymerchant_q4_tag: tag add candymerchant_q4_active
+  candymerchant_q4_remove: tag del candymerchant_q4_active
+  candymerchant_q4_journal: journal add candymerchant_q4
+  candymerchant_remove_journal_q4: journal delete candymerchant_q4
+  candymerchant_q4_take_items: take candymerchant_glow_berries:12
+  candymerchant_q4_msg: 'notify &6Candy Merchant - Momo&7: &fBring me &812 Glow Berries&f.
+    Glow berries make sweets that look magical at night. io:chat'
+  candymerchant_q4_complete_msg: 'notify &6Candy Merchant - Momo&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  candymerchant_q4_reward: command cmi money give %player% -s 400
+  candymerchant_q4_complete_title: notify Contract CompleteCandy Merchant - Momo is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  candymerchant_q4_start_timer: objective start candymerchant_q4_timer
+  candymerchant_q4_stop_timer: objective delete candymerchant_q4_timer
+  candymerchant_q4_expire_msg: 'notify &6Candy Merchant - Momo&7: &cThe contract expired.
+    Come back another day. io:chat'
+  candymerchant_q4_expire: folder candymerchant_q4_remove,candymerchant_remove_journal_q4,candymerchant_reputation_lose,candymerchant_reputation_lose_msg,candymerchant_q4_expire_msg
+  candymerchant_daily_quest_4: folder candymerchant_clear_active_quests,candymerchant_q4_tag,candymerchant_q4_journal,candymerchant_q4_msg,candymerchant_q4_start_timer
+  candymerchant_q4_complete: folder candymerchant_q4_take_items,candymerchant_reputation_gain,candymerchant_reputation_gain_msg,candymerchant_q4_complete_title,candymerchant_q4_complete_msg,candymerchant_q4_remove,candymerchant_q4_reward,candymerchant_remove_journal_q4,candymerchant_q4_stop_timer
+  candymerchant_q5_tag: tag add candymerchant_q5_active
+  candymerchant_q5_remove: tag del candymerchant_q5_active
+  candymerchant_q5_journal: journal add candymerchant_q5
+  candymerchant_remove_journal_q5: journal delete candymerchant_q5
+  candymerchant_q5_take_items: take candymerchant_cocoa_beans:20
+  candymerchant_q5_msg: 'notify &6Candy Merchant - Momo&7: &fBring me &820 Cocoa Beans&f.
+    Chocolate makes customers forgive high prices. io:chat'
+  candymerchant_q5_complete_msg: 'notify &6Candy Merchant - Momo&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  candymerchant_q5_reward: command cmi money give %player% -s 400
+  candymerchant_q5_complete_title: notify Contract CompleteCandy Merchant - Momo is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  candymerchant_q5_start_timer: objective start candymerchant_q5_timer
+  candymerchant_q5_stop_timer: objective delete candymerchant_q5_timer
+  candymerchant_q5_expire_msg: 'notify &6Candy Merchant - Momo&7: &cThe contract expired.
+    Come back another day. io:chat'
+  candymerchant_q5_expire: folder candymerchant_q5_remove,candymerchant_remove_journal_q5,candymerchant_reputation_lose,candymerchant_reputation_lose_msg,candymerchant_q5_expire_msg
+  candymerchant_daily_quest_5: folder candymerchant_clear_active_quests,candymerchant_q5_tag,candymerchant_q5_journal,candymerchant_q5_msg,candymerchant_q5_start_timer
+  candymerchant_q5_complete: folder candymerchant_q5_take_items,candymerchant_reputation_gain,candymerchant_reputation_gain_msg,candymerchant_q5_complete_title,candymerchant_q5_complete_msg,candymerchant_q5_remove,candymerchant_q5_reward,candymerchant_remove_journal_q5,candymerchant_q5_stop_timer
+  candymerchant_q6_tag: tag add candymerchant_q6_active
+  candymerchant_q6_remove: tag del candymerchant_q6_active
+  candymerchant_q6_journal: journal add candymerchant_q6
+  candymerchant_remove_journal_q6: journal delete candymerchant_q6
+  candymerchant_q6_take_items: take candymerchant_paper:24
+  candymerchant_q6_msg: 'notify &6Candy Merchant - Momo&7: &fBring me &824 Paper&f.
+    Every sweet needs a wrapper and every wrapper needs paper. io:chat'
+  candymerchant_q6_complete_msg: 'notify &6Candy Merchant - Momo&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  candymerchant_q6_reward: command cmi money give %player% -s 400
+  candymerchant_q6_complete_title: notify Contract CompleteCandy Merchant - Momo is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  candymerchant_q6_start_timer: objective start candymerchant_q6_timer
+  candymerchant_q6_stop_timer: objective delete candymerchant_q6_timer
+  candymerchant_q6_expire_msg: 'notify &6Candy Merchant - Momo&7: &cThe contract expired.
+    Come back another day. io:chat'
+  candymerchant_q6_expire: folder candymerchant_q6_remove,candymerchant_remove_journal_q6,candymerchant_reputation_lose,candymerchant_reputation_lose_msg,candymerchant_q6_expire_msg
+  candymerchant_daily_quest_6: folder candymerchant_clear_active_quests,candymerchant_q6_tag,candymerchant_q6_journal,candymerchant_q6_msg,candymerchant_q6_start_timer
+  candymerchant_q6_complete: folder candymerchant_q6_take_items,candymerchant_reputation_gain,candymerchant_reputation_gain_msg,candymerchant_q6_complete_title,candymerchant_q6_complete_msg,candymerchant_q6_remove,candymerchant_q6_reward,candymerchant_remove_journal_q6,candymerchant_q6_stop_timer
+  candymerchant_clear_active_quests: tag del candymerchant_q1_active,candymerchant_q2_active,candymerchant_q3_active,candymerchant_q4_active,candymerchant_q5_active,candymerchant_q6_active
+  candymerchant_assign_random_daily_quest: folder candymerchant_daily_quest_1,candymerchant_daily_quest_2,candymerchant_daily_quest_3,candymerchant_daily_quest_4,candymerchant_daily_quest_5,candymerchant_daily_quest_6
+    random:1
+  candymerchant_accept_random_daily_quest: folder candymerchant_assign_random_daily_quest,candymerchant_start_daily_cooldown
+  fruitmarket_open_shop: command mi stations open mmo-food-shop-fruit-market %player%
+  fruitmarket_reputation_gain: point fruitmarket_reputation 1 action:add conditions:!fruitmarket_reputation_100
+  fruitmarket_reputation_gain_msg: 'notify &6Fruit Market - Sora Reputation&7: &a+1
+    &fReputation. io:chat'
+  fruitmarket_reputation_lose: point fruitmarket_reputation 1 action:subtract conditions:fruitmarket_reputation_1
+  fruitmarket_reputation_lose_msg: 'notify &6Fruit Market - Sora Reputation&7: &c-1
+    &fReputation. io:chat'
+  fruitmarket_cleanup_legacy_cooldown: tag del fruitmarket_daily_cooldown
+  fruitmarket_start_daily_cooldown: objective start fruitmarket_daily_cooldown_timer
+  fruitmarket_q1_tag: tag add fruitmarket_q1_active
+  fruitmarket_q1_remove: tag del fruitmarket_q1_active
+  fruitmarket_q1_journal: journal add fruitmarket_q1
+  fruitmarket_remove_journal_q1: journal delete fruitmarket_q1
+  fruitmarket_q1_take_items: take fruitmarket_apple:24
+  fruitmarket_q1_msg: 'notify &6Fruit Market - Sora&7: &fBring me &824 Apple&f. Apples
+    are the backbone of any honest fruit stall. io:chat'
+  fruitmarket_q1_complete_msg: 'notify &6Fruit Market - Sora&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  fruitmarket_q1_reward: command cmi money give %player% -s 400
+  fruitmarket_q1_complete_title: notify Contract CompleteFruit Market - Sora is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  fruitmarket_q1_start_timer: objective start fruitmarket_q1_timer
+  fruitmarket_q1_stop_timer: objective delete fruitmarket_q1_timer
+  fruitmarket_q1_expire_msg: 'notify &6Fruit Market - Sora&7: &cThe contract expired.
+    Come back another day. io:chat'
+  fruitmarket_q1_expire: folder fruitmarket_q1_remove,fruitmarket_remove_journal_q1,fruitmarket_reputation_lose,fruitmarket_reputation_lose_msg,fruitmarket_q1_expire_msg
+  fruitmarket_daily_quest_1: folder fruitmarket_clear_active_quests,fruitmarket_q1_tag,fruitmarket_q1_journal,fruitmarket_q1_msg,fruitmarket_q1_start_timer
+  fruitmarket_q1_complete: folder fruitmarket_q1_take_items,fruitmarket_reputation_gain,fruitmarket_reputation_gain_msg,fruitmarket_q1_complete_title,fruitmarket_q1_complete_msg,fruitmarket_q1_remove,fruitmarket_q1_reward,fruitmarket_remove_journal_q1,fruitmarket_q1_stop_timer
+  fruitmarket_q2_tag: tag add fruitmarket_q2_active
+  fruitmarket_q2_remove: tag del fruitmarket_q2_active
+  fruitmarket_q2_journal: journal add fruitmarket_q2
+  fruitmarket_remove_journal_q2: journal delete fruitmarket_q2
+  fruitmarket_q2_take_items: take fruitmarket_melon_slice:32
+  fruitmarket_q2_msg: 'notify &6Fruit Market - Sora&7: &fBring me &832 Melon Slice&f.
+    Melon sells well when the streets are hot. io:chat'
+  fruitmarket_q2_complete_msg: 'notify &6Fruit Market - Sora&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  fruitmarket_q2_reward: command cmi money give %player% -s 400
+  fruitmarket_q2_complete_title: notify Contract CompleteFruit Market - Sora is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  fruitmarket_q2_start_timer: objective start fruitmarket_q2_timer
+  fruitmarket_q2_stop_timer: objective delete fruitmarket_q2_timer
+  fruitmarket_q2_expire_msg: 'notify &6Fruit Market - Sora&7: &cThe contract expired.
+    Come back another day. io:chat'
+  fruitmarket_q2_expire: folder fruitmarket_q2_remove,fruitmarket_remove_journal_q2,fruitmarket_reputation_lose,fruitmarket_reputation_lose_msg,fruitmarket_q2_expire_msg
+  fruitmarket_daily_quest_2: folder fruitmarket_clear_active_quests,fruitmarket_q2_tag,fruitmarket_q2_journal,fruitmarket_q2_msg,fruitmarket_q2_start_timer
+  fruitmarket_q2_complete: folder fruitmarket_q2_take_items,fruitmarket_reputation_gain,fruitmarket_reputation_gain_msg,fruitmarket_q2_complete_title,fruitmarket_q2_complete_msg,fruitmarket_q2_remove,fruitmarket_q2_reward,fruitmarket_remove_journal_q2,fruitmarket_q2_stop_timer
+  fruitmarket_q3_tag: tag add fruitmarket_q3_active
+  fruitmarket_q3_remove: tag del fruitmarket_q3_active
+  fruitmarket_q3_journal: journal add fruitmarket_q3
+  fruitmarket_remove_journal_q3: journal delete fruitmarket_q3
+  fruitmarket_q3_take_items: take fruitmarket_sweet_berries:24
+  fruitmarket_q3_msg: 'notify &6Fruit Market - Sora&7: &fBring me &824 Sweet Berries&f.
+    Sweet berries stain fingers and make customers smile. io:chat'
+  fruitmarket_q3_complete_msg: 'notify &6Fruit Market - Sora&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  fruitmarket_q3_reward: command cmi money give %player% -s 400
+  fruitmarket_q3_complete_title: notify Contract CompleteFruit Market - Sora is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  fruitmarket_q3_start_timer: objective start fruitmarket_q3_timer
+  fruitmarket_q3_stop_timer: objective delete fruitmarket_q3_timer
+  fruitmarket_q3_expire_msg: 'notify &6Fruit Market - Sora&7: &cThe contract expired.
+    Come back another day. io:chat'
+  fruitmarket_q3_expire: folder fruitmarket_q3_remove,fruitmarket_remove_journal_q3,fruitmarket_reputation_lose,fruitmarket_reputation_lose_msg,fruitmarket_q3_expire_msg
+  fruitmarket_daily_quest_3: folder fruitmarket_clear_active_quests,fruitmarket_q3_tag,fruitmarket_q3_journal,fruitmarket_q3_msg,fruitmarket_q3_start_timer
+  fruitmarket_q3_complete: folder fruitmarket_q3_take_items,fruitmarket_reputation_gain,fruitmarket_reputation_gain_msg,fruitmarket_q3_complete_title,fruitmarket_q3_complete_msg,fruitmarket_q3_remove,fruitmarket_q3_reward,fruitmarket_remove_journal_q3,fruitmarket_q3_stop_timer
+  fruitmarket_q4_tag: tag add fruitmarket_q4_active
+  fruitmarket_q4_remove: tag del fruitmarket_q4_active
+  fruitmarket_q4_journal: journal add fruitmarket_q4
+  fruitmarket_remove_journal_q4: journal delete fruitmarket_q4
+  fruitmarket_q4_take_items: take fruitmarket_glow_berries:16
+  fruitmarket_q4_msg: 'notify &6Fruit Market - Sora&7: &fBring me &816 Glow Berries&f.
+    Glow berries catch the eye after sunset. io:chat'
+  fruitmarket_q4_complete_msg: 'notify &6Fruit Market - Sora&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  fruitmarket_q4_reward: command cmi money give %player% -s 400
+  fruitmarket_q4_complete_title: notify Contract CompleteFruit Market - Sora is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  fruitmarket_q4_start_timer: objective start fruitmarket_q4_timer
+  fruitmarket_q4_stop_timer: objective delete fruitmarket_q4_timer
+  fruitmarket_q4_expire_msg: 'notify &6Fruit Market - Sora&7: &cThe contract expired.
+    Come back another day. io:chat'
+  fruitmarket_q4_expire: folder fruitmarket_q4_remove,fruitmarket_remove_journal_q4,fruitmarket_reputation_lose,fruitmarket_reputation_lose_msg,fruitmarket_q4_expire_msg
+  fruitmarket_daily_quest_4: folder fruitmarket_clear_active_quests,fruitmarket_q4_tag,fruitmarket_q4_journal,fruitmarket_q4_msg,fruitmarket_q4_start_timer
+  fruitmarket_q4_complete: folder fruitmarket_q4_take_items,fruitmarket_reputation_gain,fruitmarket_reputation_gain_msg,fruitmarket_q4_complete_title,fruitmarket_q4_complete_msg,fruitmarket_q4_remove,fruitmarket_q4_reward,fruitmarket_remove_journal_q4,fruitmarket_q4_stop_timer
+  fruitmarket_q5_tag: tag add fruitmarket_q5_active
+  fruitmarket_q5_remove: tag del fruitmarket_q5_active
+  fruitmarket_q5_journal: journal add fruitmarket_q5
+  fruitmarket_remove_journal_q5: journal delete fruitmarket_q5
+  fruitmarket_q5_take_items: take fruitmarket_pumpkin:8
+  fruitmarket_q5_msg: 'notify &6Fruit Market - Sora&7: &fBring me &88 Pumpkin&f. Pumpkins
+    fill carts, soups, and festival displays. io:chat'
+  fruitmarket_q5_complete_msg: 'notify &6Fruit Market - Sora&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  fruitmarket_q5_reward: command cmi money give %player% -s 400
+  fruitmarket_q5_complete_title: notify Contract CompleteFruit Market - Sora is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  fruitmarket_q5_start_timer: objective start fruitmarket_q5_timer
+  fruitmarket_q5_stop_timer: objective delete fruitmarket_q5_timer
+  fruitmarket_q5_expire_msg: 'notify &6Fruit Market - Sora&7: &cThe contract expired.
+    Come back another day. io:chat'
+  fruitmarket_q5_expire: folder fruitmarket_q5_remove,fruitmarket_remove_journal_q5,fruitmarket_reputation_lose,fruitmarket_reputation_lose_msg,fruitmarket_q5_expire_msg
+  fruitmarket_daily_quest_5: folder fruitmarket_clear_active_quests,fruitmarket_q5_tag,fruitmarket_q5_journal,fruitmarket_q5_msg,fruitmarket_q5_start_timer
+  fruitmarket_q5_complete: folder fruitmarket_q5_take_items,fruitmarket_reputation_gain,fruitmarket_reputation_gain_msg,fruitmarket_q5_complete_title,fruitmarket_q5_complete_msg,fruitmarket_q5_remove,fruitmarket_q5_reward,fruitmarket_remove_journal_q5,fruitmarket_q5_stop_timer
+  fruitmarket_q6_tag: tag add fruitmarket_q6_active
+  fruitmarket_q6_remove: tag del fruitmarket_q6_active
+  fruitmarket_q6_journal: journal add fruitmarket_q6
+  fruitmarket_remove_journal_q6: journal delete fruitmarket_q6
+  fruitmarket_q6_take_items: take fruitmarket_carrot:28
+  fruitmarket_q6_msg: 'notify &6Fruit Market - Sora&7: &fBring me &828 Carrot&f. Not
+    fruit, I know. Customers still ask for them. io:chat'
+  fruitmarket_q6_complete_msg: 'notify &6Fruit Market - Sora&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  fruitmarket_q6_reward: command cmi money give %player% -s 400
+  fruitmarket_q6_complete_title: notify Contract CompleteFruit Market - Sora is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  fruitmarket_q6_start_timer: objective start fruitmarket_q6_timer
+  fruitmarket_q6_stop_timer: objective delete fruitmarket_q6_timer
+  fruitmarket_q6_expire_msg: 'notify &6Fruit Market - Sora&7: &cThe contract expired.
+    Come back another day. io:chat'
+  fruitmarket_q6_expire: folder fruitmarket_q6_remove,fruitmarket_remove_journal_q6,fruitmarket_reputation_lose,fruitmarket_reputation_lose_msg,fruitmarket_q6_expire_msg
+  fruitmarket_daily_quest_6: folder fruitmarket_clear_active_quests,fruitmarket_q6_tag,fruitmarket_q6_journal,fruitmarket_q6_msg,fruitmarket_q6_start_timer
+  fruitmarket_q6_complete: folder fruitmarket_q6_take_items,fruitmarket_reputation_gain,fruitmarket_reputation_gain_msg,fruitmarket_q6_complete_title,fruitmarket_q6_complete_msg,fruitmarket_q6_remove,fruitmarket_q6_reward,fruitmarket_remove_journal_q6,fruitmarket_q6_stop_timer
+  fruitmarket_clear_active_quests: tag del fruitmarket_q1_active,fruitmarket_q2_active,fruitmarket_q3_active,fruitmarket_q4_active,fruitmarket_q5_active,fruitmarket_q6_active
+  fruitmarket_assign_random_daily_quest: folder fruitmarket_daily_quest_1,fruitmarket_daily_quest_2,fruitmarket_daily_quest_3,fruitmarket_daily_quest_4,fruitmarket_daily_quest_5,fruitmarket_daily_quest_6
+    random:1
+  fruitmarket_accept_random_daily_quest: folder fruitmarket_assign_random_daily_quest,fruitmarket_start_daily_cooldown
+  coffeehouse_open_shop: command mi stations open mmo-food-shop-coffee-house %player%
+  coffeehouse_reputation_gain: point coffeehouse_reputation 1 action:add conditions:!coffeehouse_reputation_100
+  coffeehouse_reputation_gain_msg: 'notify &6Coffee House - Ren Reputation&7: &a+1
+    &fReputation. io:chat'
+  coffeehouse_reputation_lose: point coffeehouse_reputation 1 action:subtract conditions:coffeehouse_reputation_1
+  coffeehouse_reputation_lose_msg: 'notify &6Coffee House - Ren Reputation&7: &c-1
+    &fReputation. io:chat'
+  coffeehouse_cleanup_legacy_cooldown: tag del coffeehouse_daily_cooldown
+  coffeehouse_start_daily_cooldown: objective start coffeehouse_daily_cooldown_timer
+  coffeehouse_q1_tag: tag add coffeehouse_q1_active
+  coffeehouse_q1_remove: tag del coffeehouse_q1_active
+  coffeehouse_q1_journal: journal add coffeehouse_q1
+  coffeehouse_remove_journal_q1: journal delete coffeehouse_q1
+  coffeehouse_q1_take_items: take coffeehouse_cocoa_beans:24
+  coffeehouse_q1_msg: 'notify &6Coffee House - Ren&7: &fBring me &824 Cocoa Beans&f.
+    A dark cup needs deep flavor. Cocoa helps. io:chat'
+  coffeehouse_q1_complete_msg: 'notify &6Coffee House - Ren&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  coffeehouse_q1_reward: command cmi money give %player% -s 400
+  coffeehouse_q1_complete_title: notify Contract CompleteCoffee House - Ren is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  coffeehouse_q1_start_timer: objective start coffeehouse_q1_timer
+  coffeehouse_q1_stop_timer: objective delete coffeehouse_q1_timer
+  coffeehouse_q1_expire_msg: 'notify &6Coffee House - Ren&7: &cThe contract expired.
+    Come back another day. io:chat'
+  coffeehouse_q1_expire: folder coffeehouse_q1_remove,coffeehouse_remove_journal_q1,coffeehouse_reputation_lose,coffeehouse_reputation_lose_msg,coffeehouse_q1_expire_msg
+  coffeehouse_daily_quest_1: folder coffeehouse_clear_active_quests,coffeehouse_q1_tag,coffeehouse_q1_journal,coffeehouse_q1_msg,coffeehouse_q1_start_timer
+  coffeehouse_q1_complete: folder coffeehouse_q1_take_items,coffeehouse_reputation_gain,coffeehouse_reputation_gain_msg,coffeehouse_q1_complete_title,coffeehouse_q1_complete_msg,coffeehouse_q1_remove,coffeehouse_q1_reward,coffeehouse_remove_journal_q1,coffeehouse_q1_stop_timer
+  coffeehouse_q2_tag: tag add coffeehouse_q2_active
+  coffeehouse_q2_remove: tag del coffeehouse_q2_active
+  coffeehouse_q2_journal: journal add coffeehouse_q2
+  coffeehouse_remove_journal_q2: journal delete coffeehouse_q2
+  coffeehouse_q2_take_items: take coffeehouse_sugar:18
+  coffeehouse_q2_msg: 'notify &6Coffee House - Ren&7: &fBring me &818 Sugar&f. Some
+    customers are not brave enough for bitter coffee. io:chat'
+  coffeehouse_q2_complete_msg: 'notify &6Coffee House - Ren&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  coffeehouse_q2_reward: command cmi money give %player% -s 400
+  coffeehouse_q2_complete_title: notify Contract CompleteCoffee House - Ren is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  coffeehouse_q2_start_timer: objective start coffeehouse_q2_timer
+  coffeehouse_q2_stop_timer: objective delete coffeehouse_q2_timer
+  coffeehouse_q2_expire_msg: 'notify &6Coffee House - Ren&7: &cThe contract expired.
+    Come back another day. io:chat'
+  coffeehouse_q2_expire: folder coffeehouse_q2_remove,coffeehouse_remove_journal_q2,coffeehouse_reputation_lose,coffeehouse_reputation_lose_msg,coffeehouse_q2_expire_msg
+  coffeehouse_daily_quest_2: folder coffeehouse_clear_active_quests,coffeehouse_q2_tag,coffeehouse_q2_journal,coffeehouse_q2_msg,coffeehouse_q2_start_timer
+  coffeehouse_q2_complete: folder coffeehouse_q2_take_items,coffeehouse_reputation_gain,coffeehouse_reputation_gain_msg,coffeehouse_q2_complete_title,coffeehouse_q2_complete_msg,coffeehouse_q2_remove,coffeehouse_q2_reward,coffeehouse_remove_journal_q2,coffeehouse_q2_stop_timer
+  coffeehouse_q3_tag: tag add coffeehouse_q3_active
+  coffeehouse_q3_remove: tag del coffeehouse_q3_active
+  coffeehouse_q3_journal: journal add coffeehouse_q3
+  coffeehouse_remove_journal_q3: journal delete coffeehouse_q3
+  coffeehouse_q3_take_items: take coffeehouse_milk_bucket:4
+  coffeehouse_q3_msg: 'notify &6Coffee House - Ren&7: &fBring me &84 Milk Bucket&f.
+    Milk softens the cup and the mood. io:chat'
+  coffeehouse_q3_complete_msg: 'notify &6Coffee House - Ren&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  coffeehouse_q3_reward: command cmi money give %player% -s 400
+  coffeehouse_q3_complete_title: notify Contract CompleteCoffee House - Ren is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  coffeehouse_q3_start_timer: objective start coffeehouse_q3_timer
+  coffeehouse_q3_stop_timer: objective delete coffeehouse_q3_timer
+  coffeehouse_q3_expire_msg: 'notify &6Coffee House - Ren&7: &cThe contract expired.
+    Come back another day. io:chat'
+  coffeehouse_q3_expire: folder coffeehouse_q3_remove,coffeehouse_remove_journal_q3,coffeehouse_reputation_lose,coffeehouse_reputation_lose_msg,coffeehouse_q3_expire_msg
+  coffeehouse_daily_quest_3: folder coffeehouse_clear_active_quests,coffeehouse_q3_tag,coffeehouse_q3_journal,coffeehouse_q3_msg,coffeehouse_q3_start_timer
+  coffeehouse_q3_complete: folder coffeehouse_q3_take_items,coffeehouse_reputation_gain,coffeehouse_reputation_gain_msg,coffeehouse_q3_complete_title,coffeehouse_q3_complete_msg,coffeehouse_q3_remove,coffeehouse_q3_reward,coffeehouse_remove_journal_q3,coffeehouse_q3_stop_timer
+  coffeehouse_q4_tag: tag add coffeehouse_q4_active
+  coffeehouse_q4_remove: tag del coffeehouse_q4_active
+  coffeehouse_q4_journal: journal add coffeehouse_q4
+  coffeehouse_remove_journal_q4: journal delete coffeehouse_q4
+  coffeehouse_q4_take_items: take coffeehouse_cookie:16
+  coffeehouse_q4_msg: 'notify &6Coffee House - Ren&7: &fBring me &816 Cookie&f. Coffee
+    without a biscuit is just work in a cup. io:chat'
+  coffeehouse_q4_complete_msg: 'notify &6Coffee House - Ren&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  coffeehouse_q4_reward: command cmi money give %player% -s 400
+  coffeehouse_q4_complete_title: notify Contract CompleteCoffee House - Ren is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  coffeehouse_q4_start_timer: objective start coffeehouse_q4_timer
+  coffeehouse_q4_stop_timer: objective delete coffeehouse_q4_timer
+  coffeehouse_q4_expire_msg: 'notify &6Coffee House - Ren&7: &cThe contract expired.
+    Come back another day. io:chat'
+  coffeehouse_q4_expire: folder coffeehouse_q4_remove,coffeehouse_remove_journal_q4,coffeehouse_reputation_lose,coffeehouse_reputation_lose_msg,coffeehouse_q4_expire_msg
+  coffeehouse_daily_quest_4: folder coffeehouse_clear_active_quests,coffeehouse_q4_tag,coffeehouse_q4_journal,coffeehouse_q4_msg,coffeehouse_q4_start_timer
+  coffeehouse_q4_complete: folder coffeehouse_q4_take_items,coffeehouse_reputation_gain,coffeehouse_reputation_gain_msg,coffeehouse_q4_complete_title,coffeehouse_q4_complete_msg,coffeehouse_q4_remove,coffeehouse_q4_reward,coffeehouse_remove_journal_q4,coffeehouse_q4_stop_timer
+  coffeehouse_q5_tag: tag add coffeehouse_q5_active
+  coffeehouse_q5_remove: tag del coffeehouse_q5_active
+  coffeehouse_q5_journal: journal add coffeehouse_q5
+  coffeehouse_remove_journal_q5: journal delete coffeehouse_q5
+  coffeehouse_q5_take_items: take coffeehouse_paper:20
+  coffeehouse_q5_msg: 'notify &6Coffee House - Ren&7: &fBring me &820 Paper&f. Receipts,
+    labels, filters... paper disappears in this place. io:chat'
+  coffeehouse_q5_complete_msg: 'notify &6Coffee House - Ren&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  coffeehouse_q5_reward: command cmi money give %player% -s 400
+  coffeehouse_q5_complete_title: notify Contract CompleteCoffee House - Ren is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  coffeehouse_q5_start_timer: objective start coffeehouse_q5_timer
+  coffeehouse_q5_stop_timer: objective delete coffeehouse_q5_timer
+  coffeehouse_q5_expire_msg: 'notify &6Coffee House - Ren&7: &cThe contract expired.
+    Come back another day. io:chat'
+  coffeehouse_q5_expire: folder coffeehouse_q5_remove,coffeehouse_remove_journal_q5,coffeehouse_reputation_lose,coffeehouse_reputation_lose_msg,coffeehouse_q5_expire_msg
+  coffeehouse_daily_quest_5: folder coffeehouse_clear_active_quests,coffeehouse_q5_tag,coffeehouse_q5_journal,coffeehouse_q5_msg,coffeehouse_q5_start_timer
+  coffeehouse_q5_complete: folder coffeehouse_q5_take_items,coffeehouse_reputation_gain,coffeehouse_reputation_gain_msg,coffeehouse_q5_complete_title,coffeehouse_q5_complete_msg,coffeehouse_q5_remove,coffeehouse_q5_reward,coffeehouse_remove_journal_q5,coffeehouse_q5_stop_timer
+  coffeehouse_q6_tag: tag add coffeehouse_q6_active
+  coffeehouse_q6_remove: tag del coffeehouse_q6_active
+  coffeehouse_q6_journal: journal add coffeehouse_q6
+  coffeehouse_remove_journal_q6: journal delete coffeehouse_q6
+  coffeehouse_q6_take_items: take coffeehouse_copper_ingot:10
+  coffeehouse_q6_msg: 'notify &6Coffee House - Ren&7: &fBring me &810 Copper Ingot&f.
+    The coffee machine needs repairs again. Of course it does. io:chat'
+  coffeehouse_q6_complete_msg: 'notify &6Coffee House - Ren&7: &fPerfect. This will
+    keep the shop running. io:chat'
+  coffeehouse_q6_reward: command cmi money give %player% -s 400
+  coffeehouse_q6_complete_title: notify Contract CompleteCoffee House - Ren is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  coffeehouse_q6_start_timer: objective start coffeehouse_q6_timer
+  coffeehouse_q6_stop_timer: objective delete coffeehouse_q6_timer
+  coffeehouse_q6_expire_msg: 'notify &6Coffee House - Ren&7: &cThe contract expired.
+    Come back another day. io:chat'
+  coffeehouse_q6_expire: folder coffeehouse_q6_remove,coffeehouse_remove_journal_q6,coffeehouse_reputation_lose,coffeehouse_reputation_lose_msg,coffeehouse_q6_expire_msg
+  coffeehouse_daily_quest_6: folder coffeehouse_clear_active_quests,coffeehouse_q6_tag,coffeehouse_q6_journal,coffeehouse_q6_msg,coffeehouse_q6_start_timer
+  coffeehouse_q6_complete: folder coffeehouse_q6_take_items,coffeehouse_reputation_gain,coffeehouse_reputation_gain_msg,coffeehouse_q6_complete_title,coffeehouse_q6_complete_msg,coffeehouse_q6_remove,coffeehouse_q6_reward,coffeehouse_remove_journal_q6,coffeehouse_q6_stop_timer
+  coffeehouse_clear_active_quests: tag del coffeehouse_q1_active,coffeehouse_q2_active,coffeehouse_q3_active,coffeehouse_q4_active,coffeehouse_q5_active,coffeehouse_q6_active
+  coffeehouse_assign_random_daily_quest: folder coffeehouse_daily_quest_1,coffeehouse_daily_quest_2,coffeehouse_daily_quest_3,coffeehouse_daily_quest_4,coffeehouse_daily_quest_5,coffeehouse_daily_quest_6
+    random:1
+  coffeehouse_accept_random_daily_quest: folder coffeehouse_assign_random_daily_quest,coffeehouse_start_daily_cooldown
+  icecreamcart_open_shop: command mi stations open mmo-food-shop-ice-cream-cart %player%
+  icecreamcart_reputation_gain: point icecreamcart_reputation 1 action:add conditions:!icecreamcart_reputation_100
+  icecreamcart_reputation_gain_msg: 'notify &6Ice Cream Cart - Yuki Reputation&7:
+    &a+1 &fReputation. io:chat'
+  icecreamcart_reputation_lose: point icecreamcart_reputation 1 action:subtract conditions:icecreamcart_reputation_1
+  icecreamcart_reputation_lose_msg: 'notify &6Ice Cream Cart - Yuki Reputation&7:
+    &c-1 &fReputation. io:chat'
+  icecreamcart_cleanup_legacy_cooldown: tag del icecreamcart_daily_cooldown
+  icecreamcart_start_daily_cooldown: objective start icecreamcart_daily_cooldown_timer
+  icecreamcart_q1_tag: tag add icecreamcart_q1_active
+  icecreamcart_q1_remove: tag del icecreamcart_q1_active
+  icecreamcart_q1_journal: journal add icecreamcart_q1
+  icecreamcart_remove_journal_q1: journal delete icecreamcart_q1
+  icecreamcart_q1_take_items: take icecreamcart_snowball:32
+  icecreamcart_q1_msg: 'notify &6Ice Cream Cart - Yuki&7: &fBring me &832 Snowball&f.
+    Cold starts with snow. Simple enough. io:chat'
+  icecreamcart_q1_complete_msg: 'notify &6Ice Cream Cart - Yuki&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  icecreamcart_q1_reward: command cmi money give %player% -s 400
+  icecreamcart_q1_complete_title: notify Contract CompleteIce Cream Cart - Yuki is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  icecreamcart_q1_start_timer: objective start icecreamcart_q1_timer
+  icecreamcart_q1_stop_timer: objective delete icecreamcart_q1_timer
+  icecreamcart_q1_expire_msg: 'notify &6Ice Cream Cart - Yuki&7: &cThe contract expired.
+    Come back another day. io:chat'
+  icecreamcart_q1_expire: folder icecreamcart_q1_remove,icecreamcart_remove_journal_q1,icecreamcart_reputation_lose,icecreamcart_reputation_lose_msg,icecreamcart_q1_expire_msg
+  icecreamcart_daily_quest_1: folder icecreamcart_clear_active_quests,icecreamcart_q1_tag,icecreamcart_q1_journal,icecreamcart_q1_msg,icecreamcart_q1_start_timer
+  icecreamcart_q1_complete: folder icecreamcart_q1_take_items,icecreamcart_reputation_gain,icecreamcart_reputation_gain_msg,icecreamcart_q1_complete_title,icecreamcart_q1_complete_msg,icecreamcart_q1_remove,icecreamcart_q1_reward,icecreamcart_remove_journal_q1,icecreamcart_q1_stop_timer
+  icecreamcart_q2_tag: tag add icecreamcart_q2_active
+  icecreamcart_q2_remove: tag del icecreamcart_q2_active
+  icecreamcart_q2_journal: journal add icecreamcart_q2
+  icecreamcart_remove_journal_q2: journal delete icecreamcart_q2
+  icecreamcart_q2_take_items: take icecreamcart_ice:16
+  icecreamcart_q2_msg: 'notify &6Ice Cream Cart - Yuki&7: &fBring me &816 Ice&f. Good
+    ice keeps the cart alive through the afternoon. io:chat'
+  icecreamcart_q2_complete_msg: 'notify &6Ice Cream Cart - Yuki&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  icecreamcart_q2_reward: command cmi money give %player% -s 400
+  icecreamcart_q2_complete_title: notify Contract CompleteIce Cream Cart - Yuki is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  icecreamcart_q2_start_timer: objective start icecreamcart_q2_timer
+  icecreamcart_q2_stop_timer: objective delete icecreamcart_q2_timer
+  icecreamcart_q2_expire_msg: 'notify &6Ice Cream Cart - Yuki&7: &cThe contract expired.
+    Come back another day. io:chat'
+  icecreamcart_q2_expire: folder icecreamcart_q2_remove,icecreamcart_remove_journal_q2,icecreamcart_reputation_lose,icecreamcart_reputation_lose_msg,icecreamcart_q2_expire_msg
+  icecreamcart_daily_quest_2: folder icecreamcart_clear_active_quests,icecreamcart_q2_tag,icecreamcart_q2_journal,icecreamcart_q2_msg,icecreamcart_q2_start_timer
+  icecreamcart_q2_complete: folder icecreamcart_q2_take_items,icecreamcart_reputation_gain,icecreamcart_reputation_gain_msg,icecreamcart_q2_complete_title,icecreamcart_q2_complete_msg,icecreamcart_q2_remove,icecreamcart_q2_reward,icecreamcart_remove_journal_q2,icecreamcart_q2_stop_timer
+  icecreamcart_q3_tag: tag add icecreamcart_q3_active
+  icecreamcart_q3_remove: tag del icecreamcart_q3_active
+  icecreamcart_q3_journal: journal add icecreamcart_q3
+  icecreamcart_remove_journal_q3: journal delete icecreamcart_q3
+  icecreamcart_q3_take_items: take icecreamcart_packed_ice:8
+  icecreamcart_q3_msg: 'notify &6Ice Cream Cart - Yuki&7: &fBring me &88 Packed Ice&f.
+    Packed ice lasts longer when the crowd gets loud. io:chat'
+  icecreamcart_q3_complete_msg: 'notify &6Ice Cream Cart - Yuki&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  icecreamcart_q3_reward: command cmi money give %player% -s 400
+  icecreamcart_q3_complete_title: notify Contract CompleteIce Cream Cart - Yuki is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  icecreamcart_q3_start_timer: objective start icecreamcart_q3_timer
+  icecreamcart_q3_stop_timer: objective delete icecreamcart_q3_timer
+  icecreamcart_q3_expire_msg: 'notify &6Ice Cream Cart - Yuki&7: &cThe contract expired.
+    Come back another day. io:chat'
+  icecreamcart_q3_expire: folder icecreamcart_q3_remove,icecreamcart_remove_journal_q3,icecreamcart_reputation_lose,icecreamcart_reputation_lose_msg,icecreamcart_q3_expire_msg
+  icecreamcart_daily_quest_3: folder icecreamcart_clear_active_quests,icecreamcart_q3_tag,icecreamcart_q3_journal,icecreamcart_q3_msg,icecreamcart_q3_start_timer
+  icecreamcart_q3_complete: folder icecreamcart_q3_take_items,icecreamcart_reputation_gain,icecreamcart_reputation_gain_msg,icecreamcart_q3_complete_title,icecreamcart_q3_complete_msg,icecreamcart_q3_remove,icecreamcart_q3_reward,icecreamcart_remove_journal_q3,icecreamcart_q3_stop_timer
+  icecreamcart_q4_tag: tag add icecreamcart_q4_active
+  icecreamcart_q4_remove: tag del icecreamcart_q4_active
+  icecreamcart_q4_journal: journal add icecreamcart_q4
+  icecreamcart_remove_journal_q4: journal delete icecreamcart_q4
+  icecreamcart_q4_take_items: take icecreamcart_milk_bucket:5
+  icecreamcart_q4_msg: 'notify &6Ice Cream Cart - Yuki&7: &fBring me &85 Milk Bucket&f.
+    Creamy treats need real milk. io:chat'
+  icecreamcart_q4_complete_msg: 'notify &6Ice Cream Cart - Yuki&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  icecreamcart_q4_reward: command cmi money give %player% -s 400
+  icecreamcart_q4_complete_title: notify Contract CompleteIce Cream Cart - Yuki is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  icecreamcart_q4_start_timer: objective start icecreamcart_q4_timer
+  icecreamcart_q4_stop_timer: objective delete icecreamcart_q4_timer
+  icecreamcart_q4_expire_msg: 'notify &6Ice Cream Cart - Yuki&7: &cThe contract expired.
+    Come back another day. io:chat'
+  icecreamcart_q4_expire: folder icecreamcart_q4_remove,icecreamcart_remove_journal_q4,icecreamcart_reputation_lose,icecreamcart_reputation_lose_msg,icecreamcart_q4_expire_msg
+  icecreamcart_daily_quest_4: folder icecreamcart_clear_active_quests,icecreamcart_q4_tag,icecreamcart_q4_journal,icecreamcart_q4_msg,icecreamcart_q4_start_timer
+  icecreamcart_q4_complete: folder icecreamcart_q4_take_items,icecreamcart_reputation_gain,icecreamcart_reputation_gain_msg,icecreamcart_q4_complete_title,icecreamcart_q4_complete_msg,icecreamcart_q4_remove,icecreamcart_q4_reward,icecreamcart_remove_journal_q4,icecreamcart_q4_stop_timer
+  icecreamcart_q5_tag: tag add icecreamcart_q5_active
+  icecreamcart_q5_remove: tag del icecreamcart_q5_active
+  icecreamcart_q5_journal: journal add icecreamcart_q5
+  icecreamcart_remove_journal_q5: journal delete icecreamcart_q5
+  icecreamcart_q5_take_items: take icecreamcart_sugar:24
+  icecreamcart_q5_msg: 'notify &6Ice Cream Cart - Yuki&7: &fBring me &824 Sugar&f.
+    Frozen sweets still need sweetness. io:chat'
+  icecreamcart_q5_complete_msg: 'notify &6Ice Cream Cart - Yuki&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  icecreamcart_q5_reward: command cmi money give %player% -s 400
+  icecreamcart_q5_complete_title: notify Contract CompleteIce Cream Cart - Yuki is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  icecreamcart_q5_start_timer: objective start icecreamcart_q5_timer
+  icecreamcart_q5_stop_timer: objective delete icecreamcart_q5_timer
+  icecreamcart_q5_expire_msg: 'notify &6Ice Cream Cart - Yuki&7: &cThe contract expired.
+    Come back another day. io:chat'
+  icecreamcart_q5_expire: folder icecreamcart_q5_remove,icecreamcart_remove_journal_q5,icecreamcart_reputation_lose,icecreamcart_reputation_lose_msg,icecreamcart_q5_expire_msg
+  icecreamcart_daily_quest_5: folder icecreamcart_clear_active_quests,icecreamcart_q5_tag,icecreamcart_q5_journal,icecreamcart_q5_msg,icecreamcart_q5_start_timer
+  icecreamcart_q5_complete: folder icecreamcart_q5_take_items,icecreamcart_reputation_gain,icecreamcart_reputation_gain_msg,icecreamcart_q5_complete_title,icecreamcart_q5_complete_msg,icecreamcart_q5_remove,icecreamcart_q5_reward,icecreamcart_remove_journal_q5,icecreamcart_q5_stop_timer
+  icecreamcart_q6_tag: tag add icecreamcart_q6_active
+  icecreamcart_q6_remove: tag del icecreamcart_q6_active
+  icecreamcart_q6_journal: journal add icecreamcart_q6
+  icecreamcart_remove_journal_q6: journal delete icecreamcart_q6
+  icecreamcart_q6_take_items: take icecreamcart_blue_ice:2
+  icecreamcart_q6_msg: 'notify &6Ice Cream Cart - Yuki&7: &fBring me &82 Blue Ice&f.
+    Blue ice is expensive, but it keeps miracles frozen. io:chat'
+  icecreamcart_q6_complete_msg: 'notify &6Ice Cream Cart - Yuki&7: &fPerfect. This
+    will keep the shop running. io:chat'
+  icecreamcart_q6_reward: command cmi money give %player% -s 400
+  icecreamcart_q6_complete_title: notify Contract CompleteIce Cream Cart - Yuki is
+    satisfied io:title fadeIn:0 stay:40 fadeOut:0
+  icecreamcart_q6_start_timer: objective start icecreamcart_q6_timer
+  icecreamcart_q6_stop_timer: objective delete icecreamcart_q6_timer
+  icecreamcart_q6_expire_msg: 'notify &6Ice Cream Cart - Yuki&7: &cThe contract expired.
+    Come back another day. io:chat'
+  icecreamcart_q6_expire: folder icecreamcart_q6_remove,icecreamcart_remove_journal_q6,icecreamcart_reputation_lose,icecreamcart_reputation_lose_msg,icecreamcart_q6_expire_msg
+  icecreamcart_daily_quest_6: folder icecreamcart_clear_active_quests,icecreamcart_q6_tag,icecreamcart_q6_journal,icecreamcart_q6_msg,icecreamcart_q6_start_timer
+  icecreamcart_q6_complete: folder icecreamcart_q6_take_items,icecreamcart_reputation_gain,icecreamcart_reputation_gain_msg,icecreamcart_q6_complete_title,icecreamcart_q6_complete_msg,icecreamcart_q6_remove,icecreamcart_q6_reward,icecreamcart_remove_journal_q6,icecreamcart_q6_stop_timer
+  icecreamcart_clear_active_quests: tag del icecreamcart_q1_active,icecreamcart_q2_active,icecreamcart_q3_active,icecreamcart_q4_active,icecreamcart_q5_active,icecreamcart_q6_active
+  icecreamcart_assign_random_daily_quest: folder icecreamcart_daily_quest_1,icecreamcart_daily_quest_2,icecreamcart_daily_quest_3,icecreamcart_daily_quest_4,icecreamcart_daily_quest_5,icecreamcart_daily_quest_6
+    random:1
+  icecreamcart_accept_random_daily_quest: folder icecreamcart_assign_random_daily_quest,icecreamcart_start_daily_cooldown
+objectives:
+  teahouse_q1_timer: delay 1320 events:teahouse_q1_expire
+  teahouse_q2_timer: delay 1320 events:teahouse_q2_expire
+  teahouse_q3_timer: delay 1320 events:teahouse_q3_expire
+  teahouse_q4_timer: delay 1320 events:teahouse_q4_expire
+  teahouse_q5_timer: delay 1320 events:teahouse_q5_expire
+  teahouse_q6_timer: delay 1320 events:teahouse_q6_expire
+  teahouse_daily_cooldown_timer: delay 1320 events:teahouse_cleanup_legacy_cooldown
+  sakebrewery_q1_timer: delay 1320 events:sakebrewery_q1_expire
+  sakebrewery_q2_timer: delay 1320 events:sakebrewery_q2_expire
+  sakebrewery_q3_timer: delay 1320 events:sakebrewery_q3_expire
+  sakebrewery_q4_timer: delay 1320 events:sakebrewery_q4_expire
+  sakebrewery_q5_timer: delay 1320 events:sakebrewery_q5_expire
+  sakebrewery_q6_timer: delay 1320 events:sakebrewery_q6_expire
+  sakebrewery_daily_cooldown_timer: delay 1320 events:sakebrewery_cleanup_legacy_cooldown
+  bbqmaster_q1_timer: delay 1320 events:bbqmaster_q1_expire
+  bbqmaster_q2_timer: delay 1320 events:bbqmaster_q2_expire
+  bbqmaster_q3_timer: delay 1320 events:bbqmaster_q3_expire
+  bbqmaster_q4_timer: delay 1320 events:bbqmaster_q4_expire
+  bbqmaster_q5_timer: delay 1320 events:bbqmaster_q5_expire
+  bbqmaster_q6_timer: delay 1320 events:bbqmaster_q6_expire
+  bbqmaster_daily_cooldown_timer: delay 1320 events:bbqmaster_cleanup_legacy_cooldown
+  sushimaster_q1_timer: delay 1320 events:sushimaster_q1_expire
+  sushimaster_q2_timer: delay 1320 events:sushimaster_q2_expire
+  sushimaster_q3_timer: delay 1320 events:sushimaster_q3_expire
+  sushimaster_q4_timer: delay 1320 events:sushimaster_q4_expire
+  sushimaster_q5_timer: delay 1320 events:sushimaster_q5_expire
+  sushimaster_q6_timer: delay 1320 events:sushimaster_q6_expire
+  sushimaster_daily_cooldown_timer: delay 1320 events:sushimaster_cleanup_legacy_cooldown
+  candymerchant_q1_timer: delay 1320 events:candymerchant_q1_expire
+  candymerchant_q2_timer: delay 1320 events:candymerchant_q2_expire
+  candymerchant_q3_timer: delay 1320 events:candymerchant_q3_expire
+  candymerchant_q4_timer: delay 1320 events:candymerchant_q4_expire
+  candymerchant_q5_timer: delay 1320 events:candymerchant_q5_expire
+  candymerchant_q6_timer: delay 1320 events:candymerchant_q6_expire
+  candymerchant_daily_cooldown_timer: delay 1320 events:candymerchant_cleanup_legacy_cooldown
+  fruitmarket_q1_timer: delay 1320 events:fruitmarket_q1_expire
+  fruitmarket_q2_timer: delay 1320 events:fruitmarket_q2_expire
+  fruitmarket_q3_timer: delay 1320 events:fruitmarket_q3_expire
+  fruitmarket_q4_timer: delay 1320 events:fruitmarket_q4_expire
+  fruitmarket_q5_timer: delay 1320 events:fruitmarket_q5_expire
+  fruitmarket_q6_timer: delay 1320 events:fruitmarket_q6_expire
+  fruitmarket_daily_cooldown_timer: delay 1320 events:fruitmarket_cleanup_legacy_cooldown
+  coffeehouse_q1_timer: delay 1320 events:coffeehouse_q1_expire
+  coffeehouse_q2_timer: delay 1320 events:coffeehouse_q2_expire
+  coffeehouse_q3_timer: delay 1320 events:coffeehouse_q3_expire
+  coffeehouse_q4_timer: delay 1320 events:coffeehouse_q4_expire
+  coffeehouse_q5_timer: delay 1320 events:coffeehouse_q5_expire
+  coffeehouse_q6_timer: delay 1320 events:coffeehouse_q6_expire
+  coffeehouse_daily_cooldown_timer: delay 1320 events:coffeehouse_cleanup_legacy_cooldown
+  icecreamcart_q1_timer: delay 1320 events:icecreamcart_q1_expire
+  icecreamcart_q2_timer: delay 1320 events:icecreamcart_q2_expire
+  icecreamcart_q3_timer: delay 1320 events:icecreamcart_q3_expire
+  icecreamcart_q4_timer: delay 1320 events:icecreamcart_q4_expire
+  icecreamcart_q5_timer: delay 1320 events:icecreamcart_q5_expire
+  icecreamcart_q6_timer: delay 1320 events:icecreamcart_q6_expire
+  icecreamcart_daily_cooldown_timer: delay 1320 events:icecreamcart_cleanup_legacy_cooldown
+npc_holograms:
+  teahouse_available:
+    lines:
+    - '&d&l❗'
+    npcs: '82'
+    conditions: '!teahouse_daily_cooldown_v2,!teahouse_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  teahouse_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '82'
+    conditions: teahouse_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+  sakebrewery_available:
+    lines:
+    - '&d&l❗'
+    npcs: '83'
+    conditions: '!sakebrewery_daily_cooldown_v2,!sakebrewery_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  sakebrewery_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '83'
+    conditions: sakebrewery_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+  bbqmaster_available:
+    lines:
+    - '&d&l❗'
+    npcs: '84'
+    conditions: '!bbqmaster_daily_cooldown_v2,!bbqmaster_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  bbqmaster_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '84'
+    conditions: bbqmaster_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+  sushimaster_available:
+    lines:
+    - '&d&l❗'
+    npcs: '85'
+    conditions: '!sushimaster_daily_cooldown_v2,!sushimaster_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  sushimaster_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '85'
+    conditions: sushimaster_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+  candymerchant_available:
+    lines:
+    - '&d&l❗'
+    npcs: '86'
+    conditions: '!candymerchant_daily_cooldown_v2,!candymerchant_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  candymerchant_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '86'
+    conditions: candymerchant_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+  fruitmarket_available:
+    lines:
+    - '&d&l❗'
+    npcs: '87'
+    conditions: '!fruitmarket_daily_cooldown_v2,!fruitmarket_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  fruitmarket_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '87'
+    conditions: fruitmarket_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+  coffeehouse_available:
+    lines:
+    - '&d&l❗'
+    npcs: '88'
+    conditions: '!coffeehouse_daily_cooldown_v2,!coffeehouse_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  coffeehouse_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '88'
+    conditions: coffeehouse_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+  icecreamcart_available:
+    lines:
+    - '&d&l❗'
+    npcs: '89'
+    conditions: '!icecreamcart_daily_cooldown_v2,!icecreamcart_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  icecreamcart_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '89'
+    conditions: icecreamcart_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+npc_conversations:
+  '82': teahouse_conv
+  '83': sakebrewery_conv
+  '84': bbqmaster_conv
+  '85': sushimaster_conv
+  '86': candymerchant_conv
+  '87': fruitmarket_conv
+  '88': coffeehouse_conv
+  '89': icecreamcart_conv
+conversations:
+  teahouse_conv:
+    quester: Tea House - Aiko
+    first: teahouse_start
+    stop: true
+    NPC_options:
+      teahouse_start:
+        text: Welcome, traveler. The kettle is singing and the cups are warm. What
+          would you like?
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      teahouse_shop:
+        text: Let me prepare the tea menu for you.
+        actions: teahouse_open_shop
+        pointers: pl_end_conversation
+      teahouse_talk_available:
+        text: I need simple ingredients for todays blends and sweets. Take one contract,
+          bring the materials, and I will pay you.
+        conditions: '!teahouse_daily_cooldown_v2,!teahouse_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      teahouse_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: teahouse_daily_cooldown_v2,!teahouse_has_active_quest_v2
+        pointers: pl_end_conversation
+      teahouse_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: teahouse_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      teahouse_about:
+        text: This tea house was built for tired feet and restless minds. Steam carries
+          stories better than paper.
+        pointers: pl_end_conversation
+      teahouse_accept:
+        text: Good. I will write the contract now.
+        actions: teahouse_accept_random_daily_quest
+        pointers: pl_end_conversation
+      teahouse_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      teahouse_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      teahouse_assigned_q1:
+        text: Bring me 12 Sugar. Sweetness keeps bitter tea honest. Return when you
+          have them.
+        conditions: teahouse_q1_active
+        pointers: pl_end_conversation
+      teahouse_turnin_q1_ready:
+        text: Yes, these Sugar will do nicely. Here is your pay.
+        conditions: teahouse_q1_active,teahouse_q1_has_items
+        actions: teahouse_q1_complete
+        pointers: pl_end_conversation
+      teahouse_turnin_q1_missing:
+        text: Not enough. I still need 12 Sugar.
+        conditions: teahouse_q1_active,!teahouse_q1_has_items
+        pointers: pl_end_conversation
+      teahouse_assigned_q2:
+        text: Bring me 4 Honey Bottle. Good honey makes even a rainy day taste gentle.
+          Return when you have them.
+        conditions: teahouse_q2_active
+        pointers: pl_end_conversation
+      teahouse_turnin_q2_ready:
+        text: Yes, these Honey Bottle will do nicely. Here is your pay.
+        conditions: teahouse_q2_active,teahouse_q2_has_items
+        actions: teahouse_q2_complete
+        pointers: pl_end_conversation
+      teahouse_turnin_q2_missing:
+        text: Not enough. I still need 4 Honey Bottle.
+        conditions: teahouse_q2_active,!teahouse_q2_has_items
+        pointers: pl_end_conversation
+      teahouse_assigned_q3:
+        text: Bring me 20 Sugar Cane. Fresh cane gives me syrup, paper wraps, and
+          trade favors. Return when you have them.
+        conditions: teahouse_q3_active
+        pointers: pl_end_conversation
+      teahouse_turnin_q3_ready:
+        text: Yes, these Sugar Cane will do nicely. Here is your pay.
+        conditions: teahouse_q3_active,teahouse_q3_has_items
+        actions: teahouse_q3_complete
+        pointers: pl_end_conversation
+      teahouse_turnin_q3_missing:
+        text: Not enough. I still need 20 Sugar Cane.
+        conditions: teahouse_q3_active,!teahouse_q3_has_items
+        pointers: pl_end_conversation
+      teahouse_assigned_q4:
+        text: Bring me 24 Wheat. Tea is better with small cakes, and small cakes begin
+          with wheat. Return when you have them.
+        conditions: teahouse_q4_active
+        pointers: pl_end_conversation
+      teahouse_turnin_q4_ready:
+        text: Yes, these Wheat will do nicely. Here is your pay.
+        conditions: teahouse_q4_active,teahouse_q4_has_items
+        actions: teahouse_q4_complete
+        pointers: pl_end_conversation
+      teahouse_turnin_q4_missing:
+        text: Not enough. I still need 24 Wheat.
+        conditions: teahouse_q4_active,!teahouse_q4_has_items
+        pointers: pl_end_conversation
+      teahouse_assigned_q5:
+        text: Bring me 16 Sweet Berries. Berry tea warms the hands and brightens the
+          heart. Return when you have them.
+        conditions: teahouse_q5_active
+        pointers: pl_end_conversation
+      teahouse_turnin_q5_ready:
+        text: Yes, these Sweet Berries will do nicely. Here is your pay.
+        conditions: teahouse_q5_active,teahouse_q5_has_items
+        actions: teahouse_q5_complete
+        pointers: pl_end_conversation
+      teahouse_turnin_q5_missing:
+        text: Not enough. I still need 16 Sweet Berries.
+        conditions: teahouse_q5_active,!teahouse_q5_has_items
+        pointers: pl_end_conversation
+      teahouse_assigned_q6:
+        text: Bring me 18 Bamboo. Bamboo whisks and trays do not replace themselves.
+          Return when you have them.
+        conditions: teahouse_q6_active
+        pointers: pl_end_conversation
+      teahouse_turnin_q6_ready:
+        text: Yes, these Bamboo will do nicely. Here is your pay.
+        conditions: teahouse_q6_active,teahouse_q6_has_items
+        actions: teahouse_q6_complete
+        pointers: pl_end_conversation
+      teahouse_turnin_q6_missing:
+        text: Not enough. I still need 18 Bamboo.
+        conditions: teahouse_q6_active,!teahouse_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: teahouse_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: teahouse_talk_active,teahouse_talk_available,teahouse_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: teahouse_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: teahouse_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: teahouse_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: teahouse_turnin_q1_ready,teahouse_turnin_q2_ready,teahouse_turnin_q3_ready,teahouse_turnin_q4_ready,teahouse_turnin_q5_ready,teahouse_turnin_q6_ready,teahouse_turnin_q1_missing,teahouse_turnin_q2_missing,teahouse_turnin_q3_missing,teahouse_turnin_q4_missing,teahouse_turnin_q5_missing,teahouse_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: teahouse_assigned_q1,teahouse_assigned_q2,teahouse_assigned_q3,teahouse_assigned_q4,teahouse_assigned_q5,teahouse_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: teahouse_goodbye
+      pl_end_conversation:
+        text: End conversation
+  sakebrewery_conv:
+    quester: Sake Brewery - Goro
+    first: sakebrewery_start
+    stop: true
+    NPC_options:
+      sakebrewery_start:
+        text: You smell that? Rice, heat, barrels, and trouble. Welcome to the brewery.
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      sakebrewery_shop:
+        text: The brewery shelves are open. Drink responsibly, or at least amusingly.
+        actions: sakebrewery_open_shop
+        pointers: pl_end_conversation
+      sakebrewery_talk_available:
+        text: The vats are hungry. Bring supplies and I will pay properly. Take one
+          contract, bring the materials, and I will pay you.
+        conditions: '!sakebrewery_daily_cooldown_v2,!sakebrewery_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      sakebrewery_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: sakebrewery_daily_cooldown_v2,!sakebrewery_has_active_quest_v2
+        pointers: pl_end_conversation
+      sakebrewery_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: sakebrewery_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      sakebrewery_about:
+        text: My family turned grain into courage long before the city had copper
+          pipes.
+        pointers: pl_end_conversation
+      sakebrewery_accept:
+        text: Good. I will write the contract now.
+        actions: sakebrewery_accept_random_daily_quest
+        pointers: pl_end_conversation
+      sakebrewery_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      sakebrewery_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      sakebrewery_assigned_q1:
+        text: Bring me 32 Wheat. Grain feeds workers and fills tavern bowls. Return
+          when you have them.
+        conditions: sakebrewery_q1_active
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q1_ready:
+        text: Yes, these Wheat will do nicely. Here is your pay.
+        conditions: sakebrewery_q1_active,sakebrewery_q1_has_items
+        actions: sakebrewery_q1_complete
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q1_missing:
+        text: Not enough. I still need 32 Wheat.
+        conditions: sakebrewery_q1_active,!sakebrewery_q1_has_items
+        pointers: pl_end_conversation
+      sakebrewery_assigned_q2:
+        text: Bring me 16 Sugar. A careful sweetness keeps the brew balanced. Return
+          when you have them.
+        conditions: sakebrewery_q2_active
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q2_ready:
+        text: Yes, these Sugar will do nicely. Here is your pay.
+        conditions: sakebrewery_q2_active,sakebrewery_q2_has_items
+        actions: sakebrewery_q2_complete
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q2_missing:
+        text: Not enough. I still need 16 Sugar.
+        conditions: sakebrewery_q2_active,!sakebrewery_q2_has_items
+        pointers: pl_end_conversation
+      sakebrewery_assigned_q3:
+        text: Bring me 12 Brown Mushroom. Mushrooms make strong tavern stews for stronger
+          drinkers. Return when you have them.
+        conditions: sakebrewery_q3_active
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q3_ready:
+        text: Yes, these Brown Mushroom will do nicely. Here is your pay.
+        conditions: sakebrewery_q3_active,sakebrewery_q3_has_items
+        actions: sakebrewery_q3_complete
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q3_missing:
+        text: Not enough. I still need 12 Brown Mushroom.
+        conditions: sakebrewery_q3_active,!sakebrewery_q3_has_items
+        pointers: pl_end_conversation
+      sakebrewery_assigned_q4:
+        text: Bring me 24 Potato. Potatoes keep customers standing after the second
+          cup. Return when you have them.
+        conditions: sakebrewery_q4_active
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q4_ready:
+        text: Yes, these Potato will do nicely. Here is your pay.
+        conditions: sakebrewery_q4_active,sakebrewery_q4_has_items
+        actions: sakebrewery_q4_complete
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q4_missing:
+        text: Not enough. I still need 24 Potato.
+        conditions: sakebrewery_q4_active,!sakebrewery_q4_has_items
+        pointers: pl_end_conversation
+      sakebrewery_assigned_q5:
+        text: Bring me 20 Kelp. Dried kelp gives snacks the taste of the sea. Return
+          when you have them.
+        conditions: sakebrewery_q5_active
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q5_ready:
+        text: Yes, these Kelp will do nicely. Here is your pay.
+        conditions: sakebrewery_q5_active,sakebrewery_q5_has_items
+        actions: sakebrewery_q5_complete
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q5_missing:
+        text: Not enough. I still need 20 Kelp.
+        conditions: sakebrewery_q5_active,!sakebrewery_q5_has_items
+        pointers: pl_end_conversation
+      sakebrewery_assigned_q6:
+        text: Bring me 3 Barrel. No barrel, no brewery. Simple as that. Return when
+          you have them.
+        conditions: sakebrewery_q6_active
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q6_ready:
+        text: Yes, these Barrel will do nicely. Here is your pay.
+        conditions: sakebrewery_q6_active,sakebrewery_q6_has_items
+        actions: sakebrewery_q6_complete
+        pointers: pl_end_conversation
+      sakebrewery_turnin_q6_missing:
+        text: Not enough. I still need 3 Barrel.
+        conditions: sakebrewery_q6_active,!sakebrewery_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: sakebrewery_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: sakebrewery_talk_active,sakebrewery_talk_available,sakebrewery_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: sakebrewery_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: sakebrewery_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: sakebrewery_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: sakebrewery_turnin_q1_ready,sakebrewery_turnin_q2_ready,sakebrewery_turnin_q3_ready,sakebrewery_turnin_q4_ready,sakebrewery_turnin_q5_ready,sakebrewery_turnin_q6_ready,sakebrewery_turnin_q1_missing,sakebrewery_turnin_q2_missing,sakebrewery_turnin_q3_missing,sakebrewery_turnin_q4_missing,sakebrewery_turnin_q5_missing,sakebrewery_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: sakebrewery_assigned_q1,sakebrewery_assigned_q2,sakebrewery_assigned_q3,sakebrewery_assigned_q4,sakebrewery_assigned_q5,sakebrewery_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: sakebrewery_goodbye
+      pl_end_conversation:
+        text: End conversation
+  bbqmaster_conv:
+    quester: BBQ Master - Taro
+    first: bbqmaster_start
+    stop: true
+    NPC_options:
+      bbqmaster_start:
+        text: Come closer, but not too close. The smoke bites harder than some swords.
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      bbqmaster_shop:
+        text: Good. The grill is hot and the meat is ready.
+        actions: bbqmaster_open_shop
+        pointers: pl_end_conversation
+      bbqmaster_talk_available:
+        text: If you can bring raw supplies, I can turn them into food worth remembering.
+          Take one contract, bring the materials, and I will pay you.
+        conditions: '!bbqmaster_daily_cooldown_v2,!bbqmaster_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      bbqmaster_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: bbqmaster_daily_cooldown_v2,!bbqmaster_has_active_quest_v2
+        pointers: pl_end_conversation
+      bbqmaster_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: bbqmaster_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      bbqmaster_about:
+        text: I learned cooking from hunters, miners, and hungry guards. Fire treats
+          everyone equally.
+        pointers: pl_end_conversation
+      bbqmaster_accept:
+        text: Good. I will write the contract now.
+        actions: bbqmaster_accept_random_daily_quest
+        pointers: pl_end_conversation
+      bbqmaster_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      bbqmaster_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      bbqmaster_assigned_q1:
+        text: Bring me 16 Beef. Good beef needs only fire, salt, and patience. Return
+          when you have them.
+        conditions: bbqmaster_q1_active
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q1_ready:
+        text: Yes, these Beef will do nicely. Here is your pay.
+        conditions: bbqmaster_q1_active,bbqmaster_q1_has_items
+        actions: bbqmaster_q1_complete
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q1_missing:
+        text: Not enough. I still need 16 Beef.
+        conditions: bbqmaster_q1_active,!bbqmaster_q1_has_items
+        pointers: pl_end_conversation
+      bbqmaster_assigned_q2:
+        text: Bring me 16 Porkchop. Pork takes smoke better than most nobles take
+          advice. Return when you have them.
+        conditions: bbqmaster_q2_active
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q2_ready:
+        text: Yes, these Porkchop will do nicely. Here is your pay.
+        conditions: bbqmaster_q2_active,bbqmaster_q2_has_items
+        actions: bbqmaster_q2_complete
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q2_missing:
+        text: Not enough. I still need 16 Porkchop.
+        conditions: bbqmaster_q2_active,!bbqmaster_q2_has_items
+        pointers: pl_end_conversation
+      bbqmaster_assigned_q3:
+        text: Bring me 20 Chicken. Chicken skewers sell faster than I can grill them.
+          Return when you have them.
+        conditions: bbqmaster_q3_active
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q3_ready:
+        text: Yes, these Chicken will do nicely. Here is your pay.
+        conditions: bbqmaster_q3_active,bbqmaster_q3_has_items
+        actions: bbqmaster_q3_complete
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q3_missing:
+        text: Not enough. I still need 20 Chicken.
+        conditions: bbqmaster_q3_active,!bbqmaster_q3_has_items
+        pointers: pl_end_conversation
+      bbqmaster_assigned_q4:
+        text: Bring me 14 Mutton. Mutton keeps the night watch warm. Return when you
+          have them.
+        conditions: bbqmaster_q4_active
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q4_ready:
+        text: Yes, these Mutton will do nicely. Here is your pay.
+        conditions: bbqmaster_q4_active,bbqmaster_q4_has_items
+        actions: bbqmaster_q4_complete
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q4_missing:
+        text: Not enough. I still need 14 Mutton.
+        conditions: bbqmaster_q4_active,!bbqmaster_q4_has_items
+        pointers: pl_end_conversation
+      bbqmaster_assigned_q5:
+        text: Bring me 24 Coal. A weak fire ruins strong meat. Return when you have
+          them.
+        conditions: bbqmaster_q5_active
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q5_ready:
+        text: Yes, these Coal will do nicely. Here is your pay.
+        conditions: bbqmaster_q5_active,bbqmaster_q5_has_items
+        actions: bbqmaster_q5_complete
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q5_missing:
+        text: Not enough. I still need 24 Coal.
+        conditions: bbqmaster_q5_active,!bbqmaster_q5_has_items
+        pointers: pl_end_conversation
+      bbqmaster_assigned_q6:
+        text: Bring me 18 Charcoal. Clean charcoal makes clean smoke. Return when
+          you have them.
+        conditions: bbqmaster_q6_active
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q6_ready:
+        text: Yes, these Charcoal will do nicely. Here is your pay.
+        conditions: bbqmaster_q6_active,bbqmaster_q6_has_items
+        actions: bbqmaster_q6_complete
+        pointers: pl_end_conversation
+      bbqmaster_turnin_q6_missing:
+        text: Not enough. I still need 18 Charcoal.
+        conditions: bbqmaster_q6_active,!bbqmaster_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: bbqmaster_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: bbqmaster_talk_active,bbqmaster_talk_available,bbqmaster_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: bbqmaster_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: bbqmaster_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: bbqmaster_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: bbqmaster_turnin_q1_ready,bbqmaster_turnin_q2_ready,bbqmaster_turnin_q3_ready,bbqmaster_turnin_q4_ready,bbqmaster_turnin_q5_ready,bbqmaster_turnin_q6_ready,bbqmaster_turnin_q1_missing,bbqmaster_turnin_q2_missing,bbqmaster_turnin_q3_missing,bbqmaster_turnin_q4_missing,bbqmaster_turnin_q5_missing,bbqmaster_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: bbqmaster_assigned_q1,bbqmaster_assigned_q2,bbqmaster_assigned_q3,bbqmaster_assigned_q4,bbqmaster_assigned_q5,bbqmaster_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: bbqmaster_goodbye
+      pl_end_conversation:
+        text: End conversation
+  sushimaster_conv:
+    quester: Sushi Master - Daichi
+    first: sushimaster_start
+    stop: true
+    NPC_options:
+      sushimaster_start:
+        text: Fresh fish, clean rice, sharp knife. That is the order of the world.
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      sushimaster_shop:
+        text: Sit straight. The sushi counter is ready.
+        actions: sushimaster_open_shop
+        pointers: pl_end_conversation
+      sushimaster_talk_available:
+        text: The harbor is busy and my counter is empty. Bring me ingredients. Take
+          one contract, bring the materials, and I will pay you.
+        conditions: '!sushimaster_daily_cooldown_v2,!sushimaster_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      sushimaster_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: sushimaster_daily_cooldown_v2,!sushimaster_has_active_quest_v2
+        pointers: pl_end_conversation
+      sushimaster_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: sushimaster_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      sushimaster_about:
+        text: I worked the docks before I touched a chef knife. A fish tells the truth
+          if you know where to look.
+        pointers: pl_end_conversation
+      sushimaster_accept:
+        text: Good. I will write the contract now.
+        actions: sushimaster_accept_random_daily_quest
+        pointers: pl_end_conversation
+      sushimaster_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      sushimaster_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      sushimaster_assigned_q1:
+        text: Bring me 12 Cod. Cod is honest fish. Simple, clean, useful. Return when
+          you have them.
+        conditions: sushimaster_q1_active
+        pointers: pl_end_conversation
+      sushimaster_turnin_q1_ready:
+        text: Yes, these Cod will do nicely. Here is your pay.
+        conditions: sushimaster_q1_active,sushimaster_q1_has_items
+        actions: sushimaster_q1_complete
+        pointers: pl_end_conversation
+      sushimaster_turnin_q1_missing:
+        text: Not enough. I still need 12 Cod.
+        conditions: sushimaster_q1_active,!sushimaster_q1_has_items
+        pointers: pl_end_conversation
+      sushimaster_assigned_q2:
+        text: Bring me 10 Salmon. Salmon brings color to the plate and strength to
+          the body. Return when you have them.
+        conditions: sushimaster_q2_active
+        pointers: pl_end_conversation
+      sushimaster_turnin_q2_ready:
+        text: Yes, these Salmon will do nicely. Here is your pay.
+        conditions: sushimaster_q2_active,sushimaster_q2_has_items
+        actions: sushimaster_q2_complete
+        pointers: pl_end_conversation
+      sushimaster_turnin_q2_missing:
+        text: Not enough. I still need 10 Salmon.
+        conditions: sushimaster_q2_active,!sushimaster_q2_has_items
+        pointers: pl_end_conversation
+      sushimaster_assigned_q3:
+        text: Bring me 24 Dried Kelp. Kelp wraps, seasons, and reminds the rice of
+          the ocean. Return when you have them.
+        conditions: sushimaster_q3_active
+        pointers: pl_end_conversation
+      sushimaster_turnin_q3_ready:
+        text: Yes, these Dried Kelp will do nicely. Here is your pay.
+        conditions: sushimaster_q3_active,sushimaster_q3_has_items
+        actions: sushimaster_q3_complete
+        pointers: pl_end_conversation
+      sushimaster_turnin_q3_missing:
+        text: Not enough. I still need 24 Dried Kelp.
+        conditions: sushimaster_q3_active,!sushimaster_q3_has_items
+        pointers: pl_end_conversation
+      sushimaster_assigned_q4:
+        text: Bring me 24 Seagrass. Fresh greens help balance rich fish. Return when
+          you have them.
+        conditions: sushimaster_q4_active
+        pointers: pl_end_conversation
+      sushimaster_turnin_q4_ready:
+        text: Yes, these Seagrass will do nicely. Here is your pay.
+        conditions: sushimaster_q4_active,sushimaster_q4_has_items
+        actions: sushimaster_q4_complete
+        pointers: pl_end_conversation
+      sushimaster_turnin_q4_missing:
+        text: Not enough. I still need 24 Seagrass.
+        conditions: sushimaster_q4_active,!sushimaster_q4_has_items
+        pointers: pl_end_conversation
+      sushimaster_assigned_q5:
+        text: Bring me 32 Kelp. The best kitchens waste nothing from the sea. Return
+          when you have them.
+        conditions: sushimaster_q5_active
+        pointers: pl_end_conversation
+      sushimaster_turnin_q5_ready:
+        text: Yes, these Kelp will do nicely. Here is your pay.
+        conditions: sushimaster_q5_active,sushimaster_q5_has_items
+        actions: sushimaster_q5_complete
+        pointers: pl_end_conversation
+      sushimaster_turnin_q5_missing:
+        text: Not enough. I still need 32 Kelp.
+        conditions: sushimaster_q5_active,!sushimaster_q5_has_items
+        pointers: pl_end_conversation
+      sushimaster_assigned_q6:
+        text: Bring me 12 Bowl. Rice bowls vanish faster than customers admit. Return
+          when you have them.
+        conditions: sushimaster_q6_active
+        pointers: pl_end_conversation
+      sushimaster_turnin_q6_ready:
+        text: Yes, these Bowl will do nicely. Here is your pay.
+        conditions: sushimaster_q6_active,sushimaster_q6_has_items
+        actions: sushimaster_q6_complete
+        pointers: pl_end_conversation
+      sushimaster_turnin_q6_missing:
+        text: Not enough. I still need 12 Bowl.
+        conditions: sushimaster_q6_active,!sushimaster_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: sushimaster_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: sushimaster_talk_active,sushimaster_talk_available,sushimaster_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: sushimaster_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: sushimaster_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: sushimaster_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: sushimaster_turnin_q1_ready,sushimaster_turnin_q2_ready,sushimaster_turnin_q3_ready,sushimaster_turnin_q4_ready,sushimaster_turnin_q5_ready,sushimaster_turnin_q6_ready,sushimaster_turnin_q1_missing,sushimaster_turnin_q2_missing,sushimaster_turnin_q3_missing,sushimaster_turnin_q4_missing,sushimaster_turnin_q5_missing,sushimaster_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: sushimaster_assigned_q1,sushimaster_assigned_q2,sushimaster_assigned_q3,sushimaster_assigned_q4,sushimaster_assigned_q5,sushimaster_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: sushimaster_goodbye
+      pl_end_conversation:
+        text: End conversation
+  candymerchant_conv:
+    quester: Candy Merchant - Momo
+    first: candymerchant_start
+    stop: true
+    NPC_options:
+      candymerchant_start:
+        text: Welcome! If your day is bitter, I can fix that with sugar.
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      candymerchant_shop:
+        text: The candy boxes are open. Try not to buy everything.
+        actions: candymerchant_open_shop
+        pointers: pl_end_conversation
+      candymerchant_talk_available:
+        text: I need ingredients for todays candy batches. Take one contract, bring
+          the materials, and I will pay you.
+        conditions: '!candymerchant_daily_cooldown_v2,!candymerchant_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      candymerchant_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: candymerchant_daily_cooldown_v2,!candymerchant_has_active_quest_v2
+        pointers: pl_end_conversation
+      candymerchant_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: candymerchant_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      candymerchant_about:
+        text: I sell festival sweets for children, travelers, and adults pretending
+          they are not children.
+        pointers: pl_end_conversation
+      candymerchant_accept:
+        text: Good. I will write the contract now.
+        actions: candymerchant_accept_random_daily_quest
+        pointers: pl_end_conversation
+      candymerchant_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      candymerchant_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      candymerchant_assigned_q1:
+        text: Bring me 32 Sugar. Candy without sugar is just a sad idea. Return when
+          you have them.
+        conditions: candymerchant_q1_active
+        pointers: pl_end_conversation
+      candymerchant_turnin_q1_ready:
+        text: Yes, these Sugar will do nicely. Here is your pay.
+        conditions: candymerchant_q1_active,candymerchant_q1_has_items
+        actions: candymerchant_q1_complete
+        pointers: pl_end_conversation
+      candymerchant_turnin_q1_missing:
+        text: Not enough. I still need 32 Sugar.
+        conditions: candymerchant_q1_active,!candymerchant_q1_has_items
+        pointers: pl_end_conversation
+      candymerchant_assigned_q2:
+        text: Bring me 6 Honey Bottle. Honey makes the glaze shine like lantern light.
+          Return when you have them.
+        conditions: candymerchant_q2_active
+        pointers: pl_end_conversation
+      candymerchant_turnin_q2_ready:
+        text: Yes, these Honey Bottle will do nicely. Here is your pay.
+        conditions: candymerchant_q2_active,candymerchant_q2_has_items
+        actions: candymerchant_q2_complete
+        pointers: pl_end_conversation
+      candymerchant_turnin_q2_missing:
+        text: Not enough. I still need 6 Honey Bottle.
+        conditions: candymerchant_q2_active,!candymerchant_q2_has_items
+        pointers: pl_end_conversation
+      candymerchant_assigned_q3:
+        text: Bring me 18 Apple. Candy apples need crisp fruit, not bruised excuses.
+          Return when you have them.
+        conditions: candymerchant_q3_active
+        pointers: pl_end_conversation
+      candymerchant_turnin_q3_ready:
+        text: Yes, these Apple will do nicely. Here is your pay.
+        conditions: candymerchant_q3_active,candymerchant_q3_has_items
+        actions: candymerchant_q3_complete
+        pointers: pl_end_conversation
+      candymerchant_turnin_q3_missing:
+        text: Not enough. I still need 18 Apple.
+        conditions: candymerchant_q3_active,!candymerchant_q3_has_items
+        pointers: pl_end_conversation
+      candymerchant_assigned_q4:
+        text: Bring me 12 Glow Berries. Glow berries make sweets that look magical
+          at night. Return when you have them.
+        conditions: candymerchant_q4_active
+        pointers: pl_end_conversation
+      candymerchant_turnin_q4_ready:
+        text: Yes, these Glow Berries will do nicely. Here is your pay.
+        conditions: candymerchant_q4_active,candymerchant_q4_has_items
+        actions: candymerchant_q4_complete
+        pointers: pl_end_conversation
+      candymerchant_turnin_q4_missing:
+        text: Not enough. I still need 12 Glow Berries.
+        conditions: candymerchant_q4_active,!candymerchant_q4_has_items
+        pointers: pl_end_conversation
+      candymerchant_assigned_q5:
+        text: Bring me 20 Cocoa Beans. Chocolate makes customers forgive high prices.
+          Return when you have them.
+        conditions: candymerchant_q5_active
+        pointers: pl_end_conversation
+      candymerchant_turnin_q5_ready:
+        text: Yes, these Cocoa Beans will do nicely. Here is your pay.
+        conditions: candymerchant_q5_active,candymerchant_q5_has_items
+        actions: candymerchant_q5_complete
+        pointers: pl_end_conversation
+      candymerchant_turnin_q5_missing:
+        text: Not enough. I still need 20 Cocoa Beans.
+        conditions: candymerchant_q5_active,!candymerchant_q5_has_items
+        pointers: pl_end_conversation
+      candymerchant_assigned_q6:
+        text: Bring me 24 Paper. Every sweet needs a wrapper and every wrapper needs
+          paper. Return when you have them.
+        conditions: candymerchant_q6_active
+        pointers: pl_end_conversation
+      candymerchant_turnin_q6_ready:
+        text: Yes, these Paper will do nicely. Here is your pay.
+        conditions: candymerchant_q6_active,candymerchant_q6_has_items
+        actions: candymerchant_q6_complete
+        pointers: pl_end_conversation
+      candymerchant_turnin_q6_missing:
+        text: Not enough. I still need 24 Paper.
+        conditions: candymerchant_q6_active,!candymerchant_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: candymerchant_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: candymerchant_talk_active,candymerchant_talk_available,candymerchant_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: candymerchant_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: candymerchant_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: candymerchant_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: candymerchant_turnin_q1_ready,candymerchant_turnin_q2_ready,candymerchant_turnin_q3_ready,candymerchant_turnin_q4_ready,candymerchant_turnin_q5_ready,candymerchant_turnin_q6_ready,candymerchant_turnin_q1_missing,candymerchant_turnin_q2_missing,candymerchant_turnin_q3_missing,candymerchant_turnin_q4_missing,candymerchant_turnin_q5_missing,candymerchant_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: candymerchant_assigned_q1,candymerchant_assigned_q2,candymerchant_assigned_q3,candymerchant_assigned_q4,candymerchant_assigned_q5,candymerchant_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: candymerchant_goodbye
+      pl_end_conversation:
+        text: End conversation
+  fruitmarket_conv:
+    quester: Fruit Market - Sora
+    first: fruitmarket_start
+    stop: true
+    NPC_options:
+      fruitmarket_start:
+        text: Fresh fruit! Clean crates! No bruises unless you annoy me.
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      fruitmarket_shop:
+        text: Here, take a look at the freshest fruit in town.
+        actions: fruitmarket_open_shop
+        pointers: pl_end_conversation
+      fruitmarket_talk_available:
+        text: A market stall survives on fresh stock. Bring me a good harvest. Take
+          one contract, bring the materials, and I will pay you.
+        conditions: '!fruitmarket_daily_cooldown_v2,!fruitmarket_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      fruitmarket_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: fruitmarket_daily_cooldown_v2,!fruitmarket_has_active_quest_v2
+        pointers: pl_end_conversation
+      fruitmarket_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: fruitmarket_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      fruitmarket_about:
+        text: My stall follows the seasons. The city changes, but good fruit always
+          brings people back.
+        pointers: pl_end_conversation
+      fruitmarket_accept:
+        text: Good. I will write the contract now.
+        actions: fruitmarket_accept_random_daily_quest
+        pointers: pl_end_conversation
+      fruitmarket_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      fruitmarket_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      fruitmarket_assigned_q1:
+        text: Bring me 24 Apple. Apples are the backbone of any honest fruit stall.
+          Return when you have them.
+        conditions: fruitmarket_q1_active
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q1_ready:
+        text: Yes, these Apple will do nicely. Here is your pay.
+        conditions: fruitmarket_q1_active,fruitmarket_q1_has_items
+        actions: fruitmarket_q1_complete
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q1_missing:
+        text: Not enough. I still need 24 Apple.
+        conditions: fruitmarket_q1_active,!fruitmarket_q1_has_items
+        pointers: pl_end_conversation
+      fruitmarket_assigned_q2:
+        text: Bring me 32 Melon Slice. Melon sells well when the streets are hot.
+          Return when you have them.
+        conditions: fruitmarket_q2_active
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q2_ready:
+        text: Yes, these Melon Slice will do nicely. Here is your pay.
+        conditions: fruitmarket_q2_active,fruitmarket_q2_has_items
+        actions: fruitmarket_q2_complete
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q2_missing:
+        text: Not enough. I still need 32 Melon Slice.
+        conditions: fruitmarket_q2_active,!fruitmarket_q2_has_items
+        pointers: pl_end_conversation
+      fruitmarket_assigned_q3:
+        text: Bring me 24 Sweet Berries. Sweet berries stain fingers and make customers
+          smile. Return when you have them.
+        conditions: fruitmarket_q3_active
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q3_ready:
+        text: Yes, these Sweet Berries will do nicely. Here is your pay.
+        conditions: fruitmarket_q3_active,fruitmarket_q3_has_items
+        actions: fruitmarket_q3_complete
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q3_missing:
+        text: Not enough. I still need 24 Sweet Berries.
+        conditions: fruitmarket_q3_active,!fruitmarket_q3_has_items
+        pointers: pl_end_conversation
+      fruitmarket_assigned_q4:
+        text: Bring me 16 Glow Berries. Glow berries catch the eye after sunset. Return
+          when you have them.
+        conditions: fruitmarket_q4_active
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q4_ready:
+        text: Yes, these Glow Berries will do nicely. Here is your pay.
+        conditions: fruitmarket_q4_active,fruitmarket_q4_has_items
+        actions: fruitmarket_q4_complete
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q4_missing:
+        text: Not enough. I still need 16 Glow Berries.
+        conditions: fruitmarket_q4_active,!fruitmarket_q4_has_items
+        pointers: pl_end_conversation
+      fruitmarket_assigned_q5:
+        text: Bring me 8 Pumpkin. Pumpkins fill carts, soups, and festival displays.
+          Return when you have them.
+        conditions: fruitmarket_q5_active
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q5_ready:
+        text: Yes, these Pumpkin will do nicely. Here is your pay.
+        conditions: fruitmarket_q5_active,fruitmarket_q5_has_items
+        actions: fruitmarket_q5_complete
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q5_missing:
+        text: Not enough. I still need 8 Pumpkin.
+        conditions: fruitmarket_q5_active,!fruitmarket_q5_has_items
+        pointers: pl_end_conversation
+      fruitmarket_assigned_q6:
+        text: Bring me 28 Carrot. Not fruit, I know. Customers still ask for them.
+          Return when you have them.
+        conditions: fruitmarket_q6_active
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q6_ready:
+        text: Yes, these Carrot will do nicely. Here is your pay.
+        conditions: fruitmarket_q6_active,fruitmarket_q6_has_items
+        actions: fruitmarket_q6_complete
+        pointers: pl_end_conversation
+      fruitmarket_turnin_q6_missing:
+        text: Not enough. I still need 28 Carrot.
+        conditions: fruitmarket_q6_active,!fruitmarket_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: fruitmarket_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: fruitmarket_talk_active,fruitmarket_talk_available,fruitmarket_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: fruitmarket_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: fruitmarket_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: fruitmarket_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: fruitmarket_turnin_q1_ready,fruitmarket_turnin_q2_ready,fruitmarket_turnin_q3_ready,fruitmarket_turnin_q4_ready,fruitmarket_turnin_q5_ready,fruitmarket_turnin_q6_ready,fruitmarket_turnin_q1_missing,fruitmarket_turnin_q2_missing,fruitmarket_turnin_q3_missing,fruitmarket_turnin_q4_missing,fruitmarket_turnin_q5_missing,fruitmarket_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: fruitmarket_assigned_q1,fruitmarket_assigned_q2,fruitmarket_assigned_q3,fruitmarket_assigned_q4,fruitmarket_assigned_q5,fruitmarket_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: fruitmarket_goodbye
+      pl_end_conversation:
+        text: End conversation
+  coffeehouse_conv:
+    quester: Coffee House - Ren
+    first: coffeehouse_start
+    stop: true
+    NPC_options:
+      coffeehouse_start:
+        text: Welcome. Speak softly; some people here are awake only by force.
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      coffeehouse_shop:
+        text: The coffee machine is awake. Choose your cup.
+        actions: coffeehouse_open_shop
+        pointers: pl_end_conversation
+      coffeehouse_talk_available:
+        text: I need supplies for the next batch before the night shift arrives. Take
+          one contract, bring the materials, and I will pay you.
+        conditions: '!coffeehouse_daily_cooldown_v2,!coffeehouse_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      coffeehouse_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: coffeehouse_daily_cooldown_v2,!coffeehouse_has_active_quest_v2
+        pointers: pl_end_conversation
+      coffeehouse_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: coffeehouse_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      coffeehouse_about:
+        text: Engineers, scribes, and guards all come here when sleep becomes negotiable.
+        pointers: pl_end_conversation
+      coffeehouse_accept:
+        text: Good. I will write the contract now.
+        actions: coffeehouse_accept_random_daily_quest
+        pointers: pl_end_conversation
+      coffeehouse_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      coffeehouse_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      coffeehouse_assigned_q1:
+        text: Bring me 24 Cocoa Beans. A dark cup needs deep flavor. Cocoa helps.
+          Return when you have them.
+        conditions: coffeehouse_q1_active
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q1_ready:
+        text: Yes, these Cocoa Beans will do nicely. Here is your pay.
+        conditions: coffeehouse_q1_active,coffeehouse_q1_has_items
+        actions: coffeehouse_q1_complete
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q1_missing:
+        text: Not enough. I still need 24 Cocoa Beans.
+        conditions: coffeehouse_q1_active,!coffeehouse_q1_has_items
+        pointers: pl_end_conversation
+      coffeehouse_assigned_q2:
+        text: Bring me 18 Sugar. Some customers are not brave enough for bitter coffee.
+          Return when you have them.
+        conditions: coffeehouse_q2_active
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q2_ready:
+        text: Yes, these Sugar will do nicely. Here is your pay.
+        conditions: coffeehouse_q2_active,coffeehouse_q2_has_items
+        actions: coffeehouse_q2_complete
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q2_missing:
+        text: Not enough. I still need 18 Sugar.
+        conditions: coffeehouse_q2_active,!coffeehouse_q2_has_items
+        pointers: pl_end_conversation
+      coffeehouse_assigned_q3:
+        text: Bring me 4 Milk Bucket. Milk softens the cup and the mood. Return when
+          you have them.
+        conditions: coffeehouse_q3_active
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q3_ready:
+        text: Yes, these Milk Bucket will do nicely. Here is your pay.
+        conditions: coffeehouse_q3_active,coffeehouse_q3_has_items
+        actions: coffeehouse_q3_complete
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q3_missing:
+        text: Not enough. I still need 4 Milk Bucket.
+        conditions: coffeehouse_q3_active,!coffeehouse_q3_has_items
+        pointers: pl_end_conversation
+      coffeehouse_assigned_q4:
+        text: Bring me 16 Cookie. Coffee without a biscuit is just work in a cup.
+          Return when you have them.
+        conditions: coffeehouse_q4_active
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q4_ready:
+        text: Yes, these Cookie will do nicely. Here is your pay.
+        conditions: coffeehouse_q4_active,coffeehouse_q4_has_items
+        actions: coffeehouse_q4_complete
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q4_missing:
+        text: Not enough. I still need 16 Cookie.
+        conditions: coffeehouse_q4_active,!coffeehouse_q4_has_items
+        pointers: pl_end_conversation
+      coffeehouse_assigned_q5:
+        text: Bring me 20 Paper. Receipts, labels, filters... paper disappears in
+          this place. Return when you have them.
+        conditions: coffeehouse_q5_active
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q5_ready:
+        text: Yes, these Paper will do nicely. Here is your pay.
+        conditions: coffeehouse_q5_active,coffeehouse_q5_has_items
+        actions: coffeehouse_q5_complete
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q5_missing:
+        text: Not enough. I still need 20 Paper.
+        conditions: coffeehouse_q5_active,!coffeehouse_q5_has_items
+        pointers: pl_end_conversation
+      coffeehouse_assigned_q6:
+        text: Bring me 10 Copper Ingot. The coffee machine needs repairs again. Of
+          course it does. Return when you have them.
+        conditions: coffeehouse_q6_active
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q6_ready:
+        text: Yes, these Copper Ingot will do nicely. Here is your pay.
+        conditions: coffeehouse_q6_active,coffeehouse_q6_has_items
+        actions: coffeehouse_q6_complete
+        pointers: pl_end_conversation
+      coffeehouse_turnin_q6_missing:
+        text: Not enough. I still need 10 Copper Ingot.
+        conditions: coffeehouse_q6_active,!coffeehouse_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: coffeehouse_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: coffeehouse_talk_active,coffeehouse_talk_available,coffeehouse_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: coffeehouse_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: coffeehouse_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: coffeehouse_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: coffeehouse_turnin_q1_ready,coffeehouse_turnin_q2_ready,coffeehouse_turnin_q3_ready,coffeehouse_turnin_q4_ready,coffeehouse_turnin_q5_ready,coffeehouse_turnin_q6_ready,coffeehouse_turnin_q1_missing,coffeehouse_turnin_q2_missing,coffeehouse_turnin_q3_missing,coffeehouse_turnin_q4_missing,coffeehouse_turnin_q5_missing,coffeehouse_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: coffeehouse_assigned_q1,coffeehouse_assigned_q2,coffeehouse_assigned_q3,coffeehouse_assigned_q4,coffeehouse_assigned_q5,coffeehouse_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: coffeehouse_goodbye
+      pl_end_conversation:
+        text: End conversation
+  icecreamcart_conv:
+    quester: Ice Cream Cart - Yuki
+    first: icecreamcart_start
+    stop: true
+    NPC_options:
+      icecreamcart_start:
+        text: Hear the bell? That means frozen happiness is nearby.
+        pointers: pl_open_shop,pl_talk_little,pl_about,pl_just_hi
+      icecreamcart_shop:
+        text: The cart is cold and the treats are ready.
+        actions: icecreamcart_open_shop
+        pointers: pl_end_conversation
+      icecreamcart_talk_available:
+        text: The ice box needs supplies before everything melts into soup. Take one
+          contract, bring the materials, and I will pay you.
+        conditions: '!icecreamcart_daily_cooldown_v2,!icecreamcart_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      icecreamcart_talk_cooldown:
+        text: I already gave you work recently. Come back later, when the shop needs
+          more supplies.
+        conditions: icecreamcart_daily_cooldown_v2,!icecreamcart_has_active_quest_v2
+        pointers: pl_end_conversation
+      icecreamcart_talk_active:
+        text: You already have one of my contracts. Did you bring the materials?
+        conditions: icecreamcart_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_show_assigned_quest,pl_end_conversation
+      icecreamcart_about:
+        text: I follow sunny streets, festivals, and anyone running from the heat.
+        pointers: pl_end_conversation
+      icecreamcart_accept:
+        text: Good. I will write the contract now.
+        actions: icecreamcart_accept_random_daily_quest
+        pointers: pl_end_conversation
+      icecreamcart_refuse:
+        text: No problem. The shop will still be here when you change your mind.
+        pointers: pl_end_conversation
+      icecreamcart_goodbye:
+        text: Safe travels, and come back hungry.
+        pointers: pl_end_conversation
+      icecreamcart_assigned_q1:
+        text: Bring me 32 Snowball. Cold starts with snow. Simple enough. Return when
+          you have them.
+        conditions: icecreamcart_q1_active
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q1_ready:
+        text: Yes, these Snowball will do nicely. Here is your pay.
+        conditions: icecreamcart_q1_active,icecreamcart_q1_has_items
+        actions: icecreamcart_q1_complete
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q1_missing:
+        text: Not enough. I still need 32 Snowball.
+        conditions: icecreamcart_q1_active,!icecreamcart_q1_has_items
+        pointers: pl_end_conversation
+      icecreamcart_assigned_q2:
+        text: Bring me 16 Ice. Good ice keeps the cart alive through the afternoon.
+          Return when you have them.
+        conditions: icecreamcart_q2_active
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q2_ready:
+        text: Yes, these Ice will do nicely. Here is your pay.
+        conditions: icecreamcart_q2_active,icecreamcart_q2_has_items
+        actions: icecreamcart_q2_complete
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q2_missing:
+        text: Not enough. I still need 16 Ice.
+        conditions: icecreamcart_q2_active,!icecreamcart_q2_has_items
+        pointers: pl_end_conversation
+      icecreamcart_assigned_q3:
+        text: Bring me 8 Packed Ice. Packed ice lasts longer when the crowd gets loud.
+          Return when you have them.
+        conditions: icecreamcart_q3_active
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q3_ready:
+        text: Yes, these Packed Ice will do nicely. Here is your pay.
+        conditions: icecreamcart_q3_active,icecreamcart_q3_has_items
+        actions: icecreamcart_q3_complete
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q3_missing:
+        text: Not enough. I still need 8 Packed Ice.
+        conditions: icecreamcart_q3_active,!icecreamcart_q3_has_items
+        pointers: pl_end_conversation
+      icecreamcart_assigned_q4:
+        text: Bring me 5 Milk Bucket. Creamy treats need real milk. Return when you
+          have them.
+        conditions: icecreamcart_q4_active
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q4_ready:
+        text: Yes, these Milk Bucket will do nicely. Here is your pay.
+        conditions: icecreamcart_q4_active,icecreamcart_q4_has_items
+        actions: icecreamcart_q4_complete
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q4_missing:
+        text: Not enough. I still need 5 Milk Bucket.
+        conditions: icecreamcart_q4_active,!icecreamcart_q4_has_items
+        pointers: pl_end_conversation
+      icecreamcart_assigned_q5:
+        text: Bring me 24 Sugar. Frozen sweets still need sweetness. Return when you
+          have them.
+        conditions: icecreamcart_q5_active
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q5_ready:
+        text: Yes, these Sugar will do nicely. Here is your pay.
+        conditions: icecreamcart_q5_active,icecreamcart_q5_has_items
+        actions: icecreamcart_q5_complete
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q5_missing:
+        text: Not enough. I still need 24 Sugar.
+        conditions: icecreamcart_q5_active,!icecreamcart_q5_has_items
+        pointers: pl_end_conversation
+      icecreamcart_assigned_q6:
+        text: Bring me 2 Blue Ice. Blue ice is expensive, but it keeps miracles frozen.
+          Return when you have them.
+        conditions: icecreamcart_q6_active
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q6_ready:
+        text: Yes, these Blue Ice will do nicely. Here is your pay.
+        conditions: icecreamcart_q6_active,icecreamcart_q6_has_items
+        actions: icecreamcart_q6_complete
+        pointers: pl_end_conversation
+      icecreamcart_turnin_q6_missing:
+        text: Not enough. I still need 2 Blue Ice.
+        conditions: icecreamcart_q6_active,!icecreamcart_q6_has_items
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the shop.
+        pointers: icecreamcart_shop
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: icecreamcart_talk_active,icecreamcart_talk_available,icecreamcart_talk_cooldown
+      pl_about:
+        text: Tell me about this place.
+        pointers: icecreamcart_about
+      pl_accept_random_quest:
+        text: I will take the contract.
+        pointers: icecreamcart_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: icecreamcart_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: icecreamcart_turnin_q1_ready,icecreamcart_turnin_q2_ready,icecreamcart_turnin_q3_ready,icecreamcart_turnin_q4_ready,icecreamcart_turnin_q5_ready,icecreamcart_turnin_q6_ready,icecreamcart_turnin_q1_missing,icecreamcart_turnin_q2_missing,icecreamcart_turnin_q3_missing,icecreamcart_turnin_q4_missing,icecreamcart_turnin_q5_missing,icecreamcart_turnin_q6_missing
+      pl_show_assigned_quest:
+        text: What do you need again?
+        pointers: icecreamcart_assigned_q1,icecreamcart_assigned_q2,icecreamcart_assigned_q3,icecreamcart_assigned_q4,icecreamcart_assigned_q5,icecreamcart_assigned_q6
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: icecreamcart_goodbye
+      pl_end_conversation:
+        text: End conversation

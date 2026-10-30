@@ -1,0 +1,816 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+npcs:
+  '95': citizens 95
+items:
+  brakka_stick: simple stick
+  brakka_leather: simple leather
+  brakka_string: simple string
+  brakka_coal: simple coal
+  brakka_iron_ingot: simple iron_ingot
+  brakka_copper_ingot: simple copper_ingot
+  brakka_gold_ingot: simple gold_ingot
+  brakka_redstone: simple redstone
+  brakka_flint: simple flint
+  brakka_raw_iron: simple raw_iron
+  brakka_diamond: simple diamond
+  brakka_netherite_scrap: simple netherite_scrap
+journal:
+  brakka_q1:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &824 Sticks&f. Armor stands begin with strong frames and boring old wood.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &824 Sticks&f. Armor stands begin with strong frames and boring old wood.
+  brakka_q2:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &816 Leather&f. Good armor needs leather straps that will not split in rain or battle.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &816 Leather&f. Good armor needs leather straps that will not split in rain or battle.
+  brakka_q3:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &812 String&f. Mail, padding, and fastenings all need strong cord. Bring me proper thread.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &812 String&f. Mail, padding, and fastenings all need strong cord. Bring me proper thread.
+  brakka_q4:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &816 Coal&f. My forge is hungry, and hungry forges shape stronger plate.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &816 Coal&f. My forge is hungry, and hungry forges shape stronger plate.
+  brakka_q5:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &810 Iron Ingots&f. Iron is the backbone of every honest suit of armor.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &810 Iron Ingots&f. Iron is the backbone of every honest suit of armor.
+  brakka_q6:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &812 Copper Ingots&f. Copper is useful for buckles, rivets, and pressure-release mechanisms.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &812 Copper Ingots&f. Copper is useful for buckles, rivets, and pressure-release mechanisms.
+  brakka_q7:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &86 Gold Ingots&f. Gold does not stop a blade, but nobles pay well for ceremonial trim.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &86 Gold Ingots&f. Gold does not stop a blade, but nobles pay well for ceremonial trim.
+  brakka_q8:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &86 Redstone Dust&f. Some reinforced armor uses redstone locks, seals, and emergency mechanisms.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &86 Redstone Dust&f. Some reinforced armor uses redstone locks, seals, and emergency mechanisms.
+  brakka_q9:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &810 Flint&f. Flint is useful for testing leather, padding, and weak seams.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &810 Flint&f. Flint is useful for testing leather, padding, and weak seams.
+  brakka_q10:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &848 Raw Iron&f. Fresh ore gives me enough material to forge and reinforce new armor.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &848 Raw Iron&f. Fresh ore gives me enough material to forge and reinforce new armor.
+  brakka_q11:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &81 Diamond&f. Diamond reinforcement can turn good armor into something exceptional.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &81 Diamond&f. Diamond reinforcement can turn good armor into something exceptional.
+  brakka_q12:
+    en: |-
+      &fBrakka's Contract
+
+      &7Bring me &81 Netherite Scrap&f. Bring me Netherite Scrap. Some armor is forged for legends, not ordinary guards.
+    en-US: |-
+      &fBrakka's Contract
+
+      &7Bring me &81 Netherite Scrap&f. Bring me Netherite Scrap. Some armor is forged for legends, not ordinary guards.
+conditions:
+  brakka_friendship_1: point brakka_friendship 1
+  brakka_friendship_31: point brakka_friendship 31
+  brakka_friendship_61: point brakka_friendship 61
+  brakka_friendship_100: point brakka_friendship 100
+  # V2: the cooldown is the active delay objective itself. No permanent tag is used.
+  brakka_daily_cooldown_v2: objective brakka_daily_cooldown_timer_v2
+  brakka_q1_active: tag brakka_q1_active
+  brakka_q2_active: tag brakka_q2_active
+  brakka_q3_active: tag brakka_q3_active
+  brakka_q4_active: tag brakka_q4_active
+  brakka_q5_active: tag brakka_q5_active
+  brakka_q6_active: tag brakka_q6_active
+  brakka_q7_active: tag brakka_q7_active
+  brakka_q8_active: tag brakka_q8_active
+  brakka_q9_active: tag brakka_q9_active
+  brakka_q10_active: tag brakka_q10_active
+  brakka_q11_active: tag brakka_q11_active
+  brakka_q12_active: tag brakka_q12_active
+  brakka_q1_has_items: item brakka_stick:24
+  brakka_q2_has_items: item brakka_leather:16
+  brakka_q3_has_items: item brakka_string:12
+  brakka_q4_has_items: item brakka_coal:16
+  brakka_q5_has_items: item brakka_iron_ingot:10
+  brakka_q6_has_items: item brakka_copper_ingot:12
+  brakka_q7_has_items: item brakka_gold_ingot:6
+  brakka_q8_has_items: item brakka_redstone:6
+  brakka_q9_has_items: item brakka_flint:10
+  brakka_q10_has_items: item brakka_raw_iron:48
+  brakka_q11_has_items: item brakka_diamond:1
+  brakka_q12_has_items: item brakka_netherite_scrap:1
+  brakka_has_active_quest_v2: or brakka_q1_active,brakka_q2_active,brakka_q3_active,brakka_q4_active,brakka_q5_active,brakka_q6_active,brakka_q7_active,brakka_q8_active,brakka_q9_active,brakka_q10_active,brakka_q11_active,brakka_q12_active
+  brakka_story_1_heard: tag brakka_story_1_heard
+  brakka_story_2_heard: tag brakka_story_2_heard
+  brakka_story_3_heard: tag brakka_story_3_heard
+  brakka_story_4_heard: tag brakka_story_4_heard
+  brakka_story_5_heard: tag brakka_story_5_heard
+  brakka_story_6_heard: tag brakka_story_6_heard
+  brakka_story_7_heard: tag brakka_story_7_heard
+  brakka_story_8_heard: tag brakka_story_8_heard
+  brakka_life_book_received: tag brakka_life_book_received
+  brakka_current_story_1: tag brakka_current_story_1
+  brakka_current_story_2: tag brakka_current_story_2
+  brakka_current_story_3: tag brakka_current_story_3
+  brakka_current_story_4: tag brakka_current_story_4
+  brakka_current_story_5: tag brakka_current_story_5
+  brakka_current_story_6: tag brakka_current_story_6
+  brakka_current_story_7: tag brakka_current_story_7
+  brakka_current_story_8: tag brakka_current_story_8
+actions:
+  brakka_friendship_gain: point brakka_friendship 1 action:add conditions:!brakka_friendship_100
+  brakka_friendship_lose: point brakka_friendship 1 action:subtract conditions:brakka_friendship_1
+  brakka_friendship_gain_msg: 'notify &6Brakka Reputation&7: &a+1 &fReputation with
+    Brakka. io:chat'
+  brakka_friendship_lose_msg: 'notify &6Brakka Reputation&7: &c-1 &fReputation with
+    Brakka. io:chat'
+  brakka_story_1_mark_heard: tag add brakka_story_1_heard
+  brakka_story_2_mark_heard: tag add brakka_story_2_heard
+  brakka_story_3_mark_heard: tag add brakka_story_3_heard
+  brakka_story_4_mark_heard: tag add brakka_story_4_heard
+  brakka_story_5_mark_heard: tag add brakka_story_5_heard
+  brakka_story_6_mark_heard: tag add brakka_story_6_heard
+  brakka_story_7_mark_heard: tag add brakka_story_7_heard
+  brakka_story_8_mark_heard: tag add brakka_story_8_heard
+  brakka_story_clear_selection: tag del brakka_current_story_1,brakka_current_story_2,brakka_current_story_3,brakka_current_story_4,brakka_current_story_5,brakka_current_story_6,brakka_current_story_7,brakka_current_story_8
+  brakka_story_select_1: tag add brakka_current_story_1
+  brakka_story_select_2: tag add brakka_current_story_2
+  brakka_story_select_3: tag add brakka_current_story_3
+  brakka_story_select_4: tag add brakka_current_story_4
+  brakka_story_select_5: tag add brakka_current_story_5
+  brakka_story_select_6: tag add brakka_current_story_6
+  brakka_story_select_7: tag add brakka_current_story_7
+  brakka_story_select_8: tag add brakka_current_story_8
+  brakka_story_choose_random: folder brakka_story_select_1,brakka_story_select_2,brakka_story_select_3,brakka_story_select_4,brakka_story_select_5,brakka_story_select_6,brakka_story_select_7,brakka_story_select_8
+    random:1
+  brakka_story_prepare_random: folder brakka_story_clear_selection,brakka_story_choose_random
+  brakka_life_book_received_tag: tag add brakka_life_book_received
+  brakka_life_book_reward: command give %player% minecraft:written_book[written_book_content={title:"The
+    Stonewall Ledger",author:"Brakka Stonewall",pages:['{"text":"The Stonewall Ledger\n\nI
+    was raised where the mountain roads narrowed and every caravan needed guards.
+    My first armor was made from scavenged iron and stubbornness."}','{"text":"Armor
+    is not a wall. It is a promise to move when the wearer moves, hold when the enemy
+    strikes, and never become a prison."}','{"text":"Leather whispers before it tears.
+    Iron complains. Copper bends. Diamond refuses. Netherite simply endures."}','{"text":"The
+    finest armor returns dented and empty because its owner came home alive. That
+    is the only legend worth forging."}']}] 1
+  brakka_life_book_msg: 'notify &6Armor Merchant Brakka Stonewall&7: &fYou listened
+    to every story I was willing to tell. Take this ledger. It contains the parts
+    I usually leave buried beneath the hammering. io:chat'
+  brakka_life_book_reward_check: folder brakka_life_book_reward,brakka_life_book_received_tag,brakka_life_book_msg
+    conditions:brakka_story_1_heard,brakka_story_2_heard,brakka_story_3_heard,brakka_story_4_heard,brakka_story_5_heard,brakka_story_6_heard,brakka_story_7_heard,brakka_story_8_heard,!brakka_life_book_received
+  brakka_open_shop: command mi stations open shop-armor-1 %player%
+  brakka_open_shop_1: command mi stations open shop-armor-2 %player%
+  brakka_open_shop_2: command mi stations open shop-armor-3 %player%
+  brakka_start_daily_cooldown_v2: objective start brakka_daily_cooldown_timer_v2
+  brakka_assign_random_daily_quest: folder brakka_daily_quest_1,brakka_daily_quest_2,brakka_daily_quest_3,brakka_daily_quest_4,brakka_daily_quest_5,brakka_daily_quest_6,brakka_daily_quest_7,brakka_daily_quest_8,brakka_daily_quest_9,brakka_daily_quest_10,brakka_daily_quest_11,brakka_daily_quest_12
+    random:1
+  brakka_clear_active_quests: tag del brakka_q1_active,brakka_q2_active,brakka_q3_active,brakka_q4_active,brakka_q5_active,brakka_q6_active,brakka_q7_active,brakka_q8_active,brakka_q9_active,brakka_q10_active,brakka_q11_active,brakka_q12_active
+  brakka_q_title: notify Stonewall Contract Start io:title fadeIn:0 stay:60 fadeOut:0
+  brakka_daily_quest_1: folder brakka_clear_active_quests,brakka_q1_tag,brakka_q1_journal,brakka_q_title,brakka_q1_msg,brakka_q1_start_timer
+  brakka_q1_tag: tag add brakka_q1_active
+  brakka_q1_take_items: take brakka_stick:24
+  brakka_q1_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &824 Sticks&f.
+    Armor stands begin with strong frames and boring old wood. io:chat'
+  brakka_q1_remove: tag del brakka_q1_active
+  brakka_q1_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fStraight
+    enough. A weapon with a crooked handle kills the wrong fool. io:chat'
+  brakka_q1_reward: command cmi money give %player% -s 250
+  brakka_q1_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q1_complete: folder brakka_q1_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q1_complete_title,brakka_q1_complete_msg,brakka_q1_remove,brakka_q1_reward,brakka_remove_journal_q1,brakka_q1_stop_timer
+  brakka_daily_quest_2: folder brakka_clear_active_quests,brakka_q2_tag,brakka_q2_journal,brakka_q_title,brakka_q2_msg,brakka_q2_start_timer
+  brakka_q2_tag: tag add brakka_q2_active
+  brakka_q2_take_items: take brakka_leather:16
+  brakka_q2_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &816 Leather&f.
+    Good armor needs leather straps that will not split in rain or battle. io:chat'
+  brakka_q2_remove: tag del brakka_q2_active
+  brakka_q2_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fThis will
+    wrap a hilt nicely. Practical, not pretty. io:chat'
+  brakka_q2_reward: command cmi money give %player% -s 250
+  brakka_q2_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q2_complete: folder brakka_q2_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q2_complete_title,brakka_q2_complete_msg,brakka_q2_remove,brakka_q2_reward,brakka_remove_journal_q2,brakka_q2_stop_timer
+  brakka_daily_quest_3: folder brakka_clear_active_quests,brakka_q3_tag,brakka_q3_journal,brakka_q_title,brakka_q3_msg,brakka_q3_start_timer
+  brakka_q3_tag: tag add brakka_q3_active
+  brakka_q3_take_items: take brakka_string:12
+  brakka_q3_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &812 String&f.
+    Mail, padding, and fastenings all need strong cord. Bring me proper thread. io:chat'
+  brakka_q3_remove: tag del brakka_q3_active
+  brakka_q3_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fStrong fibers.
+    Good. A bow is only as honest as its string. io:chat'
+  brakka_q3_reward: command cmi money give %player% -s 250
+  brakka_q3_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q3_complete: folder brakka_q3_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q3_complete_title,brakka_q3_complete_msg,brakka_q3_remove,brakka_q3_reward,brakka_remove_journal_q3,brakka_q3_stop_timer
+  brakka_daily_quest_4: folder brakka_clear_active_quests,brakka_q4_tag,brakka_q4_journal,brakka_q_title,brakka_q4_msg,brakka_q4_start_timer
+  brakka_q4_tag: tag add brakka_q4_active
+  brakka_q4_take_items: take brakka_coal:16
+  brakka_q4_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &816 Coal&f.
+    My forge is hungry, and hungry forges shape stronger plate. io:chat'
+  brakka_q4_remove: tag del brakka_q4_active
+  brakka_q4_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fGood coal.
+    Dark, dry, and angry enough for the furnace. io:chat'
+  brakka_q4_reward: command cmi money give %player% -s 250
+  brakka_q4_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q4_complete: folder brakka_q4_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q4_complete_title,brakka_q4_complete_msg,brakka_q4_remove,brakka_q4_reward,brakka_remove_journal_q4,brakka_q4_stop_timer
+  brakka_daily_quest_5: folder brakka_clear_active_quests,brakka_q5_tag,brakka_q5_journal,brakka_q_title,brakka_q5_msg,brakka_q5_start_timer
+  brakka_q5_tag: tag add brakka_q5_active
+  brakka_q5_take_items: take brakka_iron_ingot:10
+  brakka_q5_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &810 Iron
+    Ingots&f. Iron is the backbone of every honest suit of armor. io:chat'
+  brakka_q5_remove: tag del brakka_q5_active
+  brakka_q5_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fIron. Simple.
+    Reliable. The world survives on this metal. io:chat'
+  brakka_q5_reward: command cmi money give %player% -s 400
+  brakka_q5_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q5_complete: folder brakka_q5_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q5_complete_title,brakka_q5_complete_msg,brakka_q5_remove,brakka_q5_reward,brakka_remove_journal_q5,brakka_q5_stop_timer
+  brakka_daily_quest_6: folder brakka_clear_active_quests,brakka_q6_tag,brakka_q6_journal,brakka_q_title,brakka_q6_msg,brakka_q6_start_timer
+  brakka_q6_tag: tag add brakka_q6_active
+  brakka_q6_take_items: take brakka_copper_ingot:12
+  brakka_q6_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &812 Copper
+    Ingots&f. Copper is useful for buckles, rivets, and pressure-release mechanisms.
+    io:chat'
+  brakka_q6_remove: tag del brakka_q6_active
+  brakka_q6_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fCopper bends
+    without complaining. I respect that. io:chat'
+  brakka_q6_reward: command cmi money give %player% -s 400
+  brakka_q6_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q6_complete: folder brakka_q6_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q6_complete_title,brakka_q6_complete_msg,brakka_q6_remove,brakka_q6_reward,brakka_remove_journal_q6,brakka_q6_stop_timer
+  brakka_daily_quest_7: folder brakka_clear_active_quests,brakka_q7_tag,brakka_q7_journal,brakka_q_title,brakka_q7_msg,brakka_q7_start_timer
+  brakka_q7_tag: tag add brakka_q7_active
+  brakka_q7_take_items: take brakka_gold_ingot:6
+  brakka_q7_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &86 Gold
+    Ingots&f. Gold does not stop a blade, but nobles pay well for ceremonial trim.
+    io:chat'
+  brakka_q7_remove: tag del brakka_q7_active
+  brakka_q7_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fGold for
+    decoration. Wasteful, but profitable. io:chat'
+  brakka_q7_reward: command cmi money give %player% -s 400
+  brakka_q7_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q7_complete: folder brakka_q7_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q7_complete_title,brakka_q7_complete_msg,brakka_q7_remove,brakka_q7_reward,brakka_remove_journal_q7,brakka_q7_stop_timer
+  brakka_daily_quest_8: folder brakka_clear_active_quests,brakka_q8_tag,brakka_q8_journal,brakka_q_title,brakka_q8_msg,brakka_q8_start_timer
+  brakka_q8_tag: tag add brakka_q8_active
+  brakka_q8_take_items: take brakka_redstone:6
+  brakka_q8_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &86 Redstone
+    Dust&f. Some reinforced armor uses redstone locks, seals, and emergency mechanisms.
+    io:chat'
+  brakka_q8_remove: tag del brakka_q8_active
+  brakka_q8_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fRedstone.
+    Now keep it away from the powder barrels. io:chat'
+  brakka_q8_reward: command cmi money give %player% -s 400
+  brakka_q8_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q8_complete: folder brakka_q8_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q8_complete_title,brakka_q8_complete_msg,brakka_q8_remove,brakka_q8_reward,brakka_remove_journal_q8,brakka_q8_stop_timer
+  brakka_daily_quest_9: folder brakka_clear_active_quests,brakka_q9_tag,brakka_q9_journal,brakka_q_title,brakka_q9_msg,brakka_q9_start_timer
+  brakka_q9_tag: tag add brakka_q9_active
+  brakka_q9_take_items: take brakka_flint:10
+  brakka_q9_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &810 Flint&f.
+    Flint is useful for testing leather, padding, and weak seams. io:chat'
+  brakka_q9_remove: tag del brakka_q9_active
+  brakka_q9_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fGood flint.
+    Sharp enough to punish careless fingers. io:chat'
+  brakka_q9_reward: command cmi money give %player% -s 400
+  brakka_q9_complete_title: notify Contract CompleteBrakka is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  brakka_q9_complete: folder brakka_q9_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q9_complete_title,brakka_q9_complete_msg,brakka_q9_remove,brakka_q9_reward,brakka_remove_journal_q9,brakka_q9_stop_timer
+  brakka_daily_quest_10: folder brakka_clear_active_quests,brakka_q10_tag,brakka_q10_journal,brakka_q_title,brakka_q10_msg,brakka_q10_start_timer
+  brakka_q10_tag: tag add brakka_q10_active
+  brakka_q10_take_items: take brakka_raw_iron:48
+  brakka_q10_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &848 Raw
+    Iron&f. Fresh ore gives me enough material to forge and reinforce new armor. io:chat'
+  brakka_q10_remove: tag del brakka_q10_active
+  brakka_q10_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fGood quality
+    ore. This will become strong plate once the forge has done its work. io:chat'
+  brakka_q10_reward: command cmi money give %player% -s 650
+  brakka_q10_complete_title: notify Contract CompleteBrakka is satisfied io:title
+    fadeIn:0 stay:40 fadeOut:0
+  brakka_q10_complete: folder brakka_q10_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q10_complete_title,brakka_q10_complete_msg,brakka_q10_remove,brakka_q10_reward,brakka_remove_journal_q10,brakka_q10_stop_timer
+  brakka_daily_quest_11: folder brakka_clear_active_quests,brakka_q11_tag,brakka_q11_journal,brakka_q_title,brakka_q11_msg,brakka_q11_start_timer
+  brakka_q11_tag: tag add brakka_q11_active
+  brakka_q11_take_items: take brakka_diamond:1
+  brakka_q11_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &81 Diamond&f.
+    Diamond reinforcement can turn good armor into something exceptional. io:chat'
+  brakka_q11_remove: tag del brakka_q11_active
+  brakka_q11_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fA diamond.
+    Expensive, stubborn, and worth the trouble. io:chat'
+  brakka_q11_reward: command cmi money give %player% -s 650
+  brakka_q11_complete_title: notify Contract CompleteBrakka is satisfied io:title
+    fadeIn:0 stay:40 fadeOut:0
+  brakka_q11_complete: folder brakka_q11_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q11_complete_title,brakka_q11_complete_msg,brakka_q11_remove,brakka_q11_reward,brakka_remove_journal_q11,brakka_q11_stop_timer
+  brakka_daily_quest_12: folder brakka_clear_active_quests,brakka_q12_tag,brakka_q12_journal,brakka_q_title,brakka_q12_msg,brakka_q12_start_timer
+  brakka_q12_tag: tag add brakka_q12_active
+  brakka_q12_take_items: take brakka_netherite_scrap:1
+  brakka_q12_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fBring me &81 Netherite
+    Scrap&f. Bring me Netherite Scrap. Some armor is forged for legends, not ordinary
+    guards. io:chat'
+  brakka_q12_remove: tag del brakka_q12_active
+  brakka_q12_complete_msg: 'notify &6Armor Merchant Brakka Stonewall&7\: &fNetherite
+    scrap. Now this is the kind of problem I enjoy. io:chat'
+  brakka_q12_reward: command cmi money give %player% -s 900
+  brakka_q12_complete_title: notify Contract CompleteBrakka is satisfied io:title
+    fadeIn:0 stay:40 fadeOut:0
+  brakka_q12_complete: folder brakka_q12_take_items,brakka_friendship_gain,brakka_friendship_gain_msg,brakka_q12_complete_title,brakka_q12_complete_msg,brakka_q12_remove,brakka_q12_reward,brakka_remove_journal_q12,brakka_q12_stop_timer
+  brakka_q1_journal: journal add brakka_q1
+  brakka_q2_journal: journal add brakka_q2
+  brakka_q3_journal: journal add brakka_q3
+  brakka_q4_journal: journal add brakka_q4
+  brakka_q5_journal: journal add brakka_q5
+  brakka_q6_journal: journal add brakka_q6
+  brakka_q7_journal: journal add brakka_q7
+  brakka_q8_journal: journal add brakka_q8
+  brakka_q9_journal: journal add brakka_q9
+  brakka_q10_journal: journal add brakka_q10
+  brakka_q11_journal: journal add brakka_q11
+  brakka_q12_journal: journal add brakka_q12
+  brakka_remove_journal_q1: journal delete brakka_q1
+  brakka_remove_journal_q2: journal delete brakka_q2
+  brakka_remove_journal_q3: journal delete brakka_q3
+  brakka_remove_journal_q4: journal delete brakka_q4
+  brakka_remove_journal_q5: journal delete brakka_q5
+  brakka_remove_journal_q6: journal delete brakka_q6
+  brakka_remove_journal_q7: journal delete brakka_q7
+  brakka_remove_journal_q8: journal delete brakka_q8
+  brakka_remove_journal_q9: journal delete brakka_q9
+  brakka_remove_journal_q10: journal delete brakka_q10
+  brakka_remove_journal_q11: journal delete brakka_q11
+  brakka_remove_journal_q12: journal delete brakka_q12
+  brakka_q1_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q1_remove,brakka_remove_journal_q1,brakka_q1_fail_msg,brakka_q1_stop_timer
+  brakka_q2_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q2_remove,brakka_remove_journal_q2,brakka_q2_fail_msg,brakka_q2_stop_timer
+  brakka_q3_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q3_remove,brakka_remove_journal_q3,brakka_q3_fail_msg,brakka_q3_stop_timer
+  brakka_q4_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q4_remove,brakka_remove_journal_q4,brakka_q4_fail_msg,brakka_q4_stop_timer
+  brakka_q5_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q5_remove,brakka_remove_journal_q5,brakka_q5_fail_msg,brakka_q5_stop_timer
+  brakka_q6_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q6_remove,brakka_remove_journal_q6,brakka_q6_fail_msg,brakka_q6_stop_timer
+  brakka_q7_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q7_remove,brakka_remove_journal_q7,brakka_q7_fail_msg,brakka_q7_stop_timer
+  brakka_q8_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q8_remove,brakka_remove_journal_q8,brakka_q8_fail_msg,brakka_q8_stop_timer
+  brakka_q9_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q9_remove,brakka_remove_journal_q9,brakka_q9_fail_msg,brakka_q9_stop_timer
+  brakka_q10_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q10_remove,brakka_remove_journal_q10,brakka_q10_fail_msg,brakka_q10_stop_timer
+  brakka_q11_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q11_remove,brakka_remove_journal_q11,brakka_q11_fail_msg,brakka_q11_stop_timer
+  brakka_q12_expire: folder brakka_friendship_lose,brakka_friendship_lose_msg,brakka_q12_remove,brakka_remove_journal_q12,brakka_q12_fail_msg,brakka_q12_stop_timer
+  brakka_q1_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q2_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q3_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q4_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q5_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q6_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q7_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q8_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q9_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q10_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q11_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q12_fail_msg: 'notify &cContract Expired&7: &fToo slow. Brakka has sold the
+    commission to someone else.'
+  brakka_q1_stop_timer: objective delete brakka_q1_timer
+  brakka_q2_stop_timer: objective delete brakka_q2_timer
+  brakka_q3_stop_timer: objective delete brakka_q3_timer
+  brakka_q4_stop_timer: objective delete brakka_q4_timer
+  brakka_q5_stop_timer: objective delete brakka_q5_timer
+  brakka_q6_stop_timer: objective delete brakka_q6_timer
+  brakka_q7_stop_timer: objective delete brakka_q7_timer
+  brakka_q8_stop_timer: objective delete brakka_q8_timer
+  brakka_q9_stop_timer: objective delete brakka_q9_timer
+  brakka_q10_stop_timer: objective delete brakka_q10_timer
+  brakka_q11_stop_timer: objective delete brakka_q11_timer
+  brakka_q12_stop_timer: objective delete brakka_q12_timer
+  brakka_q1_start_timer: objective start brakka_q1_timer
+  brakka_q2_start_timer: objective start brakka_q2_timer
+  brakka_q3_start_timer: objective start brakka_q3_timer
+  brakka_q4_start_timer: objective start brakka_q4_timer
+  brakka_q5_start_timer: objective start brakka_q5_timer
+  brakka_q6_start_timer: objective start brakka_q6_timer
+  brakka_q7_start_timer: objective start brakka_q7_timer
+  brakka_q8_start_timer: objective start brakka_q8_timer
+  brakka_q9_start_timer: objective start brakka_q9_timer
+  brakka_q10_start_timer: objective start brakka_q10_timer
+  brakka_q11_start_timer: objective start brakka_q11_timer
+  brakka_q12_start_timer: objective start brakka_q12_timer
+objectives:
+  brakka_daily_cooldown_timer_v2: delay 1320
+  brakka_q1_timer: delay 1320 events:brakka_q1_expire
+  brakka_q2_timer: delay 1320 events:brakka_q2_expire
+  brakka_q3_timer: delay 1320 events:brakka_q3_expire
+  brakka_q4_timer: delay 1320 events:brakka_q4_expire
+  brakka_q5_timer: delay 1320 events:brakka_q5_expire
+  brakka_q6_timer: delay 1320 events:brakka_q6_expire
+  brakka_q7_timer: delay 1320 events:brakka_q7_expire
+  brakka_q8_timer: delay 1320 events:brakka_q8_expire
+  brakka_q9_timer: delay 1320 events:brakka_q9_expire
+  brakka_q10_timer: delay 1320 events:brakka_q10_expire
+  brakka_q11_timer: delay 1320 events:brakka_q11_expire
+  brakka_q12_timer: delay 1320 events:brakka_q12_expire
+npc_holograms:
+  brakka_available:
+    lines:
+    - '&d&l❗'
+    npcs: '95'
+    conditions: '!brakka_daily_cooldown_v2,!brakka_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  brakka_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '95'
+    conditions: brakka_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+npc_conversations:
+  '95': brakka_conv
+conversations:
+  brakka_conv:
+    quester: Armor Merchant Brakka Stonewall
+    first: brakka_start_close,brakka_start_friendly,brakka_start
+    stop: true
+    NPC_options:
+      brakka_start_close:
+        text: Back again, eh? Good. I prefer customers who survive long enough to
+          return. \n\nDo not lean on the armor displays. Half of them are sharper
+          than they look, and the other half are loaded. \n\nWhat does my best client
+          need today?
+        conditions: brakka_friendship_61
+        pointers: pl_open_shop_2,pl_talk_little,pl_about_brakka,pl_just_hi
+      brakka_start_friendly:
+        text: Welcome back. I remember your face, and more importantly, I remember
+          that you pay attention. \n\nKeep your hands clear of the forge tools unless
+          you want fewer fingers. \n\nWhat can Brakka Stonewall do for you?
+        conditions: brakka_friendship_31,!brakka_friendship_61
+        pointers: pl_open_shop_1,pl_talk_little,pl_about_brakka,pl_just_hi
+      brakka_start:
+        text: Welcome, traveler. \n\nBlades, spears, mechanisms, reinforced grips...
+          if it can end a fight quickly, I probably sell it. \n\nSpeak clearly. What
+          do you need?
+        conditions: '!brakka_friendship_31'
+        pointers: pl_open_shop,pl_talk_little,pl_about_brakka,pl_just_hi
+      brakka_shop:
+        text: A fine choice. \n\nLet me open the armor displays.
+        actions: brakka_open_shop
+        pointers: pl_end_conversation
+      brakka_shop_1:
+        text: A fine choice. \n\nLet me open the armor displays.
+        actions: brakka_open_shop_1
+        pointers: pl_end_conversation
+      brakka_shop_2:
+        text: A fine choice. \n\nLet me open the armor displays.
+        actions: brakka_open_shop_2
+        pointers: pl_end_conversation
+      brakka_talk_available:
+        text: You want work? Good. I need materials, not excuses. \n\nBring me what
+          I ask for and I will pay. Maybe I will even remember your name.
+        conditions: '!brakka_daily_cooldown_v2,!brakka_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      brakka_talk_cooldown:
+        text: We already had a deal recently. \n\nA forge needs time to heat, cool,
+          and curse properly. Come back later.
+        conditions: brakka_daily_cooldown_v2,!brakka_has_active_quest_v2
+        pointers: pl_end_conversation
+      brakka_talk_active:
+        text: You are already carrying one of my contracts. \n\nEither bring the materials
+          or stop blocking the counter.
+        conditions: brakka_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_end_conversation
+      brakka_turnin_q1_ready:
+        text: Strong enough. An armor stand with a crooked frame ruins every fitting.
+        conditions: brakka_q1_active,brakka_q1_has_items
+        actions: brakka_q1_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q1_missing:
+        text: Not enough. I asked for 24 Sticks.
+        conditions: brakka_q1_active,!brakka_q1_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q2_ready:
+        text: Good leather. Strong enough for straps, padding, and reinforced joints.
+        conditions: brakka_q2_active,brakka_q2_has_items
+        actions: brakka_q2_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q2_missing:
+        text: Not enough. I asked for 16 Leather.
+        conditions: brakka_q2_active,!brakka_q2_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q3_ready:
+        text: Strong fibers. Good. Armor fails first where its bindings are weak.
+        conditions: brakka_q3_active,brakka_q3_has_items
+        actions: brakka_q3_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q3_missing:
+        text: Not enough. I asked for 12 String.
+        conditions: brakka_q3_active,!brakka_q3_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q4_ready:
+        text: Good coal. Dark, dry, and angry enough for the furnace.
+        conditions: brakka_q4_active,brakka_q4_has_items
+        actions: brakka_q4_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q4_missing:
+        text: Not enough. I asked for 16 Coal.
+        conditions: brakka_q4_active,!brakka_q4_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q5_ready:
+        text: Iron. Simple. Reliable. Most soldiers survive because of this metal.
+        conditions: brakka_q5_active,brakka_q5_has_items
+        actions: brakka_q5_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q5_missing:
+        text: Not enough. I asked for 10 Iron Ingots.
+        conditions: brakka_q5_active,!brakka_q5_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q6_ready:
+        text: Copper bends without breaking. Perfect for fittings and articulated
+          joints.
+        conditions: brakka_q6_active,brakka_q6_has_items
+        actions: brakka_q6_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q6_missing:
+        text: Not enough. I asked for 12 Copper Ingots.
+        conditions: brakka_q6_active,!brakka_q6_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q7_ready:
+        text: Gold for ceremonial trim. Wasteful, but profitable.
+        conditions: brakka_q7_active,brakka_q7_has_items
+        actions: brakka_q7_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q7_missing:
+        text: Not enough. I asked for 6 Gold Ingots.
+        conditions: brakka_q7_active,!brakka_q7_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q8_ready:
+        text: Redstone. Good. Now I can finish the locking plates and release mechanisms.
+        conditions: brakka_q8_active,brakka_q8_has_items
+        actions: brakka_q8_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q8_missing:
+        text: Not enough. I asked for 6 Redstone Dust.
+        conditions: brakka_q8_active,!brakka_q8_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q9_ready:
+        text: Good flint. Sharp enough to expose weak leather and careless stitching.
+        conditions: brakka_q9_active,brakka_q9_has_items
+        actions: brakka_q9_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q9_missing:
+        text: Not enough. I asked for 10 Flint.
+        conditions: brakka_q9_active,!brakka_q9_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q10_ready:
+        text: Good. Raw iron gives me enough freedom to shape the plate properly.
+        conditions: brakka_q10_active,brakka_q10_has_items
+        actions: brakka_q10_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q10_missing:
+        text: Not enough. I asked for 48 Raw Iron.
+        conditions: brakka_q10_active,!brakka_q10_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q11_ready:
+        text: A diamond. Expensive, stubborn, and perfect for elite reinforcement.
+        conditions: brakka_q11_active,brakka_q11_has_items
+        actions: brakka_q11_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q11_missing:
+        text: Not enough. I asked for 1 Diamond.
+        conditions: brakka_q11_active,!brakka_q11_has_items
+        pointers: pl_end_conversation
+      brakka_turnin_q12_ready:
+        text: Netherite scrap. Now this is the kind of protection worthy of a legend.
+        conditions: brakka_q12_active,brakka_q12_has_items
+        actions: brakka_q12_complete
+        pointers: pl_end_conversation
+      brakka_turnin_q12_missing:
+        text: Not enough. I asked for 1 Netherite Scrap.
+        conditions: brakka_q12_active,!brakka_q12_has_items
+        pointers: pl_end_conversation
+      brakka_about:
+        text: Me? \n\nI learned armor before I learned manners. The first lesson lasted.
+          The second did not. \n\nI buy raw materials, shape reliable protection,
+          and sell it to people who understand that surviving a battle is better than
+          looking heroic in one. \n\nA helmet must protect without blinding you. A
+          chestplate must breathe. Greaves must bend. Boots must grip. \n\nEverything
+          else is decoration, and decoration does not stop steel.
+        pointers: pl_more_story,pl_end_conversation
+      brakka_story_1:
+        text: Once, a noble ordered armor covered in spikes. I removed half of them,
+          improved the joints, and saved him from being trapped inside his own carriage.
+        conditions: brakka_current_story_1
+        actions: brakka_story_1_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_story_2:
+        text: My first master said every suit of armor remembers the hammer that shaped
+          it. Mine remembered impatience, burned gloves, and very accurate rivets.
+        conditions: brakka_current_story_2
+        actions: brakka_story_2_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_story_3:
+        text: A mercenary once demanded armor that made no sound. I told him silence
+          costs more than steel. He paid without arguing.
+        conditions: brakka_current_story_3
+        actions: brakka_story_3_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_story_4:
+        text: I tested a breastplate against a charging boar. The plate survived.
+          The fence behind me did not.
+        conditions: brakka_current_story_4
+        actions: brakka_story_4_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_story_5:
+        text: The prettiest armor I ever made cracked within a month. The ugliest
+          set is still protecting a city guard after ten years. Remember that.
+        conditions: brakka_current_story_5
+        actions: brakka_story_5_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_story_6:
+        text: A strong buckle matters more than gold trim. Gold impresses fools. A
+          buckle keeps the plate closed when fear arrives.
+        conditions: brakka_current_story_6
+        actions: brakka_story_6_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_story_7:
+        text: I once built a suit with hidden redstone releases so its owner could
+          escape underwater. He paid double after needing it on the first voyage.
+        conditions: brakka_current_story_7
+        actions: brakka_story_7_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_story_8:
+        text: Some customers ask for legendary armor. I ask whether they have legendary
+          coin and legendary patience. Most legends end there.
+        conditions: brakka_current_story_8
+        actions: brakka_story_8_mark_heard,brakka_story_clear_selection,brakka_life_book_reward_check
+        pointers: pl_end_conversation
+      brakka_accept:
+        text: Good. Let us see what the forge demands today.
+        actions: brakka_assign_random_daily_quest,brakka_start_daily_cooldown_v2
+        pointers: pl_show_assigned_quest
+      brakka_assigned_q1:
+        text: Bring me 24 Sticks. A blade begins with grip, balance, and boring old
+          wood. Return when you have them.
+        conditions: brakka_q1_active
+        pointers: pl_end_conversation
+      brakka_assigned_q2:
+        text: Bring me 16 Leather. Good grips need leather that will not slip in blood
+          or rain. Return when you have them.
+        conditions: brakka_q2_active
+        pointers: pl_end_conversation
+      brakka_assigned_q3:
+        text: Bring me 12 String. Bowstrings snap when cheap hands make them. Bring
+          me proper cord. Return when you have them.
+        conditions: brakka_q3_active
+        pointers: pl_end_conversation
+      brakka_assigned_q4:
+        text: Bring me 16 Coal. My forge is hungry, and hungry forges make better
+          steel. Return when you have them.
+        conditions: brakka_q4_active
+        pointers: pl_end_conversation
+      brakka_assigned_q5:
+        text: Bring me 10 Iron Ingots. Iron is the backbone of every honest suit of
+          armor. Return when you have them.
+        conditions: brakka_q5_active
+        pointers: pl_end_conversation
+      brakka_assigned_q6:
+        text: Bring me 12 Copper Ingots. Copper is useful for fittings, rivets, and
+          clever little mechanisms. Return when you have them.
+        conditions: brakka_q6_active
+        pointers: pl_end_conversation
+      brakka_assigned_q7:
+        text: Bring me 6 Gold Ingots. Gold does not make a blade stronger, but nobles
+          pay for shine. Return when you have them.
+        conditions: brakka_q7_active
+        pointers: pl_end_conversation
+      brakka_assigned_q8:
+        text: Bring me 6 Redstone Dust. Some weapons need a spark before they become
+          dangerous. Return when you have them.
+        conditions: brakka_q8_active
+        pointers: pl_end_conversation
+      brakka_assigned_q9:
+        text: Bring me 10 Flint. Flint is useful for testing leather, padding, and
+          weak seams. Return when you have them.
+        conditions: brakka_q9_active
+        pointers: pl_end_conversation
+      brakka_assigned_q10:
+        text: Bring me 48 Raw Iron. Fresh ore gives me enough material to forge and
+          reinforce new armor. Return when you have it.
+        conditions: brakka_q10_active
+        pointers: pl_end_conversation
+      brakka_assigned_q11:
+        text: Bring me 1 Diamond. Diamond reinforcement can turn good armor into something
+          exceptional. Return when you have them.
+        conditions: brakka_q11_active
+        pointers: pl_end_conversation
+      brakka_assigned_q12:
+        text: Bring me 1 Netherite Scrap. Bring me Netherite Scrap. Some weapons are
+          forged for legends, not guards. Return when you have them.
+        conditions: brakka_q12_active
+        pointers: pl_end_conversation
+      brakka_refuse:
+        text: Then stop breathing on my counter. Come back when you are useful.
+        pointers: pl_end_conversation
+      brakka_goodbye:
+        text: Keep your armor dry, your straps tight, and your back away from strangers.
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the armor shop.
+        pointers: brakka_shop
+      pl_open_shop_1:
+        text: Open the armor shop.
+        pointers: brakka_shop_1
+      pl_open_shop_2:
+        text: Open the armor shop.
+        pointers: brakka_shop_2
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: brakka_talk_active,brakka_talk_available,brakka_talk_cooldown
+      pl_about_brakka:
+        text: Tell me about yourself.
+        pointers: brakka_about
+      pl_more_story:
+        text: Tell me one of your stories.
+        actions: brakka_story_prepare_random
+        pointers: brakka_story_1,brakka_story_2,brakka_story_3,brakka_story_4,brakka_story_5,brakka_story_6,brakka_story_7,brakka_story_8
+      pl_accept_random_quest:
+        text: Fine, I will take the contract.
+        pointers: brakka_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: brakka_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: brakka_turnin_q1_ready,brakka_turnin_q2_ready,brakka_turnin_q3_ready,brakka_turnin_q4_ready,brakka_turnin_q5_ready,brakka_turnin_q6_ready,brakka_turnin_q7_ready,brakka_turnin_q8_ready,brakka_turnin_q9_ready,brakka_turnin_q10_ready,brakka_turnin_q11_ready,brakka_turnin_q12_ready,brakka_turnin_q1_missing,brakka_turnin_q2_missing,brakka_turnin_q3_missing,brakka_turnin_q4_missing,brakka_turnin_q5_missing,brakka_turnin_q6_missing,brakka_turnin_q7_missing,brakka_turnin_q8_missing,brakka_turnin_q9_missing,brakka_turnin_q10_missing,brakka_turnin_q11_missing,brakka_turnin_q12_missing
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: brakka_goodbye
+      pl_end_conversation:
+        text: End conversation
+      pl_show_assigned_quest:
+        text: What materials do you need?
+        pointers: brakka_assigned_q1,brakka_assigned_q2,brakka_assigned_q3,brakka_assigned_q4,brakka_assigned_q5,brakka_assigned_q6,brakka_assigned_q7,brakka_assigned_q8,brakka_assigned_q9,brakka_assigned_q10,brakka_assigned_q11,brakka_assigned_q12

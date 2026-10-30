@@ -1,0 +1,1239 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '65': citizens 65
+  '66': citizens 66
+  '44': citizens 44
+  '68': citizens 68
+
+conditions:
+  jr5_quest_available: permission costum.jobsrank.5
+  jr5_citizen_registered: tag jr5_citizen_registered
+  
+  is_weaponsmith: tag job_weaponsmith
+  is_armorsmith: tag job_armorsmith
+  is_shinobi: tag job_shinobi
+  
+  chose_weaponsmith: tag chosen_weaponsmith
+  chose_armorsmith: tag chosen_armorsmith
+  chose_shinobi: tag chosen_shinobi
+  
+  change_to_weaponsmith: tag change_to_weaponsmith
+  change_to_armorsmith: tag change_to_armorsmith
+  change_to_shinobi: tag change_to_shinobi
+  
+  target_weaponsmith_npc: tag target_weaponsmith_npc
+  target_armorsmith_npc: tag target_armorsmith_npc
+  target_shinobi_npc: tag target_shinobi_npc
+  
+  weaponsmith_rand_1: random 1-4
+  weaponsmith_rand_2: random 1-3
+  weaponsmith_rand_3: random 1-2
+  
+  shinobi_rand_1: random 1-4
+  shinobi_rand_2: random 1-3
+  shinobi_rand_3: random 1-2
+  
+  armorsmith_rand_1: random 1-4
+  armorsmith_rand_2: random 1-3
+  armorsmith_rand_3: random 1-2
+
+actions:
+  # Selection tags
+  choose_weaponsmith: tag add chosen_weaponsmith
+  choose_armorsmith: tag add chosen_armorsmith
+  choose_shinobi: tag add chosen_shinobi
+  
+  # Pending change tags
+  select_change_weaponsmith: folder jr5_clear_change_choices,select_change_weaponsmith_add
+  select_change_armorsmith: folder jr5_clear_change_choices,select_change_armorsmith_add
+  select_change_shinobi: folder jr5_clear_change_choices,select_change_shinobi_add
+  select_change_weaponsmith_add: tag add change_to_weaponsmith
+  select_change_armorsmith_add: tag add change_to_armorsmith
+  select_change_shinobi_add: tag add change_to_shinobi
+  
+  # Clear temporary choices
+  clear_choices_jr5: tag del chosen_weaponsmith,chosen_armorsmith,chosen_shinobi,change_to_weaponsmith,change_to_armorsmith,change_to_shinobi
+  
+  # Registration/job tags
+  jr5_add_registered: tag add jr5_citizen_registered
+  add_job_weaponsmith: tag add job_weaponsmith
+  add_job_armorsmith: tag add job_armorsmith
+  add_job_shinobi: tag add job_shinobi
+  
+  del_job_weaponsmith: tag del job_weaponsmith
+  del_job_armorsmith: tag del job_armorsmith
+  del_job_shinobi: tag del job_shinobi
+  
+  jr5_clear_initial_job_choices: tag del chosen_weaponsmith,chosen_armorsmith,chosen_shinobi
+  jr5_clear_change_choices: tag del change_to_weaponsmith,change_to_armorsmith,change_to_shinobi
+  
+  # Commands that must behave like player/op
+  cmd_join_weaponsmith: nujobs_joinjob weaponsmith
+  cmd_join_armorsmith: nujobs_joinjob armorsmith
+  cmd_join_shinobi: nujobs_joinjob shinobi
+  
+  cmd_leave_weaponsmith: nujobs_leavejob weaponsmith
+  cmd_leave_armorsmith: nujobs_leavejob armorsmith
+  cmd_leave_shinobi: nujobs_leavejob shinobi
+  
+  # First assignment folders
+  become_weaponsmith: folder cmd_join_weaponsmith,jr5_add_registered,add_job_weaponsmith,jr5_clear_initial_job_choices,jr5_clear_target_npcs
+  become_armorsmith: folder cmd_join_armorsmith,jr5_add_registered,add_job_armorsmith,jr5_clear_initial_job_choices,jr5_clear_target_npcs
+  become_shinobi: folder cmd_join_shinobi,jr5_add_registered,add_job_shinobi,jr5_clear_initial_job_choices,jr5_clear_target_npcs
+  
+  # Job switches
+  switch_weaponsmith_from_armorsmith: folder cmd_leave_armorsmith,cmd_join_weaponsmith,del_job_armorsmith,add_job_weaponsmith,jr5_clear_change_choices,jr5_clear_target_npcs
+  switch_weaponsmith_from_shinobi: folder cmd_leave_shinobi,cmd_join_weaponsmith,del_job_shinobi,add_job_weaponsmith,jr5_clear_change_choices,jr5_clear_target_npcs
+  
+  switch_armorsmith_from_weaponsmith: folder cmd_leave_weaponsmith,cmd_join_armorsmith,del_job_weaponsmith,add_job_armorsmith,jr5_clear_change_choices,jr5_clear_target_npcs
+  switch_armorsmith_from_shinobi: folder cmd_leave_shinobi,cmd_join_armorsmith,del_job_shinobi,add_job_armorsmith,jr5_clear_change_choices,jr5_clear_target_npcs
+  
+  switch_shinobi_from_weaponsmith: folder cmd_leave_weaponsmith,cmd_join_shinobi,del_job_weaponsmith,add_job_shinobi,jr5_clear_change_choices,jr5_clear_target_npcs
+  switch_shinobi_from_armorsmith: folder cmd_leave_armorsmith,cmd_join_shinobi,del_job_armorsmith,add_job_shinobi,jr5_clear_change_choices,jr5_clear_target_npcs
+  
+  # Targhet NPC
+  jr5_clear_target_npcs: tag del target_weaponsmith_npc,target_armorsmith_npc,target_shinobi_npc
+  
+  set_target_weaponsmith_npc: folder jr5_clear_target_npcs,add_target_weaponsmith_npc
+  set_target_armorsmith_npc: folder jr5_clear_target_npcs,add_target_armorsmith_npc
+  set_target_shinobi_npc: folder jr5_clear_target_npcs,add_target_shinobi_npc
+  
+  add_target_weaponsmith_npc: tag add target_weaponsmith_npc
+  add_target_armorsmith_npc: tag add target_armorsmith_npc
+  add_target_shinobi_npc: tag add target_shinobi_npc
+
+npc_holograms:
+  Emperor_of_Steam_unregistered:
+    lines:
+    - '&c&l!'
+    - '&c&l❗❗'
+    - '&7New Quest Available'
+    npcs: '65'
+    conditions: jr5_quest_available,!jr5_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  Emperor_of_Steam_registered:
+    lines:
+    - '&a&l❗'
+    - '&7change Job'
+    npcs: '65'
+    conditions: jr5_quest_available,jr5_citizen_registered
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  weaponsmith_target:
+    lines:
+    - '&e&l❓'
+    npcs: '66'
+    conditions: target_weaponsmith_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  armorsmith_target:
+    lines:
+    - '&e&l❓'
+    npcs: '68'
+    conditions: target_armorsmith_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  shinobi_target:
+    lines:
+    - '&e&l❓'
+    npcs: '44'
+    conditions: target_shinobi_npc
+    follow: true
+    check_interval: 20
+    max_range: 25
+
+npc_conversations:
+  '65': Emperor_of_Steam_conv
+  '66': weaponsmith_conv
+  '44': shinobi_conv
+  '68': armorsmith_conv
+
+conversations:
+  Emperor_of_Steam_conv:
+    quester: Sensei Emperor of Steam
+    first: reg_pending_weaponsmith_from_armorsmith,reg_pending_shinobi_from_armorsmith,reg_pending_armorsmith_from_weaponsmith,reg_pending_shinobi_from_weaponsmith,reg_pending_weaponsmith_from_shinobi,reg_pending_armorsmith_from_shinobi,reg_waiting_weaponsmith,reg_waiting_armorsmith,reg_waiting_shinobi,reg_already_weaponsmith,reg_already_armorsmith,reg_already_shinobi,reg_greet_jr5,reg_unavailable_jr5
+    stop: true
+    
+    NPC_options:
+      reg_unavailable_jr5:
+        text: |-
+          &7The Emperor of Steam does not even acknowledge you.
+
+          &f"You lack pressure."
+
+          "Without it… nothing is forged."
+
+          "Return when you have been tested."
+        conditions: jr5_quest_available
+        pointers: pl_end_conversation_jr5
+      
+      reg_greet_jr5:
+        text: |-
+          &7Steam hisses softly around the Emperor.
+
+          &f"You made it this far."
+
+          "That means something."
+
+          "But not enough."
+
+          A pause.
+
+          "Power is not given."
+
+          "It is built… under pressure."
+
+          "Some become weapons."
+
+          "Some become shields."
+
+          "Some become shadows… unseen, unstoppable."
+
+          "Three paths."
+
+          "All demand control."
+
+          "All demand sacrifice."
+
+          He looks directly at you.
+
+          "Choose what you will become, %player%."
+        conditions: jr5_quest_available,!jr5_citizen_registered,!chose_weaponsmith,!chose_armorsmith,!chose_shinobi
+        pointers: pl_register_yes_jr5,pl_register_no_jr5
+      
+      reg_choose_fifth_job:
+        text: |-
+          &7A deep metallic sound echoes.
+
+          &f"Weaponsmith."
+
+          "To strike. To end."
+
+          "Armorsmith."
+
+          "To endure. To resist."
+
+          "Shinobi."
+
+          "To move unseen. To control the moment."
+
+          A pause.
+
+          "No path is easy."
+
+          "All require discipline."
+
+          "Choose."
+        conditions: jr5_quest_available
+        pointers: pl_pick_weaponsmith,pl_pick_armorsmith,pl_pick_shinobi
+      
+      reg_waiting_weaponsmith:
+        text: |-
+          &7Steam vents sharply.
+
+          &f"You chose the blade."
+
+          "Then stop hesitating."
+
+          "Go to the forge."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      reg_waiting_armorsmith:
+        text: |-
+          &7A slow metallic pulse.
+
+          &f"You chose to endure."
+
+          "Then stand firm."
+
+          "Your master is waiting, go to the forge."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      reg_waiting_shinobi:
+        text: |-
+          &7Steam fades into silence around the Emperor.
+
+          &f"You chose the unseen path."
+
+          "Then you will not be guided like the others."
+
+          A pause.
+
+          "The Shinobi does not wait in plain sight."
+
+          "Jiraja watches… from above."
+
+          "An island that should not stand… yet it does."
+
+          "To reach it… you must fall."
+
+          "To find the darkness… you must follow the light."
+
+          A longer pause.
+
+          "Most will step back."
+
+          "They fear the void."
+
+          "You will step forward."
+
+          "Or you will remain nothing."
+
+          "Go. Prove you understand."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      reg_already_weaponsmith:
+        text: |-
+          &7The Emperor studies you.
+
+          &f"You chose to strike."
+
+          "To end fights… not endure them."
+
+          "That path sharpens you."
+
+          "But it leaves you exposed."
+
+          "If you change…"
+
+          "You lose that edge."
+
+          "Decide."
+
+          "Remain a weapon… or become something else."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_weaponsmith,!change_to_weaponsmith,!change_to_armorsmith,!change_to_shinobi
+        pointers: pl_change_weaponsmith_to_armorsmith,pl_change_weaponsmith_to_shinobi,pl_keep_current_job_jr5
+      
+      reg_already_armorsmith:
+        text: |-
+          &7A heavy pause.
+
+          &f"You chose to endure."
+
+          "To survive what others cannot."
+
+          "That path hardens you."
+
+          "But it slows you."
+
+          "If you change…"
+
+          "You lose that resilience."
+
+          "Decide."
+
+          "Stand firm… or abandon it."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_armorsmith,!change_to_weaponsmith,!change_to_armorsmith,!change_to_shinobi
+        pointers: pl_change_armorsmith_to_weaponsmith,pl_change_armorsmith_to_shinobi,pl_keep_current_job_jr5
+      
+      reg_already_shinobi:
+        text: |-
+          &7He watches you without moving.
+
+          &f"You chose control."
+
+          "Precision. Timing."
+
+          "You strike… without being seen."
+
+          "If you change…"
+
+          "You lose that advantage."
+
+          "Decide."
+
+          "Remain unseen… or step into the open."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_shinobi,!change_to_weaponsmith,!change_to_armorsmith,!change_to_shinobi
+        pointers: pl_change_shinobi_to_weaponsmith,pl_change_shinobi_to_armorsmith,pl_keep_current_job_jr5
+      
+      reg_pending_weaponsmith_from_armorsmith:
+        text: |-
+          &7Steam pressure builds… then stabilizes.
+
+          &f"You started the change."
+
+          "But you did not finish it."
+
+          "Half-formed steel breaks."
+
+          "Half-made choices fail."
+
+          "Decide, %player%."
+
+          "Finish it."
+
+          "Abandon it."
+
+          "Or choose again."
+
+          "But do not remain incomplete."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_armorsmith,change_to_weaponsmith
+        pointers: pl_continue_weaponsmith,pl_cancel_pending_jr5,pl_switch_pending_to_shinobi
+      
+      reg_pending_shinobi_from_armorsmith:
+        text: |-
+          &7Steam pressure builds… then stabilizes.
+
+          &f"You started the change."
+
+          "But you did not finish it."
+
+          "Half-formed steel breaks."
+
+          "Half-made choices fail."
+
+          "Decide, %player%."
+
+          "Finish it."
+
+          "Abandon it."
+
+          "Or choose again."
+
+          "But do not remain incomplete."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_armorsmith,change_to_shinobi
+        pointers: pl_continue_shinobi,pl_cancel_pending_jr5,pl_switch_pending_to_weaponsmith
+      
+      reg_pending_armorsmith_from_weaponsmith:
+        text: |-
+          &7Steam pressure builds… then stabilizes.
+
+          &f"You started the change."
+
+          "But you did not finish it."
+
+          "Half-formed steel breaks."
+
+          "Half-made choices fail."
+
+          "Decide, %player%."
+
+          "Finish it."
+
+          "Abandon it."
+
+          "Or choose again."
+
+          "But do not remain incomplete."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_weaponsmith,change_to_armorsmith
+        pointers: pl_continue_armorsmith,pl_cancel_pending_jr5,pl_switch_pending_to_shinobi
+      
+      reg_pending_shinobi_from_weaponsmith:
+        text: |-
+          &7Steam pressure builds… then stabilizes.
+
+          &f"You started the change."
+
+          "But you did not finish it."
+
+          "Half-formed steel breaks."
+
+          "Half-made choices fail."
+
+          "Decide, %player%."
+
+          "Finish it."
+
+          "Abandon it."
+
+          "Or choose again."
+
+          "But do not remain incomplete."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_weaponsmith,change_to_shinobi
+        pointers: pl_continue_shinobi,pl_cancel_pending_jr5,pl_switch_pending_to_armorsmith
+      
+      reg_pending_weaponsmith_from_shinobi:
+        text: |-
+          &7Steam pressure builds… then stabilizes.
+
+          &f"You started the change."
+
+          "But you did not finish it."
+
+          "Half-formed steel breaks."
+
+          "Half-made choices fail."
+
+          "Decide, %player%."
+
+          "Finish it."
+
+          "Abandon it."
+
+          "Or choose again."
+
+          "But do not remain incomplete."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_shinobi,change_to_weaponsmith
+        pointers: pl_continue_weaponsmith,pl_cancel_pending_jr5,pl_switch_pending_to_armorsmith
+      
+      reg_pending_armorsmith_from_shinobi:
+        text: |-
+          &7Steam pressure builds… then stabilizes.
+
+          &f"You started the change."
+
+          "But you did not finish it."
+
+          "Half-formed steel breaks."
+
+          "Half-made choices fail."
+
+          "Decide, %player%."
+
+          "Finish it."
+
+          "Abandon it."
+
+          "Or choose again."
+
+          "But do not remain incomplete."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_shinobi,change_to_armorsmith
+        pointers: pl_continue_armorsmith,pl_cancel_pending_jr5,pl_switch_pending_to_weaponsmith
+      
+      reg_send_weaponsmith:
+        text: |-
+          &7A burst of steam.
+
+          &f"Good."
+
+          "You chose to strike."
+
+          "The Weaponsmith will teach you force… and how to control it."
+
+          "Do not hesitate."
+
+          "Hesitation dulls the blade."
+
+          "Go."
+        conditions: jr5_quest_available
+        pointers: pl_end_conversation_jr5
+      
+      reg_send_armorsmith:
+        text: |-
+          &7A deep metallic sound.
+
+          &f"Good."
+
+          "You chose to endure."
+
+          "The Armorsmith will teach you resistance… and discipline."
+
+          "Stand firm."
+
+          "Or break."
+
+          "Go."
+        conditions: jr5_quest_available
+        pointers: pl_end_conversation_jr5
+      
+      reg_send_shinobi:
+        text: |-
+          &7Steam fades into silence around the Emperor.
+
+          &f"You chose the unseen path."
+
+          "Then you will not be guided like the others."
+
+          A pause.
+
+          "The Shinobi does not wait in plain sight."
+
+          "Jiraja watches… from above."
+
+          "An island that should not stand… yet it does."
+
+          "To reach it… you must fall."
+
+          "To find the darkness… you must follow the light."
+
+          A longer pause.
+
+          "Most will step back."
+
+          "They fear the void."
+
+          "You will step forward."
+
+          "Or you will remain nothing."
+
+          "Go. Prove you understand."
+        conditions: jr5_quest_available
+        pointers: pl_end_conversation_jr5
+      
+      jr5_reg_goodbye:
+        text: |-
+          &7The Emperor turns away.
+
+          &f"Without pressure… nothing changes."
+
+          "Without choice… nothing begins."
+
+          "Return when you are ready to be forged."
+        actions: clear_choices_jr5
+        conditions: jr5_quest_available
+        pointers: pl_end_conversation_jr5
+    
+    player_options:
+      pl_register_yes_jr5:
+        text: Yes, I want to take a fifth jobs.
+        conditions: jr5_quest_available
+        pointers: reg_choose_fifth_job
+      
+      pl_register_no_jr5:
+        text: No, not now.
+        pointers: jr5_reg_goodbye
+      
+      pl_pick_weaponsmith:
+        text: I want to become a weaponsmith.
+        actions: clear_choices_jr5,choose_weaponsmith,set_target_weaponsmith_npc
+        pointers: reg_send_weaponsmith
+      
+      pl_pick_armorsmith:
+        text: I want to become a armorsmith.
+        actions: clear_choices_jr5,choose_armorsmith,set_target_armorsmith_npc
+        pointers: reg_send_armorsmith
+      
+      pl_pick_shinobi:
+        text: I want to become a shinobi.
+        actions: clear_choices_jr5,choose_shinobi,set_target_shinobi_npc
+        pointers: reg_send_shinobi
+      
+      pl_change_weaponsmith_to_armorsmith:
+        text: Yes. I want to leave this path and become a armorsmith.
+        actions: select_change_armorsmith,set_target_armorsmith_npc
+        pointers: reg_send_armorsmith
+      
+      pl_change_weaponsmith_to_shinobi:
+        text: Yes. I want to leave this path and become a shinobi.
+        actions: select_change_shinobi,set_target_shinobi_npc
+        pointers: reg_send_shinobi
+      
+      pl_change_armorsmith_to_weaponsmith:
+        text: Yes. I want to leave this path and become a weaponsmith.
+        actions: select_change_weaponsmith,set_target_weaponsmith_npc
+        pointers: reg_send_weaponsmith
+      
+      pl_change_armorsmith_to_shinobi:
+        text: Yes. I want to leave this path and become a shinobi.
+        actions: select_change_shinobi,set_target_shinobi_npc
+        pointers: reg_send_shinobi
+      
+      pl_change_shinobi_to_weaponsmith:
+        text: Yes. I want to leave this path and become a weaponsmith.
+        actions: select_change_weaponsmith,set_target_weaponsmith_npc
+        pointers: reg_send_weaponsmith
+      
+      pl_change_shinobi_to_armorsmith:
+        text: Yes. I want to leave this path and become a armorsmith.
+        actions: select_change_armorsmith,set_target_armorsmith_npc
+        pointers: reg_send_armorsmith
+      
+      pl_continue_weaponsmith:
+        text: I want to continue with my choice.
+        pointers: reg_send_weaponsmith
+      
+      pl_continue_armorsmith:
+        text: I want to continue with my choice.
+        pointers: reg_send_armorsmith
+      
+      pl_continue_shinobi:
+        text: I want to continue with my choice.
+        pointers: reg_send_shinobi
+      
+      pl_cancel_pending_jr5:
+        text: I want to keep my current profession.
+        pointers: jr5_reg_goodbye
+      
+      pl_switch_pending_to_weaponsmith:
+        text: No, I want to become a weaponsmith instead.
+        actions: select_change_weaponsmith,set_target_weaponsmith_npc
+        pointers: reg_send_weaponsmith
+      
+      pl_switch_pending_to_armorsmith:
+        text: No, I want to become a armorsmith instead.
+        actions: select_change_armorsmith,set_target_armorsmith_npc
+        pointers: reg_send_armorsmith
+      
+      pl_switch_pending_to_shinobi:
+        text: No, I want to become a shinobi instead.
+        actions: select_change_shinobi,set_target_shinobi_npc
+        pointers: reg_send_shinobi
+      
+      pl_keep_current_job_jr5:
+        text: No, I want to keep my current profession.
+        pointers: jr5_reg_goodbye
+      
+      pl_end_conversation_jr5:
+        text: -End conversation-
+  
+  weaponsmith_conv:
+    quester: Weaponsmith Master
+    first: weaponsmith_assign_initial,weaponsmith_assign_from_armorsmith,weaponsmith_assign_from_shinobi,weaponsmith_redirect_initial_armorsmith,weaponsmith_redirect_initial_shinobi,weaponsmith_redirect_change_armorsmith,weaponsmith_redirect_change_shinobi,weaponsmith_default1,weaponsmith_default2,weaponsmith_default3,weaponsmith_default4
+    stop: true
+    
+    NPC_options:
+      weaponsmith_assign_initial:
+        text: |-
+          &7The weaponsmith brings a hammer down on hot metal.
+
+          A sharp clang echoes.
+
+          &f"Too soft."
+
+          He strikes again.
+
+          "Better."
+
+          He looks at you.
+
+          "You’re here to learn."
+
+          "Good."
+
+          "An untrained hand swings wildly."
+
+          "A trained one… ends things."
+
+          "Weapons are not tools."
+
+          "They are decisions."
+
+          "Too slow… you fail."
+
+          "Too weak… you fail."
+
+          "From now on… you forge weapons."
+
+          "And you learn when to strike."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_weaponsmith
+        actions: become_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_assign_from_armorsmith:
+        text: |-
+          &7He watches your stance.
+
+          &f"You learned to endure."
+
+          "To take the hit."
+
+          "That builds discipline."
+
+          "But it’s not enough."
+
+          "Endurance keeps you alive."
+
+          "Force ends the fight."
+
+          "Here, you don’t wait."
+
+          "You act."
+
+          "If you stay… you will learn to strike first."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_armorsmith,change_to_weaponsmith
+        actions: switch_weaponsmith_from_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_assign_from_shinobi:
+        text: |-
+          &7He studies you carefully.
+
+          &f"You move unseen."
+
+          "Precise. Controlled."
+
+          "But indirect."
+
+          "Here… there is no hiding."
+
+          "No second chances."
+
+          "You face what stands before you."
+
+          "And you break it."
+
+          "If you remain… you will learn to end things openly."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_shinobi,change_to_weaponsmith
+        actions: switch_weaponsmith_from_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_redirect_initial_armorsmith:
+        text: |-
+          &7He barely looks at you.
+
+          &f"You chose to endure."
+
+          "Then stop looking for a blade."
+
+          "Go."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_redirect_initial_shinobi:
+        text: |-
+          &7He exhales sharply.
+
+          &f"You hide."
+
+          "We don’t."
+
+          "Wrong place."
+
+          "Leave."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_redirect_change_armorsmith:
+        text: |-
+          &7He turns back to the forge.
+
+          &f"Back to defense."
+
+          "Then stop thinking about striking."
+
+          "Go."
+        conditions: jr5_quest_available,jr5_citizen_registered,change_to_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_redirect_change_shinobi:
+        text: |-
+          &7A short laugh.
+
+          &f"Back to shadows."
+
+          "Then stop standing in the open."
+
+          "Go."
+        conditions: jr5_quest_available,jr5_citizen_registered,change_to_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_default1:
+        text: '&f"Hesitation dulls the blade."'
+        conditions: weaponsmith_rand_1
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_default2:
+        text: |-
+          &f"If it doesn’t break…"
+
+          "You didn’t strike hard enough."
+        conditions: '!weaponsmith_rand_1,weaponsmith_rand_2'
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_default3:
+        text: |-
+          &f"One strike."
+
+          "Make it count."
+        conditions: '!weaponsmith_rand_1,!weaponsmith_rand_2,weaponsmith_rand_3'
+        pointers: pl_end_conversation_jr5
+      
+      weaponsmith_default4:
+        text: |-
+          &f"Force without control…"
+
+          "Is wasted."
+        conditions: '!weaponsmith_rand_1,!weaponsmith_rand_2,!weaponsmith_rand_3'
+        pointers: pl_end_conversation_jr5
+    
+    player_options:
+      pl_end_conversation_jr5:
+        text: End conversation
+  
+  shinobi_conv:
+    quester: Jiraya
+    first: shinobi_assign_initial,shinobi_assign_from_weaponsmith,shinobi_assign_from_armorsmith,shinobi_redirect_initial_weaponsmith,shinobi_redirect_initial_armorsmith,shinobi_redirect_change_weaponsmith,shinobi_redirect_change_armorsmith,shinobi_default1,shinobi_default2,shinobi_default3,shinobi_default4
+    stop: true
+    
+    NPC_options:
+      shinobi_assign_initial:
+        text: |-
+          &7You do not hear him arrive.
+
+          When you turn… he is already there, sitting casually.
+
+          &f"Yo."
+
+          A grin.
+
+          "So… you made the jump."
+
+          "Most do not."
+
+          "They think too much."
+
+          "Or not enough."
+
+          He stands up slowly.
+
+          "Let me guess…"
+
+          "You want power?"
+
+          "Speed?"
+
+          "Control?"
+
+          He shrugs.
+
+          "Wrong questions."
+
+          "A Shinobi doesn’t chase strength."
+
+          "He controls the moment."
+
+          "Appears when needed…"
+
+          "Disappears when not."
+
+          "Wins before the fight even begins."
+
+          He looks at you, more serious now.
+
+          "From now on… you walk the Shinobi path."
+
+          "Try to keep up."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_shinobi
+        actions: become_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_assign_from_weaponsmith:
+        text: |-
+          &7He watches you approach… like he already knew you would.
+
+          &f"Ah… the loud type."
+
+          "Swing first, think later."
+
+          A small chuckle.
+
+          "That works… until it doesn’t."
+
+          "A Shinobi doesn’t win by force."
+
+          "He wins by choosing when the fight happens."
+
+          "Or if it happens at all."
+
+          He steps closer.
+
+          "If you stay… you’ll learn something dangerous."
+
+          "How to end things… without being seen."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_weaponsmith,change_to_shinobi
+        actions: switch_shinobi_from_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_assign_from_armorsmith:
+        text: |-
+          &7He circles around you slowly.
+
+          &f"Solid."
+
+          "Steady."
+
+          "You take the hit and keep standing."
+
+          He nods.
+
+          "Respectable."
+
+          "But here’s the thing…"
+
+          "If you never get hit… you don’t need armor."
+
+          A grin.
+
+          "A Shinobi doesn’t endure."
+
+          "He avoids."
+
+          "He redirects."
+
+          "He’s gone before the strike lands."
+
+          "If you stay… you’ll learn to stop being a target."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_armorsmith,change_to_shinobi
+        actions: switch_shinobi_from_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_redirect_initial_weaponsmith:
+        text: |-
+          &7He doesn’t even look at you.
+
+          &f"Too loud."
+
+          "Too obvious."
+
+          "You’re not ready for this."
+
+          "Go break something instead."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_redirect_initial_armorsmith:
+        text: |-
+          &7He sighs softly.
+
+          &f"You stand there waiting to be hit…"
+
+          "That’s not how this works."
+
+          "Wrong path."
+
+          "Go."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_redirect_change_weaponsmith:
+        text: |-
+          &7He smirks.
+
+          &f"Back to smashing things?"
+
+          "Try not to miss this time."
+
+          "Go."
+        conditions: jr5_quest_available,jr5_citizen_registered,change_to_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_redirect_change_armorsmith:
+        text: |-
+          &7He shrugs.
+
+          &f"Back to standing still and taking hits?"
+
+          "Not my style… but hey."
+
+          "Go."
+        conditions: jr5_quest_available,jr5_citizen_registered,change_to_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_default1:
+        text: |-
+          &f"If they see you…"
+
+          "You’re already late."
+        conditions: shinobi_rand_1
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_default2:
+        text: |-
+          &f"Speed isn’t about moving fast."
+
+          "It’s about moving at the right time."
+        conditions: '!shinobi_rand_1,shinobi_rand_2'
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_default3:
+        text: |-
+          &f"The best fight…"
+
+          "Is the one that never starts."
+        conditions: '!shinobi_rand_1,!shinobi_rand_2,shinobi_rand_3'
+        pointers: pl_end_conversation_jr5
+      
+      shinobi_default4:
+        text: |-
+          &f"You’re still thinking too much."
+
+          "Relax."
+        conditions: '!shinobi_rand_1,!shinobi_rand_2,!shinobi_rand_3'
+        pointers: pl_end_conversation_jr5
+    
+    player_options:
+      pl_end_conversation_jr5:
+        text: End conversation
+  
+  armorsmith_conv:
+    quester: armorsmith Master
+    first: armorsmith_assign_initial,armorsmith_assign_from_weaponsmith,armorsmith_assign_from_shinobi,armorsmith_redirect_initial_weaponsmith,armorsmith_redirect_initial_shinobi,armorsmith_redirect_change_weaponsmith,armorsmith_redirect_change_shinobi,armorsmith_default1,armorsmith_default2,armorsmith_default3,armorsmith_default4
+    stop: true
+    
+    NPC_options:
+      armorsmith_assign_initial:
+        text: |-
+          &7The armorsmith stands before an anvil, holding a plate of dark metal.
+
+          A heavy hammer falls.
+
+          The metal bends… but does not break.
+
+          &f"Good."
+
+          He strikes again.
+
+          "Still standing."
+
+          He turns to you.
+
+          "You are here to learn endurance."
+
+          "Not comfort."
+
+          "Not safety."
+
+          "Armor is not meant to avoid the strike."
+
+          "It is meant to survive it."
+
+          "Every plate must carry pressure."
+
+          "Every joint must accept force."
+
+          "Every weakness becomes death."
+
+          "From now on… you forge armor."
+
+          "Learn to withstand what others fear."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_armorsmith
+        actions: become_armorsmith
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_assign_from_weaponsmith:
+        text: |-
+          &7The armorsmith looks at your hands.
+
+          &f"You know how to strike."
+
+          "Good."
+
+          "Then you know what armor must survive."
+
+          "A weapon asks one question."
+
+          "Can it break?"
+
+          "Armor answers."
+
+          "No."
+
+          "Here, you will stop chasing impact."
+
+          "You will learn resistance."
+
+          "If you stay… you will understand strength that does not need to move."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_weaponsmith,change_to_armorsmith
+        actions: switch_armorsmith_from_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_assign_from_shinobi:
+        text: |-
+          &7The armorsmith studies you in silence.
+
+          &f"You learned to avoid the strike."
+
+          "Useful."
+
+          "But avoidance is not endurance."
+
+          "A shadow survives by not being touched."
+
+          "Armor survives by being struck."
+
+          "Here, you will not disappear."
+
+          "You will stand."
+
+          "You will receive the force."
+
+          "And remain."
+        conditions: jr5_quest_available,jr5_citizen_registered,is_shinobi,change_to_armorsmith
+        actions: switch_armorsmith_from_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_redirect_initial_weaponsmith:
+        text: |-
+          &7The armorsmith does not look up.
+
+          &f"You chose the blade."
+
+          "Then go learn how to strike."
+
+          "This forge teaches how to endure."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_redirect_initial_shinobi:
+        text: |-
+          &7The armorsmith lifts a heavy plate of metal.
+
+          &f"You chose the shadow."
+
+          "Then stop standing before the anvil."
+
+          "This path is for those who do not vanish."
+        conditions: jr5_quest_available,!jr5_citizen_registered,chose_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_redirect_change_weaponsmith:
+        text: |-
+          &7The armorsmith lowers his hammer.
+
+          &f"Back to the blade."
+
+          "Then stop thinking like a shield."
+
+          "Go."
+        conditions: jr5_quest_available,jr5_citizen_registered,change_to_weaponsmith
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_redirect_change_shinobi:
+        text: |-
+          &7The armorsmith watches you calmly.
+
+          &f"Back to the shadows."
+
+          "Then leave the weight behind."
+
+          "Go."
+        conditions: jr5_quest_available,jr5_citizen_registered,change_to_shinobi
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_default1:
+        text: |-
+          &f"Armor does not ask the strike to be gentle."
+
+          "It prepares for it."
+        conditions: armorsmith_rand_1
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_default2:
+        text: |-
+          &f"If it bends and holds…"
+
+          "It is stronger than what refuses to bend."
+        conditions: '!armorsmith_rand_1,armorsmith_rand_2'
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_default3:
+        text: '&f"A weak joint kills faster than a weak plate."'
+        conditions: '!armorsmith_rand_1,!armorsmith_rand_2,armorsmith_rand_3'
+        pointers: pl_end_conversation_jr5
+      
+      armorsmith_default4:
+        text: |-
+          &f"Strength is not standing untouched."
+
+          "Strength is standing after impact."
+        conditions: '!armorsmith_rand_1,!armorsmith_rand_2,!armorsmith_rand_3'
+        pointers: pl_end_conversation_jr5
+    
+    player_options:
+      pl_end_conversation_jr5:
+        text: End conversation

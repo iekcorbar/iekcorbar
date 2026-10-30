@@ -1,0 +1,82 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '94': citizens 94
+
+npc_conversations:
+  '94': cleric_conv
+
+conditions:
+  cleric_race_used: tag cleric_free_race
+  cleric_class_used: tag cleric_free_class
+  cleric_has_100k: money 100000
+
+actions:
+  cleric_free_race_change: folder cleric_reset_race,cleric_tag_race
+  cleric_paid_race_change: folder cleric_take_100k,cleric_reset_race
+  cleric_free_class_change: folder cleric_reset_class,cleric_tag_class
+  cleric_paid_class_change: folder cleric_take_100k,cleric_reset_class
+  cleric_reset_race: command valhallaraces:races reset race %player%
+  cleric_reset_class: command valhallaraces:races reset class %player%
+  cleric_tag_race: tag add cleric_free_race
+  cleric_tag_class: tag add cleric_free_class
+  cleric_take_100k: money -100000
+
+conversations:
+  cleric_conv:
+    quester: Cleric
+    first: cleric_greeting
+    stop: true
+    NPC_options:
+      cleric_greeting:
+        text: Do you wish to use my divine services?
+        pointers: pl_yes,pl_no
+      cleric_services:
+        text: Which divine service do you seek?
+        pointers: pl_race_free,pl_race_paid,pl_race_no_money,pl_class_free,pl_class_paid,pl_class_no_money,pl_back
+      cleric_goodbye:
+        text: May the gods watch over your path.
+      cleric_no_money:
+        text: You do not have enough coins for this divine service. Return with 100,000
+          coins.
+        pointers: pl_back
+    player_options:
+      pl_yes:
+        text: Yes, I want to use your divine services.
+        pointers: cleric_services
+      pl_no:
+        text: No, thank you.
+        pointers: cleric_goodbye
+      pl_back:
+        text: Maybe another time.
+        pointers: cleric_goodbye
+      pl_race_free:
+        text: Change my race.
+        conditions: '!cleric_race_used'
+        actions: cleric_free_race_change
+        pointers: cleric_goodbye
+      pl_race_paid:
+        text: 'Change my race. Cost: 100,000.'
+        conditions: cleric_race_used,cleric_has_100k
+        actions: cleric_paid_race_change
+        pointers: cleric_goodbye
+      pl_race_no_money:
+        text: 'Change my race. Cost: 100,000.'
+        conditions: cleric_race_used,!cleric_has_100k
+        pointers: cleric_no_money
+      pl_class_free:
+        text: Change my class.
+        conditions: '!cleric_class_used'
+        actions: cleric_free_class_change
+        pointers: cleric_goodbye
+      pl_class_paid:
+        text: 'Change my class. Cost: 100,000.'
+        conditions: cleric_class_used,cleric_has_100k
+        actions: cleric_paid_class_change
+        pointers: cleric_goodbye
+      pl_class_no_money:
+        text: 'Change my class. Cost: 100,000.'
+        conditions: cleric_class_used,!cleric_has_100k
+        pointers: cleric_no_money

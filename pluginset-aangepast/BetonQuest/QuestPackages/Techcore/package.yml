@@ -1,0 +1,135 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '125': citizens 125
+
+items:
+  # TechCore MATERIAL:STEEL_INGOT
+  # Matching by vanilla base material + modern item model avoids accepting a normal renamed Iron Ingot.
+  steel_ingot: simple iron_ingot item-model:techcore:steel_ingot
+journal:
+  first_steel:
+    en: |-
+      &dThe First Steel
+      &6Chapter I - The Alloy Test
+
+      &7Obtain &d1 Steel Ingot&7 using TechCore's engineering systems.
+      &8Return to the Engineer when you have it.
+    en-US: |-
+      &dThe First Steel
+      &6Chapter I - The Alloy Test
+
+      &7Obtain &d1 Steel Ingot&7 using TechCore's engineering systems.
+      &8Return to the Engineer when you have it.
+conditions:
+  first_steel_active_1: tag first_steel_active_1
+  first_steel_completed_1: tag first_steel_completed_1
+  first_steel_has_ingot: item steel_ingot:1
+
+
+actions:
+  # Quest state
+  first_steel_add_active: tag add first_steel_active_1
+  first_steel_remove_active: tag del first_steel_active_1
+  first_steel_add_completed: tag add first_steel_completed_1
+  
+  # Journal
+  first_steel_add_journal: journal add first_steel
+  first_steel_remove_journal: journal delete first_steel
+  
+  # TechCore blueprint grant.
+  # BetonQuest %player% resolves to the player taking the quest.
+  # OpSudo executes the command as that player with temporary operator permissions.
+  # This quest now grants ONLY the Era I TechnoCore placement blueprint.
+  first_steel_grant_technocore: opsudo techcore blueprint grant %player% ERA_1:technocore_placement
+  first_steel_grant_blueprints: folder first_steel_grant_technocore
+  
+  # Delayed chat/title, so they are shown after the NPC conversation has closed.
+  first_steel_start_accept_delay: objective start first_steel_accept_delay
+  first_steel_accept_message: notify &6Quest Updated &7- &dThe First Steel&7. Obtain
+    &d1 Steel Ingot&7 and return to the Engineer. io:chat
+  
+  first_steel_start_complete_delay: objective start first_steel_complete_delay
+  first_steel_complete_message: notify &6Quest Complete &7- &dThe First Steel&7. You
+    have produced your first Steel Ingot. io:chat
+  first_steel_complete_title: notify &6Quest Complete\n&dThe First Steel io:title
+    fadeIn:10 stay:60 fadeOut:10
+  first_steel_complete_feedback: folder first_steel_complete_title,first_steel_complete_message
+  
+  # Main flows
+  first_steel_accept: folder first_steel_add_active,first_steel_add_journal,first_steel_grant_blueprints,first_steel_start_accept_delay
+  first_steel_complete: folder first_steel_add_completed,first_steel_remove_active,first_steel_remove_journal,first_steel_start_complete_delay
+
+objectives:
+  first_steel_accept_delay: delay 2 seconds interval:5 events:first_steel_accept_message
+  first_steel_complete_delay: delay 2 seconds interval:5 events:first_steel_complete_feedback
+
+npc_holograms:
+  first_steel_available:
+    lines:
+    - '&d&l❗'
+    npcs: '125'
+    conditions: '!first_steel_active_1,!first_steel_completed_1'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  
+  first_steel_active_1_hologram:
+    lines:
+    - '&6&l?'
+    - '&7Quest in progress'
+    npcs: '125'
+    conditions: first_steel_active_1
+    follow: true
+    check_interval: 20
+    max_range: 25
+
+npc_conversations:
+  '125': first_steel_conv
+
+conversations:
+  first_steel_conv:
+    quester: Engineer
+    first: first_steel_done,first_steel_turnin_ready,first_steel_turnin_missing,first_steel_offer
+    stop: true
+    
+    NPC_options:
+      first_steel_done:
+        text: You proved you can turn raw materials into something stronger. Keep
+          that Steel Ingot. You earned it.
+        conditions: first_steel_completed_1
+        pointers: pl_end
+      
+      first_steel_turnin_ready:
+        text: Good. That is real steel. Not iron painted gray, not a shortcut. You
+          followed the process and made the alloy yourself.
+        conditions: first_steel_active_1,first_steel_has_ingot
+        actions: first_steel_complete
+        pointers: pl_end
+      
+      first_steel_turnin_missing:
+        text: Not yet. I want to see one proper Steel Ingot. Learn the process, build
+          what you need, and come back when you have it.
+        conditions: first_steel_active_1,!first_steel_has_ingot
+        pointers: pl_end
+      
+      first_steel_offer:
+        text: Before you call yourself an engineer, I want to see whether you can
+          produce a material that separates simple ironwork from real industry. Make
+          one Steel Ingot and bring it back to me. I can grant you the technical blueprint
+          access you need for the trial.
+        conditions: '!first_steel_active_1,!first_steel_completed_1'
+        pointers: pl_accept,pl_refuse
+    
+    player_options:
+      pl_accept:
+        text: I will make the Steel Ingot.
+        actions: first_steel_accept
+      
+      pl_refuse:
+        text: Not now.
+      
+      pl_end:
+        text: Understood.

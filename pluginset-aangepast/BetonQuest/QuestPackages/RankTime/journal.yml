@@ -1,0 +1,16 @@
+journal:
+  rank_1_to_2:
+    en: "&6Rank Progression\n\n&7Current Rank: &6&lRank 1\n&7Next Rank: &6&lKikai-shi 機械師 – Mechanical Craftsman\n\n&7Required playtime: &6&l1 hour\n\n&8Continue playing to advance."
+    en-US: "&6Rank Progression\n\n&7Current Rank: &6&lRank 1\n&7Next Rank: &6&lKikai-shi 機械師 – Mechanical Craftsman\n\n&7Required playtime: &6&l1 hour\n\n&8Continue playing to advance."
+
+  rank_2_to_3:
+    en: "&6Rank Progression\n\n&7Current Rank: &6&lKikai-shi 機械師 – Mechanical Craftsman\n&7Next Rank: &6&lTetsu-bushi 鉄武士 – Iron Samurai\n\n&7Required playtime: &6&l1 hours\n\n&8Continue playing to advance."
+    en-US: "&6Rank Progression\n\n&7Current Rank: &6&lKikai-shi 機械師 – Mechanical Craftsman\n&7Next Rank: &6&lTetsu-bushi 鉄武士 – Iron Samurai\n\n&7Required playtime: &6&l1 hours\n\n&8Continue playing to advance."
+
+  rank_3_to_4:
+    en: "&6Rank Progression\n\n&7Current Rank: &6&lTetsu-bushi 鉄武士 – Iron Samurai\n&7Next Rank: &6&lKarakuri Daimyō 絡繰大名 – Machine Lord\n\n&7Required playtime: &6&l1 hours\n\n&8Continue playing to advance."
+    en-US: "&6Rank Progression\n\n&7Current Rank: &6&lTetsu-bushi 鉄武士 – Iron Samurai\n&7Next Rank: &6&lKarakuri Daimyō 絡繰大名 – Machine Lord\n\n&7Required playtime: &f6 hours\n\n&8Continue playing to advance."
+
+  rank_4_to_5:
+    en: "&6Rank Progression\n\n&7Current Rank: &6&lKarakuri Daimyō 絡繰大名 – Machine Lord\n&7Next Rank: &6&lJōki Tennō 蒸気天皇 – Emperor of Steam\n\n&7Required playtime: &6&l1 hours\n\n&8Continue playing to advance."
+    en-US: "&6Rank Progression\n\n&7Current Rank: &6&lKarakuri Daimyō 絡繰大名 – Machine Lord\n&7Next Rank: &6&lJōki Tennō 蒸気天皇 – Emperor of Steam\n\n&7Required playtime: &6&l1 hours\n\n&8Continue playing to advance."

@@ -1,0 +1,79 @@
+actions:
+  # --------------------------------------------------
+  # AVVIO SISTEMA
+  # --------------------------------------------------
+  start_rank_system: "folder add_rank_system_started,set_rank_1,start_rank_1_message,start_rank_1_to_2 conditions:!rank_system_started"
+
+  add_rank_system_started: "tag add rank_system_started"
+
+  set_rank_1: "folder clear_all_ranks,add_rank_1"
+  add_rank_1: "tag add rank_1"
+
+  start_rank_1_message: "notify &6Rank system activated! &eYour playing time now counts for the ranks."
+
+  # --------------------------------------------------
+  # START TIMER + JOURNAL
+  # --------------------------------------------------
+  start_rank_1_to_2: "folder start_rank_1_to_2_obj,add_rank_1_to_2_journal"
+  start_rank_2_to_3: "folder start_rank_2_to_3_obj,add_rank_2_to_3_journal"
+  start_rank_3_to_4: "folder start_rank_3_to_4_obj,add_rank_3_to_4_journal"
+  start_rank_4_to_5: "folder start_rank_4_to_5_obj,add_rank_4_to_5_journal"
+
+  start_rank_1_to_2_obj: "objective add rank_1_to_2"
+  start_rank_2_to_3_obj: "objective add rank_2_to_3"
+  start_rank_3_to_4_obj: "objective add rank_3_to_4"
+  start_rank_4_to_5_obj: "objective add rank_4_to_5"
+
+  add_rank_1_to_2_journal: "journal add rank_1_to_2"
+  add_rank_2_to_3_journal: "journal add rank_2_to_3"
+  add_rank_3_to_4_journal: "journal add rank_3_to_4"
+  add_rank_4_to_5_journal: "journal add rank_4_to_5"
+
+  del_rank_1_to_2_journal: "journal delete rank_1_to_2"
+  del_rank_2_to_3_journal: "journal delete rank_2_to_3"
+  del_rank_3_to_4_journal: "journal delete rank_3_to_4"
+  del_rank_4_to_5_journal: "journal delete rank_4_to_5"
+
+  # --------------------------------------------------
+  # PROMOZIONI
+  # --------------------------------------------------
+  promote_to_2: "folder del_rank_1_to_2_journal,remove_rank_1,add_rank_2,rank_2_message,rank_2_message_2,rank_2_lp,start_rank_2_to_3"
+  promote_to_3: "folder del_rank_2_to_3_journal,remove_rank_2,add_rank_3,rank_3_message,rank_3_message_2,rank_3_lp,start_rank_3_to_4"
+  promote_to_4: "folder del_rank_3_to_4_journal,remove_rank_3,add_rank_4,rank_4_message,rank_4_message_2,rank_4_lp,start_rank_4_to_5"
+  promote_to_5: "folder del_rank_4_to_5_journal,remove_rank_4,add_rank_5,rank_5_message,rank_5_message_2,rank_5_lp"
+
+  # --------------------------------------------------
+  # TAG RANK
+  # --------------------------------------------------
+  clear_all_ranks: "folder remove_rank_1,remove_rank_2,remove_rank_3,remove_rank_4,remove_rank_5"
+
+  remove_rank_1: "tag del rank_1"
+  remove_rank_2: "tag del rank_2"
+  remove_rank_3: "tag del rank_3"
+  remove_rank_4: "tag del rank_4"
+  remove_rank_5: "tag del rank_5"
+
+  add_rank_2: "tag add rank_2"
+  add_rank_3: "tag add rank_3"
+  add_rank_4: "tag add rank_4"
+  add_rank_5: "tag add rank_5"
+
+  # --------------------------------------------------
+  # MESSAGGI
+  # --------------------------------------------------
+  rank_2_message: "notify &6Congratulations! You have been promoted to &eRank 2&6! you are now a Kikai-shi 機械師 – Mechanical Craftsman"
+  rank_2_message_2: "notify &6reach the second floor of Townhall at the spawn to get your second job"
+  rank_3_message: "notify &6Congratulations! You have been promoted to &eRank 3&6! you are now Tetsu-bushi 鉄武士 - Iron Samurai"
+  rank_3_message_2: "notify &6reach the third floor of Townhall at the spawn to get your third job"
+  rank_4_message: "notify &6Congratulations! You have been promoted to &eRank 4&6! you are now Karakuri Daimyō 絡繰大名 – Machine Lord"
+  rank_4_message_2: "notify &6reach the fourth floor of Townhall at the spawn to get your fourth job"
+  rank_5_message: "notify &6Congratulations! You have been promoted to &eRank 5&6! you are now Jōki Tennō 蒸気天皇 – Emperor of Steam"
+  rank_5_message_2: "notify &6reach the fifth floor of Townhall at the spawn to get your fifth job"
+
+  # --------------------------------------------------
+  # LUCKPERMS
+  # --------------------------------------------------
+  rank_2_lp: "command lp user %player% parent add rank_2"
+  rank_3_lp: "command lp user %player% parent add rank_3"
+  rank_4_lp: "command lp user %player% parent add rank_4"
+  rank_5_lp: "command lp user %player% parent add rank_5"

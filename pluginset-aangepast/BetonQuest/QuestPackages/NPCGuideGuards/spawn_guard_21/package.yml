@@ -1,0 +1,35 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+  templates:
+  - NPCGuideGuard
+
+npcs:
+  '118': citizens 118
+
+npc_conversations:
+  '118': guard_dialogue
+
+actions:
+  guide_miner: command npcguide start spawn_guard_21 miner %player%
+  guide_woodcutter: command npcguide start spawn_guard_21 woodcutter %player%
+  guide_fisherman: command npcguide start spawn_guard_21 fisherman %player%
+  guide_digger: command npcguide start spawn_guard_21 digger %player%
+  guide_farmer: command npcguide start spawn_guard_21 farmer %player%
+  guide_chef: command npcguide start spawn_guard_21 chef %player%
+  guide_weaponsmith: command npcguide start spawn_guard_21 weaponsmith %player%
+  guide_akito: command npcguide start spawn_guard_21 tea_house_akito %player%
+  guide_momo: command npcguide start spawn_guard_21 candy_shop_momo %player%
+  guide_vorkan: command npcguide start spawn_guard_21 vorkan_kross %player%
+  guide_brakka: command npcguide start spawn_guard_21 brakka_stonewall %player%
+  guide_parkour: command npcguide start spawn_guard_21 old_guard_parkour %player%
+  guide_cleric: command npcguide start spawn_guard_21 cleric %player%
+  guide_coffe_house: command npcguide start spawn_guard_21 coffe_house %player%
+  guide_fishing_rod_merchant: command npcguide start spawn_guard_21 fishing_rod_merchant
+    %player%
+  guide_ice_cream_cart: command npcguide start spawn_guard_21 ice_cream_cart %player%
+  guide_mad_doctor: command npcguide start spawn_guard_21 mad_doctor %player%
+  guide_old_dungeon_1: command npcguide start spawn_guard_21 old_dungeon_1 %player%
+  guide_petragemologist: command npcguide start spawn_guard_21 petragemologist %player%
+  guide_postal_office: command npcguide start spawn_guard_21 postal_office %player%
+  guide_sake_brewery: command npcguide start spawn_guard_21 sake_brewery %player%

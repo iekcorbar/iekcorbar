@@ -1,0 +1,144 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+
+npcs:
+  '76': citizens 76
+
+conditions:
+  mad_doctor_done: tag mad_doctor_done
+  has_random_teleport: permission cmi.command.rt
+
+actions:
+  md_start: folder md_tp,md_01,md_03,md_05,md_07,md_09,md_11,md_12,md_14,md_15,md_17,md_19,md_20,md_22,md_23,md_25,md_27,md_29,md_31,md_33,md_35,md_37,md_39,md_41,md_43,md_45,md_47,md_49,md_51,md_53,md_55,md_57,md_59,md_60,md_61
+    delay:1 period:3 cancelOnLogout
+  
+  md_tp: teleport 2980.075;114;-453.652;iekcorbarSeason2
+  
+  md_01: 'notify &eMad Doctor&7: &fExcellent! Please remain perfectly still. io:chat'
+  md_03: 'notify &eMad Doctor&7: &fOr do not. Honestly, we are mostly improvising.
+    io:chat'
+  md_05: 'notify &bMachine&7: &fBiological scan started. io:chat'
+  md_07: 'notify &bMachine&7: &fSubject classified as: reckless. io:chat'
+  md_09: 'notify &eMad Doctor&7: &fHey! That is rude! io:chat'
+  
+  md_11: 'notify &bMachine&7: &fBeginning cryogenic preservation. io:chat'
+  md_12: command freezeeffect %player% 5s
+  md_14: 'notify &eMad Doctor&7: &fNO! Teleportation! Not refrigeration! io:chat'
+  md_15: command freezeeffect %player% remove
+  
+  md_17: 'notify &bMachine&7: &fAlternative solution detected. io:chat'
+  md_19: 'notify &bMachine&7: &fApplying poison. io:chat'
+  md_20: effect POISON 3 1 hidden noicon
+  md_22: 'notify &eMad Doctor&7: &fWho programmed you?! io:chat'
+  md_23: effect REGENERATION 4 4 hidden noicon
+  
+  md_25: 'notify &bMachine&7: &fNew strategy available. io:chat'
+  md_27: 'notify &bMachine&7: &fEliminate the problem. io:chat'
+  md_29: 'notify &eMad Doctor&7: &fThe problem is not the volunteer! io:chat'
+  md_31: 'notify &bMachine&7: &fVolunteer identified as source of all current issues.
+    io:chat'
+  md_33: 'notify &eMad Doctor&7: &fThat is NOT how troubleshooting works! io:chat'
+  
+  md_35: 'notify &eMad Doctor&7: &fListen carefully. io:chat'
+  md_37: 'notify &eMad Doctor&7: &fIf you kill the volunteers... io:chat'
+  md_39: 'notify &eMad Doctor&7: &fWe will not have any volunteers left. io:chat'
+  md_41: 'notify &bMachine&7: &fProcessing... io:chat'
+  md_43: 'notify &bMachine&7: &fLogical argument detected. io:chat'
+  md_45: 'notify &bMachine&7: &fMurder mode disabled. io:chat'
+  md_47: 'notify &eMad Doctor&7: &fSee? Communication solves everything. io:chat'
+  
+  md_49: 'notify &bMachine&7: &fPreparing safe teleportation. io:chat'
+  md_51: 'notify &eMad Doctor&7: &fFinally! io:chat'
+  md_53: 'notify &bMachine&7: &fUpdated survival chance: 63%. io:chat'
+  md_55: 'notify &eMad Doctor&7: &fONLY SIXTY-THREE PERCENT?! io:chat'
+  md_57: 'notify &bMachine&7: &fCorrection. Sixty-four percent. io:chat'
+  
+  md_59: notify &aQUEST COMPLETE\n&7You have contributed to science. io:title fadeIn:0
+    stay:60 fadeOut:20
+  md_60: tag add mad_doctor_done
+  md_61: folder md_unlock_random_teleport,md_random_teleport
+
+  md_unlock_random_teleport: folder md_grant_random_teleport,md_random_teleport_unlocked
+    conditions:!has_random_teleport
+  md_grant_random_teleport: command lp user %player% permission set cmi.command.rt true
+  md_random_teleport_unlocked: 'notify &6TRAVEL ABILITY UNLOCKED &8» &7Type &b/rt
+    &7in chat to teleport to a random safe location. io:chat'
+  md_random_teleport: command rt %player%
+  
+  md_quicktravel: folder md_q1,md_q2,md_q3 delay:1 period:2
+  md_q1: 'notify &eMad Doctor&7: &fThe machine promised not to do anything weird.
+    io:chat'
+  md_q2: 'notify &bMachine&7: &fNo promises were made. io:chat'
+  md_q3: folder md_unlock_random_teleport,md_random_teleport
+
+npc_conversations:
+  '76': mad_doctor_conv
+
+conversations:
+  mad_doctor_conv:
+    quester: Mad Doctor
+    first: done,start
+    stop: true
+    
+    NPC_options:
+      start:
+        text: Ah! A fresh volunteer! Wonderful! My teleportation machine only exploded
+          twice this week!
+        conditions: '!mad_doctor_done'
+        pointers: accept,refuse
+      
+      done:
+        text: 'Ah, my favorite test subject! Good news: the machine has not tried
+          to murder anyone for almost three days!'
+        conditions: mad_doctor_done
+        pointers: quicktravel,leave,repeat_quest
+      
+      accepted:
+        text: Excellent! Please sign this completely legitimate liability waiver.
+        actions: md_start
+      
+      refused:
+        text: A perfectly reasonable decision. Cowardly, but reasonable.
+      
+      quick:
+        text: Straight to the destination this time. The machine and I had a long
+          talk.
+        actions: md_quicktravel
+    
+    player_options:
+      accept:
+        text: I'll do it.
+        pointers: accepted
+      
+      refuse:
+        text: No thanks.
+        pointers: refused
+      
+      quicktravel:
+        text: Send me immediately.
+        pointers: quick
+      
+      leave:
+        text: Maybe later.
+      
+      repeat_quest:
+        text: Put me in the cannon! (repeat the quest).
+        pointers: accepted
+npc_holograms:
+  mad_doctor_available:
+    lines:
+    - '&d&l❗'
+    npcs: '76'
+    conditions: '!mad_doctor_done'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  mad_doctor_do_again:
+    lines:
+    - '&e&l❓'
+    npcs: '76'
+    conditions: mad_doctor_done
+    follow: true
+    check_interval: 20
+    max_range: 25

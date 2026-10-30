@@ -1,0 +1,774 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+npcs:
+  '81': citizens 81
+items:
+  rodmerchant_fish_q1: mmoitem FISH PYROFISH_BRONZE_TUNA quest-item
+  rodmerchant_fish_q2: mmoitem FISH PYROFISH_BRONZE_SHRIMP quest-item
+  rodmerchant_fish_q3: mmoitem FISH PYROFISH_BRONZE_ANGELFISH quest-item
+  rodmerchant_fish_q4: mmoitem FISH PYROFISH_BRONZE_CATFISH quest-item
+  rodmerchant_fish_q5: mmoitem FISH PYROFISH_BRONZE_PIKE quest-item
+  rodmerchant_fish_q6: mmoitem FISH PYROFISH_BRONZE_SCORPIO_FISH quest-item
+  rodmerchant_fish_q7: mmoitem FISH PYROFISH_BRONZE_GLACIERFISH quest-item
+  rodmerchant_fish_q8: mmoitem FISH PYROFISH_BRONZE_SLIMEJACK quest-item
+  rodmerchant_fish_q9: mmoitem FISH PYROFISH_BRONZE_STONEFISH quest-item
+  rodmerchant_fish_q10: mmoitem FISH PYROFISH_BRONZE_HERRING quest-item
+  rodmerchant_fish_q11: mmoitem FISH PYROFISH_BRONZE_PERCH quest-item
+  rodmerchant_fish_q12: mmoitem FISH PYROFISH_BRONZE_GREENGILL quest-item
+journal:
+  rodmerchant_q1:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Tuna&f. You can fish them
+      in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Tuna&f. You can fish
+      them in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Tuna&f. You can fish them
+      in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+  rodmerchant_q2:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &86 Shrimp&f. You can fish
+      them in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &86 Shrimp&f. You can fish
+      them in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &86 Shrimp&f. You can fish
+      them in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+  rodmerchant_q3:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Angelfish&f. You can fish
+      them in &bWarm Ocean, Lukewarm Ocean, or Deep Lukewarm Ocean&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Angelfish&f. You can
+      fish them in &bWarm Ocean, Lukewarm Ocean, or Deep Lukewarm Ocean&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Angelfish&f. You can fish
+      them in &bWarm Ocean, Lukewarm Ocean, or Deep Lukewarm Ocean&f.'
+  rodmerchant_q4:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Catfish&f. You can fish
+      them in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Catfish&f. You can fish
+      them in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Catfish&f. You can fish
+      them in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+  rodmerchant_q5:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Pike&f. You can fish them
+      in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Pike&f. You can fish
+      them in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Pike&f. You can fish them
+      in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+  rodmerchant_q6:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &82 Scorpio Fish&f. You can
+      fish them in &bJungle, Bamboo Jungle, or Sparse Jungle&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &82 Scorpio Fish&f. You
+      can fish them in &bJungle, Bamboo Jungle, or Sparse Jungle&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &82 Scorpio Fish&f. You can
+      fish them in &bJungle, Bamboo Jungle, or Sparse Jungle&f.'
+  rodmerchant_q7:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Glacierfish&f. You can
+      fish them in &bCold Ocean, Frozen Ocean, Deep Cold Ocean, Deep Frozen Ocean,
+      Frozen River, or Snowy Beach&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Glacierfish&f. You can
+      fish them in &bCold Ocean, Frozen Ocean, Deep Cold Ocean, Deep Frozen Ocean,
+      Frozen River, or Snowy Beach&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Glacierfish&f. You can
+      fish them in &bCold Ocean, Frozen Ocean, Deep Cold Ocean, Deep Frozen Ocean,
+      Frozen River, or Snowy Beach&f.'
+  rodmerchant_q8:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Slimejack&f. You can fish
+      them in &bSwamp or Mangrove Swamp&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Slimejack&f. You can
+      fish them in &bSwamp or Mangrove Swamp&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &83 Slimejack&f. You can fish
+      them in &bSwamp or Mangrove Swamp&f.'
+  rodmerchant_q9:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &82 Stonefish&f. You can fish
+      them in &bLush Caves, Dripstone Caves, or Deep Dark&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &82 Stonefish&f. You can
+      fish them in &bLush Caves, Dripstone Caves, or Deep Dark&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &82 Stonefish&f. You can fish
+      them in &bLush Caves, Dripstone Caves, or Deep Dark&f.'
+  rodmerchant_q10:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &85 Herring&f. You can fish
+      them in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &85 Herring&f. You can fish
+      them in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &85 Herring&f. You can fish
+      them in &bOcean, Deep Ocean, Beach, or Stony Shore&f.'
+  rodmerchant_q11:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &85 Perch&f. You can fish them
+      in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &85 Perch&f. You can fish
+      them in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &85 Perch&f. You can fish them
+      in &bRiver, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+      Plains&f.'
+  rodmerchant_q12:
+    en: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Greengill&f. You can fish
+      them in &bSwamp or Mangrove Swamp&f.'
+    en-US: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Greengill&f. You can
+      fish them in &bSwamp or Mangrove Swamp&f.'
+    it: '&fFishing Rod Merchant Contract\n\n&7Bring me &84 Greengill&f. You can fish
+      them in &bSwamp or Mangrove Swamp&f.'
+conditions:
+  rodmerchant_friendship_1: point rodmerchant_friendship 1
+  rodmerchant_friendship_31: point rodmerchant_friendship 31
+  rodmerchant_friendship_61: point rodmerchant_friendship 61
+  rodmerchant_friendship_100: point rodmerchant_friendship 100
+  rodmerchant_daily_cooldown_v2: objective rodmerchant_daily_cooldown_timer
+  rodmerchant_q1_active: tag rodmerchant_q1_active
+  rodmerchant_q2_active: tag rodmerchant_q2_active
+  rodmerchant_q3_active: tag rodmerchant_q3_active
+  rodmerchant_q4_active: tag rodmerchant_q4_active
+  rodmerchant_q5_active: tag rodmerchant_q5_active
+  rodmerchant_q6_active: tag rodmerchant_q6_active
+  rodmerchant_q7_active: tag rodmerchant_q7_active
+  rodmerchant_q8_active: tag rodmerchant_q8_active
+  rodmerchant_q9_active: tag rodmerchant_q9_active
+  rodmerchant_q10_active: tag rodmerchant_q10_active
+  rodmerchant_q11_active: tag rodmerchant_q11_active
+  rodmerchant_q12_active: tag rodmerchant_q12_active
+  rodmerchant_q1_has_items: item rodmerchant_fish_q1:4
+  rodmerchant_q2_has_items: item rodmerchant_fish_q2:6
+  rodmerchant_q3_has_items: item rodmerchant_fish_q3:3
+  rodmerchant_q4_has_items: item rodmerchant_fish_q4:4
+  rodmerchant_q5_has_items: item rodmerchant_fish_q5:3
+  rodmerchant_q6_has_items: item rodmerchant_fish_q6:2
+  rodmerchant_q7_has_items: item rodmerchant_fish_q7:3
+  rodmerchant_q8_has_items: item rodmerchant_fish_q8:3
+  rodmerchant_q9_has_items: item rodmerchant_fish_q9:2
+  rodmerchant_q10_has_items: item rodmerchant_fish_q10:5
+  rodmerchant_q11_has_items: item rodmerchant_fish_q11:5
+  rodmerchant_q12_has_items: item rodmerchant_fish_q12:4
+  rodmerchant_has_active_quest_v2: or rodmerchant_q1_active,rodmerchant_q2_active,rodmerchant_q3_active,rodmerchant_q4_active,rodmerchant_q5_active,rodmerchant_q6_active,rodmerchant_q7_active,rodmerchant_q8_active,rodmerchant_q9_active,rodmerchant_q10_active,rodmerchant_q11_active,rodmerchant_q12_active
+  rodmerchant_story_1_heard: tag rodmerchant_story_1_heard
+  rodmerchant_story_2_heard: tag rodmerchant_story_2_heard
+  rodmerchant_story_3_heard: tag rodmerchant_story_3_heard
+  rodmerchant_story_4_heard: tag rodmerchant_story_4_heard
+  rodmerchant_story_5_heard: tag rodmerchant_story_5_heard
+  rodmerchant_story_6_heard: tag rodmerchant_story_6_heard
+  rodmerchant_story_7_heard: tag rodmerchant_story_7_heard
+  rodmerchant_story_8_heard: tag rodmerchant_story_8_heard
+  rodmerchant_current_story_1: tag rodmerchant_current_story_1
+  rodmerchant_current_story_2: tag rodmerchant_current_story_2
+  rodmerchant_current_story_3: tag rodmerchant_current_story_3
+  rodmerchant_current_story_4: tag rodmerchant_current_story_4
+  rodmerchant_current_story_5: tag rodmerchant_current_story_5
+  rodmerchant_current_story_6: tag rodmerchant_current_story_6
+  rodmerchant_current_story_7: tag rodmerchant_current_story_7
+  rodmerchant_current_story_8: tag rodmerchant_current_story_8
+actions:
+  rodmerchant_friendship_gain: point rodmerchant_friendship 1 action:add conditions:!rodmerchant_friendship_100
+  rodmerchant_friendship_lose: point rodmerchant_friendship 1 action:subtract conditions:rodmerchant_friendship_1
+  rodmerchant_friendship_gain_msg: 'notify &6Fisher Reputation&7: &a+1 &fReputation
+    with the Fishing Rod Merchant. io:chat'
+  rodmerchant_friendship_lose_msg: 'notify &6Fisher Reputation&7: &c-1 &fReputation
+    with the Fishing Rod Merchant. io:chat'
+  rodmerchant_story_1_mark_heard: tag add rodmerchant_story_1_heard
+  rodmerchant_story_2_mark_heard: tag add rodmerchant_story_2_heard
+  rodmerchant_story_3_mark_heard: tag add rodmerchant_story_3_heard
+  rodmerchant_story_4_mark_heard: tag add rodmerchant_story_4_heard
+  rodmerchant_story_5_mark_heard: tag add rodmerchant_story_5_heard
+  rodmerchant_story_6_mark_heard: tag add rodmerchant_story_6_heard
+  rodmerchant_story_7_mark_heard: tag add rodmerchant_story_7_heard
+  rodmerchant_story_8_mark_heard: tag add rodmerchant_story_8_heard
+  rodmerchant_story_clear_selection: tag del rodmerchant_current_story_1,rodmerchant_current_story_2,rodmerchant_current_story_3,rodmerchant_current_story_4,rodmerchant_current_story_5,rodmerchant_current_story_6,rodmerchant_current_story_7,rodmerchant_current_story_8
+  rodmerchant_story_select_1: tag add rodmerchant_current_story_1
+  rodmerchant_story_select_2: tag add rodmerchant_current_story_2
+  rodmerchant_story_select_3: tag add rodmerchant_current_story_3
+  rodmerchant_story_select_4: tag add rodmerchant_current_story_4
+  rodmerchant_story_select_5: tag add rodmerchant_current_story_5
+  rodmerchant_story_select_6: tag add rodmerchant_current_story_6
+  rodmerchant_story_select_7: tag add rodmerchant_current_story_7
+  rodmerchant_story_select_8: tag add rodmerchant_current_story_8
+  rodmerchant_story_choose_random: folder rodmerchant_story_select_1,rodmerchant_story_select_2,rodmerchant_story_select_3,rodmerchant_story_select_4,rodmerchant_story_select_5,rodmerchant_story_select_6,rodmerchant_story_select_7,rodmerchant_story_select_8
+    random:1
+  rodmerchant_story_prepare_random: folder rodmerchant_story_clear_selection,rodmerchant_story_choose_random
+  rodmerchant_open_shop: command mi stations open shop-fishing-rod-1 %player%
+  rodmerchant_open_shop_1: command mi stations open shop-fishing-rod-2 %player%
+  rodmerchant_open_shop_2: command mi stations open shop-fishing-rod-3 %player%
+  rodmerchant_cleanup_legacy_cooldown: tag del rodmerchant_daily_cooldown
+  rodmerchant_start_daily_cooldown: objective start rodmerchant_daily_cooldown_timer
+  rodmerchant_assign_random_daily_quest: folder rodmerchant_daily_quest_1,rodmerchant_daily_quest_2,rodmerchant_daily_quest_3,rodmerchant_daily_quest_4,rodmerchant_daily_quest_5,rodmerchant_daily_quest_6,rodmerchant_daily_quest_7,rodmerchant_daily_quest_8,rodmerchant_daily_quest_9,rodmerchant_daily_quest_10,rodmerchant_daily_quest_11,rodmerchant_daily_quest_12
+    random:1
+  rodmerchant_clear_active_quests: tag del rodmerchant_q1_active,rodmerchant_q2_active,rodmerchant_q3_active,rodmerchant_q4_active,rodmerchant_q5_active,rodmerchant_q6_active,rodmerchant_q7_active,rodmerchant_q8_active,rodmerchant_q9_active,rodmerchant_q10_active,rodmerchant_q11_active,rodmerchant_q12_active
+  rodmerchant_q_title: notify Fisher ContractStarted io:title fadeIn:0 stay:60 fadeOut:0
+  rodmerchant_daily_quest_1: folder rodmerchant_clear_active_quests,rodmerchant_q1_tag,rodmerchant_q1_journal,rodmerchant_q_title,rodmerchant_q1_msg,rodmerchant_q1_start_timer
+  rodmerchant_q1_tag: tag add rodmerchant_q1_active
+  rodmerchant_q1_take_items: take rodmerchant_fish_q1:4
+  rodmerchant_q1_msg: 'notify &bFishing Rod Merchant&7: &fBring me &84 Tuna&f. Tuna
+    hold the current well: look in Ocean, Deep Ocean, Beach, or Stony Shore. Bring
+    me 4. io:chat'
+  rodmerchant_q1_remove: tag del rodmerchant_q1_active
+  rodmerchant_q1_complete_msg: 'notify &bFishing Rod Merchant&7: &fExcellent Tuna.
+    Their meat says a lot about the current. io:chat'
+  rodmerchant_q1_reward: command cmi money give %player% -s 400
+  rodmerchant_q1_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q1_complete: folder rodmerchant_q1_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q1_complete_title,rodmerchant_q1_complete_msg,rodmerchant_q1_remove,rodmerchant_q1_reward,rodmerchant_remove_journal_q1,rodmerchant_q1_stop_timer
+  rodmerchant_q1_journal: journal add rodmerchant_q1
+  rodmerchant_remove_journal_q1: journal delete rodmerchant_q1
+  rodmerchant_q1_start_timer: objective start rodmerchant_q1_timer
+  rodmerchant_q1_stop_timer: objective delete rodmerchant_q1_timer
+  rodmerchant_q1_expire: folder rodmerchant_q1_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q1
+  rodmerchant_daily_quest_2: folder rodmerchant_clear_active_quests,rodmerchant_q2_tag,rodmerchant_q2_journal,rodmerchant_q_title,rodmerchant_q2_msg,rodmerchant_q2_start_timer
+  rodmerchant_q2_tag: tag add rodmerchant_q2_active
+  rodmerchant_q2_take_items: take rodmerchant_fish_q2:6
+  rodmerchant_q2_msg: 'notify &bFishing Rod Merchant&7: &fBring me &86 Shrimp&f. Shrimp
+    are mostly found in Ocean, Deep Ocean, Beach, or Stony Shore. Bring me 6. io:chat'
+  rodmerchant_q2_remove: tag del rodmerchant_q2_active
+  rodmerchant_q2_complete_msg: 'notify &bFishing Rod Merchant&7: &fFresh Shrimp. Perfect
+    for testing small hooks and light lines. io:chat'
+  rodmerchant_q2_reward: command cmi money give %player% -s 400
+  rodmerchant_q2_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q2_complete: folder rodmerchant_q2_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q2_complete_title,rodmerchant_q2_complete_msg,rodmerchant_q2_remove,rodmerchant_q2_reward,rodmerchant_remove_journal_q2,rodmerchant_q2_stop_timer
+  rodmerchant_q2_journal: journal add rodmerchant_q2
+  rodmerchant_remove_journal_q2: journal delete rodmerchant_q2
+  rodmerchant_q2_start_timer: objective start rodmerchant_q2_timer
+  rodmerchant_q2_stop_timer: objective delete rodmerchant_q2_timer
+  rodmerchant_q2_expire: folder rodmerchant_q2_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q2
+  rodmerchant_daily_quest_3: folder rodmerchant_clear_active_quests,rodmerchant_q3_tag,rodmerchant_q3_journal,rodmerchant_q_title,rodmerchant_q3_msg,rodmerchant_q3_start_timer
+  rodmerchant_q3_tag: tag add rodmerchant_q3_active
+  rodmerchant_q3_take_items: take rodmerchant_fish_q3:3
+  rodmerchant_q3_msg: 'notify &bFishing Rod Merchant&7: &fBring me &83 Angelfish&f.
+    Angelfish live in Warm Ocean, Lukewarm Ocean, or Deep Lukewarm Ocean. Bring me
+    3. io:chat'
+  rodmerchant_q3_remove: tag del rodmerchant_q3_active
+  rodmerchant_q3_complete_msg: 'notify &bFishing Rod Merchant&7: &fBeautiful Angelfish.
+    Warm water and a careful hand, I see. io:chat'
+  rodmerchant_q3_reward: command cmi money give %player% -s 450
+  rodmerchant_q3_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q3_complete: folder rodmerchant_q3_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q3_complete_title,rodmerchant_q3_complete_msg,rodmerchant_q3_remove,rodmerchant_q3_reward,rodmerchant_remove_journal_q3,rodmerchant_q3_stop_timer
+  rodmerchant_q3_journal: journal add rodmerchant_q3
+  rodmerchant_remove_journal_q3: journal delete rodmerchant_q3
+  rodmerchant_q3_start_timer: objective start rodmerchant_q3_timer
+  rodmerchant_q3_stop_timer: objective delete rodmerchant_q3_timer
+  rodmerchant_q3_expire: folder rodmerchant_q3_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q3
+  rodmerchant_daily_quest_4: folder rodmerchant_clear_active_quests,rodmerchant_q4_tag,rodmerchant_q4_journal,rodmerchant_q_title,rodmerchant_q4_msg,rodmerchant_q4_start_timer
+  rodmerchant_q4_tag: tag add rodmerchant_q4_active
+  rodmerchant_q4_take_items: take rodmerchant_fish_q4:4
+  rodmerchant_q4_msg: 'notify &bFishing Rod Merchant&7: &fBring me &84 Catfish&f.
+    Catfish bite in River, Plains, Forest, Birch Forest, Flower Forest, Meadow, or
+    Sunflower Plains. Bring me 4. io:chat'
+  rodmerchant_q4_remove: tag del rodmerchant_q4_active
+  rodmerchant_q4_complete_msg: 'notify &bFishing Rod Merchant&7: &fSturdy Catfish.
+    These help me calibrate river rods. io:chat'
+  rodmerchant_q4_reward: command cmi money give %player% -s 400
+  rodmerchant_q4_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q4_complete: folder rodmerchant_q4_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q4_complete_title,rodmerchant_q4_complete_msg,rodmerchant_q4_remove,rodmerchant_q4_reward,rodmerchant_remove_journal_q4,rodmerchant_q4_stop_timer
+  rodmerchant_q4_journal: journal add rodmerchant_q4
+  rodmerchant_remove_journal_q4: journal delete rodmerchant_q4
+  rodmerchant_q4_start_timer: objective start rodmerchant_q4_timer
+  rodmerchant_q4_stop_timer: objective delete rodmerchant_q4_timer
+  rodmerchant_q4_expire: folder rodmerchant_q4_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q4
+  rodmerchant_daily_quest_5: folder rodmerchant_clear_active_quests,rodmerchant_q5_tag,rodmerchant_q5_journal,rodmerchant_q_title,rodmerchant_q5_msg,rodmerchant_q5_start_timer
+  rodmerchant_q5_tag: tag add rodmerchant_q5_active
+  rodmerchant_q5_take_items: take rodmerchant_fish_q5:3
+  rodmerchant_q5_msg: 'notify &bFishing Rod Merchant&7: &fBring me &83 Pike&f. Pike
+    can be caught in River, Plains, Forest, Birch Forest, Flower Forest, Meadow, or
+    Sunflower Plains. Bring me 3. io:chat'
+  rodmerchant_q5_remove: tag del rodmerchant_q5_active
+  rodmerchant_q5_complete_msg: 'notify &bFishing Rod Merchant&7: &fFine Pike. If these
+    do not snap the line, nothing will. io:chat'
+  rodmerchant_q5_reward: command cmi money give %player% -s 450
+  rodmerchant_q5_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q5_complete: folder rodmerchant_q5_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q5_complete_title,rodmerchant_q5_complete_msg,rodmerchant_q5_remove,rodmerchant_q5_reward,rodmerchant_remove_journal_q5,rodmerchant_q5_stop_timer
+  rodmerchant_q5_journal: journal add rodmerchant_q5
+  rodmerchant_remove_journal_q5: journal delete rodmerchant_q5
+  rodmerchant_q5_start_timer: objective start rodmerchant_q5_timer
+  rodmerchant_q5_stop_timer: objective delete rodmerchant_q5_timer
+  rodmerchant_q5_expire: folder rodmerchant_q5_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q5
+  rodmerchant_daily_quest_6: folder rodmerchant_clear_active_quests,rodmerchant_q6_tag,rodmerchant_q6_journal,rodmerchant_q_title,rodmerchant_q6_msg,rodmerchant_q6_start_timer
+  rodmerchant_q6_tag: tag add rodmerchant_q6_active
+  rodmerchant_q6_take_items: take rodmerchant_fish_q6:2
+  rodmerchant_q6_msg: 'notify &bFishing Rod Merchant&7: &fBring me &82 Scorpio Fish&f.
+    Scorpio Fish are found in Jungle, Bamboo Jungle, or Sparse Jungle. Bring me 2.
+    io:chat'
+  rodmerchant_q6_remove: tag del rodmerchant_q6_active
+  rodmerchant_q6_complete_msg: 'notify &bFishing Rod Merchant&7: &fReal Scorpio Fish.
+    Not everyone has the courage to catch them. io:chat'
+  rodmerchant_q6_reward: command cmi money give %player% -s 550
+  rodmerchant_q6_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q6_complete: folder rodmerchant_q6_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q6_complete_title,rodmerchant_q6_complete_msg,rodmerchant_q6_remove,rodmerchant_q6_reward,rodmerchant_remove_journal_q6,rodmerchant_q6_stop_timer
+  rodmerchant_q6_journal: journal add rodmerchant_q6
+  rodmerchant_remove_journal_q6: journal delete rodmerchant_q6
+  rodmerchant_q6_start_timer: objective start rodmerchant_q6_timer
+  rodmerchant_q6_stop_timer: objective delete rodmerchant_q6_timer
+  rodmerchant_q6_expire: folder rodmerchant_q6_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q6
+  rodmerchant_daily_quest_7: folder rodmerchant_clear_active_quests,rodmerchant_q7_tag,rodmerchant_q7_journal,rodmerchant_q_title,rodmerchant_q7_msg,rodmerchant_q7_start_timer
+  rodmerchant_q7_tag: tag add rodmerchant_q7_active
+  rodmerchant_q7_take_items: take rodmerchant_fish_q7:3
+  rodmerchant_q7_msg: 'notify &bFishing Rod Merchant&7: &fBring me &83 Glacierfish&f.
+    Glacierfish live in Cold Ocean, Frozen Ocean, Deep Cold Ocean, Deep Frozen Ocean,
+    Frozen River, or Snowy Beach. Bring me 3. io:chat'
+  rodmerchant_q7_remove: tag del rodmerchant_q7_active
+  rodmerchant_q7_complete_msg: 'notify &bFishing Rod Merchant&7: &fIce-cold Glacierfish.
+    A rod must stay flexible even in the cold. io:chat'
+  rodmerchant_q7_reward: command cmi money give %player% -s 550
+  rodmerchant_q7_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q7_complete: folder rodmerchant_q7_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q7_complete_title,rodmerchant_q7_complete_msg,rodmerchant_q7_remove,rodmerchant_q7_reward,rodmerchant_remove_journal_q7,rodmerchant_q7_stop_timer
+  rodmerchant_q7_journal: journal add rodmerchant_q7
+  rodmerchant_remove_journal_q7: journal delete rodmerchant_q7
+  rodmerchant_q7_start_timer: objective start rodmerchant_q7_timer
+  rodmerchant_q7_stop_timer: objective delete rodmerchant_q7_timer
+  rodmerchant_q7_expire: folder rodmerchant_q7_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q7
+  rodmerchant_daily_quest_8: folder rodmerchant_clear_active_quests,rodmerchant_q8_tag,rodmerchant_q8_journal,rodmerchant_q_title,rodmerchant_q8_msg,rodmerchant_q8_start_timer
+  rodmerchant_q8_tag: tag add rodmerchant_q8_active
+  rodmerchant_q8_take_items: take rodmerchant_fish_q8:3
+  rodmerchant_q8_msg: 'notify &bFishing Rod Merchant&7: &fBring me &83 Slimejack&f.
+    Slimejack are found in Swamp or Mangrove Swamp. Bring me 3. io:chat'
+  rodmerchant_q8_remove: tag del rodmerchant_q8_active
+  rodmerchant_q8_complete_msg: 'notify &bFishing Rod Merchant&7: &fSticky Slimejack.
+    Unpleasant, but very useful for testing knots. io:chat'
+  rodmerchant_q8_reward: command cmi money give %player% -s 500
+  rodmerchant_q8_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q8_complete: folder rodmerchant_q8_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q8_complete_title,rodmerchant_q8_complete_msg,rodmerchant_q8_remove,rodmerchant_q8_reward,rodmerchant_remove_journal_q8,rodmerchant_q8_stop_timer
+  rodmerchant_q8_journal: journal add rodmerchant_q8
+  rodmerchant_remove_journal_q8: journal delete rodmerchant_q8
+  rodmerchant_q8_start_timer: objective start rodmerchant_q8_timer
+  rodmerchant_q8_stop_timer: objective delete rodmerchant_q8_timer
+  rodmerchant_q8_expire: folder rodmerchant_q8_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q8
+  rodmerchant_daily_quest_9: folder rodmerchant_clear_active_quests,rodmerchant_q9_tag,rodmerchant_q9_journal,rodmerchant_q_title,rodmerchant_q9_msg,rodmerchant_q9_start_timer
+  rodmerchant_q9_tag: tag add rodmerchant_q9_active
+  rodmerchant_q9_take_items: take rodmerchant_fish_q9:2
+  rodmerchant_q9_msg: 'notify &bFishing Rod Merchant&7: &fBring me &82 Stonefish&f.
+    Stonefish can be caught in Lush Caves, Dripstone Caves, or Deep Dark. Bring me
+    2. io:chat'
+  rodmerchant_q9_remove: tag del rodmerchant_q9_active
+  rodmerchant_q9_complete_msg: 'notify &bFishing Rod Merchant&7: &fStonefish, hard
+    as rock. Excellent for testing reinforced hooks. io:chat'
+  rodmerchant_q9_reward: command cmi money give %player% -s 650
+  rodmerchant_q9_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q9_complete: folder rodmerchant_q9_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q9_complete_title,rodmerchant_q9_complete_msg,rodmerchant_q9_remove,rodmerchant_q9_reward,rodmerchant_remove_journal_q9,rodmerchant_q9_stop_timer
+  rodmerchant_q9_journal: journal add rodmerchant_q9
+  rodmerchant_remove_journal_q9: journal delete rodmerchant_q9
+  rodmerchant_q9_start_timer: objective start rodmerchant_q9_timer
+  rodmerchant_q9_stop_timer: objective delete rodmerchant_q9_timer
+  rodmerchant_q9_expire: folder rodmerchant_q9_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q9
+  rodmerchant_daily_quest_10: folder rodmerchant_clear_active_quests,rodmerchant_q10_tag,rodmerchant_q10_journal,rodmerchant_q_title,rodmerchant_q10_msg,rodmerchant_q10_start_timer
+  rodmerchant_q10_tag: tag add rodmerchant_q10_active
+  rodmerchant_q10_take_items: take rodmerchant_fish_q10:5
+  rodmerchant_q10_msg: 'notify &bFishing Rod Merchant&7: &fBring me &85 Herring&f.
+    Herring are found in Ocean, Deep Ocean, Beach, or Stony Shore. Bring me 5. io:chat'
+  rodmerchant_q10_remove: tag del rodmerchant_q10_active
+  rodmerchant_q10_complete_msg: 'notify &bFishing Rod Merchant&7: &fClean Herring.
+    A simple catch, but well done. io:chat'
+  rodmerchant_q10_reward: command cmi money give %player% -s 400
+  rodmerchant_q10_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q10_complete: folder rodmerchant_q10_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q10_complete_title,rodmerchant_q10_complete_msg,rodmerchant_q10_remove,rodmerchant_q10_reward,rodmerchant_remove_journal_q10,rodmerchant_q10_stop_timer
+  rodmerchant_q10_journal: journal add rodmerchant_q10
+  rodmerchant_remove_journal_q10: journal delete rodmerchant_q10
+  rodmerchant_q10_start_timer: objective start rodmerchant_q10_timer
+  rodmerchant_q10_stop_timer: objective delete rodmerchant_q10_timer
+  rodmerchant_q10_expire: folder rodmerchant_q10_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q10
+  rodmerchant_daily_quest_11: folder rodmerchant_clear_active_quests,rodmerchant_q11_tag,rodmerchant_q11_journal,rodmerchant_q_title,rodmerchant_q11_msg,rodmerchant_q11_start_timer
+  rodmerchant_q11_tag: tag add rodmerchant_q11_active
+  rodmerchant_q11_take_items: take rodmerchant_fish_q11:5
+  rodmerchant_q11_msg: 'notify &bFishing Rod Merchant&7: &fBring me &85 Perch&f. Perch
+    bite in River, Plains, Forest, Birch Forest, Flower Forest, Meadow, or Sunflower
+    Plains. Bring me 5. io:chat'
+  rodmerchant_q11_remove: tag del rodmerchant_q11_active
+  rodmerchant_q11_complete_msg: 'notify &bFishing Rod Merchant&7: &fPerch in excellent
+    condition. Calm waters teach patience. io:chat'
+  rodmerchant_q11_reward: command cmi money give %player% -s 400
+  rodmerchant_q11_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q11_complete: folder rodmerchant_q11_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q11_complete_title,rodmerchant_q11_complete_msg,rodmerchant_q11_remove,rodmerchant_q11_reward,rodmerchant_remove_journal_q11,rodmerchant_q11_stop_timer
+  rodmerchant_q11_journal: journal add rodmerchant_q11
+  rodmerchant_remove_journal_q11: journal delete rodmerchant_q11
+  rodmerchant_q11_start_timer: objective start rodmerchant_q11_timer
+  rodmerchant_q11_stop_timer: objective delete rodmerchant_q11_timer
+  rodmerchant_q11_expire: folder rodmerchant_q11_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q11
+  rodmerchant_daily_quest_12: folder rodmerchant_clear_active_quests,rodmerchant_q12_tag,rodmerchant_q12_journal,rodmerchant_q_title,rodmerchant_q12_msg,rodmerchant_q12_start_timer
+  rodmerchant_q12_tag: tag add rodmerchant_q12_active
+  rodmerchant_q12_take_items: take rodmerchant_fish_q12:4
+  rodmerchant_q12_msg: 'notify &bFishing Rod Merchant&7: &fBring me &84 Greengill&f.
+    Greengill live in Swamp or Mangrove Swamp. Bring me 4. io:chat'
+  rodmerchant_q12_remove: tag del rodmerchant_q12_active
+  rodmerchant_q12_complete_msg: 'notify &bFishing Rod Merchant&7: &fPerfect Greengill.
+    Swamps reward those who know how to wait. io:chat'
+  rodmerchant_q12_reward: command cmi money give %player% -s 500
+  rodmerchant_q12_complete_title: notify Contract CompleteThe merchant is satisfied
+    io:title fadeIn:0 stay:40 fadeOut:0
+  rodmerchant_q12_complete: folder rodmerchant_q12_take_items,rodmerchant_friendship_gain,rodmerchant_friendship_gain_msg,rodmerchant_q12_complete_title,rodmerchant_q12_complete_msg,rodmerchant_q12_remove,rodmerchant_q12_reward,rodmerchant_remove_journal_q12,rodmerchant_q12_stop_timer
+  rodmerchant_q12_journal: journal add rodmerchant_q12
+  rodmerchant_remove_journal_q12: journal delete rodmerchant_q12
+  rodmerchant_q12_start_timer: objective start rodmerchant_q12_timer
+  rodmerchant_q12_stop_timer: objective delete rodmerchant_q12_timer
+  rodmerchant_q12_expire: folder rodmerchant_q12_remove,rodmerchant_friendship_lose,rodmerchant_friendship_lose_msg,rodmerchant_remove_journal_q12
+objectives:
+  rodmerchant_daily_cooldown_timer: delay 1320 events:rodmerchant_cleanup_legacy_cooldown
+  rodmerchant_q1_timer: delay 1320 events:rodmerchant_q1_expire
+  rodmerchant_q2_timer: delay 1320 events:rodmerchant_q2_expire
+  rodmerchant_q3_timer: delay 1320 events:rodmerchant_q3_expire
+  rodmerchant_q4_timer: delay 1320 events:rodmerchant_q4_expire
+  rodmerchant_q5_timer: delay 1320 events:rodmerchant_q5_expire
+  rodmerchant_q6_timer: delay 1320 events:rodmerchant_q6_expire
+  rodmerchant_q7_timer: delay 1320 events:rodmerchant_q7_expire
+  rodmerchant_q8_timer: delay 1320 events:rodmerchant_q8_expire
+  rodmerchant_q9_timer: delay 1320 events:rodmerchant_q9_expire
+  rodmerchant_q10_timer: delay 1320 events:rodmerchant_q10_expire
+  rodmerchant_q11_timer: delay 1320 events:rodmerchant_q11_expire
+  rodmerchant_q12_timer: delay 1320 events:rodmerchant_q12_expire
+npc_holograms:
+  rodmerchant_available:
+    lines:
+    - '&d&l❗'
+    npcs: '81'
+    conditions: '!rodmerchant_daily_cooldown_v2,!rodmerchant_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  rodmerchant_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in corso'
+    npcs: '81'
+    conditions: rodmerchant_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+npc_conversations:
+  '81': rodmerchant_conv
+conversations:
+  rodmerchant_conv:
+    quester: Fishing Rod Merchant
+    first: rodmerchant_start_close,rodmerchant_start_friendly,rodmerchant_start
+    stop: true
+    NPC_options:
+      rodmerchant_start_close:
+        text: Ah, my favorite fisher. The best rods are not sold to the impatient,
+          but to those who know how to wait for the right bite. \n\nDo you want to
+          buy, work, or hear a water tale?
+        conditions: rodmerchant_friendship_61
+        pointers: pl_open_shop_2,pl_talk_little,pl_about_rodmerchant,pl_just_hi
+      rodmerchant_start_friendly:
+        text: Welcome back. I just finished checking hooks, lines, and reels. \n\nTell
+          me what you need.
+        conditions: rodmerchant_friendship_31,!rodmerchant_friendship_61
+        pointers: pl_open_shop_1,pl_talk_little,pl_about_rodmerchant,pl_just_hi
+      rodmerchant_start:
+        text: Welcome. I sell fishing rods, reinforced lines, and a few tools for
+          those who are not afraid to wait by the water.
+        conditions: '!rodmerchant_friendship_31'
+        pointers: pl_open_shop,pl_talk_little,pl_about_rodmerchant,pl_just_hi
+      rodmerchant_shop:
+        text: Of course. I will open the rod counter for you.
+        actions: rodmerchant_open_shop
+        pointers: pl_end_conversation
+      rodmerchant_shop_1:
+        text: Of course. I will open the rod counter for you.
+        actions: rodmerchant_open_shop_1
+        pointers: pl_end_conversation
+      rodmerchant_shop_2:
+        text: Of course. I will open the reserved shelf for you.
+        actions: rodmerchant_open_shop_2
+        pointers: pl_end_conversation
+      rodmerchant_talk_available:
+        text: I need common fish to test rods, hooks, and lines. Every fish tells
+          me something about a different biome. \n\nWill you accept a contract?
+        conditions: '!rodmerchant_daily_cooldown_v2,!rodmerchant_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      rodmerchant_talk_cooldown:
+        text: 'We have already done business recently. Come back later: even a good
+          rod needs rest.'
+        conditions: rodmerchant_daily_cooldown_v2,!rodmerchant_has_active_quest_v2
+        pointers: pl_end_conversation
+      rodmerchant_talk_active:
+        text: You already have one of my contracts open. Bring the requested fish
+          and we will settle the account.
+        conditions: rodmerchant_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_end_conversation
+      rodmerchant_turnin_q1_ready:
+        text: Excellent Tuna. Their meat says a lot about the current.
+        conditions: rodmerchant_q1_active,rodmerchant_q1_has_items
+        actions: rodmerchant_q1_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q1_missing:
+        text: Not enough. I asked you for 4 Tuna. You can fish them in Ocean, Deep
+          Ocean, Beach, or Stony Shore.
+        conditions: rodmerchant_q1_active,!rodmerchant_q1_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q2_ready:
+        text: Fresh Shrimp. Perfect for testing small hooks and light lines.
+        conditions: rodmerchant_q2_active,rodmerchant_q2_has_items
+        actions: rodmerchant_q2_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q2_missing:
+        text: Not enough. I asked you for 6 Shrimp. You can fish them in Ocean, Deep
+          Ocean, Beach, or Stony Shore.
+        conditions: rodmerchant_q2_active,!rodmerchant_q2_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q3_ready:
+        text: Beautiful Angelfish. Warm water and a careful hand, I see.
+        conditions: rodmerchant_q3_active,rodmerchant_q3_has_items
+        actions: rodmerchant_q3_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q3_missing:
+        text: Not enough. I asked you for 3 Angelfish. You can fish them in Warm Ocean,
+          Lukewarm Ocean, or Deep Lukewarm Ocean.
+        conditions: rodmerchant_q3_active,!rodmerchant_q3_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q4_ready:
+        text: Sturdy Catfish. These help me calibrate river rods.
+        conditions: rodmerchant_q4_active,rodmerchant_q4_has_items
+        actions: rodmerchant_q4_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q4_missing:
+        text: Not enough. I asked you for 4 Catfish. You can fish them in River, Plains,
+          Forest, Birch Forest, Flower Forest, Meadow, or Sunflower Plains.
+        conditions: rodmerchant_q4_active,!rodmerchant_q4_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q5_ready:
+        text: Fine Pike. If these do not snap the line, nothing will.
+        conditions: rodmerchant_q5_active,rodmerchant_q5_has_items
+        actions: rodmerchant_q5_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q5_missing:
+        text: Not enough. I asked you for 3 Pike. You can fish them in River, Plains,
+          Forest, Birch Forest, Flower Forest, Meadow, or Sunflower Plains.
+        conditions: rodmerchant_q5_active,!rodmerchant_q5_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q6_ready:
+        text: Real Scorpio Fish. Not everyone has the courage to catch them.
+        conditions: rodmerchant_q6_active,rodmerchant_q6_has_items
+        actions: rodmerchant_q6_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q6_missing:
+        text: Not enough. I asked you for 2 Scorpio Fish. You can fish them in Jungle,
+          Bamboo Jungle, or Sparse Jungle.
+        conditions: rodmerchant_q6_active,!rodmerchant_q6_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q7_ready:
+        text: Ice-cold Glacierfish. A rod must stay flexible even in the cold.
+        conditions: rodmerchant_q7_active,rodmerchant_q7_has_items
+        actions: rodmerchant_q7_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q7_missing:
+        text: Not enough. I asked you for 3 Glacierfish. You can fish them in Cold
+          Ocean, Frozen Ocean, Deep Cold Ocean, Deep Frozen Ocean, Frozen River, or
+          Snowy Beach.
+        conditions: rodmerchant_q7_active,!rodmerchant_q7_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q8_ready:
+        text: Sticky Slimejack. Unpleasant, but very useful for testing knots.
+        conditions: rodmerchant_q8_active,rodmerchant_q8_has_items
+        actions: rodmerchant_q8_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q8_missing:
+        text: Not enough. I asked you for 3 Slimejack. You can fish them in Swamp
+          or Mangrove Swamp.
+        conditions: rodmerchant_q8_active,!rodmerchant_q8_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q9_ready:
+        text: Stonefish, hard as rock. Excellent for testing reinforced hooks.
+        conditions: rodmerchant_q9_active,rodmerchant_q9_has_items
+        actions: rodmerchant_q9_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q9_missing:
+        text: Not enough. I asked you for 2 Stonefish. You can fish them in Lush Caves,
+          Dripstone Caves, or Deep Dark.
+        conditions: rodmerchant_q9_active,!rodmerchant_q9_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q10_ready:
+        text: Clean Herring. A simple catch, but well done.
+        conditions: rodmerchant_q10_active,rodmerchant_q10_has_items
+        actions: rodmerchant_q10_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q10_missing:
+        text: Not enough. I asked you for 5 Herring. You can fish them in Ocean, Deep
+          Ocean, Beach, or Stony Shore.
+        conditions: rodmerchant_q10_active,!rodmerchant_q10_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q11_ready:
+        text: Perch in excellent condition. Calm waters teach patience.
+        conditions: rodmerchant_q11_active,rodmerchant_q11_has_items
+        actions: rodmerchant_q11_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q11_missing:
+        text: Not enough. I asked you for 5 Perch. You can fish them in River, Plains,
+          Forest, Birch Forest, Flower Forest, Meadow, or Sunflower Plains.
+        conditions: rodmerchant_q11_active,!rodmerchant_q11_has_items
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q12_ready:
+        text: Perfect Greengill. Swamps reward those who know how to wait.
+        conditions: rodmerchant_q12_active,rodmerchant_q12_has_items
+        actions: rodmerchant_q12_complete
+        pointers: pl_end_conversation
+      rodmerchant_turnin_q12_missing:
+        text: Not enough. I asked you for 4 Greengill. You can fish them in Swamp
+          or Mangrove Swamp.
+        conditions: rodmerchant_q12_active,!rodmerchant_q12_has_items
+        pointers: pl_end_conversation
+      rodmerchant_about:
+        text: I build and sell fishing rods. Not simple sticks with string, but instruments
+          for reading the water. \n\nA good rod feels the current, holds the weight,
+          and forgives a mistake only if the fisher learns quickly. \n\nIf you truly
+          want to fish, you must respect water, time, and silence.
+        pointers: pl_more_story,pl_end_conversation
+      rodmerchant_story_1:
+        text: Once, I fished for three hours without catching anything. Then I realized
+          the fish was watching me.
+        conditions: rodmerchant_current_story_1
+        actions: rodmerchant_story_1_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_story_2:
+        text: A rod that is too stiff breaks. One that is too soft cannot command
+          the line. The same is true for people.
+        conditions: rodmerchant_current_story_2
+        actions: rodmerchant_story_2_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_story_3:
+        text: The best hook I ever sold came back with a sea monster tooth still attached.
+        conditions: rodmerchant_current_story_3
+        actions: rodmerchant_story_3_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_story_4:
+        text: A customer wanted a golden rod. I sold him patience and good line. He
+          caught more fish than the noble beside him.
+        conditions: rodmerchant_current_story_4
+        actions: rodmerchant_story_4_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_story_5:
+        text: 'When the water is calm, do not trust it: it often means something is
+          moving underneath.'
+        conditions: rodmerchant_current_story_5
+        actions: rodmerchant_story_5_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_story_6:
+        text: Noisy reels scare small fish. Silent ones attract big trouble.
+        conditions: rodmerchant_current_story_6
+        actions: rodmerchant_story_6_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_story_7:
+        text: I once saw a line cut an apprentice's fingers. Since then, I teach the
+          knot before the fishing.
+        conditions: rodmerchant_current_story_7
+        actions: rodmerchant_story_7_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_story_8:
+        text: Legendary rods are not born legendary. They become legendary when the
+          fisher refuses to give up.
+        conditions: rodmerchant_current_story_8
+        actions: rodmerchant_story_8_mark_heard,rodmerchant_story_clear_selection
+        pointers: pl_end_conversation
+      rodmerchant_accept:
+        text: Good. Let us see what I need today.
+        actions: rodmerchant_assign_random_daily_quest,rodmerchant_start_daily_cooldown
+        pointers: pl_show_assigned_quest
+      rodmerchant_assigned_q1:
+        text: 'Bring me 4 Tuna. Tuna hold the current well: look in Ocean, Deep Ocean,
+          Beach, or Stony Shore. Bring me 4.'
+        conditions: rodmerchant_q1_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q2:
+        text: Bring me 6 Shrimp. Shrimp are mostly found in Ocean, Deep Ocean, Beach,
+          or Stony Shore. Bring me 6.
+        conditions: rodmerchant_q2_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q3:
+        text: Bring me 3 Angelfish. Angelfish live in Warm Ocean, Lukewarm Ocean,
+          or Deep Lukewarm Ocean. Bring me 3.
+        conditions: rodmerchant_q3_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q4:
+        text: Bring me 4 Catfish. Catfish bite in River, Plains, Forest, Birch Forest,
+          Flower Forest, Meadow, or Sunflower Plains. Bring me 4.
+        conditions: rodmerchant_q4_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q5:
+        text: Bring me 3 Pike. Pike can be caught in River, Plains, Forest, Birch
+          Forest, Flower Forest, Meadow, or Sunflower Plains. Bring me 3.
+        conditions: rodmerchant_q5_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q6:
+        text: Bring me 2 Scorpio Fish. Scorpio Fish are found in Jungle, Bamboo Jungle,
+          or Sparse Jungle. Bring me 2.
+        conditions: rodmerchant_q6_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q7:
+        text: Bring me 3 Glacierfish. Glacierfish live in Cold Ocean, Frozen Ocean,
+          Deep Cold Ocean, Deep Frozen Ocean, Frozen River, or Snowy Beach. Bring
+          me 3.
+        conditions: rodmerchant_q7_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q8:
+        text: Bring me 3 Slimejack. Slimejack are found in Swamp or Mangrove Swamp.
+          Bring me 3.
+        conditions: rodmerchant_q8_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q9:
+        text: Bring me 2 Stonefish. Stonefish can be caught in Lush Caves, Dripstone
+          Caves, or Deep Dark. Bring me 2.
+        conditions: rodmerchant_q9_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q10:
+        text: Bring me 5 Herring. Herring are found in Ocean, Deep Ocean, Beach, or
+          Stony Shore. Bring me 5.
+        conditions: rodmerchant_q10_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q11:
+        text: Bring me 5 Perch. Perch bite in River, Plains, Forest, Birch Forest,
+          Flower Forest, Meadow, or Sunflower Plains. Bring me 5.
+        conditions: rodmerchant_q11_active
+        pointers: pl_end_conversation
+      rodmerchant_assigned_q12:
+        text: Bring me 4 Greengill. Greengill live in Swamp or Mangrove Swamp. Bring
+          me 4.
+        conditions: rodmerchant_q12_active
+        pointers: pl_end_conversation
+      rodmerchant_refuse:
+        text: All right. The water waits, and so do I.
+        pointers: pl_end_conversation
+      rodmerchant_goodbye:
+        text: May your line stay tight and your rod never break.
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the fishing rod shop.
+        pointers: rodmerchant_shop
+      pl_open_shop_1:
+        text: Open the fishing rod shop.
+        pointers: rodmerchant_shop_1
+      pl_open_shop_2:
+        text: Open the fishing rod shop.
+        pointers: rodmerchant_shop_2
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: rodmerchant_talk_active,rodmerchant_talk_available,rodmerchant_talk_cooldown
+      pl_about_rodmerchant:
+        text: Tell me about yourself.
+        pointers: rodmerchant_about
+      pl_more_story:
+        text: Tell me a story.
+        actions: rodmerchant_story_prepare_random
+        pointers: rodmerchant_story_1,rodmerchant_story_2,rodmerchant_story_3,rodmerchant_story_4,rodmerchant_story_5,rodmerchant_story_6,rodmerchant_story_7,rodmerchant_story_8
+      pl_accept_random_quest:
+        text: I accept the contract.
+        pointers: rodmerchant_accept
+      pl_refuse_random_quest:
+        text: Not now.
+        pointers: rodmerchant_refuse
+      pl_turn_in_materials:
+        text: I brought the fish.
+        pointers: rodmerchant_turnin_q1_ready,rodmerchant_turnin_q2_ready,rodmerchant_turnin_q3_ready,rodmerchant_turnin_q4_ready,rodmerchant_turnin_q5_ready,rodmerchant_turnin_q6_ready,rodmerchant_turnin_q7_ready,rodmerchant_turnin_q8_ready,rodmerchant_turnin_q9_ready,rodmerchant_turnin_q10_ready,rodmerchant_turnin_q11_ready,rodmerchant_turnin_q12_ready,rodmerchant_turnin_q1_missing,rodmerchant_turnin_q2_missing,rodmerchant_turnin_q3_missing,rodmerchant_turnin_q4_missing,rodmerchant_turnin_q5_missing,rodmerchant_turnin_q6_missing,rodmerchant_turnin_q7_missing,rodmerchant_turnin_q8_missing,rodmerchant_turnin_q9_missing,rodmerchant_turnin_q10_missing,rodmerchant_turnin_q11_missing,rodmerchant_turnin_q12_missing
+      pl_just_hi:
+        text: Nothing, I am just looking.
+        pointers: rodmerchant_goodbye
+      pl_end_conversation:
+        text: Close conversation
+      pl_show_assigned_quest:
+        text: Which fish do you need?
+        pointers: rodmerchant_assigned_q1,rodmerchant_assigned_q2,rodmerchant_assigned_q3,rodmerchant_assigned_q4,rodmerchant_assigned_q5,rodmerchant_assigned_q6,rodmerchant_assigned_q7,rodmerchant_assigned_q8,rodmerchant_assigned_q9,rodmerchant_assigned_q10,rodmerchant_assigned_q11,rodmerchant_assigned_q12

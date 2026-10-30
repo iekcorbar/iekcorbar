@@ -1,0 +1,8 @@
+conditions:
+  rank_system_started: "tag rank_system_started"
+
+  has_rank_1: "tag rank_1"
+  has_rank_2: "tag rank_2"
+  has_rank_3: "tag rank_3"
+  has_rank_4: "tag rank_4"
+  has_rank_5: "tag rank_5"

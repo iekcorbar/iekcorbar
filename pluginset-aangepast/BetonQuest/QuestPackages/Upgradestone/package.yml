@@ -1,0 +1,800 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+npcs:
+  '96': citizens 96
+items:
+  aster_ender_pearl: simple ender_pearl
+  aster_shulker_shell: simple shulker_shell
+  aster_nautilus_shell: simple nautilus_shell
+  aster_heart_of_the_sea: simple heart_of_the_sea
+  aster_phantom_membrane: simple phantom_membrane
+  aster_echo_shard: simple echo_shard
+  aster_blaze_rod: simple blaze_rod
+  aster_armadillo_scute: simple armadillo_scute
+  aster_amethyst_shard: simple amethyst_shard
+  aster_glow_ink_sac: simple glow_ink_sac
+  aster_chorus_fruit: simple chorus_fruit
+journal:
+  aster_q1:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &88 Ender Pearls&f. Ender pearls retain the tension of folded space. I use them to stabilize mobile upgrade cores.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &88 Ender Pearls&f. Ender pearls retain the tension of folded space. I use them to stabilize mobile upgrade cores.
+  aster_q2:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &82 Shulker Shells&f. Shulker shells hold enchantments under pressure without cracking. Perfect for reinforced socket casings.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &82 Shulker Shells&f. Shulker shells hold enchantments under pressure without cracking. Perfect for reinforced socket casings.
+  aster_q3:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &84 Nautilus Shells&f. Nautilus shells carry a clean spiral resonance, ideal for channeling defensive effects.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &84 Nautilus Shells&f. Nautilus shells carry a clean spiral resonance, ideal for channeling defensive effects.
+  aster_q4:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &81 Heart of the Sea&f. A Heart of the Sea can anchor a powerful aquatic catalyst without losing its charge.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &81 Heart of the Sea&f. A Heart of the Sea can anchor a powerful aquatic catalyst without losing its charge.
+  aster_q5:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &86 Phantom Membranes&f. Phantom membranes are light, elastic, and unusually receptive to aerial enchantments.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &86 Phantom Membranes&f. Phantom membranes are light, elastic, and unusually receptive to aerial enchantments.
+  aster_q6:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &82 Echo Shards&f. Echo shards remember vibrations long after the source is gone. They are invaluable for reactive upgrades.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &82 Echo Shards&f. Echo shards remember vibrations long after the source is gone. They are invaluable for reactive upgrades.
+  aster_q7:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &88 Blaze Rods&f. Blaze rods provide stable heat and concentrated elemental power for offensive cores.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &88 Blaze Rods&f. Blaze rods provide stable heat and concentrated elemental power for offensive cores.
+  aster_q8:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &812 Armadillo Scutes&f. Armadillo scutes make excellent flexible reinforcement for armor inserts and impact dampeners.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &812 Armadillo Scutes&f. Armadillo scutes make excellent flexible reinforcement for armor inserts and impact dampeners.
+  aster_q9:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &816 Amethyst Shards&f. Amethyst shards are reliable conductors for magical frequency and socket alignment.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &816 Amethyst Shards&f. Amethyst shards are reliable conductors for magical frequency and socket alignment.
+  aster_q10:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &810 Glow Ink Sacs&f. Glow ink reveals hidden runes and keeps delicate inscriptions visible during infusion.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &810 Glow Ink Sacs&f. Glow ink reveals hidden runes and keeps delicate inscriptions visible during infusion.
+  aster_q11:
+    en: |-
+      &fAster's Component Request
+
+      &7Bring me &816 Chorus Fruits&f. Chorus fruit carries unstable spatial energy. Properly refined, it creates unpredictable but potent upgrades.
+    en-US: |-
+      &fAster's Component Request
+
+      &7Bring me &816 Chorus Fruits&f. Chorus fruit carries unstable spatial energy. Properly refined, it creates unpredictable but potent upgrades.
+conditions:
+  aster_friendship_1: point aster_friendship 1
+  aster_friendship_31: point aster_friendship 31
+  aster_friendship_61: point aster_friendship 61
+  aster_friendship_100: point aster_friendship 100
+  aster_daily_cooldown_v2: objective aster_daily_cooldown_timer
+  aster_has_active_quest_v2: or aster_q1_active,aster_q2_active,aster_q3_active,aster_q4_active,aster_q5_active,aster_q6_active,aster_q7_active,aster_q8_active,aster_q9_active,aster_q10_active,aster_q11_active
+  aster_story_1_heard: tag aster_story_1_heard
+  aster_story_2_heard: tag aster_story_2_heard
+  aster_story_3_heard: tag aster_story_3_heard
+  aster_story_4_heard: tag aster_story_4_heard
+  aster_story_5_heard: tag aster_story_5_heard
+  aster_story_6_heard: tag aster_story_6_heard
+  aster_story_7_heard: tag aster_story_7_heard
+  aster_story_8_heard: tag aster_story_8_heard
+  aster_life_book_received: tag aster_life_book_received
+  aster_current_story_1: tag aster_current_story_1
+  aster_current_story_2: tag aster_current_story_2
+  aster_current_story_3: tag aster_current_story_3
+  aster_current_story_4: tag aster_current_story_4
+  aster_current_story_5: tag aster_current_story_5
+  aster_current_story_6: tag aster_current_story_6
+  aster_current_story_7: tag aster_current_story_7
+  aster_current_story_8: tag aster_current_story_8
+  aster_q1_active: tag aster_q1_active
+  aster_q1_has_items: item aster_ender_pearl:8
+  aster_q2_active: tag aster_q2_active
+  aster_q2_has_items: item aster_shulker_shell:2
+  aster_q3_active: tag aster_q3_active
+  aster_q3_has_items: item aster_nautilus_shell:4
+  aster_q4_active: tag aster_q4_active
+  aster_q4_has_items: item aster_heart_of_the_sea:1
+  aster_q5_active: tag aster_q5_active
+  aster_q5_has_items: item aster_phantom_membrane:6
+  aster_q6_active: tag aster_q6_active
+  aster_q6_has_items: item aster_echo_shard:2
+  aster_q7_active: tag aster_q7_active
+  aster_q7_has_items: item aster_blaze_rod:8
+  aster_q8_active: tag aster_q8_active
+  aster_q8_has_items: item aster_armadillo_scute:12
+  aster_q9_active: tag aster_q9_active
+  aster_q9_has_items: item aster_amethyst_shard:16
+  aster_q10_active: tag aster_q10_active
+  aster_q10_has_items: item aster_glow_ink_sac:10
+  aster_q11_active: tag aster_q11_active
+  aster_q11_has_items: item aster_chorus_fruit:16
+actions:
+  aster_friendship_gain: point aster_friendship 1 action:add conditions:!aster_friendship_100
+  aster_friendship_lose: point aster_friendship 1 action:subtract conditions:aster_friendship_1
+  aster_friendship_gain_msg: 'notify &6Aster Reputation&7: &a+1 &fReputation with
+    Aster. io:chat'
+  aster_friendship_lose_msg: 'notify &6Aster Reputation&7: &c-1 &fReputation with
+    Aster. io:chat'
+  aster_story_1_mark_heard: tag add aster_story_1_heard
+  aster_story_2_mark_heard: tag add aster_story_2_heard
+  aster_story_3_mark_heard: tag add aster_story_3_heard
+  aster_story_4_mark_heard: tag add aster_story_4_heard
+  aster_story_5_mark_heard: tag add aster_story_5_heard
+  aster_story_6_mark_heard: tag add aster_story_6_heard
+  aster_story_7_mark_heard: tag add aster_story_7_heard
+  aster_story_8_mark_heard: tag add aster_story_8_heard
+  aster_story_clear_selection: tag del aster_current_story_1,aster_current_story_2,aster_current_story_3,aster_current_story_4,aster_current_story_5,aster_current_story_6,aster_current_story_7,aster_current_story_8
+  aster_story_select_1: tag add aster_current_story_1
+  aster_story_select_2: tag add aster_current_story_2
+  aster_story_select_3: tag add aster_current_story_3
+  aster_story_select_4: tag add aster_current_story_4
+  aster_story_select_5: tag add aster_current_story_5
+  aster_story_select_6: tag add aster_current_story_6
+  aster_story_select_7: tag add aster_current_story_7
+  aster_story_select_8: tag add aster_current_story_8
+  aster_story_choose_random: folder aster_story_select_1,aster_story_select_2,aster_story_select_3,aster_story_select_4,aster_story_select_5,aster_story_select_6,aster_story_select_7,aster_story_select_8
+    random:1
+  aster_story_prepare_random: folder aster_story_clear_selection,aster_story_choose_random
+  aster_life_book_received_tag: tag add aster_life_book_received
+  aster_life_book_reward: 'command give %player% minecraft:written_book[written_book_content={title:"The
+    Resonance Codex",author:"Aster Veyl",pages:[''{"text":"The Resonance Codex\n\nI
+    once believed an upgrade was merely a stronger edge or thicker plate. Then I heard
+    an amethyst shard sing beside an echo shard."}'',''{"text":"Every material carries
+    a memory: fire in blaze rods, distance in ender pearls, pressure in shulker shells,
+    and the sea in a heart torn from its depths."}'',''{"text":"Sockets are not holes.
+    They are agreements between an item and a foreign power. Force the bond, and both
+    may break."}'',''{"text":"The finest enhancement does not replace the weapon or
+    armor. It reveals what the item was always capable of becoming."}'']}] 1'
+  aster_life_book_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &fYou have
+    heard every lesson I chose to preserve. Take this codex; it contains the principles
+    behind my finest work. io:chat'
+  aster_life_book_reward_check: folder aster_life_book_reward,aster_life_book_received_tag,aster_life_book_msg
+    conditions:aster_story_1_heard,aster_story_2_heard,aster_story_3_heard,aster_story_4_heard,aster_story_5_heard,aster_story_6_heard,aster_story_7_heard,aster_story_8_heard,!aster_life_book_received
+  aster_open_shop: command mi stations open shop-specialupgrade-1 %player%
+  aster_open_shop_1: command mi stations open shop-specialupgrade-2 %player%
+  aster_open_shop_2: command mi stations open shop-specialupgrade-3 %player%
+  aster_cleanup_legacy_cooldown: tag del aster_daily_cooldown
+  aster_start_daily_cooldown: objective start aster_daily_cooldown_timer
+  aster_assign_random_daily_quest: folder aster_daily_quest_1,aster_daily_quest_2,aster_daily_quest_3,aster_daily_quest_4,aster_daily_quest_5,aster_daily_quest_6,aster_daily_quest_7,aster_daily_quest_8,aster_daily_quest_9,aster_daily_quest_10,aster_daily_quest_11
+    random:1
+  aster_clear_active_quests: tag del aster_q1_active,aster_q2_active,aster_q3_active,aster_q4_active,aster_q5_active,aster_q6_active,aster_q7_active,aster_q8_active,aster_q9_active,aster_q10_active,aster_q11_active
+  aster_q_title: notify Resonance Contract Start io:title fadeIn:0 stay:60 fadeOut:0
+  aster_daily_quest_1: folder aster_clear_active_quests,aster_q1_tag,aster_q1_journal,aster_q_title,aster_q1_msg,aster_q1_start_timer
+  aster_q1_tag: tag add aster_q1_active
+  aster_q1_take_items: take aster_ender_pearl:8
+  aster_q1_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &88 Ender
+    Pearls&f. Ender pearls retain the tension of folded space. I use them to stabilize
+    mobile upgrade cores. io:chat'
+  aster_q1_remove: tag del aster_q1_active
+  aster_q1_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q1_reward: command cmi money give %player% -s 300
+  aster_q1_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q1_complete: folder aster_q1_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q1_complete_title,aster_q1_complete_msg,aster_q1_remove,aster_q1_reward,aster_remove_journal_q1,aster_q1_stop_timer
+  aster_q1_journal: journal add aster_q1
+  aster_remove_journal_q1: journal delete aster_q1
+  aster_q1_start_timer: objective start aster_q1_timer
+  aster_q1_stop_timer: objective delete aster_q1_timer
+  aster_q1_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q1_expire: folder aster_q1_remove,aster_remove_journal_q1,aster_friendship_lose,aster_friendship_lose_msg,aster_q1_expire_msg
+  aster_daily_quest_2: folder aster_clear_active_quests,aster_q2_tag,aster_q2_journal,aster_q_title,aster_q2_msg,aster_q2_start_timer
+  aster_q2_tag: tag add aster_q2_active
+  aster_q2_take_items: take aster_shulker_shell:2
+  aster_q2_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &82 Shulker
+    Shells&f. Shulker shells hold enchantments under pressure without cracking. Perfect
+    for reinforced socket casings. io:chat'
+  aster_q2_remove: tag del aster_q2_active
+  aster_q2_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q2_reward: command cmi money give %player% -s 450
+  aster_q2_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q2_complete: folder aster_q2_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q2_complete_title,aster_q2_complete_msg,aster_q2_remove,aster_q2_reward,aster_remove_journal_q2,aster_q2_stop_timer
+  aster_q2_journal: journal add aster_q2
+  aster_remove_journal_q2: journal delete aster_q2
+  aster_q2_start_timer: objective start aster_q2_timer
+  aster_q2_stop_timer: objective delete aster_q2_timer
+  aster_q2_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q2_expire: folder aster_q2_remove,aster_remove_journal_q2,aster_friendship_lose,aster_friendship_lose_msg,aster_q2_expire_msg
+  aster_daily_quest_3: folder aster_clear_active_quests,aster_q3_tag,aster_q3_journal,aster_q_title,aster_q3_msg,aster_q3_start_timer
+  aster_q3_tag: tag add aster_q3_active
+  aster_q3_take_items: take aster_nautilus_shell:4
+  aster_q3_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &84 Nautilus
+    Shells&f. Nautilus shells carry a clean spiral resonance, ideal for channeling
+    defensive effects. io:chat'
+  aster_q3_remove: tag del aster_q3_active
+  aster_q3_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q3_reward: command cmi money give %player% -s 350
+  aster_q3_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q3_complete: folder aster_q3_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q3_complete_title,aster_q3_complete_msg,aster_q3_remove,aster_q3_reward,aster_remove_journal_q3,aster_q3_stop_timer
+  aster_q3_journal: journal add aster_q3
+  aster_remove_journal_q3: journal delete aster_q3
+  aster_q3_start_timer: objective start aster_q3_timer
+  aster_q3_stop_timer: objective delete aster_q3_timer
+  aster_q3_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q3_expire: folder aster_q3_remove,aster_remove_journal_q3,aster_friendship_lose,aster_friendship_lose_msg,aster_q3_expire_msg
+  aster_daily_quest_4: folder aster_clear_active_quests,aster_q4_tag,aster_q4_journal,aster_q_title,aster_q4_msg,aster_q4_start_timer
+  aster_q4_tag: tag add aster_q4_active
+  aster_q4_take_items: take aster_heart_of_the_sea:1
+  aster_q4_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &81 Heart
+    of the Sea&f. A Heart of the Sea can anchor a powerful aquatic catalyst without
+    losing its charge. io:chat'
+  aster_q4_remove: tag del aster_q4_active
+  aster_q4_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q4_reward: command cmi money give %player% -s 600
+  aster_q4_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q4_complete: folder aster_q4_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q4_complete_title,aster_q4_complete_msg,aster_q4_remove,aster_q4_reward,aster_remove_journal_q4,aster_q4_stop_timer
+  aster_q4_journal: journal add aster_q4
+  aster_remove_journal_q4: journal delete aster_q4
+  aster_q4_start_timer: objective start aster_q4_timer
+  aster_q4_stop_timer: objective delete aster_q4_timer
+  aster_q4_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q4_expire: folder aster_q4_remove,aster_remove_journal_q4,aster_friendship_lose,aster_friendship_lose_msg,aster_q4_expire_msg
+  aster_daily_quest_5: folder aster_clear_active_quests,aster_q5_tag,aster_q5_journal,aster_q_title,aster_q5_msg,aster_q5_start_timer
+  aster_q5_tag: tag add aster_q5_active
+  aster_q5_take_items: take aster_phantom_membrane:6
+  aster_q5_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &86 Phantom
+    Membranes&f. Phantom membranes are light, elastic, and unusually receptive to
+    aerial enchantments. io:chat'
+  aster_q5_remove: tag del aster_q5_active
+  aster_q5_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q5_reward: command cmi money give %player% -s 350
+  aster_q5_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q5_complete: folder aster_q5_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q5_complete_title,aster_q5_complete_msg,aster_q5_remove,aster_q5_reward,aster_remove_journal_q5,aster_q5_stop_timer
+  aster_q5_journal: journal add aster_q5
+  aster_remove_journal_q5: journal delete aster_q5
+  aster_q5_start_timer: objective start aster_q5_timer
+  aster_q5_stop_timer: objective delete aster_q5_timer
+  aster_q5_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q5_expire: folder aster_q5_remove,aster_remove_journal_q5,aster_friendship_lose,aster_friendship_lose_msg,aster_q5_expire_msg
+  aster_daily_quest_6: folder aster_clear_active_quests,aster_q6_tag,aster_q6_journal,aster_q_title,aster_q6_msg,aster_q6_start_timer
+  aster_q6_tag: tag add aster_q6_active
+  aster_q6_take_items: take aster_echo_shard:2
+  aster_q6_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &82 Echo
+    Shards&f. Echo shards remember vibrations long after the source is gone. They
+    are invaluable for reactive upgrades. io:chat'
+  aster_q6_remove: tag del aster_q6_active
+  aster_q6_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q6_reward: command cmi money give %player% -s 550
+  aster_q6_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q6_complete: folder aster_q6_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q6_complete_title,aster_q6_complete_msg,aster_q6_remove,aster_q6_reward,aster_remove_journal_q6,aster_q6_stop_timer
+  aster_q6_journal: journal add aster_q6
+  aster_remove_journal_q6: journal delete aster_q6
+  aster_q6_start_timer: objective start aster_q6_timer
+  aster_q6_stop_timer: objective delete aster_q6_timer
+  aster_q6_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q6_expire: folder aster_q6_remove,aster_remove_journal_q6,aster_friendship_lose,aster_friendship_lose_msg,aster_q6_expire_msg
+  aster_daily_quest_7: folder aster_clear_active_quests,aster_q7_tag,aster_q7_journal,aster_q_title,aster_q7_msg,aster_q7_start_timer
+  aster_q7_tag: tag add aster_q7_active
+  aster_q7_take_items: take aster_blaze_rod:8
+  aster_q7_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &88 Blaze
+    Rods&f. Blaze rods provide stable heat and concentrated elemental power for offensive
+    cores. io:chat'
+  aster_q7_remove: tag del aster_q7_active
+  aster_q7_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q7_reward: command cmi money give %player% -s 350
+  aster_q7_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q7_complete: folder aster_q7_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q7_complete_title,aster_q7_complete_msg,aster_q7_remove,aster_q7_reward,aster_remove_journal_q7,aster_q7_stop_timer
+  aster_q7_journal: journal add aster_q7
+  aster_remove_journal_q7: journal delete aster_q7
+  aster_q7_start_timer: objective start aster_q7_timer
+  aster_q7_stop_timer: objective delete aster_q7_timer
+  aster_q7_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q7_expire: folder aster_q7_remove,aster_remove_journal_q7,aster_friendship_lose,aster_friendship_lose_msg,aster_q7_expire_msg
+  aster_daily_quest_8: folder aster_clear_active_quests,aster_q8_tag,aster_q8_journal,aster_q_title,aster_q8_msg,aster_q8_start_timer
+  aster_q8_tag: tag add aster_q8_active
+  aster_q8_take_items: take aster_armadillo_scute:12
+  aster_q8_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &812
+    Armadillo Scutes&f. Armadillo scutes make excellent flexible reinforcement for
+    armor inserts and impact dampeners. io:chat'
+  aster_q8_remove: tag del aster_q8_active
+  aster_q8_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q8_reward: command cmi money give %player% -s 300
+  aster_q8_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q8_complete: folder aster_q8_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q8_complete_title,aster_q8_complete_msg,aster_q8_remove,aster_q8_reward,aster_remove_journal_q8,aster_q8_stop_timer
+  aster_q8_journal: journal add aster_q8
+  aster_remove_journal_q8: journal delete aster_q8
+  aster_q8_start_timer: objective start aster_q8_timer
+  aster_q8_stop_timer: objective delete aster_q8_timer
+  aster_q8_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q8_expire: folder aster_q8_remove,aster_remove_journal_q8,aster_friendship_lose,aster_friendship_lose_msg,aster_q8_expire_msg
+  aster_daily_quest_9: folder aster_clear_active_quests,aster_q9_tag,aster_q9_journal,aster_q_title,aster_q9_msg,aster_q9_start_timer
+  aster_q9_tag: tag add aster_q9_active
+  aster_q9_take_items: take aster_amethyst_shard:16
+  aster_q9_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &816
+    Amethyst Shards&f. Amethyst shards are reliable conductors for magical frequency
+    and socket alignment. io:chat'
+  aster_q9_remove: tag del aster_q9_active
+  aster_q9_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q9_reward: command cmi money give %player% -s 300
+  aster_q9_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q9_complete: folder aster_q9_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q9_complete_title,aster_q9_complete_msg,aster_q9_remove,aster_q9_reward,aster_remove_journal_q9,aster_q9_stop_timer
+  aster_q9_journal: journal add aster_q9
+  aster_remove_journal_q9: journal delete aster_q9
+  aster_q9_start_timer: objective start aster_q9_timer
+  aster_q9_stop_timer: objective delete aster_q9_timer
+  aster_q9_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q9_expire: folder aster_q9_remove,aster_remove_journal_q9,aster_friendship_lose,aster_friendship_lose_msg,aster_q9_expire_msg
+  aster_daily_quest_10: folder aster_clear_active_quests,aster_q10_tag,aster_q10_journal,aster_q_title,aster_q10_msg,aster_q10_start_timer
+  aster_q10_tag: tag add aster_q10_active
+  aster_q10_take_items: take aster_glow_ink_sac:10
+  aster_q10_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &810
+    Glow Ink Sacs&f. Glow ink reveals hidden runes and keeps delicate inscriptions
+    visible during infusion. io:chat'
+  aster_q10_remove: tag del aster_q10_active
+  aster_q10_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q10_reward: command cmi money give %player% -s 300
+  aster_q10_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q10_complete: folder aster_q10_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q10_complete_title,aster_q10_complete_msg,aster_q10_remove,aster_q10_reward,aster_remove_journal_q10,aster_q10_stop_timer
+  aster_q10_journal: journal add aster_q10
+  aster_remove_journal_q10: journal delete aster_q10
+  aster_q10_start_timer: objective start aster_q10_timer
+  aster_q10_stop_timer: objective delete aster_q10_timer
+  aster_q10_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q10_expire: folder aster_q10_remove,aster_remove_journal_q10,aster_friendship_lose,aster_friendship_lose_msg,aster_q10_expire_msg
+  aster_daily_quest_11: folder aster_clear_active_quests,aster_q11_tag,aster_q11_journal,aster_q_title,aster_q11_msg,aster_q11_start_timer
+  aster_q11_tag: tag add aster_q11_active
+  aster_q11_take_items: take aster_chorus_fruit:16
+  aster_q11_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fBring me &816
+    Chorus Fruits&f. Chorus fruit carries unstable spatial energy. Properly refined,
+    it creates unpredictable but potent upgrades. io:chat'
+  aster_q11_remove: tag del aster_q11_active
+  aster_q11_complete_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7\: &fExcellent.
+    This material has the resonance I need. io:chat'
+  aster_q11_reward: command cmi money give %player% -s 350
+  aster_q11_complete_title: notify Contract CompleteAster accepts the component io:title
+    fadeIn:0 stay:40 fadeOut:0
+  aster_q11_complete: folder aster_q11_take_items,aster_friendship_gain,aster_friendship_gain_msg,aster_q11_complete_title,aster_q11_complete_msg,aster_q11_remove,aster_q11_reward,aster_remove_journal_q11,aster_q11_stop_timer
+  aster_q11_journal: journal add aster_q11
+  aster_remove_journal_q11: journal delete aster_q11
+  aster_q11_start_timer: objective start aster_q11_timer
+  aster_q11_stop_timer: objective delete aster_q11_timer
+  aster_q11_expire_msg: 'notify &6Special Upgrade Merchant Aster Veyl&7: &cThe component
+    contract expired. Aster is disappointed. io:chat'
+  aster_q11_expire: folder aster_q11_remove,aster_remove_journal_q11,aster_friendship_lose,aster_friendship_lose_msg,aster_q11_expire_msg
+objectives:
+  aster_daily_cooldown_timer: delay 1320 events:aster_cleanup_legacy_cooldown
+  aster_q1_timer: delay 1320 events:aster_q1_expire
+  aster_q2_timer: delay 1320 events:aster_q2_expire
+  aster_q3_timer: delay 1320 events:aster_q3_expire
+  aster_q4_timer: delay 1320 events:aster_q4_expire
+  aster_q5_timer: delay 1320 events:aster_q5_expire
+  aster_q6_timer: delay 1320 events:aster_q6_expire
+  aster_q7_timer: delay 1320 events:aster_q7_expire
+  aster_q8_timer: delay 1320 events:aster_q8_expire
+  aster_q9_timer: delay 1320 events:aster_q9_expire
+  aster_q10_timer: delay 1320 events:aster_q10_expire
+  aster_q11_timer: delay 1320 events:aster_q11_expire
+npc_holograms:
+  aster_available:
+    lines:
+    - '&d&l❗'
+    npcs: '96'
+    conditions: '!aster_daily_cooldown_v2,!aster_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  aster_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '96'
+    conditions: aster_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+npc_conversations:
+  '96': aster_conv
+conversations:
+  aster_conv:
+    quester: Special Upgrade Merchant Aster Veyl
+    first: aster_start_close,aster_start_friendly,aster_start
+    stop: true
+    NPC_options:
+      aster_start_close:
+        text: |-
+          You return with all your limbs and most of your equipment intact. Promising.
+
+          My rarer catalysts are not displayed for strangers. Fortunately, you are no longer one.
+
+          What would you like to improve today?
+        conditions: aster_friendship_61
+        pointers: pl_open_shop_2,pl_talk_little,pl_about_aster,pl_just_hi
+      aster_start_friendly:
+        text: |-
+          Welcome back. I have set aside several stable upgrade cores for you.
+
+          Do not touch the loose echo shards; they sometimes repeat thoughts that were never spoken.
+
+          What do you need?
+        conditions: aster_friendship_31,!aster_friendship_61
+        pointers: pl_open_shop_1,pl_talk_little,pl_about_aster,pl_just_hi
+      aster_start:
+        text: |-
+          Welcome, traveler.
+
+          I sell upgrade catalysts, socketable components, and objects that persuade weapons and armor to exceed their original limits.
+
+          Handle nothing without permission. What are you looking for?
+        conditions: '!aster_friendship_31'
+        pointers: pl_open_shop,pl_talk_little,pl_about_aster,pl_just_hi
+      aster_shop:
+        text: |-
+          Of course.
+
+          Let me open the special upgrade collection.
+        actions: aster_open_shop
+        pointers: pl_end_conversation
+      aster_shop_1:
+        text: |-
+          Of course.
+
+          Let me open the special upgrade collection.
+        actions: aster_open_shop_1
+        pointers: pl_end_conversation
+      aster_shop_2:
+        text: |-
+          Of course.
+
+          Let me open the special upgrade collection.
+        actions: aster_open_shop_2
+        pointers: pl_end_conversation
+      aster_talk_available:
+        text: I need unusual components for my work. Bring me what I request and I
+          will pay you for the risk.
+        conditions: '!aster_daily_cooldown_v2,!aster_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      aster_talk_cooldown:
+        text: Not yet. Rare materials must be tested, cleaned, and allowed to settle
+          before they can be used. Return later.
+        conditions: aster_daily_cooldown_v2,!aster_has_active_quest_v2
+        pointers: pl_end_conversation
+      aster_talk_active:
+        text: You already accepted one of my component contracts. Bring the requested
+          material when you have it.
+        conditions: aster_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_end_conversation
+      aster_about:
+        text: |-
+          My name is Aster Veyl. I study resonance: the hidden property that allows one material to change the behavior of another.
+
+          A weapon can accept fury, precision, flame, or distance. Armor can accept memory, resistance, movement, or silence.
+
+          The difficult part is not inserting power. It is preventing the item from rejecting it.
+        pointers: pl_more_story,pl_end_conversation
+      aster_story_1:
+        text: I ruined my first enchanted blade by forcing a blaze core into a socket
+          made for frost. The explosion removed my eyebrows and improved my caution.
+        conditions: aster_current_story_1
+        actions: aster_story_1_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_story_2:
+        text: A shulker shell once remained closed for three days after I placed an
+          echo shard inside it. When it opened, it repeated every hammer strike from
+          the workshop.
+        conditions: aster_current_story_2
+        actions: aster_story_2_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_story_3:
+        text: Ender pearls dislike symmetry. Place two perfectly opposite each other
+          and the item may decide that somewhere else is a better place to exist.
+        conditions: aster_current_story_3
+        actions: aster_story_3_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_story_4:
+        text: I made a nautilus insert for a diver whose armor kept pulling him downward.
+          It worked so well that he complained about floating during meals.
+        conditions: aster_current_story_4
+        actions: aster_story_4_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_story_5:
+        text: Phantom membrane is excellent for reducing weight, but it must be bound
+          at dawn. At midnight it remembers the sky and tries to leave.
+        conditions: aster_current_story_5
+        actions: aster_story_5_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_story_6:
+        text: A Heart of the Sea is not merely a power source. Treat it carelessly
+          and every metal object in the room begins to sound like distant waves.
+        conditions: aster_current_story_6
+        actions: aster_story_6_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_story_7:
+        text: Amethyst is the most honest material I use. Strike the wrong frequency
+          and it tells you immediately, usually by shattering.
+        conditions: aster_current_story_7
+        actions: aster_story_7_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_story_8:
+        text: The best socket is invisible once the work is complete. A customer should
+          notice the result, not the mechanism.
+        conditions: aster_current_story_8
+        actions: aster_story_8_mark_heard,aster_story_clear_selection,aster_life_book_reward_check
+        pointers: pl_end_conversation
+      aster_accept:
+        text: Very well. Let us see which resonance is missing from my workshop today.
+        actions: aster_assign_random_daily_quest,aster_start_daily_cooldown
+        pointers: pl_show_assigned_quest
+      aster_refuse:
+        text: Sensible. Rare components punish careless collectors. Return when you
+          are prepared.
+        pointers: pl_end_conversation
+      aster_goodbye:
+        text: Keep your equipment dry, your sockets clean, and unstable magic away
+          from your pockets.
+        pointers: pl_end_conversation
+      aster_turnin_q1_ready:
+        text: Excellent. These ender pearls carry a clean, usable resonance.
+        conditions: aster_q1_active,aster_q1_has_items
+        actions: aster_q1_complete
+        pointers: pl_end_conversation
+      aster_turnin_q1_missing:
+        text: Not enough. I asked for 8 Ender Pearls.
+        conditions: aster_q1_active,!aster_q1_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q1:
+        text: Bring me 8 Ender Pearls. Ender pearls retain the tension of folded space.
+          I use them to stabilize mobile upgrade cores. Return when you have them.
+        conditions: aster_q1_active
+        pointers: pl_end_conversation
+      aster_turnin_q2_ready:
+        text: Excellent. These shulker shells carry a clean, usable resonance.
+        conditions: aster_q2_active,aster_q2_has_items
+        actions: aster_q2_complete
+        pointers: pl_end_conversation
+      aster_turnin_q2_missing:
+        text: Not enough. I asked for 2 Shulker Shells.
+        conditions: aster_q2_active,!aster_q2_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q2:
+        text: Bring me 2 Shulker Shells. Shulker shells hold enchantments under pressure
+          without cracking. Perfect for reinforced socket casings. Return when you
+          have them.
+        conditions: aster_q2_active
+        pointers: pl_end_conversation
+      aster_turnin_q3_ready:
+        text: Excellent. These nautilus shells carry a clean, usable resonance.
+        conditions: aster_q3_active,aster_q3_has_items
+        actions: aster_q3_complete
+        pointers: pl_end_conversation
+      aster_turnin_q3_missing:
+        text: Not enough. I asked for 4 Nautilus Shells.
+        conditions: aster_q3_active,!aster_q3_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q3:
+        text: Bring me 4 Nautilus Shells. Nautilus shells carry a clean spiral resonance,
+          ideal for channeling defensive effects. Return when you have them.
+        conditions: aster_q3_active
+        pointers: pl_end_conversation
+      aster_turnin_q4_ready:
+        text: Excellent. These heart of the sea carry a clean, usable resonance.
+        conditions: aster_q4_active,aster_q4_has_items
+        actions: aster_q4_complete
+        pointers: pl_end_conversation
+      aster_turnin_q4_missing:
+        text: Not enough. I asked for 1 Heart of the Sea.
+        conditions: aster_q4_active,!aster_q4_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q4:
+        text: Bring me 1 Heart of the Sea. A Heart of the Sea can anchor a powerful
+          aquatic catalyst without losing its charge. Return when you have it.
+        conditions: aster_q4_active
+        pointers: pl_end_conversation
+      aster_turnin_q5_ready:
+        text: Excellent. These phantom membranes carry a clean, usable resonance.
+        conditions: aster_q5_active,aster_q5_has_items
+        actions: aster_q5_complete
+        pointers: pl_end_conversation
+      aster_turnin_q5_missing:
+        text: Not enough. I asked for 6 Phantom Membranes.
+        conditions: aster_q5_active,!aster_q5_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q5:
+        text: Bring me 6 Phantom Membranes. Phantom membranes are light, elastic,
+          and unusually receptive to aerial enchantments. Return when you have them.
+        conditions: aster_q5_active
+        pointers: pl_end_conversation
+      aster_turnin_q6_ready:
+        text: Excellent. These echo shards carry a clean, usable resonance.
+        conditions: aster_q6_active,aster_q6_has_items
+        actions: aster_q6_complete
+        pointers: pl_end_conversation
+      aster_turnin_q6_missing:
+        text: Not enough. I asked for 2 Echo Shards.
+        conditions: aster_q6_active,!aster_q6_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q6:
+        text: Bring me 2 Echo Shards. Echo shards remember vibrations long after the
+          source is gone. They are invaluable for reactive upgrades. Return when you
+          have them.
+        conditions: aster_q6_active
+        pointers: pl_end_conversation
+      aster_turnin_q7_ready:
+        text: Excellent. These blaze rods carry a clean, usable resonance.
+        conditions: aster_q7_active,aster_q7_has_items
+        actions: aster_q7_complete
+        pointers: pl_end_conversation
+      aster_turnin_q7_missing:
+        text: Not enough. I asked for 8 Blaze Rods.
+        conditions: aster_q7_active,!aster_q7_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q7:
+        text: Bring me 8 Blaze Rods. Blaze rods provide stable heat and concentrated
+          elemental power for offensive cores. Return when you have them.
+        conditions: aster_q7_active
+        pointers: pl_end_conversation
+      aster_turnin_q8_ready:
+        text: Excellent. These armadillo scutes carry a clean, usable resonance.
+        conditions: aster_q8_active,aster_q8_has_items
+        actions: aster_q8_complete
+        pointers: pl_end_conversation
+      aster_turnin_q8_missing:
+        text: Not enough. I asked for 12 Armadillo Scutes.
+        conditions: aster_q8_active,!aster_q8_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q8:
+        text: Bring me 12 Armadillo Scutes. Armadillo scutes make excellent flexible
+          reinforcement for armor inserts and impact dampeners. Return when you have
+          them.
+        conditions: aster_q8_active
+        pointers: pl_end_conversation
+      aster_turnin_q9_ready:
+        text: Excellent. These amethyst shards carry a clean, usable resonance.
+        conditions: aster_q9_active,aster_q9_has_items
+        actions: aster_q9_complete
+        pointers: pl_end_conversation
+      aster_turnin_q9_missing:
+        text: Not enough. I asked for 16 Amethyst Shards.
+        conditions: aster_q9_active,!aster_q9_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q9:
+        text: Bring me 16 Amethyst Shards. Amethyst shards are reliable conductors
+          for magical frequency and socket alignment. Return when you have them.
+        conditions: aster_q9_active
+        pointers: pl_end_conversation
+      aster_turnin_q10_ready:
+        text: Excellent. These glow ink sacs carry a clean, usable resonance.
+        conditions: aster_q10_active,aster_q10_has_items
+        actions: aster_q10_complete
+        pointers: pl_end_conversation
+      aster_turnin_q10_missing:
+        text: Not enough. I asked for 10 Glow Ink Sacs.
+        conditions: aster_q10_active,!aster_q10_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q10:
+        text: Bring me 10 Glow Ink Sacs. Glow ink reveals hidden runes and keeps delicate
+          inscriptions visible during infusion. Return when you have them.
+        conditions: aster_q10_active
+        pointers: pl_end_conversation
+      aster_turnin_q11_ready:
+        text: Excellent. These chorus fruits carry a clean, usable resonance.
+        conditions: aster_q11_active,aster_q11_has_items
+        actions: aster_q11_complete
+        pointers: pl_end_conversation
+      aster_turnin_q11_missing:
+        text: Not enough. I asked for 16 Chorus Fruits.
+        conditions: aster_q11_active,!aster_q11_has_items
+        pointers: pl_end_conversation
+      aster_assigned_q11:
+        text: Bring me 16 Chorus Fruits. Chorus fruit carries unstable spatial energy.
+          Properly refined, it creates unpredictable but potent upgrades. Return when
+          you have them.
+        conditions: aster_q11_active
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the special upgrade shop.
+        pointers: aster_shop
+      pl_open_shop_1:
+        text: Open the special upgrade shop.
+        pointers: aster_shop_1
+      pl_open_shop_2:
+        text: Open the special upgrade shop.
+        pointers: aster_shop_2
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: aster_talk_active,aster_talk_available,aster_talk_cooldown
+      pl_about_aster:
+        text: Tell me about your work.
+        pointers: aster_about
+      pl_more_story:
+        text: Tell me one of your stories.
+        actions: aster_story_prepare_random
+        pointers: aster_story_1,aster_story_2,aster_story_3,aster_story_4,aster_story_5,aster_story_6,aster_story_7,aster_story_8
+      pl_accept_random_quest:
+        text: Fine, I will take the contract.
+        pointers: aster_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: aster_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: aster_turnin_q1_ready,aster_turnin_q2_ready,aster_turnin_q3_ready,aster_turnin_q4_ready,aster_turnin_q5_ready,aster_turnin_q6_ready,aster_turnin_q7_ready,aster_turnin_q8_ready,aster_turnin_q9_ready,aster_turnin_q10_ready,aster_turnin_q11_ready,aster_turnin_q1_missing,aster_turnin_q2_missing,aster_turnin_q3_missing,aster_turnin_q4_missing,aster_turnin_q5_missing,aster_turnin_q6_missing,aster_turnin_q7_missing,aster_turnin_q8_missing,aster_turnin_q9_missing,aster_turnin_q10_missing,aster_turnin_q11_missing
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: aster_goodbye
+      pl_end_conversation:
+        text: End conversation
+      pl_show_assigned_quest:
+        text: What materials do you need?
+        pointers: aster_assigned_q1,aster_assigned_q2,aster_assigned_q3,aster_assigned_q4,aster_assigned_q5,aster_assigned_q6,aster_assigned_q7,aster_assigned_q8,aster_assigned_q9,aster_assigned_q10,aster_assigned_q11

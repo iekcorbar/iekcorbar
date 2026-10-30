@@ -1,0 +1,798 @@
+package:
+  enabled: true
+  version: 3.2.0-QUEST-2 # Don't change this! The plugin's automatic quest updater handles it.
+npcs:
+  '79': citizens 79
+items:
+  vorkan_stick: simple stick
+  vorkan_leather: simple leather
+  vorkan_string: simple string
+  vorkan_coal: simple coal
+  vorkan_iron_ingot: simple iron_ingot
+  vorkan_copper_ingot: simple copper_ingot
+  vorkan_gold_ingot: simple gold_ingot
+  vorkan_redstone: simple redstone
+  vorkan_flint: simple flint
+  vorkan_gunpowder: simple gunpowder
+  vorkan_diamond: simple diamond
+  vorkan_netherite_scrap: simple netherite_scrap
+journal:
+  vorkan_q1:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &824 Sticks&f. A blade begins with grip, balance, and boring old wood.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &824 Sticks&f. A blade begins with grip, balance, and boring old wood.
+  vorkan_q2:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &816 Leather&f. Good grips need leather that will not slip in blood or rain.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &816 Leather&f. Good grips need leather that will not slip in blood or rain.
+  vorkan_q3:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &812 String&f. Bowstrings snap when cheap hands make them. Bring me proper cord.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &812 String&f. Bowstrings snap when cheap hands make them. Bring me proper cord.
+  vorkan_q4:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &816 Coal&f. My forge is hungry, and hungry forges make better steel.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &816 Coal&f. My forge is hungry, and hungry forges make better steel.
+  vorkan_q5:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &810 Iron Ingots&f. Iron is the spine of every honest weapon.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &810 Iron Ingots&f. Iron is the spine of every honest weapon.
+  vorkan_q6:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &812 Copper Ingots&f. Copper is useful for fittings, rivets, and clever little mechanisms.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &812 Copper Ingots&f. Copper is useful for fittings, rivets, and clever little mechanisms.
+  vorkan_q7:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &86 Gold Ingots&f. Gold does not make a blade stronger, but nobles pay for shine.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &86 Gold Ingots&f. Gold does not make a blade stronger, but nobles pay for shine.
+  vorkan_q8:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &86 Redstone Dust&f. Some weapons need a spark before they become dangerous.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &86 Redstone Dust&f. Some weapons need a spark before they become dangerous.
+  vorkan_q9:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &810 Flint&f. Sharp edges teach apprentices humility.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &810 Flint&f. Sharp edges teach apprentices humility.
+  vorkan_q10:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &86 Gunpowder&f. I am testing a few loud solutions to quiet problems.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &86 Gunpowder&f. I am testing a few loud solutions to quiet problems.
+  vorkan_q11:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &81 Diamond&f. A diamond edge cuts promises as easily as armor.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &81 Diamond&f. A diamond edge cuts promises as easily as armor.
+  vorkan_q12:
+    en: |-
+      &fVorkan's Contract
+
+      &7Bring me &81 Netherite Scrap&f. Bring me Netherite Scrap. Some weapons are forged for legends, not guards.
+    en-US: |-
+      &fVorkan's Contract
+
+      &7Bring me &81 Netherite Scrap&f. Bring me Netherite Scrap. Some weapons are forged for legends, not guards.
+conditions:
+  vorkan_friendship_1: point vorkan_friendship 1
+  vorkan_friendship_31: point vorkan_friendship 31
+  vorkan_friendship_61: point vorkan_friendship 61
+  vorkan_friendship_100: point vorkan_friendship 100
+  vorkan_daily_cooldown_v2: objective vorkan_daily_cooldown_timer
+  vorkan_q1_active: tag vorkan_q1_active
+  vorkan_q2_active: tag vorkan_q2_active
+  vorkan_q3_active: tag vorkan_q3_active
+  vorkan_q4_active: tag vorkan_q4_active
+  vorkan_q5_active: tag vorkan_q5_active
+  vorkan_q6_active: tag vorkan_q6_active
+  vorkan_q7_active: tag vorkan_q7_active
+  vorkan_q8_active: tag vorkan_q8_active
+  vorkan_q9_active: tag vorkan_q9_active
+  vorkan_q10_active: tag vorkan_q10_active
+  vorkan_q11_active: tag vorkan_q11_active
+  vorkan_q12_active: tag vorkan_q12_active
+  vorkan_q1_has_items: item vorkan_stick:24
+  vorkan_q2_has_items: item vorkan_leather:16
+  vorkan_q3_has_items: item vorkan_string:12
+  vorkan_q4_has_items: item vorkan_coal:16
+  vorkan_q5_has_items: item vorkan_iron_ingot:10
+  vorkan_q6_has_items: item vorkan_copper_ingot:12
+  vorkan_q7_has_items: item vorkan_gold_ingot:6
+  vorkan_q8_has_items: item vorkan_redstone:6
+  vorkan_q9_has_items: item vorkan_flint:10
+  vorkan_q10_has_items: item vorkan_gunpowder:6
+  vorkan_q11_has_items: item vorkan_diamond:1
+  vorkan_q12_has_items: item vorkan_netherite_scrap:1
+  vorkan_has_active_quest_v2: or vorkan_q1_active,vorkan_q2_active,vorkan_q3_active,vorkan_q4_active,vorkan_q5_active,vorkan_q6_active,vorkan_q7_active,vorkan_q8_active,vorkan_q9_active,vorkan_q10_active,vorkan_q11_active,vorkan_q12_active
+  vorkan_story_1_heard: tag vorkan_story_1_heard
+  vorkan_story_2_heard: tag vorkan_story_2_heard
+  vorkan_story_3_heard: tag vorkan_story_3_heard
+  vorkan_story_4_heard: tag vorkan_story_4_heard
+  vorkan_story_5_heard: tag vorkan_story_5_heard
+  vorkan_story_6_heard: tag vorkan_story_6_heard
+  vorkan_story_7_heard: tag vorkan_story_7_heard
+  vorkan_story_8_heard: tag vorkan_story_8_heard
+  vorkan_current_story_1: tag vorkan_current_story_1
+  vorkan_current_story_2: tag vorkan_current_story_2
+  vorkan_current_story_3: tag vorkan_current_story_3
+  vorkan_current_story_4: tag vorkan_current_story_4
+  vorkan_current_story_5: tag vorkan_current_story_5
+  vorkan_current_story_6: tag vorkan_current_story_6
+  vorkan_current_story_7: tag vorkan_current_story_7
+  vorkan_current_story_8: tag vorkan_current_story_8
+actions:
+  vorkan_friendship_gain: point vorkan_friendship 1 action:add conditions:!vorkan_friendship_100
+  vorkan_friendship_lose: point vorkan_friendship 1 action:subtract conditions:vorkan_friendship_1
+  vorkan_friendship_gain_msg: 'notify &6Vorkan Reputation&7: &a+1 &fReputation with
+    Vorkan. io:chat'
+  vorkan_friendship_lose_msg: 'notify &6Vorkan Reputation&7: &c-1 &fReputation with
+    Vorkan. io:chat'
+  vorkan_story_1_mark_heard: tag add vorkan_story_1_heard
+  vorkan_story_2_mark_heard: tag add vorkan_story_2_heard
+  vorkan_story_3_mark_heard: tag add vorkan_story_3_heard
+  vorkan_story_4_mark_heard: tag add vorkan_story_4_heard
+  vorkan_story_5_mark_heard: tag add vorkan_story_5_heard
+  vorkan_story_6_mark_heard: tag add vorkan_story_6_heard
+  vorkan_story_7_mark_heard: tag add vorkan_story_7_heard
+  vorkan_story_8_mark_heard: tag add vorkan_story_8_heard
+  vorkan_story_clear_selection: tag del vorkan_current_story_1,vorkan_current_story_2,vorkan_current_story_3,vorkan_current_story_4,vorkan_current_story_5,vorkan_current_story_6,vorkan_current_story_7,vorkan_current_story_8
+  vorkan_story_select_1: tag add vorkan_current_story_1
+  vorkan_story_select_2: tag add vorkan_current_story_2
+  vorkan_story_select_3: tag add vorkan_current_story_3
+  vorkan_story_select_4: tag add vorkan_current_story_4
+  vorkan_story_select_5: tag add vorkan_current_story_5
+  vorkan_story_select_6: tag add vorkan_current_story_6
+  vorkan_story_select_7: tag add vorkan_current_story_7
+  vorkan_story_select_8: tag add vorkan_current_story_8
+  vorkan_story_choose_random: folder vorkan_story_select_1,vorkan_story_select_2,vorkan_story_select_3,vorkan_story_select_4,vorkan_story_select_5,vorkan_story_select_6,vorkan_story_select_7,vorkan_story_select_8
+    random:1
+  vorkan_story_prepare_random: folder vorkan_story_clear_selection,vorkan_story_choose_random
+  vorkan_open_shop: command mi stations open shop-weapon-1 %player%
+  vorkan_open_shop_1: command mi stations open shop-weapon-2 %player%
+  vorkan_open_shop_2: command mi stations open shop-weapon-3 %player%
+  vorkan_cleanup_legacy_cooldown: tag del vorkan_daily_cooldown
+  vorkan_start_daily_cooldown: objective start vorkan_daily_cooldown_timer
+  vorkan_assign_random_daily_quest: folder vorkan_daily_quest_1,vorkan_daily_quest_2,vorkan_daily_quest_3,vorkan_daily_quest_4,vorkan_daily_quest_5,vorkan_daily_quest_6,vorkan_daily_quest_7,vorkan_daily_quest_8,vorkan_daily_quest_9,vorkan_daily_quest_10,vorkan_daily_quest_11,vorkan_daily_quest_12
+    random:1
+  vorkan_clear_active_quests: tag del vorkan_q1_active,vorkan_q2_active,vorkan_q3_active,vorkan_q4_active,vorkan_q5_active,vorkan_q6_active,vorkan_q7_active,vorkan_q8_active,vorkan_q9_active,vorkan_q10_active,vorkan_q11_active,vorkan_q12_active
+  vorkan_q_title: notify Vorkan Contract Start io:title fadeIn:0 stay:60 fadeOut:0
+  vorkan_daily_quest_1: folder vorkan_clear_active_quests,vorkan_q1_tag,vorkan_q1_journal,vorkan_q_title,vorkan_q1_msg,vorkan_q1_start_timer
+  vorkan_q1_tag: tag add vorkan_q1_active
+  vorkan_q1_take_items: take vorkan_stick:24
+  vorkan_q1_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &824 Sticks&f.
+    A blade begins with grip, balance, and boring old wood. io:chat'
+  vorkan_q1_remove: tag del vorkan_q1_active
+  vorkan_q1_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fStraight enough.
+    A weapon with a crooked handle kills the wrong fool. io:chat'
+  vorkan_q1_reward: command cmi money give %player% -s 250
+  vorkan_q1_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q1_complete: folder vorkan_q1_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q1_complete_title,vorkan_q1_complete_msg,vorkan_q1_remove,vorkan_q1_reward,vorkan_remove_journal_q1,vorkan_q1_stop_timer
+  vorkan_daily_quest_2: folder vorkan_clear_active_quests,vorkan_q2_tag,vorkan_q2_journal,vorkan_q_title,vorkan_q2_msg,vorkan_q2_start_timer
+  vorkan_q2_tag: tag add vorkan_q2_active
+  vorkan_q2_take_items: take vorkan_leather:16
+  vorkan_q2_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &816 Leather&f.
+    Good grips need leather that will not slip in blood or rain. io:chat'
+  vorkan_q2_remove: tag del vorkan_q2_active
+  vorkan_q2_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fThis will wrap
+    a hilt nicely. Practical, not pretty. io:chat'
+  vorkan_q2_reward: command cmi money give %player% -s 250
+  vorkan_q2_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q2_complete: folder vorkan_q2_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q2_complete_title,vorkan_q2_complete_msg,vorkan_q2_remove,vorkan_q2_reward,vorkan_remove_journal_q2,vorkan_q2_stop_timer
+  vorkan_daily_quest_3: folder vorkan_clear_active_quests,vorkan_q3_tag,vorkan_q3_journal,vorkan_q_title,vorkan_q3_msg,vorkan_q3_start_timer
+  vorkan_q3_tag: tag add vorkan_q3_active
+  vorkan_q3_take_items: take vorkan_string:12
+  vorkan_q3_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &812 String&f.
+    Bowstrings snap when cheap hands make them. Bring me proper cord. io:chat'
+  vorkan_q3_remove: tag del vorkan_q3_active
+  vorkan_q3_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fStrong fibers.
+    Good. A bow is only as honest as its string. io:chat'
+  vorkan_q3_reward: command cmi money give %player% -s 250
+  vorkan_q3_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q3_complete: folder vorkan_q3_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q3_complete_title,vorkan_q3_complete_msg,vorkan_q3_remove,vorkan_q3_reward,vorkan_remove_journal_q3,vorkan_q3_stop_timer
+  vorkan_daily_quest_4: folder vorkan_clear_active_quests,vorkan_q4_tag,vorkan_q4_journal,vorkan_q_title,vorkan_q4_msg,vorkan_q4_start_timer
+  vorkan_q4_tag: tag add vorkan_q4_active
+  vorkan_q4_take_items: take vorkan_coal:16
+  vorkan_q4_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &816 Coal&f.
+    My forge is hungry, and hungry forges make better steel. io:chat'
+  vorkan_q4_remove: tag del vorkan_q4_active
+  vorkan_q4_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fGood coal.
+    Dark, dry, and angry enough for the furnace. io:chat'
+  vorkan_q4_reward: command cmi money give %player% -s 250
+  vorkan_q4_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q4_complete: folder vorkan_q4_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q4_complete_title,vorkan_q4_complete_msg,vorkan_q4_remove,vorkan_q4_reward,vorkan_remove_journal_q4,vorkan_q4_stop_timer
+  vorkan_daily_quest_5: folder vorkan_clear_active_quests,vorkan_q5_tag,vorkan_q5_journal,vorkan_q_title,vorkan_q5_msg,vorkan_q5_start_timer
+  vorkan_q5_tag: tag add vorkan_q5_active
+  vorkan_q5_take_items: take vorkan_iron_ingot:10
+  vorkan_q5_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &810 Iron Ingots&f.
+    Iron is the spine of every honest weapon. io:chat'
+  vorkan_q5_remove: tag del vorkan_q5_active
+  vorkan_q5_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fIron. Simple.
+    Reliable. The world survives on this metal. io:chat'
+  vorkan_q5_reward: command cmi money give %player% -s 400
+  vorkan_q5_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q5_complete: folder vorkan_q5_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q5_complete_title,vorkan_q5_complete_msg,vorkan_q5_remove,vorkan_q5_reward,vorkan_remove_journal_q5,vorkan_q5_stop_timer
+  vorkan_daily_quest_6: folder vorkan_clear_active_quests,vorkan_q6_tag,vorkan_q6_journal,vorkan_q_title,vorkan_q6_msg,vorkan_q6_start_timer
+  vorkan_q6_tag: tag add vorkan_q6_active
+  vorkan_q6_take_items: take vorkan_copper_ingot:12
+  vorkan_q6_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &812 Copper
+    Ingots&f. Copper is useful for fittings, rivets, and clever little mechanisms.
+    io:chat'
+  vorkan_q6_remove: tag del vorkan_q6_active
+  vorkan_q6_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fCopper bends
+    without complaining. I respect that. io:chat'
+  vorkan_q6_reward: command cmi money give %player% -s 400
+  vorkan_q6_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q6_complete: folder vorkan_q6_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q6_complete_title,vorkan_q6_complete_msg,vorkan_q6_remove,vorkan_q6_reward,vorkan_remove_journal_q6,vorkan_q6_stop_timer
+  vorkan_daily_quest_7: folder vorkan_clear_active_quests,vorkan_q7_tag,vorkan_q7_journal,vorkan_q_title,vorkan_q7_msg,vorkan_q7_start_timer
+  vorkan_q7_tag: tag add vorkan_q7_active
+  vorkan_q7_take_items: take vorkan_gold_ingot:6
+  vorkan_q7_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &86 Gold Ingots&f.
+    Gold does not make a blade stronger, but nobles pay for shine. io:chat'
+  vorkan_q7_remove: tag del vorkan_q7_active
+  vorkan_q7_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fGold for decoration.
+    Wasteful, but profitable. io:chat'
+  vorkan_q7_reward: command cmi money give %player% -s 400
+  vorkan_q7_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q7_complete: folder vorkan_q7_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q7_complete_title,vorkan_q7_complete_msg,vorkan_q7_remove,vorkan_q7_reward,vorkan_remove_journal_q7,vorkan_q7_stop_timer
+  vorkan_daily_quest_8: folder vorkan_clear_active_quests,vorkan_q8_tag,vorkan_q8_journal,vorkan_q_title,vorkan_q8_msg,vorkan_q8_start_timer
+  vorkan_q8_tag: tag add vorkan_q8_active
+  vorkan_q8_take_items: take vorkan_redstone:6
+  vorkan_q8_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &86 Redstone
+    Dust&f. Some weapons need a spark before they become dangerous. io:chat'
+  vorkan_q8_remove: tag del vorkan_q8_active
+  vorkan_q8_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fRedstone. Now
+    keep it away from the powder barrels. io:chat'
+  vorkan_q8_reward: command cmi money give %player% -s 400
+  vorkan_q8_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q8_complete: folder vorkan_q8_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q8_complete_title,vorkan_q8_complete_msg,vorkan_q8_remove,vorkan_q8_reward,vorkan_remove_journal_q8,vorkan_q8_stop_timer
+  vorkan_daily_quest_9: folder vorkan_clear_active_quests,vorkan_q9_tag,vorkan_q9_journal,vorkan_q_title,vorkan_q9_msg,vorkan_q9_start_timer
+  vorkan_q9_tag: tag add vorkan_q9_active
+  vorkan_q9_take_items: take vorkan_flint:10
+  vorkan_q9_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &810 Flint&f.
+    Sharp edges teach apprentices humility. io:chat'
+  vorkan_q9_remove: tag del vorkan_q9_active
+  vorkan_q9_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fGood flint.
+    Sharp enough to punish careless fingers. io:chat'
+  vorkan_q9_reward: command cmi money give %player% -s 400
+  vorkan_q9_complete_title: notify Contract CompleteVorkan is satisfied io:title fadeIn:0
+    stay:40 fadeOut:0
+  vorkan_q9_complete: folder vorkan_q9_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q9_complete_title,vorkan_q9_complete_msg,vorkan_q9_remove,vorkan_q9_reward,vorkan_remove_journal_q9,vorkan_q9_stop_timer
+  vorkan_daily_quest_10: folder vorkan_clear_active_quests,vorkan_q10_tag,vorkan_q10_journal,vorkan_q_title,vorkan_q10_msg,vorkan_q10_start_timer
+  vorkan_q10_tag: tag add vorkan_q10_active
+  vorkan_q10_take_items: take vorkan_gunpowder:6
+  vorkan_q10_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &86 Gunpowder&f.
+    I am testing a few loud solutions to quiet problems. io:chat'
+  vorkan_q10_remove: tag del vorkan_q10_active
+  vorkan_q10_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fCareful. That
+    powder has more temper than most soldiers. io:chat'
+  vorkan_q10_reward: command cmi money give %player% -s 650
+  vorkan_q10_complete_title: notify Contract CompleteVorkan is satisfied io:title
+    fadeIn:0 stay:40 fadeOut:0
+  vorkan_q10_complete: folder vorkan_q10_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q10_complete_title,vorkan_q10_complete_msg,vorkan_q10_remove,vorkan_q10_reward,vorkan_remove_journal_q10,vorkan_q10_stop_timer
+  vorkan_daily_quest_11: folder vorkan_clear_active_quests,vorkan_q11_tag,vorkan_q11_journal,vorkan_q_title,vorkan_q11_msg,vorkan_q11_start_timer
+  vorkan_q11_tag: tag add vorkan_q11_active
+  vorkan_q11_take_items: take vorkan_diamond:1
+  vorkan_q11_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &81 Diamond&f.
+    A diamond edge cuts promises as easily as armor. io:chat'
+  vorkan_q11_remove: tag del vorkan_q11_active
+  vorkan_q11_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fA diamond.
+    Expensive, stubborn, and worth the trouble. io:chat'
+  vorkan_q11_reward: command cmi money give %player% -s 650
+  vorkan_q11_complete_title: notify Contract CompleteVorkan is satisfied io:title
+    fadeIn:0 stay:40 fadeOut:0
+  vorkan_q11_complete: folder vorkan_q11_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q11_complete_title,vorkan_q11_complete_msg,vorkan_q11_remove,vorkan_q11_reward,vorkan_remove_journal_q11,vorkan_q11_stop_timer
+  vorkan_daily_quest_12: folder vorkan_clear_active_quests,vorkan_q12_tag,vorkan_q12_journal,vorkan_q_title,vorkan_q12_msg,vorkan_q12_start_timer
+  vorkan_q12_tag: tag add vorkan_q12_active
+  vorkan_q12_take_items: take vorkan_netherite_scrap:1
+  vorkan_q12_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fBring me &81 Netherite
+    Scrap&f. Bring me Netherite Scrap. Some weapons are forged for legends, not guards.
+    io:chat'
+  vorkan_q12_remove: tag del vorkan_q12_active
+  vorkan_q12_complete_msg: 'notify &6Weapon Merchant Vorkan Kross&7\: &fNetherite
+    scrap. Now this is the kind of problem I enjoy. io:chat'
+  vorkan_q12_reward: command cmi money give %player% -s 900
+  vorkan_q12_complete_title: notify Contract CompleteVorkan is satisfied io:title
+    fadeIn:0 stay:40 fadeOut:0
+  vorkan_q12_complete: folder vorkan_q12_take_items,vorkan_friendship_gain,vorkan_friendship_gain_msg,vorkan_q12_complete_title,vorkan_q12_complete_msg,vorkan_q12_remove,vorkan_q12_reward,vorkan_remove_journal_q12,vorkan_q12_stop_timer
+  vorkan_q1_journal: journal add vorkan_q1
+  vorkan_q2_journal: journal add vorkan_q2
+  vorkan_q3_journal: journal add vorkan_q3
+  vorkan_q4_journal: journal add vorkan_q4
+  vorkan_q5_journal: journal add vorkan_q5
+  vorkan_q6_journal: journal add vorkan_q6
+  vorkan_q7_journal: journal add vorkan_q7
+  vorkan_q8_journal: journal add vorkan_q8
+  vorkan_q9_journal: journal add vorkan_q9
+  vorkan_q10_journal: journal add vorkan_q10
+  vorkan_q11_journal: journal add vorkan_q11
+  vorkan_q12_journal: journal add vorkan_q12
+  vorkan_remove_journal_q1: journal delete vorkan_q1
+  vorkan_remove_journal_q2: journal delete vorkan_q2
+  vorkan_remove_journal_q3: journal delete vorkan_q3
+  vorkan_remove_journal_q4: journal delete vorkan_q4
+  vorkan_remove_journal_q5: journal delete vorkan_q5
+  vorkan_remove_journal_q6: journal delete vorkan_q6
+  vorkan_remove_journal_q7: journal delete vorkan_q7
+  vorkan_remove_journal_q8: journal delete vorkan_q8
+  vorkan_remove_journal_q9: journal delete vorkan_q9
+  vorkan_remove_journal_q10: journal delete vorkan_q10
+  vorkan_remove_journal_q11: journal delete vorkan_q11
+  vorkan_remove_journal_q12: journal delete vorkan_q12
+  vorkan_q1_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q1_remove,vorkan_remove_journal_q1,vorkan_q1_fail_msg,vorkan_q1_stop_timer
+  vorkan_q2_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q2_remove,vorkan_remove_journal_q2,vorkan_q2_fail_msg,vorkan_q2_stop_timer
+  vorkan_q3_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q3_remove,vorkan_remove_journal_q3,vorkan_q3_fail_msg,vorkan_q3_stop_timer
+  vorkan_q4_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q4_remove,vorkan_remove_journal_q4,vorkan_q4_fail_msg,vorkan_q4_stop_timer
+  vorkan_q5_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q5_remove,vorkan_remove_journal_q5,vorkan_q5_fail_msg,vorkan_q5_stop_timer
+  vorkan_q6_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q6_remove,vorkan_remove_journal_q6,vorkan_q6_fail_msg,vorkan_q6_stop_timer
+  vorkan_q7_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q7_remove,vorkan_remove_journal_q7,vorkan_q7_fail_msg,vorkan_q7_stop_timer
+  vorkan_q8_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q8_remove,vorkan_remove_journal_q8,vorkan_q8_fail_msg,vorkan_q8_stop_timer
+  vorkan_q9_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q9_remove,vorkan_remove_journal_q9,vorkan_q9_fail_msg,vorkan_q9_stop_timer
+  vorkan_q10_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q10_remove,vorkan_remove_journal_q10,vorkan_q10_fail_msg,vorkan_q10_stop_timer
+  vorkan_q11_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q11_remove,vorkan_remove_journal_q11,vorkan_q11_fail_msg,vorkan_q11_stop_timer
+  vorkan_q12_expire: folder vorkan_friendship_lose,vorkan_friendship_lose_msg,vorkan_q12_remove,vorkan_remove_journal_q12,vorkan_q12_fail_msg,vorkan_q12_stop_timer
+  vorkan_q1_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q2_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q3_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q4_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q5_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q6_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q7_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q8_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q9_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q10_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q11_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q12_fail_msg: 'notify &cContract Expired&7: &fToo slow. Vorkan has sold the
+    commission to someone else.'
+  vorkan_q1_stop_timer: objective delete vorkan_q1_timer
+  vorkan_q2_stop_timer: objective delete vorkan_q2_timer
+  vorkan_q3_stop_timer: objective delete vorkan_q3_timer
+  vorkan_q4_stop_timer: objective delete vorkan_q4_timer
+  vorkan_q5_stop_timer: objective delete vorkan_q5_timer
+  vorkan_q6_stop_timer: objective delete vorkan_q6_timer
+  vorkan_q7_stop_timer: objective delete vorkan_q7_timer
+  vorkan_q8_stop_timer: objective delete vorkan_q8_timer
+  vorkan_q9_stop_timer: objective delete vorkan_q9_timer
+  vorkan_q10_stop_timer: objective delete vorkan_q10_timer
+  vorkan_q11_stop_timer: objective delete vorkan_q11_timer
+  vorkan_q12_stop_timer: objective delete vorkan_q12_timer
+  vorkan_q1_start_timer: objective start vorkan_q1_timer
+  vorkan_q2_start_timer: objective start vorkan_q2_timer
+  vorkan_q3_start_timer: objective start vorkan_q3_timer
+  vorkan_q4_start_timer: objective start vorkan_q4_timer
+  vorkan_q5_start_timer: objective start vorkan_q5_timer
+  vorkan_q6_start_timer: objective start vorkan_q6_timer
+  vorkan_q7_start_timer: objective start vorkan_q7_timer
+  vorkan_q8_start_timer: objective start vorkan_q8_timer
+  vorkan_q9_start_timer: objective start vorkan_q9_timer
+  vorkan_q10_start_timer: objective start vorkan_q10_timer
+  vorkan_q11_start_timer: objective start vorkan_q11_timer
+  vorkan_q12_start_timer: objective start vorkan_q12_timer
+objectives:
+  vorkan_daily_cooldown_timer: delay 1320 events:vorkan_cleanup_legacy_cooldown
+  vorkan_q1_timer: delay 1320 events:vorkan_q1_expire
+  vorkan_q2_timer: delay 1320 events:vorkan_q2_expire
+  vorkan_q3_timer: delay 1320 events:vorkan_q3_expire
+  vorkan_q4_timer: delay 1320 events:vorkan_q4_expire
+  vorkan_q5_timer: delay 1320 events:vorkan_q5_expire
+  vorkan_q6_timer: delay 1320 events:vorkan_q6_expire
+  vorkan_q7_timer: delay 1320 events:vorkan_q7_expire
+  vorkan_q8_timer: delay 1320 events:vorkan_q8_expire
+  vorkan_q9_timer: delay 1320 events:vorkan_q9_expire
+  vorkan_q10_timer: delay 1320 events:vorkan_q10_expire
+  vorkan_q11_timer: delay 1320 events:vorkan_q11_expire
+  vorkan_q12_timer: delay 1320 events:vorkan_q12_expire
+npc_holograms:
+  vorkan_available:
+    lines:
+    - '&d&l❗'
+    npcs: '79'
+    conditions: '!vorkan_daily_cooldown_v2,!vorkan_has_active_quest_v2'
+    follow: true
+    check_interval: 20
+    max_range: 25
+  vorkan_active:
+    lines:
+    - '&8&l❓'
+    - '&7Quest in progress'
+    npcs: '79'
+    conditions: vorkan_has_active_quest_v2
+    follow: true
+    check_interval: 20
+    max_range: 25
+npc_conversations:
+  '79': vorkan_conv
+conversations:
+  vorkan_conv:
+    quester: Weapon Merchant Vorkan Kross
+    first: vorkan_start_close,vorkan_start_friendly,vorkan_start
+    stop: true
+    NPC_options:
+      vorkan_start_close:
+        text: Back again, eh? Good. I prefer customers who survive long enough to
+          return. \n\nDo not lean on the weapon racks. Half of them are sharper than
+          they look, and the other half are loaded. \n\nWhat does my best client need
+          today?
+        conditions: vorkan_friendship_61
+        pointers: pl_open_shop_2,pl_talk_little,pl_about_vorkan,pl_just_hi
+      vorkan_start_friendly:
+        text: Welcome back. I remember your face, and more importantly, I remember
+          that you pay attention. \n\nKeep your hands clear of the forge tools unless
+          you want fewer fingers. \n\nWhat can Vorkan Kross do for you?
+        conditions: vorkan_friendship_31,!vorkan_friendship_61
+        pointers: pl_open_shop_1,pl_talk_little,pl_about_vorkan,pl_just_hi
+      vorkan_start:
+        text: Welcome, traveler. \n\nBlades, spears, mechanisms, reinforced grips...
+          if it can end a fight quickly, I probably sell it. \n\nSpeak clearly. What
+          do you need?
+        conditions: '!vorkan_friendship_31'
+        pointers: pl_open_shop,pl_talk_little,pl_about_vorkan,pl_just_hi
+      vorkan_shop:
+        text: A fine choice. \n\nLet me open the weapon racks.
+        actions: vorkan_open_shop
+        pointers: pl_end_conversation
+      vorkan_shop_1:
+        text: A fine choice. \n\nLet me open the weapon racks.
+        actions: vorkan_open_shop_1
+        pointers: pl_end_conversation
+      vorkan_shop_2:
+        text: A fine choice. \n\nLet me open the weapon racks.
+        actions: vorkan_open_shop_2
+        pointers: pl_end_conversation
+      vorkan_talk_available:
+        text: You want work? Good. I need materials, not excuses. \n\nBring me what
+          I ask for and I will pay. Maybe I will even remember your name.
+        conditions: '!vorkan_daily_cooldown_v2,!vorkan_has_active_quest_v2'
+        pointers: pl_accept_random_quest,pl_refuse_random_quest
+      vorkan_talk_cooldown:
+        text: We already had a deal recently. \n\nA forge needs time to heat, cool,
+          and curse properly. Come back later.
+        conditions: vorkan_daily_cooldown_v2,!vorkan_has_active_quest_v2
+        pointers: pl_end_conversation
+      vorkan_talk_active:
+        text: You are already carrying one of my contracts. \n\nEither bring the materials
+          or stop blocking the counter.
+        conditions: vorkan_has_active_quest_v2
+        pointers: pl_turn_in_materials,pl_end_conversation
+      vorkan_turnin_q1_ready:
+        text: Straight enough. A weapon with a crooked handle kills the wrong fool.
+        conditions: vorkan_q1_active,vorkan_q1_has_items
+        actions: vorkan_q1_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q1_missing:
+        text: Not enough. I asked for 24 Sticks.
+        conditions: vorkan_q1_active,!vorkan_q1_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q2_ready:
+        text: This will wrap a hilt nicely. Practical, not pretty.
+        conditions: vorkan_q2_active,vorkan_q2_has_items
+        actions: vorkan_q2_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q2_missing:
+        text: Not enough. I asked for 16 Leather.
+        conditions: vorkan_q2_active,!vorkan_q2_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q3_ready:
+        text: Strong fibers. Good. A bow is only as honest as its string.
+        conditions: vorkan_q3_active,vorkan_q3_has_items
+        actions: vorkan_q3_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q3_missing:
+        text: Not enough. I asked for 12 String.
+        conditions: vorkan_q3_active,!vorkan_q3_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q4_ready:
+        text: Good coal. Dark, dry, and angry enough for the furnace.
+        conditions: vorkan_q4_active,vorkan_q4_has_items
+        actions: vorkan_q4_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q4_missing:
+        text: Not enough. I asked for 16 Coal.
+        conditions: vorkan_q4_active,!vorkan_q4_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q5_ready:
+        text: Iron. Simple. Reliable. The world survives on this metal.
+        conditions: vorkan_q5_active,vorkan_q5_has_items
+        actions: vorkan_q5_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q5_missing:
+        text: Not enough. I asked for 10 Iron Ingots.
+        conditions: vorkan_q5_active,!vorkan_q5_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q6_ready:
+        text: Copper bends without complaining. I respect that.
+        conditions: vorkan_q6_active,vorkan_q6_has_items
+        actions: vorkan_q6_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q6_missing:
+        text: Not enough. I asked for 12 Copper Ingots.
+        conditions: vorkan_q6_active,!vorkan_q6_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q7_ready:
+        text: Gold for decoration. Wasteful, but profitable.
+        conditions: vorkan_q7_active,vorkan_q7_has_items
+        actions: vorkan_q7_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q7_missing:
+        text: Not enough. I asked for 6 Gold Ingots.
+        conditions: vorkan_q7_active,!vorkan_q7_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q8_ready:
+        text: Redstone. Now keep it away from the powder barrels.
+        conditions: vorkan_q8_active,vorkan_q8_has_items
+        actions: vorkan_q8_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q8_missing:
+        text: Not enough. I asked for 6 Redstone Dust.
+        conditions: vorkan_q8_active,!vorkan_q8_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q9_ready:
+        text: Good flint. Sharp enough to punish careless fingers.
+        conditions: vorkan_q9_active,vorkan_q9_has_items
+        actions: vorkan_q9_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q9_missing:
+        text: Not enough. I asked for 10 Flint.
+        conditions: vorkan_q9_active,!vorkan_q9_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q10_ready:
+        text: Careful. That powder has more temper than most soldiers.
+        conditions: vorkan_q10_active,vorkan_q10_has_items
+        actions: vorkan_q10_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q10_missing:
+        text: Not enough. I asked for 6 Gunpowder.
+        conditions: vorkan_q10_active,!vorkan_q10_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q11_ready:
+        text: A diamond. Expensive, stubborn, and worth the trouble.
+        conditions: vorkan_q11_active,vorkan_q11_has_items
+        actions: vorkan_q11_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q11_missing:
+        text: Not enough. I asked for 1 Diamond.
+        conditions: vorkan_q11_active,!vorkan_q11_has_items
+        pointers: pl_end_conversation
+      vorkan_turnin_q12_ready:
+        text: Netherite scrap. Now this is the kind of problem I enjoy.
+        conditions: vorkan_q12_active,vorkan_q12_has_items
+        actions: vorkan_q12_complete
+        pointers: pl_end_conversation
+      vorkan_turnin_q12_missing:
+        text: Not enough. I asked for 1 Netherite Scrap.
+        conditions: vorkan_q12_active,!vorkan_q12_has_items
+        pointers: pl_end_conversation
+      vorkan_about:
+        text: Me? \n\nI learned weapons before I learned manners. The first lesson
+          lasted. The second did not. \n\nI buy raw materials, forge reliable killing
+          tools, and sell them to people who know the difference between a weapon
+          and a decoration. \n\nA sword must have balance. A spear must have reach.
+          A crossbow must obey. \n\nEverything else is poetry, and poetry rarely survives
+          a battlefield.
+        pointers: pl_more_story,pl_end_conversation
+      vorkan_story_1:
+        text: Once, a noble asked me for a sword that looked terrifying. I gave him
+          one that was perfectly balanced instead. He complained until it saved his
+          life.
+        conditions: vorkan_current_story_1
+        actions: vorkan_story_1_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_story_2:
+        text: My first forge master said a weapon reveals the hand that made it. Mine
+          revealed impatience, burns, and excellent steel.
+        conditions: vorkan_current_story_2
+        actions: vorkan_story_2_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_story_3:
+        text: A mercenary once tried to haggle with a loaded crossbow on the table.
+          He received a discount and a very useful lesson in silence.
+        conditions: vorkan_current_story_3
+        actions: vorkan_story_3_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_story_4:
+        text: I tested a spear against a charging boar. The spear worked. The fence
+          behind me did not.
+        conditions: vorkan_current_story_4
+        actions: vorkan_story_4_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_story_5:
+        text: The prettiest blade I ever made broke in one week. The ugliest one is
+          still in service after ten years. Remember that.
+        conditions: vorkan_current_story_5
+        actions: vorkan_story_5_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_story_6:
+        text: A good grip matters more than gold. Gold impresses fools. Grip keeps
+          you alive when rain, blood, and fear arrive together.
+        conditions: vorkan_current_story_6
+        actions: vorkan_story_6_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_story_7:
+        text: I once forged a dagger so quiet that the buyer paid double and never
+          told me his name. Wise man.
+        conditions: vorkan_current_story_7
+        actions: vorkan_story_7_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_story_8:
+        text: Some customers ask for legendary weapons. I ask if they have legendary
+          coin. Most legends end there.
+        conditions: vorkan_current_story_8
+        actions: vorkan_story_8_mark_heard,vorkan_story_clear_selection
+        pointers: pl_end_conversation
+      vorkan_accept:
+        text: Good. Let us see what the forge demands today.
+        actions: vorkan_assign_random_daily_quest,vorkan_start_daily_cooldown
+        pointers: pl_show_assigned_quest
+      vorkan_assigned_q1:
+        text: Bring me 24 Sticks. A blade begins with grip, balance, and boring old
+          wood. Return when you have them.
+        conditions: vorkan_q1_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q2:
+        text: Bring me 16 Leather. Good grips need leather that will not slip in blood
+          or rain. Return when you have them.
+        conditions: vorkan_q2_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q3:
+        text: Bring me 12 String. Bowstrings snap when cheap hands make them. Bring
+          me proper cord. Return when you have them.
+        conditions: vorkan_q3_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q4:
+        text: Bring me 16 Coal. My forge is hungry, and hungry forges make better
+          steel. Return when you have them.
+        conditions: vorkan_q4_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q5:
+        text: Bring me 10 Iron Ingots. Iron is the spine of every honest weapon. Return
+          when you have them.
+        conditions: vorkan_q5_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q6:
+        text: Bring me 12 Copper Ingots. Copper is useful for fittings, rivets, and
+          clever little mechanisms. Return when you have them.
+        conditions: vorkan_q6_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q7:
+        text: Bring me 6 Gold Ingots. Gold does not make a blade stronger, but nobles
+          pay for shine. Return when you have them.
+        conditions: vorkan_q7_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q8:
+        text: Bring me 6 Redstone Dust. Some weapons need a spark before they become
+          dangerous. Return when you have them.
+        conditions: vorkan_q8_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q9:
+        text: Bring me 10 Flint. Sharp edges teach apprentices humility. Return when
+          you have them.
+        conditions: vorkan_q9_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q10:
+        text: Bring me 6 Gunpowder. I am testing a few loud solutions to quiet problems.
+          Return when you have them.
+        conditions: vorkan_q10_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q11:
+        text: Bring me 1 Diamond. A diamond edge cuts promises as easily as armor.
+          Return when you have them.
+        conditions: vorkan_q11_active
+        pointers: pl_end_conversation
+      vorkan_assigned_q12:
+        text: Bring me 1 Netherite Scrap. Bring me Netherite Scrap. Some weapons are
+          forged for legends, not guards. Return when you have them.
+        conditions: vorkan_q12_active
+        pointers: pl_end_conversation
+      vorkan_refuse:
+        text: Then stop breathing on my counter. Come back when you are useful.
+        pointers: pl_end_conversation
+      vorkan_goodbye:
+        text: Keep your blade dry and your back away from strangers.
+        pointers: pl_end_conversation
+    player_options:
+      pl_open_shop:
+        text: Open the weapon shop.
+        pointers: vorkan_shop
+      pl_open_shop_1:
+        text: Open the weapon shop.
+        pointers: vorkan_shop_1
+      pl_open_shop_2:
+        text: Open the weapon shop.
+        pointers: vorkan_shop_2
+      pl_talk_little:
+        text: Do you have work for me?
+        pointers: vorkan_talk_active,vorkan_talk_available,vorkan_talk_cooldown
+      pl_about_vorkan:
+        text: Tell me about yourself.
+        pointers: vorkan_about
+      pl_more_story:
+        text: Tell me one of your stories.
+        actions: vorkan_story_prepare_random
+        pointers: vorkan_story_1,vorkan_story_2,vorkan_story_3,vorkan_story_4,vorkan_story_5,vorkan_story_6,vorkan_story_7,vorkan_story_8
+      pl_accept_random_quest:
+        text: Fine, I will take the contract.
+        pointers: vorkan_accept
+      pl_refuse_random_quest:
+        text: Not right now.
+        pointers: vorkan_refuse
+      pl_turn_in_materials:
+        text: I brought the materials.
+        pointers: vorkan_turnin_q1_ready,vorkan_turnin_q2_ready,vorkan_turnin_q3_ready,vorkan_turnin_q4_ready,vorkan_turnin_q5_ready,vorkan_turnin_q6_ready,vorkan_turnin_q7_ready,vorkan_turnin_q8_ready,vorkan_turnin_q9_ready,vorkan_turnin_q10_ready,vorkan_turnin_q11_ready,vorkan_turnin_q12_ready,vorkan_turnin_q1_missing,vorkan_turnin_q2_missing,vorkan_turnin_q3_missing,vorkan_turnin_q4_missing,vorkan_turnin_q5_missing,vorkan_turnin_q6_missing,vorkan_turnin_q7_missing,vorkan_turnin_q8_missing,vorkan_turnin_q9_missing,vorkan_turnin_q10_missing,vorkan_turnin_q11_missing,vorkan_turnin_q12_missing
+      pl_just_hi:
+        text: Nothing, just looking around.
+        pointers: vorkan_goodbye
+      pl_end_conversation:
+        text: End conversation
+      pl_show_assigned_quest:
+        text: What materials do you need?
+        pointers: vorkan_assigned_q1,vorkan_assigned_q2,vorkan_assigned_q3,vorkan_assigned_q4,vorkan_assigned_q5,vorkan_assigned_q6,vorkan_assigned_q7,vorkan_assigned_q8,vorkan_assigned_q9,vorkan_assigned_q10,vorkan_assigned_q11,vorkan_assigned_q12

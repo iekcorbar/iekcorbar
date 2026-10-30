@@ -32,7 +32,8 @@ src/lib/db.json
 id_rsa*
 
 # --- serverkopieën en tijdelijke upload-mappen ---
-pluginset-aangepast/
+pluginset-aangepast/*
+!pluginset-aangepast/BetonQuest/
 upload-*/
 output_browser/
 _archief/
