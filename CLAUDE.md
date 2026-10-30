@@ -1756,6 +1756,40 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.5.3 - Steamworks-quests + de dode-keuzes-reparatie (30-10, ~14:20 live)
+
+- Eigenaar: "ik wil steamworks quests". Gebouwd als vijfdelige Engineer-cursus
+  op NPC 125 (dezelfde als "The First Steel"): steam_gears Cogwork 101 (4x
+  Cogwheel, 2x Shaft) → steam_boiler (Steam Boiler + 2 gauges) → black_gold
+  (2 crude + 1 fuel canister, Dowsing Rod in de tekst) → iron_road (Signal +
+  Depot + 2 fuel - de treinlug) → engineer_contracts (herhaalbare leveringen
+  cogwerk/ijzeren platen/brass/olie/fuel, punt engineer_credit als reputatie).
+  Prijzen 600-1500 yen + 15-30 eco, EN per hoofdstuk een TechCore-blueprint
+  weggegeven via "techcore blueprint grant %player% ERA_x:<id>" (era1
+  fuel_generator, compactor, extractor; era2 rotary_generator). Blauwdruk-
+  ids uit de live plugins/TechCore/blueprints/*.yml gehaald (era1_crafting,
+  era2_crafting, static_machines). Tekst Engels, toon als de bestaande lijn.
+- Levermechaniek: álle sw_items zijn PAPER met display-naam - deliver-stages
+  material: PAPER + name-filter (cogwheel/shaft/steam boiler/gauge/crude/fuel
+  canister/...). Craft-gebeurtenissen tellen per basismateriaal (PAPER = te
+  ambigu), dus de cursus levert in plaats van te-vervaardigen.
+- ENGINE-BUG gevonden en hersteld: de stage-parser las keuzes ALLEEN als
+  map; het hele quests.yml (en de wizard-export) schrijft keuzes als LIJST
+  (choices: - label: ...). Gevolg: Vokans stallknoppen, backpack-vertakkingen
+  etc. waren in 0.5.x stil onbestaand - het menu toonde ze nooit. 0.5.3
+  parseert beide vormen (getMapList-tak + mm-helper). Bestaande dode knoppen
+  leven op - ook het shop-deel van Vorkan/Brakka doet nu wat de tekst belooft.
+- UITGEROLD (lege server, eigenaar gaf eerder vandaag al de lijn "rollen bij
+  lege"): jar 0.5.3 (sha1 c4b14871) + nieuwe data/quests.yml (6398 regels)
+  naar plugins/IekQuests/; oude 0.5.2 eraf; bak quests.yml.bak-steam-3010.
+  Live-check: "IekQuests 0.5.3 klaar - 56 quest(s)", 0 SEVERE, Done.
+  NPC 125 in Citizens bevestigd (saves.yml key '125').
+- Ketting-start: qtag:techcore:first_steel_completed_1 → hoofdstuk II, en
+  verder per tag. Wie The First Steel (golf 1-4 restant) nog niet deed, ziet
+  de cursus niet - dat is de bedoelde instroom.
+- Test-instructie voor eigenaar in TE-61: questbook bij de Engineer, lever een
+  Cogwheel, check blueprintontvangst (/techbrowser of de TechCore-gui).
+
 ### StaffHub 0.5.0 - permissies per lid + de grote UX-ronde (30-10, ~13:05 live)
 
 - Eigenaarswish: "permissies per lid instellen (wat ik alleen kan doen);

@@ -1637,6 +1637,259 @@ quests:
       - "title &dQUEST COMPLETE|&7The First Steel"
       - "say &dEngineer: &aGood. That is real steel. You earned it - keep it."
 
+  steam_gears:
+    title: "&6Cogwork 101"
+    subtitle: "Engineer - Steamworks course II"
+    icon: CLOCK
+    npc-id: 125
+    order: 64
+    start: "qtag:techcore:first_steel_completed_1,!tag:steam_gears_done"
+    journal:
+      - "Chapter II - Cogwork: four Cogwheels and two Shafts for the Engineer."
+    stages:
+      offer:
+        type: talk
+        label: "&aTeach me to make it turn."
+        lines:
+          - "&dEngineer: &7Steel was the body. Motion is the soul."
+          - "&7Anyone can stack ingots. I want hands that make"
+          - "&7things TURN - quietly, in a line, like clockwork."
+      cogwork:
+        type: deliver
+        material: PAPER
+        name: cogwheel
+        amount: 4
+        label: "&aHand in four Cogwheels"
+        lines:
+          - "&dEngineer: &7Oak sawn straight, teeth cut even."
+          - "&7Four Cogwheels. Lay them on the bench, not the floor."
+      shafts:
+        type: deliver
+        material: PAPER
+        name: shaft
+        amount: 2
+        label: "&aHand in two Shafts"
+        lines:
+          - "&dEngineer: &7A wheel without a spine is a frisbee."
+          - "&7Two copper Shafts - and yes, they count as spinning."
+    rewards:
+      - "tag+ steam_gears_done"
+      - "money 600"
+      - "eco 15"
+      - "techcore blueprint grant %player% ERA_1:fuel_generator_placement"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&6Cogwork 101"
+      - "say &dEngineer: &7It turns. Take it - the Fuel Generator blueprint. Steam needs a hearth, not a campfire."
+
+  steam_boiler:
+    title: "&6The Boiler Room"
+    subtitle: "Engineer - Steamworks course III"
+    icon: LAVA_BUCKET
+    npc-id: 125
+    order: 65
+    start: "qtag:steam_gears:steam_gears_done,!tag:steam_boiler_done"
+    journal:
+      - "Chapter III - Boiler: one Steam Boiler and two working gauges."
+    stages:
+      offer:
+        type: talk
+        label: "&aWhere do I build real steam?"
+        lines:
+          - "&dEngineer: &7Cogwheels are toys without pressure."
+          - "&7Build a Steam Boiler, feed it from a water wheel"
+          - "&7or a fire, and bring me proof it can count itself."
+      boiler:
+        type: deliver
+        material: PAPER
+        name: steam boiler
+        amount: 1
+        label: "&aDeliver the Steam Boiler"
+        lines:
+          - "&dEngineer: &7Copper around, iron within, one seam only."
+          - "&7If it hisses, you failed. If it hums, you are here."
+      gauges:
+        type: deliver
+        material: PAPER
+        name: gauge
+        amount: 2
+        label: "&aBring two gauges"
+        lines:
+          - "&dEngineer: &7A machine you cannot READ is a bomb you"
+          - "&7built yourself. One Speed Gauge, one Stress Gauge."
+    rewards:
+      - "tag+ steam_boiler_done"
+      - "money 900"
+      - "eco 20"
+      - "techcore blueprint grant %player% ERA_1:compactor_placement"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&6The Boiler Room"
+      - "say &dEngineer: &7Pressure with manners. Here - the Compactor blueprint. It eats scrap and gives ore. Fair trade."
+
+  black_gold:
+    title: "&6Black Gold"
+    subtitle: "Engineer - Steamworks course IV"
+    icon: BLACK_DYE
+    npc-id: 125
+    order: 66
+    start: "qtag:steam_boiler:steam_boiler_done,!tag:black_gold_done"
+    journal:
+      - "Chapter IV - Oil: two crude canisters and one refined fuel."
+    stages:
+      offer:
+        type: talk
+        label: "&aWhat runs hotter than water?"
+        lines:
+          - "&dEngineer: &7Steam is patient. The Guild is not."
+          - "&7Somewhere under this world lies a lake that burns."
+          - "&8Find it with the Dowsing Rod - it hums over oil."
+      crude:
+        type: deliver
+        material: PAPER
+        name: crude
+        amount: 2
+        label: "&aPump up two crude canisters"
+        lines:
+          - "&dEngineer: &7Two Canisters of crude, sealed tight."
+          - "&7It stains like sin and smells like money. Good."
+      refined:
+        type: deliver
+        material: PAPER
+        name: fuel canister
+        amount: 1
+        label: "&aRefine one canister to fuel"
+        lines:
+          - "&dEngineer: &7Crude through a Refinery comes out as Fuel."
+          - "&7One clean canister - and do not drink it. Nobody."
+    rewards:
+      - "tag+ black_gold_done"
+      - "money 1200"
+      - "eco 25"
+      - "techcore blueprint grant %player% ERA_1:extractor_placement"
+      - "sound steamworks:quest.complete"
+      - "title &aQUEST COMPLETE|&6Black Gold"
+      - "say &dEngineer: &7The earth pays out. Take the Extractor blueprint - it pulls what the pumpjack missed."
+
+  iron_road:
+    title: "&6The Iron Road"
+    subtitle: "Engineer - Steamworks course V"
+    icon: MINECART
+    npc-id: 125
+    order: 67
+    start: "qtag:black_gold:black_gold_done,!tag:iron_road_done"
+    journal:
+      - "Chapter V - Rail: a Signal, a Depot and fuel for the line."
+    stages:
+      offer:
+        type: talk
+        label: "&aThe machines are ready. Now what?"
+        lines:
+          - "&dEngineer: &7Now everything we built MOVES somewhere."
+          - "&7The Guild lays iron roads - rails with wagons that"
+          - "&7eat fuel instead of oats. Build me a working corner of one."
+      parts:
+        type: deliverall
+        label: "&aDeliver signal and depot"
+        items:
+          - "PAPER 1 signal"
+          - "PAPER 1 depot"
+        lines:
+          - "&dEngineer: &7One Signal, one Depot. The wagons obey the"
+          - "&7light and sleep at the depot. That is the whole trick."
+      fuel:
+        type: deliver
+        material: PAPER
+        name: fuel canister
+        amount: 2
+        label: "&aBring two canisters of fuel"
+        lines:
+          - "&dEngineer: &7A locomotive starts cold and stays temperamental."
+          - "&7Two Fuel Canisters - the line breathes on them."
+    rewards:
+      - "tag+ iron_road_done"
+      - "money 1500"
+      - "eco 30"
+      - "techcore blueprint grant %player% ERA_2:rotary_generator_placement"
+      - "sound steamworks:quest.complete"
+      - "title &aIRON ROAD PIONEER|&6You move the Guild now"
+      - "say &dEngineer: &7Course complete - you built, measured, pumped AND connected. Era Two opens: the Rotary Generator blueprint. Mind what it powers."
+
+  engineer_contracts:
+    title: "&6Engineer's Contracts"
+    subtitle: "Machine parts - steady stock, steady pay"
+    icon: PAPER
+    npc-id: 125
+    order: 68
+    start: "qtag:steam_gears:steam_gears_done"
+    journal:
+      - "Repeatable: deliver parts and plates. Reputation: engineer_credit"
+    stages:
+      intro:
+        type: talk
+        label: "&aAny work left?"
+        lines:
+          - "&dEngineer: &7The district never stops eating parts."
+          - "&8Bring stock, take coin. Contracts are on the board."
+        choices:
+          - label: "&2Read the contract board"
+            say: "&7Engineer: &8Every line pays itself. Pick one and come back loaded."
+    rewards: []
+    repeat:
+      cogwerk:
+        label: "&a8x Cogwheels"
+        material: PAPER
+        name: cogwheel
+        amount: 8
+        cooldown: 1200
+        money: 350
+        eco: 3
+        rewards:
+          - "point engineer_credit +1"
+          - "say &7+350 coins, +3 elite coins, +1 credit with the Engineer"
+      plates:
+        label: "&66x Iron Plates"
+        material: PAPER
+        name: iron plate
+        amount: 6
+        cooldown: 1200
+        money: 300
+        eco: 3
+        rewards:
+          - "point engineer_credit +1"
+          - "say &7+300 coins, +3 elite coins, +1 credit with the Engineer"
+      brass:
+        label: "&e3x Brass Ingots"
+        material: PAPER
+        name: brass ingot
+        amount: 3
+        cooldown: 1500
+        money: 500
+        eco: 5
+        rewards:
+          - "point engineer_credit +2"
+          - "say &7+500 coins, +5 elite coins, +2 credit with the Engineer"
+      oil:
+        label: "&84x Crude Canisters"
+        material: PAPER
+        name: crude
+        amount: 4
+        cooldown: 1200
+        money: 250
+        eco: 4
+        rewards:
+          - "point engineer_credit +1"
+          - "say &7+250 coins, +4 elite coins, +1 credit with the Engineer"
+      fuel:
+        label: "&63x Fuel Canisters"
+        material: PAPER
+        name: fuel canister
+        amount: 3
+        cooldown: 1500
+        money: 600
+        eco: 6
+        rewards:
+          - "point engineer_credit +2"
+          - "say &7+600 coins, +6 elite coins, +2 credit with the Engineer"
+
   cleric:
     title: "&fCleric of Valhalla"
     subtitle: "Divine services - race and class"

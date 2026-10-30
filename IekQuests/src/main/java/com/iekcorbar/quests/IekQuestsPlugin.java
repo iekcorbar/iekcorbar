@@ -443,6 +443,22 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     c.conds = conds(cv.getString("cond", ""));
                     for (var d : cv.getStringList("do")) c.doList.add(d);
                     g.choices.add(c);
+                } else for (var cm : v.getMapList("choices")) {
+                    // lijstnotatie - zoals het hele quests.yml die schrijft (vorkan,
+                    // backpack). Vóór deze tak verdwenen die keuzes spoorloos: de map-
+                    // parser gaf null en de menu-knoppen bleven weg. Nooit meer.
+                    Choice c = new Choice();
+                    c.label = mm(cm, "label");
+                    if (c.label.isEmpty()) c.label = "…";
+                    c.say = mm(cm, "say");
+                    c.gotoKey = mm(cm, "goto");
+                    c.voice = mm(cm, "voice");
+                    c.conds = conds(mm(cm, "cond"));
+                    Object closev = cm.get("close");
+                    c.close = closev instanceof Boolean b ? b : "true".equalsIgnoreCase(String.valueOf(closev));
+                    Object dl = cm.get("do");
+                    if (dl instanceof List<?> dd) for (var d : dd) if (d != null) c.doList.add(String.valueOf(d));
+                    g.choices.add(c);
                 }
                 q.stages.put(k, g);
             }
@@ -508,8 +524,13 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         try { return Double.parseDouble(s.trim()); } catch (Exception e) { return def; }
     }
 
-    private List<Cond> conds(String s) {
-        List<Cond> l = new ArrayList<>();
+    /** Waarde uit een willekeurs-map (keuze-uit-een-lijst), altijd als string. */
+    private static String mm(Map<?, ?> m, String k) {
+        Object o = m.get(k);
+        return o == null ? "" : String.valueOf(o);
+    }
+
+    private List<Cond> conds(String s) {        List<Cond> l = new ArrayList<>();
         if (s == null || s.isBlank()) return l;
         for (var p : s.split(",")) {
             var t = p.trim();
