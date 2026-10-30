@@ -19,7 +19,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
 | StaffHub 0.4.10 uitrollen (vertaalbalk mobiel) | TE-DEPLOYEN punt 49 | /opt/staffhub bijwerken + container rebuilden (zelfde als 0.4.9) |
-| Milo's quest uploaden (NPC staat er al: id 136) | TE-DEPLOYEN punt 51 + deploy/stap-voor-stap-quests-plaatsen.md | alleen nog mapje uploaden + /bq reload |
+| Milo's quest: upload staat, reload te doen | TE-DEPLOYEN punt 51 | console: /bq reload → klik Milo (fix me: BQ-weigering door YAML-dubbele-punt, hersteld) |
 | Halloween-quest plaatsen (morgen is het zo ver!) | TE-DEPLOYEN punt 52 | /npc create Igor Nightgrave → mapje uploaden → /bq reload |
 | Steamworks 0.3.26 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 | bij volgende herstart-batch |
 | Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | grijs-bericht VERSTUURD door eigenaar (30-10, DM) → wacht op antwoord; daarna ja/nee lockplan + klasse-keus |
