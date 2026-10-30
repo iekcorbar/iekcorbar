@@ -31,6 +31,12 @@ EXCLUDE = {
     "src/lib/db.json",
 }
 
+# Source maps and the file-tracing manifests (.nft.json) are build-time
+# debug/tracing artifacts: server.js never reads them. Per eigenaarsbesluit
+# 30-10 ("zip hoeft alleen de build te hebben") gaan ze niet meer mee - ze
+# waren goed voor ~9 MB van de 31 MB die de Plesk-filemanager niet pakte.
+SKIP_SUFFIXES = (".map", ".nft.json")
+
 
 def add_path(zf, base, rel):
     full = os.path.join(base, rel)
@@ -40,6 +46,8 @@ def add_path(zf, base, rel):
     if os.path.isdir(full):
         for root, _dirs, files in os.walk(full):
             for f in files:
+                if f.endswith(SKIP_SUFFIXES):
+                    continue
                 fp = os.path.join(root, f)
                 arcname = os.path.relpath(fp, base).replace(os.sep, "/")
                 if arcname in EXCLUDE:

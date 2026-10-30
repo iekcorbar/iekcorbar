@@ -28,39 +28,20 @@ for (const sub of ['cache', 'dev']) {
 // Instead, run `npm install` (or use Plesk's "NPM install" button) on the
 // server itself after uploading/extracting this package.
 
-// The compiled plugin jar's filename tracks the plugin's own version (see
-// pom.xml's version-bump comment: this exists so `/version IekcorbarSiteSync`
-// in-game can confirm a freshly built jar actually reached the server). That
-// only works if this filename is never allowed to drift out of sync with
-// pom.xml by hand — a hardcoded literal here is exactly the kind of gap that
-// silently ships a stale jar (or omits a freshly bumped one) the next time
-// the plugin's version changes. Reading it from pom.xml instead makes
-// pom.xml the single source of truth.
-function readPluginVersion() {
-  const pomPath = path.join(__dirname, 'IekcorbarSiteSync', 'pom.xml');
-  const pomXml = fs.readFileSync(pomPath, 'utf8');
-  // Only search the part of the file before <dependencies> — each
-  // dependency also has its own <version> tag, and the project's own
-  // <version> always appears earlier in a standard pom.xml.
-  const projectSection = pomXml.split('<dependencies>')[0];
-  const match = projectSection.match(/<version>([^<]+)<\/version>/);
-  if (!match) throw new Error('Could not read <version> from IekcorbarSiteSync/pom.xml');
-  return match[1];
-}
-
-const pluginVersion = readPluginVersion();
-const pluginJarName = `IekcorbarSiteSync-${pluginVersion}.jar`;
-const pluginJarPath = path.join(__dirname, pluginJarName);
-if (!fs.existsSync(pluginJarPath)) {
-  console.warn(`WARNING: ${pluginJarName} not found at repo root (pom.xml currently says version ${pluginVersion}). Did you forget to "mvn package" the plugin and copy the fresh jar here? Continuing WITHOUT the plugin jar in this zip.`);
-}
+// De plugin-jar-vracht is per 30-10 uit deze zip verdwenen (zie de items-
+// comment hieronder): site-zip = website, SiteSync = MC-server-deploy.
 
 const items = [
   '.next', 'src', 'public', 'app.js', 'server.js', 'package.json',
   'package-lock.json', 'next.config.mjs', 'postcss.config.mjs', 'jsconfig.json',
-  '.env.local', '.node-version', 'IekcorbarSiteSync',
-  ...(fs.existsSync(pluginJarPath) ? [pluginJarName] : [])
+  '.env.local', '.node-version'
 ];
+// IekcorbarSiteSync (plugin-jar + resourcepack) REIST NIET MEER MEE (eigenaar
+// 30-10): deze zip is uitsluitend het iekcorbar.com-buildpakket voor Plesk.
+// De site-code verwijst alleen in commentaren naar de plugin en leest niets
+// uit de map; het jar + resourcepack reizen naar de MC-server toe via hun
+// eigen TE-regels. Scheelt ~12 MB upload - precies wat de Plesk-filemanager
+// de hele middag niet lukte.
 
 const zipName = process.env.ZIP_NAME || 'iekcorbar_iekje_barend.zip';
 const zipPath = path.join(__dirname, zipName);
