@@ -22,6 +22,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | IekQuests 0.4.0 🟢 LIVE sinds 30-10 05:40 (18 quests: +Mad Doctor/Usop/Techcore/Cleric) | docs/quest-wizard.md | teleport=staff-only (spelers: kompas), money-condities, pay N, name-filter; 10 BQ-pakketten offline; BQ houdt: Rod, tutorial, jobs, Backpack, guards |
 | Halloween-quest plaatsen (morgen is het zo ver!) | TE-DEPLOYEN punt 52 | /npc create Igor Nightgrave → mapje uploaden → /bq reload |
 | Steamworks 0.3.26 🟢 LIVE sinds 30-10 05:05 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 (afgevinkt) | oude 0.3.25 van de server af |
+| Steamworks 0.3.27 (placement-rotatie: machines kijken kant op van speler + wrench draait voorkant) | TE-DEPLOYEN punt 54 | jar in deploy/ (sha1 6df44ece); KineticsTest 70/70; wiki-seed herbouwd; server is leeg, wacht op restart |
 | Tutorial: analyse + slotplan af | docs/tutorial-analyse.md | grijs-bericht VERSTUURD door eigenaar (30-10, DM) → wacht op antwoord; daarna ja/nee lockplan + klasse-keus |
 | iekcorbar-pack-build19.zip 🟢 LIVE sinds 30-10 05:05 (woosh + blips + Milo/Igor-stem + questboek-model) | TE-DEPLOYEN punt 43 (afgevinkt) | build14 uit de mixer; clients: pack opnieuw halen + herstart |
 | steamworks-seed (59 wiki-pagina's) | staff-site | opnieuw importeren |

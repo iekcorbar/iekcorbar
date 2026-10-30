@@ -55,7 +55,12 @@ final class Visuals {
             }
             default -> {
                 up = Kinetics.positive(n.axis);
-                front = n.type.isGauge() ? dialFace(n) : (n.axis == Axis.Y ? BlockFace.SOUTH : BlockFace.UP);
+                // Y-axis machines (kettle, mixer, tank, boiler, whistle, arm, depot) show their
+                // stored facing as front - so placement orientation and wrench turns are visible;
+                // old nodes (facing = UP/DOWN) fall back to south, like before
+                front = n.type.isGauge() ? dialFace(n)
+                        : (n.axis != Axis.Y ? BlockFace.UP
+                           : (Kinetics.axisOf(n.facing) == Axis.Y ? BlockFace.SOUTH : n.facing));
             }
         }
         Quaternionf orient = orientation(up, front);

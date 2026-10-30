@@ -237,7 +237,12 @@ final class PartListener implements Listener {
                         && beside.axis != faceAxis) axis = beside.axis;
             }
             case GEARBOX -> axis = faceAxis == Axis.Y ? Kinetics.axisOf(p.getFacing()) : Axis.Y;
-            case KETTLE, MIXER, PIPE, TANK, REFINERY, ARM, STEAM_BOILER, DEPOT, WHISTLE -> axis = Axis.Y;
+            case KETTLE, MIXER, PIPE, TANK, REFINERY, ARM, STEAM_BOILER, DEPOT, WHISTLE -> {
+                axis = Axis.Y;
+                // floor/ceiling click: the front looks the way the player looked when placing,
+                // like stations and gauges do - a side click keeps the clicked face as front
+                if (faceAxis == Axis.Y) facing = p.getFacing();
+            }
             case STATION, SIGNAL -> {
                 axis = Axis.Y;
                 facing = p.getFacing().getOppositeFace(); // the board faces the player

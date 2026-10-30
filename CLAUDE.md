@@ -1756,6 +1756,25 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### Steamworks 0.3.27 - placement-rotatie (30-10 ochtend)
+
+- Eigenaar: "stoom - model en geen rotatie mbt placement, alleen 1 facing,
+  niet de bedoeling". Gevolgd: ketel/mixer/tank/refinery/stoomketel/fluit/
+  robotarm/depot rendeerden altijd Zuid (Visuals fronste as-Y vast op SOUTH).
+- Fix op drie punten: (a) PartListener.place - bij plaatsen op vloer/plafond
+  krijgt de machine facing = kijkrichting van de speler (zij-klik blijft zoals
+  Create tegen het aangeklikte vlak), (b) Visuals - Y-machines met horizontale
+  facing tonen die als voorkant; oude nodes (facing=UP) vallen terug op Zuid,
+  dus geen databewerking nodig, (c) Kinetics - wrench draait bij die machines
+  nu het voorkant rond (blijven rechtop; canRotate + nieuw turnFace-geval).
+- KineticsTest 70/70 groen; geen modellen/pack gewijzigd (rotatie zit in de
+  display-quaternion). Wiki 02-power wrench-sectie + seed (59 pagina's) bij.
+- jar: deploy/Steamworks-0.3.27.jar sha1 6df44eced137535898b3eb28f4fa8736e0718db5;
+  TE-DEPLOYEN punt 54 (vervang 0.3.26, herstart). Server was leeg bij klaarzetten.
+- Ook vastgelegd: ochtend-uitrol (Steamworks 0.3.26 + IekQuests-golf 1/3 op de
+  live server, TAB geconfigureerd, Valhalla dubbelde grid_recipes opgeschoond)
+  → zie werklogs hierboven + board.
+
 ### IekQuests 0.4.0 - golf 3 uitgerold: Mad Doctor, Usop, Techcore, Cleric (30-10, ~05:45)
 
 - Eigenaars-regel aangenomen: "teleport is staff-only - spelers gebruiken het

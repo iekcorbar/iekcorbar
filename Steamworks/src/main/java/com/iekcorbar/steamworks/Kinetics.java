@@ -204,7 +204,8 @@ final class Kinetics {
         return switch (n.type) {
             case SHAFT, COGWHEEL, LARGE_COGWHEEL, GEARBOX, CLUTCH, GEARSHIFT, SPROCKET, CRUSHING_WHEEL,
                     SPEED_GAUGE, STRESS_GAUGE, STEAM_ENGINE, HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL,
-                    BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL, MILLSTONE -> true;
+                    BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL, MILLSTONE,
+                    KETTLE, MIXER, TANK, REFINERY, STEAM_BOILER, WHISTLE, ARM, DEPOT -> true;
             case CUSTOM -> n.ext != null && n.ext.rotatable();
             default -> false;   // pure-Y machines (kettle, mixer, arm, boiler, depot, whistle) and fluid parts
         };
@@ -253,6 +254,14 @@ final class Kinetics {
                 BlockFace f = clockwise(positive(n.axis), a);
                 if (f == positive(n.axis) || axisOf(f) == Axis.Y) return false;
                 n.axis = axisOf(f);
+                return true;
+            }
+            case KETTLE, MIXER, TANK, REFINERY, STEAM_BOILER, WHISTLE, ARM, DEPOT -> {
+                // pure-Y machines: only their front turns (around the clicked face's axis),
+                // the machine stays upright on its Y-axis
+                BlockFace f = clockwise(n.facing, a);
+                if (f == n.facing || axisOf(f) == Axis.Y) return false;
+                n.facing = f;
                 return true;
             }
             default -> {                                                  // shaft-like: X/Y/Z line
