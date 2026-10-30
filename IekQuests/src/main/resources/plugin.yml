@@ -2,7 +2,7 @@ name: IekQuests
 version: '${project.version}'
 main: com.iekcorbar.quests.IekQuestsPlugin
 api-version: '26.2'
-description: Eigen quest-engine: gesprekken, doelen, beloningen, compass en een klickbare GUI.
+description: Own quest engine - conversations, goals, rewards, compass and a click GUI.
 author: iekcorbar
 softdepend: [Citizens]
 

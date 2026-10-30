@@ -1,12 +1,17 @@
-# IekQuests - quest-definities (30-10)
+# IekQuests 0.2 - quest definitions (30-10)
 #
-# per quest:  title/subtitle/icon, npc-id (Citizens; -1 = alleen uit het menu),
-#             stages op volgorde, rewards (eenmalig bij finish) en herhaalbare contracten.
-# stage types: talk (klik verder) | craft (X van material maken) | deliver (X afgeven)
-#              | walk (naar location met radius; compass-knop verschijnt)
-# reward regels: money <bedrag> | eco <elitecoins> | title <titel|sub> | sound <ns:key>
-#                | say <tekst> | of een rauw console-commando met %player%.
-# voice: geluid uit het iekcorbar-pack, bv. steamworks:milo.line01
+# NOTE: everything the PLAYER can see is English (staff + players are
+# international). Code comments may stay Dutch.
+#
+# stages: talk | craft | deliver | walk | kill   (order = sequence;
+# next/goto to jump). choices = branching options with labels.
+# rewards/actions: money|eco|title A|B|sound ns:key|say|tag+|tag-|
+#   point <cat> +N | effect TYPE secs amp | teleport | give | shop <cmd> |
+#   compass | sequence <id>
+# conditions (start / stage cond / choice cond): tag:name, point:cat>=N,
+#   item:MAT>=N, perm:node, day, night  (comma = and)
+# repeat: contracts after completion (deliver|walk, own cooldown).
+# sequences: timelines "delay|action".
 
 quests:
   milo:
@@ -15,34 +20,36 @@ quests:
     icon: BOOK
     npc-id: 136
     order: 10
+    journal:
+      - "Four blank labels for Milo's caravan."
     stages:
       talk:
         type: talk
-        label: "&aIk help je, Milo."
+        label: "&aI'll help you, Milo."
         voice: steamworks:milo.line01
         lines:
-          - "&fMilo: &7mijn karavaan is de labelkoffer kwijtgeraakt op"
-          - "&7de route. Vier blanco's van papier en ik kan weer"
-          - "&7dichtbij huis bezorgen. Munt en elitecoins eraan vast!"
+          - "&fMilo: &7my caravan spilled its label case on"
+          - "&7the road. Four blank sheets of paper and I can"
+          - "&7deliver close to home again - coin AND elite coins!"
       labels:
         type: craft
         material: PAPER
         amount: 4
-        label: "&aLever de vier labels"
+        label: "&aHand in the four labels"
         voice: steamworks:milo.line02
         lines:
-          - "&fMilo: &7Vier blanco vellen - knip wat papier uit"
-          - "&7wat je maar vinden kunt (suikerriet voor suiker, of"
-          - "&7gewoon uit een boek). Ik wacht hier."
+          - "&fMilo: &7Four blank sheets. Paper is sugar cane and"
+          - "&7water - or torn out of a book. Whatever you prefer."
     rewards:
       - "money 300"
       - "eco 10"
       - "sound steamworks:quest.complete"
-      - "title &aQUEST COMPLETE|&7Milo betaalt je uit: 300 + 10 elitecoins"
+      - "title &aQUEST COMPLETE|&7+300 coin, +10 elite coins"
       - "say &eMilo: &aBless your crafting hands!"
+      - "tag+ milo_done"
     repeat:
       labels:
-        label: "&aNog vier labels"
+        label: "&aFour more labels"
         material: PAPER
         amount: 4
         cooldown: 900
@@ -54,47 +61,87 @@ quests:
     title: "&5Halloween Lanterns"
     subtitle: "Igor Nightgrave - Halloween Town"
     icon: CARVED_PUMPKIN
-    npc-id: -1            # nog niet geplaatst; zet hier het Citizens-id van Igor neer
+    npc-id: -1
     order: 20
+    journal:
+      - "Eight candles and six pumpkins for the town."
+    start: "!tag:igor_done"
     stages:
-      praat:
+      talk:
         type: talk
-        label: "&aDe lantarens aansteken"
+        label: "&aLight up the lanterns"
         voice: steamworks:igor.line01
         lines:
-          - "&fIgor: &7Heeeeeey, klein pompoentje. De lantarens van"
-          - "&7het dorp doven uit en de geesten worden onrustig."
-          - "&7Acht kaarsen en zes pompoenen - dan brandt het weer."
-      kaarsen:
+          - "&fIgor: &7Heeeeey, little pumpkin. The lanterns of the"
+          - "&7town are dying and the spirits grow restless."
+          - "&7Eight candles, six pumpkins - and it glows again."
+      candles:
         type: craft
         material: CANDLE
         amount: 8
-        label: "&aLever de acht kaarsen"
+        label: "&aHand in the eight candles"
         voice: steamworks:igor.line03
         lines:
-          - "&fIgor: &7Kaarsen! Honingraat en draad - de wereld"
-          - "&7herinnert zich zoiets altijd wel."
-      pompoenen:
+          - "&fIgor: &7Candles! Honeycomb and string - the world"
+          - "&7remembers how that works."
+      pumpkins:
         type: deliver
         material: PUMPKIN
         amount: 6
-        label: "&aZes pompoenen op de brandstapel"
+        label: "&aSix pumpkins on the pyre"
         voice: steamworks:igor.line09
         lines:
-          - "&fIgor: &7Zes volle ronde pompoenen. Snij ze gerust"
-          - "&7aan met een schaar - de hele werken toch het best."
+          - "&fIgor: &7Six round, whole pumpkins. Carve them with"
+          - "&7shears if you like - whole ones glow the best."
     rewards:
       - "money 400"
       - "eco 15"
-      - "give %player% carved_pumpkin 1"
+      - "give CARVED_PUMPKIN 1"
+      - "effect NIGHT_VISION 60"
       - "sound steamworks:quest.complete"
-      - "title &aQUEST COMPLETE|&7Halloween Town brandt weer - 400 + 15 elitecoins"
+      - "title &aQUEST COMPLETE|&7Halloween Town blazes on"
+      - "tag+ igor_done"
     repeat:
       trick_or_treat:
-        label: "&aTrick or treat (2 pompoenen)"
+        label: "&aTrick or treat (2 pumpkins)"
         material: PUMPKIN
         amount: 2
         cooldown: 600
         money: 120
         eco: 2
         voice: steamworks:igor.line11
+
+  # ---- migration-style demo (greyarts' vorkan in 0.2 language) -------------
+  vorkan_demo:
+    title: "&2Vorkan - Weapon Merchant"
+    subtitle: "Weapon Merchant Vorkan Kross &8(demo)"
+    icon: IRON_SWORD
+    npc-id: 79
+    order: 90
+    start: "!tag:vorkan_demo_done"
+    stages:
+      talk:
+        type: talk
+        label: "&2I'm looking for work."
+        lines:
+          - "&fVorkan: &7Materials, not excuses. This time:"
+          - "&76× gunpowder. The smith needs it for blasting charges."
+        choices:
+          - label: "&2What went wrong with the last contract?"
+            say: "&7Vorkan: &8nothing - except you never finished it."
+            cond: "!tag:vorkan_grumpy"
+            do: ["tag+ vorkan_grumpy"]
+        next: gunpowder
+      gunpowder:
+        type: deliver
+        material: GUNPOWDER
+        amount: 6
+        label: "&aDeliver 6× gunpowder"
+    rewards:
+      - "money 650"
+      - "point vorkan_friend +1"
+      - "sound steamworks:quest.complete"
+      - "title &2CONTRACT COMPLETE|&7Vorkan remembers your name"
+      - "tag+ vorkan_demo_done"
+
+sequences: {}

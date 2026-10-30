@@ -10,100 +10,152 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 /**
- * IekQuests - de eigen quest-engine van iekcorbar (30-10).
+ * IekQuests 0.2 - de eigen quest-engine van iekcorbar (30-10).
  *
- * Alles zit in quests.yml: gespreksregels, doelen (praten / X craften / X afleveren /
- * naar een plek lopen), eenmalige beloningen (money|eco|title|sound|commando) en
- * herhaalbare contracten met eigen cooldown. De speler opent alles via /questbook of
- * door een gekoppelde Citizens-NPC aan te klikken (npc-id in de config). NPC-praten
- * speelt optioneel een stemgeluid uit het eigen pack (voice: steamworks:milo.lineXX).
+ * Alles in quests.yml:
+ *   quests.<id>:  title, subtitle, icon, npc-id, order, startcondities,
+ *                 stages (talk/craft/deliver/walk/kill/repeat, met condities +
+ *                 keys van de repeat-map), een vertakking "goto" op een stage,
+ *                 rewards bij finish, repeats (herhaalcontracten met cooldown +
+ *                 random-tag), journal-regels, sequences (timede actie-reeksen).
+ *   stages.<key>: type, material, amount, location, radius, label, voice, lines,
+ *                 condities, rewards (extra), next of goto, choices: [ {label, say,
+ *                 goto/do, condities} ] - choices maken een gesprek vertakkend.
+ *   rewards:  money N | eco N | title A|B | sound ns:key | say tekst | tag +/-:naam |
+ *             point cat +N | effect TYPE secs amp | teleport x;y;z;w | give mat N |
+ *             sequence <id> | commando | shop <commando> | compass x;y;z;w
+ *   condities: "tag:naam" | "!tag:naam" | "point:cat>=N" | "item:MAT>=N" |
+ *              "perm:node" | "night" | "day"  ( komma = alles moet )
  *
- * Progressie-per-speler: state 0 = niet gestart, 1..N = actieve stage, N+1 = klaar.
- * Data blijft klein (data.yml), periodiek + immediate opgeslagen.
- *
- * BetonQuest-quotes (greyarts) blijven gewoon draaien zolang BQ op de server staat;
- * dit systeem is de opvolger en heeft NOTHING van BQ nodig - alleen CMI/Vault
- * (via console-commando's) en EliteMobs voor de eco-regels.
+ * Progressie per speler in data.yml: state, tags, points, cooldowns, sequences.
+ * BQ blijft buiten dit alles - alleen CMI/Vault + EliteMobs worden via console
+ * aangeroerd.
  */
 public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     // ---------------------------------------------------------------- model
 
+    static final class Cond {
+        String raw;
+        Cond(String s) { raw = s; }
+    }
+
+    static final class Choice {
+        String label, say, gotoKey = "";
+        List<String> doList = new ArrayList<>();
+        List<Cond> conds = new ArrayList<>();
+        String voice = "";
+    }
+
     static final class Stage {
-        String kind = "talk";          // talk|craft|deliver|walk
+        String key = "", kind = "talk";      // talk|craft|deliver|walk|kill
         String material = "PAPER";
+        String mobType = "";                 // kill: entity type naam of "monster"
         int amount = 1;
         Location loc;
         double radius = 6;
         String label = "&aVerder";
+        String voice = "";
         List<String> lines = new ArrayList<>();
-        String voice = "";             // bv. steamworks:milo.line01 (leeg = knopklik-geluid)
+        List<Cond> conds = new ArrayList<>();
+        List<Choice> choices = new ArrayList<>();
+        String next = "";                    // key van volgende stage; "" = sequentieel
+        String gotoKey = "";                 // directe sprong na voltooien van deze stage
+        List<String> rewards = new ArrayList<>();
     }
 
     static final class Repeat {
         String id;
+        String kind = "deliver";             // deliver|walk
         String material = "PUMPKIN";
         int amount = 2;
+        Location loc;
+        double radius = 6;
         long cooldown = 600;
         int money = 100;
         int eco = 2;
+        boolean daily;                       // max 1x per gamemiddag (24u)
         String label = "&aInleveren";
         String voice = "";
+        List<String> rewards = new ArrayList<>();
     }
 
     static final class Quest {
         String id = "", title = "&fQuest", subtitle = "", icon = "BOOK";
-        int npcId = -1;                // Citizens-id; -1 = alleen menu, geen NPC-klik
+        int npcId = -1;
         int order = 0;
-        List<Stage> stages = new ArrayList<>();
+        boolean randomStart;                 // bij start: willekeurige eerste stage uit 'random-stages'
+        List<String> randomStages = new ArrayList<>();
+        List<Cond> startConds = new ArrayList<>();
+        LinkedHashMap<String, Stage> stages = new LinkedHashMap<>();
         List<Repeat> repeats = new ArrayList<>();
         List<String> rewards = new ArrayList<>();
+        List<String> journal = new ArrayList<>();
+    }
+
+    static final class Seq {
+        List<String> steps = new ArrayList<>();
+        long[] delays;
     }
 
     static final class Prog {
-        int state = 0;
-        Map<String, Long> cd = new HashMap<>();   // repeat-id -> unix-secs deadline
+        String stage = "";                   // key van actieve stage; "" = klaar/niet gestart
+        boolean started, done;
+        List<String> tags = new ArrayList<>();
+        Map<String, Integer> points = new HashMap<>();
+        Map<String, Long> cd = new HashMap<>();
+        long startedAt;
     }
 
-    /** Herkenbare GUI's: slot -> commando-tag. */
     static final class Holder implements InventoryHolder {
         final UUID who;
-        final String quest;            // "" = hoofdmenu
-        int page;
+        final String quest;
+        String sig = "";                   // tekenvinger van de vorige render - geen flicker
         Holder(UUID who, String quest) { this.who = who; this.quest = quest == null ? "" : quest; }
         @Override public Inventory getInventory() { return null; }
     }
 
     private final List<Quest> quests = new ArrayList<>();
+    private final Map<String, Seq> sequences = new HashMap<>();
     private final Map<UUID, Map<String, Prog>> prog = new HashMap<>();
     private YamlConfiguration data;
     private NamespacedKey tagKey;
+    private final Random rnd = new Random();
 
     // ---------------------------------------------------------------- lifecycle
 
@@ -135,7 +187,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             return true;
         });
         Bukkit.getScheduler().runTaskTimer(this, this::refreshOpenGuis, 40L, 40L);
-        Bukkit.getScheduler().runTaskTimer(this, this::saveData, 600L, 600L);
+        Bukkit.getScheduler().runTaskTimer(this, this::saveData, 1200L, 1200L);
         load();
         getLogger().info("IekQuests " + getDescription().getVersion() + " klaar - " + quests.size() + " quest(s).");
     }
@@ -149,7 +201,25 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private void load() {
         quests.clear();
+        sequences.clear();
         var qc = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "quests.yml"));
+
+        var sq = qc.getConfigurationSection("sequences");
+        if (sq != null) for (String k : sq.getKeys(false)) {
+            Seq s = new Seq();
+            for (var st : sq.getStringList(k)) {
+                String del = "0";
+                String body = st;
+                if (st.contains("|")) {
+                    del = st.substring(0, st.indexOf('|')).trim();
+                    body = st.substring(st.indexOf('|') + 1).trim();
+                }
+                s.steps.add(body);
+                s.delays = grow(s.delays, (long) (num(del, 0) * 20));
+            }
+            sequences.put(k, s);
+        }
+
         var sec = qc.getConfigurationSection("quests");
         if (sec != null) for (String id : sec.getKeys(false)) {
             var s = sec.getConfigurationSection(id);
@@ -161,25 +231,44 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             q.icon = s.getString("icon", "BOOK");
             q.npcId = s.getInt("npc-id", -1);
             q.order = s.getInt("order", 0);
+            q.randomStart = s.getBoolean("random", false);
+            q.startConds = conds(s.getString("start", ""));
             for (var r : s.getStringList("rewards")) q.rewards.add(r);
+            for (var j : s.getStringList("journal")) q.journal.add(j);
             var st = s.getConfigurationSection("stages");
-            if (st != null) for (String k : st.getKeys(true)) {
+            if (st != null) for (String k : st.getKeys(false)) {
                 var v = st.getConfigurationSection(k);
                 if (v == null) continue;
                 Stage g = new Stage();
+                g.key = k;
                 g.kind = v.getString("type", "talk");
                 g.material = v.getString("material", "PAPER").toUpperCase();
+                g.mobType = v.getString("mob", "").toUpperCase();
                 g.amount = v.getInt("amount", 1);
                 g.radius = v.getDouble("radius", 6);
                 g.label = v.getString("label", "&aVerder");
                 g.voice = v.getString("voice", "");
                 g.lines.addAll(v.getStringList("lines"));
+                g.conds = conds(v.getString("cond", ""));
+                g.next = v.getString("next", "");
+                g.gotoKey = v.getString("goto", "");
+                for (var r : v.getStringList("rewards")) g.rewards.add(r);
                 String locStr = v.getString("location", "");
-                if (!locStr.isEmpty()) {
-                    g.loc = parseLoc(locStr);
-                    if (g.loc == null) getLogger().warning("quest " + id + " stage " + k + ": slechte location '" + locStr + "'");
+                if (!locStr.isEmpty()) g.loc = parseLoc(locStr);
+                var ch = v.getConfigurationSection("choices");
+                if (ch != null) for (String ck : ch.getKeys(false)) {
+                    var cv = ch.getConfigurationSection(ck);
+                    if (cv == null) continue;
+                    Choice c = new Choice();
+                    c.label = cv.getString("label", ck);
+                    c.say = cv.getString("say", "");
+                    c.gotoKey = cv.getString("goto", "");
+                    c.voice = cv.getString("voice", "");
+                    c.conds = conds(cv.getString("cond", ""));
+                    for (var d : cv.getStringList("do")) c.doList.add(d);
+                    g.choices.add(c);
                 }
-                q.stages.add(g);
+                q.stages.put(k, g);
             }
             var rp = s.getConfigurationSection("repeat");
             if (rp != null) for (String k : rp.getKeys(false)) {
@@ -187,15 +276,22 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 if (v == null) continue;
                 Repeat r = new Repeat();
                 r.id = k;
+                r.kind = v.getString("type", "deliver");
                 r.material = v.getString("material", "PUMPKIN").toUpperCase();
                 r.amount = v.getInt("amount", 2);
+                r.radius = v.getDouble("radius", 6);
                 r.cooldown = v.getLong("cooldown", 600);
+                r.daily = v.getBoolean("daily", false);
                 r.money = v.getInt("money", 0);
                 r.eco = v.getInt("eco", 0);
-                r.label = v.getString("label", "&aLever " + r.amount + " in");
+                r.label = v.getString("label", "&aLever in");
                 r.voice = v.getString("voice", "");
+                String locStr = v.getString("location", "");
+                if (!locStr.isEmpty()) r.loc = parseLoc(locStr);
+                for (var x : v.getStringList("rewards")) r.rewards.add(x);
                 q.repeats.add(r);
             }
+            for (var x : s.getStringList("random-stages")) q.randomStages.add(x);
             quests.add(q);
         }
         quests.sort((a, b) -> Integer.compare(a.order, b.order));
@@ -204,11 +300,17 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         prog.clear();
         var ps = data.getConfigurationSection("players");
         if (ps != null) for (String uuid : ps.getKeys(false)) {
-            Map<String, Prog> m = new HashMap<>();
-            var qs = ps.getConfigurationSection(uuid + ".quests");
+            var m = new HashMap<String, Prog>();
+            var qs = data.getConfigurationSection(uuid + ".quests");
             if (qs != null) for (String qid : qs.getKeys(false)) {
                 Prog pr = new Prog();
-                pr.state = qs.getInt(qid + ".state");
+                pr.stage = qs.getString(qid + ".stage", "");
+                pr.started = qs.getBoolean(qid + ".started");
+                pr.done = qs.getBoolean(qid + ".done");
+                pr.startedAt = qs.getLong(qid + ".startedAt");
+                pr.tags.addAll(qs.getStringList(qid + ".tags"));
+                var pp = qs.getConfigurationSection(qid + ".points");
+                if (pp != null) for (String c : pp.getKeys(false)) pr.points.put(c, pp.getInt(c));
                 var cds = qs.getConfigurationSection(qid + ".cd");
                 if (cds != null) for (String k : cds.getKeys(false)) pr.cd.put(k, cds.getLong(k));
                 m.put(qid, pr);
@@ -217,17 +319,43 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    private long[] grow(long[] arr, long v) {
+        var out = new long[arr == null ? 1 : arr.length + 1];
+        if (arr != null) System.arraycopy(arr, 0, out, 0, arr.length);
+        out[out.length - 1] = v;
+        return out;
+    }
+
+    private double num(String s, double def) {
+        try { return Double.parseDouble(s.trim()); } catch (Exception e) { return def; }
+    }
+
+    private List<Cond> conds(String s) {
+        List<Cond> l = new ArrayList<>();
+        if (s == null || s.isBlank()) return l;
+        for (var p : s.split(",")) {
+            var t = p.trim();
+            if (!t.isEmpty()) l.add(new Cond(t));
+        }
+        return l;
+    }
+
     private void save() { saveData(); }
 
     private void saveData() {
         if (data == null) return;
         data.set("players", null);
-        var ps = data.createSection("players");
         for (var e : prog.entrySet()) {
-            var sec = ps.createSection(e.getKey().toString() + ".quests");
+            var base = e.getKey().toString() + ".quests.";
             for (var qe : e.getValue().entrySet()) {
-                sec.set(qe.getKey() + ".state", qe.getValue().state);
-                for (var ce : qe.getValue().cd.entrySet()) sec.set(qe.getKey() + ".cd." + ce.getKey(), ce.getValue());
+                var pr = qe.getValue();
+                data.set(base + qe.getKey() + ".stage", pr.stage);
+                data.set(base + qe.getKey() + ".started", pr.started);
+                data.set(base + qe.getKey() + ".done", pr.done);
+                if (pr.startedAt > 0) data.set(base + qe.getKey() + ".startedAt", pr.startedAt);
+                if (!pr.tags.isEmpty()) data.set(base + qe.getKey() + ".tags", pr.tags);
+                for (var pe : pr.points.entrySet()) data.set(base + qe.getKey() + ".points." + pe.getKey(), pe.getValue());
+                for (var ce : pr.cd.entrySet()) data.set(base + qe.getKey() + ".cd." + ce.getKey(), ce.getValue());
             }
         }
         try {
@@ -244,6 +372,43 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private Quest byId(String id) {
         for (var q : quests) if (q.id.equals(id)) return q;
         return null;
+    }
+
+    // ---------------------------------------------------------------- condities
+
+    private boolean ok(Player p, Quest q, Prog pr, List<Cond> cs) {
+        for (var c : cs) if (!ok(p, q, pr, c.raw)) return false;
+        return true;
+    }
+
+    private boolean ok(Player p, Quest q, Prog pr, String c) {
+        try {
+            if (c.startsWith("!") && c.contains("tag:")) return !pr.tags.contains(c.substring(2).split(":")[1]);
+            if (c.startsWith("tag:")) {
+                var want = c.substring(4);
+                return pr.tags.contains(want) || q.stages.keySet().contains(want) && pr.stage.equals(want);
+            }
+            if (c.startsWith("point:")) {
+                var body = c.substring(6);
+                var ge = body.indexOf(">=");
+                if (ge < 0) return false;
+                var cat = body.substring(0, ge);
+                var need = Integer.parseInt(body.substring(ge + 2));
+                return pr.points.getOrDefault(cat, 0) >= need;
+            }
+            if (c.startsWith("item:")) {
+                var body = c.substring(5);
+                var ge = body.indexOf(">=");
+                if (ge < 0) return false;
+                return held(p, body.substring(0, ge)) >= Integer.parseInt(body.substring(ge + 2));
+            }
+            if (c.startsWith("perm:")) return p.hasPermission(c.substring(5));
+            if (c.equals("night")) return p.getWorld().getTime() > 13000 || p.getWorld().getTime() < 23000;
+            if (c.equals("day")) return p.getWorld().getTime() >= 23000 || p.getWorld().getTime() <= 13000;
+            return true;   // onbekende string: niet blokkeren (log het niet, te veel ruis)
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     // ---------------------------------------------------------------- events
@@ -272,11 +437,36 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (m == null) return;
         for (var q : quests) {
             Prog pr = m.get(q.id);
-            if (pr == null || pr.state < 1 || pr.state > q.stages.size()) continue;
-            Stage s = q.stages.get(pr.state - 1);
-            if (!s.kind.equals("craft") || !s.material.equals(result.getType().name())) continue;
+            if (pr == null || pr.stage.isEmpty()) continue;
+            Stage s = q.stages.get(pr.stage);
+            if (s == null || !s.kind.equals("craft") || !s.material.equals(result.getType().name())) continue;
             Bukkit.getScheduler().runTask(this, () -> {
-                if (held(p, s.material) >= s.amount) advance(p, q, pr);
+                if (held(p, s.material) >= s.amount) advance(p, q, pr, s);
+            });
+            return;
+        }
+    }
+
+    @EventHandler
+    public void onKill(EntityDeathEvent e) {
+        var k = e.getEntity().getKiller();
+        if (k == null) return;
+        var m = prog.get(k.getUniqueId());
+        if (m == null) return;
+        for (var q : quests) {
+            Prog pr = m.get(q.id);
+            if (pr == null || pr.stage.isEmpty()) continue;
+            Stage s = q.stages.get(pr.stage);
+            if (s == null || !s.kind.equals("kill")) continue;
+            if (!s.mobType.isEmpty() && !s.mobType.equals("MONSTER")
+                    && !s.mobType.equalsIgnoreCase(e.getEntityType().name())) continue;
+            if (s.mobType.equals("MONSTER") && !(e.getEntity() instanceof Monster)) continue;
+            Bukkit.getScheduler().runTask(this, () -> {
+                int have = pr.points.getOrDefault("kill:" + q.id + ":" + s.key, 0) + 1;
+                pr.points.put("kill:" + q.id + ":" + s.key, have);
+                if (have >= s.amount) advance(k, q, pr, s);
+                else k.playSound(k.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, SoundCategory.PLAYERS, 0.5f, 1.6f);
+                save();
             });
             return;
         }
@@ -293,10 +483,10 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (m == null) return;
         for (var q : quests) {
             Prog pr = m.get(q.id);
-            if (pr == null || pr.state < 1 || pr.state > q.stages.size()) continue;
-            Stage s = q.stages.get(pr.state - 1);
-            if (!s.kind.equals("walk") || s.loc == null || !s.loc.getWorld().equals(p.getWorld())) continue;
-            if (p.getLocation().distanceSquared(s.loc) <= s.radius * s.radius) advance(p, q, pr);
+            if (pr == null || pr.stage.isEmpty()) continue;
+            Stage s = q.stages.get(pr.stage);
+            if (s == null || !s.kind.equals("walk") || s.loc == null || !s.loc.getWorld().equals(p.getWorld())) continue;
+            if (p.getLocation().distanceSquared(s.loc) <= s.radius * s.radius) advance(p, q, pr, s);
         }
     }
 
@@ -326,72 +516,118 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (q == null) return;
         Prog pr = pr(p, q);
         switch (tag) {
-            case "back" -> openMenu(p);
-            case "start" -> { pr.state = 1; refresh(p, q); save(); }
-            default -> {
-                if (tag.equals("act")) {
-                    int st = pr.state;
-                    if (st < 1 || st > q.stages.size()) return;
-                    Stage s = q.stages.get(st - 1);
-                    boolean ok = switch (s.kind) {
-                        case "talk" -> true;
-                        case "walk" -> s.loc != null && p.getWorld().equals(s.loc.getWorld())
-                                && p.getLocation().distanceSquared(s.loc) <= s.radius * s.radius;
-                        default -> held(p, s.material) >= s.amount;
-                    };
-                    if (ok) {
-                        if (s.kind.equals("deliver")) take(p, s.material, s.amount);
-                        advance(p, q, pr);
-                    } else {
-                        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, SoundCategory.PLAYERS, 0.6f, 0.7f);
-                    }
-                } else if (tag.startsWith("repeat:")) {
-                    doRepeat(p, q, pr, tag.substring(7));
-                } else if (tag.startsWith("compass:")) {
-                    String[] a = tag.substring(8).split(";");
-                    var w = Bukkit.getWorld(a[0]);
-                    if (w != null) setCompass(p, new Location(w,
-                            Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3])));
-                }
+            case "back" -> { openMenu(p); return; }
+            case "start" -> { startQuest(p, q, pr); return; }
+            case "newtry" -> { resetQuest(pr); refresh(p, q); save(); return; }
+        }
+        if (tag.startsWith("choice:")) {
+            var s = q.stages.get(pr.stage);
+            if (s == null) return;
+            int i = Integer.parseInt(tag.substring(7));
+            if (i < 0 || i >= s.choices.size()) return;
+            Choice c = s.choices.get(i);
+            if (!ok(p, q, pr, c.conds)) { deny(p); return; }
+            if (!c.say.isEmpty()) p.sendMessage(legacy(c.say));
+            speak(p, c.voice);
+            for (var d : c.doList) run(p, q, pr, d);
+            if (!c.gotoKey.isEmpty() && q.stages.containsKey(c.gotoKey)) {
+                pr.stage = c.gotoKey;
+                speakFirst(p, q, pr);
             }
+            refresh(p, q);
+            save();
+            return;
+        }
+        if (tag.startsWith("repeat:")) { doRepeat(p, q, pr, tag.substring(7)); return; }
+        if (tag.startsWith("compass:")) {
+            String[] a = tag.substring(8).split(";");
+            var w = Bukkit.getWorld(a[0]);
+            if (w != null) setCompass(p, new Location(w, Double.parseDouble(a[1]), Double.parseDouble(a[2]), Double.parseDouble(a[3])));
+            return;
+        }
+        if (tag.equals("act")) {
+            var s = q.stages.get(pr.stage);
+            if (s == null) return;
+            if (!ok(p, q, pr, s.conds)) { deny(p); return; }
+            boolean done = switch (s.kind) {
+                case "talk" -> true;
+                case "walk" -> s.loc != null && p.getWorld().equals(s.loc.getWorld())
+                        && p.getLocation().distanceSquared(s.loc) <= s.radius * s.radius;
+                case "kill" -> pr.points.getOrDefault("kill:" + q.id + ":" + s.key, 0) >= s.amount;
+                default -> held(p, s.material) >= s.amount;
+            };
+            if (done) {
+                if (s.kind.equals("deliver")) take(p, s.material, s.amount);
+                advance(p, q, pr, s);
+            } else deny(p);
         }
     }
 
-    /** Cooldown-tellers in open GUI's live verversen. */
-    private void refreshOpenGuis() {
-        for (var p : Bukkit.getOnlinePlayers()) {
-            var holder = p.getOpenInventory().getTopInventory().getHolder();
-            if (!(holder instanceof Holder h)) continue;
-            var m = prog.get(p.getUniqueId());
-            if (m == null) continue;
-            if (h.quest.isEmpty()) {
-                boolean dirty = false;
-                for (var q : quests) {
-                    var pr = m.get(q.id);
-                    if (pr == null) continue;
-                    for (var r : q.repeats) if (pr.cd.getOrDefault(r.id, 0L) <= now()) dirty = true;
-                }
-                if (dirty) openMenu(p);
-            } else {
-                var q = byId(h.quest);
-                if (q != null) openQuest(p, q);
-            }
-        }
+    private void deny(Player p) {
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, SoundCategory.PLAYERS, 0.6f, 0.7f);
     }
 
-    private long now() { return System.currentTimeMillis() / 1000L; }
+    private void speakFirst(Player p, Quest q, Prog pr) {
+        var s = q.stages.get(pr.stage);
+        if (s != null) speak(p, s.voice);
+    }
 
-    // ---------------------------------------------------------------- stage flow
+    // ---------------------------------------------------------------- flow
 
-    private void advance(Player p, Quest q, Prog pr) {
-        pr.state = Math.min(pr.state + 1, q.stages.size() + 1);
-        if (pr.state == q.stages.size() + 1 && !q.rewards.isEmpty()) {
-            runRewards(p, q.rewards);
+    private void startQuest(Player p, Quest q, Prog pr) {
+        if (q.stages.isEmpty()) { p.sendMessage(legacy("&7This quest is not ready yet.")); return; }
+        if (!ok(p, q, pr, q.startConds)) { deny(p); return; }
+        pr.started = true;
+        pr.done = false;
+        pr.startedAt = System.currentTimeMillis();
+        String first;
+        if (q.randomStart && !q.randomStages.isEmpty() && q.stages.containsKey(q.randomStages.get(0))) {
+            first = q.randomStages.get(rnd.nextInt(q.randomStages.size()));
         } else {
-            var s = q.stages.get(Math.min(pr.state, q.stages.size()) - 1);
-            p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.7f, 1.3f);
-            if (s != null) speak(p, s.voice);
+            first = q.stages.keySet().iterator().next();
         }
+        pr.stage = first;
+        speakFirst(p, q, pr);
+        refresh(p, q);
+        save();
+    }
+
+    private void resetQuest(Prog pr) {
+        pr.stage = "";
+        pr.started = false;
+        pr.done = false;
+    }
+
+    /** Stage voltooid: extra rewards, volgende stage (next/goto) of klaar. */
+    private void advance(Player p, Quest q, Prog pr, Stage s) {
+        for (var r : s.rewards) run(p, q, pr, r);
+        String nxt = !s.gotoKey.isEmpty() ? s.gotoKey : (!s.next.isEmpty() ? s.next : nextKey(q, s));
+        if (nxt == null || !q.stages.containsKey(nxt)) {
+            finish(p, q, pr);
+            return;
+        }
+        pr.stage = nxt;
+        p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.7f, 1.3f);
+        speakFirst(p, q, pr);
+        refresh(p, q);
+        save();
+    }
+
+    private String nextKey(Quest q, Stage cur) {
+        var it = q.stages.keySet().iterator();
+        String prev = null;
+        while (it.hasNext()) {
+            String k = it.next();
+            if (k.equals(cur.key)) return it.hasNext() ? it.next() : null;
+            prev = k;
+        }
+        return null;
+    }
+
+    private void finish(Player p, Quest q, Prog pr) {
+        pr.done = true;
+        pr.stage = "";
+        if (!q.rewards.isEmpty()) runRewards(p, q, pr, q.rewards);
         refresh(p, q);
         save();
     }
@@ -402,51 +638,140 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (r == null) return;
         Long cd = pr.cd.get(r.id);
         if (cd != null && cd > now()) {
-            p.sendMessage(legacy("&7Milo's papier moet nog even rusten - nog " + fmt(cd - now()) + " te gaan."));
+            p.sendMessage(legacy("&7Not yet - the queue clears in " + fmt(cd - now()) + "."));
             return;
         }
-        if (held(p, r.material) < r.amount) {
-            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, SoundCategory.PLAYERS, 0.6f, 0.7f);
-            return;
+        if (r.kind.equals("walk")) {
+            if (r.loc == null || !p.getWorld().equals(r.loc.getWorld())
+                    || p.getLocation().distanceSquared(r.loc) > r.radius * r.radius) { deny(p); return; }
+        } else {
+            if (held(p, r.material) < r.amount) { deny(p); return; }
+            take(p, r.material, r.amount);
         }
-        take(p, r.material, r.amount);
-        if (r.money > 0) dispatch(p, "cmi money give " + p.getName() + " -s " + r.money);
-        if (r.eco > 0) dispatch(p, "em money add " + p.getName() + " " + r.eco);
+        if (r.money > 0) dispatch("cmi money give " + p.getName() + " -s " + r.money);
+        if (r.eco > 0) dispatch("em money add " + p.getName() + " " + r.eco);
+        runRewards(p, q, pr, r.rewards);
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 0.9f, 1.4f);
         speak(p, r.voice);
-        pr.cd.put(r.id, now() + r.cooldown);
+        pr.cd.put(r.id, now() + (r.daily ? 86400 : r.cooldown));
         refresh(p, q);
         save();
     }
 
-    private void runRewards(Player p, List<String> rewards) {
-        for (String raw : rewards) {
-            var r = raw.trim();
-            if (r.isEmpty()) continue;
-            r = r.replace("%player%", p.getName());
-            int sp = r.indexOf(' ');
-            String key = sp < 0 ? r : r.substring(0, sp);
-            String val = sp < 0 ? "" : r.substring(sp + 1);
-            switch (key) {
-                case "money" -> dispatch(p, "cmi money give " + p.getName() + " -s " + val);
-                case "eco" -> dispatch(p, "em money add " + p.getName() + " " + val);
-                case "sound" -> {
-                    var snd = sound(val);
-                    p.playSound(p.getLocation(), snd == null ? Sound.BLOCK_NOTE_BLOCK_PLING : snd, SoundCategory.PLAYERS, 0.8f, 1f);
+    // ---------------------------------------------------------------- acties
+
+    /** Eén actie-regel uit de config (rewards/do/sequence-stap). */
+    private void run(Player p, Quest q, Prog pr, String raw) {
+        var a = raw.trim();
+        if (a.isEmpty()) return;
+        a = a.replace("%player%", p.getName());
+        int sp = a.indexOf(' ');
+        String key = sp < 0 ? a : a.substring(0, sp);
+        String val = sp < 0 ? "" : a.substring(sp + 1);
+        switch (key) {
+            case "money" -> dispatch("cmi money give " + p.getName() + " -s " + val);
+            case "eco" -> dispatch("em money add " + p.getName() + " " + val);
+            case "title" -> {
+                String[] ab = val.split("\\|");
+                p.showTitle(Title.title(legacy(ab[0]), ab.length > 1 ? legacy(ab[1]) : Component.empty()));
+            }
+            case "sound" -> {
+                var snd = sound(val);
+                p.playSound(p.getLocation(), snd == null ? Sound.BLOCK_NOTE_BLOCK_PLING : snd, SoundCategory.PLAYERS, 0.8f, 1f);
+            }
+            case "say" -> p.sendMessage(legacy(val));
+            case "tag+" -> { if (!pr.tags.contains(val)) pr.tags.add(val); save(); }
+            case "tag-" -> { pr.tags.remove(val); save(); }
+            case "point" -> {
+                // vorm: point <cat> +N  (optellen) | point <cat> =N (zetten)
+                String[] x = val.split(" ");
+                if (x.length >= 2) {
+                    String cat = x[0];
+                    String op = x[1];
+                    int n = Integer.parseInt(op.replace("+", "").replace("=", "").replace("-", ""));
+                    if (op.startsWith("+")) pr.points.merge(cat, n, Integer::sum);
+                    else if (op.startsWith("-")) pr.points.merge(cat, -n, Integer::sum);
+                    else pr.points.put(cat, n);
+                    save();
                 }
-                case "title" -> {
-                    String[] ab = val.split("\\|");
-                    p.showTitle(Title.title(legacy(ab[0]), ab.length > 1 ? legacy(ab[1]) : Component.empty()));
+            }
+            case "effect" -> {
+                String[] x = val.split(" ");
+                var type = PotionEffectType.getByName(x[0]);
+                if (type != null) p.addPotionEffect(new org.bukkit.potion.PotionEffect(type,
+                        (int) (num(x.length > 1 ? x[1] : "5", 5) * 20), x.length > 2 ? Integer.parseInt(x[2]) : 0, true, false));
+            }
+            case "teleport" -> {
+                var l = parseLoc(val);
+                if (l != null) p.teleport(l);
+            }
+            case "give" -> {
+                String[] x = val.split(" ");
+                var mt = Material.matchMaterial(x[0]);
+                if (mt != null) p.getInventory().addItem(new ItemStack(mt, x.length > 1 ? Integer.parseInt(x[1]) : 1));
+            }
+            case "compass" -> {
+                var l = parseLoc(val);
+                if (l != null) setCompass(p, l);
+            }
+            case "shop" -> {
+                p.closeInventory();
+                Bukkit.dispatchCommand(p, val);
+            }
+            case "sequence" -> playSeq(p, q, pr, val);
+            default -> dispatch(a);
+        }
+    }
+
+    private void runRewards(Player p, Quest q, Prog pr, List<String> rewards) {
+        for (var r : rewards) run(p, q, pr, r);
+    }
+
+    /** Tijdlijn: steps met eigen vertraging (notify/cmd), als folder uit BQ-land. */
+    private void playSeq(Player p, Quest q, Prog pr, String seqId) {
+        var s = sequences.get(seqId);
+        if (s == null) return;
+        long acc = 0;
+        for (int i = 0; i < s.steps.size(); i++) {
+            acc += s.delays[i];
+            final String step = s.steps.get(i);
+            Bukkit.getScheduler().runTaskLater(this, () -> run(p, q, pr, step), acc);
+        }
+    }
+
+    /** Openstaande GUI's (cooldown-tellers) periodisch verversen. */
+    private void refreshOpenGuis() {
+        for (var p : Bukkit.getOnlinePlayers()) {
+            var holder = p.getOpenInventory().getTopInventory().getHolder();
+            if (!(holder instanceof Holder h)) continue;
+            var m = prog.get(p.getUniqueId());
+            if (m == null) continue;
+            if (h.quest.isEmpty()) {
+                String sig = "";
+                for (var q : quests) {
+                    var pr = m.get(q.id);
+                    sig += q.id + ":" + (pr == null ? "-" : (pr.done ? "d" : pr.stage + "/" +
+                            pr.cd.entrySet().stream().map(e -> e.getKey() + (e.getValue() > now() ? 1 : 0)).reduce("", (a, b) -> a + b)));
                 }
-                case "say" -> p.sendMessage(legacy(val));
-                default -> dispatch(p, r);
+                if (!sig.equals(h.sig)) { h.sig = sig; openMenu(p); }
+            } else {
+                var q = byId(h.quest);
+                if (q == null) continue;
+                var pr = m.getOrDefault(q.id, new Prog());
+                Stage s = q.stages.get(pr.stage);
+                String sig = (pr.started ? "s" : "-") + (pr.done ? "d" : "") + pr.stage
+                        + (s == null ? "" : "/" + (s.kind.equals("kill")
+                                ? pr.points.getOrDefault("kill:" + q.id + ":" + s.key, 0)
+                                : held(p, s.material)))
+                        + pr.cd.entrySet().stream().map(e -> e.getKey() + (e.getValue() > now() ? 1 : 0))
+                                .reduce("", (a, b) -> a + b);
+                if (!sig.equals(h.sig)) { h.sig = sig; openQuest(p, q); }
             }
         }
     }
 
-    private void dispatch(Player p, String consoleCmd) {
-        Bukkit.getScheduler().runTask(this,
-                () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), consoleCmd));
+    private void dispatch(String consoleCmd) {
+        Bukkit.getScheduler().runTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), consoleCmd));
     }
 
     private void speak(Player p, String key) {
@@ -464,7 +789,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    // ---------------------------------------------------------------- helpers: inventaris
+    // ---------------------------------------------------------------- inventaris
 
     private int held(Player p, String material) {
         var mt = Material.matchMaterial(material);
@@ -490,10 +815,15 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     // ---------------------------------------------------------------- GUI's
 
     private void openMenu(Player p) {
-        int size = Math.max(27, ((quests.size() / 9) + 1) * 9);
-        var inv = Bukkit.createInventory(new Holder(p.getUniqueId(), ""), size, legacy("&6&l⚒ Questboek"));
-        int slot = 10;
+        List<Quest> vis = new ArrayList<>();
         for (var q : quests) {
+            var pr = pr(p, q);
+            if (ok(p, q, pr, q.startConds) || (pr.started && !pr.done)) vis.add(q);
+        }
+        int size = Math.max(27, ((vis.size() / 9) + 1) * 9);
+        var inv = Bukkit.createInventory(new Holder(p.getUniqueId(), ""), size, legacy("&6&l⚒ Quest Book"));
+        int slot = 10;
+        for (var q : vis) {
             if (q.stages.isEmpty()) continue;
             List<String> lo = new ArrayList<>();
             if (!q.subtitle.isEmpty()) lo.add("&8" + q.subtitle);
@@ -508,69 +838,90 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private void openQuest(Player p, Quest q) {
         Prog pr = pr(p, q);
-        int n = q.stages.size();
         var inv = Bukkit.createInventory(new Holder(p.getUniqueId(), q.id), 45, legacy(q.title));
+        Stage s = pr.stage.isEmpty() ? null : q.stages.get(pr.stage);
 
-        // midden: boek met gesprekstekst van nu
         List<String> lines = new ArrayList<>();
-        if (pr.state == 0) lines.add("&eKlik hieronder om te beginnen.");
-        else if (pr.state <= n) lines.addAll(q.stages.get(pr.state - 1).lines);
-        else lines.add("&aDe quest is voltooid!");
-        if (!q.subtitle.isEmpty()) lines.add(0, "&8" + q.subtitle);
+        if (!q.subtitle.isEmpty()) lines.add("&8" + q.subtitle);
+        if (!pr.started) lines.add("&eClick below to begin.");
+        else if (pr.done) {
+            lines.add("&aThe quest is complete!");
+            for (var j : q.journal) lines.add("&7" + j);
+        } else if (s != null) {
+            lines.addAll(s.lines);
+            if (!q.journal.isEmpty()) lines.add("&8" + q.journal.get(Math.min(q.journal.size() - 1, Math.max(0, indexOfStage(q, s)))));
+        }
         var book = item(q.icon, q.title, lines);
         inv.setItem(13, book);
 
-        // onder: acties
-        if (pr.state == 0) {
-            inv.setItem(31, tagged(Material.LIME_DYE, "&a✔ Quest starten", "start"));
-        } else if (pr.state <= n) {
-            var s = q.stages.get(pr.state - 1);
-            inv.setItem(31, tagged(Material.PAPER, labelFor(p, s), "act"));
-            if ((s.kind.equals("walk")) && s.loc != null)
-                inv.setItem(33, tagged(Material.COMPASS, "&6Wijst " + s.loc.getWorld().getName()
-                        + " " + s.loc.getBlockX() + ", " + s.loc.getBlockZ(),
+        int nextSlot = 31;
+        if (!pr.started) {
+            inv.setItem(31, tagged(Material.LIME_DYE, "&a✔ Start quest", "start"));
+        } else if (pr.done) {
+            if (!q.repeats.isEmpty()) {
+                int slot = 29;
+                for (var r : q.repeats) {
+                    Long cd = pr.cd.get(r.id);
+                    boolean ready = cd == null || cd <= now();
+                    String lab = (ready ? "&a" : "&7") + r.label
+                            + (r.kind.equals("deliver") ? " (" + held(p, r.material) + "/" + r.amount + ")" : "")
+                            + (ready ? "" : " &7still " + fmt(cd - now()));
+                    if (slot < 35) { inv.setItem(slot, tagged(Material.LIME_DYE, lab, "repeat:" + r.id)); slot++; }
+                }
+            } else inv.setItem(31, tagged(Material.PAPER, "&aStart the quest again", "newtry"));
+        } else if (s != null) {
+            inv.setItem(31, tagged(Material.PAPER, labelFor(p, q, pr, s), "act"));
+            if (s.kind.equals("walk") && s.loc != null)
+                inv.setItem(33, tagged(Material.COMPASS, "&6Point the way",
                         "compass:" + s.loc.getWorld().getName() + ";" + s.loc.getBlockX()
                                 + ";" + s.loc.getBlockY() + ";" + s.loc.getBlockZ()));
-        } else if (!q.repeats.isEmpty()) {
-            int slot = 29;
-            for (var r : q.repeats) {
-                Long cd = pr.cd.get(r.id);
-                boolean ready = cd == null || cd <= now();
-                String lab = (ready ? "&a" : "&7") + r.label + " (" + held(p, r.material) + "/" + r.amount + ")"
-                        + (ready ? "" : " &7nog " + fmt(cd - now()));
-                if (slot < 35) { inv.setItem(slot, tagged(Material.LIME_DYE, lab, "repeat:" + r.id)); slot++; }
+            for (var c : s.choices) {
+                if (nextSlot > 37) break;
+                inv.setItem(nextSlot, tagged(Material.OAK_SIGN, c.label, "choice:" + indexOfChoice(s, c)));
+                nextSlot++;
             }
         }
-        inv.setItem(40, tagged(Material.BARRIER, "&cTerug", "back"));
+        inv.setItem(40, tagged(Material.BARRIER, "&cBack", "back"));
         p.openInventory(inv);
     }
 
-    /** Hernoemt de hoofd-GUI van de speler na elke voortgang zonder close/open-flits. */
-    private void refresh(Player p, Quest q) {
-        var holder = p.getOpenInventory().getTopInventory().getHolder();
-        if (holder instanceof Holder h && h.quest.equals(q.id)) {
-            openQuest(p, q);
-            return;
-        }
-        var h = p.getOpenInventory().getTopInventory().getHolder();
-        if (h instanceof Holder) openQuest(p, q);   // menu staat open? quest openen is prima feedback
+    private int indexOfChoice(Stage s, Choice c) {
+        return s.choices.indexOf(c);
     }
 
-    private String labelFor(Player p, Stage s) {
-        switch (s.kind) {
-            case "craft": return "&e" + s.label + " &8(" + held(p, s.material) + "/" + s.amount + ")";
-            case "deliver": return "&a" + s.label + " &8(" + held(p, s.material) + "/" + s.amount + ")";
-            case "walk": return "&e" + s.label + " &8[" + (s.loc == null ? "?" : s.loc.getBlockX() + "," + s.loc.getBlockZ()) + "]";
-            default: return "&a" + s.label;
+    private int indexOfStage(Quest q, Stage s) {
+        int i = 0;
+        for (var k : q.stages.keySet()) {
+            if (k.equals(s.key)) return i;
+            i++;
         }
+        return 0;
+    }
+
+    private void refresh(Player p, Quest q) {
+        var holder = p.getOpenInventory().getTopInventory().getHolder();
+        if (holder instanceof Holder) openQuest(p, q);
+    }
+
+    private String labelFor(Player p, Quest q, Prog pr, Stage s) {
+        return switch (s.kind) {
+            case "craft" -> "&e" + s.label + " &8(" + held(p, s.material) + "/" + s.amount + ")";
+            case "deliver" -> "&a" + s.label + " &8(" + held(p, s.material) + "/" + s.amount + ")";
+            case "walk" -> "&e" + s.label + " &8[" + (s.loc == null ? "?" : s.loc.getBlockX() + "," + s.loc.getBlockZ()) + "]";
+            case "kill" -> "&c" + s.label + " &8(" + pr.points.getOrDefault("kill:" + q.id + ":" + s.key, 0) + "/" + s.amount + ")";
+            default -> "&a" + s.label;
+        };
     }
 
     private String statusLine(Quest q, Prog pr) {
-        int n = q.stages.size();
-        if (pr.state == 0) return "&7Nog niet gestart";
-        if (pr.state <= n) return "&eStage " + pr.state + "/" + n;
-        return "&a✔ Voltooid";
+        if (!pr.started) return "&7Not started yet";
+        if (pr.done) return "&a✔ Completed";
+        var s = q.stages.get(pr.stage);
+        int i = s == null ? 0 : indexOfStage(q, s) + 1;
+        return "&eStage " + i + "/" + q.stages.size() + (s == null ? "" : " - " + plain(s.label));
     }
+
+    // ---------------------------------------------------------------- items
 
     private ItemStack item(String material, String name, List<String> lore) {
         var mt = Material.matchMaterial(material);
@@ -588,7 +939,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         var it = new ItemStack(m);
         var im = it.getItemMeta();
         im.displayName(legacy(name));
-        im.getPersistentDataContainer().set(tagKey, org.bukkit.persistence.PersistentDataType.STRING, tag);
+        im.getPersistentDataContainer().set(tagKey, PersistentDataType.STRING, tag);
         it.setItemMeta(im);
         return it;
     }
@@ -596,19 +947,18 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private void setTag(ItemStack it, String tag) {
         var im = it.getItemMeta();
         if (im == null) return;
-        im.getPersistentDataContainer().set(tagKey, org.bukkit.persistence.PersistentDataType.STRING, tag);
+        im.getPersistentDataContainer().set(tagKey, PersistentDataType.STRING, tag);
         it.setItemMeta(im);
     }
 
     private String loreTag(ItemStack it) {
         var im = it.getItemMeta();
         if (im == null) return null;
-        return im.getPersistentDataContainer().get(tagKey, org.bukkit.persistence.PersistentDataType.STRING);
+        return im.getPersistentDataContainer().get(tagKey, PersistentDataType.STRING);
     }
 
     // ---------------------------------------------------------------- misc
 
-    /** Citizens id van een entity via reflectie; -1 als het er geen is of Citizens ontbreekt. */
     private Method mRegistry, mGetNpc, mId;
     private boolean citizensBroken;
 
@@ -632,19 +982,23 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** MetaCompass (Paper): wijs de client-compass naar een plek. Reflectief voor zekerheid. */
     private void setCompass(Player p, Location loc) {
         try {
             var mc = p.getClass().getMethod("getMetaCompass").invoke(p);
             mc.getClass().getMethod("setLocation", Location.class).invoke(mc, loc);
             p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 0.8f, 1.6f);
         } catch (Exception e) {
-            p.sendMessage(legacy("&7De compass-modus is op deze server niet beschikbaar."));
+            p.sendMessage(legacy("&7Compass mode is not available on this server."));
         }
     }
 
     private Component legacy(String s) {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(s == null ? "" : s);
+    }
+
+    private String plain(String s) {
+        return org.bukkit.ChatColor.stripColor(
+                org.bukkit.ChatColor.translateAlternateColorCodes('&', s == null ? "" : s));
     }
 
     private Location parseLoc(String s) {
@@ -658,6 +1012,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             return null;
         }
     }
+
+    private long now() { return System.currentTimeMillis() / 1000L; }
 
     private String fmt(long secs) {
         if (secs <= 0) return "";
