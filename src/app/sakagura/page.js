@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { CircleHelp, Flame, Wine, Timer, Cog, Sprout, Droplets, Lightbulb, BookOpen, ListOrdered, Sparkles, AlertTriangle } from 'lucide-react';
+import { CircleHelp, Flame, Wine, Timer, Cog, Sprout, Trees, Droplets, Lightbulb, BookOpen, ListOrdered, Sparkles, AlertTriangle } from 'lucide-react';
 import SakaguraPlayground from '@/components/SakaguraPlayground';
 
 export const metadata = {
@@ -72,6 +72,7 @@ const NAV = [
   ['#casks', 'Casks'],
   ['#quality', 'Quality'],
   ['#garden', 'Garden'],
+  ['#orchard', 'Orchard'],
   ['#drinking', 'Drinking'],
   ['#first', 'First brew'],
   ['#seasonal', 'Seasonal'],
@@ -90,6 +91,49 @@ const CROPS = [
   ['blueberry', 'Blueberries', 'forest-y Berry Wine'],
   ['juniper', 'Juniper Berries', 'botanical Juniper Gin'],
   ['ginger', 'Ginger', 'the kick in Amazake and gin'],
+];
+
+// The garden grew (Sakagura 0.4/0.5): thirty-seven more crops. Plant = what goes
+// into the ground; wild home = where ripe patches already grow. Faithful to
+// docs/wiki-sakagura/02-garden.md - keep the two in sync.
+const GARDEN_LATER = [
+  ['Apples', 'Apple Pip', 'plains, meadows, forests'],
+  ['Pears', 'Pear Pip', 'forests, flower forests'],
+  ['Apricots', 'Apricot Kernel', 'savannas, badlands, plains'],
+  ['Mikan Oranges', 'Mikan Seeds', 'jungles, bamboo'],
+  ['Kiwis', 'Kiwi Seeds', 'jungles, forests'],
+  ['Rice', 'Rice', 'swamps, rivers, jungles'],
+  ['Rye', 'Rye', 'plains, taiga'],
+  ['Maize', 'Maize', 'plains, savannas'],
+  ['Tomatoes', 'Tomato Seeds', 'plains, sunflower plains'],
+  ['Raspberries', 'Raspberries', 'forests, taiga'],
+  ['Blackcurrants', 'Blackcurrants', 'forests, groves'],
+  ['Elderberries', 'Elderberries', 'forests, dark forests'],
+  ['Cranberries', 'Cranberries', 'swamps, groves'],
+  ['Gooseberries', 'Gooseberries', 'forests'],
+  ['Mulberries', 'Mulberries', 'plains, savannas'],
+  ['Persimmons', 'Persimmon Pip', 'forests'],
+  ['Loquats', 'Loquat Stone', 'jungles'],
+  ['Pomegranates', 'Pomegranate Seeds', 'savannas, badlands'],
+  ['Figs', 'Fig Cuttings', 'savannas, plains'],
+  ['Quinces', 'Quince Pip', 'forests, flower forests'],
+  ['Olives', 'Olive Stone', 'savannas, badlands'],
+  ['Dates', 'Date Pit', 'badlands, jungles'],
+  ['Lychees', 'Lychee Seed', 'jungles, bamboo'],
+  ['Passion Fruits', 'Passionfruit Seeds', 'jungles'],
+  ['Vanilla Pods', 'Vanilla Cuttings', 'jungles, bamboo'],
+  ['Sudachi', 'Sudachi Seeds', 'jungles, bamboo'],
+  ['Shiso Leaves', 'Shiso Leaves', 'forests, jungles'],
+  ['Wasabi Roots', 'Wasabi Roots', 'swamps, rivers'],
+  ['Daikon', 'Daikon', 'plains, flower forests'],
+  ['Chili Peppers', 'Chili Seeds', 'jungles, savannas'],
+  ['Mangoes', 'Mango Pit', 'jungles'],
+  ['Papayas', 'Papaya Seeds', 'jungles'],
+  ['Guavas', 'Guava Seeds', 'savannas, jungles'],
+  ['Rambutan', 'Rambutan Seed', 'jungles'],
+  ['Longans', 'Longan Seed', 'jungles'],
+  ['Mangosteens', 'Mangosteen Seeds', 'jungles'],
+  ['Dragon Fruits', 'Dragonfruit Seeds', 'swamps, jungles'],
 ];
 
 export default function SakaguraExplainedPage() {
@@ -274,22 +318,63 @@ export default function SakaguraExplainedPage() {
       </Section>
 
       {/* ---------- garden ---------- */}
-      <Section id="garden" icon={Sprout} kicker="Where drinks are grown" title="The garden: eleven crops worth drinking">
+      <Section id="garden" icon={Sprout} kicker="Where drinks are grown" title="The garden: forty-eight crops worth drinking">
         <p className="text-sm text-text-warm/80 leading-relaxed">
-          Every crop here exists because a recipe asked for it. They grow on ordinary farmland in three
-          stages; berry bushes and dwarf fruit trees <b>regrow</b> after picking, barley and ginger are dug up
-          and replanted. And when you explore, keep your eyes open: wild patches grow ripened bushes from the
-          first day, in the biomes each plant likes.
+          Eleven crops founded this garden; every one of them still earns its place because a recipe asks
+          for it. They grow on ordinary farmland in three stages; berry bushes and dwarf fruit trees
+          <b>regrow</b> after picking, barley and ginger are dug up and replanted. And when you explore, keep
+          your eyes open: wild patches grow ripened bushes from the first day, in the biomes each plant likes.
         </p>
         <div className="grid sm:grid-cols-3 gap-4">
           {CROPS.map(([id, name, use]) => (
             <Card key={id} img={id} title={name} stat={use} />
           ))}
         </div>
+        <p className="text-sm text-text-warm/80 leading-relaxed">
+          Since then the garden grew to <b className="text-sp-gold">forty-eight</b> - fruits, grains and the
+          hot green things the newer bar asks for. Apricots, kiwis, mikan, pears, tomatoes and chili all
+          stand behind at least one drink on the recipes page; most of the rest are fresh eating and the
+          Kitchen&apos;s doing. What asks for nothing is planted for the joy of the orchard.
+        </p>
+        <Table
+          head={['Crop', 'Plant', 'Found wild in']}
+          rows={GARDEN_LATER}
+        />
         <p className="text-xs text-text-warm/50">
           Seeds come from the fruit itself - one fruit in a crafting grid makes a couple of seeds (barley,
           strawberries, blueberries, juniper and ginger plant straight from the harvest).
         </p>
+      </Section>
+
+      {/* ---------- orchard ---------- */}
+      <Section id="orchard" icon={Trees} kicker="The 0.5.0 grove" title="Orchard trees: a spot of their own">
+        <p className="text-sm text-text-warm/80 leading-relaxed">
+          The garden finally stood up straight. A sapling goes in with a right-click on grass or dirt -
+          not farmland, trees take a spot of their own - and grows in three stages: a sprout, a young tree,
+          a full tree. Each step takes about twenty minutes of real time; bone meal on the trunk skips one.
+        </p>
+        <Table
+          head={['Tree', 'Fruit', 'Grown from', 'Good to know']}
+          rows={[
+            ['Sakura', '2-4 Cherries', 'Cherry + 2 Sticks', 'pink blossom; petals drift off the canopy'],
+            ['Ume Plum', '2-3 Ume Plums', 'Ume Plums + 2 Sticks', 'the sake fruit, off a tree instead of a bush'],
+            ['Apple', '2-4 Apples', 'Apples + 2 Sticks', 'a classic, with bigger yields than the bush'],
+            ['Orange', '2-4 Mikan Oranges', 'Mikan Oranges + 2 Sticks', 'glossy green canopy'],
+            ['Red Maple', 'none', '2 Red Mushrooms + 2 Sticks', 'pure decoration - golden sparkles in autumn colours'],
+          ]}
+        />
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Card title="Picking and felling" stat="the canopy regrows">
+            <p>A ripe tree shows fruit dots in its top canopy. Right-click the trunk and 2-4 pieces drop -
+            the canopy ripens again in about twenty minutes. Punch the trunk three times and the tree comes
+            down; you get the sapling back, plus whatever hung in it.</p>
+          </Card>
+          <Card title="Same fruit, same bar" stat="bush or tree, it counts">
+            <p>Tree fruit is the very same fruit the bush version gives, so every drink recipe works with
+            either - and vice versa. Trees want four blocks of air above them and a little space from their
+            neighbours. Wild trees do not spawn: an orchard is something you plant.</p>
+          </Card>
+        </div>
       </Section>
 
       {/* ---------- drinking ---------- */}
@@ -347,8 +432,9 @@ export default function SakaguraExplainedPage() {
       <Section id="seasonal" icon={Sparkles} kicker="Twelve times a year" title="The seasonal shelf">
         <p className="text-sm text-text-warm/80">
           Since late October the bar keeps a <b>seasonal shelf</b>: twelve holiday brews that join the
-          regular menu. And no, the garden did not grow — it stays at its eleven crops. Everything else
-          these drinks ask for comes from the world as it is: <b>glow berries</b> from caves, a <b>sea
+          regular menu. And yes — since then the garden did grow, from its founding eleven to forty-eight
+          crops and five orchard trees. Still, these seasonal drinks ask for the stranger corners of the
+          world as much as for the garden: <b>glow berries</b> from caves, a <b>sea
           pickle</b> from warm reefs, <b>turtle eggs</b> from the beach, the odd rabbit&apos;s foot after
           a lucky hunt, and one Relics treat used for the very first time in a cauldron.
         </p>
@@ -367,7 +453,7 @@ export default function SakaguraExplainedPage() {
           ))}
         </div>
         <p className="text-sm text-text-warm/80">
-          The whole live menu — all fifty drinks with steps and alcohol — is on the{' '}
+          The whole live menu — all eighty drinks with steps and alcohol — is on the{' '}
           <Link href="/recipes" className="text-sp-gold underline">recipes page</Link> under the{' '}
           <b>Sakagura</b> tab, and your in-game <b>Brewer&apos;s Manual</b> always carries the same list,
           rebuilt fresh every time a copy leaves the shelf.
@@ -388,7 +474,7 @@ export default function SakaguraExplainedPage() {
           <Link href="/wiki?page=sakagura" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Sakagura Wiki (quick reference)</Link>
           <Link href="/recipes" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><BookOpen className="w-4 h-4" /> All Recipes</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Sakagura {`0.3.4`}). Exact times are always shown in-game: right-click anything, or use /zukan.</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Sakagura {`0.5.0`}). Exact times are always shown in-game: right-click anything, or use /zukan.</p>
       </Section>
     </div>
   );
