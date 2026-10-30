@@ -1708,6 +1708,30 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
   (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
 
+### StaffHub quest-gidsen + git-backup alle quests + quest-stemgeluid (30-10)
+
+- Nieuwe skill `monitor` (~\.claude\skills\monitor): één ssh-scan
+  (scripts/healthcheck.sh) over RAM/schijf/logs/processen/groei; drempels en
+  rapportstijl in SKILL.md. Live-getest.
+- Quest-voice: make_sounds.py uitgebreid — `voice.milo`/`voice.machine`
+  (3 varianten, dankzij _vseed-teller onderling verschillend) +
+  `quest.complete`/`quest.click`; alle generatoren met EIGEN lokale Random,
+  de gedeelde seed-stream blijft onaangeroerd (audio-craft regel). Pack-build
+  16 nog tegoed.
+- **StaffHub quests-map**: deploy/staffhub-quests/ 00–07 (overzicht /
+  handelaars-dailies / eet-en-drinkhallen / backpack-keten / jobs-ranges /
+  tutorial / one-offs / routekaart), geschreven uit de ECHTE pakketten
+  (19 stuks getarrend en uitgelezen). Nieuwe kennis: de 5 handelaars + 8
+  eetwarens delen één daily-mechaniek (take prefix-items + vriendschaps-
+  punten + 22 min delay-cooldown + cmi money 250–900); JobsRank1 geeft
+  `lp parent add rank_1` — botsing met de CMI-ladder (`parent set`) is
+  gearnoteerd in gids 04 en in het greyarts-bericht.
+- **git-backup**: alle QuestPackages staan vanaf nu in
+  pluginset-aangepast/BetonQuest/QuestPackages/ (19 pakketten, YAML-only).
+- Milo's karavaan (eerste nieuwe quest, gids 07): menu-IO + typ-effect +
+  stemgeluid per NPC; beloning cash + elitecoins (`em money add`); Zeta pas
+  na SiteSync-`/izeta`-werkblokje.
+
 ### RAM-groei op de server: BluMap eraf + plafond op Java (30-10 nacht)
 
 - Eigenaar zag in het paneel RAM richting 16/20 GB (normaal 10-11), "sinds Earis

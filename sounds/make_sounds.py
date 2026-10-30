@@ -421,6 +421,63 @@ def windmill_woosh(rnd):
     return [x * math.sin(math.pi * i / m) for i, x in enumerate(sig)]
 
 
+# Variantenteller (30-10): de CATALOGUE-bouwer roept elke generator een keer per
+# variant aan met dezelfde GEGEVENDE rnd. Eigen fixed-seed funcs (voice_milo,
+# voice_machine) zouden anders per variant IDENTIEKE bytes produceren - de MC-
+# randompick tussen varianten doet dan niets. Een teller geeft elke variant z'n
+# eigen seed, ZONDER de Gedeelde seeded stream te verbruiken (audio-craft regel).
+_VCOUNT = {}
+
+
+def _vseed(base):
+    _VCOUNT[base] = _VCOUNT.get(base, 0) + 1
+    return random.Random(base + _VCOUNT[base])
+
+
+def voice_milo(rnd):
+    # 30-10: NPC-stem voor questconversaties (Milo de handelaar). Dierentuin-achtig
+    # gekwebbel: een rijtje korte lettergrepen die elk opgliden, daarna zacht
+    # afgezwakt. Eigen lokale Random (les van windmill_woosh): de GEDEELDE seeded
+    # stream verbruikt hier niets, alle bestaande clips blijven byte-identisch.
+    local = _vseed(8417)
+    out = []
+    for _ in range(local.randint(4, 6)):
+        f0 = local.choice((380.0, 430.0, 480.0, 530.0)) * local.uniform(0.92, 1.08)
+        syl = osc(glide(f0, f0 * 1.35, 0.09))
+        out += env(syl, 0.008, 0.03, 0.8, 0.03)
+        out += silence(local.uniform(0.02, 0.06))
+    return lowpass(out, 1400)
+
+
+def voice_machine(rnd):
+    # 30-10: machine-stem (Mad-Docter-achtige NPCs): vierkante tik-tik-piepjes met
+    # ruis-klak tussen de lettergrepen. Lokale Random, zie voice_milo.
+    local = _vseed(8418)
+    out = []
+    for _ in range(local.randint(3, 5)):
+        f0 = local.choice((900.0, 1100.0, 1300.0))
+        syl = osc(const(f0, 0.05), "square")
+        out += env(syl, 0.005, 0.02, 0.9, 0.02)
+        out += gain(noise(local.uniform(0.02, 0.05), local), 0.12)
+    return out
+
+
+def quest_sting(rnd):
+    # 30-10: quest-complete motiefje: C-E-G-C opgewaaierd plus nazaag.
+    # Volledig deterministisch - geen rnd-verbruik.
+    out = []
+    for f in (523.0, 659.0, 784.0, 1046.0):
+        out += env(osc(const(f, 0.14)), 0.006, 0.04, 0.7, 0.05)
+    out += gain(decay(osc(const(1046.0, 0.5)), 0.18), 0.4)
+    return out
+
+
+def quest_click(rnd):
+    # 30-10: tiny pluck wanneer een speler een gespreksoptie kiest. Deterministisch.
+    syl = osc(glide(800.0, 1250.0, 0.06))
+    return env(syl, 0.004, 0.03, 0.6, 0.02)
+
+
 def servo(rnd):
     return env(mix(osc(glide(600, 950, 0.5), "square"), gain(noise(0.5, rnd), 0.05)), 0.02, 0.05, 0.4, 0.1)
 
@@ -946,6 +1003,11 @@ CATALOGUE = {
         "train.chuff": (lambda r: chuff(r, 0.25), 3, "Locomotive chuffs"), "train.whistle": (whistle, 1, "Train whistles"),
         "train.brake": (brake, 1, "Train brakes"), "train.clack": (rail_clack, 2, "Rails clack"),
         "station.bell": (bell, 1, "Station bell rings"), "machine.hum": (hum, 2, "Machines hum"),
+        # Quest-stemmen (30-10): conversation-blips, te spelen via BetonQuest
+        # "notify io:sound sound:steamworks:voice.milo". Laatst in het blok, dus
+        # alle bestaande events blijven byte-identisch.
+        "voice.milo": (voice_milo, 3, "Milo chatters"), "voice.machine": (voice_machine, 3, "A machine chatters"),
+        "quest.complete": (quest_sting, 1, "Quest complete"), "quest.click": (quest_click, 1, "A choice is made"),
     },
     "kitchen": {
         "knife.chop": (chop, 4, "Knife chops"), "pot.simmer": (simmer, 2, "Pot simmers"), "grill.sizzle": (sizzle, 2, "Food sizzles"),
