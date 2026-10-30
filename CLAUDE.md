@@ -1756,6 +1756,36 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### IekQuests 0.5.0 - golf 3b + 4 uitgerold: alles behalve tutorial (30-10, ~08:45)
+
+- "migreer alles" afgerond (behalve golf 5): Rod_merchant, 24 NPCGuideGuards,
+  Backpack-ketting en JobsRank1-5 staan nu LIVE in IekQuests. Log: 51 quests,
+  0 SEVERE, data.yml nog leeg (geen bestaande voortgang verloren).
+- Engine 0.5.0 erbij: (a) GUI-verbreding - keuzelijsten en voltooide dienst-
+  panelen groeien naar 54 slots (26 keuzes), questboek gepagineerd (35/pagina);
+  (b) `deliverall`-stages + multi-goederen-contracten (Backpack-fasen, Orion);
+  (c) `menu`-type stage zonder act-knop (guard-menu's, kijschermen);
+  (d) dienstvoortgang: keuze-met-goto op een VOLTOOIDE quest heropent de quest
+  op die stage (jobs wisselen, backpack herhalen - de "menu-goto-on-done");
+  (e) condities `qtag:<quest>:<tag>` ( Backpack-pad-keuzes lives across quests)
+  en `npc:<id>` (keuze alleen bij de juiste NPC - jobs-masters);
+  (f) acties `joinjob`/`leavejob` (performCommand - de BQ-bridge "nujobs_joinjob"
+  zat IN de BQ-jar en is dus dood; confirm is uit in Jobs generalConfig),
+  `chat <tekst>` (Orion-shops zeggen "hi 1/2/3"), exacte display-naam "=Tuna"
+  (vis vs Nuptuna), repeat-contracten met `name:`-filter, walk-stages `flat:`
+  (alleen XZ - de WorldGuard regio's liepen van Y -64 tot 319).
+- Coördinaten: explore-regio-centra + kasteel-explorer-punten gehaald uit
+  plugins/WorldGuard/worlds/iekcorbarSeason2/regions.yml (point1/point2);
+  bp3-ingang 2874;67;-589 uit de BQ-notify-tekst.
+- Bron-generator: scripts/gen-iekquests-wave3b.py (markering >>> wave3b <<< in
+  resources/quests.yml; idempotent). vissen: MMOItems fish.yml -> material COD
+  + display-namen uit de itembestanden.
+- Deploy door de agent (server was leeg): jar sha1 7fea6970... + quests.yml
+  (bak: quests.yml.bak-wave3b). TE 55 = LIVE-record. Container nu edf31e406c27.
+- Status docs/quests-migratie.md: alle migratiegolven op ✅ behalve
+  tutorial (⛓️ greyarts). RankTime was een dode verwijzing in BQ
+  (package van 3 regels, leeg) - archief.
+
 ### Steamworks 0.3.27 - placement-rotatie (30-10 ochtend)
 
 - Eigenaar: "stoom - model en geen rotatie mbt placement, alleen 1 facing,

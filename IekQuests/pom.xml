@@ -8,7 +8,7 @@
     <artifactId>IekQuests</artifactId>
     <!-- IekQuests: eigen quest-engine (praten/craften/leveren + beloningen + compass + GUI).
          Voorloper: BetonQuest blijft naast ons draaien voor de oude quests tot ze gemigreerd zijn. -->
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <packaging>jar</packaging>
 
     <name>IekQuests</name>

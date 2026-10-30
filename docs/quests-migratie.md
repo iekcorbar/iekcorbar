@@ -55,10 +55,13 @@ Citizens-NPC-klik, compass-knop, eigen data.yml, reload/reset.
 | milo, halloween_lanterns | ✅ al in IekQuests | klaar (na deploy + test) |
 | vorkan/Armorshop/gemologist/Upgradestone | ✅ gemigreerd 0.2.1 | 12+12+12+11 contracten, cooldown 1320s, rep-punten, mi-shopknoppen |
 | mmoitems_food_shop | ✅ gemigreerd 0.2.1 | 8×6 contracten (82 Aiko … 89 Yuki), 400c + eco |
-| Rod_merchant | BQ (blijft) | **uitgesteld** — contracten zijn `mmoitem FISH PYROFISH_BRONZE_*`; engine heeft MMOItems-itemherkenning nodig (golf 2: reflectie API of lore-matching). FishingRodney npc 81 doet dus zolang z'n BQ-gesprek door. |
-| Backpack, Techcore, mad_doctor, cleric, CapitaUsop, NPCGuideGuards, RankTime (leeg) | BQ | stap 3 |
-| JobsRank1-5 | BQ | stap 4 |
-| tutorial | BQ | stap 5, met greyarts |
+| mad_doctor, cleric, CapitaUsop, Techcore | ✅ gemigreerd 0.4.0 (golf 3) | md_show-reeks, betaalde-cleric-optie, kompas-richtingen |
+| Rod_merchant | ✅ gemigreerd 0.5.0 (golf 3b) | 12 viscontracten op COD + exacte display-naam (`name: "=Tuna"`), 1320s, rep, 3 shopknoppen |
+| NPCGuideGuards (24×) | ✅ gemigreerd 0.5.0 (golf 3b) | guard_1..24 = één `menu`-stage met 21 keuzes (GUI verbreed naar 54 slots), keuzes sluiten het menu (close: true) |
+| Backpack | ✅ gemigreerd 0.5.0 (golf 3b) | backpack_one/two/three + Orion-contracten (`deliverall`); pad/mentale-/kracht-tags via `qtag:` over quests; regionen omgezet naar flat-walk met coördinaten uit WorldGuard regions.yml |
+| JobsRank1-5 | ✅ gemigreerd 0.5.0 (golf 4) | jobs_rankN met `npc:`-keuzes (per NPC welke master), `joinjob`/`leavejob` → /jobs als speler; JR1 geeft lp rank_1 |
+| RankTime (leeg) | 🗄️ archief | deed niets; BQ's `RankTime>start_rank_system` was een dode verwijzing |
+| tutorial | ⛓️ wacht op greyarts | golf 5 |
 
 ### Migratie-opmerkingen golf 1 (30-10 04:30)
 

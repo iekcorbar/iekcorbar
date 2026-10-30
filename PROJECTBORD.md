@@ -63,3 +63,4 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 - Eén regel per werkblok, status: 🟢 live · 🟡 wachten-op-eigenaar · 🔵 agent-bezig · ⚪ wachtrij.
 - Afgerond → meteen bijwerken + opruimen volgens skill `cleanup` (artefact uit deploy/, punt uit de lijst).
 - Niets hier = geen persoonlijke namen/gegevens: die blijven in gitignore-mappen.
+| IekQuests 0.5.0 - golf 3b+4: Rod, 24 guards, Backpack x3, JobsRank1-5 gemigreerd | ✅ LIVE | 🟢 30-10 uitgerold door agent; 51 quests, log groen; alleen tutorial (golf 5) nog niet - wacht op greyarts |
