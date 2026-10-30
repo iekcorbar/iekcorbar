@@ -90,3 +90,15 @@ Follow a recipe closely for the best quality (up to 5 stars). Cooking needs heat
 | Matcha Latte | Cook 2 min: 3 Tea Leaves, 1 Milk Bucket, 1 Sugar | - |
 | Mugicha | Mix (no heat) 2 min: 3 Barley, 2 Snowball | - |
 | Ramune | Mix (no heat) 1 min: 3 Sugar, 1 Yuzu, 1 Glass | - |
+| Blind Date | Mix (no heat) 3 min: 4 Date, 2 Pomegranate, 1 Honey Bottle | 9% |
+| Six of Persephone | Cook 6 min: 6 Pomegranate, 3 Sugar -> Age 6 years (dark oak cask) | 14% |
+| Lychee & Chill | Mix (no heat) 2 min: 6 Lychee, 3 Sugar, 2 Snowball | 5% |
+| Unrequited | Mix (no heat) 3 min: 4 Passionfruit, 2 Yuzu, 2 Sugar | 8% |
+| Clear Channels | Cook 3 min: 2 Wasabi, 2 Daikon Slices, 1 Sugar | 6% |
+| Mango-Tango | Cook 3 min: 4 Mango, 2 Papaya, 2 Sugar, 1 Milk Bucket | 7% |
+| The Hairy Narwhal | Cook 5 min: 4 Rambutan, 2 Longan, 1 Ginger -> Distill 2x | 13% |
+| Wyrm's Regret | Cook 7 min: 3 Dragonfruit, 2 Chili, 2 Mangosteen -> Age 3 years (copper cask) | 17% |
+| Zest for Life | Mix (no heat) 2 min: 4 Sudachi, 2 Shiso, 2 Sugar, 1 Sake | 10% |
+| Silk Road | Cook 6 min: 5 Mulberry, 1 Honey Bottle -> Age 4 years (oak cask) | 9% |
+| Dark Rye Comedy | Cook 9 min: 8 Rye, 2 Sugar -> Distill 2x -> Age 6 years (spruce cask) | 16% |
+| Plain Vanilla | Cook 4 min: 2 Vanilla, 1 Milk Bucket, 2 Sugar | 3% |

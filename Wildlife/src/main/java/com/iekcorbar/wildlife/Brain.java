@@ -28,12 +28,13 @@ final class Brain {
     static final Set<Species> DANGEROUS = EnumSet.of(Species.BEAR, Species.BOAR);
 
     private final WildlifePlugin plugin;
-    private final GoalKey<Mob> wanderKey, panicKey;
+    private final GoalKey<Mob> wanderKey, panicKey, controlKey;
 
     Brain(WildlifePlugin plugin) {
         this.plugin = plugin;
         wanderKey = GoalKey.of(Mob.class, new NamespacedKey(plugin, "wander"));
         panicKey = GoalKey.of(Mob.class, new NamespacedKey(plugin, "panic"));
+        controlKey = GoalKey.of(Mob.class, new NamespacedKey(plugin, "dragon_control"));
     }
 
     /** Only adult bears and boars fight back; their young are as calm as everything else. */
@@ -42,7 +43,7 @@ final class Brain {
     }
 
     static boolean tame(Animals.Animal a) {
-        return a.species.habitat != Species.Habitat.AIR && !dangerous(a);
+        return a.species.habitat != Species.Habitat.AIR && a.species.habitat != Species.Habitat.CAVE && !dangerous(a);
     }
 
     void apply(Animals.Animal a) {
@@ -52,6 +53,12 @@ final class Brain {
             // AIR species keep their (flying) base brain, but these vanilla habits do not fit a wild model:
             // parrots land on the player's shoulder and beelines to hives/flowers will empty the scene.
             if (a.species == Species.SONGBIRD) strip(g, m, VanillaGoal.PARROT_LAND_ON_OWNERS_SHOULDER);
+            if (a.species == Species.DRAGON) {
+                // a 2.5-metre dragon on your shoulder is not cute; the Control goal takes the MOVE
+                // slot whenever it sits or carries a rider (DragonAI steers it then)
+                strip(g, m, VanillaGoal.PARROT_LAND_ON_OWNERS_SHOULDER);
+                if (!g.hasGoal(m, controlKey)) g.addGoal(m, 0, new Control(m, a));
+            }
             if (m instanceof org.bukkit.entity.Bee) {
                 strip(g, m, VanillaGoal.BEE_LOCATE_HIVE);
                 strip(g, m, VanillaGoal.BEE_GO_TO_HIVE);
@@ -106,6 +113,55 @@ final class Brain {
     }
 
     // ------------------------------------------------------------ goals
+
+    /**
+     * The dragon's "too busy to be a parrot" goal: while it sits or carries a rider it occupies
+     * the MOVE slot (priority 0 beats every vanilla goal), kills any path and lets DragonAI's
+     * per-tick steering do the rest. It activates itself off the moment the reason is gone.
+     */
+    private final class Control implements Goal<Mob> {
+        private final Mob m;
+        private final Animals.Animal a;
+
+        Control(Mob m, Animals.Animal a) {
+            this.m = m;
+            this.a = a;
+        }
+
+        @Override
+        public boolean shouldActivate() {
+            return DragonAI.blocked(a);
+        }
+
+        @Override
+        public boolean shouldStayActive() {
+            return DragonAI.blocked(a);
+        }
+
+        @Override
+        public void start() {
+            m.getPathfinder().stopPathfinding();
+        }
+
+        @Override
+        public void tick() {
+            if (m.getPathfinder().hasPath()) m.getPathfinder().stopPathfinding();
+        }
+
+        @Override
+        public void stop() {
+        }
+
+        @Override
+        public GoalKey<Mob> getKey() {
+            return controlKey;
+        }
+
+        @Override
+        public EnumSet<GoalType> getTypes() {
+            return EnumSet.of(GoalType.MOVE);
+        }
+    }
 
     private final class Wander implements Goal<Mob> {
         private final Mob m;

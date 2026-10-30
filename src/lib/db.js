@@ -5630,7 +5630,7 @@ export const db = {
       if (rows && rows.length > 0) return { takeCommand: rows[0].takeCommand, coinsTakeCommand: rows[0].coinsTakeCommand, enabled: Boolean(rows[0].enabled) };
     } catch { /* fallback below */ }
     const fb = readFallbackJson();
-    return fb.shop_settings || { takeCommand: 'cmi money take {player} {amount}', coinsTakeCommand: 'elitecoins take {player} {amount}', enabled: true };
+    return fb.shop_settings || { takeCommand: 'cmi money take {player} {amount}', coinsTakeCommand: 'em money remove {player} {amount}', enabled: true };
   },
 
   // Merge-safe: only overwrites the fields actually passed in, so toggling

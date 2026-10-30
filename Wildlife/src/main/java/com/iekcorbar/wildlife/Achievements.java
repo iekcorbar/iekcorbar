@@ -27,6 +27,9 @@ final class Achievements {
         a.add("trophy", "root", "armor_stand", "Hunter's Trophy", "Take a statue home from an animal you had recorded first.", "goal").hidden();
         a.add("pond_stop", "root", "bell", "Next Stop: Pond", "See five birds ride one capybara at once.", "task").hidden();
         a.add("tanuki_wink", "root", "sweet_berries", "Charcoal Deal", "Stand very still near a tanuki at night.", "task").hidden();
+        a.add("dragon_tame", "root", "coal", "Soot and Seat", "Tame a wild dragon with a lump of coal.", "goal");
+        a.add("dragon_rider", "dragon_tame", "feather", "Up She Goes", "Ride a tamed dragon.", "goal");
+        a.add("dragon_flight", "dragon_rider", "elytra", "A New Machine in the Sky", "Fly a dragon above the clouds (Y 100+).", "challenge");
 
         NamespacedKey decor = new NamespacedKey(plugin, "decor");
         a.scanner(it -> {

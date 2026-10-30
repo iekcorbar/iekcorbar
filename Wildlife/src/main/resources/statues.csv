@@ -89,8 +89,15 @@ stat_piranha_baby,2.0000,0.55,0.59
 stat_macaw,1.0000,1.05,0.47
 stat_macaw_rare,1.0000,1.05,0.47
 stat_macaw_baby,1.0000,0.56,0.45
+stat_dragon,1.0887,2.39,2.04
+stat_dragon_rare,1.0887,2.39,2.04
+stat_dragon_baby,1.0000,1.20,1.09
 stat_songbird_cardinal,2.0000,0.88,0.65
 stat_songbird_canary,2.0000,0.88,0.65
 stat_songbird_sparrow,2.0000,0.88,0.65
 stat_macaw_blue,1.0000,1.05,0.47
 stat_macaw_green,1.0000,1.05,0.47
+stat_dragon_sakagura,1.0887,2.39,2.04
+stat_dragon_kitchen,1.0887,2.39,2.04
+stat_dragon_kura,1.0887,2.39,2.04
+stat_dragon_verdigris,1.0887,2.39,2.04

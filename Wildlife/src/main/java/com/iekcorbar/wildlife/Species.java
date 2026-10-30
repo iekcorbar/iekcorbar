@@ -151,6 +151,20 @@ enum Species {
             "A tail longer than its body, a beak like bolt cutters, and the vocabulary of a sailor.",
             "Over the jungle canopy - yes, it may land on your shoulder.",
             "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.85f),
+    // Steam Dragon (0.8.0): the rideable companion. PARROT base = proven 3D flight (all gravity
+    // off in setup(): it hovers, never falls, takes no fall damage). Coal to tame like a wolf;
+    // two of one kind in love make a baby like every other animal; the lead works as always.
+    // The look is chosen at random from five trait colours (models()); rare = the gilded one.
+    // Cave spawning is the Spawner's underground pass - biomes list stays empty on purpose so
+    // the surface loop never picks it. Taming/riding live in DragonAI; statues/journal/eggs
+    // follow the species loop.
+    DRAGON("Steam Dragon", EntityType.PARROT, 2.5, 26, 0.09, Habitat.CAVE, Time.ANY, 1, 2, 3,
+            List.of(), "coal",
+            "Brass over an iron frame, a furnace ticking behind its ribs. It drifts through the deep "
+            + "caverns on slow wingbeats and heats its own steam. Feed it coal and it is yours: it will "
+            + "follow, sit when told, and let you ride - caves, sky, whatever you like.",
+            "It is not found - it is heard. Follow the hiss through the big caverns deep down.",
+            "wildlife:dragon.ambient", "wildlife:dragon.hurt", "wildlife:dragon.death", 0.5f),
 
     // Sfeer-wezen, GEEN dier (0.7.0): niet fokbaar, geen baby, geen rare-kleur, buiten het
     // journaal, geen statue en geen recept - zie animal(). Basemob BEE (PARROT is wel bewezen
@@ -167,7 +181,9 @@ enum Species {
             "Not found in the wild: staff place them at dark, quiet spots.",
             "wildlife:wraith.ambient", "wildlife:wraith.hurt", "wildlife:wraith.death", 0.65f);
 
-    enum Habitat { LAND, WATER, SHORE, AIR, POND }
+    enum Habitat { LAND, WATER, SHORE, AIR, POND,
+        /** The steam dragon: 3D flight like AIR, but spawned by the Spawner's underground pass, never on the surface. */
+        CAVE }
 
     enum Time { ANY, DAY, NIGHT }
 
@@ -268,6 +284,7 @@ enum Species {
     List<String> models() {
         if (this == SONGBIRD) return List.of("wl_songbird", "wl_songbird_cardinal", "wl_songbird_canary", "wl_songbird_sparrow");
         if (this == MACAW) return List.of("wl_macaw", "wl_macaw_blue", "wl_macaw_green");
+        if (this == DRAGON) return List.of("wl_dragon", "wl_dragon_sakagura", "wl_dragon_kitchen", "wl_dragon_kura", "wl_dragon_verdigris");
         return List.of("wl_" + id());
     }
 
@@ -307,6 +324,7 @@ enum Species {
             case ORCA -> "White Orca";
             case PIRANHA -> "Golden Piranha";
             case MACAW -> "Albino Macaw";
+            case DRAGON -> "Gilded Dragon";   // the gilded one: every brass cell turned to gold
             case WRAITH -> displayName;   // not an animal: there is no rare look (animal() guard)
         };
     }
@@ -343,6 +361,7 @@ enum Species {
             case ORCA -> m == Material.COD || m == Material.SALMON || m == Material.TROPICAL_FISH;
             case PIRANHA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.CHICKEN || m == Material.MUTTON;
             case MACAW -> m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS || m == Material.COCOA_BEANS;
+            case DRAGON -> m == Material.COAL || m == Material.CHARCOAL;   // coal: it is a furnace
             case WRAITH -> false;   // not an animal: nothing tempts it, breeding is out of the question
         };
     }
@@ -379,6 +398,7 @@ enum Species {
             case ORCA -> "a big fish";
             case PIRANHA -> "any raw meat";
             case MACAW -> "seeds or cocoa beans";
+            case DRAGON -> "coal or charcoal";
             case WRAITH -> "nothing - it is not an animal and cannot be bred";
         };
     }

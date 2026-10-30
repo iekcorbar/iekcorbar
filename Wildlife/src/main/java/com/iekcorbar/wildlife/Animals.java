@@ -167,7 +167,9 @@ final class Animals implements Listener {
         e.setHealth(hp);
         set(e, Attribute.MOVEMENT_SPEED, s.speed);
         set(e, Attribute.SCALE, baby ? s.scale * 0.5 : s.scale);   // babies are half size, hitbox included
-        if (s.habitat == Species.Habitat.AIR) set(e, Attribute.FLYING_SPEED, s.speed * 1.6);
+        if (s.habitat == Species.Habitat.AIR || s.habitat == Species.Habitat.CAVE)
+            set(e, Attribute.FLYING_SPEED, s.speed * (s == Species.DRAGON ? 2.6 : 1.6));
+        if (s == Species.DRAGON) e.setGravity(false);              // dragons simply fly: no falls, no fall damage
         if (e instanceof Breedable b) {
             b.setAdult();
             b.setAgeLock(true);
@@ -634,7 +636,11 @@ final class Animals implements Listener {
         ItemStack hand = e.getPlayer().getInventory().getItem(e.getHand());
         if (hand.getType() == Material.NAME_TAG || hand.getType() == Material.LEAD) return; // name tags keep an animal
         e.setCancelled(true);
-        if (e.getHand() == EquipmentSlot.HAND) breeding.use(a, e.getPlayer(), hand);
+        if (e.getHand() == EquipmentSlot.HAND) {
+            // dragons answer to coal (taming) and to their owner's empty hand (sit/ride) before breeding thinks of it
+            if (a.species == Species.DRAGON && plugin.dragon().interact(a, e.getPlayer(), hand, e.getPlayer().isSneaking())) return;
+            breeding.use(a, e.getPlayer(), hand);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -735,6 +741,10 @@ final class Animals implements Listener {
             case SONGBIRD, OSTRICH, MACAW -> add(d, Material.FEATHER, 1 + r.nextInt(a.species == Species.SONGBIRD ? 2 : 3));
             case CRANE -> add(d, Material.FEATHER, 1 + r.nextInt(2));
             case TANUKI, MACAQUE -> { }   // foragers, not farms: they drop nothing
+            case DRAGON -> {               // scrap from a broken machine, never meat
+                add(d, Material.COPPER_INGOT, r.nextInt(3));
+                add(d, Material.COAL, r.nextInt(2));
+            }
             default -> { }
         }
         // Hunter's trophy (0.6.2): whoever recorded an animal in the Field Journal and then brings one down

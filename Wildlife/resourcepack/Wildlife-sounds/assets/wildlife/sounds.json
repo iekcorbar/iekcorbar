@@ -261,5 +261,27 @@
    "wildlife:wraith/death_2"
   ],
   "subtitle": "subtitles.wildlife.wraith.death"
+ },
+ "dragon.ambient": {
+  "sounds": [
+   "wildlife:dragon/ambient_1",
+   "wildlife:dragon/ambient_2",
+   "wildlife:dragon/ambient_3"
+  ],
+  "subtitle": "subtitles.wildlife.dragon.ambient"
+ },
+ "dragon.hurt": {
+  "sounds": [
+   "wildlife:dragon/hurt_1",
+   "wildlife:dragon/hurt_2"
+  ],
+  "subtitle": "subtitles.wildlife.dragon.hurt"
+ },
+ "dragon.death": {
+  "sounds": [
+   "wildlife:dragon/death_1",
+   "wildlife:dragon/death_2"
+  ],
+  "subtitle": "subtitles.wildlife.dragon.death"
  }
 }

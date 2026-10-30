@@ -1708,7 +1708,80 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   Bouw-sessie volgt: eerst TABLE + FURNACE prototype, tweede REA-passage
   (validatieregels uit Table/FurnaceActions) pas ná eerste werkende versie.
 
-### Quest-book model + BetonQuest COMPASS (30-10)
+### Wildlife 0.8.0 - de stoomdraak: temmen, zitten, berijden + shop-commando's bewezen (30-10 avond)
+
+- Eigenaarswish: "rideable/tameable steampunk dragons - zorg dat de modellen goed
+  zijn, en de animaties". SOORT: 1 Steam Dragon in 5 looks (brass/stoomworks,
+  sakagura, kitchen, kura, verdigris) + zeldzame GILDED; medium ~1,8 m; kool als
+  temp-voer; spawn uitsluitend diep in grotten; passief;folgen/zitten/berijden
+  als Mojang-wolf. Base-mob = PARROT (bewezen AIR-brain in Wildlife), gravity uit.
+- MODELLEN (Wildlife/tools/make_animals.py, builder dragon()): mechanische
+  anatomie - furnace-rooster met gloeiende kern achter de ribben, koperen
+  ruggengraat + nekringen, uitlaatpijpen achter de helm, messing armen met
+  vlakke vliezen en uitgelate vingerribben + klauwen, 2-ledige poten met ijzeren
+  beslag, zadelrails op de rug met m_seat-bot (FMM MountPointManager zet de
+  berijder zélf op de juiste plek). 8 animaties in clip-vorm (geen sine-rommel):
+  fly met echte power-downstroke + elleboog-lag, laterale galop-walk, idle met
+  losse flutter per lus, sit, eat met kauwende kaak, roar met wijd spread,
+  death: laatste flare dan omvallen. PALET: 7 dragon-kleuren APPENDED AT THE END
+  (atlas-plafond 256 dwong inkorten: dragon_iron/steel/rice eruit, dark trim =
+  fur_black). 146->149-bestanden full-folder push in het model-zip.
+- NIEUWE TOOL: Wildlife/tools/pose3d.py - pure-python bbmodel-renderer MET bone-
+  hierarchy en animatie-sampling (contact_sheet/MCP rendert alleen rust-posen);
+  `python pose3d.py out.png model.bbmodel cel side:fly:0.34 ...`. Toon de
+  vleugelvouwen via de mirrored-pose regel (x,-y,-z).
+- CODE (jar groen, 172.992 B): Species.DRAGON (Habitat.CAVE, kool, 5 models,
+  gilded rare, copper/coal-drops); DragonAI.java (temmen 35%/kool, sluip+klik
+  zitten met FMM-sit-pose, klik = addPassenger, eigen WASD-sturing via
+  Paper org.bukkit.event.player.PlayerInputEvent -> getInput() (Input is
+  READ-ONLY: geen setters; de draken-sturing werkt met velocity-tuning), ruimte
+  omhoog/achteruit omlaag, geen invoer = hover; wild gebrul <=4 blokken;
+  tele-port reunie >34; achievements dragon_tame/rider/flight>Y100). Brain.java
+  kreeg een Control-goal (priority 0) die het MOVE-slot bezet als de draak zit
+  of draagt + strip PARROT_LAND_ON_OWNERS_SHOULDER. Spawner: eigen ondergrondse
+  cave-pass (Y<40, dak-check, vloer+4 lucht, 14-30 blokken rond de speler,
+  cap groupMax binnnen 48) met config cave-chance 0.06.
+- GELUID (audio-craft-regel): dragon.ambient/hurt/death (3+2+2) appended in de
+  LATE-bloK NA de wraith - RNG-stroom blijft heilig; ffmpeg9-herbouw veranderde
+  alle ogg-bytes, dus build21 = complete packvervanging.
+- ZOO: make_zoo_pack.py voorzag het 256-plafond van een HERFMT: de statue-pas
+  bouwt nu elke look een keer in memory en neemt alleen de REFERENCIEDE kleuren
+  over (voorbak: wraith/dragon passeerden het plafond toen alles 1-op-1 werd
+  gekopieerd). stat_dragon{,_rare,_baby,_sakagura,_kitchen,_kura,_verdigris} +
+  egg_dragon (brass/koper) in statues.csv (7 rijen) en Zoo-pack (194 modellen);
+  Zoo.java leest de CSV dynamisch - geen code-wijziging nodig.
+- SHOP-COMMANDO'S (eigenaar testte de lucky-relic-crate-knop offline en vroeg om
+  de echte commando's - geen schade, hij was de koper): Vault-leverancier is
+  CMI (log: "Economy: CMIEconomy", CMIEInjector). UIT DE JAR-ZELF GEHAALD:
+  cmi money heeft [pay/give/take/set] + doelen via getPlayerExact => ALLEEN
+  ONLINE spelers, vandaar de lege reply + ongewijzigde balance bij de offline
+  test (de site-bewaking brak de koop netjes af: geen krat, geen geld weg).
+  EliteMobs 10.9.12 heeft GEEN "take": afhalen = /em money remove <player>
+  <amount> (MoneyRemoveCommand). De codevallen in db.js en route.js
+  ('elitecoins take') zijn verbeterd; site-30-10-kits.sql-commentaar aangepast;
+  TE-punt 63.sha1-lijst bijgewerkt en de zip HERBOUWD met deze fixes
+  (sha1 ecf1d85c) - pagetest 32/32 pagina's 200, API's sano, de 2 x 403 zijn
+  correct anoniem-gedrag. Commando's voor Staff Panel -> Shop Settings:
+  money-take  cmi money take {player} {amount}
+  coins-take  em money remove {player} {amount}
+  Balance-koop vereist online koper (CMI); coins-koop deed dat al.
+- AFLEVERING: TE-DEPLOYEN punt 64 (jar sha1 E76A0897 + Wildlife-0.8.0-fmm-models.zip
+  sha1 19C6061D + pack build21 sha1 2974c405...); het oude 0.7.0-modelzip is
+  bewezen live (server = 134 bbmodels, draken-mappen afwezig) en dus uit
+  deploy/ gehaald.
+- OPEN → KLAAR: de vier Darkmatter86-tales zijn gebouwd (3 werden er 4: ook
+  The Well): IekcorbarSiteSync 1.16.3 - 4 .txt'en in resources/books/,
+  seed-lijst in BookManager, loot:false + copyable:false (alleen /ibook give),
+  model: story_bundle - nieuw FMM-boekmodel (brievenbundel: 4 kremere/witte
+  brieven, blauw lint in beide richtingen, rode waszegel-octagoon + goudpunt,
+  los briefhoek - 12 elementen, uitsluitend bestaande atlas-cellen). Sidecar
+  -json met display-transforms gekopieerd van engineers_manual (bbmodel+8/+6,2).
+  Artefacten: deploy/IekcorbarSiteSync-1.16.3.jar (sha1 BB013837...) +
+  IekcorbarSiteSync-1.16.3-fmm-models.zip (sha1 0A71253F...) → TE-DEPLOYEN punt 65.
+  Generator: %TEMP%\opencode\make_books_batch.py (einmalig; bron-tx'en staan
+  nu als canonical in resources/books/).
+
+
 
 - **Core-pack voor het journaal-boek**: nieuwe generator
   scripts/make_core_pack.py -> scripts/core-pack/Core-pack.zip. Rode lederen
@@ -1779,6 +1852,22 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Grammar-check (node/js-yaml + eigen stage/reward-controles) op 68 quests:
   groen; start-tags, qtag-ketting, reward-werkwoorden en deliver-grammatica
   stuk voor stuk geverifieerd tegen de engine-code.
+
+### Site-zip 30-10 - Sakagura-wiki + 80 recepten mee in de deploy (30-10, 15:20)
+
+- Eigenaar wees erop dat "de shop + wiki's" bijgewerkt móesten zijn: kits
+  hebben inderdaad geen code nodig (alleen de SQL's), maar de 30-10 wiki-seeds
+  en de herbordeerde recipes-data reizen wél mee met de site-zip - en die was
+  nog van 28-10.
+- scripts/build-recipes-data.js gedraaid: sakagura 80 recepten (de nieuwe
+  gewassen), json committed (8094b52). Daarna npm run build groen +
+  make-zip.js: deploy\iekcorbar_iekje_barend.zip 31,5 MB
+  (sha1 2035c27c...) - ingehouden: .next, seeds (sakagura.json 32 KB =
+  56 pagina's), recipes-data 95 KB; excluderule: node_modules, db.json.
+- TE-DEPLOYEN punt 63: Plesk-stappen + de Import-knoppen-regel (wiki-tabel
+  in de DB ververst pas na de klik per onderwerp) + testpunten.
+- deploy/ bevat nu: verse site-zip, 2 SQL's (kits + nieuws),
+  cursuskets-quests (file al op de server, /questbook reload open).
 
 ### IekQuests 0.5.3 - Steamworks-quests + de dode-keuzes-reparatie (30-10, ~14:20 live)
 

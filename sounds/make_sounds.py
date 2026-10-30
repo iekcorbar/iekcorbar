@@ -1043,13 +1043,50 @@ CATALOGUE = {
     },
 }
 
+# ------------------------------------------------------------------ steam dragon (Wildlife 0.8.0)
+
+def dragon_rumble(rnd):
+    """Steam dragon ambient: a furnace idling. A warm low sine with a slow vibrato, a coal-tin
+    tick or two and one short valve hiss near the end - mostly felt, not heard."""
+    sec = 2.4
+    body = lowpass(env(osc(vibrato(const(60 + rnd.uniform(-4, 4), sec), 5.5, 4)), a=0.25, d=0.3, s=0.85, r=0.5), 240)
+    out = []
+    place(out, gain(body, 0.95), 0)
+    place(out, gain(highpass(clicks(rnd, 2, spacing=0.09 + rnd.uniform(0, 0.05)), 1400), 0.20), 0.55)
+    place(out, gain(hiss(rnd, 0.5, cut=2300), 0.45), sec - 0.62)
+    return fade(normalize(out, 0.7))
+
+
+def dragon_clank(rnd):
+    """Steam dragon hurt: a boiler shell being hit - a bright metal ring over a short low
+    growl and one small puff, over fast, not loud."""
+    bell = ring([(2100, 0.5), (2780, 0.32), (1490, 0.28)], 0.7, 0.16)
+    growl = bandpass(env(osc(glide(170, 120, 0.4), "sawtooth"), a=0.02, d=0.15, s=0.2, r=0.2), 300, 2.0)
+    return fade(normalize(mix(gain(bell, 0.85), gain(growl, 0.5), gain(hiss(rnd, 0.22, cut=3800), 0.35)), 0.75))
+
+
+def dragon_vent(rnd):
+    """Steam dragon death: pressure letting go. A long descending groan inside a widening steam
+    release, ending on a small escaping whistle."""
+    groan = bandpass(env(osc(vibrato(glide(150, 52, 1.7, 0.7), 7, 8), "sawtooth"), a=0.05, d=0.4, s=0.5, r=0.6), 220, 1.4)
+    steam = env(noise(2.4, rnd), a=0.05, d=0.5, s=0.6, r=0.9)
+    out = []
+    place(out, gain(bandpass(steam, 900, 0.7), 0.9), 0)
+    place(out, gain(groan, 0.95), 0.05)
+    place(out, gain(env(osc(glide(2400, 3000, 0.7), "sine"), a=0.05, d=0.3, s=0.4, r=0.3), 0.13), 1.35)
+    return fade(normalize(out, 0.7))
+
+
 # Wraith (Wildlife 0.7.0): appended AFTER both CATALOGUE and EXTRA. The RNG stream must not
 # shift for anything already in the pack, so new events never go into EXTRA's wildlife block
 # (that block is drawn BEFORE the relics EXTRA events, which would all change byte-wise).
+# Steam dragon (0.8.0) joins the same LATE block, drawn last, same reason.
 LATE = {
     "wildlife": {
         "wraith.ambient": (wraith_moan, 3, "Wraith moans"), "wraith.hurt": (wraith_shriek, 2, "Wraith shrieks"),
         "wraith.death": (wraith_fade, 2, "Wraith fades away"),
+        "dragon.ambient": (dragon_rumble, 3, "Steam Dragon rumbles"), "dragon.hurt": (dragon_clank, 2, "Steam Dragon clanks"),
+        "dragon.death": (dragon_vent, 2, "Steam Dragon vents"),
     },
 }
 

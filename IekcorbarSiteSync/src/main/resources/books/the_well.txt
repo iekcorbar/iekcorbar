@@ -1,0 +1,92 @@
+# The Well - a Darkmatter86 tale, given with /ibook give <player> the_well.
+title: &6The Well
+author: Darkmatter86
+description: The voice was clear as a bell - and it was not asking for help.
+copyable: false
+loot: false
+model: story_bundle
+===
+&l&fThe Well&r
+
+&7a tale by &fDarkmatter86
+
+&8The voice was clear as a bell - and it was not asking for help.
+---
+In the distance, a voice could be heard
+But strangely as clear as a bell
+It caught the ears of a young lady
+Who followed it all the way to an old well
+---
+The stones were jagged and chipped
+Covered in moss and weeds
+A voice inside was calling out for help
+As she leaned in to hear its pleads
+---
+She assured its safety by shouting
+Her voice piercing the dark abyss
+She said to remain calm and still
+And even enquired as to how it lead to this
+---
+The voice stayed silent for a bit
+Before the story it was going to tell
+I shall tell you of my fate it said
+Once you get me out of this well
+---
+So the lady dropped a stone in the well
+To check the length of the drop
+But strangely she heard no splash
+No knock, no smash, no plop
+---
+There was no signal on her phone to call the emergency services
+She couldn’t even find a long piece of rope
+She even yelled for assistance to help her
+Could anyone hear her, nope
+---
+Then the voice came again
+That same voice as clear as a bell
+With a reluctant feeling of regret
+She slowly climbed down the well
+---
+The walls were wet and slimy
+Not even a sound of water dropped
+As she slowly descended down
+The voice faded and then it stopped
+---
+She stopped for a moment
+Her arms and legs pressed against the walls
+Then from below she heard a loud scream
+But this one did not sound like those distressed calls
+---
+She jumped in fright and tried to climb out
+Only to fail with every slip
+The slime off the walls covered her hands
+Causing her to lose her grip
+---
+Her shoes lost their traction
+As one slipped away from the wall
+Replaced with her head with a loud thud
+As the darkness enveloped her inevitable fall
+---
+She slowly opened her eyes
+Then yelled with excruciating pain
+As she looked down at her legs
+There revealed were many a bloody vein
+---
+She looked around and almost cried in terror
+Bones of bodies surrounded her without so much as a whisper
+She was trapped inside where she could not get out
+This voice inside had tricked her
+---
+For days she called for help
+Until the days turned to weeks
+Her voice faded after a time
+As her life span began to slowly decrease
+---
+She died not long after
+Her body was now another to decay
+As the voice continues to envelope the well
+Trapping another soul come what may
+&7&oka tale by &f&oDarkmatter86&7&oka
+
+&8found in the collection of
+&8the iekcorbar library

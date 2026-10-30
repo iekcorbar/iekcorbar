@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadLocalRandom;
 final class Spawner {
     private final WildlifePlugin plugin;
     private boolean enabled;
-    private double chance, rareChance;
+    private double chance, rareChance, caveChance;
     private int minDist, maxDist, maxNear, nearRadius;
     private final Map<Species, Boolean> on = new EnumMap<>(Species.class);
     private final Map<Species, Integer> weight = new EnumMap<>(Species.class);
@@ -45,6 +45,7 @@ final class Spawner {
         maxDist = Math.max(minDist + 4, c.getInt("spawning.max-distance", 56));
         maxNear = c.getInt("spawning.max-animals-near-player", 8);
         nearRadius = c.getInt("spawning.near-radius", 64);
+        caveChance = c.getDouble("spawning.cave-chance", 0.06);
         ConfigurationSection s = c.getConfigurationSection("species");
         for (Species sp : Species.values()) {
             ConfigurationSection one = s == null ? null : s.getConfigurationSection(sp.id());
@@ -66,9 +67,8 @@ final class Spawner {
         ThreadLocalRandom r = ThreadLocalRandom.current();
         for (Player p : plugin.getServer().getOnlinePlayers()) {
             if (p.getGameMode() == GameMode.SPECTATOR || p.getWorld().getEnvironment() != World.Environment.NORMAL) continue;
-            if (r.nextDouble() >= chance) continue;
-            if (plugin.animals().countNear(p.getLocation(), nearRadius, null) >= maxNear) continue;
-            trySpawn(p, r);
+            if (r.nextDouble() < chance && plugin.animals().countNear(p.getLocation(), nearRadius, null) < maxNear) trySpawn(p, r);
+            if (r.nextDouble() < caveChance) tryCave(p, r);   // dragons keep their own cap
         }
     }
 
@@ -114,9 +114,61 @@ final class Spawner {
         }
     }
 
+    /**
+     * The underground pass (0.8.0): a player deep below a roof gets one weighted CAVE-species
+     * try per interval at caveChance. Finds a floor with 4 blocks of headroom within 14-30
+     * blocks and 12 levels of the player, never loads a chunk for it. Scarce on purpose: at
+     * most groupMax of a kind within 48 blocks.
+     */
+    private void tryCave(Player p, ThreadLocalRandom r) {
+        World w = p.getWorld();
+        if (p.getY() > 40) return;
+        if (w.getHighestBlockYAt(p.getLocation()) <= p.getLocation().getBlockY() + 1) return;   // sky above: not underground
+        List<Species> fit = new ArrayList<>();
+        int total = 0;
+        for (Species s : Species.values()) {
+            if (s.habitat != Species.Habitat.CAVE || !on.get(s) || weight.get(s) <= 0) continue;
+            if (plugin.animals().countNear(p.getLocation(), 48, s) >= s.groupMax) continue;
+            fit.add(s);
+            total += weight.get(s);
+        }
+        if (fit.isEmpty()) return;
+        int pick = r.nextInt(total);
+        Species s = fit.get(0);
+        for (Species f : fit) {
+            pick -= weight.get(f);
+            if (pick < 0) {
+                s = f;
+                break;
+            }
+        }
+        int py = p.getLocation().getBlockY();
+        for (int i = 0; i < 12; i++) {
+            double a = r.nextDouble() * Math.PI * 2, d = 14 + r.nextDouble() * 16;
+            int x = p.getLocation().getBlockX() + (int) (Math.cos(a) * d);
+            int z = p.getLocation().getBlockZ() + (int) (Math.sin(a) * d);            if (!w.isChunkLoaded(x >> 4, z >> 4)) continue;
+            for (int y = py + 8; y > py - 12; y--) {
+                Block floor = w.getBlockAt(x, y, z);
+                if (!floor.getType().isSolid() || floor.getType() == Material.LAVA) continue;
+                boolean clear = true;
+                for (int dy = 1; dy <= 4; dy++) {
+                    Material t = w.getBlockAt(x, y + dy, z).getType();
+                    if (!(t == Material.AIR || t == Material.CAVE_AIR || t == Material.VOID_AIR)) {
+                        clear = false;
+                        break;
+                    }
+                }
+                if (!clear) continue;
+                plugin.animals().spawn(s, new Location(w, x + 0.5, y + 1.05, z + 0.5), r.nextDouble() < rareChance, false, null);
+                return;
+            }
+        }
+    }
+
     /** Where this species can appear above the given top block, or null. */
     private static Location spot(Species s, Block top) {
         Material m = top.getType();
+        if (s.habitat == Species.Habitat.CAVE) return null;   // the surface pass never places cave species (tryCave does)
         if (s.habitat == Species.Habitat.POND) {   // koi live IN the water: top must be a water surface with depth
             return m == Material.WATER && top.getRelative(0, -1, 0).getType() == Material.WATER
                     && top.getRelative(0, 1, 0).getType().isAir() ? top.getLocation().add(0.5, 0.5, 0.5) : null;
@@ -131,7 +183,7 @@ final class Spawner {
             case SHORE -> (m == Material.SAND || m == Material.GRAVEL || m == Material.MUD || m == Material.STONE || m == Material.MUDDY_MANGROVE_ROOTS)
                     && nearWater(top, 4) ? on : null;
             case AIR -> m != Material.LAVA && top.getRelative(0, 2, 0).getType().isAir() ? on.add(0, 1.5, 0) : null;
-            case POND -> null;
+            case POND, CAVE -> null;
         };
     }
 

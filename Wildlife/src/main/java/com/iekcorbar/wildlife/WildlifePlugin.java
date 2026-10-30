@@ -17,6 +17,7 @@ public final class WildlifePlugin extends JavaPlugin {
     long tick;
     private Fmm fmm;
     private Animals animals;
+    private DragonAI dragon;
     private Spawner spawner;
     private Journal journal;
     private Adv adv;
@@ -31,6 +32,7 @@ public final class WildlifePlugin extends JavaPlugin {
         fmm = new Fmm(getLogger());
         molehills = new Molehills(this);
         animals = new Animals(this);
+        dragon = new DragonAI(this);
         spawner = new Spawner(this);
         journal = new Journal(this);
         items = new WildItems(this);
@@ -39,6 +41,7 @@ public final class WildlifePlugin extends JavaPlugin {
         adv = Achievements.create(this);
         var pm = getServer().getPluginManager();
         pm.registerEvents(animals, this);
+        pm.registerEvents(dragon, this);
         pm.registerEvents(journal, this);
         pm.registerEvents(items, this);
         pm.registerEvents(molehills, this);
@@ -73,6 +76,7 @@ public final class WildlifePlugin extends JavaPlugin {
             if (tick % 40 == 0) ambience.tick();
             if (tick % (20L * Math.max(1, getConfig().getInt("spawning.interval-seconds", 10))) == 0) spawner.tick();
         }, 5L, 5L);
+        getServer().getScheduler().runTaskTimer(this, dragon::tick, 20L, 1L);   // riding and staying want every tick
         getLogger().info("Wildlife enabled with " + Species.values().length + " species.");
     }
 
@@ -96,6 +100,7 @@ public final class WildlifePlugin extends JavaPlugin {
     Adv adv() { return adv; }
     Fmm fmm() { return fmm; }
     Animals animals() { return animals; }
+    DragonAI dragon() { return dragon; }
     Molehills molehills() { return molehills; }
     Spawner spawner() { return spawner; }
     Journal journal() { return journal; }

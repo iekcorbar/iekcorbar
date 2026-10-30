@@ -18,10 +18,31 @@ PALETTE = {
 }
 
 
-# animal colours for the statues: the animal palette, prefixed so it never clashes with the prop colours above
-ALL = dict(PALETTE)
-for _n, _c in MA.PALETTE.items():
-    ALL["a_" + _n] = _c
+# animal colours for the statues: the animal palette, prefixed so it never clashes with the prop colours above.
+# 30-10: the animal palette outgrew the zoo atlas' 256-cell ceiling (the steam dragon added fourteen colours and
+# the wraith had already used up the slack), so instead of copying ALL of it we copy only what the statues and
+# eggs actually reference - the pre-pass builds every look once in memory and harvests the colour names.
+def _statue_colours():
+    used = set()
+
+    def harvest(name, build, kw, recolor):
+        m = MA.Model(name, recolor=recolor)
+        build(m, **kw)
+        used.update(e["name"] for e in m.elements)
+
+    for sid, build, kw, rare, rare_kw in MA.SPECIES:
+        harvest("wl_" + sid, build, kw, None)
+        harvest("wl_" + sid + "_rare", build, {**kw, **rare_kw}, rare)
+        harvest("wl_" + sid + "_baby", build, kw, None)
+    for name, build, kw in MA.EXTRA:
+        harvest("wl_" + name, build, kw, None)
+    for body, spot in EGG.values():
+        for nm in (body, spot):
+            used.add(nm)             # eggs() gebruikt van body én spot de basis-, _l- (lichtvlak) en _d- (schaduw) variant
+            used.add(nm + "_l")
+            used.add(nm + "_d")
+    return used
+
 
 # spawn egg colours per species: (body, spots) from the animal palette
 EGG = {"deer": ("deer", "antler"), "bear": ("fur_brown", "fur_light"), "boar": ("boar", "tusk"), "duck": ("duck_green", "bill"),
@@ -34,7 +55,12 @@ EGG = {"deer": ("deer", "antler"), "bear": ("fur_brown", "fur_light"), "boar": (
        "kangaroo": ("fur_brown", "fur_dark"), "ostrich": ("black", "white"), "crocodile": ("lizard", "lizard_spot"),
        "koala": ("elephant", "fur_cream"), "mole": ("elephant", "pink"), "rhino": ("elephant", "tusk"),
        "penguin": ("black", "web"), "orca": ("black", "white"), "piranha": ("scales", "firefly_red"),
-       "macaw": ("cardinal", "jay")}
+       "macaw": ("cardinal", "jay"),
+       "wraith": ("wraith_robe", "wraith_glow"), "dragon": ("dragon_brass", "dragon_copper")}
+
+ALL = dict(PALETTE)
+for _n in sorted(_statue_colours()):
+    ALL["a_" + _n] = MA.PALETTE[_n]
 
 
 def statues(pk, csv_path):

@@ -331,10 +331,13 @@ export default function SakaguraExplainedPage() {
           ))}
         </div>
         <p className="text-sm text-text-warm/80 leading-relaxed">
-          Since then the garden grew to <b className="text-sp-gold">forty-eight</b> - fruits, grains and the
-          hot green things the newer bar asks for. Apricots, kiwis, mikan, pears, tomatoes and chili all
-          stand behind at least one drink on the recipes page; most of the rest are fresh eating and the
-          Kitchen&apos;s doing. What asks for nothing is planted for the joy of the orchard.
+          Since then the garden grew to <b className="text-sp-gold">forty-eight</b> - and the bar kept up:
+          apricots, kiwis, mikan, pears, tomatoes and chili moved behind the counter first, and with the
+          grove set even mango, rambutan, dragon fruit, sudachi, lychee, passion fruit, pomegranate, date,
+          mulberry, rye and vanilla pour their own drinks - four of them with effects the bar had never
+          served: a chosen blindness, a queen&apos;s tired hands, a dolphin&apos;s grace and one rye joke that
+          lifts you off the ground. What still asks for nothing is grown for the joy of the orchard - or
+          for eating, warm, on the step.
         </p>
         <Table
           head={['Crop', 'Plant', 'Found wild in']}
@@ -453,7 +456,7 @@ export default function SakaguraExplainedPage() {
           ))}
         </div>
         <p className="text-sm text-text-warm/80">
-          The whole live menu — all eighty drinks with steps and alcohol — is on the{' '}
+          The whole live menu — all ninety-two drinks with steps and alcohol — is on the{' '}
           <Link href="/recipes" className="text-sp-gold underline">recipes page</Link> under the{' '}
           <b>Sakagura</b> tab, and your in-game <b>Brewer&apos;s Manual</b> always carries the same list,
           rebuilt fresh every time a copy leaves the shelf.

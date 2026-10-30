@@ -779,3 +779,117 @@ recipes:
     effects: ["JUMP_BOOST/0-1/60-120"]
     steps:
       - {type: mix, time: 1, ingredients: ["Sugar/3", "sakagura:yuzu/1", "Glass/1"]}
+  blind_date:
+    names: ["Dim Date", "Blind Date", "Sight-Seeing Romance"]
+    color: "8a1f3d"
+    difficulty: 4
+    alcohol: 9
+    lore: ["<dark_red>You said yes without looking."]
+    effects: ["BLINDNESS/0/20-40", "LUCK/0/240-480"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["sakagura:date/4", "sakagura:pomegranate/2", "Honey Bottle/1"]}
+  persephone:
+    names: ["Winter Seed", "Six of Persephone", "Queen of the Underworld"]
+    color: "6e0f22"
+    difficulty: 7
+    alcohol: 14
+    lore: ["<purple>Six seeds. Do not eat six seeds."]
+    effects: ["NIGHT_VISION/0/180-300", "MINING_FATIGUE/0/60-120"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["sakagura:pomegranate/6", "Sugar/3"]}
+      - {type: age, years: 6, wood: "dark_oak"}
+  lychee_cooler:
+    names: ["Tepid Lychee", "Lychee & Chill", "Absolute Zero Chill"]
+    color: "bfe8ff"
+    difficulty: 2
+    alcohol: 5
+    lore: ["<aqua>The panic simply drifts away."]
+    effects: ["SLOW_FALLING/0/120-240", "SATURATION/0/4"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["sakagura:lychee/6", "Sugar/3", "Snowball/2"]}
+  unrequited:
+    names: ["One-Sided", "Unrequited", "Mutual at Last"]
+    color: "f06aa5"
+    difficulty: 4
+    alcohol: 8
+    lore: ["<pink>Chasing them, and somehow enjoying it."]
+    effects: ["NAUSEA/0/20-45", "SPEED/0/120-240"]
+    steps:
+      - {type: mix, time: 3, ingredients: ["sakagura:passionfruit/4", "sakagura:yuzu/2", "Sugar/2"]}
+  clear_channels:
+    names: ["Watery Eyes", "Clear Channels", "The Seventh Sinus"]
+    color: "9be564"
+    difficulty: 5
+    alcohol: 6
+    lore: ["<green>Nose: evacuated. Lungs: ocean."]
+    effects: ["WATER_BREATHING/0/240-420", "GLOWING/0/2-6"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["sakagura:wasabi/2", "kitchen:daikon_slices/2", "Sugar/1"]}
+  mango_tango:
+    names: ["Solo Tango", "Mango-Tango", "Two Left Feet, Gone"]
+    color: "ffb437"
+    difficulty: 3
+    alcohol: 7
+    lore: ["<gold>Commit to the step you misremembered."]
+    effects: ["SPEED/0/120-240", "JUMP_BOOST/0/60-120"]
+    steps:
+      - {type: cook, time: 3, ingredients: ["sakagura:mango/4", "sakagura:papaya/2", "Sugar/2", "Milk Bucket/1"]}
+  hairy_narwhal:
+    names: ["Bald Yeti", "The Hairy Narwhal", "Unicorn of the Deep"]
+    color: "6f8fae"
+    difficulty: 6
+    alcohol: 13
+    lore: ["<aqua>Hairy outside, majestic inside."]
+    effects: ["WATER_BREATHING/0/120-240", "DOLPHIN_GRACE/0/120-240"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["sakagura:rambutan/4", "sakagura:longan/2", "sakagura:ginger/1"]}
+      - {type: distill, runs: 2}
+  wyrms_regret:
+    names: ["Hiccup", "Wyrm's Regret", "Dragon's Apology"]
+    color: "8e2418"
+    difficulty: 8
+    alcohol: 17
+    lore: ["<red>The fire went down. The apology did not."]
+    effects: ["FIRE_RESISTANCE/0/180-300", "STRENGTH/0/60-120"]
+    steps:
+      - {type: cook, time: 7, ingredients: ["sakagura:dragonfruit/3", "kitchen:chili/2", "sakagura:mangosteen/2"]}
+      - {type: age, years: 3, wood: "copper"}
+  zest_for_life:
+    names: ["Flat Soda", "Zest for Life", "Second Wind"]
+    color: "d9e86a"
+    difficulty: 3
+    alcohol: 10
+    lore: ["<yellow>The garden's smallest citrus, loudest effect."]
+    effects: ["SATURATION/0/6", "SPEED/0/120-240"]
+    steps:
+      - {type: mix, time: 2, ingredients: ["sakagura:sudachi/4", "sakagura:shiso/2", "Sugar/2", "Sake/1"]}
+  silk_road:
+    names: ["Threadbare", "Silk Road", "Loom Reserve"]
+    color: "e8d7b8"
+    difficulty: 5
+    alcohol: 9
+    lore: ["<gray>Woven by worms, aged by merchants."]
+    effects: ["SLOW_FALLING/0/180-360", "RESISTANCE/0/60-120"]
+    steps:
+      - {type: cook, time: 6, ingredients: ["sakagura:mulberry/5", "Honey Bottle/1"]}
+      - {type: age, years: 4, wood: "oak"}
+  dark_rye:
+    names: ["Groaner", "Dark Rye Comedy", "Killer Punchline"]
+    color: "4a3a28"
+    difficulty: 8
+    alcohol: 16
+    lore: ["<gray>It gets funnier the higher you float."]
+    effects: ["LEVITATION/0/10-25", "REGENERATION/0/60-120"]
+    steps:
+      - {type: cook, time: 9, ingredients: ["sakagura:rye/8", "Sugar/2"]}
+      - {type: distill, runs: 2}
+      - {type: age, years: 6, wood: "spruce"}
+  plain_vanilla:
+    names: ["Plain Vanilla", "Plain Vanilla", "Plain Vanilla"]
+    color: "f5f0e6"
+    difficulty: 2
+    alcohol: 3
+    lore: ["<gray>A five-star score changes absolutely nothing."]
+    effects: ["SATURATION/0/3"]
+    steps:
+      - {type: cook, time: 4, ingredients: ["sakagura:vanilla/2", "Milk Bucket/1", "Sugar/2"]}

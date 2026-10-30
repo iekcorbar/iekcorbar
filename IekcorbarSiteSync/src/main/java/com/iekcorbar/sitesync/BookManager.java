@@ -111,6 +111,9 @@ public class BookManager implements Listener, TabExecutor {
         if (!new File(booksDir, "engineers_manual.txt").exists()) plugin.saveResource("books/engineers_manual.txt", false);
         if (!new File(booksDir, "brewers_manual.txt").exists()) plugin.saveResource("books/brewers_manual.txt", false);
         if (!new File(booksDir, "not_supposed_to.txt").exists()) plugin.saveResource("books/not_supposed_to.txt", false);
+        // Darkmatter86's four collected tales (1.16.3): command-only (/ibook give), never loot.
+        for (String tale : new String[]{"let_me_use_your_phone", "mother", "the_day_the_cat_came_home", "the_well"})
+            if (!new File(booksDir, tale + ".txt").exists()) plugin.saveResource("books/" + tale + ".txt", false);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         if (plugin.getCommand("ibook") != null) {
             plugin.getCommand("ibook").setExecutor(this);

@@ -14,6 +14,9 @@ spawning:
   near-radius: 64
   # chance (0-1) that an animal is the rare colour variant
   rare-chance: 0.025
+  # chance (0-1) that an underground player gets a CAVE-species try (steam dragons): a floor with
+  # headroom 14-30 blocks away, at most groupMax within 48 blocks - finding one is a real event
+  cave-chance: 0.06
 
 # biome soundscapes around players who are outdoors (birds, crickets, frogs, gulls, cicadas, wind);
 # played in the Ambient/Environment volume category, so players can turn them down themselves
@@ -39,9 +42,15 @@ species:
   dragonfly: {enabled: true, weight: 5}
   elephant: {enabled: true, weight: 3}
   zebra: {enabled: true, weight: 7}
+  dragon: {enabled: true, weight: 3}   # CAVE species: only the underground pass places it (cave-chance)
   # sfeer-wezen (0.7.0): geen dier en dus nooit in het wild - alleen te plaatsen met
   # /wildlife spawn wraith (het commando negeert deze sectie; de spawner holds itself extra in)
   wraith: {enabled: false, weight: 0}
+
+# the steam dragon (0.8.0): tamed with coal, ridden by its owner
+dragon:
+  # horizontal top speed while ridden, in blocks per tick (0.40 = 8 m/s; sprinting rider +35 %)
+  ride-speed: 0.40
 
 
 # breeding: right-click an adult with its food (see /wildlife help or the wiki); two of one kind in love close together get a baby

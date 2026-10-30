@@ -52,6 +52,12 @@ BASE = {
     "macaque": (150, 118, 92),
     # wraith (0.7.0): eigen kleuren, appended at the END so every existing palette cell keeps its index
     "wraith_robe": (52, 58, 74), "wraith_void": (18, 18, 24), "wraith_glow": (148, 226, 232),
+    # steam dragons (0.8.0): appended at the END, same rule as the wraith. One hide colour per
+    # trait + the shared metalwork; _d/_l shades are generated. The iron frame reuses fur_black
+    # (256 cells is the atlas ceiling and 10 fresh colours would not fit).
+    "dragon_brass": (188, 146, 66), "dragon_copper": (204, 116, 66), "dragon_furnace": (244, 142, 44),
+    "dragon_sakura": (232, 168, 186), "dragon_chili": (196, 62, 42),
+    "dragon_lacquer": (62, 32, 38), "dragon_verdigris": (98, 172, 142),
 }
 PALETTE = {}
 for n, (r, g, b) in BASE.items():
@@ -111,7 +117,8 @@ SIZE = {"elephant": 0.9, "zebra": 1.25, "deer": 1.3, "bear": 1.15, "boar": 1.3, 
         "tanuki": 1.3, "crane": 1.25, "koi": 1.4, "macaque": 1.25,
         "kangaroo": 1.3, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.3, "mole": 1.35,
         "rhino": 1.15, "penguin": 1.35, "orca": 1.0, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0}   # drawn 26 px = 1.63 m, matching Species.WRAITH scale 1.8 on the 0.9 m bee hitbox
+        "wraith": 1.0, "dragon": 1.15}   # drawn 26 px = 1.63 m, matching Species.WRAITH scale 1.8 on the 0.9 m bee hitbox
+                                         # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
 
@@ -194,6 +201,10 @@ class Model:
             return "songbird"
         if n.startswith("macaw"):
             return "macaw"
+        if n.startswith("dragonfly"):
+            return "dragonfly"
+        if n.startswith("dragon"):
+            return "dragon"   # looks like dragon_sakagura count as the species
         return n
 
     def size(self):
@@ -1399,6 +1410,222 @@ def wraith(m):
                           "hem": {"rotation": [(0, (0, 0, 0)), (0.55, (8, 0, 0)), (0.8, (8, 0, 0))]}}, loop="hold")
 
 
+# ------------------------------------------------------------------ steam dragons (0.8.0)
+
+def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
+           glow="dragon_furnace", spine="dragon_copper"):
+    """Steampunk dragon, ~2.8 m snout-to-tail, ~3 m across the wings, drawn 16 px = 1 m with
+    the head at -Z. A mechanical predator in living brass: hide plates over an iron frame, a
+    furnace glowing through the chest ribs, copper spine ridges and neck rings, twin exhaust
+    pipes behind the helmet, and bat wings on two-jointed brass arms - a flat membrane sheet
+    with fanning finger ribs and a wrist claw, the way a bat's wing actually hangs. The back
+    carries brass saddle rails under an m_seat bone (it IS the saddle), so FreeMinecraftModels
+    seats a rider there and steering works. A tame dragon is a mount and a companion.
+    col=hide, plate=metal frame, memb=wing membrane, glow=furnace, spine=ridge copper/gold.
+    Mirroring rule for the wing tracks (bones lie on +-X): a pose (x, y, z) on the left wing
+    mirrors to (x, -y, -z) on the right - the flap is z (tip up/down), the sweep is y.
+    Animations: fly (power downstroke, slower recovery, elbow lag, tail counter-wave, legs
+    tucked), walk (lateral gallop, folded wings), idle (folded, breath, one loose flutter),
+    sit (haunches down, wings wrapped), eat (neck dips, jaw chews), roar (rears up, wings
+    flared), death (one flare, then the frame tips and the furnace goes out)."""
+    # ---- torso: chest, mid, hips, a metal keel below and a furnace behind the ribs
+    m.bone("body", (0, 16.4, 0))
+    m.box("body", -3.6, 13.2, -8.6, 3.6, 20.4, -3.8, col)         # chest
+    m.box("body", -2.7, 12.6, -4.2, 2.7, 19.4, 2.8, col)          # mid
+    m.box("body", -3.4, 12.8, 2.4, 3.4, 19.2, 8.0, col)           # hips
+    m.box("body", -2.3, 12.2, -8.0, 2.3, 13.8, -4.1, plate)       # belly keel, three plates
+    m.box("body", -2.3, 12.2, -3.9, 2.3, 13.8, 2.5, plate)
+    m.box("body", -2.3, 12.2, 2.7, 2.3, 13.8, 7.4, plate)
+    m.box("body", -2.2, 14.0, -8.9, 2.2, 16.8, -8.2, plate)       # sternum
+    m.sym("body", 3.5, 14.4, -7.6, 3.66, 18.2, -4.2, glow)        # furnace behind the ribs
+    m.sym("body", 3.62, 14.4, -6.6, 3.8, 18.2, -6.2, plate)       # grate bar
+    m.sym("body", 3.62, 14.4, -5.2, 3.8, 18.2, -4.8, plate)       # ... and its twin
+    m.sym("body", 2.6, 18.8, -6.4, 4.8, 20.8, -2.6, plate)        # shoulder pauldrons
+    for z in (-8.0, -5.2, -2.4, 0.6, 3.4, 6.4):                   # copper spine ridge, stepping down
+        y0 = 19.8 - (z + 8.0) * 0.18
+        m.box("body", -0.55, y0, z, 0.55, y0 + 1.7, z + 1.6, spine)
+    # ---- neck on an angle: lower column in the chest, upper rising to the helmet
+    m.bone("neck", (0, 19.8, -6.8), "body")
+    m.box("neck", -1.9, 18.4, -9.4, 1.9, 22.0, -6.6, col)
+    m.box("neck", -1.7, 20.4, -11.8, 1.7, 23.8, -8.4, col)
+    m.box("neck", -1.25, 17.8, -11.0, 1.25, 19.6, -8.0, plate)    # throat guard
+    m.box("neck", -2.0, 20.0, -9.0, 2.0, 20.8, -8.4, spine)       # collar ring
+    m.box("neck", -1.75, 22.4, -11.6, 1.75, 23.2, -11.0, spine)   # crown ring
+    m.sym("neck", 1.9, 19.2, -9.6, 2.5, 20.8, -8.0, spine)        # side vents
+    # ---- head: brass helmet over a long snout, furnace-light eyes, swept-back horns
+    m.bone("h_head", (0, 23.2, -11.4), "neck")
+    m.box("h_head", -1.8, 22.2, -15.8, 1.8, 25.8, -11.0, col)     # skull
+    m.box("h_head", -1.2, 21.9, -19.0, 1.2, 24.2, -15.4, col)     # snout
+    m.box("h_head", -0.8, 24.0, -18.6, 0.8, 24.8, -16.0, col)     # nose bridge step
+    m.box("h_head", -1.95, 25.4, -16.2, 1.95, 26.4, -11.6, plate)  # brow crest
+    m.sym("h_head", 0.4, 22.6, -19.2, 0.75, 23.4, -18.8, plate)   # nostrils
+    m.sym("h_head", 1.62, 23.6, -14.8, 1.8, 24.5, -13.2, glow)    # furnace-light eyes
+    m.sym("h_head", 1.0, 25.8, -13.4, 1.5, 27.6, -11.6, plate)    # horn roots
+    m.sym("h_head", 1.15, 26.6, -11.8, 1.45, 28.4, -10.0, spine)  # ... copper tips
+    m.sym("h_head", 1.8, 23.2, -10.6, 2.4, 25.6, -9.2, memb)      # cheek fins, worn not stuck out
+    m.sym("h_head", 1.5, 24.8, -11.4, 2.2, 27.4, -10.2, plate)    # exhaust pipes
+    m.sym("h_head", 1.42, 27.2, -11.6, 2.28, 27.9, -10.0, spine)  # ... with caps
+    m.bone("jaw", (0, 22.0, -12.0), "h_head")
+    m.box("jaw", -1.05, 20.4, -17.8, 1.05, 22.0, -11.6, plate)
+    m.sym("jaw", 0.3, 21.8, -17.2, 0.6, 22.5, -16.5, "fur_cream")     # fangs on the seam
+    m.sym("jaw", 0.3, 21.8, -14.6, 0.6, 22.5, -13.9, "fur_cream")
+    # ---- tail: slim and HOVER-LEVEL (well clear of the wing sheet), ridge spikes, fin, tip
+    m.bone("tail", (0, 17.6, 7.8), "body")
+    m.box("tail", -1.5, 16.0, 7.6, 1.5, 19.2, 12.2, col)
+    m.box("tail", -0.5, 19.0, 8.4, 0.5, 20.3, 10.8, spine)
+    m.bone("tail_t", (0, 17.0, 12.0), "tail")
+    m.box("tail_t", -1.05, 15.4, 11.8, 1.05, 18.4, 16.2, col)
+    m.box("tail_t", -0.85, 15.0, 15.4, 0.85, 16.2, 16.2, spine)
+    m.box("tail_t", -0.6, 14.4, 15.8, 0.6, 17.0, 19.8, col + "_d")   # the tip, tapering
+    m.sym("tail_t", 1.05, 16.2, 12.6, 1.9, 18.8, 15.2, memb)         # dorsal fin
+    # ---- wings: brass arm forward along the leading edge, flat membrane sheet sweeping back
+    for name, sx in (("wing_l", 1), ("wing_r", -1)):
+        m.bone(name, (sx * 3.0, 18.8, -3.2), "body")
+        m.bone(name + "_t", (sx * 8.8, 18.2, -4.0), name)
+        m.box(name, sx * 2.9, 17.6, -5.4, sx * 9.2, 19.6, -1.8, plate)    # upper arm
+        m.box(name, sx * 3.2, 15.4, -1.2, sx * 9.0, 16.0, 3.4, memb)      # inner membrane
+        m.box(name, sx * 8.4, 16.2, 2.6, sx * 9.4, 17.0, 4.0, "fur_cream")  # elbow claw
+        m.box(name + "_t", sx * 8.6, 17.0, -6.0, sx * 15.0, 19.0, -2.2, plate)  # forearm
+        m.box(name + "_t", sx * 9.0, 16.3, -2.4, sx * 15.4, 16.9, -1.2, plate)  # finger rib
+        m.box(name + "_t", sx * 10.0, 16.2, 1.0, sx * 13.2, 16.7, 2.0, plate)   # rib two
+        m.box(name + "_t", sx * 12.6, 16.2, 3.2, sx * 14.8, 16.6, 4.2, plate)   # rib three
+        m.box(name + "_t", sx * 8.6, 15.4, -2.2, sx * 20.4, 16.0, 6.8, memb)    # outer membrane
+        m.box(name + "_t", sx * 19.6, 15.6, 6.0, sx * 20.8, 16.4, 7.4, "fur_cream")  # wrist claw
+    # ---- legs: big thighs, iron-shod feet with cream claws, toes pointing forward (-Z)
+    for name, x, z in (("leg_fl", 2.7, -5.4), ("leg_fr", -2.7, -5.4)):
+        m.bone(name, (x, 13.6, z), "body")
+        m.bone(name + "_l", (x, 8.4, z), name)
+        m.box(name, x - 1.0, 8.2, z - 1.2, x + 1.0, 14.0, z + 1.2, col)
+        m.box(name, x - 1.2, 11.8, z - 1.4, x + 1.2, 14.4, z + 1.4, plate)      # shoulder armour
+        m.box(name + "_l", x - 0.7, 1.8, z - 0.8, x + 0.7, 8.6, z + 0.8, col + "_d")
+        m.box(name + "_l", x - 0.8, 3.2, z - 0.95, x + 0.8, 4.2, z + 0.95, plate)  # ankle band
+        m.box(name + "_l", x - 1.1, 0.0, z - 2.6, x + 1.1, 1.8, z + 1.0, plate)    # foot
+        m.box(name + "_l", x - 1.1, 0.0, z - 3.2, x - 0.4, 1.0, z - 2.3, "fur_cream")  # claws
+        m.box(name + "_l", x + 0.4, 0.0, z - 3.2, x + 1.1, 1.0, z - 2.3, "fur_cream")
+    for name, x, z in (("leg_bl", 3.4, 5.4), ("leg_br", -3.4, 5.4)):
+        m.bone(name, (x, 14.2, z), "body")
+        m.bone(name + "_l", (x + 0.2, 8.8, z + 0.4), name)
+        m.box(name, x - 1.2, 8.4, z - 2.2, x + 1.2, 14.6, z + 2.2, col)
+        m.box(name, x - 1.4, 12.2, z - 2.4, x + 1.4, 14.8, z + 1.6, plate)      # hip guard
+        m.box(name + "_l", x - 0.7, 2.0, z - 0.6, x + 0.7, 9.0, z + 1.8, col + "_d")
+        m.box(name + "_l", x - 0.8, 3.4, z - 0.75, x + 0.8, 4.4, z + 1.95, plate)   # hock band
+        m.box(name + "_l", x - 1.2, 0.0, z - 2.8, x + 1.2, 2.0, z + 2.0, plate)     # long foot
+        m.box(name + "_l", x - 1.2, 0.0, z - 3.5, x - 0.4, 1.1, z - 2.6, "fur_cream")
+        m.box(name + "_l", x + 0.4, 0.0, z - 3.5, x + 1.2, 1.1, z - 2.6, "fur_cream")
+    # ---- saddle: brass side rails, a spine backrest, a leather seat, and the FMM mount bone
+    m.sym("body", 2.9, 20.0, -4.0, 3.3, 20.8, 3.6, plate)
+    m.box("body", -1.3, 20.2, -4.8, 1.3, 22.1, -3.4, spine)       # backrest
+    m.box("body", -2.0, 19.7, -3.2, 2.0, 20.4, 3.0, "fur_brown")  # leather seat
+    m.bone("m_seat", (0, 21.8, 0.2), "body")                      # FMM mounts riders here
+    # ---------------------------------------------------------------- animations
+    FOLD_L = (0, -72, 6)       # folded along the body: swept back, tipped up a finger's width
+    FOLD_LT = (0, -48, -4)    # forearm folded in and down against the flank    # fly: a real stroke - fast power downbeat, slower recovery, the elbow lags a beat, the
+    # tail undulates against the bob and the legs tuck up under the belly. Left wing first,
+    # right mirrored with (x, -y, -z).
+    M = 1.05
+    down, up = 0.32 * M, 0.78 * M
+    m.anim("fly", M, {
+        "wing_l": {"rotation": [(0, (0, -20, 44)), (0.14 * M, (0, -14, 12)), (down, (0, -6, -38)),
+                                (0.52 * M, (0, -5, -32)), (up, (0, -20, 44)), (M, (0, -20, 44))]},
+        "wing_r": {"rotation": [(0, (0, 20, -44)), (0.14 * M, (0, 14, -12)), (down, (0, 6, 38)),
+                                (0.52 * M, (0, 5, 32)), (up, (0, 20, -44)), (M, (0, 20, -44))]},
+        "wing_l_t": {"rotation": [(0, (0, -18, -16)), (0.14 * M, (0, -8, -2)), (down, (0, -2, 4)),
+                                  (0.52 * M, (0, -2, 2)), (up, (0, -18, -16)), (M, (0, -18, -16))]},
+        "wing_r_t": {"rotation": [(0, (0, 18, 16)), (0.14 * M, (0, 8, 2)), (down, (0, 2, -4)),
+                                  (0.52 * M, (0, 2, -2)), (up, (0, 18, 16)), (M, (0, 18, 16))]},
+        "body": {"position": [(0, (0, -0.3, 0)), (down, (0, 0.35, 0)), (0.52 * M, (0, 0.25, 0)),
+                              (M, (0, -0.3, 0))],
+                 "rotation": [(0, (2.5, 0, 0)), (down, (-2, 0, 0)), (up, (2, 0, 0)), (M, (2.5, 0, 0))]},
+        "neck": {"rotation": [(0, (-2, 0, 0)), (down, (1.5, 0, 0)), (M, (-2, 0, 0))]},
+        "h_head": {"rotation": [(0, (1.5, 0, 0)), (down, (-1, 0, 0)), (M, (1.5, 0, 0))]},
+        "tail": {"rotation": [(0, (-4, 0, 0)), (0.35 * M, (4, 0, 0)), (0.6 * M, (5, 0, 0)),
+                              (0.85 * M, (-3, 0, 0)), (M, (-4, 0, 0))]},
+        "tail_t": {"rotation": [(0.12 * M, (-7, 0, 0)), (0.45 * M, (6, 0, 0)), (0.7 * M, (8, 0, 0)),
+                                (0.95 * M, (-5, 0, 0)), (M, (-7, 0, 0))]},
+        "leg_fl": {"rotation": hold(M, (20, 0, 0))}, "leg_fr": {"rotation": hold(M, (20, 0, 0))},
+        "leg_bl": {"rotation": hold(M, (-16, 0, 0))}, "leg_br": {"rotation": hold(M, (-16, 0, 0))},
+        "leg_fl_l": {"rotation": hold(M, (46, 0, 0))}, "leg_fr_l": {"rotation": hold(M, (46, 0, 0))},
+        "leg_bl_l": {"rotation": hold(M, (30, 0, 0))}, "leg_br_l": {"rotation": hold(M, (30, 0, 0))},
+    })
+    # walk: lateral-sequence gallop; folded wings rock a touch with each beat for balance.
+    Pw = 1.0
+    ts = [0, 0.25 * Pw, 0.5 * Pw, 0.75 * Pw, Pw]
+    rolls = [0, 4, 0, -4, 0]
+    wings = {
+        "wing_l": {"rotation": [(t, (0, -62, 8 + r)) for t, r in zip(ts, rolls)]},
+        "wing_r": {"rotation": [(t, (0, 62, -8 - r)) for t, r in zip(ts, rolls)]},
+        "wing_l_t": {"rotation": [(t, (0, -48, -4)) for t in ts]},
+        "wing_r_t": {"rotation": [(t, (0, 48, 4)) for t in ts]},
+        "neck": {"rotation": wave(8, Pw, 4, math.pi * 0.5)},
+        "leg_fl_l": {"rotation": wave(8, Pw, 15, 2 * math.pi * 0.45, base=14)},
+        "leg_fr_l": {"rotation": wave(8, Pw, 15, 2 * math.pi * 0.95, base=14)},
+        "leg_bl_l": {"rotation": wave(8, Pw, 13, 2 * math.pi * 0.15, base=12)},
+        "leg_br_l": {"rotation": wave(8, Pw, 13, 2 * math.pi * 0.65, base=12)},
+        "tail_t": {"rotation": wave(8, Pw, 16, 0, axis=1)},
+    }
+    gait(m, Pw, 22, head=3, tail=11, extra=wings)
+    # idle: folded, breathing slow, eyes around the cavern - and one loose flutter per loop
+    Pi = 4.2
+    m.anim("idle", Pi, {
+        "body": {"position": wave(6, Pi, 0.16, 0.0, axis=1)},
+        "neck": {"rotation": [(0, (0, 0, 0)), (1.4, (0, 8, 0)), (2.4, (0, -6, 0)), (Pi, (0, 0, 0))]},
+        "h_head": {"rotation": [(0, (0, 0, 0)), (0.9, (0, 26, 0)), (1.7, (0, 26, 0)),
+                                (2.2, (0, -20, 0)), (2.9, (0, -20, 0)), (Pi, (0, 0, 0))]},
+        "wing_l": {"rotation": [(0, (0, -72, 6)), (2.8, (0, -72, 6)), (2.95, (0, -34, 34)),
+                                (3.1, (0, -62, 6)), (3.25, (0, -72, 6)), (Pi, (0, -72, 6))]},
+        "wing_r": {"rotation": [(0, (0, 72, -6)), (2.8, (0, 72, -6)), (2.95, (0, 34, -34)),
+                                (3.1, (0, 62, -6)), (3.25, (0, 72, -6)), (Pi, (0, 72, -6))]},
+        "wing_l_t": {"rotation": [(0, (0, -48, -4)), (2.95, (0, -22, -10)), (3.1, (0, -48, -4)), (Pi, (0, -48, -4))]},
+        "wing_r_t": {"rotation": [(0, (0, 48, 4)), (2.95, (0, 22, 10)), (3.1, (0, 48, 4)), (Pi, (0, 48, 4))]},
+        "tail": {"rotation": wave(8, Pi, 5, 0, axis=1)},
+        "tail_t": {"rotation": wave(8, Pi, 9, -0.7, axis=1)},
+    })
+    # sit: haunches down, front legs straight, wings wrapped round the flanks, tail curled aside
+    m.anim("sit", 0.8, {
+        "body": {"position": hold(0.8, (0, -0.6, 0)), "rotation": hold(0.8, (7, 0, 0))},
+        "neck": {"rotation": hold(0.8, (8, 0, 0))}, "h_head": {"rotation": hold(0.8, (4, 0, 0))},
+        "leg_bl": {"rotation": hold(0.8, (55, 0, 0))}, "leg_br": {"rotation": hold(0.8, (55, 0, 0))},
+        "leg_bl_l": {"rotation": hold(0.8, (-40, 0, 0))}, "leg_br_l": {"rotation": hold(0.8, (-40, 0, 0))},
+        "wing_l": {"rotation": hold(0.8, (0, -80, 2))}, "wing_r": {"rotation": hold(0.8, (0, 80, -2))},
+        "wing_l_t": {"rotation": hold(0.8, (0, -56, -12))}, "wing_r_t": {"rotation": hold(0.8, (0, 56, 12))},
+        "tail": {"rotation": hold(0.8, (0, 24, 0))}, "tail_t": {"rotation": hold(0.8, (0, 30, 0))},
+    }, loop="hold")
+    # eat: the neck dips to the coal, the jaw chews twice - head DOWN is negative x
+    m.anim("eat", 1.1, {
+        "neck": {"rotation": [(0, (0, 0, 0)), (0.3, (-32, 0, 0)), (0.75, (-28, 0, 0)), (1.1, (0, 0, 0))]},
+        "h_head": {"rotation": [(0, (0, 0, 0)), (0.25, (-20, 0, 0)), (0.45, (-4, 0, 0)), (0.6, (-18, 0, 0)),
+                                (0.8, (-4, 0, 0)), (0.95, (-10, 0, 0)), (1.1, (0, 0, 0))]},
+        "jaw": {"rotation": [(0, (0, 0, 0)), (0.28, (-26, 0, 0)), (0.42, (-4, 0, 0)), (0.56, (-26, 0, 0)),
+                             (0.7, (-4, 0, 0)), (0.84, (-20, 0, 0)), (1.1, (0, 0, 0))]},
+        "body": {"rotation": [(0, (0, 0, 0)), (0.3, (4, 0, 0)), (0.8, (4, 0, 0)), (1.1, (0, 0, 0))],
+                 "position": [(0, (0, 0, 0)), (0.3, (0, -0.5, 0)), (0.8, (0, -0.5, 0)), (1.1, (0, 0, 0))]},
+        "tail": {"rotation": [(0, (0, 0, 0)), (0.3, (-6, 0, 0)), (0.9, (4, 0, 0)), (1.1, (0, 0, 0))]},
+    }, loop="hold")
+    # roar: rears up, wings flared, jaw wide - the steam valves blow with it (plugin sound)
+    m.anim("roar", 1.5, {
+        "neck": {"rotation": [(0, (0, 0, 0)), (0.25, (14, 0, 0)), (0.95, (12, 0, 0)), (1.35, (0, 0, 0)), (1.5, (0, 0, 0))]},
+        "h_head": {"rotation": [(0, (0, 0, 0)), (0.25, (20, 0, 0)), (0.95, (18, 0, 0)), (1.35, (0, 0, 0)), (1.5, (0, 0, 0))]},
+        "jaw": {"rotation": [(0, (0, 0, 0)), (0.2, (-40, 0, 0)), (0.95, (-36, 0, 0)), (1.3, (0, 0, 0)), (1.5, (0, 0, 0))]},
+        "wing_l": {"rotation": [(0, (0, -72, 6)), (0.28, (0, -14, 34)), (0.6, (0, -16, 30)),
+                                (0.95, (0, -46, 14)), (1.3, (0, -72, 6)), (1.5, (0, -72, 6))]},
+        "wing_r": {"rotation": [(0, (0, 72, -6)), (0.28, (0, 14, -34)), (0.6, (0, 16, -30)),
+                                (0.95, (0, 46, -14)), (1.3, (0, 72, -6)), (1.5, (0, 72, -6))]},
+        "wing_l_t": {"rotation": [(0, (0, -48, -4)), (0.32, (0, -8, -6)), (0.65, (0, -10, -10)), (1.3, (0, -48, -4)), (1.5, (0, -48, -4))]},
+        "wing_r_t": {"rotation": [(0, (0, 48, 4)), (0.32, (0, 8, 6)), (0.65, (0, 10, 10)), (1.3, (0, 48, 4)), (1.5, (0, 48, 4))]},
+        "body": {"position": [(0, (0, 0, 0)), (0.3, (0, 0.6, 0)), (0.9, (0, 0.5, 0)), (1.4, (0, 0, 0))],
+                 "rotation": [(0, (0, 0, 0)), (0.3, (-4, 0, 0)), (0.9, (-3, 0, 0)), (1.5, (0, 0, 0))]},
+        "tail": {"rotation": [(0, (0, 0, 0)), (0.3, (-8, 0, 0)), (0.8, (5, 0, 0)), (1.2, (0, 0, 0)), (1.5, (0, 0, 0))]},
+    }, loop="hold")
+    # death: one last flare, then the wings fold, the frame tips and the furnace goes out
+    m.anim("death", 0.7, {
+        "body": {"rotation": [(0, (0, 0, 0)), (0.5, (0, 0, 88)), (0.7, (0, 0, 88))],
+                 "position": [(0, (0, 0, 0)), (0.5, (0, -1.4, 0)), (0.7, (0, -1.4, 0))]},
+        "wing_l": {"rotation": [(0, (0, -72, 6)), (0.18, (0, -26, 18)), (0.6, (0, -84, -6)), (0.7, (0, -84, -6))]},
+        "wing_r": {"rotation": [(0, (0, 72, -6)), (0.18, (0, 26, -18)), (0.6, (0, 84, 6)), (0.7, (0, 84, 6))]},
+        "jaw": {"rotation": [(0, (0, 0, 0)), (0.3, (-22, 0, 0)), (0.7, (-22, 0, 0))]},
+        "h_head": {"rotation": [(0, (0, 0, 0)), (0.5, (-12, 0, 0)), (0.7, (-12, 0, 0))]},
+    }, loop="hold")
+
 # ------------------------------------------------------------------ species list
 
 SPECIES = [  # (id, builder, kwargs, rare recolour, rare kwargs)
@@ -1432,6 +1659,11 @@ SPECIES = [  # (id, builder, kwargs, rare recolour, rare kwargs)
     ("orca", orca, {}, {"black": "fur_white", "white": "elephant"}, {}),
     ("piranha", piranha, {}, {"scales": "gold", "firefly_red": "koi_orange"}, {}),
     ("macaw", macaw, {}, {"cardinal": "canary", "jay": "white", "canary": "gold_l"}, {}),
+    # steam dragon (0.8.0): the brass steamworks look is the species base; the other traits live
+    # in EXTRA below as extra looks, chosen at random by the plugin (songbird/macaw style).
+    # rare = the gilded one: every brass cell to gold, iron to charcoal, furnace to bright ember.
+    ("dragon", dragon, {}, {"dragon_brass": "gold", "dragon_copper": "gold_l",
+                            "dragon_furnace": "glow_yellow", "fur_brown": "fur_dark"}, {}),
 ]
 EXTRA = [  # more common looks of a species (chosen at random by the plugin)
     ("songbird_cardinal", songbird, {"col": "cardinal", "breast": "cardinal_l", "cap": "cardinal"}),
@@ -1439,6 +1671,14 @@ EXTRA = [  # more common looks of a species (chosen at random by the plugin)
     ("songbird_sparrow", songbird, {"col": "sparrow", "breast": "fur_cream", "cap": "fur_brown"}),
     ("macaw_blue", macaw, {"col": "jay", "col2": "canary", "belly": "white"}),        # blue-and-gold
     ("macaw_green", macaw, {"col": "leaf", "col2": "canary", "belly": "fur_cream"}),  # military macaw
+    ("dragon_sakagura", dragon, {"col": "dragon_sakura", "plate": "fur_cream", "memb": "dragon_sakura_d",
+                                 "glow": "dragon_furnace", "spine": "dragon_copper"}),  # blossom-silk scales
+    ("dragon_kitchen", dragon, {"col": "dragon_chili", "plate": "dragon_lacquer", "memb": "dragon_chili_d",
+                                "glow": "dragon_furnace", "spine": "dragon_copper"}),    # chilli-red, copper ridge
+    ("dragon_kura", dragon, {"col": "dragon_lacquer", "plate": "fur_black", "memb": "dragon_lacquer_d",
+                              "glow": "dragon_furnace", "spine": "gold"}),              # lacquered barrel, gold ridge
+    ("dragon_verdigris", dragon, {"col": "dragon_verdigris", "plate": "dragon_copper", "memb": "dragon_verdigris_d",
+                                  "glow": "dragon_furnace", "spine": "dragon_copper"}),  # the oldest copper of all
 ]
 
 # Solo creatures (0.7.0): custom mobs that are NOT animals. Deliberately outside SPECIES and

@@ -70,7 +70,9 @@ final class Facts {
         Map.entry("koi", new String[]{"The oldest recorded koi reached 226 - its age is read from growth rings in the scales, like a tree.",
                 "Koi have a three-second memory - they learn and remember for months to years."}),
         Map.entry("macaque", new String[]{"Sweet-potato washing started with one female, Imo, in 1953 - the whole troop copied: documented animal culture.",
-                "Snow monkeys bathe in hot springs by nature - it is learned; troops without springs never do it."}));
+                "Snow monkeys bathe in hot springs by nature - it is learned; troops without springs never do it."}),
+        Map.entry("dragon", new String[]{"A steam dragon's furnace burns its own scrap: it rusts from the inside out and the verdigris elders are the oldest, not the youngest.",
+                "Tamed dragons always fly - their brass buoyancy tank never ran out - which is why no dragon has ever broken a leg on the rocks."}));
 
     private Facts() { }
 

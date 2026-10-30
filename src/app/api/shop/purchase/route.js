@@ -159,7 +159,7 @@ export async function POST(request) {
       return NextResponse.json({ error: `Not enough ${moneyName}. You have ${beforeHeld}, this costs ${item.price}.` }, { status: 402 });
     }
 
-    const takeCommand = fillTemplate(useCoins ? (settings.coinsTakeCommand || 'elitecoins take {player} {amount}') : settings.takeCommand, { player: username, amount: formatAmount(item.price) });
+    const takeCommand = fillTemplate(useCoins ? (settings.coinsTakeCommand || 'em money remove {player} {amount}') : settings.takeCommand, { player: username, amount: formatAmount(item.price) });
 
     let takeMessage;
     try {

@@ -3,7 +3,7 @@
 Eén overzicht van wat er speelt. De agent werkt dit bij na elke afgeronde werkblok;
 jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPLOYEN.txt`.)
 
-**Peildatum: 29-10-2026 avond**
+**Peildatum: 30-10-2026 avond**
 
 ## 🟢 Live op de server
 | Blok | Sinds | Wat |
@@ -14,10 +14,16 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Relics-config + ghosts-disc | 28-10 | discs staan weer goed |
 | Sakagura 0.5.0 | 30-10 11:23 | 12 nieuwe gewassen + orchard-trees (5 soorten, sapling→groei→plukken→vellen) |
 | Relics 0.5.0 | 30-10 12:25 | shop-crates `/relics crate` (kits uit crates.yml) + shadow-set voortaan niet-craftbaar |
+| Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
+| **Wildlife 0.8.0 stoomdraken** | TE-DEPLOYEN punt 64 | jar + 149 modellen + pack build21; volgorde: server uit → wildlife-modellenmap VOLLEDIG vervangen → jar wisselen → build21 in mixer (build20 weg) → aan → `/fmm reload` + `/wildlife reload`; temmen/rijden/zitten/brullen testen |
+| **4 Darkmatter86-boeken + story_bundle** | TE-DEPLOYEN punt 65 | SiteSync 1.16.3-jar (txt'en worden bij eerste start automatisch in books/ gelegd) + modelzip in FMM/models; /fmm reload; test /ibook give <speler> the_well |
+| site-zip + **Shop Settings-commando's** | TE-DEPLOYEN punt 63 (nieuw: sha1 ecf1d85c) | zip uitpakken + NPM + restart; dan Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online) |
+| 2 site-SQL's importeren | deploy/site-30-10-kits.sql + site-30-10-nieuws.sql | phpMyAdmin → iekcorbar-DB; kits zijn nu veilig (Relics 0.5.0 draait), nieuws kan direct |
+| 2 announcement-posts publiceren | Discord #announcements | per post nog op 'Publish' klikken - anders zien abonnees de Halloween- en Blood Moon-post niet |
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
 | StaffHub 0.4.11 🟢 LIVE (30-10 05:20, agent) | TE-DEPLOYEN punt 49 (af) | DELETION-BUG REPARERD: prullenbak-lazy-create had onjuiste SQL (5 waardes/6 kolommen) → 'verwijderen' deed niets; nu fix + rebuild + bewezen op DB-kopie. Tevens 0.4.10 (vertaalbalk mobiel) mee live |
@@ -38,7 +44,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 ## 🔵 In uitvoering (agent) → afgerond, wacht op deploy
 | Blok | Status |
 |---|---|
-| Tank- + plateauwagen | 🟢 LIVE 30-10 05:05: jar + 2 sw-modellen + pack build19 allemaal op de server |
+| 3 Darkmatter86-verhaalboeken (ibook) | ✅ gebouwd → wacht op deploy als TE-DEPLOYEN punt 65 (SiteSync 1.16.3 + story_bundle-model, 4 tales) |
 
 ## ⚪ Wachtrij
 - **Pluginstrategie eigen beheer** → docs/plugin-strategie.md (30-10): routekaart
@@ -60,7 +66,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 - Paper 26.3: upgrade-beslisboom (testbank groen, blockers in docs/263-testrapport.md)
 
 ## ❓ Open vragen (kort antwoord genoeg)
-1. `deploy/iekcorbar_iekje_barend.zip` (site-build van 28-10) — staat op geen enkele lijst: nog nodig of weg?
+1. ~~site-zip zonder lijst~~ — staat nu als TE-DEPLOYEN punt 63 (herbouwd, sha1 ecf1d85c).
 2. StaffHub-desktop 0.1.3 (TE-DEPLOYEN punt 25): al bij staff uitgedeeld? Zo ja, dan vliegt die er ook af.
 3. De oude punten ≤32 op de deploy-lijst: zal ik ze straks één voor één met de server vergelijken en de lijst naar 0 terugbrengen?
 
