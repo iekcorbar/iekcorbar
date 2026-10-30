@@ -1756,6 +1756,32 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### StaffHub 0.4.11 - deletion-bug gerepareerd + uitgerold (30-10, ~05:20)
+
+- Gevraagd: "deletion werkt niet op staffhub of was dat al gerepareerd along
+  the way?" - ANTWOORD: nee, was het nooit. Root-cause: lazy-create van de
+  Prullenbak-map in /api/trash had een onjuiste INSERT (6 kolommen vs 5
+  waardes: VALUES(NULL,?,?,?,?) - één ? te weinig). Live-log bevatte 2×
+  "Error: 5 values for 6 columns". Zolang de map niet bestond - wat na elke
+  verse DB zo is - crashte ELKE verwijderpoging; de UI slikt het stil.
+- Fix: VALUES(NULL,?,?,?,?,?) (trash/route.js). Check: geen enkele INSERT
+  meer met kolom/value-mismatch (scan alle api-routes + lib).
+- 0.4.10 (vertaalbalk mobiel, TE 49) zat nog lokaal - meegenomen; versie
+  naar 0.4.11 (bump_version.py), i18n 242×4, npm build groen.
+- Uitgerold op de VPS ZELF (dezelfde route als 0.4.9/0.4.8 eerder): tar
+  (src+public+server/config) → /opt/staffhub, .next-cache weg, docker
+  compose up -d --build. Container draait 0.4.11; homepage 200,
+  /api/trash anoniem 401, logs schoon (0 SQL-fouten), fix-string gevonden
+  in de built bundle.
+- Bewezen zonder de live-DB te racketen: kopie staffhub.db → /tmp, de
+  gefixte INSERT uitgevoerd (node-id 301, Prullenbak aangemaakt), kopie
+  weggegooid. Eerste ingelogde staff-lid krijgt de map nu vanzelf.
+- TE-DEPLOYEN 49 afgestreept (LIVE), board bijgewerkt.
+- LEERZAME FACTOR: "uitgerold en geverifieerd" bij 0.4.8 meette alleen
+  200/401 - de lazy-create-codepad werd nooit oefend. Bij UI-feature-roll-
+  outs voortaan het echte klikpad (hier: iets verwijderen) minstens één
+  keer simuleren (of de codepad-copy-test doen zoals nu).
+
 ### Deploy-batch eigenhandig uitgerold (30-10, 05:00-05:10)
 
 - Eigenaar gaf groen licht ("alles wat kan deployen/builden etc") - en de MC-

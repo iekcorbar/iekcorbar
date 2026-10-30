@@ -18,7 +18,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 |---|---|---|
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
 | StaffHub quest-gidsen importeren | deploy/staffhub-quests/ (8 ENGELSE md) | map slepen in de StaffHub-webapp (team-rechten); NL-versie is verouderd - niet meer gebruiken |
-| StaffHub 0.4.10 uitrollen (vertaalbalk mobiel) | TE-DEPLOYEN punt 49 | /opt/staffhub bijwerken + container rebuilden (zelfde als 0.4.9) |
+| StaffHub 0.4.11 🟢 LIVE (30-10 05:20, agent) | TE-DEPLOYEN punt 49 (af) | DELETION-BUG REPARERD: prullenbak-lazy-create had onjuiste SQL (5 waardes/6 kolommen) → 'verwijderen' deed niets; nu fix + rebuild + bewezen op DB-kopie. Tevens 0.4.10 (vertaalbalk mobiel) mee live |
 | IekQuests 0.3.0 🟢 LIVE sinds 30-10 05:05 (agent-deploy, log groen) | docs/quest-wizard.md | 14 quests live (milo, igor + 4 handelaars + 8 eetwarens, alles Engels); 6 BQ-pakketten → QuestPackages-offline (Rod_merchant blijft BQ tot mmoitem-ondersteuning); /questwizard bouwt quests+NPC's in de GUI → wizard-quests.yml; permissies: wizard=admin-only, cond perm:, reward perm+/perm- |
 | Halloween-quest plaatsen (morgen is het zo ver!) | TE-DEPLOYEN punt 52 | /npc create Igor Nightgrave → mapje uploaden → /bq reload |
 | Steamworks 0.3.26 🟢 LIVE sinds 30-10 05:05 (treinlijnen + windmolen-woosh + receptboek-fix) | TE-DEPLOYEN punt 42 (afgevinkt) | oude 0.3.25 van de server af |

@@ -13,7 +13,7 @@ const NAAM = 'Prullenbak';
 function trashNode(d, u) {
   let f = findChild(null, NAAM);
   if (!f || f.type !== 'folder') {
-    const id = Number(d.prepare('INSERT INTO nodes(parent,name,type,owner,created,updated) VALUES(NULL,?,?,?,?)')
+    const id = Number(d.prepare('INSERT INTO nodes(parent,name,type,owner,created,updated) VALUES(NULL,?,?,?,?,?)')
       .run(NAAM, 'folder', u.id, now(), now()).lastInsertRowid);
     f = d.prepare('SELECT * FROM nodes WHERE id = ?').get(id);
   }
