@@ -144,20 +144,34 @@ final class Belts {
         for (KNode n : plugin.kinetics().ejectors) {
             if (n.speed() == 0 || plugin.kinetics().tick < n.ejectUntil) continue;
             BlockFace f = n.facing;
-            Item item = firstItem(n, new BoundingBox(n.x, n.y + 0.6, n.z, n.x + 1, n.y + 2.4, n.z + 1));
+            // collect items on top of the ejector OR on the depot it looks at
+            java.util.List<Item> candidates = new java.util.ArrayList<>();
+            for (Entity e : n.world.getNearbyEntities(new BoundingBox(n.x, n.y + 0.6, n.z, n.x + 1, n.y + 2.4, n.z + 1)))
+                if (e instanceof Item i) candidates.add(i);
             org.bukkit.Location from = n.center().add(0, 0.8, 0);
-            if (item == null) {
-                KNode dep = plugin.kinetics().rel(n, f.getModX(), 0, f.getModZ());
-                if (dep != null && dep.type == PartType.DEPOT) {
-                    item = firstItem(dep, new BoundingBox(dep.x, dep.y + 0.6, dep.z, dep.x + 1, dep.y + 2.0, dep.z + 1));
-                    from = dep.center().add(0, 0.8, 0);
-                }
+            KNode dep = plugin.kinetics().rel(n, f.getModX(), 0, f.getModZ());
+            if (candidates.isEmpty() && dep != null && dep.type == PartType.DEPOT) {
+                for (Entity e : dep.world.getNearbyEntities(new BoundingBox(dep.x, dep.y + 0.6, dep.z, dep.x + 1, dep.y + 2.0, dep.z + 1)))
+                    if (e instanceof Item i) candidates.add(i);
+                from = dep.center().add(0, 0.8, 0);
             }
-            if (item == null) continue;
-            n.ejectUntil = plugin.kinetics().tick + 16;
-            item.teleport(from.add(new Vector(f.getModX(), 0, f.getModZ()).multiply(0.45)));
-            item.setVelocity(new Vector(f.getModX(), 0, f.getModZ()).multiply(0.55).setY(0.38));
-            n.world.playSound(n.center(), "block.tripwire.attach", 0.7f, 1.15f);
+            if (candidates.isEmpty()) continue;
+            // fling up to 3 items at once (weighted by speed)
+            int max = n.speed() >= 32 ? 3 : (n.speed() >= 16 ? 2 : 1);
+            int flung = 0;
+            for (Item item : candidates) {
+                if (flung >= max) break;
+                n.ejectUntil = plugin.kinetics().tick + 16;
+                org.bukkit.Location launch = from.clone().add(f.getModX() * 0.45, 0, f.getModZ() * 0.45);
+                item.teleport(launch);
+                // weighted: heavier items (more stack) fly shorter
+                double weight = Math.min(1.0, item.getItemStack().getAmount() / 16.0);
+                double speed = 0.55 + (1 - weight) * 0.2;
+                item.setVelocity(new Vector(f.getModX(), 0, f.getModZ()).multiply(speed).setY(0.38 + (1 - weight) * 0.1));
+                n.world.playSound(n.center(), "block.tripwire.attach", 0.7f, 1.15f);
+                n.world.spawnParticle(org.bukkit.Particle.CRIT, launch, 5, 0.1, 0.1, 0.1, 0.05);
+                flung++;
+            }
         }
     }
 
