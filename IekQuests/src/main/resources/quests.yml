@@ -64,41 +64,67 @@ quests:
     npc-id: 137
     order: 20
     journal:
-      - "Eight candles and six pumpkins for the town."
+      - "Hear Igor's plan for the dying lanterns."
+      - "Craft 8 candles (1 honeycomb + 1 string each)."
+      - "Bring 6 WHOLE pumpkins from the patch."
+      - "Light the first lantern together."
     start: "!tag:igor_done"
     stages:
       talk:
         type: talk
-        label: "&aLight up the lanterns"
+        label: "&aHear Igor's plan"
         voice: steamworks:igor.line01
         lines:
-          - "&fIgor: &7Heeeeey, little pumpkin. The lanterns of the"
-          - "&7town are dying and the spirits grow restless."
-          - "&7Eight candles, six pumpkins - and it glows again."
+          - "&fIgor: &7Heeeeey, little pumpkin. Come closer - don't"
+          - "&7mind the cold. It only bites the living."
+          - "&fIgor: &7The lanterns of Halloween Town are dying, and"
+          - "&7restless spirits hate a dark street."
+          - "&fIgor: &7Here is the whole spell: &feight candles &7and"
+          - "&fsix whole pumpkins&7. Bring those, and the town"
+          - "&7glows until Samhain."
+          - "&e> Click the green button - the list stays in your journal."
       candles:
         type: craft
         material: CANDLE
         amount: 8
-        label: "&aHand in the eight candles"
+        label: "&eCraft 8 candles (you keep them)"
         voice: steamworks:igor.line03
         lines:
-          - "&fIgor: &7Candles! Honeycomb and string - the world"
-          - "&7remembers how that works."
+          - "&fIgor: &7First: candles. &fOne honeycomb, one string&7 -"
+          - "&7that is a whole candle in a crafting square."
+          - "&fIgor: &7Eight of them, and &akeep them in your pack&7:"
+          - "&7you light the lanterns with these same candles."
+          - "&e> All 8 in your pack? Click &aCraft 8 candles&7."
       pumpkins:
         type: deliver
         material: PUMPKIN
         amount: 6
-        label: "&aSix pumpkins on the pyre"
+        label: "&aHand in 6 whole pumpkins"
         voice: steamworks:igor.line09
         lines:
-          - "&fIgor: &7Six round, whole pumpkins. Carve them with"
-          - "&7shears if you like - whole ones glow the best."
+          - "&fIgor: &7Six pumpkins now - round, whole, &fun-carved&7."
+          - "&7The flame does the carving; a knife only cheats it."
+          - "&fIgor: &7These six burn on the pyre, so they are gone"
+          - "&7afterwards. The candles you keep. Clear?"
+          - "&e> Six in your pack? Click &aHand in 6 whole pumpkins&7."
+      lantern:
+        type: deliver
+        material: CANDLE
+        amount: 1
+        label: "&eLight the first lantern (1 candle)"
+        voice: steamworks:igor.line11
+        lines:
+          - "&fIgor: &7There they are. Now hold still, little pumpkin"
+          - "&7- one candle from your pack, and we light the"
+          - "&7first lantern &utogether&7."
+          - "&e> Click &aLight the first lantern&7."
     rewards:
       - "money 400"
       - "eco 15"
       - "give CARVED_PUMPKIN 1"
       - "effect NIGHT_VISION 60"
       - "sound steamworks:quest.complete"
+      - "say &eIgor: &aThere she burns. Take the first lantern - you earned it, little pumpkin."
       - "title &aQUEST COMPLETE|&7Halloween Town blazes on"
       - "tag+ igor_done"
     repeat:
@@ -109,7 +135,7 @@ quests:
         cooldown: 600
         money: 120
         eco: 2
-        voice: steamworks:igor.line11
+        voice: steamworks:igor.line12
 
   vorkan:
     title: "&2Weapon Merchant Vorkan Kross"

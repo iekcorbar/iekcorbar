@@ -844,9 +844,20 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, SoundCategory.PLAYERS, 0.6f, 0.7f);
     }
 
+    /**
+     * Eerste uiting van een nieuwe stage: stem + de dialoogregels IN CHAT, met een
+     * klein ritme eronder (praten, niet een boek-lore om over te hoveren). Aan bij
+     * start, doorklikken en goto (0.5.4 - "conversatie ipv gui").
+     */
     private void speakFirst(Player p, Quest q, Prog pr) {
         var s = q.stages.get(pr.stage);
-        if (s != null) speak(p, s.voice);
+        if (s == null) return;
+        speak(p, s.voice);
+        int n = 0;
+        for (String line : s.lines) {
+            final String l = line;
+            Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) p.sendMessage(legacy(l)); }, (++n) * 6L);
+        }
     }
 
     // ---------------------------------------------------------------- flow
@@ -866,6 +877,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         pr.stage = first;
         speakFirst(p, q, pr);
         refresh(p, q);
+        closeForDialogue(p, q.stages.get(first));
         save();
     }
 
@@ -887,7 +899,14 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.7f, 1.3f);
         speakFirst(p, q, pr);
         refresh(p, q);
+        closeForDialogue(p, q.stages.get(nxt));
         save();
+    }
+
+    /** Heeft deze stage tekst? Dan gaat het paneel dicht zodat het gesprek leesbaar is (0.5.4). */
+    private void closeForDialogue(Player p, Stage s) {
+        if (s == null || s.lines.isEmpty()) return;
+        Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) p.closeInventory(); }, 2L);
     }
 
     private String nextKey(Quest q, Stage cur) {

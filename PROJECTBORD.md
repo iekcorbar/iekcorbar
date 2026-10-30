@@ -16,6 +16,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Relics 0.5.0 | 30-10 12:25 | shop-crates `/relics crate` (kits uit crates.yml) + shadow-set voortaan niet-craftbaar |
 | **Wildlife 0.8.0 stoomdraken** | 30-10 18:51 | berijden/temmen/grotten + 149 modellen + pack build21; clients: pack herhalen + herstart |
 | **SiteSync 1.16.3 + 4 Darkmatter86-boeken** | 30-10 18:51 | story_bundle-model + 11 books geladen; /ibook give <speler> the_well enz. |
+| **IekQuests 0.5.4 + Igor conversatie-quest** | 30-10 18:05 | stage-dialoog in chat + paneel sluit voor leespauze; Igor: 4 verduidelijkte stages + receptuur in de praat |
 | Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
 ## 🟡 Wacht op JOU
@@ -44,7 +45,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 ## 🔵 In uitvoering (agent) → afgerond, wacht op deploy
 | Blok | Status |
 |---|---|
-| Igor Nightgrave (NPC 137) Halloween-quest | 🔵 agent bezig: uitgebreider + conversation i.p.v. GUI + duidelijker doel |
+| **IekQuests 0.5.4 + Igor conversatie-quest** | 30-10 18:05 | stage-dialoog in chat + paneel sluit voor leespauze; Igor: 4 verduidelijkte stages + receptuur in de praat |
 
 ## ⚪ Wachtrij
 - **Pluginstrategie eigen beheer** → docs/plugin-strategie.md (30-10): routekaart
