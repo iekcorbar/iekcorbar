@@ -1756,6 +1756,28 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### Relics 0.5.0 - shop-crates + shadow-set naar shop-only (30-10, ~12:25)
+
+- Kits voor de site-shop: /relics crate <speler> <naam>, bundels uit crates.yml
+  (saveResource op eerste start - stateerd nu op de server, 1937 B). Entries:
+  relic:/disc:/random:[:collectie]; once:true bijt in crates-used.yml (UUID's,
+  eigen bestand zodat config-comments heel blijven). Ceremonie: levelup-sound +
+  FIREWORK-deeltjes ("FIREWORKS_LAUNCH" heet in 26.2 simpelweg FIREWORK).
+- SHADOW-collectief (13 stuks) craftableByDefault -> false: voortaan alléén via
+  de Shadow-of-the-Settlement-crate. Server-config had geen crafting-keys voor
+  ze, dus code-vlag was genoeg (config blijft de uitweg).
+- Elitecoins bleken GEEN site-werk te vragen: shop heeft currency 'coins' al
+  (live-check via webstats, only-onlineregel, coins-take-command in Shop
+  Settings). Kits-SQL = 10 rijen (yen+eco variant), draft in deploy/.
+- UITROLLED 12:25 host (logklok 11:25): Earis uitgeserveerd (11:15 log), server
+  leeg => plain stop/start; docker start faalde ("No such container") want Wings
+  nam opnieuw over - log bevestigt Relics 0.5.0 + 0 SEVERE + Done 57s.
+  Let op: /iekrestart via de console-attach gaf géén console-reactie terwijl
+  'list' dat wél doet (attach werkt via script-PTY: printf x\\r\\n | script -qec
+  'docker attach --sig-proxy=false CID'). Onverklaard - mogelijke oorzaak:
+  console-permissies of timing; een /iekrestart cancel test in het spel zelf
+  geeft uitsluitsel. De console-ingang-wel-werkend-notitie staat in werklog.
+
 ### Sakagura 0.5.0 + IekQuests 0.5.2 - crops, trees en /iekrestart (30-10, ~11:23)
 
 - Eigenaar: "meer crops en trees" + "kondig een restart altijd in-game aan,
