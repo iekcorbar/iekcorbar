@@ -12,6 +12,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Easter-egg-golf | 29-10 16:56 | 16 eieren over 8 plugins + meta-ei SiteSync |
 | StaffHub 0.4.9 | 29-10 19:2x | bulk-beheer, prullenbak-undo, .bbmodel-3D-weergave |
 | Relics-config + ghosts-disc | 28-10 | discs staan weer goed |
+| Sakagura 0.4.2 | 30-10 10:39 | Steam Still + Sake Cask oriënteren op kijkrichting (ouwe rug-showend bug, Decor-patroon uit additions) |
 
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |

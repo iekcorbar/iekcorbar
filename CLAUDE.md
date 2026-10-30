@@ -1756,6 +1756,25 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
 - Randgeval voor greyarts-antwoord: de quest spreekt Engels; als staff
   later NL-stemmen wil: VOICES-dict + andere tekst-regels, zelfde pijplijn.
 
+### Sakagura 0.4.2 - still & cask oriëntatie (30-10, ~10:39)
+
+- Eigenaar: "steam still en sake cask zijn nog niet goed, moeten denk ik een
+  ander model hebben en oriënteren niet goed". Code-analysis: het model zélf
+  klopt (vaten met banden/label, still met gauge+ pijpen) - de cover-
+  ItemDisplays in Casks/Stills kregen altijd een IDENTITEITS-quaternion.
+  ItemDisplay spiegelt het model 180° op Y (dezelfde valkuil als de early
+  Steamworks-machines), dus voorkant staat altijd zuid: kijk je van de andere
+  kant, dan zie je de kale rug = "ander model"-gevoel.
+- Fix: CoverTransform.java (package-private, patroon uit Decor.java van
+  SteamworksAdditions: yaw(facing)+180, NONE-context, 1.01 scale). Facing van
+  de speler (kijkrichting, body-yaw vangval) gaat in de barrel-PDC → chunk
+  reload/hernieuw zet hem terug. Oude geplaatste covers hebben geen tag:
+  fallback zoals voorheen (slopen+plaatsen = goed).
+- Nog checken met eigenaar: bevalt het MODEL zelf na de oriëntatie-fix? Zo nee:
+  nieuw still/cask-model via de palette-generator is een eigen werkblok.
+- Uitgerold in de vaste volgorde (push-uit-oude-eraf-aan) terwijl server leeg:
+  jar 18fc1fc2 live 10:39, boot "Done 58.7s", 0 SEVERE. TE-DEPLOYEN punt 57.
+
 ### IekQuests 0.5.1 - de stemmen-fix + Igor live (30-10, ~09:46)
 
 - Eigenaar testte Igor: "horen nieman praten". Oorzaak: speak()/sound zochten in
