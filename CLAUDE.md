@@ -1727,7 +1727,15 @@ Vier losse opdrachten van de eigenaar, een batch; artefacten staan in deploy/ (l
   `lp parent add rank_1` — botsing met de CMI-ladder (`parent set`) is
   gearnoteerd in gids 04 en in het greyarts-bericht.
 - **git-backup**: alle QuestPackages staan vanaf nu in
-  pluginset-aangepast/BetonQuest/QuestPackages/ (19 pakketten, YAML-only).
+  pluginset-aangepast/BetonQuest/QuestPackages/ (46 yml's; .gitignore kreeg
+  één uitzondering voor die folder - de rest blijft buiten, want andere
+  plugin-configs kunnen secrets bevatten).
+- **RankTime-vondst**: het "lege" pakket is een SLAPENDE tweede
+  speeltijd-rangladder (events/objectives/journal, `lp parent add rank_N`,
+  zelfde Japanse range-namen als de CMI-ladder). Niemand triggert hem
+  (geen start-aanroper). Damit zijn er DRIE range-systemen (JobsQuest,
+  CMI-ladder, RankTime) - vraag aan greyarts welke de baas wordt; staat in
+  StaffHub-gidsen 04+06 en in de werklijst voor z'n antwoord.
 - Milo's karavaan (eerste nieuwe quest, gids 07): menu-IO + typ-effect +
   stemgeluid per NPC; beloning cash + elitecoins (`em money add`); Zeta pas
   na SiteSync-`/izeta`-werkblokje.
