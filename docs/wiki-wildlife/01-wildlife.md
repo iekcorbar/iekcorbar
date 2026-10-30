@@ -22,7 +22,29 @@ Now and then an animal has a rare colouring - an albino deer, a blue morpho butt
 
 ### Advancements
 
-Open the advancement screen and look for the **Wildlife** tab: one advancement per species, one per rare look, and milestones for 5 species, 10 species, every species, your first rare find and 5 rare finds.
+Open the advancement screen and look for the **Wildlife** tab: one advancement per species, one per rare look, and milestones for 5 species, 10 species, every species, your first rare find and 5 rare finds. There is also a separate **Zoo** tab with advancements for building your own zoo: placing props, building entrances, enclosures, comfort areas, paths and decorations.
+
+### Commands
+
+* **/wildlife journal** - read your Field Journal.
+* **/wildlife stats [player]** - see how many species you have recorded.
+* **/wildlife list [filter]** - list all species and where they live.
+* **/wildlife find <species>** - find the nearest animal of that species.
+* **/wildlife tamed** - list your tamed dragons.
+* **/wildlife spawn <species> [rare] [baby]** - spawn an animal (staff only).
+* **/wildlife egg <species> [player]** - give a spawn egg (staff only).
+* **/wildlife give <player> <item>** - give an item (staff only).
+* **/wildlife info** - server info (staff only).
+* **/wildlife reload** - reload config (staff only).
+* **/wildlife remove <radius>** - remove animals in a radius (staff only).
+
+### Zoo-builder
+
+Build your own zoo with craftable decor props: doors, toilets, cobblestone paths, welcome/exit signs, flower boxes, picnic tables, parasols, first aid posts and brick walls. Place ticket kiosks, turnstiles and gates to create a working zoo with tickets. Animals can be kept on leads or with name tags. Statues of every animal can be crafted from stone and the animal's drop item.
+
+### Graveyard spawning
+
+Wraiths now spawn at night near graveyards (soul sand/soul soil clusters). They are sfeer-wezen: they drift, shed mist, moan softly and vanish at dawn. They are not in the Field Journal and cannot be bred.
 
 ### Behaviour worth knowing
 

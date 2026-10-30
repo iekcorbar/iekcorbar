@@ -172,6 +172,25 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private NamespacedKey tagKey;
     private final Random rnd = new Random();
     private QuestWizard wizard;
+    private InventoryItems invItems;
+
+    /** Trigger a quest action by setting a tag on the player. Used by InventoryItems. */
+    /** Set a tag on the player's active quests. Used by InventoryItems. */
+    public void triggerQuestTag(Player p, String questId, String actionName) {
+        String tag = questId + "_" + actionName;
+        var m = prog.get(p.getUniqueId());
+        if (m != null) {
+            // Add tag to all active quests (the quest engine checks tags as conditions)
+            for (var entry : m.entrySet()) {
+                var pr = entry.getValue();
+                if (!pr.tags.contains(tag)) {
+                    pr.tags.add(tag);
+                }
+            }
+            save();
+        }
+        getLogger().info("Quest tag set: " + tag + " by " + p.getName());
+    }
 
     // ---------------------------------------------------------------- wizard-toegang
 
@@ -215,6 +234,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         tagKey = new NamespacedKey(this, "tag");
         if (!new File(getDataFolder(), "quests.yml").exists()) saveResource("quests.yml", false);
+        saveDefaultConfig();
+        if (!new File(getDataFolder(), "config.yml").exists()) saveResource("config.yml", false);
         Bukkit.getPluginManager().registerEvents(this, this);
         var cmd = Bukkit.getPluginCommand("questbook");
         if (cmd != null) cmd.setExecutor((sender, command, label, args) -> {
@@ -240,6 +261,9 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         });
         wizard = new QuestWizard(this);
         Bukkit.getPluginManager().registerEvents(wizard, this);
+        invItems = new InventoryItems(this);
+        Bukkit.getPluginManager().registerEvents(invItems, this);
+        invItems.load();
         var wcmd = Bukkit.getPluginCommand("questwizard");
         if (wcmd != null) wcmd.setExecutor((sender, command, label, args) -> {
             if (args.length >= 1 && args[0].equalsIgnoreCase("delete") && sender.hasPermission("iekquests.admin")

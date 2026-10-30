@@ -1,0 +1,26 @@
+# IekQuests config
+
+inventory-items:
+  profile:
+    material: PLAYER_HEAD
+    slot: 0
+    name: "&eProfile"
+    action: "open:profile"
+    quest: "tutorial:profile_clicked"
+  crafting:
+    material: SMITHING_TABLE
+    slot: 1
+    name: "&eCrafting Table Portable"
+    action: "open:workbench"
+    quest: "tutorial:inventory_clicked"
+  jobs:
+    material: BOOK
+    slot: 2
+    name: "&eQuest Jobs"
+    action: "open:jobs"
+    quest: "tutorial:jobs_clicked"
+  gouw:
+    material: NETHERITE_HOE
+    slot: 4
+    name: "&eGouw Menu"
+    action: "open:gouw"

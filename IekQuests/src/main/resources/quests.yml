@@ -6944,3 +6944,495 @@ sequences:
     - "0|say &eMad Doctor: &7The machine promised not to do anything weird."
     - "1.2|say &bMachine: &7No promises were made."
     - "2.4|say &7Type &b/rt &7yourself when you dare - nobody rides you around here."
+sequences:
+  mad_doctor:
+    - "0|say &eMad Doctor: &7Excellent! Please remain perfectly still."
+    - "1.5|say &eMad Doctor: &7Or do not. Honestly, we are mostly improvising."
+    - "3|say &bMachine: &7Biological scan started."
+    - "4.5|say &bMachine: &7Subject classified as: reckless."
+    - "6|say &eMad Doctor: &7Hey! That is rude!"
+    - "7.5|say &bMachine: &7Beginning cryogenic preservation."
+    - "8|effect BLINDNESS 3 1"
+    - "9|say &eMad Doctor: &7NO! Teleportation! Not refrigeration!"
+    - "10.5|say &bMachine: &7Alternative solution detected."
+    - "12|say &bMachine: &7Applying poison."
+    - "12.5|effect POISON 3 1"
+    - "14|say &eMad Doctor: &7Who programmed you?!"
+    - "15.5|say &eMad Doctor: &7The problem is not the volunteer!"
+    - "17|say &bMachine: &7Volunteer identified as source of all current issues."
+    - "18.5|say &eMad Doctor: &7That is NOT how troubleshooting works!"
+    - "20|say &eMad Doctor: &7Listen carefully."
+    - "21.5|say &eMad Doctor: &7If you kill the volunteers..."
+    - "23|say &eMad Doctor: &7We will not have any volunteers left."
+    - "24.5|say &bMachine: &7Processing..."
+    - "26|say &bMachine: &7Logical argument detected."
+    - "27.5|say &bMachine: &7Murder mode disabled."
+    - "29|say &eMad Doctor: &7See? Communication solves everything."
+    - "30.5|say &bMachine: &7Preparing safe teleportation."
+    - "32|say &eMad Doctor: &7Finally!"
+    - "33.5|say &bMachine: &7Updated survival chance: 63%."
+    - "35|say &eMad Doctor: &7ONLY SIXTY-THREE PERCENT?!"
+    - "36.5|say &bMachine: &7Correction. Sixty-four percent."
+    - "38|title &aQUEST COMPLETE|&7You have contributed to science"
+    - "39|tag+ mad_doctor_done"
+  tutorial_inventory_tour:
+    - "3|say &fTutorial: &7In the bottom-left corner is the Warp menu. Right-click for waypoints, left-click for Homes."
+    - "6|say &fTutorial: &7In the bottom-right corner is your Lands menu. It lets you claim chunks."
+    - "8|say &fTutorial: &7Finally, the most important menu: your Profile. Your head in the crafting result slot opens it."
+  tutorial_valhalla_explain:
+    - "2|say &fValhallaMMO: &7Gathering, crafting and combat skills grow separately."
+    - "5|say &fValhallaMMO: &7Each skill has its own levels and a skill tree."
+    - "8|say &fValhallaMMO: &7Valhalla Fishing is disabled here. Power is always active."
+  tutorial_expanded_explain:
+    - "2|say &fExpanded: &7Fishing has 150+ custom fish with a tug mechanic."
+    - "5|say &fExpanded: &7Farming has custom crops: berries, grapes, cherry, etc."
+    - "8|say &fExpanded: &7Mining has fluxes, gemstones, mysterious dust and Zeta."
+
+  mad_doctor:
+    title: "&6Mad Doctor"
+    subtitle: "Volunteer for science"
+    icon: POTION
+    npc-id: 76
+    order: 50
+    journal:
+      - "Volunteer for the Mad Doctor's experiment."
+    stages:
+      talk:
+        type: talk
+        label: "&aI volunteer!"
+        lines:
+          - "&eMad Doctor: &7Excellent! Please remain perfectly still."
+          - "&7Or do not. Honestly, we are mostly improvising."
+    rewards:
+      - "sequence mad_doctor"
+      - "title &aQUEST COMPLETE|&7You have contributed to science"
+      - "tag+ mad_doctor_done"
+      - "perm+ cmi.command.rt"
+    repeat:
+      cooldown: 3600
+      money: 100
+      eco: 5
+
+  backpack_gold:
+    title: "&6The Golden Backpack"
+    subtitle: "Elias Packwright - for the experienced"
+    icon: GOLD_INGOT
+    npc-ids: "90,91,92"
+    order: 41
+    start: "qtag:backpack_one:bp_done,qtag:backpack_two:bp_done"
+    journal:
+      - "Level 4: explore 3 landmarks, stitch gold-threaded canvas,"
+      - "build a reinforced frame, survive the nether, then answer Elias."
+      - "Reward: gold_backpack via the Satchel plugin."
+    stages:
+      intro:
+        type: talk
+        label: "&aAccept the gold trial"
+        lines:
+          - "&fElias: &7You have proven yourself worthy of canvas and copper."
+          - "&7Now it is time for &6gold&7. Are you ready?"
+        choices:
+          - label: "&aI want to earn my gold backpack."
+            goto: explore_nether
+          - label: "&7Maybe another time."
+      explore_nether:
+        type: walk
+        label: "&eTravel to the Nether Fortress"
+        location: "3000;80;-500;iekcorbarSeason2"
+        radius: 50
+        flat: true
+        lines:
+          - "&fElias: &7A gold backpack is for someone who ventures into the Nether."
+          - "&7Find the &6Nether Fortress&7. The compass points the way."
+      canvas:
+        type: deliverall
+        label: "&aHand in the gold-threaded canvas"
+        items:
+          - "GOLD_INGOT 16"
+          - "LEATHER 32"
+          - "STRING 32"
+        lines:
+          - "&fMara: &7Gold-threaded canvas for a gold backpack."
+          - "&7Bring me &616 Gold Ingots&7, &632 Leather&7 and &632 String&7."
+      frame:
+        type: deliverall
+        label: "&aHand in the reinforced frame"
+        items:
+          - "GOLD_INGOT 24"
+          - "IRON_INGOT 16"
+          - "CHEST 1"
+        lines:
+          - "&fBrann: &7A gold frame needs gold and iron."
+          - "&7Bring me &624 Gold Ingots&7, &616 Iron Ingots&7 and &61 Chest&7."
+      hunt_blaze:
+        type: kill
+        label: "&cHunt 10 Blazes"
+        amount: 10
+        mob: BLAZE
+        goto: hunt_ghast
+        lines:
+          - "&fElias: &7The Nether is dangerous. Hunt &610 Blazes&7."
+      hunt_ghast:
+        type: kill
+        label: "&cHunt 3 Ghasts"
+        amount: 3
+        mob: GHAST
+        goto: final
+        lines:
+          - "&7Next: &63 Ghasts&7. Show me you can handle the Nether."
+      final:
+        type: deliverall
+        label: "&aHand in the final fittings"
+        goto: craft
+        items:
+          - "GOLD_INGOT 8"
+          - "GLOWSTONE_DUST 16"
+        lines:
+          - "&fElias: &7Final fittings: &68 Gold Ingots&7 and &616 Glowstone Dust&7."
+      craft:
+        type: talk
+        label: "&aLet Elias sew the backpack"
+        lines:
+          - "&fElias: &7You brought everything. Everything is ready."
+          - "&7Let me craft something worthy of your journey."
+        rewards:
+          - "satchel give gold_backpack %player%"
+          - "money 1000"
+          - "eco 50"
+          - "title &6GOLD BACKPACK|&7+1000 coin, +50 elite coins"
+          - "say &eElias: &aA golden backpack for a golden adventurer!"
+          - "tag+ backpack_gold_done"
+    repeat:
+      cooldown: 7200
+      money: 500
+      eco: 25
+
+  backpack_diamond:
+    title: "&bThe Diamond Backpack"
+    subtitle: "Elias Packwright - for the masters"
+    icon: DIAMOND
+    npc-ids: "90,91,92"
+    order: 42
+    start: "qtag:backpack_one:bp_done,qtag:backpack_two:bp_done,qtag:backpack_gold:bp_done"
+    journal:
+      - "Level 5: explore the End, gather diamond materials,"
+      - "survive the strongest mobs, then answer Elias."
+      - "Reward: diamond_backpack via the Satchel plugin."
+    stages:
+      intro:
+        type: talk
+        label: "&aAccept the diamond trial"
+        lines:
+          - "&fElias: &7Gold is good, but diamond is better."
+          - "&7Are you ready for the ultimate challenge?"
+        choices:
+          - label: "&aI want to earn my diamond backpack."
+            goto: explore_end
+          - label: "&7Maybe another time."
+      explore_end:
+        type: walk
+        label: "&eTravel to the End Portal"
+        location: "2900;80;-600;iekcorbarSeason2"
+        radius: 50
+        flat: true
+        lines:
+          - "&fElias: &7A diamond backpack is for someone who has seen the End."
+          - "&7Find the &6End Portal&7. The compass points the way."
+      canvas:
+        type: deliverall
+        label: "&aHand in the diamond-threaded canvas"
+        items:
+          - "DIAMOND 8"
+          - "LEATHER 32"
+          - "STRING 32"
+        lines:
+          - "&fMara: &7Diamond-threaded canvas for a diamond backpack."
+          - "&7Bring me &68 Diamonds&7, &632 Leather&7 and &632 String&7."
+      frame:
+        type: deliverall
+        label: "&aHand in the diamond frame"
+        items:
+          - "DIAMOND 16"
+          - "IRON_INGOT 16"
+          - "CHEST 1"
+        lines:
+          - "&fBrann: &7A diamond frame needs diamond and iron."
+          - "&7Bring me &616 Diamonds&7, &616 Iron Ingots&7 and &61 Chest&7."
+      hunt_wither:
+        type: kill
+        label: "&cDefeat 1 Wither"
+        amount: 1
+        mob: WITHER
+        goto: hunt_enderman
+        lines:
+          - "&fElias: &7The strongest mobs guard the best materials."
+          - "&7Defeat &61 Wither&7."
+      hunt_enderman:
+        type: kill
+        label: "&cHunt 20 Endermen"
+        amount: 20
+        mob: ENDERMAN
+        goto: final
+        lines:
+          - "&7Next: &620 Endermen&7. Show me you can handle the End."
+      final:
+        type: deliverall
+        label: "&aHand in the final fittings"
+        goto: craft
+        items:
+          - "DIAMOND 4"
+          - "GOLD_INGOT 8"
+          - "ENDER_PEARL 4"
+        lines:
+          - "&fElias: &7Final fittings: &64 Diamonds&7, &68 Gold Ingots&7"
+          - "&7and &64 Ender Pearls&7."
+      craft:
+        type: talk
+        label: "&aLet Elias sew the backpack"
+        lines:
+          - "&fElias: &7You brought everything. Everything is ready."
+          - "&7Let me craft something worthy of your journey."
+        rewards:
+          - "satchel give diamond_backpack %player%"
+          - "money 2000"
+          - "eco 100"
+          - "title &bDIAMOND BACKPACK|&7+2000 coin, +100 elite coins"
+          - "say &eElias: &aA diamond backpack for a diamond adventurer!"
+          - "tag+ backpack_diamond_done"
+    repeat:
+      cooldown: 14400
+      money: 1000
+      eco: 50
+
+  backpack_netherite:
+    title: "&4The Netherite Backpack"
+    subtitle: "Elias Packwright - for the legends"
+    icon: NETHERITE_INGOT
+    npc-ids: "90,91,92"
+    order: 43
+    start: "qtag:backpack_one:bp_done,qtag:backpack_two:bp_done,qtag:backpack_gold:bp_done,qtag:backpack_diamond:bp_done"
+    journal:
+      - "Level 6: the ultimate challenge. Ancient debris, netherite,"
+      - "the strongest mobs in the game. Reward: netherite_backpack."
+    stages:
+      intro:
+        type: talk
+        label: "&aAccept the netherite trial"
+        lines:
+          - "&fElias: &7Diamond is good, but netherite is the ultimate."
+          - "&7Are you ready for the final challenge?"
+        choices:
+          - label: "&aI want to earn my netherite backpack."
+            goto: explore_ancient
+          - label: "&7Maybe another time."
+      explore_ancient:
+        type: walk
+        label: "&eTravel to the Ancient Debris site"
+        location: "2900;20;-700;iekcorbarSeason2"
+        radius: 50
+        flat: true
+        lines:
+          - "&fElias: &7A netherite backpack is for the legends."
+          - "&7Find the &6Ancient Debris site&7. The compass points the way."
+      canvas:
+        type: deliverall
+        label: "&aHand in the netherite-threaded canvas"
+        items:
+          - "NETHERITE_INGOT 4"
+          - "LEATHER 32"
+          - "STRING 32"
+        lines:
+          - "&fMara: &7Netherite-threaded canvas for a netherite backpack."
+          - "&7Bring me &64 Netherite Ingots&7, &632 Leather&7 and &632 String&7."
+      frame:
+        type: deliverall
+        label: "&aHand in the netherite frame"
+        items:
+          - "NETHERITE_INGOT 8"
+          - "DIAMOND 8"
+          - "CHEST 1"
+        lines:
+          - "&fBrann: &7A netherite frame needs netherite and diamond."
+          - "&7Bring me &68 Netherite Ingots&7, &68 Diamonds&7 and &61 Chest&7."
+      hunt_warden:
+        type: kill
+        label: "&cDefeat 1 Warden"
+        amount: 1
+        mob: WARDEN
+        goto: hunt_wither_skeleton
+        lines:
+          - "&fElias: &7The strongest mobs guard the best materials."
+          - "&7Defeat &61 Warden&7."
+      hunt_wither_skeleton:
+        type: kill
+        label: "&cHunt 10 Wither Skeletons"
+        amount: 10
+        mob: WITHER_SKELETON
+        goto: final
+        lines:
+          - "&7Next: &610 Wither Skeletons&7. Show me you can handle the Nether."
+      final:
+        type: deliverall
+        label: "&aHand in the final fittings"
+        goto: craft
+        items:
+          - "NETHERITE_INGOT 2"
+          - "GOLD_INGOT 8"
+          - "NETHER_STAR 1"
+        lines:
+          - "&fElias: &7Final fittings: &62 Netherite Ingots&7, &68 Gold Ingots&7"
+          - "&7and &61 Nether Star&7."
+      craft:
+        type: talk
+        label: "&aLet Elias sew the backpack"
+        lines:
+          - "&fElias: &7You brought everything. Everything is ready."
+          - "&7Let me craft something worthy of your journey."
+        rewards:
+          - "satchel give netherite_backpack %player%"
+          - "money 5000"
+          - "eco 250"
+          - "title &4NETHERITE BACKPACK|&7+5000 coin, +250 elite coins"
+          - "say &eElias: &aNetherite backpack for a legend!"
+          - "tag+ backpack_netherite_done"
+    repeat:
+      cooldown: 28800
+      money: 2500
+      eco: 125
+
+  tutorial:
+    title: "&6Tutorial - Welcome to Iekcorbar"
+    subtitle: "Learn the basics"
+    icon: BOOK
+    npc-id: 122
+    order: 1
+    journal:
+      - "Welcome to Iekcorbar! Follow this tutorial to learn the basics."
+      - "Chapter I: First Steps - Reach the building."
+      - "Chapter II: Game Menu - Explore your inventory."
+      - "Chapter III: Crafting - Craft 4 sticks."
+      - "Chapter IV: ValhallaMMO - Learn about skills."
+      - "Chapter V: Jobs - Check the Jobs menu."
+      - "Chapter VI: EliteMobs - Learn about combat."
+      - "Chapter VII: Expanded Systems - Fishing, farming, brewing, mining, techcore."
+      - "Chapter VIII: Race - Choose your race."
+      - "Chapter IX: Class - Choose your class."
+      - "Chapter X: Specialization - Choose your production specialization."
+      - "Chapter XI: Profession - Choose your gathering specialization."
+    stages:
+      start:
+        type: talk
+        label: "&aI'm ready to start!"
+        voice: steamworks:milo.line01
+        lines:
+          - "&fTutorial: &7Welcome to Iekcorbar! This tutorial will"
+          - "&7teach you the basics of the server."
+          - "&7Let's start by exploring your inventory."
+        rewards:
+          - "teleport 2815;164;-472;iekcorbarSeason2"
+      inventory:
+        type: talk
+        label: "&aI've explored my inventory"
+        cond: "tag:tutorial_inventory_clicked"
+        lines:
+          - "&fTutorial: &7Your inventory has special items:"
+          - "&7- Profile (top-left) - your character progression"
+          - "&7- Crafting Table (top-middle) - craft anywhere"
+          - "&7- Quest Jobs (top-right) - daily quests"
+          - "&7- Gouw Menu (slot 5) - land claims"
+          - "&7Click each item to see what it does."
+        rewards:
+          - "sequence tutorial_inventory_tour"
+      crafting:
+        type: craft
+        material: STICK
+        amount: 4
+        label: "&aI've crafted 4 sticks"
+        lines:
+          - "&fTutorial: &7Close your inventory and open your"
+          - "&7Portable Crafting Table. Turn 2 Oak Planks into 4 Sticks."
+      valhalla:
+        type: talk
+        label: "&aI understand ValhallaMMO"
+        lines:
+          - "&fTutorial: &7ValhallaMMO is your skill progression."
+          - "&7Gathering, crafting and combat skills grow separately."
+          - "&7Each skill has its own levels and skill tree."
+          - "&7Jobs are your profession - they pay and assign work."
+        rewards:
+          - "sequence tutorial_valhalla_explain"
+      jobs:
+        type: talk
+        label: "&aI've checked the Jobs menu"
+        cond: "tag:tutorial_jobs_clicked"
+        lines:
+          - "&fTutorial: &7Open your inventory and click the"
+          - "&7Jobs Quest menu in the top-right corner."
+          - "&7Once you have a profession, daily quests appear here."
+      elitemobs:
+        type: talk
+        label: "&aI understand EliteMobs"
+        lines:
+          - "&fTutorial: &7EliteMobs gives familiar enemies stronger"
+          - "&7combat behavior and special powers."
+          - "&7Watch the nameplate, health display and powers"
+          - "&7before committing to a fight."
+          - "&7Natural elites use player-aware scaled combat."
+      expanded:
+        type: talk
+        label: "&aI understand expanded systems"
+        lines:
+          - "&fTutorial: &7Many Minecraft activities are expanded:"
+          - "&7- Fishing: 150+ custom fish, tug mechanic, tournaments"
+          - "&7- Farming: custom crops (berries, grapes, cherry, etc.)"
+          - "&7- Brewing: cauldron brewing, barrel aging"
+          - "&7- Mining: fluxes, gemstones, mysterious dust, Zeta"
+          - "&7- TechCore: machines, production lines, automation"
+          - "&7Explore these systems as you play!"
+        rewards:
+          - "sequence tutorial_expanded_explain"
+      race:
+        type: talk
+        label: "&aI've chosen my race"
+        lines:
+          - "&fTutorial: &7Speak with the Race Assignor (NPC 127)"
+          - "&7and choose your race: Gearborn, Cinderbeard, Clockmoth, or Rustborn."
+          - "&7Use: /valhallaraces races set race <name>"
+      class:
+        type: talk
+        label: "&aI've chosen my class"
+        lines:
+          - "&fTutorial: &7Speak with the Class Assignor (NPC 128)"
+          - "&7and choose your primary class: Warrior, Barbarian, or Ranger."
+          - "&7Use: /valhallaraces races set class <name>"
+      spec:
+        type: talk
+        label: "&aI've chosen my specialization"
+        lines:
+          - "&fTutorial: &7Speak with the Class Assignor again"
+          - "&7and choose your production specialization:"
+          - "&7Alchemist, Enchanter, or Blacksmith."
+      profession:
+        type: talk
+        label: "&aI've chosen my profession"
+        lines:
+          - "&fTutorial: &7Speak with the Class Assignor one final time"
+          - "&7and choose your gathering specialization:"
+          - "&7Miner, Farmer/Fisherman, or Terraformer."
+      finish:
+        type: talk
+        label: "&aTutorial complete!"
+        lines:
+          - "&fTutorial: &7Congratulations! You now know the basics."
+          - "&7Explore, craft, and enjoy Iekcorbar!"
+    rewards:
+      - "money 500"
+      - "eco 25"
+      - "title &aTUTORIAL COMPLETE|&7+500 coin, +25 elite coins"
+      - "say &eTutorial: &aWelcome to Iekcorbar!"
+      - "tag+ tutorial_finished"
+      - "command cmi spawn %player%"
+    repeat:
+      cooldown: 3600
+      money: 100
+      eco: 5
