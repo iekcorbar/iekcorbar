@@ -1301,6 +1301,16 @@ def sieve():
     return m
 
 
+def deployer():
+    m = Model("sw_deployer")
+    m.cube("body", (-6, -4, -6), (6, 4, 6), "brass")
+    m.cube("shaft_hole", (-2, -2, 4), (2, 2, 8), "dark")
+    m.cube("filter_slot", (-3, 4, -3), (3, 6, 3), "black")
+    m.cube("arm", (-1.5, -1.5, -8), (1.5, 1.5, -4), "steel")
+    m.cube("tip", (-2, -2, -10), (2, 2, -8), "gold")
+    return m
+
+
 def build():
     parts = [shaft(), cogwheel(), large_cogwheel(), gearbox(), hand_crank(), water_wheel(),
              gauge_body("sw_speed_gauge_body", "brass"), gauge_body("sw_stress_gauge_body", "copper"),
@@ -1329,7 +1339,7 @@ def build():
              whisk(), propeller(), zinc_nugget(),
              chute(), funnel(), depot(), ejector(), pump(), valve(), whistle(),
              track_straight(), track_slope(), track_curve(),
-             sieve()]
+             sieve(), deployer()]
     for part, metal, frame in (("clutch", "steel", "brass"), ("gearshift", "darkwood", "copper")):
         parts.append(switch_casing(f"sw_{part}_casing", metal, frame, False))
         parts.append(switch_casing(f"sw_{part}_casing_on", metal, frame, True))

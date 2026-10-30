@@ -52,6 +52,9 @@ final class KNode {
     final List<ItemStack> sieveOutput = new ArrayList<>();
     double sieveProgress;
 
+    // deployer
+    ItemStack deployItem;
+
     // steam hammer
     double hammerProgress;
 

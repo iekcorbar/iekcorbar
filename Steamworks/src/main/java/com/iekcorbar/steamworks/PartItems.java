@@ -281,6 +281,7 @@ final class PartItems {
         r.put(PartType.HARVESTER, new Object[]{1, new String[]{"I", "C", "I"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL});
         r.put(PartType.PLOUGH, new Object[]{1, new String[]{"I", "C"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL});
         r.put(PartType.ROLLER, new Object[]{1, new String[]{"I", "I", "I"}, 'I', MaterialType.IRON_PLATE});
+        r.put(PartType.DEPLOYER, new Object[]{1, new String[]{"I", "C", "P"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL, 'P', PartType.PIPE});
 
         for (Map.Entry<PartType, Object[]> e : r.entrySet()) addRecipe(e.getKey().id(), create(e.getKey(), (int) e.getValue()[0]), e.getValue());
         addRecipe("large_cogwheel_from_little", create(PartType.LARGE_COGWHEEL, 1), new Object[]{1, new String[]{"P", "C"}, 'P', planks, 'C', PartType.COGWHEEL});

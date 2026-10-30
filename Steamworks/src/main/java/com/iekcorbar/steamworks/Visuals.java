@@ -74,6 +74,9 @@ final class Visuals {
             case SIEVE -> {
                 add(n, "sw_sieve", Role.STATIC, orient, 1);
             }
+            case DEPLOYER -> {
+                add(n, "sw_deployer", Role.STATIC, orient, 1);
+            }
             case MILLSTONE -> {
                 // the stone wheel stands upright in its frame and the drive shaft plugs into the
                 // axle on either side: the frame stays world-upright (model X along the axle, like

@@ -91,6 +91,8 @@ public enum PartType {
             "Tills dirt into farmland in front of it.", "Power it from behind."),
     ROLLER("Mechanical Roller", Material.IRON_BLOCK, Kind.METAL,
             "Compacts concrete powder into concrete.", "Power it from behind."),
+    DEPLOYER("Deployer", Material.IRON_BLOCK, Kind.METAL,
+            "Places or breaks the block in front of it.", "Power it from behind. Filter sets what it deploys."),
     /**
      * Not a real part: nodes with this type get their answers from the {@code com.iekcorbar.steamworks.api}
      * registry, so other plugins (add-ons) can add machines to the network. Nothing builds or gives CUSTOM.

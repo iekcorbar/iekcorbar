@@ -52,6 +52,7 @@ final class Kinetics {
     final Set<KNode> wheels = new HashSet<>();
     final Set<KNode> mills = new HashSet<>();
     final Set<KNode> sieves = new HashSet<>();
+    final Set<KNode> deployers = new HashSet<>();
     final Set<KNode> hammers = new HashSet<>();
     final Set<KNode> switches = new HashSet<>();
     final Set<KNode> fans = new HashSet<>();
@@ -112,6 +113,7 @@ final class Kinetics {
         }
         if (n.type == PartType.MILLSTONE) mills.add(n);
         if (n.type == PartType.SIEVE) sieves.add(n);
+        if (n.type == PartType.DEPLOYER) deployers.add(n);
         if (n.type == PartType.STEAM_HAMMER) hammers.add(n);
         if (n.type.isSwitch()) switches.add(n);
         if (n.type == PartType.BELLOWS_FAN) fans.add(n);
@@ -153,6 +155,7 @@ final class Kinetics {
         wheels.remove(n);
         mills.remove(n);
         sieves.remove(n);
+        deployers.remove(n);
         hammers.remove(n);
         switches.remove(n);
         fans.remove(n);
@@ -207,7 +210,7 @@ final class Kinetics {
         return switch (n.type) {
             case SHAFT, COGWHEEL, LARGE_COGWHEEL, GEARBOX, CLUTCH, GEARSHIFT, SPROCKET, CRUSHING_WHEEL,
                     SPEED_GAUGE, STRESS_GAUGE, STEAM_ENGINE, HAND_CRANK, BELLOWS_FAN, DRILL, SAW, WINDMILL,
-                    BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL, MILLSTONE, SIEVE,
+                    BELT, CHUTE, FUNNEL, EJECTOR, PUMP, VALVE, STATION, SIGNAL, MILLSTONE, SIEVE, DEPLOYER,
                     KETTLE, MIXER, TANK, REFINERY, STEAM_BOILER, WHISTLE, ARM, DEPOT -> true;
             case CUSTOM -> n.ext != null && n.ext.rotatable();
             default -> false;   // pure-Y machines (kettle, mixer, arm, boiler, depot, whistle) and fluid parts
@@ -253,7 +256,7 @@ final class Kinetics {
                     n.axis = axisOf(f) == Axis.X ? Axis.Z : Axis.X;
                 return true;
             }
-            case STEAM_ENGINE, MILLSTONE, SIEVE -> {                                      // stays horizontal too
+            case STEAM_ENGINE, MILLSTONE, SIEVE, DEPLOYER -> {                                      // stays horizontal too
                 BlockFace f = clockwise(positive(n.axis), a);
                 if (f == positive(n.axis) || axisOf(f) == Axis.Y) return false;
                 n.axis = axisOf(f);
