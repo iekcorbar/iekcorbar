@@ -35,6 +35,13 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Tank- + plateauwagen | 🟢 LIVE 30-10 05:05: jar + 2 sw-modellen + pack build19 allemaal op de server |
 
 ## ⚪ Wachtrij
+- **Pluginstrategie eigen beheer** → docs/plugin-strategie.md (30-10): routekaart
+  BQ→IekQuests af, next: IekShops (vervangt MMOItems-stations), IekElites
+  (vervangt EliteMobs+MMOBridge-koppeling, bevat custom elite-config), TechCore→
+  Steamworks, CMI-inventory. MythicLib blijft tot die tijd (hard op MMOItems).
+- **REA-wachtrij (eigenaar):** ItemJoin (jar trek in archief/rea/) → TAB goed
+  instellen → DecentHolograms. MythicLib-check is GAAN (deps + configs
+  uitgelezen; schade-koppeling zit in MMOBridge-integrations, niet MythicLib zelf).
 - **Cinematic Interaction** (Fabric-mod `cinematic` v0.18.30, MC 26.3): REA-analyse
   eerste-passage KLAAR (docs/cinematic-onderzoek-rea.md: server-model, 17 payloads,
   actie-grammatica, feasibility = 100% server-side + server-getrouw paneel).
