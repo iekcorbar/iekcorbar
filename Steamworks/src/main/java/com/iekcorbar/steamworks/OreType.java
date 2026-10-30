@@ -10,10 +10,10 @@ import java.util.Locale;
  * Steamworks-blocks resource pack gives those states the ore textures.
  */
 public enum OreType {
-    ZINC_ORE("Zinc Ore", 0, Material.STONE, MaterialType.RAW_ZINC, 1, 1, 1, 0, 3.0),
-    DEEPSLATE_ZINC_ORE("Deepslate Zinc Ore", 1, Material.DEEPSLATE, MaterialType.RAW_ZINC, 1, 1, 1, 0, 4.5),
-    TIN_ORE("Tin Ore", 2, Material.STONE, MaterialType.RAW_TIN, 1, 1, 1, 0, 3.0),
-    DEEPSLATE_TIN_ORE("Deepslate Tin Ore", 3, Material.DEEPSLATE, MaterialType.RAW_TIN, 1, 1, 1, 0, 4.5),
+    ZINC_ORE("Zinc Ore", 0, Material.STONE, MaterialType.RAW_ZINC, 1, 1, 1, 2, 3.0),
+    DEEPSLATE_ZINC_ORE("Deepslate Zinc Ore", 1, Material.DEEPSLATE, MaterialType.RAW_ZINC, 1, 1, 1, 2, 4.5),
+    TIN_ORE("Tin Ore", 2, Material.STONE, MaterialType.RAW_TIN, 1, 1, 1, 2, 3.0),
+    DEEPSLATE_TIN_ORE("Deepslate Tin Ore", 3, Material.DEEPSLATE, MaterialType.RAW_TIN, 1, 1, 1, 2, 4.5),
     SULFUR_ORE("Sulfur Ore", 4, Material.STONE, MaterialType.SULFUR, 2, 4, 2, 2, 3.0),
     DEEPSLATE_SULFUR_ORE("Deepslate Sulfur Ore", 5, Material.DEEPSLATE, MaterialType.SULFUR, 2, 4, 2, 2, 4.5),
     NETHER_SULFUR_ORE("Nether Sulfur Ore", 6, Material.NETHERRACK, MaterialType.SULFUR, 2, 5, 1, 2, 2.0);
