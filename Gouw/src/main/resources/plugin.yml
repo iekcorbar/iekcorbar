@@ -4,6 +4,7 @@ main: com.iekcorbar.gouw.GouwPlugin
 api-version: '26.2'
 description: Chunk land claims - the in-house successor to Lands, and it reads old Lands claims on first start.
 author: iekcorbar
+softdepend: [AfkCinema, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 libraries:
   - org.xerial:sqlite-jdbc:3.46.1.0
 
@@ -23,3 +24,4 @@ permissions:
   gouw.bypass:
     description: Walk through and build in any gouw (toggle with /gouw admin bypass)
     default: op
+

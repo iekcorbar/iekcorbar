@@ -18,6 +18,8 @@ final class Achievements {
         a.add("good", "drink", "gold_nugget", "Good Taste", "Make a drink of at least four stars.", "goal");
         a.add("perfect", "good", "nether_star", "Master Brewer", "Make a five-star drink.", "challenge").glint();
         a.add("tasted", "drink", "honey_bottle", "Cheers", "Drink a Sakagura drink.", "task");
+        a.add("comp_winner", null, "nether_star", "Master of the Still", "Win a brewing competition.", "challenge").glint();
+        a.add("sommelier_perfect", "drink", "golden_apple", "Perfect Palate", "Have the sommelier rate your drink 10/10.", "challenge").glint();
         a.add("tipsy", "tasted", "fermented_spider_eye", "Tipsy", "Get drunk enough to stumble.", "task").hidden();
         a.add("passed_out", "tipsy", "red_bed", "Lights Out", "Pass out from drinking.", "goal").hidden();
         a.add("definitely_fine", "tipsy", "player_head", "Definitely Fine", "Get so drunk your name changes.", "task").hidden();

@@ -4,7 +4,7 @@ main: com.iekcorbar.kura.KuraPlugin
 api-version: '26.2'
 description: Storage network - one terminal over all your chests, crafting terminal, cables, filters, hoppers and wireless access.
 author: iekcorbar
-softdepend: [Steamworks, Kitchen, Sakagura]
+softdepend: [AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 
 commands:
   kura:
@@ -16,3 +16,4 @@ permissions:
   kura.admin:
     description: Give items, reload the config
     default: op
+

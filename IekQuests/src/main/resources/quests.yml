@@ -15,6 +15,7 @@
 
 quests:
   milo:
+    group: "Merchants"
     title: "&6The Lost Caravan"
     subtitle: "Milo the Wandering Trader"
     icon: BOOK
@@ -58,6 +59,7 @@ quests:
         voice: steamworks:milo.line09
 
   igor:
+    group: "Tutorial"
     title: "&5Halloween Lanterns"
     subtitle: "Igor Nightgrave - Halloween Town"
     icon: CARVED_PUMPKIN
@@ -4621,6 +4623,7 @@ quests:
     rewards: []
 
   backpack_one:
+    group: "Backpack"
     title: "&2The First Backpack"
     subtitle: "Elias Packwright - earned, not gifted"
     icon: LEATHER
@@ -4827,6 +4830,7 @@ quests:
     rewards: []
 
   backpack_two:
+    group: "Backpack"
     title: "&6The Traveller's Mirror"
     subtitle: "Elias Packwright - three trials, three answers"
     icon: BOOK
@@ -5075,6 +5079,7 @@ quests:
     rewards: []
 
   backpack_three:
+    group: "Backpack"
     title: "&dThe City Below"
     subtitle: "Orion the Adventurer - the final backpack"
     icon: DIAMOND
@@ -6989,6 +6994,7 @@ sequences:
     - "8|say &fExpanded: &7Mining has fluxes, gemstones, mysterious dust and Zeta."
 
   mad_doctor:
+    group: "Special"
     title: "&6Mad Doctor"
     subtitle: "Volunteer for science"
     icon: POTION
@@ -7014,6 +7020,7 @@ sequences:
       eco: 5
 
   backpack_gold:
+    group: "Backpack"
     title: "&6The Golden Backpack"
     subtitle: "Elias Packwright - for the experienced"
     icon: GOLD_INGOT
@@ -7108,6 +7115,7 @@ sequences:
       eco: 25
 
   backpack_diamond:
+    group: "Backpack"
     title: "&bThe Diamond Backpack"
     subtitle: "Elias Packwright - for the masters"
     icon: DIAMOND
@@ -7204,7 +7212,221 @@ sequences:
       money: 1000
       eco: 50
 
+  sakagura_intro:
+    group: "Sakagura"
+    title: "&6Brew Your First Drink"
+    subtitle: "The Sakagura Brewery"
+    icon: POTION
+    npc-id: -1
+    order: 50
+    journal:
+      - "Learn the basics of brewing in a cauldron."
+      - "Cook ingredients, draw bottles, and taste your creation."
+    stages:
+      intro:
+        type: talk
+        label: "&aI want to learn brewing!"
+        lines:
+          - "&fBrewmaster: &7Welcome to the Sakagura! Brewing is an art."
+          - "&7First, you need a water cauldron with heat below it."
+          - "&7Throw in ingredients, wait, and draw bottles."
+          - "&7Let's start simple: craft 4 glass bottles."
+      bottles:
+        type: craft
+        material: GLASS_BOTTLE
+        amount: 4
+        label: "&aCraft 4 glass bottles"
+        lines:
+          - "&fBrewmaster: &7Good! Now place a water cauldron over fire."
+          - "&7Throw in 3 wheat and wait 2 minutes."
+          - "&7Then right-click with an empty bottle to draw."
+      brew:
+        type: deliver
+        material: POTION
+        amount: 1
+        nameFilter: "brew"
+        label: "&aBrew your first drink"
+        lines:
+          - "&fBrewmaster: &7Excellent! You've brewed your first drink."
+          - "&7Now taste it with /brew taste to get feedback."
+    rewards:
+      - "money 200"
+      - "eco 5"
+      - "title &6FIRST BREW|&7+200 coin, +5 elite coins"
+      - "say &eBrewmaster: &aNot bad for a beginner!"
+      - "tag+ sakagura_intro_done"
+      - "give SAKAGURA:barley 16"
+      - "give SAKAGURA:hops 8"
+
+  sakagura_distill:
+    group: "Sakagura"
+    title: "&6The Distiller's Art"
+    subtitle: "Master the Steam Still"
+    icon: GLOWSTONE_DUST
+    npc-id: -1
+    order: 51
+    start: "tag:sakagura_intro_done"
+    journal:
+      - "Learn to distill drinks in a Steam Still."
+      - "Requires a barrel, iron, blaze powder, and glowstone."
+    stages:
+      intro:
+        type: talk
+        label: "&aTeach me distillation!"
+        lines:
+          - "&fBrewmaster: &7Distillation purifies and strengthens drinks."
+          - "&7You need a Steam Still: barrel + 2 iron + blaze powder + glowstone."
+          - "&7Craft one and place it over fire or lava."
+      craft_still:
+        type: craft
+        material: PAPER
+        nameFilter: "still"
+        amount: 1
+        label: "&aCraft a Steam Still"
+        lines:
+          - "&fBrewmaster: &7Now put your brewed drink inside with glowstone dust."
+          - "&7Every 20 seconds, one glowstone is spent and bottles are distilled."
+          - "&7Right-click to check progress."
+      distill:
+        type: deliver
+        material: POTION
+        amount: 1
+        nameFilter: "distilled"
+        label: "&aDistill a drink"
+        lines:
+          - "&fBrewmaster: &7Perfect! The drink is now distilled."
+          - "&7Distillation adds the 'D' step to your recipe."
+          - "&7Some drinks require multiple distillations."
+    rewards:
+      - "money 300"
+      - "eco 10"
+      - "title &6DISTILLER|&7+300 coin, +10 elite coins"
+      - "say &eBrewmaster: &aYou're becoming a true distiller!"
+      - "tag+ sakagura_distill_done"
+      - "give GLOWSTONE_DUST 16"
+
+  sakagura_age:
+    group: "Sakagura"
+    title: "&6Patience of the Cask"
+    subtitle: "Age Drinks in Oak"
+    icon: BARREL
+    npc-id: -1
+    order: 52
+    start: "tag:sakagura_distill_done"
+    journal:
+      - "Learn to age drinks in sake casks."
+      - "Casks age in real time, even while offline."
+    stages:
+      intro:
+        type: talk
+        label: "&aTeach me aging!"
+        lines:
+          - "&fBrewmaster: &7Aging transforms good drinks into great ones."
+          - "&7Craft a sake cask: barrel + wood planks."
+          - "&7Place your drink inside and wait."
+      craft_cask:
+        type: craft
+        material: PAPER
+        nameFilter: "cask"
+        amount: 1
+        label: "&aCraft a Sake Cask"
+        lines:
+          - "&fBrewmaster: &7One year of aging takes 20 real minutes."
+          - "&7The longer you age, the better the quality."
+          - "&7But don't over-age - some drinks peak at 3 years."
+      age:
+        type: deliver
+        material: POTION
+        amount: 1
+        nameFilter: "aged"
+        label: "&aAge a drink"
+        lines:
+          - "&fBrewmaster: &7Wonderful! Aged to perfection."
+          - "&7The 'A' step is now complete."
+          - "&7You've learned all three brewing techniques!"
+    rewards:
+      - "money 400"
+      - "eco 15"
+      - "title &6CELLAR MASTER|&7+400 coin, +15 elite coins"
+      - "say &eBrewmaster: &aPatience is the brewer's greatest virtue."
+      - "tag+ sakagura_age_done"
+      - "give OAK_PLANKS 32"
+
+  sakagura_master:
+    group: "Sakagura"
+    title: "&6Master Brewer"
+    subtitle: "Brew a 5-Star Drink"
+    icon: NETHER_STAR
+    npc-id: -1
+    order: 53
+    start: "tag:sakagura_age_done"
+    journal:
+      - "Brew a drink of at least 5 stars quality."
+      - "Use /brew taste to check your quality."
+    stages:
+      challenge:
+        type: talk
+        label: "&aI'm ready for the challenge!"
+        lines:
+          - "&fBrewmaster: &7Now for the real test."
+          - "&7Brew a drink of at least 5 stars."
+          - "&7Follow the recipe precisely - timing, ingredients, distillation, aging."
+          - "&7Use /brew taste to check your progress."
+      brew_master:
+        type: deliver
+        material: POTION
+        amount: 1
+        label: "&aDeliver a 5-star drink"
+        lines:
+          - "&fBrewmaster: &7Magnificent! A true master brewer."
+          - "&7You've mastered the art of brewing."
+          - "&7Now try for a perfect 10/10!"
+    rewards:
+      - "money 1000"
+      - "eco 50"
+      - "title &6MASTER BREWER|&7+1000 coin, +50 elite coins"
+      - "say &eBrewmaster: &aYou are a master of the craft!"
+      - "tag+ sakagura_master_done"
+      - "give PAPER 64"
+      - "perm+ sakagura.master"
+
+  sakagura_competition:
+    group: "Sakagura"
+    title: "&6The Brewer's Tournament"
+    subtitle: "Enter a Brewing Competition"
+    icon: TROPHY
+    npc-id: -1
+    order: 54
+    start: "tag:sakagura_master_done"
+    journal:
+      - "Enter a brewing competition and win!"
+      - "Use /brew comp to participate."
+    stages:
+      intro:
+        type: talk
+        label: "&aTell me about competitions!"
+        lines:
+          - "&fBrewmaster: &7The ultimate test of skill."
+          - "&7Brewing competitions pit brewers against each other."
+          - "&7Submit your best drink and let the quality speak."
+          - "&7Use /brew comp submit when a competition is running."
+      compete:
+        type: talk
+        label: "&aI'll enter the next competition!"
+        lines:
+          - "&fBrewmaster: &7Excellent spirit! Watch for competition announcements."
+          - "&7When one starts, brew your best and submit."
+          - "&7Top 3 win prizes: money, elite coins, and titles."
+          - "&7Good luck, brewer!"
+    rewards:
+      - "money 200"
+      - "eco 10"
+      - "title &6TOURNAMENT READY|&7+200 coin, +10 elite coins"
+      - "say &eBrewmaster: &aMay the best brew win!"
+      - "tag+ sakagura_competition_done"
+
   backpack_netherite:
+    group: "Backpack"
     title: "&4The Netherite Backpack"
     subtitle: "Elias Packwright - for the legends"
     icon: NETHERITE_INGOT
@@ -7301,6 +7523,7 @@ sequences:
       eco: 125
 
   tutorial:
+    group: "Tutorial"
     title: "&6Tutorial - Welcome to Iekcorbar"
     subtitle: "Learn the basics"
     icon: BOOK

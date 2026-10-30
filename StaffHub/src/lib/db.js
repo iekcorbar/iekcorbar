@@ -111,6 +111,15 @@ function migrate(d) {
   if (!hasColumn(d, 'users', 'prefs')) d.exec('ALTER TABLE users ADD COLUMN prefs TEXT');
   if (!hasColumn(d, 'users', 'perms')) d.exec('ALTER TABLE users ADD COLUMN perms TEXT');
   if (!hasColumn(d, 'sessions', 'agent')) d.exec('ALTER TABLE sessions ADD COLUMN agent TEXT');
+  if (!hasColumn(d, 'users', 'totp_secret')) d.exec('ALTER TABLE users ADD COLUMN totp_secret TEXT');
+  if (!hasColumn(d, 'users', 'totp_enabled')) d.exec('ALTER TABLE users ADD COLUMN totp_enabled INTEGER NOT NULL DEFAULT 0');
+  d.exec(`CREATE TABLE IF NOT EXISTS recovery_codes(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user INTEGER NOT NULL,
+    code TEXT NOT NULL,
+    used INTEGER NOT NULL DEFAULT 0,
+    created INTEGER NOT NULL
+  );`);
 }
 
 function hasColumn(d, table, col) {

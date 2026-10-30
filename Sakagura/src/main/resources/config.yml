@@ -26,3 +26,11 @@ distilling:
   seconds-per-run: 20     # one run distills the bottles inside and spends one glowstone dust
   bottles-per-run: 3      # max bottle stacks served per run; the rest waits for the next one
   debug: false            # log every second what a still sees (finding why it does nothing)
+
+seasons:
+  # real days per season (spring -> summer -> autumn -> winter -> spring)
+  days-per-season: 7
+  # current season (auto-advances; admin can override with /brew season set)
+  current: SPRING
+  # timestamp of season start (auto-managed)
+  start-time: 0

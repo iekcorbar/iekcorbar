@@ -129,6 +129,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         int npcId = -1;
         List<Integer> npcIds = new ArrayList<>();   // meerdere NPC's delven dezelfde quest (Backpack)
         int order = 0;
+        String group = "";                     // quest group for GUI grouping (tutorial, backpack, merchant, etc.)
         boolean fromWizard;                    // komt uit wizard-quests.yml (GUI-wizard)
         boolean randomStart;                 // bij start: willekeurige eerste stage uit 'random-stages'
         List<String> randomStages = new ArrayList<>();
@@ -239,12 +240,12 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
         var cmd = Bukkit.getPluginCommand("questbook");
         if (cmd != null) cmd.setExecutor((sender, command, label, args) -> {
-            if (args.length >= 1 && args[0].equalsIgnoreCase("reload") && sender.hasPermission("iekquests.admin")) {
+            if (args.length >= 1 && args[0].equalsIgnoreCase("reload") && (sender.hasPermission("iekquests.reload") || sender.hasPermission("iekquests.admin"))) {
                 load();
                 sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s) reloaded."));
                 return true;
             }
-            if (args.length >= 2 && args[0].equalsIgnoreCase("reset") && sender.hasPermission("iekquests.admin")) {
+            if (args.length >= 2 && args[0].equalsIgnoreCase("reset") && (sender.hasPermission("iekquests.reset") || sender.hasPermission("iekquests.admin"))) {
                 var pl = Bukkit.getPlayerExact(args[1]);
                 UUID u = pl != null ? pl.getUniqueId() : UUID.fromString(args[1]);
                 var mm = prog.get(u);
@@ -266,14 +267,14 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         invItems.load();
         var wcmd = Bukkit.getPluginCommand("questwizard");
         if (wcmd != null) wcmd.setExecutor((sender, command, label, args) -> {
-            if (args.length >= 1 && args[0].equalsIgnoreCase("delete") && sender.hasPermission("iekquests.admin")
+            if (args.length >= 1 && args[0].equalsIgnoreCase("delete") && (sender.hasPermission("iekquests.edit") || sender.hasPermission("iekquests.admin"))
                     && args.length >= 2) {
                 if (removeWizardQuest(args[1])) sender.sendMessage(Component.text("Wizard-quest " + args[1] + " deleted."));
                 else sender.sendMessage(Component.text("Only wizard-made quests can be deleted here (not quests.yml ones)."));
                 return true;
             }
-            if (sender instanceof Player p && p.hasPermission("iekquests.admin")) wizard.open(p);
-            else sender.sendMessage(Component.text("questwizard: iekquests.admin required."));
+            if (sender instanceof Player p && (p.hasPermission("iekquests.wizard") || p.hasPermission("iekquests.admin"))) wizard.open(p);
+            else sender.sendMessage(Component.text("questwizard: iekquests.wizard or iekquests.admin required."));
             return true;
         });
         var rcmd = Bukkit.getPluginCommand("iekrestart");
@@ -427,6 +428,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             }
             if (q.npcId >= 0 && !q.npcIds.contains(q.npcId)) q.npcIds.add(q.npcId);
             q.order = s.getInt("order", 0);
+            q.group = s.getString("group", "");
             q.randomStart = s.getBoolean("random", false);
             q.startConds = conds(s.getString("start", ""));
             for (var r : s.getStringList("rewards")) q.rewards.add(r);
@@ -869,19 +871,16 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     }
 
     /**
-     * Eerste uiting van een nieuwe stage: stem + de dialoogregels IN CHAT, met een
-     * klein ritme eronder (praten, niet een boek-lore om over te hoveren). Aan bij
-     * start, doorklikken en goto (0.5.4 - "conversatie ipv gui").
+     * Eerste uiting van een nieuwe stage: stem + dialoog in de GUI (niet in chat).
+     * De dialoogregels worden getoond in het quest-paneel (openQuest), zodat de
+     * speler een visuele conversatie heeft in plaats van chat-spam.
      */
     private void speakFirst(Player p, Quest q, Prog pr) {
         var s = q.stages.get(pr.stage);
         if (s == null) return;
         speak(p, s.voice);
-        int n = 0;
-        for (String line : s.lines) {
-            final String l = line;
-            Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) p.sendMessage(legacy(l)); }, (++n) * 6L);
-        }
+        // Dialoog in GUI, niet in chat - refresh het paneel met de nieuwe tekst
+        Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) refresh(p, q); }, 2L);
     }
 
     // ---------------------------------------------------------------- flow
@@ -900,8 +899,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
         pr.stage = first;
         speakFirst(p, q, pr);
-        refresh(p, q);
-        closeForDialogue(p, q.stages.get(first));
+        openQuest(p, q);
         save();
     }
 
@@ -922,16 +920,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         pr.stage = nxt;
         p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.7f, 1.3f);
         speakFirst(p, q, pr);
-        refresh(p, q);
-        closeForDialogue(p, q.stages.get(nxt));
+        openQuest(p, q);
         save();
     }
 
-    /** Heeft deze stage tekst? Dan gaat het paneel dicht zodat het gesprek leesbaar is (0.5.4). */
-    private void closeForDialogue(Player p, Stage s) {
-        if (s == null || s.lines.isEmpty()) return;
-        Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) p.closeInventory(); }, 2L);
-    }
+    // closeForDialogue verwijderd - dialoog wordt nu in de GUI getoond (paneel blijft open)
 
     private String nextKey(Quest q, Stage cur) {
         var it = q.stages.keySet().iterator();
@@ -1209,22 +1202,38 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             var pr = pr(p, q);
             if (ok(p, q, pr, q.startConds) || (pr.started && !pr.done)) vis.add(q);
         }
+        // Group quests by their group field
+        Map<String, List<Quest>> groups = new LinkedHashMap<>();
+        for (var q : vis) {
+            String g = q.group.isEmpty() ? "Other" : q.group;
+            groups.computeIfAbsent(g, k -> new ArrayList<>()).add(q);
+        }
+        List<Object> flat = new ArrayList<>();
+        for (var entry : groups.entrySet()) {
+            flat.add(entry.getKey());
+            flat.addAll(entry.getValue());
+        }
         boolean admin = p.hasPermission("iekquests.admin");
         int per = 35;                                   // slots 10-44, onder-rij is navigatie
-        int pages = Math.max(1, (vis.size() + per - 1) / per);
+        int pages = Math.max(1, (flat.size() + per - 1) / per);
         if (page < 0) page = 0;
         if (page >= pages) page = pages - 1;
         var inv = Bukkit.createInventory(new Holder(p.getUniqueId(), "", page), 54, legacy("&6&l⚒ Quest Book"));
         int slot = 10;
-        for (int i = page * per; i < vis.size() && i < (page + 1) * per; i++) {
-            var q = vis.get(i);
-            if (q.stages.isEmpty()) continue;
-            List<String> lo = new ArrayList<>();
-            if (!q.subtitle.isEmpty()) lo.add("&8" + q.subtitle);
-            lo.add("   " + statusLine(q, pr(p, q)));
-            var it = item(q.icon, q.title, lo);
-            setTag(it, "open:" + q.id);
-            inv.setItem(slot++, it);
+        for (int i = page * per; i < flat.size() && i < (page + 1) * per; i++) {
+            Object obj = flat.get(i);
+            if (obj instanceof String groupName) {
+                var header = item("GRAY_STAINED_GLASS_PANE", "&6" + groupName, List.of("&7---"));
+                inv.setItem(slot++, header);
+            } else if (obj instanceof Quest q) {
+                if (q.stages.isEmpty()) continue;
+                List<String> lo = new ArrayList<>();
+                if (!q.subtitle.isEmpty()) lo.add("&8" + q.subtitle);
+                lo.add("   " + statusLine(q, pr(p, q)));
+                var it = item(q.icon, q.title, lo);
+                setTag(it, "open:" + q.id);
+                inv.setItem(slot++, it);
+            }
         }
         if (admin) inv.setItem(0, tagged(Material.NETHER_STAR, "&d✚ Quest wizard &8(new quest + NPC)", "wizard"));
         if (pages > 1) {

@@ -3,7 +3,8 @@ import { cookies } from 'next/headers';
 import { createSession, userFromSid } from './secure.js';
 import { getDb } from './db.js';
 
-export { hashPass, checkPass, createSession, userFromBasic } from './secure.js';
+export { hashPass, checkPass, createSession, userFromBasic,
+         generateTotpSecret, totpCode, verifyTotp, generateRecoveryCodes, totpUri } from './secure.js';
 
 export const SID = 'sh_sid';
 

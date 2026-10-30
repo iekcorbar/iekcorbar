@@ -9,17 +9,29 @@ export default function Login({ needsSetup, onDone }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [bootstrap, setBootstrap] = useState('');
+  const [totp, setTotp] = useState('');
+  const [recoveryCode, setRecoveryCode] = useState('');
+  const [requires2fa, setRequires2fa] = useState(false);
+  const [useRecovery, setUseRecovery] = useState(false);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
   async function submit(e) {
     e.preventDefault();
     setErr(''); setBusy(true);
-    const url = needsSetup ? '/api/auth/setup' : '/api/auth/login';
-    const body = needsSetup ? { username, password, bootstrap } : { username, password };
+    const url = needsSetup ? '/api/auth/setup' : (requires2fa ? '/api/auth/2fa/verify' : '/api/auth/login');
+    let body;
+    if (needsSetup) {
+      body = { username, password, bootstrap };
+    } else if (requires2fa) {
+      body = useRecovery ? { username, password, recoveryCode } : { username, password, totp };
+    } else {
+      body = { username, password };
+    }
     try {
       const r = await fetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
       const j = await r.json().catch(() => ({}));
+      if (j.requires2fa) { setRequires2fa(true); setBusy(false); return; }
       if (!r.ok) { setErr(trServer(j.error || 'Something went wrong')); return; }
       const me = await fetch('/api/auth/me').then((x) => x.json());
       onDone(me.user);
@@ -55,6 +67,25 @@ export default function Login({ needsSetup, onDone }) {
           <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete={needsSetup ? 'new-password' : 'current-password'}
             className="w-full bg-black/40 border border-bronze/40 rounded-lg px-3 py-2 text-sm focus:border-gold outline-none" />
         </label>
+        {requires2fa && !useRecovery && (
+          <label className="block text-xs space-y-1">
+            <span className="text-parch/60">2FA Code</span>
+            <input value={totp} onChange={(e) => setTotp(e.target.value)} type="text" inputMode="numeric" autoComplete="one-time-code" maxLength={6}
+              className="w-full bg-black/40 border border-bronze/40 rounded-lg px-3 py-2 text-sm focus:border-gold outline-none text-center tracking-widest" />
+          </label>
+        )}
+        {requires2fa && useRecovery && (
+          <label className="block text-xs space-y-1">
+            <span className="text-parch/60">Recovery Code</span>
+            <input value={recoveryCode} onChange={(e) => setRecoveryCode(e.target.value)} type="text" autoComplete="off"
+              className="w-full bg-black/40 border border-bronze/40 rounded-lg px-3 py-2 text-sm focus:border-gold outline-none text-center tracking-widest" />
+          </label>
+        )}
+        {requires2fa && (
+          <button type="button" onClick={() => setUseRecovery(!useRecovery)} className="text-xs text-gold/70 hover:text-gold">
+            {useRecovery ? 'Use 2FA code instead' : 'Use recovery code instead'}
+          </button>
+        )}
         {err && <p className="text-xs text-red-400">{err}</p>}
         <button disabled={busy} className="w-full py-2 rounded-lg bg-gold/90 text-ink font-bold text-sm hover:bg-gold disabled:opacity-50">
           {busy ? '…' : needsSetup ? t('login.btn_setup') : t('login.btn')}

@@ -7,6 +7,7 @@ api-version: '26.2'
 depend: [Steamworks]
 description: Water turbine, press, ticker, brass flywheel and sieve funnel for the Steamworks network.
 author: iekcorbar
+softdepend: [AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, SteamworksAdditions, Wildlife, Zukan]
 
 commands:
   swpower:
@@ -18,3 +19,4 @@ permissions:
   power.admin:
     description: Give and configure Steamworks Power machines
     default: op
+

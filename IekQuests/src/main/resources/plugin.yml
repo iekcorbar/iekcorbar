@@ -4,7 +4,7 @@ main: com.iekcorbar.quests.IekQuestsPlugin
 api-version: '26.2'
 description: Own quest engine - conversations, goals, rewards, compass and a click GUI.
 author: iekcorbar
-softdepend: [Citizens, Vault]
+softdepend: [Citizens, Vault, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 
 commands:
   questbook:
@@ -25,9 +25,39 @@ commands:
     aliases: [iekre, restartnow]
 
 permissions:
+  # ---- player permissions
   iekquests.use:
     description: Open the quest book and do quests
     default: true
-  iekquests.admin:
-    description: Quest wizard, config reload and progress resets
+  iekquests.repeat:
+    description: Do repeatable quest contracts
+    default: true
+
+  # ---- staff permissions (granular)
+  iekquests.wizard:
+    description: Use the in-game quest wizard to create and delete quests
     default: op
+  iekquests.reload:
+    description: Reload the quest config
+    default: op
+  iekquests.reset:
+    description: Reset a player's quest progress
+    default: op
+  iekquests.give:
+    description: Give quest items to players
+    default: op
+  iekquests.edit:
+    description: Edit existing quests via the wizard
+    default: op
+  iekquests.npc:
+    description: Create and manage quest NPCs
+    default: op
+  iekquests.info:
+    description: View quest statistics and debug info
+    default: op
+
+  # ---- admin (everything)
+  iekquests.admin:
+    description: Full admin - wizard, reload, reset, give, edit, npc, info
+    default: op
+

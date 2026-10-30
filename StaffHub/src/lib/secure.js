@@ -19,6 +19,70 @@ export function checkPass(pw, stored) {
   } catch { return false; }
 }
 
+// ------------------------------------------------------------------ 2FA (TOTP)
+
+const BASE32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+
+export function generateTotpSecret() {
+  const bytes = crypto.randomBytes(20);
+  let bits = '';
+  for (const b of bytes) bits += b.toString(2).padStart(8, '0');
+  let secret = '';
+  for (let i = 0; i < bits.length; i += 5) {
+    const chunk = bits.slice(i, i + 5).padEnd(5, '0');
+    secret += BASE32[parseInt(chunk, 2)];
+  }
+  return secret;
+}
+
+function base32Decode(str) {
+  str = str.toUpperCase().replace(/=+$/, '');
+  let bits = '';
+  for (const c of str) {
+    const idx = BASE32.indexOf(c);
+    if (idx < 0) continue;
+    bits += idx.toString(2).padStart(5, '0');
+  }
+  const bytes = [];
+  for (let i = 0; i + 8 <= bits.length; i += 8) {
+    bytes.push(parseInt(bits.slice(i, i + 8), 2));
+  }
+  return Buffer.from(bytes);
+}
+
+export function totpCode(secret, time = Math.floor(Date.now() / 1000)) {
+  const key = base32Decode(secret);
+  const counter = Math.floor(time / 30);
+  const buf = Buffer.alloc(8);
+  buf.writeBigUInt64BE(BigInt(counter));
+  const hmac = crypto.createHmac('sha1', key).update(buf).digest();
+  const offset = hmac[hmac.length - 1] & 0x0f;
+  const code = ((hmac[offset] & 0x7f) << 24 | (hmac[offset + 1] & 0xff) << 16 |
+    (hmac[offset + 2] & 0xff) << 8 | (hmac[offset + 3] & 0xff)) % 1000000;
+  return code.toString().padStart(6, '0');
+}
+
+export function verifyTotp(secret, code, window = 1) {
+  const now = Math.floor(Date.now() / 1000);
+  for (let i = -window; i <= window; i++) {
+    if (totpCode(secret, now + i * 30) === String(code).trim()) return true;
+  }
+  return false;
+}
+
+export function generateRecoveryCodes(count = 8) {
+  const codes = [];
+  for (let i = 0; i < count; i++) {
+    codes.push(crypto.randomBytes(4).toString('hex').toUpperCase());
+  }
+  return codes;
+}
+
+export function totpUri(secret, username, issuer = 'StaffHub') {
+  return 'otpauth://totp/' + encodeURIComponent(issuer + ':' + username) +
+    '?secret=' + secret + '&issuer=' + encodeURIComponent(issuer) + '&digits=6&period=30';
+}
+
 /**
  * Een sessie openen. `agent` is de user-agent van de browser die inlogde: hij
  * gaat MEET in de sessierij, zodat de owner bij "wie is er ingelogd" niet naar

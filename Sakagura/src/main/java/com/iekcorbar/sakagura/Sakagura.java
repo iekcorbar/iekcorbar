@@ -46,6 +46,12 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     private Trees trees;
     private GardenDecor gardenDecor;
     private Adv adv;
+    private Competition competition;
+    private CompetitionArea compArea;
+    private WorldEditIntegration worldEdit;
+    private Seasons seasons;
+    private Sommelier sommelier;
+    private Fmm fmm;
 
     @Override
     public void onEnable() {
@@ -76,6 +82,13 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
         gardenDecor.decor.registerRecipes();
         adv = Achievements.create(this);
         adv.start();
+        competition = new Competition(this);
+        compArea = new CompetitionArea(this);
+        worldEdit = new WorldEditIntegration(this);
+        seasons = new Seasons(this);
+        sommelier = new Sommelier(this);
+        getServer().getPluginManager().registerEvents(sommelier, this);
+        fmm = new Fmm(getLogger());
         getServer().getServicesManager().register(java.util.function.Supplier.class, new ZukanData(this), this, org.bukkit.plugin.ServicePriority.Normal); // recipe viewer (Zukan)
         getCommand("brew").setExecutor(this);
         getCommand("brew").setTabCompleter(this);
@@ -97,6 +110,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
             drunk.tick();
             garden.tick();
             trees.tick();
+            seasons.tick();
             if (tick % 30 == 0) {
                 casks.relight();
                 stills.relight();
@@ -113,6 +127,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
         if (cauldrons == null) return;
         cauldrons.saveAll();
         garden.saveAll();
+        if (sommelier != null) sommelier.save();
         if (!getServer().isStopping()) {
             casks.removeAll();
             stills.removeAll();
@@ -136,6 +151,12 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     Adv adv() { return adv; }
     Drunk drunk() { return drunk; }
     GardenDecor gardenDecor() { return gardenDecor; }
+    Competition competition() { return competition; }
+    CompetitionArea compArea() { return compArea; }
+    WorldEditIntegration worldEdit() { return worldEdit; }
+    Seasons seasons() { return seasons; }
+    Sommelier sommelier() { return sommelier; }
+    Fmm fmm() { return fmm; }
 
     // ------------------------------------------------------------ /brew
 
@@ -266,6 +287,297 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                 if (admin && a.length > 2) drunk.set(t, Double.parseDouble(a[2]));
                 s.sendMessage(Component.text(t.getName() + " is " + Math.round(drunk.level(t)) + "% drunk.", NamedTextColor.GOLD));
             }
+            case "comp" -> {
+                String sub2 = a.length > 1 ? a[1].toLowerCase(Locale.ROOT) : "status";
+                switch (sub2) {
+                    case "start" -> {
+                        if (!admin) return deny(s);
+                        int days = 7;
+                        if (a.length > 2) try { days = Math.max(1, Math.min(30, Integer.parseInt(a[2]))); } catch (NumberFormatException ignored) { }
+                        String theme = a.length > 3 ? a[3] : "any";
+                        if (competition.start(s instanceof Player p ? p : null, days, theme)) {
+                            s.sendMessage(Component.text("Brewing competition started! Theme: " + theme + ", duration: " + days + " days.", NamedTextColor.GREEN));
+                            Bukkit.broadcast(Component.text("A brewing competition has started! Theme: " + theme + ". Use /brew comp submit to enter.", NamedTextColor.GOLD));
+                        } else {
+                            s.sendMessage(Component.text("A competition is already running.", NamedTextColor.RED));
+                        }
+                    }
+                    case "stop" -> {
+                        if (!admin) return deny(s);
+                        if (competition.stop()) {
+                            s.sendMessage(Component.text("Competition stopped. Giving rewards...", NamedTextColor.GREEN));
+                            competition.giveRewards();
+                        } else {
+                            s.sendMessage(Component.text("No competition running.", NamedTextColor.RED));
+                        }
+                    }
+                    case "submit" -> {
+                        if (!(s instanceof Player p)) return true;
+                        ItemStack drink = p.getInventory().getItemInMainHand();
+                        String result = competition.submit(p, drink);
+                        s.sendMessage(Component.text(result, result.startsWith("Submitted") ? NamedTextColor.GREEN : NamedTextColor.RED));
+                    }
+                    case "leaderboard", "lb" -> {
+                        List<Competition.LeaderEntry> lb = competition.leaderboard();
+                        if (lb.isEmpty()) {
+                            s.sendMessage(Component.text("No submissions yet.", NamedTextColor.GRAY));
+                            return true;
+                        }
+                        s.sendMessage(Component.text("=== Brewing Competition Leaderboard ===", NamedTextColor.GOLD));
+                        for (int i = 0; i < Math.min(10, lb.size()); i++) {
+                            Competition.LeaderEntry e = lb.get(i);
+                            s.sendMessage(Component.text("#" + (i + 1) + " " + e.playerName + " - " + e.drinkName +
+                                    " (" + e.quality + " stars, diff " + e.difficulty + ") Score: " + (int) e.score, NamedTextColor.GRAY));
+                        }
+                        if (s instanceof Player p) {
+                            int rank = competition.rank(p.getUniqueId());
+                            if (rank > 0) s.sendMessage(Component.text("Your rank: #" + rank, NamedTextColor.AQUA));
+                        }
+                    }
+                    case "status" -> {
+                        s.sendMessage(competition.statusLine());
+                    }
+                    case "area" -> {
+                        String sub3 = a.length > 2 ? a[2].toLowerCase(Locale.ROOT) : "list";
+                        switch (sub3) {
+                            case "set" -> {
+                                if (!admin) return deny(s);
+                                if (!(s instanceof Player p)) return true;
+                                if (a.length < 4) {
+                                    s.sendMessage(Component.text("Usage: /brew comp area set <name>", NamedTextColor.RED));
+                                    return true;
+                                }
+                                String areaName = a[3];
+                                if (compArea.hasFirstCorner(areaName)) {
+                                    int result = compArea.setCorner(areaName, p.getLocation(), 2);
+                                    if (result == 2) {
+                                        CompetitionArea.Area ar = compArea.getArea(areaName);
+                                        s.sendMessage(Component.text("Area '" + areaName + "' created: " + ar.bounds(), NamedTextColor.GREEN));
+                                    } else if (result == -1) {
+                                        s.sendMessage(Component.text("Both corners must be in the same world.", NamedTextColor.RED));
+                                    } else {
+                                        s.sendMessage(Component.text("Failed to create area.", NamedTextColor.RED));
+                                    }
+                                } else {
+                                    compArea.setCorner(areaName, p.getLocation(), 1);
+                                    s.sendMessage(Component.text("First corner set for '" + areaName + "'. Move to the opposite corner and run the command again.", NamedTextColor.YELLOW));
+                                }
+                            }
+                            case "remove" -> {
+                                if (!admin) return deny(s);
+                                if (a.length < 4) {
+                                    s.sendMessage(Component.text("Usage: /brew comp area remove <name>", NamedTextColor.RED));
+                                    return true;
+                                }
+                                if (compArea.removeArea(a[3])) {
+                                    s.sendMessage(Component.text("Area '" + a[3] + "' removed.", NamedTextColor.GREEN));
+                                } else {
+                                    s.sendMessage(Component.text("Area not found.", NamedTextColor.RED));
+                                }
+                            }
+                            case "activate", "use" -> {
+                                if (!admin) return deny(s);
+                                if (a.length < 4) {
+                                    s.sendMessage(Component.text("Usage: /brew comp area activate <name>", NamedTextColor.RED));
+                                    return true;
+                                }
+                                if (compArea.getArea(a[3]) == null) {
+                                    s.sendMessage(Component.text("Area not found.", NamedTextColor.RED));
+                                    return true;
+                                }
+                                compArea.setActiveArea(a[3]);
+                                s.sendMessage(Component.text("Active competition area: " + a[3], NamedTextColor.GREEN));
+                            }
+                            case "deactivate" -> {
+                                if (!admin) return deny(s);
+                                compArea.setActiveArea(null);
+                                s.sendMessage(Component.text("Competition area deactivated (no area restriction).", NamedTextColor.GREEN));
+                            }
+                            case "we", "worldedit" -> {
+                                if (!admin) return deny(s);
+                                if (!(s instanceof Player p)) return true;
+                                if (!worldEdit.worldEditAvailable()) {
+                                    s.sendMessage(Component.text("WorldEdit is not installed on this server.", NamedTextColor.RED));
+                                    return true;
+                                }
+                                if (a.length < 4) {
+                                    s.sendMessage(Component.text("Usage: /brew comp area we <name> [protect]", NamedTextColor.RED));
+                                    return true;
+                                }
+                                String areaName = a[3];
+                                boolean protect = a.length > 4 && a[4].equalsIgnoreCase("protect");
+                                if (worldEdit.createRegion(p, areaName, protect)) {
+                                    // Also store in our area system for tracking
+                                    org.bukkit.Location min = p.getLocation(); // placeholder
+                                    s.sendMessage(Component.text("WorldGuard region '" + areaName + "' created from your WorldEdit selection.", NamedTextColor.GREEN));
+                                    if (protect) s.sendMessage(Component.text("Region is protected (no building/breaking).", NamedTextColor.YELLOW));
+                                    // Store the area name as active
+                                    compArea.setActiveArea(areaName);
+                                    s.sendMessage(Component.text("Set as active competition area.", NamedTextColor.AQUA));
+                                } else {
+                                    s.sendMessage(Component.text("Failed to create region. Make sure you have a WorldEdit selection (//pos1, //pos2).", NamedTextColor.RED));
+                                }
+                            }
+                            case "remove-we", "remove-worldedit" -> {
+                                if (!admin) return deny(s);
+                                if (!(s instanceof Player p)) return true;
+                                if (a.length < 4) {
+                                    s.sendMessage(Component.text("Usage: /brew comp area remove-we <name>", NamedTextColor.RED));
+                                    return true;
+                                }
+                                if (worldEdit.removeRegion(p.getWorld(), a[3])) {
+                                    s.sendMessage(Component.text("WorldGuard region '" + a[3] + "' removed.", NamedTextColor.GREEN));
+                                } else {
+                                    s.sendMessage(Component.text("Region not found or WorldGuard not available.", NamedTextColor.RED));
+                                }
+                            }
+                            case "we-status", "worldedit-status" -> {
+                                s.sendMessage(worldEdit.status());
+                            }
+                            case "list" -> {
+                                List<String> areas = compArea.listAreas();
+                                if (areas.isEmpty()) {
+                                    s.sendMessage(Component.text("No competition areas defined.", NamedTextColor.GRAY));
+                                    return true;
+                                }
+                                s.sendMessage(Component.text("=== Competition Areas ===", NamedTextColor.GOLD));
+                                for (String line : areas) {
+                                    s.sendMessage(Component.text(line, NamedTextColor.GRAY));
+                                }
+                                if (compArea.activeAreaName() != null) {
+                                    s.sendMessage(Component.text("Active: " + compArea.activeAreaName(), NamedTextColor.AQUA));
+                                }
+                            }
+                            default -> {
+                                s.sendMessage(Component.text("Usage: /brew comp area [set <name> | remove <name> | activate <name> | deactivate | list]", NamedTextColor.GRAY));
+                            }
+                        }
+                    }
+                    default -> {
+                        s.sendMessage(Component.text("Usage: /brew comp [start <days> [theme] | stop | submit | leaderboard | status]", NamedTextColor.GRAY));
+                    }
+                }
+            }
+            case "season" -> {
+                String sub2 = a.length > 1 ? a[1].toLowerCase(Locale.ROOT) : "status";
+                switch (sub2) {
+                    case "status" -> {
+                        s.sendMessage(Component.text("Current season: " + seasons.status(), NamedTextColor.GOLD));
+                    }
+                    case "set" -> {
+                        if (!admin) return deny(s);
+                        if (a.length < 3) {
+                            s.sendMessage(Component.text("Usage: /brew season set <spring|summer|autumn|winter>", NamedTextColor.RED));
+                            return true;
+                        }
+                        try {
+                            Seasons.Season season = Seasons.Season.valueOf(a[2].toUpperCase(Locale.ROOT));
+                            seasons.setSeason(season);
+                            s.sendMessage(Component.text("Season set to " + season.displayName + ".", NamedTextColor.GREEN));
+                            Bukkit.broadcast(Component.text("The season has changed to " + season.displayName + "! " + season.description, NamedTextColor.GOLD));
+                        } catch (IllegalArgumentException e) {
+                            s.sendMessage(Component.text("Unknown season. Use: spring, summer, autumn, winter", NamedTextColor.RED));
+                        }
+                    }
+                    case "list" -> {
+                        s.sendMessage(Component.text("=== Seasons ===", NamedTextColor.GOLD));
+                        for (Seasons.Season se : Seasons.Season.values()) {
+                            String marker = se == seasons.current() ? " <-- current" : "";
+                            s.sendMessage(Component.text(se.displayName + ": " + se.description + " (" + se.crops.length + " crops)" + marker, NamedTextColor.GRAY));
+                        }
+                    }
+                    case "crops" -> {
+                        Seasons.Season se = seasons.current();
+                        s.sendMessage(Component.text("Crops that grow in " + se.displayName + ":", NamedTextColor.GOLD));
+                        StringBuilder sb = new StringBuilder();
+                        for (String c : se.crops) sb.append(sb.isEmpty() ? "" : ", ").append(c);
+                        s.sendMessage(Component.text(sb.toString(), NamedTextColor.GRAY));
+                    }
+                    default -> {
+                        s.sendMessage(Component.text("Usage: /brew season [status|set <season>|list|crops]", NamedTextColor.GRAY));
+                    }
+                }
+            }
+            case "taste" -> {
+                if (!(s instanceof Player p)) return true;
+                org.bukkit.inventory.ItemStack drink = p.getInventory().getItemInMainHand();
+                String result = sommelier.evaluate(p, drink);
+                if (result == null) {
+                    s.sendMessage(Component.text("You must be holding a Sakagura drink.", NamedTextColor.RED));
+                } else if (result.equals("unfinished")) {
+                    s.sendMessage(Component.text("This drink isn't finished yet. Complete the brewing process first.", NamedTextColor.RED));
+                }
+            }
+            case "stats" -> {
+                if (!(s instanceof Player p)) return true;
+                s.sendMessage(Component.text("Sommelier stats: " + sommelier.stats(p), NamedTextColor.GOLD));
+            }
+            case "woods" -> {
+                s.sendMessage(Component.text("=== Cask Woods & Flavor Profiles ===", NamedTextColor.GOLD));
+                for (Woods w : Woods.values()) {
+                    s.sendMessage(Component.text(w.label() + ": " + w.flavorProfile() + " (aging bonus: " + String.format("%.0f%%", w.agingBonus() * 100) + ")", NamedTextColor.GRAY));
+                }
+            }
+            case "model" -> {
+                String sub2 = a.length > 1 ? a[1].toLowerCase(Locale.ROOT) : "status";
+                switch (sub2) {
+                    case "status" -> {
+                        s.sendMessage(Component.text("FMM available: " + fmm.available(), NamedTextColor.GOLD));
+                    }
+                    case "spawn" -> {
+                        if (!admin) return deny(s);
+                        if (!(s instanceof Player p)) return true;
+                        if (!fmm.available()) {
+                            s.sendMessage(Component.text("FreeMinecraftModels is not installed.", NamedTextColor.RED));
+                            return true;
+                        }
+                        if (a.length < 3) {
+                            s.sendMessage(Component.text("Usage: /brew model spawn <sommelier|cask|still|tree|fountain>", NamedTextColor.RED));
+                            return true;
+                        }
+                        String modelName = "sakagura:" + a[2].toLowerCase(Locale.ROOT);
+                        // Spawn an invisible villager and attach the model
+                        org.bukkit.Location loc = p.getLocation();
+                        org.bukkit.entity.Villager v = loc.getWorld().spawn(loc, org.bukkit.entity.Villager.class);
+                        v.setInvisible(true);
+                        v.setAI(false);
+                        v.setSilent(true);
+                        if (fmm.attach(v, modelName)) {
+                            fmm.play(v, "idle", true);
+                            s.sendMessage(Component.text("Spawned " + modelName + " at your location.", NamedTextColor.GREEN));
+                        } else {
+                            v.remove();
+                            s.sendMessage(Component.text("Failed to attach model. Is it loaded in FMM?", NamedTextColor.RED));
+                        }
+                    }
+                    case "item" -> {
+                        if (!admin) return deny(s);
+                        if (!(s instanceof Player p)) return true;
+                        if (!fmm.available()) {
+                            s.sendMessage(Component.text("FreeMinecraftModels is not installed.", NamedTextColor.RED));
+                            return true;
+                        }
+                        if (a.length < 3) {
+                            s.sendMessage(Component.text("Usage: /brew model item <sommelier|cask|still|tree|fountain>", NamedTextColor.RED));
+                            return true;
+                        }
+                        String modelName = "sakagura:" + a[2].toLowerCase(Locale.ROOT);
+                        org.bukkit.inventory.ItemStack item = p.getInventory().getItemInMainHand();
+                        if (item == null || item.getType().isAir()) {
+                            s.sendMessage(Component.text("Hold an item in your main hand.", NamedTextColor.RED));
+                            return true;
+                        }
+                        if (fmm.itemModel(item, modelName)) {
+                            s.sendMessage(Component.text("Applied " + modelName + " to the item in your hand.", NamedTextColor.GREEN));
+                        } else {
+                            s.sendMessage(Component.text("Failed to apply model. Is it loaded in FMM?", NamedTextColor.RED));
+                        }
+                    }
+                    default -> {
+                        s.sendMessage(Component.text("Usage: /brew model [status|spawn <name>|item <name>]", NamedTextColor.GRAY));
+                    }
+                }
+            }
             case "reload" -> {
                 if (!admin) return deny(s);
                 reloadConfig();
@@ -279,7 +591,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                 s.sendMessage(Component.text("1. Water cauldron + heat below, throw in ingredients, wait, take bottles out.", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("2. Some drinks: distill them in a Steam Still (bottles + glowstone inside, fire below). 3. Some: age in a Sake Cask.", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Recipes on the website: ", NamedTextColor.GRAY).append(Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url))));
-                s.sendMessage(Component.text("/" + label + " recipes | drunk" + (admin ? " | give | take | reload" : ""), NamedTextColor.GRAY));
+                s.sendMessage(Component.text("/" + label + " recipes | drunk | taste | stats | model [status|spawn|item] | comp [...] | season [...] | woods" + (admin ? " | give | take | reload" : ""), NamedTextColor.GRAY));
             }
         }
         return true;

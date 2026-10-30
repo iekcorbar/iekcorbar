@@ -267,7 +267,9 @@ def still():
 # ------------------------------------------------------------------ orchard trees (0.5.0)
 # (id, canopy colour, fruit colour) - fruit None = decorative (maple). Names must match Tree.java.
 TREES = [("sakura", "blossom", "cherry"), ("ume", "leaf", "ume"), ("apple", "leaf", "red"),
-         ("orange", "leaf", "yuzu"), ("maple", "maple", None)]
+         ("orange", "leaf", "yuzu"), ("maple", "maple", None),
+         ("cherry", "red", "cherry"), ("peach", "peach", "peach"), ("lemon", "yuzu", "yuzu"),
+         ("fig", "fig", "fig"), ("walnut", "olive", None)]
 
 
 def block_model(name, es):

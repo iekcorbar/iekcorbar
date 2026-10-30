@@ -114,6 +114,9 @@ final class Recipes {
         if (a != null && b.seq.indexOf('A') >= 0) {
             double age = Math.max(0, 1 - Math.abs(b.years - a.years()) / (Math.max(1, a.years() * 0.4) * tol));
             if (!a.wood().equals("any") && !a.wood().equals(b.wood)) age *= Woods.similar(a.wood(), b.wood) ? 0.75 : 0.55;
+            // wood flavor bonus: aging in a flavorful wood adds up to 10% to the age score
+            Woods w = Woods.byId(b.wood);
+            if (w != null && a.wood().equals("any")) age = Math.min(1.0, age * w.agingBonus());
             total += 0.2 * age;
             weight += 0.2;
         }

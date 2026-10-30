@@ -179,6 +179,12 @@ final class Goods implements Listener {
         m.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         m.getPersistentDataContainer().set(brewKey, PersistentDataType.STRING, b.format());
         it.setItemMeta(m);
+        // Per-drink model (if available)
+        if (match != null && match.finished() && match.recipe() != null) {
+            it.setData(DataComponentTypes.ITEM_MODEL, Key.key("sakagura", "drink_" + match.recipe().slug));
+        } else if (match != null && match.recipe() != null) {
+            it.setData(DataComponentTypes.ITEM_MODEL, Key.key("sakagura", "drink_" + match.recipe().slug));
+        }
         return it;
     }
 

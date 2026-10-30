@@ -1,0 +1,295 @@
+{
+	"meta": {
+		"format_version": "5.0",
+		"model_format": "free",
+		"box_uv": false
+	},
+	"name": "Drop",
+	"model_identifier": "sakagura:drop",
+	"visible_box": [
+		1,
+		1,
+		0
+	],
+	"resolution": {
+		"width": 16,
+		"height": 16
+	},
+	"elements": [
+		{
+			"uuid": "3f910ceb-5f43-4d14-966e-c5e1fea9e81b",
+			"name": "body",
+			"origin": [
+				8,
+				3,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				5,
+				0,
+				5
+			],
+			"to": [
+				11,
+				6,
+				11
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		},
+		{
+			"uuid": "00e3342b-bf64-473d-837d-56bdb0955b77",
+			"name": "top",
+			"origin": [
+				8,
+				7,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				6,
+				6,
+				6
+			],
+			"to": [
+				10,
+				8,
+				10
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						4,
+						2
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						4,
+						2
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						4,
+						2
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						4,
+						2
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						4,
+						4
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						4,
+						4
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		},
+		{
+			"uuid": "415972be-62e9-46e2-b66d-6ac8286a7cf5",
+			"name": "stem",
+			"origin": [
+				8,
+				9,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				7.5,
+				8,
+				7.5
+			],
+			"to": [
+				8.5,
+				10,
+				8.5
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						1,
+						2
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						1,
+						2
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						1,
+						2
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						1,
+						2
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						1,
+						1
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						1,
+						1
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		}
+	],
+	"groups": [],
+	"outliner": [
+		"3f910ceb-5f43-4d14-966e-c5e1fea9e81b",
+		"00e3342b-bf64-473d-837d-56bdb0955b77",
+		"415972be-62e9-46e2-b66d-6ac8286a7cf5"
+	],
+	"textures": [
+		{
+			"path": "",
+			"name": "drop",
+			"folder": "",
+			"namespace": "",
+			"id": "0",
+			"width": 16,
+			"height": 16,
+			"uv_width": 16,
+			"uv_height": 16,
+			"particle": false,
+			"use_as_default": false,
+			"layers_enabled": false,
+			"sync_to_project": "",
+			"render_mode": "default",
+			"render_sides": "auto",
+			"frame_time": 1,
+			"frame_order_type": "loop",
+			"frame_order": "",
+			"frame_interpolate": false,
+			"visible": true,
+			"internal": true,
+			"saved": false,
+			"uuid": "6576aaf6-9b48-4e96-91cd-5632f88ec837",
+			"relative_path": "",
+			"source": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAZ0lEQVR4nGNgwAMCKoz+gzA+NUwMFAJGdIGeFJv/cnIiDOcuP2K4oQwR07jLwCDCz8UAEg+r28CI1wVyUM0gDVFcciiaQeIEvXAOqhnZIGQ2QQNE8GgGsQkaIIdH86gXHg3XWBh4AABPHWVDPeiULwAAAABJRU5ErkJggg=="
+		}
+	],
+	"variable_placeholders": "",
+	"variable_placeholder_buttons": [],
+	"timeline_setups": [],
+	"unhandled_root_fields": {},
+	"ai_used": true,
+	"ai_agents": "opencode"
+}

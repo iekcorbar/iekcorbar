@@ -10,8 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -19,11 +21,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Lightweight ItemJoin replacement for IekQuests: places custom items in the
- * player's inventory on join/respawn and triggers actions when clicked.
+ * player's crafting grid (2x2) on inventory open and triggers actions when clicked.
  * Each item is identified by a PDC key so clicks can be matched reliably.
  */
 final class InventoryItems implements Listener {
@@ -59,10 +60,13 @@ final class InventoryItems implements Listener {
         plugin.getLogger().info("Loaded " + items.size() + " inventory items.");
     }
 
-    /** Place all items in the player's inventory. Called on join/respawn. */
-    void give(Player p) {
+    /** Place all items in the crafting grid of the given inventory. */
+    void placeInCrafting(Inventory inv) {
+        if (inv == null || inv.getType() != InventoryType.CRAFTING) return;
         for (ItemDef def : items.values()) {
             if (def.slot() < 0) continue;
+            int slot = def.slot();
+            if (slot >= inv.getSize()) continue;
             ItemStack it = new ItemStack(def.material());
             ItemMeta m = it.getItemMeta();
             if (m != null) {
@@ -70,23 +74,45 @@ final class InventoryItems implements Listener {
                 m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, def.id());
                 it.setItemMeta(m);
             }
-            // Place in the correct slot (support CRAFTING slots via offset)
-            int slot = def.slot();
-            if (slot >= 0 && slot < p.getInventory().getSize()) {
-                p.getInventory().setItem(slot, it);
+            inv.setItem(slot, it);
+        }
+    }
+
+    /** Remove all our items from an inventory. */
+    void removeFromInventory(Inventory inv) {
+        if (inv == null) return;
+        for (int i = 0; i < inv.getSize(); i++) {
+            ItemStack it = inv.getItem(i);
+            if (it == null || it.getType().isAir()) continue;
+            ItemMeta m = it.getItemMeta();
+            if (m == null) continue;
+            if (m.getPersistentDataContainer().has(itemKey, PersistentDataType.STRING)) {
+                inv.setItem(i, null);
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onJoin(PlayerJoinEvent e) {
-        // Delay by a few ticks so the inventory is ready
-        Bukkit.getScheduler().runTaskLater(plugin, () -> give(e.getPlayer()), 5L);
+    /** Remove all inventory items from a player's main inventory (on quit or reset). */
+    void remove(Player p) {
+        removeFromInventory(p.getInventory());
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onRespawn(PlayerRespawnEvent e) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> give(e.getPlayer()), 5L);
+    public void onInventoryOpen(InventoryOpenEvent e) {
+        if (!(e.getPlayer() instanceof Player p)) return;
+        Inventory top = e.getInventory();
+        if (top.getType() == InventoryType.CRAFTING) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> placeInCrafting(top), 1L);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onInventoryClose(InventoryCloseEvent e) {
+        if (!(e.getPlayer() instanceof Player p)) return;
+        Inventory top = e.getInventory();
+        if (top.getType() == InventoryType.CRAFTING) {
+            removeFromInventory(top);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -130,18 +156,5 @@ final class InventoryItems implements Listener {
             }
         }
         p.playSound(p.getLocation(), org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, 0.5f, 1.2f);
-    }
-
-    /** Remove all inventory items from a player (on quit or reset). */
-    void remove(Player p) {
-        for (int i = 0; i < p.getInventory().getSize(); i++) {
-            ItemStack it = p.getInventory().getItem(i);
-            if (it == null || it.getType().isAir()) continue;
-            ItemMeta m = it.getItemMeta();
-            if (m == null) continue;
-            if (m.getPersistentDataContainer().has(itemKey, PersistentDataType.STRING)) {
-                p.getInventory().setItem(i, null);
-            }
-        }
     }
 }

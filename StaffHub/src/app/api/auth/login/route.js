@@ -45,6 +45,7 @@ export async function POST(req) {
   const body = await req.json().catch(() => ({}));
   const username = String(body.username || '').toLowerCase().trim();
   const password = String(body.password || '');
+  const totp = String(body.totp || '').trim();
   const generiek = Response.json({ error: 'Onjuze gebruikersnaam of wachtwoord' }, { status: 401 });
 
   if (!username || !password) return generiek;
@@ -67,6 +68,18 @@ export async function POST(req) {
       detail: pogingen + '/' + MAX_POEG + (nieuw.slot ? ' - op slot tot ' + new Date(nieuw.slot).toLocaleTimeString('nl-NL') : ''),
     });
     return generiek;
+  }
+
+  // 2FA check: if enabled, require TOTP code
+  if (u.totp_enabled && u.totp_secret) {
+    if (!totp) {
+      return Response.json({ ok: false, requires2fa: true }, { status: 200 });
+    }
+    const { verifyTotp } = await import('@/lib/auth');
+    if (!verifyTotp(u.totp_secret, totp)) {
+      logAudit(req, { area: 'login', actie: 'fout 2fa', wie: username, detail: 'ongeldige TOTP code' });
+      return Response.json({ error: 'Ongeldige 2FA code' }, { status: 401 });
+    }
   }
 
   // Gelukt: teller op nul en één regel in de log (wie komt erbij, vanaf waar).

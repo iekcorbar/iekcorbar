@@ -3,6 +3,7 @@ package com.iekcorbar.sakagura;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -61,6 +62,25 @@ final class Drunk implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
+    public void onConsume(PlayerItemConsumeEvent e) {
+        Player p = e.getPlayer();
+        ItemStack item = e.getItem();
+        // Hangover cure: milk or ginger removes hangover effects
+        if (item.getType() == Material.MILK_BUCKET || (plugin.goods().idOf(item) != null && plugin.goods().idOf(item).equals("ginger"))) {
+            if (p.hasPotionEffect(PotionEffectType.SLOWNESS) || p.hasPotionEffect(PotionEffectType.WEAKNESS) || p.hasPotionEffect(PotionEffectType.MINING_FATIGUE)) {
+                p.removePotionEffect(PotionEffectType.SLOWNESS);
+                p.removePotionEffect(PotionEffectType.WEAKNESS);
+                p.removePotionEffect(PotionEffectType.MINING_FATIGUE);
+                p.removePotionEffect(PotionEffectType.NAUSEA);
+                p.getPersistentDataContainer().set(peakKey, PersistentDataType.DOUBLE, 0.0);
+                set(p, Math.max(0, level(p) - 20));
+                p.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize("&aThe hangover fades. You feel better."));
+                p.playSound(p.getLocation(), "sakagura:drunk.sober", 0.8f, 1f);
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onDrink(PlayerItemConsumeEvent e) {
         Brew b = plugin.goods().brewOf(e.getItem());
         if (b == null) return;
@@ -95,6 +115,14 @@ final class Drunk implements Listener {
                 p.displayName(realNames.remove(p.getUniqueId()));
             }
             if (lv <= 0) continue;
+            // Action bar: drunk level indicator
+            if (lv >= 10) {
+                String stage = lv >= 80 ? "&4Wasted" : lv >= 60 ? "&cDrunk" : lv >= 30 ? "&eTipsy" : "&aBuzzed";
+                int bars = (int) (lv / 10);
+                StringBuilder bar = new StringBuilder();
+                for (int i = 0; i < 10; i++) bar.append(i < bars ? "█" : "░");
+                p.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize(stage + " &7" + bar + " &7" + (int) lv + "%"));
+            }
             double next = lv - decayPerMinute / 60.0;
             if (next <= 5 && lv > 5) {
                 double peak = p.getPersistentDataContainer().getOrDefault(peakKey, PersistentDataType.DOUBLE, 0.0);
@@ -188,6 +216,7 @@ final class Drunk implements Listener {
         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 2400, 0));
         p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 2400, 0));
         p.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 1200, 0));
+        p.sendActionBar(LegacyComponentSerializer.legacyAmpersand().deserialize("&cHangover! Drink ginger tea or milk to recover."));
         p.sendActionBar(Component.text("Ugh. A hangover.", NamedTextColor.GRAY));
     }
 

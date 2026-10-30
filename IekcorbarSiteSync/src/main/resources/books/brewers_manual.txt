@@ -25,6 +25,9 @@ by The Sakagura Guild
 &8Sake casks
 &8Quality and stars
 &8The garden
+&8Seasons
+&8The Sommelier
+&8Competitions
 &8Drinking
 &8First brew
 &8The live list
@@ -93,9 +96,14 @@ Twenty real minutes is one year, &ooffline too&r. Whiskey wants eighteen; umeshu
 ---
 &lSake casks&r
 
-Ten kinds, from honest oak to the lacquered &6copper cask&r (copper and iron). Recipes name the wood they want.
+Ten kinds of wood, from honest oak to the lacquered &6copper cask&r. Each wood gives a different flavour profile:
 
-Wrong-but-familiar woods (oak for dark oak) still count, just less. Hoppers work with casks too.
+&6Oak&r: robust, +20% intensity
+&6Cherry&r: sweet, +15% effect duration
+&6Acacia&r: spicy, extra effects
+&6Mangrove&r: intense, +25% potency
+
+Check &o/brew woods&r for all profiles.
 ---
 &lQuality&r
 
@@ -116,29 +124,67 @@ Check any recipe again with &o/zukan&r or the recipe book.
 ---
 &lThe garden&r
 
-Eleven crops, all here for a drink: barley, hops, grapes, ume plums, yuzu, peaches, cherries, strawberries, blueberries, juniper and ginger.
+Forty-eight crops, all here for a drink: from barley and hops to yuzu, mangoes, dragon fruit and more.
 
-Bushes and dwarf trees &6regrow&r when picked; barley and ginger are dug up and replanted.
+Bushes and dwarf trees &6regrow&r when picked; grains and ginger are dug up and replanted.
 ---
 &lThe garden&r
 
 Seeds come from the fruit itself - one fruit makes a couple of seeds.
 
 Wild patches grow &6ripe&r bushes in the biomes each plant likes. Go look.
+
+Ten orchard trees: Sakura, Ume, Apple, Orange, Red Maple, Cherry, Peach, Lemon, Fig, Walnut. Plant a sapling on grass or dirt.
+---
+&lSeasons&r
+
+The garden follows the seasons. Every 7 real days, the season changes:
+
+&6Spring&r: cherry, ume, peach, strawberry, apricot, mikan, kiwi, tomato, raspberry, gooseberry
+&6Summer&r: yuzu, mango, papaya, guava, rambutan, longan, mangosteen, dragon fruit, passion fruit, vanilla, chili, maize
+&6Autumn&r: grape, apple, pear, persimmon, loquat, pomegranate, fig, quince, olive, date, lychee, elderberry, cranberry, mulberry, barley, rye, hops
+&6Winter&r: ginger, wasabi, daikon, rice, juniper, blueberry, blackcurrant, strawberry
+
+In-season crops grow fast. Out-of-season crops grow 30-70% slower. Check &o/brew season status&r.
+---
+&lThe Sommelier&r
+
+Found a Sommelier station? Right-click with a drink to get it evaluated.
+
+&610/10&r: "Magnificent!" - $100 + 5 elite coins + achievement
+&68-9/10&r: "Excellent!" - $50 + 2 elite coins
+&66-7/10&r: "Good, but not great." - $20 + 1 elite coin
+&6Below 6&r: honest feedback and tips
+
+The Sommelier also tells you what to improve: cooking time, distillation, aging.
+---
+&lCompetitions&r
+
+From time to time, a brewing competition starts. Brew your best drink and submit it:
+
+&6/brew comp submit&r (with drink in hand)
+&6/brew comp leaderboard&r (check standings)
+&6/brew comp status&r (time remaining)
+
+Scoring: quality x 10 + difficulty x 5. Top 3 win money, elite coins, and titles.
+
+Use &o/brew comp area we <name> protect&r (admin) to set up a competition arena with WorldEdit/WorldGuard.
 ---
 &lDrinking&r
 
 Good drinks give real effects: speed, strength, luck, night vision. Better quality, better effects, milder rough ones.
 
 Alcohol is a debt: you sway, slur, and at the limit you pass out and wake with a hangover.
+
+Check yourself with &o/brew drunk&r. The action bar shows your drunk level.
 ---
 &lDrinking&r
-
-Check yourself with &o/brew drunk&r.
 
 Two sneaking friends with drinks in hand will cheers - &o"Kanpai!"&r is a toast of its own.
 
 Pace yourself. The best brew is the one you remember.
+
+Hangover cure: drink milk or ginger to recover.
 ---
 &lFirst brew&r
 
@@ -155,6 +201,8 @@ Pace yourself. The best brew is the one you remember.
 &8Red Wine&r and &8Hop Ale&r - a garden vineyard and hop field, years in oak.
 &8Whiskey&r - two runs, eighteen years in spruce.
 &8Steam Whisky&r - the copper cask showpiece.
+&8Seasonal brews&r - try brewing with in-season crops.
+&8Competitions&r - test your skills against other brewers.
 ---
 %%LIVE_RECIPES%%
 ---

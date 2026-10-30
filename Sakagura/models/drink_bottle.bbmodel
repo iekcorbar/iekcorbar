@@ -1,0 +1,504 @@
+{
+	"meta": {
+		"format_version": "5.0",
+		"model_format": "free",
+		"box_uv": false
+	},
+	"name": "Drink Bottle",
+	"model_identifier": "sakagura:drink_bottle",
+	"visible_box": [
+		1,
+		1,
+		0
+	],
+	"resolution": {
+		"width": 16,
+		"height": 16
+	},
+	"elements": [
+		{
+			"uuid": "8795aa5d-df8a-4ffb-bd45-e42cfeefc5dd",
+			"name": "body",
+			"origin": [
+				8,
+				5,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				5,
+				0,
+				5
+			],
+			"to": [
+				11,
+				10,
+				11
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						6,
+						10
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						6,
+						10
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						6,
+						10
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						6,
+						10
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						6,
+						6
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		},
+		{
+			"uuid": "a9494bd3-b0a3-436e-bdcf-e49cc97ead45",
+			"name": "body_bottom",
+			"origin": [
+				8,
+				1,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				4.5,
+				0,
+				4.5
+			],
+			"to": [
+				11.5,
+				2,
+				11.5
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						7,
+						2
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						7,
+						2
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						7,
+						2
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						7,
+						2
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						7,
+						7
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						7,
+						7
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		},
+		{
+			"uuid": "acf108cf-b243-46f0-a1e6-de27a8fdad3e",
+			"name": "neck",
+			"origin": [
+				8,
+				12,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				6.5,
+				10,
+				6.5
+			],
+			"to": [
+				9.5,
+				14,
+				9.5
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						3,
+						4
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						3,
+						4
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						3,
+						4
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						3,
+						4
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						3,
+						3
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						3,
+						3
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		},
+		{
+			"uuid": "cb36b274-e067-411b-80cf-18b9dd6ebab0",
+			"name": "lip",
+			"origin": [
+				8,
+				14.5,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				6,
+				14,
+				6
+			],
+			"to": [
+				10,
+				15,
+				10
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						4,
+						1
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						4,
+						1
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						4,
+						1
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						4,
+						1
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						4,
+						4
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						4,
+						4
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		},
+		{
+			"uuid": "fb427f17-6ee5-44f7-92db-d3570a2d5a9a",
+			"name": "cork",
+			"origin": [
+				8,
+				15.75,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				6.5,
+				15,
+				6.5
+			],
+			"to": [
+				9.5,
+				16.5,
+				9.5
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						3,
+						1.5
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						3,
+						1.5
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						3,
+						1.5
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						3,
+						1.5
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						3,
+						3
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						3,
+						3
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		},
+		{
+			"uuid": "e97de115-f9ba-45cc-8b24-b56de1de1b92",
+			"name": "liquid",
+			"origin": [
+				8,
+				5,
+				8
+			],
+			"color": 0,
+			"type": "cube",
+			"from": [
+				5.5,
+				1,
+				5.5
+			],
+			"to": [
+				10.5,
+				9,
+				10.5
+			],
+			"box_uv": false,
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						5,
+						8
+					]
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						5,
+						8
+					]
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						5,
+						8
+					]
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						5,
+						8
+					]
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						5,
+						5
+					]
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						5,
+						5
+					]
+				}
+			},
+			"rescale": false,
+			"locked": false,
+			"light_emission": 0,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"autouv": 0
+		}
+	],
+	"groups": [],
+	"outliner": [
+		"8795aa5d-df8a-4ffb-bd45-e42cfeefc5dd",
+		"a9494bd3-b0a3-436e-bdcf-e49cc97ead45",
+		"acf108cf-b243-46f0-a1e6-de27a8fdad3e",
+		"cb36b274-e067-411b-80cf-18b9dd6ebab0",
+		"fb427f17-6ee5-44f7-92db-d3570a2d5a9a",
+		"e97de115-f9ba-45cc-8b24-b56de1de1b92"
+	],
+	"textures": [],
+	"variable_placeholders": "",
+	"variable_placeholder_buttons": [],
+	"timeline_setups": [],
+	"unhandled_root_fields": {},
+	"ai_used": true,
+	"ai_agents": "opencode"
+}

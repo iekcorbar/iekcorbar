@@ -5,7 +5,7 @@ api-version: '26.2'
 description: New wildlife next to the vanilla animals, a Field Journal and a Wildlife advancement tab.
 author: iekcorbar
 depend: [FreeMinecraftModels]
-softdepend: [Vault, CMI]
+softdepend: [Vault, CMI, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Zukan]
 
 commands:
   wildlife:
@@ -27,3 +27,4 @@ permissions:
   wildlife.use:
     description: Use basic wildlife commands (journal, stats, list, find, tamed)
     default: true
+

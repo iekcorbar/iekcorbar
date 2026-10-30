@@ -8,7 +8,7 @@
     <artifactId>Sakagura</artifactId>
     <!-- Brewing + fruit garden: cauldron, distilling, cask aging, quality, drunkenness; new crops.
          Replaces the old Brewery plugin; own code, recipes based on the iekcorbar.com /brewing recipes. -->
-    <version>0.5.0</version>
+    <version>0.7.7</version>
     <packaging>jar</packaging>
 
     <name>Sakagura</name>
@@ -25,6 +25,10 @@
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>enginehub-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -39,6 +43,20 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.10.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- WorldEdit (soft dependency - optional, for competition area selection) -->
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- WorldGuard (soft dependency - optional, for competition area protection) -->
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.9</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

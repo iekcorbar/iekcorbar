@@ -15,7 +15,12 @@ enum Tree {
     UME("Ume Plum", "ume", false, false),
     APPLE("Apple", "apple", false, false),
     ORANGE("Orange", "mikan", false, false),
-    MAPLE("Red Maple", null, false, true);
+    MAPLE("Red Maple", null, false, true),
+    CHERRY("Cherry", "cherry", false, false),
+    PEACH("Peach", "peach", false, false),
+    LEMON("Lemon", "yuzu", false, false),
+    FIG("Fig", "fig", false, false),
+    WALNUT("Walnut", "olive", false, false);
 
     final String displayName;
     /** The Fruit produce id the ripe canopy drops, or null for the decorative maple. */

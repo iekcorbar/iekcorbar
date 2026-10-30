@@ -430,8 +430,19 @@ final class Kinetics {
 
     // ------------------------------------------------------------ rebuilding
 
-    /** Rebuilds every network touched since the last tick. */
+    /** Rebuilds every network touched since the last tick.
+     *  Dirty threshold: very small changes (1-2 nodes) are deferred to the next
+     *  tick to batch them and reduce rebuild frequency. */
+    private int dirtyThreshold = 3;
+    private int deferredRounds = 0;
+
     void processDirty() {
+        // Defer small changes: if fewer than threshold nodes are dirty, wait one round
+        if (dirty.size() < dirtyThreshold && deferredRounds < 2) {
+            deferredRounds++;
+            return;
+        }
+        deferredRounds = 0;
         for (int round = 0; round < 8 && !dirty.isEmpty(); round++) {
             ArrayDeque<KNode> seeds = new ArrayDeque<>(dirty);
             dirty.clear();

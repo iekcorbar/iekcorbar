@@ -17,6 +17,11 @@ Sakagura 0.5.0 added real trees to the garden. A sapling is planted with a right
 | Apple | 2-4 Apples | Apples + 2 Sticks | A classic, with bigger yields than the bush |
 | Orange | 2-4 Mikan Oranges | Mikan Oranges + 2 Sticks | Glossy green canopy |
 | Red Maple | none | 2 Red Mushrooms + 2 Sticks | Pure decoration - golden sparkles in autumn colours |
+| Cherry | 2-4 Cherries | Cherries + 2 Sticks | A smaller, denser canopy than the sakura |
+| Peach | 2-3 Peaches | Peaches + 2 Sticks | Pink blossoms, fuzzy fruit |
+| Lemon | 2-4 Yuzu | Yuzu + 2 Sticks | Glossy dark canopy, tart fruit |
+| Fig | 2-3 Figs | Figs + 2 Sticks | Broad leaves, sweet purple fruit |
+| Walnut | none | Olives + 2 Sticks | Pure decoration - broad canopy, no fruit |
 
 ### Picking and felling
 

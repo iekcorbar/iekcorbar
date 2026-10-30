@@ -4,7 +4,7 @@ main: com.iekcorbar.afkcinema.AfkCinemaPlugin
 api-version: '26.2'
 author: iekcorbar
 description: 'AFK cinema: a camera orbits your character while you are away, plus recordable camera paths.'
-softdepend: [Citizens]
+softdepend: [Citizens, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 commands:
   cine:
     description: 'Cinema: /cine afk [player] · stop · auto · menu · screen · record <path> · pad · reload'
@@ -17,3 +17,4 @@ permissions:
   afkcinema.admin:
     default: op
     description: Film other players, record and delete camera paths, reload.
+

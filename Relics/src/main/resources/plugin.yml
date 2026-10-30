@@ -4,6 +4,7 @@ main: com.iekcorbar.relics.RelicsPlugin
 api-version: '26.2'
 description: Lore relics - placeable props from the story of Iekcorbar.
 author: iekcorbar
+softdepend: [AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 
 commands:
   relics:
@@ -24,3 +25,4 @@ permissions:
   relics.build:
     description: See, remove and control placed relics (where, info, remove, board, music)
     default: op
+
