@@ -3030,10 +3030,10 @@ function ModerationContent() {
                                       {isAdmin && !member.isPending && (
                                         <button
                                           onClick={() => { setGdprError(''); setGdprDeleteConfirm(member); }}
-                                          className="px-2 py-0.5 border border-crimson/40 hover:bg-crimson text-[9px] uppercase font-bold rounded-sm text-rose-300 hover:text-white transition-colors cursor-pointer"
+                                          className="px-2.5 py-1 border border-crimson/60 bg-crimson/10 hover:bg-crimson text-[9px] uppercase font-bold rounded text-rose-300 hover:text-white cursor-pointer transition-all flex items-center gap-1"
                                           title="Permanently delete this account (GDPR erasure request)"
                                         >
-                                          Delete
+                                          <Trash2 className="w-3 h-3" /> Delete
                                         </button>
                                       )}
                                     </>
