@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Bold, Italic, Strikethrough, Heading1, Heading2, Heading3, List, ListOrdered, Quote, Code, Undo, Redo, Link2, ImagePlus, Save } from 'lucide-react';
 import { useLang, trServer } from '@/lib/i18n';
 import { GidsWeergave } from '@/components/Vertaal';
+import TagSuggester from '@/components/TagSuggester';
 
 const BTN = 'p-1.5 rounded hover:bg-white/10 text-parch/70';
 
@@ -209,6 +210,7 @@ export default function PageEditor({ node, onRenamed }) {
         <I icon={Redo} className={BTN} onClick={() => editor.chain().focus().redo().run()} />
       </div>
       {err && <p className="text-red-300 text-xs px-3 pt-2">{err}</p>}
+      {node?.id && <div className="px-3 pt-2"><TagSuggester node={node.id} text={editor?.getText() || ''} name={node.name || ''} /></div>}
       <div className="flex-1 overflow-auto px-3 py-2">
         <EditorContent editor={editor} className="prose-hub min-h-full" />
       </div>
