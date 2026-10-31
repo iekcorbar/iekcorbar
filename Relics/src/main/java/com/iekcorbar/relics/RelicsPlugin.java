@@ -120,6 +120,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         return sb.toString();
     }
     private Relics relics;
+    private RelicsMenu menu;
     private Treats treats;
     private Discs discs;
     private Adv adv;
@@ -136,6 +137,8 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         treats = new Treats(this);
         relics = new Relics(this);
         getServer().getPluginManager().registerEvents(relics, this);
+        menu = new RelicsMenu(this, relics);
+        getServer().getPluginManager().registerEvents(menu, this);
         getServer().getPluginManager().registerEvents(treats, this);
         getServer().getPluginManager().registerEvents(relics.jukebox(), this);
         getServer().getPluginManager().registerEvents(relics.giftBoxes(), this);
@@ -212,6 +215,10 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender s, Command cmd, String label, String[] a) {
+        if ((a.length == 0 || a[0].equalsIgnoreCase("menu")) && s instanceof Player mp) {
+            menu.open(mp);
+            return true;
+        }
         String sub = a.length == 0 ? "list" : a[0].toLowerCase(Locale.ROOT);
         if (sub.equals("giveall")) {
             if (denied(s, "relics.give")) return true;
