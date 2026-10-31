@@ -898,7 +898,8 @@ final class Props implements Listener {
         else inResult.setAmount(inResult.getAmount() + result.getAmount());
         // seasonal achievements
         String rid = r.id();
-        String ach = rid.equals("takenoko_gohan") ? "spring_dish" : rid.equals("hiyashi_chuka") ? "summer_dish" : rid.equals("matsutake_soup") ? "autumn_dish" : rid.equals("yaki_imo") ? "winter_dish" : null;
+        String ach = rid.equals("takenoko_gohan") ? "spring_dish" : rid.equals("hiyashi_chuka") ? "summer_dish" : rid.equals("matsutake_soup") ? "autumn_dish" : rid.equals("yaki_imo") ? "winter_dish"
+            : rid.equals("sansai_salad") ? "spring_salad" : rid.equals("somen") ? "summer_somen" : rid.equals("kinoko_rice") ? "autumn_kinoko" : rid.equals("zoni") ? "winter_zoni" : null;
         if (ach != null) for (Player near : p.world.getNearbyPlayers(p.center(), 6)) plugin.adv().grant(near, ach);
         p.progress = 0;
         p.world.playSound(top, r.container() == Material.GLASS_BOTTLE ? "kitchen:pour" : "minecraft:block.brewing_stand.brew", 0.6f, r.container() == Material.GLASS_BOTTLE ? 1f : 1.3f);

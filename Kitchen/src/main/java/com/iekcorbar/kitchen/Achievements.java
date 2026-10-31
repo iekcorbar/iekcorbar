@@ -57,6 +57,10 @@ a.add("spring_dish", "harvest", "bamboo", "Spring Bamboo", "Cook takenoko gohan 
 a.add("summer_dish", "harvest", "water_bucket", "Summer Noodles", "Cook hiyashi chuka in summer.", "task").hidden();
 a.add("autumn_dish", "harvest", "brown_mushroom", "Autumn Harvest", "Cook matsutake soup in autumn.", "task").hidden();
 a.add("winter_dish", "harvest", "campfire", "Winter Warmth", "Cook yaki imo in winter.", "task").hidden();
+a.add("spring_salad", "harvest", "green_dye", "Spring Salad", "Cook sansai salad in spring.", "task").hidden();
+a.add("summer_somen", "harvest", "water_bucket", "Summer Somen", "Cook somen in summer.", "task").hidden();
+a.add("autumn_kinoko", "harvest", "brown_mushroom", "Autumn Kinoko", "Cook kinoko rice in autumn.", "task").hidden();
+a.add("winter_zoni", "harvest", "snowball", "Winter Zoni", "Cook zoni in winter.", "task").hidden();
         a.add("tatami", "pot", "brown_carpet", "Tatami Floor", "Get a Tatami Mat.", "task");
         a.add("tears", "cut", "wheat_seeds", "Too Many Tears", "Slice ten daikon in a row.", "task").hidden();
         a.add("plain", "seeds", "bowl", "Plain. Bold.", "Put only rice in a cooking pot.", "task").hidden();

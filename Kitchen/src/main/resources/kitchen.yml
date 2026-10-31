@@ -105,6 +105,29 @@ cooking:
     result: kitchen:tempura x2
     seconds: 12
     season: winter
+  # ---- more seasonal ----
+  sansai_salad:
+    ingredients: [kitchen:shiso_leaves, kitchen:mizuna, kitchen:green_onion]
+    result: kitchen:cabbage_leaf x2
+    seconds: 4
+    season: spring
+  somen:
+    ingredients: [kitchen:raw_noodles, kitchen:raw_noodles, kitchen:soy_sauce]
+    container: BOWL
+    result: kitchen:ramen
+    seconds: 6
+    season: summer
+  kinoko_rice:
+    ingredients: [kitchen:shiitake, kitchen:rice, kitchen:rice]
+    result: kitchen:steamed_rice x2
+    seconds: 10
+    season: autumn
+  zoni:
+    ingredients: [kitchen:mochi, kitchen:dashi, kitchen:dashi]
+    container: BOWL
+    result: kitchen:miso_soup
+    seconds: 12
+    season: winter
   tamagoyaki:
     ingredients: [EGG, EGG, SUGAR]
     result: kitchen:tamagoyaki
