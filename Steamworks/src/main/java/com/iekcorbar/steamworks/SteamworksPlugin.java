@@ -110,6 +110,12 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
             customParts.register(flywheel);
             customParts.register(sieve);
             getLogger().info("Steamworks Power enabled - 5 machines registered.");
+        // Register power command
+        com.iekcorbar.power.PowerCommand pcmd = new com.iekcorbar.power.PowerCommand(this);
+        getCommand("swpower").setExecutor(pcmd);
+        getCommand("swpower").setTabCompleter(pcmd);
+        // Register Zukan data for power machines
+        getServer().getServicesManager().register(java.util.function.Supplier.class, new com.iekcorbar.power.ZukanData(this), this, org.bukkit.plugin.ServicePriority.Normal);
         } catch (Exception e) {
             getLogger().warning("Steamworks Power failed to enable: " + e.getMessage());
             e.printStackTrace();

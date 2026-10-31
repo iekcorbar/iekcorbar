@@ -19,6 +19,12 @@ press:
     - {input: CLAY, output: [BRICK 4]}
     - {input: HAY_BLOCK, output: [LEATHER 1, HAY_BLOCK 1 50%]}
     - {input: SNOW_BLOCK 4, output: [PACKED_ICE 2]}
+    # Kitchen cross-plugin: press crops into processed ingredients
+    - {input: wheat 3, output: [PAPER 1]}
+    - {input: kitchen:rice 2, output: [kitchen:rice_bread 1]}
+    - {input: kitchen:soybeans 3, output: [kitchen:tofu 1]}
+    # Sakagura cross-plugin: press fruit into juice
+    - {input: minecraft:apple 4, output: [minecraft:apple 1 50%]}
 
 ticker:
   # How many stock tickers one player may have counting in the same chunk (the plates cost nothing,

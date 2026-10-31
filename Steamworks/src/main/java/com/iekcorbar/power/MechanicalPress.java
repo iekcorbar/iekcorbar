@@ -70,6 +70,16 @@ public final class MechanicalPress implements CustomPart {
     /** "IRON_ORE", "sw:zinc_nugget" -> a stack to match/produce, or null. */
     private ItemStack resolve(String token) {
         if (token.startsWith("sw:")) return plugin.customParts().steamworksItem("material/" + token.substring(3));
+        if (token.startsWith("kitchen:")) {
+            try {
+                Class<?> kb = Class.forName("com.iekcorbar.steamworks.KitchenBridge");
+                java.lang.reflect.Method create = kb.getMethod("create", String.class, int.class);
+                Object result = create.invoke(null, token.substring(8), 1);
+                if (result instanceof ItemStack) return (ItemStack) result;
+            } catch (Exception ignored) {
+            }
+            return null;
+        }
         Material m = Material.matchMaterial(token);
         return m == null || !m.isItem() ? null : new ItemStack(m);
     }

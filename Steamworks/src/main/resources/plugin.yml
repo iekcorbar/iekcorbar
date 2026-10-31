@@ -11,6 +11,10 @@ commands:
     description: Steamworks admin commands
     usage: /steamworks <give|info|list|reload>
     aliases: [sw]
+   swpower:
+     description: Steamworks Power commands
+     usage: /swpower <list|give|reload>
+     aliases: [pwr, swp]
 
 permissions:
   steamworks.admin:
