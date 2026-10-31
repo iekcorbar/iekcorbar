@@ -1,5 +1,5 @@
-// Prullenbak: "wissen" is hier terugdraaibaar. Items verhuizen naar een
-// root-map 'Prullenbak'; hun thuisbasis (parent + naam) blijft staan in de
+// Trashbin: "wissen" is hier terugdraaibaar. Items verhuizen naar een
+// root-map 'Trashbin'; hun thuisbasis (parent + naam) blijft staan in de
 // meta-tabel onder 'trash:<id>' — precies genoeg om ze later terug te zetten.
 // Pas 'legenen' maakt ze echt weg (deleteNodeTree + gcBlobs zoals toen).
 import { getDb, findChild, uniqueName, now, deleteNodeTree, gcBlobs } from '@/lib/db';
@@ -8,7 +8,7 @@ import { canWrite, canSee, visibleChildren, may } from '@/lib/acl';
 
 export const dynamic = 'force-dynamic';
 
-const NAAM = 'Prullenbak';
+const NAAM = 'Trashbin';
 
 function trashNode(d, u) {
   let f = findChild(null, NAAM);
