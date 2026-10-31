@@ -43,6 +43,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
     private Chains chains;
     private PowerPlants plants;
     private Crushers crushers;
+    public com.iekcorbar.power.MechanicalPress press;
     private Adv adv;
     private EasterEggs eggs;
     private final ExtParts customParts = new ExtParts(this);
@@ -96,6 +97,23 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         plants = new PowerPlants(this);
         crushers = new Crushers(this);
         crushers.load(new File(getDataFolder(), "machines.yml"));
+        // Steamworks Power add-on (integrated)
+        try {
+            com.iekcorbar.power.WaterTurbine turbine = new com.iekcorbar.power.WaterTurbine(this);
+            press = new com.iekcorbar.power.MechanicalPress(this);
+            com.iekcorbar.power.StockTicker ticker = new com.iekcorbar.power.StockTicker(this);
+            com.iekcorbar.power.Flywheel flywheel = new com.iekcorbar.power.Flywheel(this);
+            com.iekcorbar.power.SieveFunnel sieve = new com.iekcorbar.power.SieveFunnel(this);
+            customParts.register(turbine);
+            customParts.register(press);
+            customParts.register(ticker);
+            customParts.register(flywheel);
+            customParts.register(sieve);
+            getLogger().info("Steamworks Power enabled - 5 machines registered.");
+        } catch (Exception e) {
+            getLogger().warning("Steamworks Power failed to enable: " + e.getMessage());
+            e.printStackTrace();
+        }
         adv = Achievements.create(this);
         adv.start();
         eggs = new EasterEggs(this);

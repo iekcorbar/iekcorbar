@@ -146,9 +146,9 @@ final class Achievements {
         a.add("hunt_hundred", "hunt_fifty", "trident", "Centurion", "Hunt one hundred animals in total.", "challenge").hidden();
 
         // photography
-        a.add("first_photo", "root", "camera", "Say Cheese", "Take your first wildlife photo.", "task").hidden();
+        a.add("first_photo", "root", "spyglass", "Say Cheese", "Take your first wildlife photo.", "task").hidden();
         a.add("photographer", "first_photo", "filled_map", "Wildlife Photographer", "Take photos of five different species.", "goal").hidden();
-        a.add("master_photographer", "photographer", "map", "Master Photographer", "Take photos of ten different species.", "challenge").hidden().global();
+        a.add("master_photographer", "photographer", "filled_map", "Master Photographer", "Take photos of ten different species.", "challenge").hidden().global();
 
         // conservation
         a.add("first_rescue", "root", "lead", "Animal Rescue", "Rescue a trapped animal.", "task").hidden();
