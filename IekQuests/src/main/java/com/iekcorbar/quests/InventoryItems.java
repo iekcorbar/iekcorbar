@@ -13,6 +13,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -67,6 +69,39 @@ final class InventoryItems implements Listener {
         plugin.getLogger().info("Loaded " + items.size() + " inventory items.");
     }
 
+    private ItemStack build(ItemDef def) {
+        ItemStack it = new ItemStack(def.material());
+        ItemMeta m = it.getItemMeta();
+        if (m != null) {
+            m.setDisplayName(def.name().replace("&", "§"));
+            m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, def.id());
+            it.setItemMeta(m);
+        }
+        return it;
+    }
+
+    private boolean isOurs(ItemStack it) {
+        return it != null && it.hasItemMeta()
+                && it.getItemMeta().getPersistentDataContainer().has(itemKey, PersistentDataType.STRING);
+    }
+
+    /** Vanilla rekent het resultaatvak (slot 0) bij elke rasterwijziging opnieuw uit: zet daar ons slot-0-item. */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPrepare(PrepareItemCraftEvent e) {
+        if (e.getInventory().getType() != InventoryType.CRAFTING) return;
+        boolean ours = false;
+        for (ItemStack it : e.getInventory().getMatrix()) if (isOurs(it)) { ours = true; break; }
+        if (!ours) return;
+        ItemDef zero = null;
+        for (ItemDef d : items.values()) if (d.slot() == 0) { zero = d; break; }
+        e.getInventory().setResult(zero == null ? null : build(zero));
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCraft(CraftItemEvent e) {
+        if (isOurs(e.getCurrentItem())) e.setCancelled(true);
+    }
+
     /** Place all items in the crafting grid of the given inventory. */
     void placeInCrafting(Inventory inv) {
         if (inv == null || inv.getType() != InventoryType.CRAFTING) return;
@@ -74,13 +109,7 @@ final class InventoryItems implements Listener {
             if (def.slot() < 0) continue;
             int slot = def.slot();
             if (slot >= inv.getSize()) continue;
-            ItemStack it = new ItemStack(def.material());
-            ItemMeta m = it.getItemMeta();
-            if (m != null) {
-                m.setDisplayName(def.name().replace("&", "\u00a7"));
-                m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, def.id());
-                it.setItemMeta(m);
-            }
+            ItemStack it = build(def);
             inv.setItem(slot, it);
         }
     }
