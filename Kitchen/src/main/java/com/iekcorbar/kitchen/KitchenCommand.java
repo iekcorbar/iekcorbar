@@ -110,6 +110,51 @@ final class KitchenCommand implements TabExecutor {
                 plugin.reload();
                 s.sendMessage(Component.text("Kitchen config and recipes reloaded.", NamedTextColor.GREEN));
             }
+            case "comp", "competition" -> {
+                boolean admin = s.hasPermission("kitchen.admin");
+                if (a.length < 2) {
+                    s.sendMessage(Component.text("/" + label + " comp start <days> [theme] | stop | status | submit | leaderboard", NamedTextColor.RED));
+                    return true;
+                }
+                switch (a[1].toLowerCase(Locale.ROOT)) {
+                    case "start" -> {
+                        if (!admin) return noPerm(s);
+                        int days = 7;
+                        try { if (a.length > 2) days = Math.max(1, Integer.parseInt(a[2])); } catch (NumberFormatException ignored) { }
+                        String theme = a.length > 3 ? a[3] : "any";
+                        if (plugin.competition().start(s instanceof Player p ? p : null, days, theme)) {
+                            s.sendMessage(Component.text("Cooking competition started! Theme: " + theme + ", " + days + " days.", NamedTextColor.GREEN));
+                        } else {
+                            s.sendMessage(Component.text("A competition is already running.", NamedTextColor.RED));
+                        }
+                    }
+                    case "stop" -> {
+                        if (!admin) return noPerm(s);
+                        if (plugin.competition().stop()) {
+                            s.sendMessage(Component.text("Competition stopped. Giving rewards...", NamedTextColor.GREEN));
+                            plugin.competition().giveRewards();
+                        } else {
+                            s.sendMessage(Component.text("No competition running.", NamedTextColor.RED));
+                        }
+                    }
+                    case "status" -> s.sendMessage(plugin.competition().statusLine());
+                    case "submit" -> {
+                        if (!(s instanceof Player p)) { s.sendMessage(Component.text("Only players can submit.", NamedTextColor.RED)); return true; }
+                        String result = plugin.competition().submit(p, p.getInventory().getItemInMainHand());
+                        s.sendMessage(Component.text(result, result.startsWith("Submitted") ? NamedTextColor.GREEN : NamedTextColor.RED));
+                    }
+                    case "leaderboard", "lb" -> {
+                        java.util.List<Competition.LeaderEntry> lb = plugin.competition().leaderboard();
+                        s.sendMessage(Component.text("=== Cooking Competition Leaderboard ===", NamedTextColor.GOLD));
+                        for (int i = 0; i < Math.min(10, lb.size()); i++) {
+                            Competition.LeaderEntry e = lb.get(i);
+                            s.sendMessage(Component.text("#" + (i + 1) + " " + e.playerName + " - " + e.itemName + " (" + e.nutrition + " nut, " + e.saturation + " sat) score " + (int) e.score, NamedTextColor.GRAY));
+                        }
+                        if (lb.isEmpty()) s.sendMessage(Component.text("No entries yet.", NamedTextColor.GRAY));
+                    }
+                    default -> s.sendMessage(Component.text("Unknown subcommand. Use: start, stop, status, submit, leaderboard", NamedTextColor.RED));
+                }
+            }
             default -> {
                 s.sendMessage(Component.text("Kitchen - Japanese farming and cooking", NamedTextColor.GOLD));
                 s.sendMessage(Component.text("Grow rice, soybeans, napa cabbage, green onion, daikon, tea, corn, tomato,", NamedTextColor.GRAY));

@@ -43,6 +43,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     private Meals meals;
     private Recipes recipes;
     private KitchenDecor kitchenDecor;
+    private Competition competition;
 
     @Override
     public void onEnable() {
@@ -54,6 +55,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
         props = new Props(this);
         meals = new Meals(this);
         kitchenDecor = new KitchenDecor(this);
+        competition = new Competition(this);
         items.registerRecipes();
         adv = Achievements.create(this, items);
         adv.start();
@@ -115,6 +117,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
         crops.saveAll();
         props.saveAll(true);
         meals.saveAll();
+        if (competition != null) competition.stop();
         if (getServer().isStopping()) return; // displays are not persistent and vanish with the server
         for (World w : getServer().getWorlds()) for (Chunk c : w.getLoadedChunks()) meals.unloadChunk(c);
         crops.removeAllDisplays();
@@ -169,4 +172,5 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     Props props() { return props; }
     Meals meals() { return meals; }
     Recipes recipes() { return recipes; }
+Competition competition() { return competition; }
 }

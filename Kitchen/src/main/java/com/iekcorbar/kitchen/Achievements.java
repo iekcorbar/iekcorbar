@@ -52,6 +52,7 @@ final class Achievements {
         a.add("sushi_platter", "maki", "nautilus_shell", "Sushi Platter", "Make a sushi platter.", "goal");
         a.add("tea_set", "green_tea", "flower_pot", "Tea Ceremony", "Get a tea set.", "goal");
         a.add("shared", "sushi_platter", "cake", "Itadakimasu", "Take a bite from a meal that was put down on the table.", "goal");
+a.add("comp_winner", null, "nether_star", "Master Chef", "Win a cooking competition.", "challenge").glint().hidden();
         a.add("tatami", "pot", "brown_carpet", "Tatami Floor", "Get a Tatami Mat.", "task");
         a.add("tears", "cut", "wheat_seeds", "Too Many Tears", "Slice ten daikon in a row.", "task").hidden();
         a.add("plain", "seeds", "bowl", "Plain. Bold.", "Put only rice in a cooking pot.", "task").hidden();
