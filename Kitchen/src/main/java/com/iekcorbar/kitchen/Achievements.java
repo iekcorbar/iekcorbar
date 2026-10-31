@@ -53,6 +53,8 @@ final class Achievements {
         a.add("tea_set", "green_tea", "flower_pot", "Tea Ceremony", "Get a tea set.", "goal");
         a.add("shared", "sushi_platter", "cake", "Itadakimasu", "Take a bite from a meal that was put down on the table.", "goal");
 a.add("comp_winner", null, "nether_star", "Master Chef", "Win a cooking competition.", "challenge").glint().hidden();
+a.add("sake_pairing", "shared", "potion", "Sake Pairing", "Eat a meal while drunk from Sakagura sake.", "task").hidden();
+a.add("coop_cook", "shared", "campfire", "Two Cooks", "Cook a co-op recipe with a friend.", "task").hidden();
 a.add("xp_5", "harvest", "experience_bottle", "Skilled Cook", "Reach cooking level 5.", "task").hidden();
 a.add("xp_10", "xp_5", "enchanted_book", "Master of the Kitchen", "Reach cooking level 10.", "challenge").glint().hidden();
 a.add("spring_dish", "harvest", "bamboo", "Spring Bamboo", "Cook takenoko gohan in spring.", "task").hidden();

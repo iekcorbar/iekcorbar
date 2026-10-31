@@ -174,6 +174,19 @@ final class Items implements Listener {
             }
             default -> { }
         }
+        // Sakagura sake-pairing: if the player is drunk, food gives a bonus
+        try {
+            org.bukkit.plugin.Plugin sak = plugin.getServer().getPluginManager().getPlugin("Sakagura");
+            if (sak != null && sak.isEnabled()) {
+                org.bukkit.NamespacedKey drunkKey = new org.bukkit.NamespacedKey(sak, "drunk");
+                Integer drunkLevel = p.getPersistentDataContainer().get(drunkKey, org.bukkit.persistence.PersistentDataType.INTEGER);
+                if (drunkLevel != null && drunkLevel >= 30) {
+                    p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.REGENERATION, 120, 1));
+                    p.sendActionBar(Component.text("Sake pairing! The food tastes even better.", NamedTextColor.GOLD));
+                    plugin.adv().grant(p, "sake_pairing");
+                }
+            }
+        } catch (Exception ignored) { }
     }
 
     // ------------------------------------------------------------ recipes

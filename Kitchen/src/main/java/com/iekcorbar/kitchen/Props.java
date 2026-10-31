@@ -857,6 +857,14 @@ final class Props implements Listener {
             p.cooking = r.id();
             p.progress = 0;
         }
+        // co-op recipes need a second player nearby
+        if (r.coop()) {
+            List<Player> nearby = new ArrayList<>(p.world.getNearbyPlayers(p.center(), 6));
+            if (nearby.size() < 2) {
+                updateProgress(p, progressItem("Needs a second cook nearby", NamedTextColor.RED));
+                return;
+            }
+        }
         ItemStack container = p.inv.getItem(Prop.POT_CONTAINER);
         if (r.container() != null && (container == null || container.getType() != r.container() || plugin.items().typeOf(container) != null)) {
             updateProgress(p, progressItem("Needs a " + (r.container() == Material.BOWL ? "bowl" : "glass bottle"), NamedTextColor.GOLD));
@@ -903,6 +911,8 @@ final class Props implements Listener {
             if (rt != null) xpGain = Math.max(5, rt.nutrition * 2 + (int)(rt.saturation * 2));
         }
         for (Player near : p.world.getNearbyPlayers(p.center(), 6)) plugin.cookingXp().grant(near, xpGain);
+        // co-op achievement
+        if (r.coop()) for (Player near : p.world.getNearbyPlayers(p.center(), 6)) plugin.adv().grant(near, "coop_cook");
         // seasonal achievements
         String rid = r.id();
         String ach = rid.equals("takenoko_gohan") ? "spring_dish" : rid.equals("hiyashi_chuka") ? "summer_dish" : rid.equals("matsutake_soup") ? "autumn_dish" : rid.equals("yaki_imo") ? "winter_dish"

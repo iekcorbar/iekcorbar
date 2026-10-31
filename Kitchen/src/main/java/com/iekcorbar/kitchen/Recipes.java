@@ -34,7 +34,7 @@ final class Recipes {
 
     record Cut(String id, Ingredient input, List<Output> outputs) {}
 
-    record Cook(String id, List<Ingredient> ingredients, Material container, Output result, int ticks, String season) {}
+    record Cook(String id, List<Ingredient> ingredients, Material container, Output result, int ticks, String season, boolean coop) {}
 
     private final KitchenPlugin plugin;
     final List<Cut> cuts = new ArrayList<>();
@@ -77,7 +77,7 @@ final class Recipes {
                     if (ins.isEmpty() || ins.size() > 6) throw new IllegalArgumentException("needs 1-6 ingredients");
                     String c = s.getString("container");
                     Material container = c == null || c.equalsIgnoreCase("none") ? null : Material.valueOf(c.toUpperCase(Locale.ROOT));
-                    cooks.add(new Cook(id, ins, container, output(s.getString("result")), 20 * s.getInt("seconds", defaultSeconds), s.getString("season", "all")));
+                    cooks.add(new Cook(id, ins, container, output(s.getString("result")), 20 * s.getInt("seconds", defaultSeconds), s.getString("season", "all"), s.getBoolean("coop", false)));
                 } catch (Exception e) {
                     plugin.getLogger().warning("kitchen.yml: skipping cooking recipe " + id + " (" + e.getMessage() + ")");
                 }
