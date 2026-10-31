@@ -30,7 +30,7 @@ import java.util.function.Function;
  * covers crafting, trading, picking up and /give).
  */
 final class Adv implements Listener {
-    private record Def(String id, String parent, String icon, String title, String desc, String frame, boolean hidden, boolean glint) {
+    private record Def(String id, String parent, String icon, String title, String desc, String frame, boolean hidden, boolean glint, boolean global) {
     }
 
     private final JavaPlugin plugin;
@@ -58,20 +58,26 @@ final class Adv implements Listener {
 
     /** frame: task | goal | challenge. parent null = directly below the tab root. */
     Adv add(String id, String parent, String icon, String title, String desc, String frame) {
-        last = new Def(id, parent == null ? "root" : parent, icon, title, desc, frame, false, false);
+        last = new Def(id, parent == null ? "root" : parent, icon, title, desc, frame, false, false, false);
         defs.put(id, last);
         return this;
     }
 
     /** The advancement added last is hidden until earned. */
     Adv hidden() {
-        defs.put(last.id, last = new Def(last.id, last.parent, last.icon, last.title, last.desc, last.frame, true, last.glint));
+        defs.put(last.id, last = new Def(last.id, last.parent, last.icon, last.title, last.desc, last.frame, true, last.glint, last.global));
         return this;
     }
 
     /** The advancement added last gets an enchantment glint on its icon. */
     Adv glint() {
-        defs.put(last.id, last = new Def(last.id, last.parent, last.icon, last.title, last.desc, last.frame, last.hidden, true));
+        defs.put(last.id, last = new Def(last.id, last.parent, last.icon, last.title, last.desc, last.frame, last.hidden, true, last.global));
+        return this;
+    }
+
+    /** The advancement added last is globally announced to all players when earned. */
+    Adv global() {
+        defs.put(last.id, last = new Def(last.id, last.parent, last.icon, last.title, last.desc, last.frame, last.hidden, last.glint, true));
         return this;
     }
 
@@ -170,6 +176,15 @@ final class Adv implements Listener {
             if (root != null) for (String c : new ArrayList<>(p.getAdvancementProgress(root).getRemainingCriteria())) p.getAdvancementProgress(root).awardCriteria(c);
         }
         for (String c : new ArrayList<>(pr.getRemainingCriteria())) pr.awardCriteria(c);
+        // global announcement for important advancements
+        Def def = defs.get(id);
+        if (def != null && def.global()) {
+            Component msg = Component.text(p.getName() + " has earned the advancement ", net.kyori.adventure.text.format.NamedTextColor.GOLD)
+                    .append(Component.text("[" + def.title() + "]", net.kyori.adventure.text.format.NamedTextColor.GREEN));
+            for (Player online : Bukkit.getOnlinePlayers()) {
+                online.sendMessage(msg);
+            }
+        }
         for (Map.Entry<String, List<String>> en : composites.entrySet()) {
             if (en.getKey().equals(id) || en.getValue().contains(id) == false) continue;
             boolean all = true;

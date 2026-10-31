@@ -18,7 +18,7 @@ final class Achievements {
         a.add("first_sighting", "root", "spyglass", "First Sighting", "Record your first animal in the Field Journal.", "task");
         a.add("observer", "first_sighting", "book", "Patient Observer", "Record five different species.", "task");
         a.add("naturalist", "observer", "filled_map", "Naturalist", "Record half of all species.", "goal");
-        a.add("encyclopedia", "naturalist", "enchanted_book", "Living Encyclopedia", "Record every species.", "challenge");
+        a.add("encyclopedia", "naturalist", "enchanted_book", "Living Encyclopedia", "Record every species.", "challenge").global();
 
         // rare sightings
         a.add("first_rare", "first_sighting", "golden_apple", "Rare Find", "Record a rare colour variant.", "task").hidden();
@@ -87,7 +87,7 @@ final class Achievements {
         // ============================================================
         a.add("dragon_tame", "root", "coal", "Soot and Seat", "Tame a wild dragon with a lump of coal.", "goal");
         a.add("dragon_rider", "dragon_tame", "feather", "Up She Goes", "Ride a tamed dragon.", "goal");
-        a.add("dragon_flight", "dragon_rider", "elytra", "A New Machine in the Sky", "Fly a dragon above the clouds (Y 100+).", "challenge");
+        a.add("dragon_flight", "dragon_rider", "elytra", "A New Machine in the Sky", "Fly a dragon above the clouds (Y 100+).", "challenge").global();
         a.add("dragon_sit", "dragon_tame", "oak_sign", "Sit, Girl", "Teach a tamed dragon to sit.", "task");
         a.add("dragon_hoarder", "dragon_tame", "charcoal", "Two Seats", "Tame two different dragons.", "goal");
         a.add("dragon_caver", "dragon_rider", "deepslate", "Underground Express", "Ride a dragon below Y 40 - through the caverns it calls home.", "goal");
@@ -140,7 +140,7 @@ final class Achievements {
         // ============================================================
         a.add("first_hunt", "root", "iron_sword", "First Blood", "Hunt your first wild animal.", "task").hidden();
         a.add("hunter", "first_hunt", "bow", "Hunter", "Hunt five different species.", "goal").hidden();
-        a.add("master_hunter", "hunter", "crossbow", "Master Hunter", "Hunt ten different species.", "challenge").hidden();
+        a.add("master_hunter", "hunter", "crossbow", "Master Hunter", "Hunt ten different species.", "challenge").hidden().global();
         a.add("hunt_ten", "first_hunt", "arrow", "Ten Down", "Hunt ten animals in total.", "task").hidden();
         a.add("hunt_fifty", "hunt_ten", "spectral_arrow", "Fifty Down", "Hunt fifty animals in total.", "goal").hidden();
         a.add("hunt_hundred", "hunt_fifty", "trident", "Centurion", "Hunt one hundred animals in total.", "challenge").hidden();
@@ -148,12 +148,12 @@ final class Achievements {
         // photography
         a.add("first_photo", "root", "camera", "Say Cheese", "Take your first wildlife photo.", "task").hidden();
         a.add("photographer", "first_photo", "filled_map", "Wildlife Photographer", "Take photos of five different species.", "goal").hidden();
-        a.add("master_photographer", "photographer", "map", "Master Photographer", "Take photos of ten different species.", "challenge").hidden();
+        a.add("master_photographer", "photographer", "map", "Master Photographer", "Take photos of ten different species.", "challenge").hidden().global();
 
         // conservation
         a.add("first_rescue", "root", "lead", "Animal Rescue", "Rescue a trapped animal.", "task").hidden();
         a.add("conservationist", "first_rescue", "emerald", "Conservationist", "Rescue five animals.", "goal").hidden();
-        a.add("master_conservationist", "conservationist", "golden_apple", "Master Conservationist", "Rescue ten animals.", "challenge").hidden();
+        a.add("master_conservationist", "conservationist", "golden_apple", "Master Conservationist", "Rescue ten animals.", "challenge").hidden().global();
 
         // seasonal events
         a.add("spring_breeder", "root", "pink_petals", "Spring Breeder", "Breed an animal in spring.", "task").hidden();
@@ -164,7 +164,7 @@ final class Achievements {
         // ============================================================
         // 10. COMPOSITE: MASTER NATURALIST
         // ============================================================
-        a.add("master", "encyclopedia", "nether_star", "Master Naturalist", "Complete every Wildlife advancement.", "challenge").hidden().allOf(
+        a.add("master", "encyclopedia", "nether_star", "Master Naturalist", "Complete every Wildlife advancement.", "challenge").hidden().global().allOf(
                 "encyclopedia", "full_zoo", "dragon_flight", "multi_gen", "hoarder", "biome_master");
 
         NamespacedKey decor = new NamespacedKey(plugin, "decor");

@@ -3,6 +3,7 @@ package com.iekcorbar.wildlife;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,12 +27,14 @@ public final class WildlifePlugin extends JavaPlugin {
     private Ambience ambience;
     private Zoo zoo;
     private Molehills molehills;
+    private Rescue rescue;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         fmm = new Fmm(getLogger());
         molehills = new Molehills(this);
+        rescue = new Rescue(this);
         animals = new Animals(this);
         dragon = new DragonAI(this);
         spawner = new Spawner(this);
@@ -47,6 +50,7 @@ public final class WildlifePlugin extends JavaPlugin {
         pm.registerEvents(journal, this);
         pm.registerEvents(items, this);
         pm.registerEvents(molehills, this);
+        pm.registerEvents(rescue, this);
         items.registerRecipes();
         pm.registerEvents(zoo.decor, this);
         pm.registerEvents(zoo, this);
@@ -78,6 +82,7 @@ public final class WildlifePlugin extends JavaPlugin {
             }
             if (tick % 40 == 0) ambience.tick();
             if (tick % (20L * Math.max(1, getConfig().getInt("spawning.interval-seconds", 10))) == 0) spawner.tick();
+            if (tick % 20 == 0) for (Player p : getServer().getOnlinePlayers()) rescue.trySpawn(p, java.util.concurrent.ThreadLocalRandom.current());
         }, 5L, 5L);
         getServer().getScheduler().runTaskTimer(this, dragon::tick, 20L, 1L);   // riding and staying want every tick
         getLogger().info("Wildlife enabled with " + Species.values().length + " species.");
@@ -109,4 +114,5 @@ public final class WildlifePlugin extends JavaPlugin {
     Spawner spawner() { return spawner; }
     Journal journal() { return journal; }
     WildItems items() { return items; }
+    Rescue rescue() { return rescue; }
 }
