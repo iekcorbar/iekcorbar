@@ -17,7 +17,10 @@ enum CropType {
     CORN(KItem.CORN, KItem.CORN, 2, 4, null, 0, 0, false, -1),
     TOMATO(KItem.TOMATO, KItem.TOMATO, 1, 3, null, 0, 0, false, -1),
     CHILI(KItem.CHILI, KItem.CHILI, 1, 3, null, 0, 0, false, -1),
-    SESAME(KItem.SESAME_SEEDS, KItem.SESAME_SEEDS, 2, 3, null, 0, 0, false, -1);
+    SESAME(KItem.SESAME_SEEDS, KItem.SESAME_SEEDS, 2, 3, null, 0, 0, false, -1),
+    SHISO(KItem.SHISO_SEEDS, KItem.SHISO_LEAVES, 1, 2, KItem.SHISO_SEEDS, 0, 1, false, -1),
+    GINGER(KItem.GINGER, KItem.GINGER, 1, 2, null, 0, 0, false, -1),
+    WASABI(KItem.WASABI_ROOT, KItem.WASABI_ROOT, 1, 1, null, 0, 0, true, -1);
 
     static final int STAGES = 4;
 

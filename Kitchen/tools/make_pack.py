@@ -60,6 +60,9 @@ PALETTE = {
     "beet": (150, 30, 60), "brown": (120, 80, 50), "white": (250, 250, 250), "seed_dark": (70, 50, 36),
     "corn": (246, 206, 70), "corn_dark": (196, 150, 40), "tomato": (212, 50, 38), "chili": (176, 24, 20),
     "sesame": (240, 230, 200), "sesame_dark": (180, 160, 120),
+"shiso": (120, 60, 120), "shiso_green": (80, 160, 60), "shiso_dark": (60, 40, 90),
+"ginger": (220, 180, 100), "ginger_dark": (160, 120, 60),
+"wasabi": (60, 160, 60), "wasabi_dark": (40, 120, 40),
 }
 NAMES = list(PALETTE)
 assert len(NAMES) <= 256, len(NAMES)
@@ -239,6 +242,10 @@ def items():
     M["tomato"] = [box(5.6, 0, 5.6, 10.4, 4.4, 10.4, "tomato"), box(6.4, 0, 4.9, 9.6, 3.6, 5.6, "tomato"), box(4.9, 0.8, 6.4, 5.6, 3.6, 9.6, "tomato"), box(7.6, 4.4, 7.6, 8.4, 5.2, 8.4, "leaf_dark"), box(5.8, 4.9, 7.1, 10.2, 5.1, 8.9, "leaf")]
     M["chili"] = [box(7.6, 0.6, 7.4, 9, 5.2, 8.8, "chili"), box(7.4, 4.6, 7.2, 9.2, 5.4, 9, "chili"), box(8, 5.2, 7.8, 8.6, 6.4, 8.4, "leaf"), box(5, 0.4, 5.6, 6.2, 4.2, 6.8, "chili"), box(5.4, 4, 5.2, 6, 5, 6, "leaf")]
     M["sesame_seeds"] = pile("sesame", "sesame_dark", 11, 9)
+    M["shiso_seeds"] = pile("shiso", "shiso_dark", 11, 10)
+    M["shiso_leaves"] = [box(4, 0, 4, 12, 1.2, 12, "shiso"), box(5, 1.2, 5, 11, 1.6, 11, "shiso_green")]
+    M["ginger"] = [box(5, 0, 6, 11, 2, 10, "ginger"), box(6, 2, 7, 10, 3, 9, "ginger_dark"), box(7, 0, 5, 9, 1, 6, "ginger")]
+    M["wasabi_root"] = [box(6, 0, 6, 10, 3, 10, "wasabi"), box(7, 3, 7, 9, 4, 9, "wasabi_dark")]
     M["cabbage_leaf"] = [box(4, 0, 5, 12, 0.6, 11, "cabbage_light"), box(5, 0.6, 6, 11, 0.8, 10, "leaf")]
     M["daikon_slices"] = disc(2.2, 0, 0.8, "daikon", cx=6, cz=8) + disc(2.2, 0.8, 1.6, "daikon", cx=8, cz=8) + disc(2.2, 0, 0.8, "daikon", cx=10, cz=8)
     M["chopped_green_onion"] = pile("negi", "negi_white", 10, 6)
@@ -530,10 +537,34 @@ def sprite(crop, stage, wild=False):
                 for y in range(max(1, hh - 5), hh):
                     put(px, x - 1, y, PALETTE["sesame"])
                     put(px, x + 1, y, PALETTE["sesame_dark"])
+    elif crop == "shiso":
+        leafy(px, rnd, h, PALETTE["shiso_green"], PALETTE["shiso_dark"], 6, 3)
+        if stage >= 2 or wild:
+            for _ in range(4 if stage == 3 else 2):
+                x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
+                for dx, dy in ((0, 0), (1, 0)):
+                    put(px, x + dx, y + dy, PALETTE["shiso"])
+    elif crop == "ginger":
+        for i in range(3):
+            x = 4 + i * 4
+            for y in range(0, min(4, h)):
+                put(px, x, y, PALETTE["ginger"] if (x + y) % 2 else PALETTE["ginger_dark"])
+                put(px, x + 1, y, PALETTE["ginger_dark"] if (x + y) % 2 else PALETTE["ginger"])
+        if stage >= 2 or wild:
+            for _ in range(3):
+                x, y = rnd.randint(2, 13), rnd.randint(0, 2)
+                put(px, x, y, PALETTE["leaf"]); put(px, x, y + 1, PALETTE["leaf_dark"])
+    elif crop == "wasabi":
+        rosette(px, rnd, [4, 6, 8, 9][min(stage, 3)] if not wild else 7, PALETTE["wasabi"], PALETTE["wasabi_dark"])
+        if stage >= 2 or wild:
+            for _ in range(3):
+                x, y = rnd.randint(3, 12), rnd.randint(0, max(1, h - 3))
+                put(px, x, y, PALETTE["wasabi_dark"])
+                put(px, x + 1, y, PALETTE["wasabi"])
     return png(px)
 
 
-CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame"]  # CropType order
+CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi"]  # CropType order
 
 # ------------------------------------------------------------------ sounds
 

@@ -24,7 +24,10 @@ enum KItem {
     TOMATO("Tomato", Kind.SEED, 2, 1.2f, Rem.NONE, 64, "Plant on farmland, or eat it straight off the vine."),
     CHILI("Chili Pepper", Kind.SEED, 1, 0.6f, Rem.NONE, 64, "Plant on farmland. Hot."),
     SESAME_SEEDS("Sesame Seeds", Kind.SEED, 1, 0.6f, Rem.NONE, 64, "Plant on farmland."),
-
+    SHISO_SEEDS("Shiso Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Purple or green leaves."),
+    SHISO_LEAVES("Shiso Leaves", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
+    GINGER("Ginger", Kind.SEED, 1, 0.8f, Rem.NONE, 64, "Plant on farmland. Spicy root."),
+    WASABI_ROOT("Wasabi Root", Kind.SEED, 2, 2.4f, Rem.NONE, 64, "Plant on wet farmland (next to water). Rare."),
     // ---- cut on the cutting board
     CABBAGE_LEAF("Cabbage Leaf", Kind.FOOD, 1, 0.6f, Rem.NONE, 64),
     DAIKON_SLICES("Daikon Slices", Kind.FOOD, 1, 1.2f, Rem.NONE, 64),
