@@ -10,6 +10,7 @@ import PageEditor from '@/components/PageEditor';
 import Dashboard from '@/components/Dashboard';
 import DeployChecklist from '@/components/DeployChecklist';
 import Navigation from '@/components/Navigation';
+import VersionHistory from '@/components/VersionHistory';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
 import Vertaal from '@/components/Vertaal';
@@ -343,6 +344,7 @@ useEffect(() => {
 <button title="Dashboard" onClick={() => setModal('dashboard')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><BarChart3 size={18} /></button>
 <button title="Deploy Checklist" onClick={() => setModal('deploy')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><ClipboardList size={18} /></button>
 <button title="Navigatie" onClick={() => setModal('nav')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><Star size={18} /></button>
+<button title="Versiegeschiedenis" onClick={() => setModal('versions')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><History size={18} /></button>
 <button title="Sync docs" onClick={async () => { const r = await fetch('/api/sync', { method: 'POST' }); const j = await r.json(); alert('Synced ' + (j.synced || 0) + ' files'); load(parent); }} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><RefreshCw size={18} /></button>
           {kan('users') && <button title={t('tip.accounts')} onClick={() => setModal('users')} className="p-1.5 rounded hover:bg-white/10"><Users className="size-4" /></button>}
           <button title={t('tip.logout')} onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); onLogout(); }} className="p-1.5 rounded hover:bg-white/10"><LogOut className="size-4" /></button>
@@ -534,6 +536,7 @@ useEffect(() => {
 {modal === 'dashboard' && <Dashboard onClose={() => setModal(null)} />}
 {modal === 'deploy' && <DeployChecklist onClose={() => setModal(null)} />}
 {modal === 'nav' && <Navigation onClose={() => setModal(null)} onOpen={(n) => { setSel(n); setModal(null); }} />}
+{modal === 'versions' && sel && <VersionHistory node={sel} onClose={() => setModal(null)} onRestore={() => { /* reload */ }} />}
       {modal === 'admin' && <AdminModal onClose={() => setModal(null)} me={me} openAccounts={() => setModal('users')} />}
       {modal === 'tokens' && <TokensModal onClose={() => setModal(null)} />}
       {archief && <ArchiveModal archief={archief} sluit={() => setArchief(null)} ververst={refresh} bewaar={arBewaar} />}
