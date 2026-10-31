@@ -82,6 +82,10 @@ PALETTE = {
 "enoki": (240, 230, 210), "enoki_dark": (200, 190, 170),
 "log": (120, 80, 50), "log_dark": (80, 50, 30), "log_light": (160, 110, 70),
 "enoki_bundle": (200, 190, 170), "enoki_bundle_dark": (160, 150, 130),
+"noodle_maker": (160, 120, 80), "noodle_maker_dark": (110, 80, 50),
+"udon": (240, 230, 200), "udon_dark": (200, 190, 160),
+"soba": (140, 100, 60), "soba_dark": (100, 70, 40),
+"ramen_noodles": (240, 230, 160), "ramen_noodles_dark": (200, 190, 120),
 }
 NAMES = list(PALETTE)
 assert len(NAMES) <= 256, len(NAMES)
@@ -438,6 +442,11 @@ def props():
                          box(4, 6, 4, 12, 7, 12, "shiitake"), box(5, 7, 5, 11, 7.5, 11, "shiitake_light")]
     M["enoki_bundle"] = [box(4, 0, 4, 12, 6, 12, "enoki_bundle"), box(5, 6, 5, 11, 7, 11, "enoki"),
                          box(6, 7, 6, 10, 8, 10, "enoki_dark")]
+    M["noodle_maker"] = [box(0, 0, 0, 16, 8, 16, "noodle_maker"), box(1, 8, 1, 15, 10, 15, "noodle_maker_dark"),
+                         box(4, 10, 4, 12, 12, 12, "wood_dark")]
+    M["udon"] = [box(4, 0, 5, 12, 1, 11, "udon"), box(5, 1, 6, 11, 1.4, 10, "udon_dark")]
+    M["soba"] = [box(4, 0, 5, 12, 1, 11, "soba"), box(5, 1, 6, 11, 1.3, 10, "soba_dark")]
+    M["ramen_noodles"] = [box(4, 0, 5, 12, 1, 11, "ramen_noodles"), box(5, 1, 6, 11, 1.3, 10, "ramen_noodles_dark")]
     return M
 
 # ------------------------------------------------------------------ meal items (icons = the whole meal)

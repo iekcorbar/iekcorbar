@@ -133,7 +133,12 @@ enum KItem {
     SHIITAKE("Shiitake", Kind.FOOD, 2, 1.6f, Rem.NONE, 64, "Earthy mushroom. Grows on logs."),
     ENOKI("Enoki", Kind.INGREDIENT, 1, 0.8f, Rem.NONE, 64, "Thin white mushroom. Grows in the dark."),
     SHIITAKE_LOG("Shiitake Log", Kind.PROP, 0, 0, Rem.NONE, 64, "Oak log inoculated with shiitake spores.", "Harvest shiitake as they grow."),
-    ENOKI_BUNDLE("Enoki Bundle", Kind.PROP, 0, 0, Rem.NONE, 64, "Bundle of enoki. Place in a dark, damp spot.", "Grows more enoki over time.");
+    ENOKI_BUNDLE("Enoki Bundle", Kind.PROP, 0, 0, Rem.NONE, 64, "Bundle of enoki. Place in a dark, damp spot.", "Grows more enoki over time."),
+    // ---- noodle station
+    NOODLE_MAKER("Noodle Maker", Kind.PROP, 0, 0, Rem.NONE, 64, "Makes udon, soba and ramen noodles.", "Needs water below it."),
+    UDON("Udon", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
+    SOBA("Soba", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
+    RAMEN_NOODLES("Ramen Noodles", Kind.INGREDIENT, 0, 0, Rem.NONE, 64);
 
     enum Kind { SEED, INGREDIENT, FOOD, DRINK, MEAL, TOOL, PROP }
 
