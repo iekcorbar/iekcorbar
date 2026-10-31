@@ -10,8 +10,32 @@ export const dynamic = 'force-dynamic';
 
 const NAAM = 'Trashbin';
 
+// Oudere namen van dezelfde map ('Prullenbak' voor de vertaling naar Engels): één
+// prullenbak houden. Staat alleen de oude er, dan wordt die hernoemd; staan ze er
+// allebei, dan verhuist de inhoud van de oude naar de nieuwe (zelfde node-id's,
+// dus de 'trash:<id>'-herkomst in meta blijft kloppen) en gaat de lege oude weg.
+const OUDE_NAMEN = ['Prullenbak'];
+
+function samenvoegenOud(d, f) {
+  for (const oud of OUDE_NAMEN) {
+    const o = findChild(null, oud);
+    if (!o || o.type !== 'folder' || (f && o.id === f.id)) continue;
+    if (!f) {
+      d.prepare('UPDATE nodes SET name = ?, updated = ? WHERE id = ?').run(NAAM, now(), o.id);
+      f = d.prepare('SELECT * FROM nodes WHERE id = ?').get(o.id);
+      continue;
+    }
+    for (const k of d.prepare('SELECT id, name FROM nodes WHERE parent = ?').all(o.id)) {
+      d.prepare('UPDATE nodes SET parent = ?, name = ? WHERE id = ?').run(f.id, uniqueName(f.id, k.name), k.id);
+    }
+    deleteNodeTree(o.id);
+  }
+  return f;
+}
+
 function trashNode(d, u) {
   let f = findChild(null, NAAM);
+  try { f = samenvoegenOud(d, f) || f; } catch { /* opruimen mag het openen van de ton nooit blokkeren */ }
   if (!f || f.type !== 'folder') {
     const id = Number(d.prepare('INSERT INTO nodes(parent,name,type,owner,created,updated) VALUES(NULL,?,?,?,?,?)')
       .run(NAAM, 'folder', u.id, now(), now()).lastInsertRowid);

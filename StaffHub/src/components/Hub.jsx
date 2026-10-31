@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Anchor, Folder, FolderPlus, FileText, File as FileIcon, Image as ImageIcon, Download, Trash2,
   Pencil, MoveRight, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
-  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield, RotateCcw, Bot, ChevronRight, BarChart3, ClipboardList, Star, MessageSquare,
+  RefreshCw, Eye, EyeOff, Plus, X, UserCog, FolderOpen, Link2, CheckSquare, Square, Shield, RotateCcw, Bot, ChevronRight, BarChart3, ClipboardList, Star, MessageSquare,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
 import Dashboard from '@/components/Dashboard';
@@ -16,6 +16,7 @@ import MarkdownImport from '@/components/MarkdownImport';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
 import Notifications from '@/components/Notifications';
+import ContextMenu from '@/components/ContextMenu';
 import Vertaal, { kanVertalen } from '@/components/Vertaal';
 import { useLang, useDt, trServer, LangToggle, LANGS, setLeesbaar, leesbaarStand } from '@/lib/i18n';
 import { may, CAPS, PRIV, effectieveCaps } from '@/lib/caps';
@@ -295,6 +296,65 @@ useEffect(() => {
 
   // ---------- zoeken verwijderd ----------
 
+  // ---------- rechtermuisklik-menu (zoals een OS) ----------
+  const [menu, setMenu] = useState(null);                // { x, y, items }
+  const sluitMenu = useCallback(() => setMenu(null), []);
+  const hoofd = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s);
+  async function kopieerLink(n) {
+    try { await navigator.clipboard.writeText(window.location.origin + '/?open=' + n.id); setErr(''); laatUndo({ tekst: t('cm.linkok'), herstel: null }); }
+    catch { setErr(t('err.failed')); }
+  }
+  function downloadNode(n) {
+    const a = document.createElement('a');
+    a.href = '/api/file/' + n.id; a.download = n.name; document.body.appendChild(a); a.click(); a.remove();
+  }
+  function openMenu(e, n) {
+    e.preventDefault(); e.stopPropagation();
+    const meerdere = n && aan.size > 1 && aan.has(n.id);
+    let items = [];
+    if (!n) {
+      items = [
+        kan('upload') && { label: hoofd(t('btn.map')), icon: <FolderPlus className="size-4" />, onClick: newFolder },
+        kan('pages') && { label: hoofd(t('btn.page')), icon: <FileText className="size-4" />, onClick: newPage },
+        kan('upload') && { label: hoofd(t('btn.upload')), icon: <Upload className="size-4" />, onClick: () => upRef.current?.click() },
+        { sep: true },
+        { label: hoofd(t('tip.selectAll')), icon: <CheckSquare className="size-4" />, onClick: allesSel, disabled: !(stuk.length) },
+        { label: t('cm.refresh'), icon: <RefreshCw className="size-4" />, onClick: () => { refresh(); verversTon(); } },
+      ].filter(Boolean);
+      if (isTon && kan('purge') && kids.length > 0) items.push({ sep: true }, { label: t('btn.lege'), icon: <Trash2 className="size-4" />, danger: true, onClick: legeTon });
+    } else if (meerdere) {
+      const ids = [...aan];
+      items = [
+        { label: t('sel.n', { n: ids.length }), disabled: true },
+        { sep: true },
+        kan('move') && { label: t('btn.moveSel'), icon: <MoveRight className="size-4" />, onClick: () => setMoveFrom({ ids, name: t('sel.n', { n: ids.length }) }) },
+        isTon
+          ? kan('trash') && { label: t('btn.herstelSel'), icon: <RotateCcw className="size-4" />, onClick: () => trashActie('herstel', ids) }
+          : kan('trash') && { label: t('btn.trashSel'), icon: <Trash2 className="size-4" />, danger: true, onClick: () => prullen(ids) },
+        { sep: true },
+        { label: t('sel.geen'), icon: <X className="size-4" />, onClick: () => setAan(new Set()) },
+      ].filter(Boolean);
+    } else {
+      const isMap = n.type === 'folder';
+      items = [
+        { label: t('cm.open'), icon: isMap ? <FolderOpen className="size-4" /> : <FileText className="size-4" />, onClick: () => (moveFrom ? null : isMap ? setParent(n.id) : setSel(n)) },
+        n.type === 'file' && { label: hoofd(t('tip.download')), icon: <Download className="size-4" />, onClick: () => downloadNode(n) },
+        { label: t('cm.link'), icon: <Link2 className="size-4" />, onClick: () => kopieerLink(n) },
+        { sep: true },
+        kan('move') && { label: hoofd(t('tip.rename')), icon: <Pencil className="size-4" />, onClick: () => rename(n) },
+        kan('move') && { label: hoofd(t('tip.move')), icon: <MoveRight className="size-4" />, onClick: () => setMoveFrom(n) },
+        { label: hoofd(t('tip.vis')), icon: n.vis === 'owner' ? <Eye className="size-4" /> : <EyeOff className="size-4" />, onClick: () => toggleVis(n) },
+        !isMap && { label: aan.has(n.id) ? t('cm.deselect') : t('cm.select'), icon: aan.has(n.id) ? <Square className="size-4" /> : <CheckSquare className="size-4" />, onClick: () => toggleSel(n.id) },
+        { sep: true },
+        isTon
+          ? kan('trash') && { label: hoofd(t('tip.restore')), icon: <RotateCcw className="size-4" />, onClick: () => trashActie('herstel', [n.id]) }
+          : kan('trash') && { label: hoofd(t('tip.trash')), icon: <Trash2 className="size-4" />, danger: true, onClick: () => remove(n) },
+        isTon && kan('purge') && { label: t('cm.purge'), icon: <X className="size-4" />, danger: true, onClick: () => remove(n) },
+      ].filter(Boolean);
+    }
+    setMenu({ x: e.clientX, y: e.clientY, items });
+  }
+
   const TypeIcon = (n) => (ICONS[n.type] || FileIcon);
   const visBadge = (n) => n.vis === 'owner' ? <Lock className="inline size-3 text-red-300/70" /> : n.vis === 'team' ? <span className="text-[9px] text-copper">{n.team || 'team'}</span> : n.vis === 'all' ? <Globe className="inline size-3 text-emerald-300/60" /> : null;
 
@@ -349,7 +409,7 @@ useEffect(() => {
       {laatste && (
         <div className="bg-emerald-900/40 text-emerald-100 text-xs px-4 py-1.5 flex items-center gap-3">
           <span>{laatste.tekst}</span>
-          <button className="font-bold underline underline-offset-2 hover:text-white" onClick={async () => { const h = laatste.herstel; setLaatste(null); await h(); await verversTon(); }}>{t('undo.btn')}</button>
+          {laatste.herstel && <button className="font-bold underline underline-offset-2 hover:text-white" onClick={async () => { const h = laatste.herstel; setLaatste(null); await h(); await verversTon(); }}>{t('undo.btn')}</button>}
           <button className="ml-auto" onClick={() => setLaatste(null)}><X className="size-3.5" /></button>
         </div>
       )}
@@ -358,7 +418,7 @@ useEffect(() => {
           Het broodkruimel bovenaan is het kompas, de AI heeft nu een eigen,
           volle kolom aan de rechterkant. */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_430px] overflow-hidden">
-        <main className="overflow-auto p-3" onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
+        <main className="overflow-auto p-3" onDragOver={(e) => e.preventDefault()} onDrop={onDrop} onContextMenu={(e) => openMenu(e, null)}>
           <div className="flex items-center gap-2 flex-wrap mb-3">
             {parent !== null && <button onClick={() => setParent(trail.length > 1 ? trail[trail.length - 2].id : null)} className="p-1.5 rounded hover:bg-white/10"><ArrowLeft className="size-4" /></button>}
             <button onClick={() => { setParent(null); setSel(null); }} className={`p-1.5 rounded hover:bg-white/10 ${parent === null ? 'text-gold' : 'text-parch/60'}`} title={t('nav.all')}><Folder className="size-4" /></button>
@@ -400,6 +460,7 @@ useEffect(() => {
                   onDragLeave={() => setSleepOver((v) => (v === n.id ? null : v))}
                   onDrop={(e) => { e.preventDefault(); e.stopPropagation(); dropNaar(n.id); }}
                   onClick={() => { if (moveFrom) { moveTo(n.id); return; } setParent(n.id); }}
+                  onContextMenu={(e) => openMenu(e, n)}
                   className={`group rounded-xl border p-3 cursor-pointer transition-colors ${sleepOver === n.id ? 'border-gold bg-gold/15' : moveFrom ? 'border-dashed border-copper/50 bg-black/25 hover:border-gold hover:bg-gold/10' : 'border-bronze/25 bg-black/25 hover:border-gold/60 hover:bg-white/5'}`}>
                   <div className="flex items-center gap-2 min-w-0">
                     <Folder className="size-5 text-gold/80 shrink-0" />
@@ -438,7 +499,7 @@ useEffect(() => {
                       onDragStart={(e) => { setSleepNode(n); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(n.id)); } catch { } }}
                       onDragEnd={() => { setSleepNode(null); setSleepOver(null); }}
                       className={`group cursor-pointer hover:bg-white/5 ${sel?.id === n.id ? 'bg-gold/10' : ''} ${sleepNode?.id === n.id ? 'opacity-40' : ''}`}
-                      onClick={() => setSel(n)}>
+                      onClick={() => setSel(n)} onContextMenu={(e) => openMenu(e, n)}>
                       <td className="py-2 pl-2 w-6" onClick={(e) => e.stopPropagation()}>
                         <button title={t('tip.sel')} onClick={() => toggleSel(n.id)} className={`size-3.5 rounded border inline-block align-middle ${aan.has(n.id) ? 'bg-gold border-gold' : 'border-parch/40 hover:border-gold'}`} />
                       </td>
@@ -477,6 +538,8 @@ useEffect(() => {
           <Bot className="size-5" /> {t('ai.title')}
         </button>
       </div>
+
+      {menu && <ContextMenu x={menu.x} y={menu.y} items={menu.items} onClose={sluitMenu} />}
 
       {/* Documenten popup: het blad vult bijna het hele scherm. Dicht met Esc,
           het kruis of een klik buiten het blad. */}
