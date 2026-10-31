@@ -112,7 +112,15 @@ enum KItem {
     TATAMI_MAT("Tatami Mat", Kind.PROP, 0, 0, Rem.NONE, 64, "Floor mat."),
     ZABUTON("Zabuton Cushion", Kind.PROP, 0, 0, Rem.NONE, 64, "Right-click to sit on it."),
     MISO_VAT("Miso Vat", Kind.PROP, 0, 0, Rem.NONE, 64, "Ferments soybeans + salt into miso.", "Takes time - better quality with patience."),
-    TSUKEMONO_POT("Tsukemono Pot", Kind.PROP, 0, 0, Rem.NONE, 64, "Pickles vegetables into tsukemono.", "Daikon, napa cabbage, etc.");
+    TSUKEMONO_POT("Tsukemono Pot", Kind.PROP, 0, 0, Rem.NONE, 64, "Pickles vegetables into tsukemono.", "Daikon, napa cabbage, etc."),
+    // ---- smoking and drying
+    SMOKER("Smoker", Kind.PROP, 0, 0, Rem.NONE, 64, "Smokes meat and fish over a fire.", "Needs heat below it."),
+    DRYING_RACK("Drying Rack", Kind.PROP, 0, 0, Rem.NONE, 64, "Dries ingredients in the sun.", "Place under open sky."),
+    SMOKED_SALMON("Smoked Salmon", Kind.FOOD, 5, 6f, Rem.NONE, 64),
+    SMOKED_BEEF("Smoked Beef", Kind.FOOD, 7, 8f, Rem.NONE, 64),
+    DRIED_CHILI("Dried Chili", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
+    DRIED_HERBS("Dried Herbs", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
+    SUNDRIED_TOMATO("Sundried Tomato", Kind.FOOD, 2, 1.6f, Rem.NONE, 64);
 
     enum Kind { SEED, INGREDIENT, FOOD, DRINK, MEAL, TOOL, PROP }
 

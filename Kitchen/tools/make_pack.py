@@ -67,6 +67,10 @@ PALETTE = {
 "kabocha": (240, 160, 40), "kabocha_skin": (52, 92, 52), "kabocha_dark": (180, 110, 30),
 "bamboo": (196, 186, 104), "bamboo_dark": (140, 132, 64), "bamboo_shoot": (220, 200, 140),
 "eggplant": (90, 40, 120), "eggplant_dark": (60, 25, 90), "eggplant_light": (130, 70, 160),
+"smoked": (120, 80, 50), "smoked_dark": (80, 50, 30),
+"dried": (180, 140, 80), "dried_dark": (140, 100, 50),
+"rack": (140, 100, 60), "rack_dark": (90, 65, 40),
+"smoker": (60, 60, 60), "smoker_dark": (40, 40, 40), "smoker_iron": (120, 120, 130),
 }
 NAMES = list(PALETTE)
 assert len(NAMES) <= 256, len(NAMES)
@@ -397,6 +401,17 @@ def props():
                           box(3, 2, 11, 13, 10, 13, "clay"), box(3, 2, 5, 5, 10, 11, "clay"),
                           box(11, 2, 5, 13, 10, 11, "clay"), box(2, 10, 2, 14, 12, 14, "clay_dark"),
                           box(4, 12, 4, 12, 13, 12, "clay"), box(7, 13, 7, 9, 15, 9, "wood_dark")]
+    M["smoker"] = [box(0, 0, 0, 16, 2, 16, "smoker_iron"), box(1, 2, 1, 15, 14, 15, "smoker"),
+                   box(0, 14, 0, 16, 16, 16, "smoker_dark"), box(2, 2, 0.5, 14, 8, 1, "smoker_iron"),
+                   box(2, 2, 15, 14, 8, 15.5, "smoker_iron")]
+    M["drying_rack"] = [box(1, 0, 1, 15, 1, 15, "rack"), box(1, 1, 1, 15, 2, 2, "rack_dark"),
+                        box(1, 1, 14, 15, 2, 15, "rack_dark"), box(1, 2, 1, 2, 8, 15, "rack"),
+                        box(14, 2, 1, 15, 8, 15, "rack"), box(1, 8, 1, 15, 9, 15, "rack_dark")]
+    M["smoked_salmon"] = [box(4, 0, 5, 12, 1.5, 11, "smoked"), box(5, 1.5, 6, 11, 1.8, 10, "smoked_dark")]
+    M["smoked_beef"] = [box(4, 0, 5, 12, 2, 11, "smoked"), box(5, 2, 6, 11, 2.4, 10, "smoked_dark")]
+    M["dried_chili"] = [box(6, 0, 6, 10, 1.5, 10, "chili"), box(7, 1.5, 7, 9, 2, 9, "chili")]
+    M["dried_herbs"] = [box(5, 0, 5, 11, 0.8, 11, "leaf"), box(6, 0.8, 6, 10, 1.2, 10, "leaf_dark")]
+    M["sundried_tomato"] = [box(5, 0, 5, 11, 1.5, 11, "tomato"), box(6, 1.5, 6, 10, 1.8, 10, "tomato")]
     return M
 
 # ------------------------------------------------------------------ meal items (icons = the whole meal)
