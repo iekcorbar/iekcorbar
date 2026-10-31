@@ -104,3 +104,17 @@ ZukanData + spawn-ei + config? + docs/wiki-wildlife + seed + version 0.4.0.
   diagonale stand meer tijdens rennen.
 - Staat een dier na deze deploy nog steeds scheef: dan is de map niet echt vervangen (vergelijk bbmodel-
   tijdstempels op de server) of heet het modelbestand niet wl_<soort>.bbmodel.
+
+## NIEUW 31-10 - Animal Rescue event (0.8.4)
+- Extremely rare (0.05% per tick per speler) spawnen van gevangen dieren
+- 5 val-types: snare (string), cage (iron bars), net (cobweb), pit (dirt), bear_trap (anvil)
+- Rechtsklik om te bevrijden -> achievement + bonus
+- Achievements: first_rescue, conservationist (5), master_conservationist (10)
+- Rescue-count opgeslagen in player PDC (rescue_count key)
+
+## NIEUW 31-10 - Global advancement announcements (0.8.5)
+- `global()` methode in Adv.java markeert advancements als globaal aangekondigd
+- Bij het verdienen van een global advancement wordt een chat-bericht naar alle online spelers gestuurd
+- Format: "PlayerName has earned the advancement [Title]"
+- Global advancements: Living Encyclopedia, Master Naturalist, A New Machine in the Sky,
+  Master Hunter, Master Conservationist, Master Photographer

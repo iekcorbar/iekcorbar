@@ -118,5 +118,13 @@ automatisch (loopt Fruit.values()). Garden wild: nieuwe biomes ok.
   `assets`-map van sept) niet opnieuw importeren: dat haalt het oude systeem terug en geeft
   magenta/verkeerde planten zodra modellen/stages niet meer matchen.
 - Mocht er ooit weer een echt blok als drager nodig zijn: suikerriet (2 age-states, geen
+
+## NIEUW 31-10 - Cross-plugin integraties (0.3.14-0.3.15)
+- Wildlife jacht: 3 recepten met wildlife-vlees (boar ramen, venison stew, duck yakitori)
+- Sakagura sake-pairing: eten terwijl drunk -> regeneratie-bonus + achievement "Sake Pairing"
+- Steamworks steam pot: STEAM_POT prop (Behaviour.POT, 8 slots), kookt 2x sneller
+  Vereist draaiende Steamworks shaft nearby (check via Function<Location,Boolean> service)
+  Zonder Steamworks: toont "Needs a Steamworks shaft nearby"
+- steam_pot model toegevoegd aan make_pack.py (iron + steam accent)
   farmland-eis, geen blockstate-Gedoente). Eerste check bij 'grapes zijn paars': staat die losse
   `assets`-map nog in de mixer? Buitensluiten.

@@ -261,3 +261,10 @@ route-gebonden via displays; gebruiker akkoord met die aanpak ("alleen treinrout
 ## Build/deploy-fouten-protocol
 mvn -q -o package (in Steamworks/) → jar naar repo-root (huidige: Steamworks-0.3.15.jar).
 Nooit DB/ping naar production. Live-check alleen in game.
+
+
+## NIEUW 31-10 - Steam power service voor Kitchen (0.3.33)
+- Registreert Function<Location, Boolean> service die checkt of een draaiende
+  shaft (PartType.SHAFT met speed() != 0) binnen 2 blokken staat
+- Kitchen gebruikt deze service om de steam pot te laten koken (2x sneller)
+- Zonder Steamworks: steam pot toont Needs a Steamworks shaft nearby
