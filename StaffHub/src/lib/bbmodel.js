@@ -63,6 +63,7 @@ function bouwElement(THREE, el, res, ouderOrigin, zoekTex, materiaal, tellers) {
   pivot.name = el.uuid;
   pivot.userData = { uuid: el.uuid, name: el.name };
   pivot.position.set((origin[0] - ouderOrigin[0]) / res, (origin[1] - ouderOrigin[1]) / res, (origin[2] - ouderOrigin[2]) / res);
+  pivot.userData.basisPos = pivot.position.clone();
   pivot.rotation.order = 'ZYX';
   const rot = el.rotation || [0, 0, 0];
   const as = el.rotation_axis ? String(el.rotation_axis).toLowerCase() : null;
@@ -85,7 +86,7 @@ function bouwElement(THREE, el, res, ouderOrigin, zoekTex, materiaal, tellers) {
   return pivot;
 }
 
-function bouwClips(THREE, data, res, nodes) {
+export function bouwClips(THREE, data, res, nodes) {
   const clips = [];
   for (const anim of data?.animations || []) {
     const tracks = [];
@@ -109,7 +110,7 @@ function bouwClips(THREE, data, res, nodes) {
           }
           tracks.push(new THREE.QuaternionKeyframeTrack(`${node.name}.quaternion`, tijden, waarden));
         } else if (kanaal === 'position') {
-          const basis = node.position;
+          const basis = node.userData.basisPos || node.position;
           const waarden = [];
           for (const k of lijst) {
             const dp = k.data_points?.[0] || {};
@@ -180,6 +181,7 @@ export function bouwBbmodel(THREE, data) {
       g.name = node.uuid;
       g.userData = { uuid: node.uuid, name: node.name };
       g.position.set((origin[0] - ouderOrigin[0]) / res, (origin[1] - ouderOrigin[1]) / res, (origin[2] - ouderOrigin[2]) / res);
+      g.userData.basisPos = g.position.clone();
       g.rotation.order = 'ZYX';
       const r = node.rotation || [0, 0, 0];
       g.rotation.set(rad(r[0]), rad(r[1]), rad(r[2]));
@@ -217,5 +219,7 @@ export function bouwBbmodel(THREE, data) {
 
   root.userData.bb = { res, elementen: elementen.length, texturen, animations: clips.map((c) => c.name) };
   root.userData.animations = clips;
+  root.userData.data = data;
+  root.userData.nodes = nodes;
   return root;
 }

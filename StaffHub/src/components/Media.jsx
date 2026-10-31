@@ -183,6 +183,44 @@ export function Model3D({ url, naam, groot = false }) {
   const [anims, setAnims] = useState([]);                // bbmodel-only: lijst van animatienamen
   const [animIdx, setAnimIdx] = useState(0);             // geselecteerde animatie
   const [playing, setPlaying] = useState(true);          // speelt af of niet
+  const [tijd, setTijd] = useState(0);                   // scrubber-positie (s)
+  const [bewerk, setBewerk] = useState(false);           // keyframe-editor open
+  const [boneKey, setBoneKey] = useState('');            // uuid van de geselecteerde animator
+  const [wijzig, setWijzig] = useState(0);               // teller: aantal bewerkingen
+
+  // scrubber: alleen bij pauze zinvol; zet de actie op de gekozen tijd
+  const scrub = (t) => {
+    const api = apiRef.current;
+    setTijd(t);
+    if (!api?.mixer) return;
+    setPlaying(false);
+    api.playing = false;
+    api.mixer.setTime(t);
+  };
+  // keyframe-waarde aanpassen in de bron-JSON en de clips opnieuw bouwen
+  const zetWaarde = async (kf, as, waarde) => {
+    const api = apiRef.current;
+    if (!api?.data) return;
+    kf.data_points[0][as] = String(waarde);
+    const { bouwClips } = await import('@/lib/bbmodel');
+    const tNu = api.mixer ? api.mixer.time : 0;
+    const nieuw = bouwClips(api.THREE, api.data, api.res, api.nodes);
+    api.mixer.stopAllAction();
+    api.mixer.uncacheRoot(api.mixer.getRoot());
+    setAnims(nieuw);
+    setWijzig((n) => n + 1);
+    setTimeout(() => { if (apiRef.current?.mixer) apiRef.current.mixer.setTime(tNu); }, 0);
+  };
+  const downloadModel = () => {
+    const api = apiRef.current;
+    if (!api?.data) return;
+    const blob = new Blob([JSON.stringify(api.data)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = String(naam || 'model.bbmodel').split(/[\/]/).pop().replace(/\.bbmodel$/i, '') + '-bewerkt.bbmodel';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
 
   // animatie wisselen / pauzeren: de mixer en THREE komen uit het hoofd-effect via apiRef
   useEffect(() => {
@@ -283,6 +321,7 @@ export function Model3D({ url, naam, groot = false }) {
         apiRef.current = {
           spin, herstel: () => { camera.position.set(2.2, 1.8, 2.6); controls.target.set(0, 0, 0); controls.update(); },
           meshes: meshList, klei, mixer: mixer.h, THREE, playing: true,
+          data: object?.userData?.data, nodes: object?.userData?.nodes, res: object?.userData?.bb?.res || 16,
           full: () => { const d = doosRef.current; if (d?.requestFullscreen) d.requestFullscreen().then(herframe).catch(() => { }); },
         };
         setTexturen(object?.userData?.bb?.texturen || []);
@@ -356,6 +395,17 @@ export function Model3D({ url, naam, groot = false }) {
           <button className={BNA} title={t('med.full')} onClick={() => apiRef.current?.full()}><Maximize2 className="size-4" /></button>
           <span className="text-[10px] text-parch/45 ml-1">{meta ? `${meta.elementen} ${t('med.el')} · ${meta.texturen} ${t('med.tx')} · ${meta.res} px` : t('med.draai_hint')}</span>
         </div>
+        {anims.length > 0 && anims[animIdx] && (
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <input type="range" min={0} max={anims[animIdx].length} step={0.01} value={Math.min(tijd, anims[animIdx].length)}
+                onChange={(e) => scrub(Number(e.target.value))} className="flex-1 accent-amber-400" />
+              <span className="text-[10px] tabular-nums text-parch/55 w-16 text-right">{tijd.toFixed(2)} / {anims[animIdx].length.toFixed(2)}s</span>
+              <button className={`px-2 py-1 rounded text-[10px] border ${bewerk ? 'bg-gold/15 border-gold/60 text-gold' : 'border-bronze/30 text-parch/60 hover:border-gold/50'}`} onClick={() => setBewerk(!bewerk)}>Bewerken</button>
+            </div>
+            {bewerk && <KeyframeEditor api={apiRef} anim={anims[animIdx]} animNaam={anims[animIdx].name} boneKey={boneKey} setBoneKey={setBoneKey} zet={zetWaarde} download={downloadModel} wijzig={wijzig} />}
+          </div>
+        )}
       </div>
       {/* textuurpaneel: alleen bij bbmodels die texturen meekregen */}
       {klaar && texturen.length > 0 && (
@@ -381,3 +431,38 @@ export function Model3D({ url, naam, groot = false }) {
   );
 }
 
+// Lijst bones met keyframes in de huidige animatie; per keyframe x/y/z bewerken.
+function KeyframeEditor({ api, anim, animNaam, boneKey, setBoneKey, zet, download, wijzig }) {
+  const data = api.current?.data;
+  const bron = (data?.animations || []).find((a) => (a.name || 'animation') === animNaam);
+  const animators = Object.entries(bron?.animators || {}).filter(([, a]) => (a.keyframes || []).length);
+  const gekozen = animators.find(([k]) => k === boneKey) || animators[0];
+  if (!gekozen) return <p className="text-[10px] text-parch/50">Geen keyframes in deze animatie.</p>;
+  const [key, animator] = gekozen;
+  const kfs = [...animator.keyframes].sort((a, b) => (Number(a.time) || 0) - (Number(b.time) || 0));
+  return (
+    <div className="rounded-lg border border-bronze/30 bg-black/30 p-2 space-y-1.5" data-w={wijzig}>
+      <div className="flex items-center gap-2">
+        <select value={key} onChange={(e) => setBoneKey(e.target.value)} className="px-2 py-1 rounded text-[10px] border border-bronze/30 bg-black/40 text-parch/70">
+          {animators.map(([k, a]) => <option key={k} value={k}>{a.name || k}</option>)}
+        </select>
+        <button className="px-2 py-1 rounded text-[10px] border border-gold/50 text-gold hover:bg-gold/10 ml-auto" onClick={download}>Download .bbmodel</button>
+      </div>
+      <div className="max-h-48 overflow-auto space-y-0.5">
+        {kfs.map((kf) => (
+          <div key={kf.uuid} className="flex items-center gap-1.5 text-[10px] text-parch/70">
+            <span className="w-24 shrink-0 tabular-nums">{kf.channel} @ {(Number(kf.time) || 0).toFixed(3)}s</span>
+            {['x', 'y', 'z'].map((as) => (
+              <label key={as} className="flex items-center gap-0.5">{as}
+                <input type="number" step="0.5" defaultValue={Number(kf.data_points?.[0]?.[as]) || 0}
+                  key={`${kf.uuid}${as}${wijzig === 0 ? 0 : 1}`}
+                  onBlur={(e) => { const v = Number(e.target.value); if (Number.isFinite(v) && v !== Number(kf.data_points[0][as])) zet(kf, as, v); }}
+                  className="w-16 px-1 py-0.5 rounded border border-bronze/30 bg-black/40 text-parch/80" />
+              </label>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
