@@ -232,3 +232,9 @@ export function deleteNodeTree(id) {
   d.prepare('DELETE FROM versions WHERE node = ?').run(id);
   d.prepare('DELETE FROM nodes WHERE id = ?').run(id);
 }
+
+export function ensureEdits(d) {
+  d.exec(`CREATE TABLE IF NOT EXISTS model_edits(
+    id INTEGER PRIMARY KEY AUTOINCREMENT, node INTEGER NOT NULL, version INTEGER NOT NULL,
+    who INTEGER, created INTEGER NOT NULL)`);
+}

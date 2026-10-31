@@ -59,3 +59,6 @@ docs/nda/signed/
 
 # archief/ = renders/onderzoek/snapshots die niet meer meedoen (nooit in git)
 archief/
+
+scripts/.hub-pull.json
+scripts/.hub-pull-state.json

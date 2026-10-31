@@ -168,7 +168,7 @@ export function MediaPlayer({ kind, id, naam, lijst }) {
  *
  * @param groot  groter canvas (62% van het scherm) - de popup-setting
  */
-export function Model3D({ url, naam, groot = false }) {
+export function Model3D({ url, naam, nodeId = null, groot = false }) {
   const { t } = useLang();
   const doosRef = useRef(null);
   const [klaar, setKlaar] = useState(false);
@@ -187,6 +187,7 @@ export function Model3D({ url, naam, groot = false }) {
   const [bewerk, setBewerk] = useState(false);           // keyframe-editor open
   const [boneKey, setBoneKey] = useState('');            // uuid van de geselecteerde animator
   const [wijzig, setWijzig] = useState(0);               // teller: aantal bewerkingen
+  const [opslag, setOpslag] = useState('');              // '' | 'bezig' | 'ok' | foutmelding
 
   // scrubber: alleen bij pauze zinvol; zet de actie op de gekozen tijd
   const scrub = (t) => {
@@ -210,6 +211,17 @@ export function Model3D({ url, naam, groot = false }) {
     setAnims(nieuw);
     setWijzig((n) => n + 1);
     setTimeout(() => { if (apiRef.current?.mixer) apiRef.current.mixer.setTime(tNu); }, 0);
+  };
+  // bewerkt model terug in de hub: nieuwe versie van dezelfde node (oude blijft in de geschiedenis)
+  const slaOp = async () => {
+    const api = apiRef.current;
+    if (!api?.data || !nodeId) return;
+    setOpslag('bezig');
+    try {
+      const r = await fetch('/api/model-save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: nodeId, json: JSON.stringify(api.data) }) });
+      const j = await r.json().catch(() => ({}));
+      setOpslag(r.ok ? (j.unchanged ? 'ok: geen wijzigingen' : 'ok') : (j.error || 'mislukt'));
+    } catch (e) { setOpslag('mislukt'); }
   };
   const downloadModel = () => {
     const api = apiRef.current;
@@ -403,7 +415,7 @@ export function Model3D({ url, naam, groot = false }) {
               <span className="text-[10px] tabular-nums text-parch/55 w-16 text-right">{tijd.toFixed(2)} / {anims[animIdx].length.toFixed(2)}s</span>
               <button className={`px-2 py-1 rounded text-[10px] border ${bewerk ? 'bg-gold/15 border-gold/60 text-gold' : 'border-bronze/30 text-parch/60 hover:border-gold/50'}`} onClick={() => setBewerk(!bewerk)}>Bewerken</button>
             </div>
-            {bewerk && <KeyframeEditor api={apiRef} anim={anims[animIdx]} animNaam={anims[animIdx].name} boneKey={boneKey} setBoneKey={setBoneKey} zet={zetWaarde} download={downloadModel} wijzig={wijzig} />}
+            {bewerk && <KeyframeEditor api={apiRef} anim={anims[animIdx]} animNaam={anims[animIdx].name} boneKey={boneKey} setBoneKey={setBoneKey} zet={zetWaarde} download={downloadModel} slaOp={nodeId ? slaOp : null} opslag={opslag} wijzig={wijzig} />}
           </div>
         )}
       </div>
@@ -432,7 +444,7 @@ export function Model3D({ url, naam, groot = false }) {
 }
 
 // Lijst bones met keyframes in de huidige animatie; per keyframe x/y/z bewerken.
-function KeyframeEditor({ api, anim, animNaam, boneKey, setBoneKey, zet, download, wijzig }) {
+function KeyframeEditor({ api, anim, animNaam, boneKey, setBoneKey, zet, download, slaOp, opslag, wijzig }) {
   const data = api.current?.data;
   const bron = (data?.animations || []).find((a) => (a.name || 'animation') === animNaam);
   const animators = Object.entries(bron?.animators || {}).filter(([, a]) => (a.keyframes || []).length);
@@ -446,7 +458,9 @@ function KeyframeEditor({ api, anim, animNaam, boneKey, setBoneKey, zet, downloa
         <select value={key} onChange={(e) => setBoneKey(e.target.value)} className="px-2 py-1 rounded text-[10px] border border-bronze/30 bg-black/40 text-parch/70">
           {animators.map(([k, a]) => <option key={k} value={k}>{a.name || k}</option>)}
         </select>
-        <button className="px-2 py-1 rounded text-[10px] border border-gold/50 text-gold hover:bg-gold/10 ml-auto" onClick={download}>Download .bbmodel</button>
+        {opslag && <span className={`ml-auto text-[10px] ${opslag.startsWith('ok') ? 'text-emerald-300' : opslag === 'bezig' ? 'text-parch/50' : 'text-red-300'}`}>{opslag === 'ok' ? 'Opgeslagen in de hub' : opslag}</span>}
+        {slaOp && <button className={`px-2 py-1 rounded text-[10px] border border-gold bg-gold/15 text-gold hover:bg-gold/25 ${opslag ? '' : 'ml-auto'}`} onClick={slaOp}>Opslaan in hub</button>}
+        <button className={`px-2 py-1 rounded text-[10px] border border-bronze/40 text-parch/70 hover:border-gold/50 ${slaOp || opslag ? '' : 'ml-auto'}`} onClick={download}>Download</button>
       </div>
       <div className="max-h-48 overflow-auto space-y-0.5">
         {kfs.map((kf) => (

@@ -569,7 +569,7 @@ function FilePane({ n, onChanged, lijst = [] }) {
       {isText && !isPdf && <pre className="max-h-72 overflow-auto bg-black/40 border border-bronze/20 rounded-lg p-2 whitespace-pre-wrap">{text ?? '…'}</pre>}
       {!isImg && !isPdf && !isText && !kind && <div className="text-parch/50">{t('fp.nopreview')}</div>}
       {(kind === 'audio' || kind === 'video') && <MediaPlayer kind={kind} id={n.id} naam={n.name} lijst={lijst} />}
-      {kind === '3d' && <Model3D url={url} naam={n.name} groot />}
+      {kind === '3d' && <Model3D url={url} naam={n.name} nodeId={n.id} groot />}
       <div className="flex gap-2">
         <a href={url} download className="flex items-center gap-1 bg-gold/90 text-ink rounded-lg px-2.5 py-1.5 font-bold"><Download className="size-3.5" /> {t('fp.download')}</a>
       </div>
