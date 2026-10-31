@@ -54,6 +54,8 @@ enum KItem {
     EDAMAME("Edamame", Kind.FOOD, 3, 3.0f, Rem.NONE, 64),
     TOFU("Tofu", Kind.FOOD, 2, 2.4f, Rem.NONE, 64),
     MISO("Miso Paste", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
+    KOJI("Koji Mold", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Sprinkle on rice to start fermentation."),
+    TSUKEMONO("Tsukemono", Kind.FOOD, 2, 1.6f, Rem.NONE, 64, "Pickled vegetables. Crunchy and salty."),
     SOY_SAUCE("Soy Sauce", Kind.INGREDIENT, 0, 0, Rem.BOTTLE, 16),
     DASHI("Dashi Stock", Kind.INGREDIENT, 0, 0, Rem.BOTTLE, 16),
     RAW_NOODLES("Raw Noodles", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
@@ -108,7 +110,9 @@ enum KItem {
     RICH_SOIL("Rich Soil", Kind.PROP, 0, 0, Rem.NONE, 64, "Kitchen crops planted on it grow faster.", "Plant straight on it - no hoe needed."),
     ORGANIC_COMPOST("Organic Compost", Kind.PROP, 0, 0, Rem.NONE, 64, "Turns into Rich Soil after a while.", "Faster with water next to it."),
     TATAMI_MAT("Tatami Mat", Kind.PROP, 0, 0, Rem.NONE, 64, "Floor mat."),
-    ZABUTON("Zabuton Cushion", Kind.PROP, 0, 0, Rem.NONE, 64, "Right-click to sit on it.");
+    ZABUTON("Zabuton Cushion", Kind.PROP, 0, 0, Rem.NONE, 64, "Right-click to sit on it."),
+    MISO_VAT("Miso Vat", Kind.PROP, 0, 0, Rem.NONE, 64, "Ferments soybeans + salt into miso.", "Takes time - better quality with patience."),
+    TSUKEMONO_POT("Tsukemono Pot", Kind.PROP, 0, 0, Rem.NONE, 64, "Pickles vegetables into tsukemono.", "Daikon, napa cabbage, etc.");
 
     enum Kind { SEED, INGREDIENT, FOOD, DRINK, MEAL, TOOL, PROP }
 

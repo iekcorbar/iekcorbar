@@ -389,6 +389,14 @@ def props():
     M["organic_compost"] = [box(0, 0, 0, 16, 16, 16, "compost", top="straw_dark"), box(3, 16, 4, 7, 16.3, 6, "straw"), box(9, 16, 10, 12, 16.3, 11, "leaf_dark")]
     M["tatami_mat"] = [box(0, 0, 0, 16, 1, 16, "tatami"), box(0, 0, -0.01, 1.2, 1.01, 16.01, "tatami_edge"), box(14.8, 0, -0.01, 16, 1.01, 16.01, "tatami_edge")]
     M["zabuton"] = [box(1, 0, 1, 15, 2.5, 15, "zabuton"), box(7.4, 2.5, 7.4, 8.6, 2.8, 8.6, "gold")]
+    M["miso_vat"] = [box(2, 0, 2, 14, 2, 14, "wood_dark"), box(2, 2, 2, 14, 12, 4, "wood"), box(2, 2, 12, 14, 12, 14, "wood"),
+                     box(2, 2, 4, 4, 12, 12, "wood"), box(12, 2, 4, 14, 12, 12, "wood"),
+                     box(1, 12, 1, 15, 14, 3, "wood_dark"), box(1, 12, 13, 15, 14, 15, "wood_dark"),
+                     box(13, 12, 3, 15, 14, 13, "wood_dark"), box(1, 12, 3, 3, 14, 13, "wood_dark")]
+    M["tsukemono_pot"] = [box(3, 0, 3, 13, 2, 13, "clay_dark"), box(3, 2, 3, 13, 10, 5, "clay"),
+                          box(3, 2, 11, 13, 10, 13, "clay"), box(3, 2, 5, 5, 10, 11, "clay"),
+                          box(11, 2, 5, 13, 10, 11, "clay"), box(2, 10, 2, 14, 12, 14, "clay_dark"),
+                          box(4, 12, 4, 12, 13, 12, "clay"), box(7, 13, 7, 9, 15, 9, "wood_dark")]
     return M
 
 # ------------------------------------------------------------------ meal items (icons = the whole meal)
