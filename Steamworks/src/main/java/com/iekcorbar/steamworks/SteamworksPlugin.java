@@ -110,6 +110,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
             customParts.register(flywheel);
             customParts.register(sieve);
             getLogger().info("Steamworks Power enabled - 5 machines registered.");
+            new com.iekcorbar.power.PowerRecipes(this, turbine, press, ticker, flywheel, sieve).start();
         // Register power command
         com.iekcorbar.power.PowerCommand pcmd = new com.iekcorbar.power.PowerCommand(this);
         getCommand("swpower").setExecutor(pcmd);
