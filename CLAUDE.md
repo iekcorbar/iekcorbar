@@ -8,19 +8,6 @@ The website for **iekcorbar**, a Minecraft server (steampunk/sakura themed: wiki
 
 ## People (server-rollen, vastgelegd 27-10 door eigenaar)
 
-| spelernaam | rol |
-|---|---|
-| `antimatter87` | **owner** (de gebruiker zelf - SSH/deploy/alle goedkeuringen lopen via hem) |
-| `iekjebr36` | staff |
-| `kooyer` | staff |
-| `afriendlystomach` | staff |
-| `greyarts` | staff - spelling door eigenaar nóg niet bevestigd ("weet ik niet zeker") |
-
-Gebruik deze namen voor tests/scenario's (denk aan `/power give <owner> ...`, permissies,
-Discord-links). De lijst komt van de eigenaar zelf; verifieer onbekende namen nooit door
-spelerbestanden op de server door te spitten (identiteitsregel) - vraag het, of laat hem
-het in het spel zelf checken.
-
 ## Commands
 
 ``
