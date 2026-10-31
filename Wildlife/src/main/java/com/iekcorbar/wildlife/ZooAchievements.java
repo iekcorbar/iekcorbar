@@ -39,9 +39,16 @@ final class ZooAchievements {
         // ticket line
         a.add("first_ticket", "root", "paper", "First Ticket", "Buy a zoo ticket.", "task");
         a.add("ticket_collector", "first_ticket", "book", "Ticket Collector", "Buy ten zoo tickets.", "goal").hidden();
+        // ---- feeding & care line (new)
+        a.add("first_feed_zoo", "root", "wheat", "Zoo Keeper", "Feed an animal in your zoo for the first time.", "task").hidden();
+        a.add("feeder", "first_feed_zoo", "hay_block", "Feeder", "Feed 10 animals in your zoo.", "goal").hidden();
+        a.add("master_feeder", "feeder", "golden_apple", "Master Feeder", "Feed 50 animals in your zoo.", "challenge").hidden().global();
+        a.add("senior_animal", "first_feed_zoo", "golden_apple", "Wise Old Animal", "Witness an animal become a senior.", "goal").hidden().global();
+        a.add("zoo_veterinarian", "first_feed_zoo", "golden_apple", "Zoo Veterinarian", "Heal a sick animal in your zoo.", "goal").hidden();
+        a.add("zoo_breeder", "first_feed_zoo", "egg", "Zoo Breeder", "Breed an animal in captivity.", "goal").hidden();
         // master
         a.add("zoo_master", "entrance", "nether_star", "Zoo Master", "Complete every Zoo advancement.", "challenge").hidden().allOf(
-                "full_entrance", "multi_enclosure", "full_comfort", "full_path", "full_decor");
+                "full_entrance", "multi_enclosure", "full_comfort", "full_path", "full_decor", "master_feeder");
 
         NamespacedKey decor = new NamespacedKey(plugin, "decor");
         a.scanner(it -> {
