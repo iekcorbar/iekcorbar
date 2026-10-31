@@ -9,7 +9,7 @@ import {
   Plus, Minus, ShoppingCart, ChevronDown, Tag
 } from 'lucide-react';
 
-const emptyItemForm = { id: null, slug: '', name: '', description: '', price: '', giveCommand: '', imageUrl: '', active: true, currency: 'balance', category: '' };
+const emptyItemForm = { id: null, slug: '', name: '', description: '', price: '', giveCommand: '', imageUrl: '', active: true, currency: 'balance', category: '', productType: 'cosmetic', filePath: '', version: '' };
 
 function StatusBadge({ status }) {
   const map = {
@@ -209,7 +209,8 @@ export default function ShopPage() {
     setItemForm({
       id: item.id, slug: item.slug, name: item.name, description: item.description || '',
       price: String(item.price), giveCommand: item.giveCommand || '', imageUrl: item.imageUrl || '',
-      active: item.active, currency: item.currency === 'website' ? 'website' : 'balance', category: item.category || ''
+      active: item.active, currency: item.currency === 'website' ? 'website' : 'balance', category: item.category || '',
+      productType: item.productType || 'cosmetic', filePath: item.filePath || '', version: item.version || ''
     });
     setFormError(''); setShowItemForm(true);
   }
@@ -229,7 +230,8 @@ export default function ShopPage() {
           description: itemForm.description.trim(), price: Number(itemForm.price),
           giveCommand: isWebsiteCurrency ? null : itemForm.giveCommand.trim(),
           imageUrl: itemForm.imageUrl.trim(), active: itemForm.active, currency: itemForm.currency,
-          category: itemForm.category.trim()
+          category: itemForm.category.trim(), productType: itemForm.productType,
+          filePath: itemForm.filePath.trim(), version: itemForm.version.trim()
         })
       });
       const data = await res.json();
@@ -470,7 +472,14 @@ export default function ShopPage() {
                 <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Description</label>
                 <textarea value={itemForm.description} onChange={e => setItemForm(f => ({ ...f, description: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2" rows={2} />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Product type</label>
+                  <select value={itemForm.productType} onChange={e => setItemForm(f => ({ ...f, productType: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2">
+                    <option value="cosmetic">Cosmetic (in-game item)</option>
+                    <option value="download">Download (plugin/file — PayPal, v2)</option>
+                  </select>
+                </div>
                 <div>
                   <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Currency</label>
                   <select value={itemForm.currency} onChange={e => setItemForm(f => ({ ...f, currency: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2">
@@ -492,6 +501,18 @@ export default function ShopPage() {
                 <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Image URL</label>
                 <input value={itemForm.imageUrl} onChange={e => setItemForm(f => ({ ...f, imageUrl: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2" placeholder="https://..." />
               </div>
+              {itemForm.productType === 'download' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">File path (under private-uploads/plugins/)</label>
+                    <input value={itemForm.filePath} onChange={e => setItemForm(f => ({ ...f, filePath: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2 font-mono" placeholder="MyPlugin-1.0.jar" />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Version</label>
+                    <input value={itemForm.version} onChange={e => setItemForm(f => ({ ...f, version: e.target.value }))} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2" placeholder="1.0.0" />
+                  </div>
+                </div>
+              )}
               {itemForm.currency !== 'website' && (
                 <div>
                   <label className="block text-[9px] uppercase font-bold text-sp-gold/70 mb-1">Give command (RCON, must include {'{player}'})</label>

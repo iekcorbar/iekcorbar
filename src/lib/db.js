@@ -5545,12 +5545,12 @@ export const db = {
   getShopItems: async () => {
     try {
       const rows = await query(
-        "SELECT id, slug, name, description, price, give_command as giveCommand, image_url as imageUrl, active, clears_tipsy_effect as clearsTipsyEffect, currency, created_at as createdAt FROM shop_items ORDER BY created_at ASC"
+        "SELECT id, slug, name, description, price, give_command as giveCommand, image_url as imageUrl, active, clears_tipsy_effect as clearsTipsyEffect, currency, product_type as productType, file_path as filePath, version, created_at as createdAt FROM shop_items ORDER BY created_at ASC"
       );
       return rows.map(r => ({ ...r, clearsTipsyEffect: Boolean(r.clearsTipsyEffect), currency: r.currency || 'balance' }));
     } catch {
       const fb = readFallbackJson();
-      return (fb.shop_items || []).map(i => ({ ...i, currency: i.currency || 'balance' }));
+      return (fb.shop_items || []).map(i => ({ ...i, currency: i.currency || 'balance', productType: i.productType || 'cosmetic' }));
     }
   },
 
@@ -5565,21 +5565,21 @@ export const db = {
   // check, no RCON take, no RCON give — so giveCommand is optional for
   // those items (there's nothing to deliver in-game).
   saveShopItem: async (item) => {
-    const { id, slug, name, description, price, giveCommand, imageUrl, active, clearsTipsyEffect, currency } = item;
+    const { id, slug, name, description, price, giveCommand, imageUrl, active, clearsTipsyEffect, currency, productType, filePath, version } = item;
     const finalCurrency = currency === 'website' ? 'website' : 'balance';
     const finalId = id || String(Date.now());
     try {
       const existing = await query('SELECT id FROM shop_items WHERE id = ?', [id || '']);
       if (existing && existing.length > 0) {
         await query(
-          'UPDATE shop_items SET slug = ?, name = ?, description = ?, price = ?, give_command = ?, image_url = ?, active = ?, clears_tipsy_effect = ?, currency = ? WHERE id = ?',
-          [slug, name, description || null, price, giveCommand || null, imageUrl || null, active ? 1 : 0, clearsTipsyEffect ? 1 : 0, finalCurrency, id]
+          'UPDATE shop_items SET slug = ?, name = ?, description = ?, price = ?, give_command = ?, image_url = ?, active = ?, clears_tipsy_effect = ?, currency = ?, product_type = ?, file_path = ?, version = ? WHERE id = ?',
+          [slug, name, description || null, price, giveCommand || null, imageUrl || null, active ? 1 : 0, clearsTipsyEffect ? 1 : 0, finalCurrency, productType || 'cosmetic', filePath || null, version || null, id]
         );
         if (active) await notifyPlayersOfContent('shop', 'updated', { id, title: name, link: '/shop' });
       } else {
         await query(
-          'INSERT INTO shop_items (id, slug, name, description, price, give_command, image_url, active, clears_tipsy_effect, currency) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-          [finalId, slug, name, description || null, price, giveCommand || null, imageUrl || null, active ? 1 : 0, clearsTipsyEffect ? 1 : 0, finalCurrency]
+          'INSERT INTO shop_items (id, slug, name, description, price, give_command, image_url, active, clears_tipsy_effect, currency, product_type, file_path, version) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          [finalId, slug, name, description || null, price, giveCommand || null, imageUrl || null, active ? 1 : 0, clearsTipsyEffect ? 1 : 0, finalCurrency, productType || 'cosmetic', filePath || null, version || null]
         );
         if (active) await notifyPlayersOfContent('shop', 'created', { id: finalId, title: name, link: '/shop' });
       }
@@ -5591,7 +5591,7 @@ export const db = {
       const fb = readFallbackJson();
       fb.shop_items = fb.shop_items || [];
       const idx = fb.shop_items.findIndex(i => i.id === id);
-      const saved = { id: finalId, slug, name, description: description || null, price, giveCommand: giveCommand || null, imageUrl: imageUrl || null, active: !!active, clearsTipsyEffect: !!clearsTipsyEffect, currency: finalCurrency, createdAt: idx >= 0 ? fb.shop_items[idx].createdAt : new Date().toISOString() };
+      const saved = { id: finalId, slug, name, description: description || null, price, giveCommand: giveCommand || null, imageUrl: imageUrl || null, active: !!active, clearsTipsyEffect: !!clearsTipsyEffect, currency: finalCurrency, productType: productType || 'cosmetic', filePath: filePath || null, version: version || null, createdAt: idx >= 0 ? fb.shop_items[idx].createdAt : new Date().toISOString() };
       if (idx >= 0) fb.shop_items[idx] = saved;
       else fb.shop_items.push(saved);
       writeFallbackJson(fb);

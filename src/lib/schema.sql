@@ -770,6 +770,16 @@ CREATE TABLE IF NOT EXISTS shop_items (
   -- or the server itself was unreachable — a website-only cosmetic
   -- shouldn't depend on either.
   currency VARCHAR(20) NOT NULL DEFAULT 'balance',
+  -- 'cosmetic' (default): in-game item delivered via queued give-command.
+  -- 'download': digital product (plugin jar/zip) sold for real money via
+  -- PayPal; delivered as a secure download link after payment. Added 2026-10-31
+  -- in preparation for the plugin-sales v2.
+  product_type VARCHAR(20) NOT NULL DEFAULT 'cosmetic',
+  -- For product_type='download': relative path under private-uploads/plugins/
+  -- (never publicly served; streamed via /api/shop/download after purchase).
+  file_path VARCHAR(500) DEFAULT NULL,
+  -- For product_type='download': human-readable version string (e.g. "1.2.0").
+  version VARCHAR(50) DEFAULT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -805,7 +815,11 @@ CREATE TABLE IF NOT EXISTS shop_settings (
   -- page's staff settings panel if the default guess doesn't match the
   -- server's actual command (added 2026-10-26 with the coins currency).
   coins_take_command VARCHAR(255) DEFAULT 'elitecoins take {player} {amount}',
-  enabled BOOLEAN NOT NULL DEFAULT TRUE
+  enabled BOOLEAN NOT NULL DEFAULT TRUE,
+  -- PayPal (v2 plugin sales). Stored here so staff can configure without redeploy.
+  paypal_client_id VARCHAR(255) DEFAULT NULL,
+  paypal_secret VARCHAR(500) DEFAULT NULL,
+  paypal_mode VARCHAR(20) NOT NULL DEFAULT 'sandbox'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Achievement/advancement system (2026-09-06) — website actions (chat,
