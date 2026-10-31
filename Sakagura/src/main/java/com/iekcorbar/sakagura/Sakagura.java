@@ -52,6 +52,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     private Seasons seasons;
     private Sommelier sommelier;
     private Fmm fmm;
+    private Spoilage spoilage;
 
     @Override
     public void onEnable() {
@@ -67,6 +68,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
         garden = new Garden(this);
         trees = new Trees(this);
         gardenDecor = new GardenDecor(this);
+        spoilage = new Spoilage(this);
         var pm = getServer().getPluginManager();
         for (var l : new org.bukkit.event.Listener[]{goods, cauldrons, stills, casks, drunk, garden, trees}) pm.registerEvents(l, this);
         pm.registerEvents(gardenDecor.decor, this);
@@ -111,6 +113,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
             garden.tick();
             trees.tick();
             seasons.tick();
+        if (spoilage != null && tick % 10 == 0) spoilage.tick();
             if (tick % 30 == 0) {
                 casks.relight();
                 stills.relight();
@@ -157,6 +160,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     Seasons seasons() { return seasons; }
     Sommelier sommelier() { return sommelier; }
     Fmm fmm() { return fmm; }
+    Spoilage spoilage() { return spoilage; }
 
     // ------------------------------------------------------------ /brew
 

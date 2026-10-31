@@ -73,6 +73,8 @@ final class Goods implements Listener {
         m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, id);
         it.setItemMeta(m);
         it.setData(DataComponentTypes.ITEM_MODEL, Key.key("sakagura", id));
+        // food spoilage: stamp fruits with a spoilage timer
+        if (FOOD.containsKey(id)) plugin.spoilage().stamp(it, id);
         Integer food = FOOD.get(id);
         if (food != null) {
             it.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(food).saturation(food * 0.6f).build());
