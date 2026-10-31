@@ -1322,6 +1322,10 @@ export default function ClientProviders({ children }) {
                 <Link href="/terms" className="hover:text-sp-gold underline transition-colors">
                   Terms of Service
                 </Link>
+                <span className="text-sp-bronze/30">|</span>
+                <Link href="/hire" className="hover:text-sp-gold underline transition-colors">
+                  Hire the builder
+                </Link>
               </div>
               <div className="flex items-center gap-1.5 text-center">
                 <span>Not affiliated with Mojang Studios or Microsoft. Steam-powered, sakura-hearted.</span>
