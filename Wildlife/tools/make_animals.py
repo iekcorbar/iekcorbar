@@ -952,9 +952,9 @@ def crane(m):
     m.sym("h_head", 0.75, 18.4, -6.3, 0.82, 18.9, -6.0, "eye")
     for name, x in (("leg_l", 0.75), ("leg_r", -0.75)):          # bare black legs
         m.bone(name, (x, 10.4, -0.2), "body")
-        m.box(name, x - 0.16, 1.0, -0.36, x + 0.16, 10.4, 0.16, "fur_dark")
-        m.box(name, x - 0.16, 0.6, 0.16, x + 0.16, 1.2, 1.5, "fur_dark")   # back toe
-        m.box(name, x - 0.16, 0.6, -1.2, x + 0.16, 1.0, 0.2, "fur_dark")   # front toes
+        m.box(name, x - 0.25, 1.0, -0.4, x + 0.25, 10.4, 0.2, "fur_dark")   # thicker leg
+        m.box(name, x - 0.25, 0.6, 0.2, x + 0.25, 1.2, 1.5, "fur_dark")   # back toe
+        m.box(name, x - 0.25, 0.6, -1.2, x + 0.25, 1.0, 0.2, "fur_dark")   # front toes
     stilt_walk(m, 1.5, 16)
     m.anim("idle", 3.6, {"h_head": {"rotation": [(0, (0, 0, 0)), (1.0, (0, 25, 0)), (2.2, (0, 25, 0)), (3.0, (0, -18, 0)), (3.6, (0, 0, 0))]},
                          "body": {"position": [(0, (0, 0, 0)), (1.8, (0, 0.12, 0)), (3.6, (0, 0, 0))]}})
