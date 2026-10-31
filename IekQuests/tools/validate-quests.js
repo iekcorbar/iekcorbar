@@ -60,6 +60,10 @@ function checkAction(where, raw) {
   const sp = a.indexOf(' ');
   const key = sp < 0 ? a : a.slice(0, sp);
   const val = sp < 0 ? '' : a.slice(sp + 1);
+  if ((key === 'tag' || key === 'perm') && /^[+-]/.test(val.trim())) {
+    err(`${where}: "${a}" lijkt een typefout (bedoeld: "${key}${val.trim()[0]} ..." zonder spatie); wordt nu als console-commando uitgevoerd`);
+    return;
+  }
   if (key === 'tag+') tagsSet.add(val.trim());
   if (!VERBS.has(key)) {
     if (SUSPECT.test(key)) err(`${where}: "${key}" lijkt een typefout van een actie; wordt nu als console-commando uitgevoerd`);
