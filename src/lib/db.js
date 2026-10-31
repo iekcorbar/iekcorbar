@@ -358,7 +358,7 @@ function queueBellPush(opts) {
 // Repeated edits to the same item within CONTENT_UPDATE_COOLDOWN_MS only
 // notify once, so a staffer saving a wiki page five times in a row doesn't
 // send every player five pushes. Creates and deletes always notify.
-const CONTENT_LABELS = { wiki: 'Wiki page', wiki_category: 'Wiki category', event: 'Event', poll: 'Poll', project: 'Community project', rules: 'Rule', tip: 'Tip of the day', carousel: 'Homepage slide', carousel_set: 'Homepage slideshow', vote_site: 'Vote site', achievement: 'Achievement', brewing: 'Brewing recipe', guide: 'Starter guide step', site_content: 'Website text' };
+const CONTENT_LABELS = { wiki: 'Wiki page', wiki_category: 'Wiki category', event: 'Event', poll: 'Poll', project: 'Community project', rules: 'Rule', tip: 'Tip of the day', carousel: 'Homepage slide', carousel_set: 'Homepage slideshow', vote_site: 'Vote site', shop: 'Shop item', achievement: 'Achievement', brewing: 'Brewing recipe', guide: 'Starter guide step', site_content: 'Website text' };
 const CONTENT_UPDATE_COOLDOWN_MS = 15 * 60 * 1000;
 const recentContentNotifications = new Map();
 
@@ -409,6 +409,8 @@ function buildContentPush(type, action, { id, title, link, extra }) {
       return { pushTitle: '💡 Tip of the day', pushBody: t };
     case 'vote_site':
       return { pushTitle: `🗳️ Vote for Iekcorbar on ${t}`, pushBody: 'Every vote helps the server grow — and earns you rewards!', actions: view('Vote now') };
+    case 'shop':
+      return { pushTitle: created ? `New in the shop: ${t}` : `Shop update: ${t}`, pushBody: 'Take a look before someone else grabs it!', actions: view('Open shop') };
     case 'achievement':
       return { pushTitle: `🏆 ${created ? 'New achievement' : 'Achievement updated'}: ${t}`, pushBody: 'Can you be the one to unlock it first?', actions: view('View achievements') };
     case 'brewing':
@@ -5533,6 +5535,238 @@ export const db = {
       }
     }
   },
+
+  // SHOP — see schema.sql's comment above CREATE TABLE shop_items for the
+  // design rationale (staff-editable RCON command templates instead of
+  // hardcoded syntax). getShopItems always returns every item including
+  // inactive ones — api/shop/items/route.js is responsible for filtering to
+  // active-only for non-staff callers, same "route decides visibility"
+  // shape as getSiteContent/getUsers elsewhere in this file.
+  getShopItems: async () => {
+    try {
+      const rows = await query(
+        "SELECT id, slug, name, description, price, give_command as giveCommand, image_url as imageUrl, active, clears_tipsy_effect as clearsTipsyEffect, currency, created_at as createdAt FROM shop_items ORDER BY created_at ASC"
+      );
+      return rows.map(r => ({ ...r, clearsTipsyEffect: Boolean(r.clearsTipsyEffect), currency: r.currency || 'balance' }));
+    } catch {
+      const fb = readFallbackJson();
+      return (fb.shop_items || []).map(i => ({ ...i, currency: i.currency || 'balance' }));
+    }
+  },
+
+  // Returns true if the item ended up persisted somewhere (MySQL, or db.json
+  // if MySQL is unreachable) — false if both failed, same pattern as
+  // saveBrewingRecipe/saveCommunityProject.
+  //
+  // `currency`: 'balance' (default) spends the real in-game Vault balance
+  // via RCON, same as always. 'website' spends the website-only "Gears"
+  // currency instead (see getUserWebsiteCurrency/spendWebsiteCurrency) and
+  // needs the Minecraft server reachable for nothing at all — no online
+  // check, no RCON take, no RCON give — so giveCommand is optional for
+  // those items (there's nothing to deliver in-game).
+  saveShopItem: async (item) => {
+    const { id, slug, name, description, price, giveCommand, imageUrl, active, clearsTipsyEffect, currency } = item;
+    const finalCurrency = currency === 'website' ? 'website' : 'balance';
+    const finalId = id || String(Date.now());
+    try {
+      const existing = await query('SELECT id FROM shop_items WHERE id = ?', [id || '']);
+      if (existing && existing.length > 0) {
+        await query(
+          'UPDATE shop_items SET slug = ?, name = ?, description = ?, price = ?, give_command = ?, image_url = ?, active = ?, clears_tipsy_effect = ?, currency = ? WHERE id = ?',
+          [slug, name, description || null, price, giveCommand || null, imageUrl || null, active ? 1 : 0, clearsTipsyEffect ? 1 : 0, finalCurrency, id]
+        );
+        if (active) await notifyPlayersOfContent('shop', 'updated', { id, title: name, link: '/shop' });
+      } else {
+        await query(
+          'INSERT INTO shop_items (id, slug, name, description, price, give_command, image_url, active, clears_tipsy_effect, currency) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+          [finalId, slug, name, description || null, price, giveCommand || null, imageUrl || null, active ? 1 : 0, clearsTipsyEffect ? 1 : 0, finalCurrency]
+        );
+        if (active) await notifyPlayersOfContent('shop', 'created', { id: finalId, title: name, link: '/shop' });
+      }
+      return true;
+    } catch (err) {
+      console.error('Failed to save shop item in MySQL:', err);
+    }
+    try {
+      const fb = readFallbackJson();
+      fb.shop_items = fb.shop_items || [];
+      const idx = fb.shop_items.findIndex(i => i.id === id);
+      const saved = { id: finalId, slug, name, description: description || null, price, giveCommand: giveCommand || null, imageUrl: imageUrl || null, active: !!active, clearsTipsyEffect: !!clearsTipsyEffect, currency: finalCurrency, createdAt: idx >= 0 ? fb.shop_items[idx].createdAt : new Date().toISOString() };
+      if (idx >= 0) fb.shop_items[idx] = saved;
+      else fb.shop_items.push(saved);
+      writeFallbackJson(fb);
+      return true;
+    } catch (fbErr) {
+      console.error('Failed to save shop item in db.json fallback:', fbErr);
+      return false;
+    }
+  },
+
+  deleteShopItem: async (id) => {
+    let mysqlOk = false;
+    try {
+      const [doomed] = await query('SELECT name, active FROM shop_items WHERE id = ?', [id]);
+      await query('DELETE FROM shop_items WHERE id = ?', [id]);
+      mysqlOk = true;
+      if (doomed && doomed.active) await notifyPlayersOfContent('shop', 'deleted', { id, title: doomed.name, link: '/shop' });
+    } catch (err) {
+      console.error('Failed to delete shop item in MySQL:', err);
+    }
+    if (!mysqlOk) {
+      const fb = readFallbackJson();
+      if (fb.shop_items) {
+        fb.shop_items = fb.shop_items.filter(i => i.id !== id);
+        writeFallbackJson(fb);
+      }
+    }
+  },
+
+  // Global shop config — currently just the RCON command template used to
+  // deduct a player's balance (see the design note on shop_items). Same
+  // single-row (id=1) shape as vote_reward_config.
+  getShopSettings: async () => {
+    try {
+      const rows = await query('SELECT take_command as takeCommand, coins_take_command as coinsTakeCommand, enabled FROM shop_settings WHERE id = 1');
+      if (rows && rows.length > 0) return { takeCommand: rows[0].takeCommand, coinsTakeCommand: rows[0].coinsTakeCommand, enabled: Boolean(rows[0].enabled) };
+    } catch { /* fallback below */ }
+    const fb = readFallbackJson();
+    return fb.shop_settings || { takeCommand: 'cmi money take {player} {amount}', coinsTakeCommand: 'em money remove {player} {amount}', enabled: true };
+  },
+
+  // Merge-safe: only overwrites the fields actually passed in, so toggling
+  // `enabled` from the shop page's staff panel never blanks out
+  // `takeCommand` (and vice versa) — the two are edited from separate
+  // controls in the UI.
+  saveShopSettings: async (settings) => {
+    const current = await db.getShopSettings();
+    const merged = {
+      takeCommand: settings.takeCommand !== undefined ? settings.takeCommand : current.takeCommand,
+      coinsTakeCommand: settings.coinsTakeCommand !== undefined ? settings.coinsTakeCommand : current.coinsTakeCommand,
+      enabled: settings.enabled !== undefined ? !!settings.enabled : current.enabled
+    };
+    try {
+      await query(
+        'INSERT INTO shop_settings (id, take_command, coins_take_command, enabled) VALUES (1, ?, ?, ?) ON DUPLICATE KEY UPDATE take_command = ?, coins_take_command = ?, enabled = ?',
+        [merged.takeCommand, merged.coinsTakeCommand, merged.enabled ? 1 : 0, merged.takeCommand, merged.coinsTakeCommand, merged.enabled ? 1 : 0]
+      );
+      return true;
+    } catch (err) {
+      console.error('Failed to save shop settings in MySQL:', err);
+    }
+    try {
+      const fb = readFallbackJson();
+      fb.shop_settings = merged;
+      writeFallbackJson(fb);
+      return true;
+    } catch (fbErr) {
+      console.error('Failed to save shop settings in db.json fallback:', fbErr);
+      return false;
+    }
+  },
+
+  getShopPurchasesByUsername: async (username) => {
+    try {
+      return await query(
+        'SELECT id, username, item_id as itemId, item_name as itemName, price_paid as pricePaid, status, take_message as takeMessage, give_message as giveMessage, consumed_at as consumedAt, created_at as createdAt FROM shop_purchases WHERE LOWER(username) = LOWER(?) ORDER BY created_at DESC',
+        [username]
+      );
+    } catch {
+      const fb = readFallbackJson();
+      return (fb.shop_purchases || []).filter(p => (p.username || '').toLowerCase() === username.toLowerCase());
+    }
+  },
+
+  // Staff-facing: every purchase, most recent first — used by the Shop
+  // page's staff panel to spot/retry 'queued' deliveries across all players.
+  getAllShopPurchases: async () => {
+    try {
+      return await query(
+        'SELECT id, username, item_id as itemId, item_name as itemName, price_paid as pricePaid, status, take_message as takeMessage, give_message as giveMessage, consumed_at as consumedAt, created_at as createdAt FROM shop_purchases ORDER BY created_at DESC'
+      );
+    } catch {
+      const fb = readFallbackJson();
+      return fb.shop_purchases || [];
+    }
+  },
+
+  createShopPurchase: async (purchase) => {
+    const { id, username, itemId, itemName, pricePaid, status, takeMessage, giveMessage } = purchase;
+    try {
+      await query(
+        'INSERT INTO shop_purchases (id, username, item_id, item_name, price_paid, status, take_message, give_message) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [id, username, itemId, itemName, pricePaid, status, takeMessage || null, giveMessage || null]
+      );
+      return true;
+    } catch (err) {
+      console.error('Failed to record shop purchase in MySQL:', err);
+    }
+    try {
+      const fb = readFallbackJson();
+      fb.shop_purchases = fb.shop_purchases || [];
+      fb.shop_purchases.unshift({ id, username, itemId, itemName, pricePaid, status, takeMessage: takeMessage || null, giveMessage: giveMessage || null, consumedAt: null, createdAt: new Date().toISOString() });
+      writeFallbackJson(fb);
+      return true;
+    } catch (fbErr) {
+      console.error('Failed to record shop purchase in db.json fallback:', fbErr);
+      return false;
+    }
+  },
+
+  // Marks a clears_tipsy_effect purchase (Glass of Milk) as actually drunk —
+  // see PATCH /api/shop/purchases {action:'consume'} and the "Your Remedies"
+  // inventory on /shop. Scoped to the owning username and only succeeds once
+  // per purchase (already-consumed or never-paid-for rows don't match), so
+  // it doubles as the ownership + double-spend check for the route.
+  consumeShopPurchase: async (id, username) => {
+    try {
+      const result = await query(
+        "UPDATE shop_purchases SET consumed_at = NOW() WHERE id = ? AND LOWER(username) = LOWER(?) AND consumed_at IS NULL AND status IN ('delivered', 'queued')",
+        [id, username]
+      );
+      return result.affectedRows > 0;
+    } catch (err) {
+      console.error('Failed to consume shop purchase in MySQL:', err);
+    }
+    try {
+      const fb = readFallbackJson();
+      const idx = (fb.shop_purchases || []).findIndex(p =>
+        p.id === id && (p.username || '').toLowerCase() === username.toLowerCase() &&
+        !p.consumedAt && ['delivered', 'queued'].includes(p.status)
+      );
+      if (idx === -1) return false;
+      fb.shop_purchases[idx].consumedAt = new Date().toISOString();
+      writeFallbackJson(fb);
+      return true;
+    } catch (fbErr) {
+      console.error('Failed to consume shop purchase in db.json fallback:', fbErr);
+      return false;
+    }
+  },
+
+  // Used both right after the initial give attempt and by the retry/claim
+  // endpoint (PATCH /api/shop/purchases) once a 'queued' delivery is
+  // reattempted.
+  updateShopPurchaseStatus: async (id, status, giveMessage) => {
+    try {
+      await query('UPDATE shop_purchases SET status = ?, give_message = ? WHERE id = ?', [status, giveMessage || null, id]);
+      return true;
+    } catch (err) {
+      console.error('Failed to update shop purchase status in MySQL:', err);
+    }
+    try {
+      const fb = readFallbackJson();
+      const idx = (fb.shop_purchases || []).findIndex(p => p.id === id);
+      if (idx === -1) return false;
+      fb.shop_purchases[idx].status = status;
+      fb.shop_purchases[idx].giveMessage = giveMessage || null;
+      writeFallbackJson(fb);
+      return true;
+    } catch (fbErr) {
+      console.error('Failed to update shop purchase status in db.json fallback:', fbErr);
+      return false;
+    }
+  },
+
 
   // STORY ROOM — staff storyline workspace (see ensureStoryTables() above for
   // why these are MySQL-only). Reads return null on failure and writes return
