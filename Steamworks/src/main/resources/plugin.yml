@@ -4,17 +4,17 @@ main: com.iekcorbar.steamworks.SteamworksPlugin
 api-version: '26.2'
 description: Steampunk/Japanese kinetic machines - shafts, cogwheels, cranks, water wheels, millstones and steam hammers.
 author: iekcorbar
-softdepend: [FreeMinecraftModels, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
+softdepend: [FreeMinecraftModels, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, SteamworksAdditions, Wildlife, Zukan]
 
 commands:
   steamworks:
     description: Steamworks admin commands
     usage: /steamworks <give|info|list|reload>
     aliases: [sw]
-   swpower:
-     description: Steamworks Power commands
-     usage: /swpower <list|give|reload>
-     aliases: [pwr, swp]
+  swpower:
+    description: Steamworks Power commands
+    usage: /swpower <list|give|reload>
+    aliases: [pwr, swp]
 
 permissions:
   steamworks.admin:
