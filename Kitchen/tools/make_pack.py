@@ -63,6 +63,10 @@ PALETTE = {
 "shiso": (120, 60, 120), "shiso_green": (80, 160, 60), "shiso_dark": (60, 40, 90),
 "ginger": (220, 180, 100), "ginger_dark": (160, 120, 60),
 "wasabi": (60, 160, 60), "wasabi_dark": (40, 120, 40),
+"mizuna": (120, 180, 80), "mizuna_dark": (70, 120, 50),
+"kabocha": (240, 160, 40), "kabocha_skin": (52, 92, 52), "kabocha_dark": (180, 110, 30),
+"bamboo": (196, 186, 104), "bamboo_dark": (140, 132, 64), "bamboo_shoot": (220, 200, 140),
+"eggplant": (90, 40, 120), "eggplant_dark": (60, 25, 90), "eggplant_light": (130, 70, 160),
 }
 NAMES = list(PALETTE)
 assert len(NAMES) <= 256, len(NAMES)
@@ -246,6 +250,11 @@ def items():
     M["shiso_leaves"] = [box(4, 0, 4, 12, 1.2, 12, "shiso"), box(5, 1.2, 5, 11, 1.6, 11, "shiso_green")]
     M["ginger"] = [box(5, 0, 6, 11, 2, 10, "ginger"), box(6, 2, 7, 10, 3, 9, "ginger_dark"), box(7, 0, 5, 9, 1, 6, "ginger")]
     M["wasabi_root"] = [box(6, 0, 6, 10, 3, 10, "wasabi"), box(7, 3, 7, 9, 4, 9, "wasabi_dark")]
+    M["mizuna_seeds"] = pile("mizuna", "mizuna_dark", 11, 11)
+    M["mizuna"] = [box(4, 0, 4, 12, 1.2, 12, "mizuna"), box(5, 1.2, 5, 11, 1.6, 11, "mizuna_dark")]
+    M["kabocha"] = [box(5, 0, 5, 11, 6, 11, "kabocha"), box(4.5, 0, 6, 5, 5, 10, "kabocha_skin"), box(11, 0, 6, 11.5, 5, 10, "kabocha_skin")]
+    M["bamboo_shoots"] = [box(6, 0, 6, 10, 4, 10, "bamboo_shoot"), box(7, 4, 7, 9, 5, 9, "bamboo_dark")]
+    M["eggplant"] = [box(5, 0, 5, 11, 5, 11, "eggplant"), box(6, 0, 4.5, 10, 4, 5, "eggplant_light"), box(5.5, 0, 10.5, 10.5, 4, 11, "eggplant_dark")]
     M["cabbage_leaf"] = [box(4, 0, 5, 12, 0.6, 11, "cabbage_light"), box(5, 0.6, 6, 11, 0.8, 10, "leaf")]
     M["daikon_slices"] = disc(2.2, 0, 0.8, "daikon", cx=6, cz=8) + disc(2.2, 0.8, 1.6, "daikon", cx=8, cz=8) + disc(2.2, 0, 0.8, "daikon", cx=10, cz=8)
     M["chopped_green_onion"] = pile("negi", "negi_white", 10, 6)
@@ -561,10 +570,45 @@ def sprite(crop, stage, wild=False):
                 x, y = rnd.randint(3, 12), rnd.randint(0, max(1, h - 3))
                 put(px, x, y, PALETTE["wasabi_dark"])
                 put(px, x + 1, y, PALETTE["wasabi"])
+    elif crop == "mizuna":
+        leafy(px, rnd, h, PALETTE["mizuna"], PALETTE["mizuna_dark"], 7, 3)
+        if stage >= 2 or wild:
+            for _ in range(5 if stage == 3 else 2):
+                x, y = rnd.randint(2, 13), rnd.randint(1, max(2, h - 2))
+                put(px, x, y, PALETTE["mizuna"]); put(px, x + 1, y, PALETTE["mizuna_dark"])
+    elif crop == "kabocha":
+        for i in range(2):
+            x = 4 + i * 6
+            for y in range(0, min(5, h)):
+                for dx in range(4):
+                    put(px, x + dx, y, PALETTE["kabocha"] if (x + y + dx) % 2 else PALETTE["kabocha_dark"])
+        if stage >= 2 or wild:
+            for _ in range(2):
+                x, y = rnd.randint(2, 12), rnd.randint(0, max(1, h - 4))
+                put(px, x, y, PALETTE["kabocha_skin"]); put(px, x + 1, y + 1, PALETTE["kabocha_skin"])
+    elif crop == "bamboo_shoots":
+        for i in range(4):
+            x = 3 + i * 3
+            hh = h - rnd.randint(0, 1)
+            for y in range(0, min(4, hh)):
+                put(px, x, y, PALETTE["bamboo_shoot"])
+                put(px, x + 1, y, PALETTE["bamboo_dark"])
+            stem(px, x, hh, PALETTE["bamboo"], 0)
+        if stage >= 2 or wild:
+            for _ in range(4):
+                x, y = rnd.randint(2, 13), rnd.randint(1, max(2, h - 2))
+                put(px, x, y, PALETTE["leaf"]); put(px, x, y + 1, PALETTE["leaf_dark"])
+    elif crop == "eggplant":
+        leafy(px, rnd, h, PALETTE["leaf"], PALETTE["leaf_dark"], 5, 3)
+        if stage >= 2 or wild:
+            for _ in range(4 if stage == 3 else 2):
+                x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
+                for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
+                    put(px, x + dx, y + dy, PALETTE["eggplant"] if (dx + dy) % 2 == 0 else PALETTE["eggplant_light"])
     return png(px)
 
 
-CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi"]  # CropType order
+CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant"]  # CropType order
 
 # ------------------------------------------------------------------ sounds
 

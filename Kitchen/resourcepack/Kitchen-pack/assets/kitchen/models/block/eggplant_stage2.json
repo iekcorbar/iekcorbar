@@ -1,0 +1,6 @@
+{
+ "parent": "minecraft:block/crop",
+ "textures": {
+  "crop": "kitchen:block/eggplant_stage2"
+ }
+}

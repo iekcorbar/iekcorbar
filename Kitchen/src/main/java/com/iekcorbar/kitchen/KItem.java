@@ -28,6 +28,11 @@ enum KItem {
     SHISO_LEAVES("Shiso Leaves", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
     GINGER("Ginger", Kind.SEED, 1, 0.8f, Rem.NONE, 64, "Plant on farmland. Spicy root."),
     WASABI_ROOT("Wasabi Root", Kind.SEED, 2, 2.4f, Rem.NONE, 64, "Plant on wet farmland (next to water). Rare."),
+    MIZUNA_SEEDS("Mizuna Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Peppery leafy green."),
+    MIZUNA("Mizuna", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
+    KABOCHA("Kabocha", Kind.SEED, 3, 3.6f, Rem.NONE, 64, "Plant on farmland. Japanese pumpkin."),
+    BAMBOO_SHOOTS("Bamboo Shoots", Kind.SEED, 2, 2.4f, Rem.NONE, 64, "Plant on farmland. Spring delicacy."),
+    EGGPLANT("Eggplant", Kind.SEED, 2, 2.0f, Rem.NONE, 64, "Plant on farmland. Nasu dengaku!"),
     // ---- cut on the cutting board
     CABBAGE_LEAF("Cabbage Leaf", Kind.FOOD, 1, 0.6f, Rem.NONE, 64),
     DAIKON_SLICES("Daikon Slices", Kind.FOOD, 1, 1.2f, Rem.NONE, 64),
