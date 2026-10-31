@@ -13,7 +13,6 @@ cine:
   orbit-crane: 1.9        # how much the height drifts up and down
   afk-shot: orbit         # what the AFK camera does: orbit | pad:<path name>
   screen-default: true    # open menus float in the world above your head, visible to everyone (/cine screen toggles)
-  screen-style: isometric # floating menu look: isometric (tilted plate with the slots on it) or billboard (loose icons that face you)
   screen-clicks: true     # floating menu slots are clickable: left-click = use that slot, sneak-click = shift-click
 
   pad-speed: 2.0          # blocks per second when playing a camera path
