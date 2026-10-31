@@ -169,6 +169,11 @@ final class Achievements {
         a.add("feeder", "first_feed_zoo", "hay_block", "Feeder", "Feed 10 animals in your zoo.", "goal").hidden();
         a.add("master_feeder", "feeder", "golden_apple", "Master Feeder", "Feed 50 animals in your zoo.", "challenge").hidden().global();
 
+        // ============================================================
+        // 11. AGING & LIFE (root -> first_birth -> grown_up -> senior)
+        // ============================================================
+        a.add("senior_animal", "grown_up", "golden_apple", "Wise Old Animal", "Witness an animal become a senior.", "goal").hidden().global();
+
         // 10. COMPOSITE: MASTER NATURALIST
         // ============================================================
         a.add("master", "encyclopedia", "nether_star", "Master Naturalist", "Complete every Wildlife advancement.", "challenge").hidden().global().allOf(

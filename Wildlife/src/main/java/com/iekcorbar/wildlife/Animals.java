@@ -69,9 +69,10 @@ final class Animals implements Listener {
         final boolean baby;
         boolean attached, curled, sleeping, hiding, waving, frozen, fishing;
         int hunger = 100; // 0-100, 100 = full, 0 = starving
+        int ageStage = 0; // 0=baby, 1=adult, 2=senior
         long busyUntil, tailBack, rideUntil, awakeAt, panicUntil, fleeUntil;
         /** Babies: world time they grow up, and how long was left when a golden dandelion froze them. Adults: love mode (plugin tick) and next breeding (world time). */
-        long growAt, frozenLeft, loveUntil, breedAfter, lastFed;
+        long growAt, frozenLeft, loveUntil, breedAfter, lastFed, birthTime;
         org.bukkit.Location threat;
 
         Animal(LivingEntity entity, Species species, boolean rare, String model, boolean baby) {
@@ -80,6 +81,8 @@ final class Animals implements Listener {
             this.rare = rare;
             this.model = model;
             this.baby = baby;
+            this.birthTime = System.currentTimeMillis();
+            this.ageStage = baby ? 0 : 1;
         }
 
         String name() {
@@ -88,7 +91,7 @@ final class Animals implements Listener {
     }
 
     private final WildlifePlugin plugin;
-    final NamespacedKey speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey;
+    final NamespacedKey speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey;
     final Breeding breeding;
     private final Map<UUID, Animal> animals = new HashMap<>();
     private boolean warnedModels;
@@ -104,6 +107,8 @@ final class Animals implements Listener {
         growKey = new NamespacedKey(plugin, "grow_at");
         frozenKey = new NamespacedKey(plugin, "frozen_left");
         breedKey = new NamespacedKey(plugin, "breed_after");
+    birthKey = new NamespacedKey(plugin, "birth_time");
+    ageKey = new NamespacedKey(plugin, "age_stage");
         brain = new Brain(plugin);
         breeding = new Breeding(plugin, this);
     }
@@ -140,6 +145,8 @@ final class Animals implements Listener {
                 pdc.set(babyKey, PersistentDataType.BYTE, (byte) 1);
                 pdc.set(growKey, PersistentDataType.LONG, en.getWorld().getFullTime() + breeding.growTicks());
             }
+            pdc.set(birthKey, PersistentDataType.LONG, System.currentTimeMillis());
+            pdc.set(ageKey, PersistentDataType.INTEGER, isBaby ? 0 : 1);
             setup((LivingEntity) en, s, isBaby);
         });
         Animal a = register((LivingEntity) e);
@@ -222,6 +229,8 @@ final class Animals implements Listener {
         Animal a = new Animal(e, s, r != null && r == 1, model, pdc.has(babyKey, PersistentDataType.BYTE));
         a.growAt = pdc.getOrDefault(growKey, PersistentDataType.LONG, 0L);
         a.breedAfter = pdc.getOrDefault(breedKey, PersistentDataType.LONG, 0L);
+        a.birthTime = pdc.getOrDefault(birthKey, PersistentDataType.LONG, System.currentTimeMillis());
+        a.ageStage = pdc.getOrDefault(ageKey, PersistentDataType.INTEGER, a.baby ? 0 : 1);
         if (pdc.has(frozenKey, PersistentDataType.LONG)) {
             a.frozen = true;
             a.frozenLeft = pdc.get(frozenKey, PersistentDataType.LONG);
@@ -316,6 +325,18 @@ final class Animals implements Listener {
             // Visual feedback for hungry animals (every 5 min, show smoke particles)
             if (a.hunger <= 20 && tick % 600 == 0) {
                 w.spawnParticle(org.bukkit.Particle.SMOKE, e.getLocation().add(0, e.getHeight() + 0.3, 0), 3, 0.2, 0.1, 0.2, 0.01);
+            }
+            // Aging: baby -> adult -> senior
+            long ageMs = System.currentTimeMillis() - a.birthTime;
+            if (a.ageStage == 0 && !a.baby && ageMs > 0) {
+                a.ageStage = 1; // grew up
+            }
+            if (a.ageStage == 1 && ageMs > 30 * 60 * 1000) { // 30 minutes
+                a.ageStage = 2; // senior
+                e.getPersistentDataContainer().set(ageKey, PersistentDataType.INTEGER, 2);
+                w.spawnParticle(org.bukkit.Particle.HAPPY_VILLAGER, e.getLocation().add(0, e.getHeight() + 0.3, 0), 10, 0.3, 0.2, 0.3, 0);
+                w.playSound(e.getLocation(), org.bukkit.Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.2f);
+                for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "senior_animal");
             }
             long time = w.getTime();
             boolean night = time > 13000 && time < 23000;
@@ -790,6 +811,13 @@ final class Animals implements Listener {
                 add(d, Material.COAL, r.nextInt(2));
             }
             default -> { }
+        }
+        // Senior animals drop bonus items (age bonus)
+        if (a.ageStage == 2 && !a.baby) {
+            d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2)));
+            if (a.species == Species.DEER || a.species == Species.BEAR) {
+                d.add(new ItemStack(Material.BONE, 1 + r.nextInt(2)));
+            }
         }
         // Hunter's trophy (0.6.2): whoever recorded an animal in the Field Journal and then brings one down
         // may take its statue home - common 10 %, rare 30 %. Observing first is the naturalist's deal.
