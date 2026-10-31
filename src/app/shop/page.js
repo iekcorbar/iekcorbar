@@ -1,10 +1,11 @@
 import { headers } from 'next/headers';
+import { CartProvider } from '../../components/CartProvider';
 import ShopPageClient from './ShopPageClient';
 
 export default async function ShopPage() {
   const h = await headers();
-  const host = (h.get('host') || '').toLowerCase();
-  const isShopSubdomain = host.startsWith('shop.');
+  const host = (h.get('host') || '').toLowerCase().replace(/:\d+$/, '');
+  const isShopSubdomain = host === 'shop.iekcorbar.com';
 
   if (!isShopSubdomain) {
     return (
@@ -17,15 +18,16 @@ export default async function ShopPage() {
           </a>
           .
         </p>
-        <a
-          href="https://shop.iekcorbar.com"
-          className="inline-block mt-2 px-5 py-2 bg-sp-gold hover:bg-white text-black text-xs font-bold uppercase rounded cursor-pointer transition-all"
-        >
+        <a href="https://shop.iekcorbar.com" className="inline-block mt-2 px-5 py-2 bg-sp-gold hover:bg-white text-black text-xs font-bold uppercase rounded cursor-pointer transition-all">
           Go to the shop
         </a>
       </div>
     );
   }
 
-  return <ShopPageClient />;
+  return (
+    <CartProvider>
+      <ShopPageClient />
+    </CartProvider>
+  );
 }
