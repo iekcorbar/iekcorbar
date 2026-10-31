@@ -5,7 +5,7 @@ inventory-items:
     material: PLAYER_HEAD
     slot: 0
     name: "&eProfile"
-    action: "open:profile"
+    action: "player:profile"
     quest: "tutorial:profile_clicked"
   crafting:
     material: SMITHING_TABLE
@@ -17,18 +17,19 @@ inventory-items:
     material: BOOK
     slot: 2
     name: "&eQuest Jobs"
-    action: "open:jobs"
+    action: "player:jobs quests"
+    action-shift-right: "player:journal"
     quest: "tutorial:jobs_clicked"
-  gouw:
-    material: NETHERITE_HOE
-    slot: 3
-    name: "&eGouw Menu"
-    action: "open:gouw"
   warp:
     material: CARTOGRAPHY_TABLE
-    slot: 4
+    slot: 3
     name: "&eWarp"
     action: "player:mmocore waypoints open %player%"
     action-left: "player:homes"
     action-right: "player:mmocore waypoints open %player%"
     action-shift-right: "player:em adventurersguild"
+  gouw:
+    material: NETHERITE_HOE
+    slot: 4
+    name: "&eGouw Menu"
+    action: "player:gouw menu"
