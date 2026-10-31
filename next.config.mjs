@@ -1,16 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* standard production build config */
-  async rewrites() {
-    return [
-      // shop.iekcorbar.com serves the shop UI at its root
-      {
-        source: '/',
-        destination: '/shop',
-        has: [{ type: 'host', value: 'shop.iekcorbar.com' }],
-      },
-    ];
-  },
   async redirects() {
     return [
       // the beginner guide moved from its sub-route to the main Steamworks page (2026-10-25);
