@@ -219,9 +219,9 @@ export default function AchievementsPage() {
           </h1>
           <p className="text-xs text-text-warm/60 mt-1 max-w-2xl">
             Earned by doing things on the website — sending your first chat message, writing a logbook entry,
-            making a friend, buying something from the shop, and more. Unlocking one
+            making a friend, and more. Unlocking one
             shows a real in-game notification the next time you join the server, and some also pay out Gears —
-            a website-only currency spendable on <a href="/shop" className="text-sp-gold hover:text-white underline">website-only shop items</a>.
+            a website-only currency.
           </p>
         </div>
         {user && (
@@ -434,7 +434,7 @@ export default function AchievementsPage() {
                 onChange={e => setForm(f => ({ ...f, currencyReward: e.target.value }))}
                 className="w-full bg-neutral-900 border border-sp-bronze/30 text-white text-xs rounded px-3 py-2 focus:outline-hidden focus:border-sp-gold"
               />
-              <p className="text-[9px] text-text-warm/35 mt-1">Paid out once, the first time a player earns this — spendable on website-only items in the <a href="/shop" className="underline hover:text-sp-gold">Shop</a>.</p>
+              <p className="text-[9px] text-text-warm/35 mt-1">Paid out once, the first time a player earns this.</p>
             </div>
 
             <label className="flex items-center gap-2 text-xs text-amber-300/80 cursor-pointer">

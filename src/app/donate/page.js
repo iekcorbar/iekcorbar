@@ -50,9 +50,7 @@ export default function DonatePage() {
         </h2>
         <p className="text-sm text-text-warm/85 leading-relaxed">
           Honestly: our thanks, and nothing else that affects the game. Donating gives you{" "}
-          <strong>no gameplay advantage, no currency and no items</strong> — the{" "}
-          <Link href="/shop" className="text-sp-gold hover:text-white underline">Shop</Link>{" "}
-          is entirely driven by in-game currencies you earn by playing, and that separation is
+          <strong>no gameplay advantage, no currency and no items</strong> — and that separation is
           by design. If we ever add donor-only cosmetics, they will be purely visual, announced
           openly, and still never required to play.
         </p>

@@ -905,7 +905,6 @@ export default function ClientProviders({ children }) {
                     { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
                     { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                     { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
-                    { href: '/shop', label: 'Shop', icon: ShoppingBag, match: (p) => p.startsWith('/shop') },
                     { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                     { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
                   ]}
@@ -1101,7 +1100,6 @@ export default function ClientProviders({ children }) {
                 { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
                 { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                 { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
-                { href: '/shop', label: 'Shop', icon: ShoppingBag, match: (p) => p.startsWith('/shop') },
                 { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                 { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
               ].map(({ href, label, icon: Icon, match }) => (

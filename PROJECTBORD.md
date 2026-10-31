@@ -64,6 +64,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 - Wissels + rangeerkoppeling (treinen, als volgende batch)
 - Sakagura: fruitbomen
 - Website: profielscherm, AI-vertalingen
+- Website: shop volledig verwijderd (page + API + nav + db-methods) - gaat naar apart subdomain (eigenaar bouwt dat zelf); DB-tabellen bewaard voor queued deliveries
 - MMO: feature-keuze uit Valhalla-onderzoek (gesprek met eigenaar)
 - Paper 26.3: upgrade-beslisboom (testbank groen, blockers in docs/263-testrapport.md)
 

@@ -14,7 +14,7 @@ const DISMISS_DAYS = 14;
 const BENEFITS = [
   { icon: MessageSquare, title: 'Instant chat notifications', text: "Know right away when someone messages you — even with the app closed." },
   { icon: CalendarCheck, title: 'Never miss an event', text: 'Reminders the day before and 1 hour before, and sign up with one tap.' },
-  { icon: Bell, title: 'All news in your pocket', text: 'New events, projects, polls, wiki pages, shop items and more.' },
+  { icon: Bell, title: 'All news in your pocket', text: 'New events, projects, polls, wiki pages and more.' },
   { icon: Lightbulb, title: 'Daily tip at 10:00', text: 'A handy Iekcorbar tip every morning to level up faster.' }
 ];
 
