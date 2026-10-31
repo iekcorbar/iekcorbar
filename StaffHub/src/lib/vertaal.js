@@ -75,12 +75,38 @@ export async function vertaalPagina(node, naar, { wie = null, opnieuw = false } 
   const bestaand = d.prepare('SELECT html, updated FROM vertalingen WHERE node = ? AND lang = ?').get(node, naar);
   if (bestaand && !opnieuw) return { ok: true, html: bestaand.html, cached: true, updated: bestaand.updated };
 
-  const md = htmlToMd(bron.html);
+  const r = await vertaalMd(htmlToMd(bron.html), naar, 'vertaling:' + node + ':' + naar);
+  if (!r.ok) return r;
+  d.prepare('INSERT INTO vertalingen(node,lang,html,who,updated) VALUES(?,?,?,?,?) ' +
+    'ON CONFLICT(node,lang) DO UPDATE SET html=excluded.html, who=excluded.who, updated=excluded.updated')
+    .run(node, naar, r.html, wie, now());
+  return r;
+}
+
+/**
+ * Vertaalt een geuploade tekstbestand (md/txt/html) en bewaart het zoals een pagina-vertaling.
+ * De vertaling telt als verouderd zodra het bestand een nieuwere versie kreeg.
+ */
+export async function vertaalBestand(node, tekst, naar, { wie = null, opnieuw = false } = {}) {
+  const d = getDb();
+  if (!TALEN[naar]) return { ok: false, fout: 'onbekende taal' };
+  const bestaand = d.prepare('SELECT html, updated FROM vertalingen WHERE node = ? AND lang = ?').get(node.id, naar);
+  if (bestaand && !opnieuw && bestaand.updated >= node.updated) return { ok: true, html: bestaand.html, cached: true, updated: bestaand.updated };
+  const r = await vertaalMd(tekst, naar, 'vertaling:bestand:' + node.id + ':' + naar);
+  if (!r.ok) return r;
+  d.prepare('INSERT INTO vertalingen(node,lang,html,who,updated) VALUES(?,?,?,?,?) ' +
+    'ON CONFLICT(node,lang) DO UPDATE SET html=excluded.html, who=excluded.who, updated=excluded.updated')
+    .run(node.id, naar, r.html, wie, now());
+  return r;
+}
+
+/** Het eigenlijke vertaalwerk: markdown in, vertaalde markdown + html + structuurcontrole uit. */
+async function vertaalMd(md, naar, sleutel) {
   const stukken = chunks(md);
   if (!stukken.length) return { ok: false, fout: 'leeg document' };
   if (stukken.length > 12) return { ok: false, fout: 'te lang voor één beurt (' + stukken.length + ' stukken)' };
 
-  const sid = await nieuweSessie('vertaling:' + node + ':' + naar);
+  const sid = await nieuweSessie(sleutel);
   if (!sid) return { ok: false, fout: 'ai-uit' };
 
   const delen = [];
@@ -100,12 +126,7 @@ export async function vertaalPagina(node, naar, { wie = null, opnieuw = false } 
   const vooraf = tel(md), achteraf = tel(resultaat);
   // Een ingestorte vertaling is erger dan een onvertaalde: zeg het als het scheelt.
   const afwijking = vooraf.koppen > 2 && Math.abs(achteraf.koppen - vooraf.koppen) / vooraf.koppen > 0.34;
-  const html = mdToHtml(resultaat);
-  d.prepare('INSERT INTO vertalingen(node,lang,html,who,updated) VALUES(?,?,?,?,?) ' +
-    'ON CONFLICT(node,lang) DO UPDATE SET html=excluded.html, who=excluded.who, updated=excluded.updated')
-    .run(node, naar, html, wie, now());
-
-  return { ok: true, html, markdown: resultaat, stukken: stukken.length, controle: { vooraf, achteraf, twijfel: afwijking } };
+  return { ok: true, html: mdToHtml(resultaat), markdown: resultaat, stukken: stukken.length, controle: { vooraf, achteraf, twijfel: afwijking } };
 }
 
 /** Welke talen van dit document al klaarliggen. */

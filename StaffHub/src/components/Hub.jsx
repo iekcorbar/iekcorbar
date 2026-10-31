@@ -15,7 +15,7 @@ import ServerStatus from '@/components/ServerStatus';
 import MarkdownImport from '@/components/MarkdownImport';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
-import Vertaal from '@/components/Vertaal';
+import Vertaal, { kanVertalen } from '@/components/Vertaal';
 import { useLang, useDt, trServer, LangToggle, LANGS, setLeesbaar, leesbaarStand } from '@/lib/i18n';
 import { may, CAPS, PRIV, effectieveCaps } from '@/lib/caps';
 
@@ -486,7 +486,7 @@ useEffect(() => {
               </div>
             </div>
             <div className="flex-1 overflow-auto min-h-0">
-              {sel.type === 'page' && <Vertaal node={sel} />}
+              {kanVertalen(sel) && <Vertaal node={sel} />}
               {sel.type === 'page' && <PageEditor key={sel.id} node={sel} onRenamed={refresh} />}
               {sel.type === 'file' && <FilePane key={sel.id} n={sel} onChanged={refresh} lijst={kids.filter((k) => k.type === 'file' && mediaKind(k.name) === mediaKind(sel.name))} />}
             </div>

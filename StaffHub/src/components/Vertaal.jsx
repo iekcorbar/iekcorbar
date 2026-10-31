@@ -31,6 +31,10 @@ export function GidsWeergave({ html, klas = '' }) {
   );
 }
 
+// Bestanden die we als tekst kunnen vertalen (de route toetst dit nogmaals)
+export const VERTAAL_EXT = ['md', 'txt', 'html', 'htm', 'log'];
+export const kanVertalen = (n) => n?.type === 'page' || (n?.type === 'file' && VERTAAL_EXT.includes(String(n.name || '').split('.').pop().toLowerCase()));
+
 export default function Vertaal({ node }) {
   const { t, tr } = useLang();
   const [bezig, setBezig] = useState('');        // taal die loopt
@@ -43,7 +47,7 @@ export default function Vertaal({ node }) {
     if (!node || bezig) return;
     setBezig(lang); setMelding('');
     try {
-      const r = await fetch('/api/page/' + node.id + '/vertaal', {
+      const r = await fetch((node.type === 'file' ? '/api/file/' : '/api/page/') + node.id + '/vertaal', {
         method: 'POST', headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ lang, opnieuw: Boolean(opnieuw) }),
       });
@@ -60,7 +64,7 @@ export default function Vertaal({ node }) {
     }
   }
 
-  if (!node || node.type !== 'page') return null;
+  if (!kanVertalen(node)) return null;
 
   return (
     <div className="border-t border-bronze/20 px-3 py-2 text-xs bg-black/10">
@@ -92,9 +96,9 @@ export default function Vertaal({ node }) {
             {resultaat.controle?.twijfel ? ' · ⚠ ' + t('tr.twijfel') : ''}
           </p>
           <GidsWeergave html={resultaat.html} klas="mt-1 max-h-52 [&_h1]:text-[13px] [&_h1]:font-bold [&_h1]:text-gold [&_h2]:font-bold [&_h2]:text-gold/90 [&_li]:ml-4 [&_li]:list-disc [&_code]:bg-black/60 [&_code]:px-1 [&_pre]:bg-black/60 [&_pre]:p-2 [&_pre]:overflow-auto" />
-          <a href={'/api/page/' + node.id + '?fmt=md'} download className="mt-1 inline-flex items-center gap-1 text-[10px] text-parch/60 hover:text-gold">
+          {node.type === 'page' && <a href={'/api/page/' + node.id + '?fmt=md'} download className="mt-1 inline-flex items-center gap-1 text-[10px] text-parch/60 hover:text-gold">
             <Download className="size-3" /> markdown van het origineel
-          </a>
+          </a>}
           <p className="text-[9px] text-parch/35 mt-0.5 flex items-center gap-1"><FileText className="size-2.5" /> de vertaling is nog niet opgeslagen als eigen taal-tab in de editor - dat is de volgende stap</p>
         </div>
       )}
