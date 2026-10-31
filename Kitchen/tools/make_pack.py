@@ -71,6 +71,13 @@ PALETTE = {
 "dried": (180, 140, 80), "dried_dark": (140, 100, 50),
 "rack": (140, 100, 60), "rack_dark": (90, 65, 40),
 "smoker": (60, 60, 60), "smoker_dark": (40, 40, 40), "smoker_iron": (120, 120, 130),
+"clay_oven": (180, 120, 80), "clay_oven_dark": (120, 80, 50), "clay_oven_light": (220, 170, 120),
+"steamer": (140, 100, 70), "steamer_dark": (90, 65, 45), "steamer_lid": (160, 120, 80),
+"bread": (220, 180, 110), "bread_dark": (180, 140, 80),
+"melonpan": (240, 200, 100), "melonpan_dark": (200, 160, 70),
+"castella": (230, 180, 90), "castella_dark": (190, 140, 60),
+"nikuman": (230, 200, 170), "nikuman_dark": (190, 160, 130),
+"anpan": (220, 170, 100), "anpan_dark": (180, 130, 70), "anpan_bean": (140, 80, 40),
 }
 NAMES = list(PALETTE)
 assert len(NAMES) <= 256, len(NAMES)
@@ -412,6 +419,15 @@ def props():
     M["dried_chili"] = [box(6, 0, 6, 10, 1.5, 10, "chili"), box(7, 1.5, 7, 9, 2, 9, "chili")]
     M["dried_herbs"] = [box(5, 0, 5, 11, 0.8, 11, "leaf"), box(6, 0.8, 6, 10, 1.2, 10, "leaf_dark")]
     M["sundried_tomato"] = [box(5, 0, 5, 11, 1.5, 11, "tomato"), box(6, 1.5, 6, 10, 1.8, 10, "tomato")]
+    M["clay_oven"] = [box(0, 0, 0, 16, 12, 16, "clay_oven"), box(0, 12, 0, 16, 14, 16, "clay_oven_dark"),
+                      box(2, 2, -0.01, 14, 10, 0.5, "black"), box(0, 0, 0, 16, 1, 16, "clay_oven_dark")]
+    M["steamer"] = [box(2, 0, 2, 14, 10, 14, "steamer"), box(1, 10, 1, 15, 12, 15, "steamer_dark"),
+                    box(4, 12, 4, 12, 13, 12, "steamer_lid"), box(7, 13, 7, 9, 14.5, 9, "steamer_lid")]
+    M["rice_bread"] = [box(4, 0, 4, 12, 6, 12, "bread"), box(5, 6, 5, 11, 7, 11, "bread_dark")]
+    M["melonpan"] = [box(4, 0, 4, 12, 5, 12, "melonpan"), box(5, 5, 5, 11, 6, 11, "melonpan_dark")]
+    M["castella"] = [box(3, 0, 3, 13, 8, 13, "castella"), box(4, 8, 4, 12, 9, 12, "castella_dark")]
+    M["nikuman"] = [box(5, 0, 5, 11, 6, 11, "nikuman"), box(6, 6, 6, 10, 7, 10, "nikuman_dark")]
+    M["anpan"] = [box(5, 0, 5, 11, 5, 11, "anpan"), box(7, 5, 7, 9, 6, 9, "anpan_bean")]
     return M
 
 # ------------------------------------------------------------------ meal items (icons = the whole meal)

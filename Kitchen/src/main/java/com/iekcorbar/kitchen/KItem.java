@@ -120,7 +120,15 @@ enum KItem {
     SMOKED_BEEF("Smoked Beef", Kind.FOOD, 7, 8f, Rem.NONE, 64),
     DRIED_CHILI("Dried Chili", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
     DRIED_HERBS("Dried Herbs", Kind.INGREDIENT, 0, 0, Rem.NONE, 64),
-    SUNDRIED_TOMATO("Sundried Tomato", Kind.FOOD, 2, 1.6f, Rem.NONE, 64);
+    SUNDRIED_TOMATO("Sundried Tomato", Kind.FOOD, 2, 1.6f, Rem.NONE, 64),
+    // ---- baking
+    CLAY_OVEN("Clay Oven", Kind.PROP, 0, 0, Rem.NONE, 64, "Bakes bread and pastries.", "Needs fire below it."),
+    STEAMER("Steamer", Kind.PROP, 0, 0, Rem.NONE, 64, "Steams buns and dumplings.", "Place over a heat source."),
+    RICE_BREAD("Rice Bread", Kind.FOOD, 5, 6f, Rem.NONE, 64),
+    MELONPAN("Melonpan", Kind.FOOD, 6, 7f, Rem.NONE, 64, "Sweet bread with a cookie crust."),
+    CASTELLA("Castella", Kind.FOOD, 7, 8f, Rem.NONE, 64, "Honey sponge cake."),
+    NIKUMAN("Nikuman", Kind.FOOD, 8, 9f, Rem.NONE, 64, "Steamed meat bun."),
+    ANPAN("Anpan", Kind.FOOD, 6, 7f, Rem.NONE, 64, "Sweet bean bun.");
 
     enum Kind { SEED, INGREDIENT, FOOD, DRINK, MEAL, TOOL, PROP }
 
