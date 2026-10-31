@@ -322,9 +322,19 @@ final class Animals implements Listener {
             World w = e.getWorld();
             // Hunger decay: animals get hungry over time (~1 point per 2 min)
             if (tick % 1200 == 0 && a.hunger > 0) a.hunger = Math.max(0, a.hunger - 1);
+            // Hunger effects: slow movement when hungry
+            if (a.hunger <= 20) {
+                if (e instanceof org.bukkit.entity.Mob mob) {
+                    mob.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SLOWNESS, 200, 1, false, false));
+                }
+            }
             // Visual feedback for hungry animals (every 5 min, show smoke particles)
             if (a.hunger <= 20 && tick % 600 == 0) {
                 w.spawnParticle(org.bukkit.Particle.SMOKE, e.getLocation().add(0, e.getHeight() + 0.3, 0), 3, 0.2, 0.1, 0.2, 0.01);
+            }
+            // Sick state: when hunger = 0, show poison particles
+            if (a.hunger == 0 && tick % 600 == 0) {
+                w.spawnParticle(org.bukkit.Particle.ENTITY_EFFECT, e.getLocation().add(0, e.getHeight() + 0.3, 0), 5, 0.2, 0.1, 0.2, 0, org.bukkit.Color.fromRGB(50, 200, 50));
             }
             // Aging: baby -> adult -> senior
             long ageMs = System.currentTimeMillis() - a.birthTime;
@@ -785,6 +795,11 @@ final class Animals implements Listener {
         Animal a = animals.remove(e.getEntity().getUniqueId());
         if (a == null) return;
         e.getDrops().clear();
+        // Starving animals drop nothing (they died of hunger)
+        if (a.hunger == 0) {
+            e.setDroppedExp(0);
+            return;
+        }
         ThreadLocalRandom r = ThreadLocalRandom.current();
         List<ItemStack> d = e.getDrops();
         if (a.baby) {   // babies drop nothing
