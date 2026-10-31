@@ -45,6 +45,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     private KitchenDecor kitchenDecor;
     private Competition competition;
     private CookingXP cookingXp;
+    private Spoilage spoilage;
 
     @Override
     public void onEnable() {
@@ -58,6 +59,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
         kitchenDecor = new KitchenDecor(this);
         competition = new Competition(this);
         cookingXp = new CookingXP(this);
+        spoilage = new Spoilage(this);
         items.registerRecipes();
         adv = Achievements.create(this, items);
         adv.start();
@@ -109,6 +111,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
             kitchenDecor.decor.tick(tick);
             if (tick % 20 == 0) crops.tick();
             if (tick % 600 == 0) meals.saveAll();
+            if (tick % 100 == 0 && spoilage != null) spoilage.tick();
         }, 10L, 10L);
         getLogger().info("Kitchen enabled. Guide: " + docsUrl());
     }
@@ -176,4 +179,5 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     Recipes recipes() { return recipes; }
 Competition competition() { return competition; }
 CookingXP cookingXp() { return cookingXp; }
+Spoilage spoilage() { return spoilage; }
 }

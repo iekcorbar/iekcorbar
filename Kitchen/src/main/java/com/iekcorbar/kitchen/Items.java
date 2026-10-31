@@ -81,6 +81,7 @@ final class Items implements Listener {
                     -2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
         }
         item.setItemMeta(meta);
+        plugin.spoilage().stamp(item);
         item.setData(DataComponentTypes.ITEM_MODEL, Key.key("kitchen", t.id()));
         if (!t.knife()) item.setData(DataComponentTypes.MAX_STACK_SIZE, t.maxStack);
         if (t.edible()) {
