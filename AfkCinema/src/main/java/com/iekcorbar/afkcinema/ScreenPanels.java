@@ -2,6 +2,11 @@ package com.iekcorbar.afkcinema;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.BlockDisplay;
+import org.bukkit.util.Transformation;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.bukkit.Sound;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
@@ -71,6 +76,10 @@ final class ScreenPanels implements Listener {
         final List<Integer> indexes = new ArrayList<>();
         final List<ItemStack> laatst = new ArrayList<>();
         Location anker;
+        /** Isometrisch paneel: achterplaat (rand + vlak) en het raster. */
+        final List<BlockDisplay> deco = new ArrayList<>();
+        int cols = 1, rows = 1;
+        float w = 0.5f, h = 0.5f;
 
         Paneel(UUID eigenaar, InventoryView view, TextDisplay titel, Location anker) {
             this.eigenaar = eigenaar; this.view = view; this.titel = titel; this.anker = anker;
@@ -94,6 +103,7 @@ final class ScreenPanels implements Listener {
         if (m == null) return;
         for (ItemDisplay it : m.vakken) { try { it.remove(); } catch (Throwable ignored) { } }
         for (Interaction it : m.klikkers) { klikmap.remove(it.getUniqueId()); try { it.remove(); } catch (Throwable ignored) { } }
+        for (BlockDisplay it : m.deco) { try { it.remove(); } catch (Throwable ignored) { } }
         try { m.titel.remove(); } catch (Throwable ignored) { }
     }
 
@@ -201,7 +211,8 @@ final class ScreenPanels implements Listener {
                     anker.clone().add(0, 1.15, 0), EntityType.TEXT_DISPLAY);
             titel.text(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
                     .legacySection().deserialize("§6" + lbl + " §8· §f" + p.getName()));
-            titel.setBillboard(Display.Billboard.CENTER);
+            titel.setBillboard(iso() ? Display.Billboard.FIXED : Display.Billboard.CENTER);
+            titel.setBrightness(new Display.Brightness(15, 15));
             titel.setAlignment(TextDisplay.TextAlignment.CENTER);
             titel.setBackgroundColor(org.bukkit.Color.fromARGB(178, 26, 18, 10));
             titel.setPersistent(false);
@@ -229,6 +240,7 @@ final class ScreenPanels implements Listener {
         }
         pn.laatst.clear(); pn.laatst.addAll(huidig);
         pn.indexes.addAll(indexen);
+        if (iso()) { bouwIso(pn, anker, huidig, indexen, klikbaar); return; }
         int n = huidig.size();
         Vector naarEigenaar = anker.getDirection().setY(0);
         if (naarEigenaar.lengthSquared() < 1e-6) naarEigenaar = new Vector(0, 0, -1);
@@ -274,8 +286,10 @@ final class ScreenPanels implements Listener {
 
     private void follow(Player p, Paneel pn) {
         Location nieuw = anker(p);
-        if (nieuw.distanceSquared(pn.anker) < 0.09) return;         // <30 cm: laten staan
+        float dy = Math.abs(((nieuw.getYaw() - pn.anker.getYaw()) % 360f + 540f) % 360f - 180f);
+        if (nieuw.distanceSquared(pn.anker) < 0.09 && dy < 20f) return;   // <30 cm en <20 graden: laten staan
         pn.anker = nieuw;
+        if (iso()) { plaats(pn); return; }
         try { pn.titel.teleport(nieuw.clone().add(0, 1.15, 0)); } catch (Throwable ignored) { }
         Vector naarEigenaar = nieuw.getDirection().setY(0);
         if (naarEigenaar.lengthSquared() < 1e-6) naarEigenaar = new Vector(0, 0, -1);
@@ -305,6 +319,103 @@ final class ScreenPanels implements Listener {
             if (zelfde) return;
         }
         bouwVakken(pn, pn.anker);
+    }
+
+    // ---------- isometrisch paneel ----------
+
+    private boolean iso() {
+        return !"billboard".equalsIgnoreCase(plugin.getConfig().getString("cine.screen-style", "isometric"));
+    }
+
+    private Vector vooruit(Location anker) {
+        Vector v = anker.getDirection().setY(0);
+        if (v.lengthSquared() < 1e-6) v = new Vector(0, 0, -1);
+        return v.normalize();
+    }
+
+    /** Het vlak staat 45 graden gedraaid ten opzichte van de kijkrichting en 35 graden achterover gekanteld (isometrisch). */
+    private Quaternionf isoRot(Location anker) {
+        Vector v = vooruit(anker).multiply(-1);            // van het paneel naar het hoofd
+        double th = Math.atan2(v.getX(), v.getZ()) + Math.PI / 4;
+        return new Quaternionf().rotateY((float) th).rotateX((float) -Math.toRadians(35));
+    }
+
+    private void bouwIso(Paneel pn, Location anker, List<ItemStack> huidig, List<Integer> indexen, boolean klikbaar) {
+        int n = huidig.size();
+        pn.cols = Math.min(5, Math.max(1, n));
+        pn.rows = Math.max(1, (n + pn.cols - 1) / pn.cols);
+        pn.w = pn.cols * 0.30f + 0.16f;
+        pn.h = pn.rows * 0.30f + 0.16f;
+        for (BlockDisplay b : pn.deco) { try { b.remove(); } catch (Throwable ignored) { } }
+        pn.deco.clear();
+        for (Material m : new Material[]{Material.COPPER_BLOCK, Material.BLACK_CONCRETE}) {
+            try {
+                BlockDisplay b = (BlockDisplay) anker.getWorld().spawnEntity(anker, EntityType.BLOCK_DISPLAY);
+                b.setBlock(m.createBlockData());
+                b.setBrightness(new Display.Brightness(15, 15));
+                b.setPersistent(false);
+                b.setTeleportDuration(2);
+                pn.deco.add(b);
+            } catch (Throwable ignored) { }
+        }
+        for (int i = 0; i < n; i++) {
+            try {
+                ItemDisplay d = (ItemDisplay) anker.getWorld().spawnEntity(anker, EntityType.ITEM_DISPLAY);
+                ItemStack kopie = huidig.get(i).clone();
+                kopie.setAmount(1);
+                d.setItemStack(kopie);
+                d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
+                d.setBillboard(Display.Billboard.FIXED);
+                d.setBrightness(new Display.Brightness(15, 15));
+                d.setTeleportDuration(2);
+                d.setPersistent(false);
+                pn.vakken.add(d);
+                if (klikbaar) {
+                    Interaction it = (Interaction) anker.getWorld().spawnEntity(anker, EntityType.INTERACTION);
+                    it.setInteractionWidth(0.28f);
+                    it.setInteractionHeight(0.28f);
+                    it.setResponsive(true);
+                    it.setPersistent(false);
+                    pn.klikkers.add(it);
+                    klikmap.put(it.getUniqueId(), new Klik(pn.eigenaar, indexen.get(i)));
+                }
+            } catch (Throwable ignored) { }
+        }
+        plaats(pn);
+    }
+
+    /** Zet plaat, titel, items en klikvlakken op het schuine vlak rond het hoofd (ook bij elke verplaatsing). */
+    private void plaats(Paneel pn) {
+        Quaternionf q = isoRot(pn.anker);
+        Location c = pn.anker.clone().add(vooruit(pn.anker).multiply(1.0)).add(0, 0.45, 0);
+        Vector3f normaal = new Vector3f(0, 0, 1).rotate(q);
+        float[][] plaat = {{pn.w, pn.h, 0.02f, -0.02f}, {pn.w - 0.08f, pn.h - 0.08f, 0.02f, -0.005f}};
+        for (int i = 0; i < pn.deco.size() && i < plaat.length; i++) {
+            float[] pl = plaat[i];
+            Vector3f hoek = new Vector3f(-pl[0] / 2f, -pl[1] / 2f, pl[3]).rotate(q);
+            BlockDisplay b = pn.deco.get(i);
+            try {
+                b.teleport(c);
+                b.setTransformation(new Transformation(hoek, q, new Vector3f(pl[0], pl[1], pl[2]), new Quaternionf()));
+            } catch (Throwable ignored) { }
+        }
+        try {
+            Vector3f t = new Vector3f(0, pn.h / 2f + 0.12f, 0.04f).rotate(q);
+            pn.titel.teleport(c.clone().add(t.x, t.y, t.z));
+            pn.titel.setTransformation(new Transformation(new Vector3f(), q, new Vector3f(0.5f), new Quaternionf()));
+        } catch (Throwable ignored) { }
+        for (int i = 0; i < pn.vakken.size(); i++) {
+            int col = i % pn.cols, row = i / pn.cols;
+            Vector3f off = new Vector3f((col - (pn.cols - 1) / 2f) * 0.30f, ((pn.rows - 1) / 2f - row) * 0.30f, 0.04f).rotate(q);
+            Location plek = c.clone().add(off.x, off.y, off.z);
+            try {
+                pn.vakken.get(i).teleport(plek);
+                pn.vakken.get(i).setTransformation(new Transformation(new Vector3f(), q, new Vector3f(0.5f), new Quaternionf()));
+            } catch (Throwable ignored) { }
+            if (i < pn.klikkers.size()) {
+                try { pn.klikkers.get(i).teleport(plek.clone().add(normaal.x * 0.1, normaal.y * 0.1 - 0.14, normaal.z * 0.1)); } catch (Throwable ignored) { }
+            }
+        }
     }
 
     private Location anker(Player p) {
