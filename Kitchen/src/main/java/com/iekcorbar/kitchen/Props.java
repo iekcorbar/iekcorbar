@@ -896,6 +896,13 @@ final class Props implements Listener {
         if (r.container() != null) container.setAmount(container.getAmount() - 1);
         if (inResult == null || inResult.isEmpty()) p.inv.setItem(Prop.POT_RESULT, result);
         else inResult.setAmount(inResult.getAmount() + result.getAmount());
+        // cooking XP: based on the result item's nutrition
+        int xpGain = 5;
+        if (r.result().spec().startsWith("kitchen:")) {
+            KItem rt = KItem.byId(r.result().spec().substring(8).split("\\s")[0]);
+            if (rt != null) xpGain = Math.max(5, rt.nutrition * 2 + (int)(rt.saturation * 2));
+        }
+        for (Player near : p.world.getNearbyPlayers(p.center(), 6)) plugin.cookingXp().grant(near, xpGain);
         // seasonal achievements
         String rid = r.id();
         String ach = rid.equals("takenoko_gohan") ? "spring_dish" : rid.equals("hiyashi_chuka") ? "summer_dish" : rid.equals("matsutake_soup") ? "autumn_dish" : rid.equals("yaki_imo") ? "winter_dish"

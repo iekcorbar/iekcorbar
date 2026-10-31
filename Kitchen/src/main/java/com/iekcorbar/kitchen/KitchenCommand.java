@@ -104,6 +104,7 @@ final class KitchenCommand implements TabExecutor {
                 s.sendMessage(Component.text("Loaded: " + plugin.crops().count() + " crops, " + plugin.props().count() + " props, "
                         + plugin.meals().count() + " meals; " + plugin.recipes().cuts.size() + " cutting + "
                         + plugin.recipes().cooks.size() + " cooking recipes.", NamedTextColor.GOLD));
+                if (s instanceof Player p) s.sendMessage(Component.text("Cooking XP: " + plugin.cookingXp().bar(p), NamedTextColor.AQUA));
             }
             case "reload" -> {
                 if (!s.hasPermission("kitchen.admin")) return noPerm(s);

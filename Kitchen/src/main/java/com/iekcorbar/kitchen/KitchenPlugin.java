@@ -44,6 +44,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     private Recipes recipes;
     private KitchenDecor kitchenDecor;
     private Competition competition;
+    private CookingXP cookingXp;
 
     @Override
     public void onEnable() {
@@ -56,6 +57,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
         meals = new Meals(this);
         kitchenDecor = new KitchenDecor(this);
         competition = new Competition(this);
+        cookingXp = new CookingXP(this);
         items.registerRecipes();
         adv = Achievements.create(this, items);
         adv.start();
@@ -173,4 +175,5 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     Meals meals() { return meals; }
     Recipes recipes() { return recipes; }
 Competition competition() { return competition; }
+CookingXP cookingXp() { return cookingXp; }
 }
