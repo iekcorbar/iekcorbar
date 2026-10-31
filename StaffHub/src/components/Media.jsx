@@ -183,27 +183,23 @@ export function Model3D({ url, naam, groot = false }) {
   const [anims, setAnims] = useState([]);                // bbmodel-only: lijst van animatienamen
   const [animIdx, setAnimIdx] = useState(0);             // geselecteerde animatie
   const [playing, setPlaying] = useState(true);          // speelt af of niet
-  const mixerRef = useRef(null);
 
-  // Handle animation selection changes
+  // animatie wisselen / pauzeren: de mixer en THREE komen uit het hoofd-effect via apiRef
   useEffect(() => {
-    if (!anims.length) return;
-    // Wait for mixer to be available
-    const checkMixer = setInterval(() => {
-      if (apiRef.current?.mixer) {
-        clearInterval(checkMixer);
-        const m = apiRef.current.mixer;
-        m.stopAllAction();
-        const a = anims[animIdx];
-        if (a) {
-          const action = m.clipAction(a.clip);
-          action.setLoop(a.loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
-          if (playing) action.play();
-        }
-      }
-    }, 100);
-    return () => clearInterval(checkMixer);
-  }, [animIdx, playing, anims]);
+    const api = apiRef.current;
+    if (!klaar || !api?.mixer || !anims.length) return;
+    api.mixer.stopAllAction();
+    const a = anims[animIdx];
+    if (!a) return;
+    const action = api.mixer.clipAction(a.clip);
+    action.setLoop(a.loop ? api.THREE.LoopRepeat : api.THREE.LoopOnce, Infinity);
+    action.clampWhenFinished = true;
+    action.reset().play();
+  }, [animIdx, anims, klaar]);
+
+  useEffect(() => {
+    if (apiRef.current) apiRef.current.playing = playing;
+  }, [playing]);
 
   useEffect(() => {
     let weg = false;
@@ -230,31 +226,22 @@ export function Model3D({ url, naam, groot = false }) {
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         const mixer = { h: null };
+        const klok = new THREE.Clock();
         // bron: glb/gltf via de loader; .bbmodel via eigen builder (Blockbench-project)
         let object;
-        let bbAnims = [];
         if (String(naam || '').toLowerCase().endsWith('.bbmodel')) {
           const { bouwBbmodel } = await import('@/lib/bbmodel');
           const data = JSON.parse(await (await fetch(url)).text());
           object = bouwBbmodel(THREE, data);
-          bbAnims = object?.userData?.animations || [];
+          if (object?.userData?.animations?.length) {
+            mixer.h = new THREE.AnimationMixer(object);
+            object.userData._clips = object.userData.animations;
+          }
         } else {
           const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
           const g = await new Promise((res, rej) => new GLTFLoader().load(url, res, undefined, rej));
           object = g.scene || g.scenes?.[0];
           if (g.animations?.length) { mixer.h = new THREE.AnimationMixer(object); for (const a of g.animations) mixer.h.clipAction(a).play(); }
-          if (bbAnims.length) {
-            mixer.h = new THREE.AnimationMixer(object);
-            // Store clips for selection
-            object.userData._clips = bbAnims.map((a) => ({ name: a.name, clip: a.clip, loop: a.loop }));
-            // Play first animation
-            const first = bbAnims[0];
-            if (first) {
-              const action = mixer.h.clipAction(first.clip);
-              action.setLoop(first.loop ? THREE.LoopRepeat : THREE.LoopOnce);
-              action.play();
-            }
-          }
         }
         if (weg) { renderer.dispose(); return; }
         if (object) {
@@ -277,15 +264,9 @@ export function Model3D({ url, naam, groot = false }) {
           if (weg) return;
           requestAnimationFrame(hor);
           controls.update();
-          if (apiRef.current?.spin && !playing) scene.rotation.y += 0.005;
-          if (playing && anims.length > 0) {
-            const a = anims[animIdx];
-            if (a && a.length > 0) {
-              const t = (Date.now() / 1000) % a.length;
-              scene.rotation.y = (t / a.length) * Math.PI * 2;
-            }
-          }
-          if (mixer.h) mixer.h.update(1 / 60);
+          if (apiRef.current?.spin) scene.rotation.y += 0.005;
+          if (mixer.h) mixer.h.update(apiRef.current?.playing === false ? 0 : klok.getDelta());
+          else klok.getDelta();
           renderer.render(scene, camera);
         };
         requestAnimationFrame(hor);
@@ -301,7 +282,7 @@ export function Model3D({ url, naam, groot = false }) {
         document.addEventListener('fullscreenchange', ws);
         apiRef.current = {
           spin, herstel: () => { camera.position.set(2.2, 1.8, 2.6); controls.target.set(0, 0, 0); controls.update(); },
-          meshes: meshList, klei, mixer: mixer.h,
+          meshes: meshList, klei, mixer: mixer.h, THREE, playing: true,
           full: () => { const d = doosRef.current; if (d?.requestFullscreen) d.requestFullscreen().then(herframe).catch(() => { }); },
         };
         setTexturen(object?.userData?.bb?.texturen || []);
@@ -349,6 +330,8 @@ export function Model3D({ url, naam, groot = false }) {
           <span className="w-1" />
           <button className={`${BNA} ${spin ? 'text-gold bg-gold/10' : ''}`} title={t('med.draaien')} onClick={() => { const aan = !spin; setSpin(aan); if (apiRef.current) apiRef.current.spin = aan; }}><Move3d className="size-4" /></button>
           <button className={BNA} title={t('med.herframe')} onClick={() => apiRef.current?.herstel()}>
+            <span className="text-sm leading-none">⟲</span>
+          </button>
           {anims.length > 0 && (
             <>
               <span className="w-1" />
@@ -370,8 +353,6 @@ export function Model3D({ url, naam, groot = false }) {
               </button>
             </>
           )}
-            <span className="text-sm leading-none">⟲</span>
-          </button>
           <button className={BNA} title={t('med.full')} onClick={() => apiRef.current?.full()}><Maximize2 className="size-4" /></button>
           <span className="text-[10px] text-parch/45 ml-1">{meta ? `${meta.elementen} ${t('med.el')} · ${meta.texturen} ${t('med.tx')} · ${meta.res} px` : t('med.draai_hint')}</span>
         </div>
