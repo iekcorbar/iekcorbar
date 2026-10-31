@@ -7,8 +7,8 @@ description: 'AFK cinema: a camera orbits your character while you are away, plu
 softdepend: [Citizens, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 commands:
   cine:
-    description: 'Cinema: /cine afk [player] · stop · auto · menu · screen · record <path> · pad · reload'
-    usage: '/cine <afk|stop|auto|menu|screen|record|pad|reload>'
+    description: 'Cinema: /cine afk [player] · stop · auto · menu · record <path> · pad · reload'
+    usage: '/cine <afk|stop|auto|menu|record|pad|reload>'
     permission: afkcinema.cine
 permissions:
   afkcinema.cine:

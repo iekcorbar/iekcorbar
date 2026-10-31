@@ -47,10 +47,6 @@ final class CineCommand implements CommandExecutor, TabCompleter {
                 if (!(sender instanceof Player p)) { sender.sendMessage("in game only"); return true; }
                 plugin.menus().toggle(p);
             }
-            case "screen" -> {
-                if (!(sender instanceof Player p)) { sender.sendMessage("in game only"); return true; }
-                plugin.panels().toggle(p);
-            }
             case "pad" -> pad(sender, args);
             case "reload", "herlaad" -> {
                 if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§cno permission"); return true; }
@@ -184,7 +180,7 @@ final class CineCommand implements CommandExecutor, TabCompleter {
         List<String> out = new ArrayList<>();
         String la = args[args.length - 1].toLowerCase(Locale.ROOT);
         if (args.length == 1) {
-            for (String s : new String[]{"afk", "stop", "auto", "menu", "screen", "record", "pad", "reload"})
+            for (String s : new String[]{"afk", "stop", "auto", "menu", "record", "pad", "reload"})
                 if (s.startsWith(la)) out.add(s);
         } else if (args.length == 2 && args[0].equalsIgnoreCase("pad")) {
             for (String s : new String[]{"add", "remove", "play", "info", "clear", "list"})
