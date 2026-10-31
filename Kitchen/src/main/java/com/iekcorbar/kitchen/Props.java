@@ -821,6 +821,12 @@ final class Props implements Listener {
         for (int i = 0; i < 6; i++) slots[i] = p.inv.getItem(Prop.POT_INGREDIENTS[i]);
         int[] used = new int[6];
         Recipes.Cook r = plugin.recipes().cook(slots, used);
+        if (r != null && !plugin.recipes().inSeason(r)) {
+            p.progress = 0;
+            p.cooking = null;
+            updateProgress(p, progressItem("Not in season (" + r.season() + ")", NamedTextColor.RED));
+            return;
+        }
         if (r == null) {
             p.progress = 0;
             p.cooking = null;
@@ -890,6 +896,10 @@ final class Props implements Listener {
         if (r.container() != null) container.setAmount(container.getAmount() - 1);
         if (inResult == null || inResult.isEmpty()) p.inv.setItem(Prop.POT_RESULT, result);
         else inResult.setAmount(inResult.getAmount() + result.getAmount());
+        // seasonal achievements
+        String rid = r.id();
+        String ach = rid.equals("takenoko_gohan") ? "spring_dish" : rid.equals("hiyashi_chuka") ? "summer_dish" : rid.equals("matsutake_soup") ? "autumn_dish" : rid.equals("yaki_imo") ? "winter_dish" : null;
+        if (ach != null) for (Player near : p.world.getNearbyPlayers(p.center(), 6)) plugin.adv().grant(near, ach);
         p.progress = 0;
         p.world.playSound(top, r.container() == Material.GLASS_BOTTLE ? "kitchen:pour" : "minecraft:block.brewing_stand.brew", 0.6f, r.container() == Material.GLASS_BOTTLE ? 1f : 1.3f);
         markDirty(p);

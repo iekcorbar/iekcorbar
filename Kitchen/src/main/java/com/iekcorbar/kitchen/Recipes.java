@@ -34,7 +34,7 @@ final class Recipes {
 
     record Cut(String id, Ingredient input, List<Output> outputs) {}
 
-    record Cook(String id, List<Ingredient> ingredients, Material container, Output result, int ticks) {}
+    record Cook(String id, List<Ingredient> ingredients, Material container, Output result, int ticks, String season) {}
 
     private final KitchenPlugin plugin;
     final List<Cut> cuts = new ArrayList<>();
@@ -77,7 +77,7 @@ final class Recipes {
                     if (ins.isEmpty() || ins.size() > 6) throw new IllegalArgumentException("needs 1-6 ingredients");
                     String c = s.getString("container");
                     Material container = c == null || c.equalsIgnoreCase("none") ? null : Material.valueOf(c.toUpperCase(Locale.ROOT));
-                    cooks.add(new Cook(id, ins, container, output(s.getString("result")), 20 * s.getInt("seconds", defaultSeconds)));
+                    cooks.add(new Cook(id, ins, container, output(s.getString("result")), 20 * s.getInt("seconds", defaultSeconds), s.getString("season", "all")));
                 } catch (Exception e) {
                     plugin.getLogger().warning("kitchen.yml: skipping cooking recipe " + id + " (" + e.getMessage() + ")");
                 }
@@ -89,6 +89,24 @@ final class Recipes {
         }
         plugin.getLogger().info("Loaded " + cuts.size() + " cutting and " + cooks.size() + " cooking recipe(s).");
     }
+
+    // ------------------------------------------------------------ seasons
+
+/** Current real-world season based on the server clock. */
+public static String currentSeason() {
+    int month = java.time.LocalDate.now().getMonthValue();
+    if (month >= 3 && month <= 5) return "spring";
+    if (month >= 6 && month <= 8) return "summer";
+    if (month >= 9 && month <= 11) return "autumn";
+    return "winter";
+}
+
+/** Whether a cook recipe is available in the current season ("all" = always). */
+public boolean inSeason(Cook c) {
+    String s = c.season();
+    if (s == null || s.equalsIgnoreCase("all") || s.isBlank()) return true;
+    return s.equalsIgnoreCase(currentSeason());
+}
 
     // ------------------------------------------------------------ specs
 

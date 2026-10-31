@@ -82,6 +82,29 @@ cooking:
     container: GLASS_BOTTLE
     result: kitchen:green_tea
     seconds: 6
+  # ---- seasonal (real-world clock) ----
+  takenoko_gohan:
+    ingredients: [kitchen:bamboo_shoots, kitchen:rice, kitchen:rice]
+    result: kitchen:steamed_rice x2
+    seconds: 10
+    season: spring
+  hiyashi_chuka:
+    ingredients: [kitchen:ramen_noodles, kitchen:soy_sauce, kitchen:tomato]
+    container: BOWL
+    result: kitchen:ramen
+    seconds: 8
+    season: summer
+  matsutake_soup:
+    ingredients: [kitchen:shiitake, kitchen:dashi, kitchen:dashi]
+    container: BOWL
+    result: kitchen:miso_soup
+    seconds: 10
+    season: autumn
+  yaki_imo:
+    ingredients: [kitchen:kabocha, kitchen:kabocha]
+    result: kitchen:tempura x2
+    seconds: 12
+    season: winter
   tamagoyaki:
     ingredients: [EGG, EGG, SUGAR]
     result: kitchen:tamagoyaki
