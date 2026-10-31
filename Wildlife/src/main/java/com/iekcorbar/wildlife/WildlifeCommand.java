@@ -150,8 +150,16 @@ final class WildlifeCommand implements TabExecutor {
                     s.sendMessage(Component.text("Player not online.", NamedTextColor.RED));
                     return true;
                 }
-                t.getInventory().addItem(it);
-                s.sendMessage(Component.text("Gave " + what + " to " + t.getName(), NamedTextColor.GREEN));
+                int n = 1;
+                try { if (a.length > 3) n = Math.max(1, Math.min(64, Integer.parseInt(a[3]))); } catch (NumberFormatException ignored) { }
+                for (int left = n; left > 0; ) {
+                    ItemStack stack = it.clone();
+                    int amt = Math.min(left, stack.getMaxStackSize());
+                    stack.setAmount(amt);
+                    for (var rest : t.getInventory().addItem(stack).values()) t.getWorld().dropItemNaturally(t.getLocation(), rest);
+                    left -= amt;
+                }
+                s.sendMessage(Component.text("Gave " + n + " x " + what + " to " + t.getName(), NamedTextColor.GREEN));
             }
             case "info" -> {
                 if (!admin(s)) return true;
@@ -172,7 +180,7 @@ final class WildlifeCommand implements TabExecutor {
                 s.sendMessage(Component.text("/" + label + " journal - read your journal (or craft one: book + feather + seeds)", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Guide: ", NamedTextColor.GRAY).append(Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url))));
                 if (s.hasPermission("wildlife.admin"))
-                    s.sendMessage(Component.text("/" + label + " spawn <species> [rare] [baby] | egg <species> [player] | give <player> <item> | info | reload | remove <radius>", NamedTextColor.GRAY));
+                    s.sendMessage(Component.text("/" + label + " spawn <species> [rare] [baby] | egg <species> [player] | give <player> <item> [amount] | info | reload | remove <radius>", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("/" + label + " stats [player] | list [filter] | find <species> | tamed", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Feed an adult its food to breed it; a golden dandelion keeps a baby small.", NamedTextColor.GRAY));
             }
