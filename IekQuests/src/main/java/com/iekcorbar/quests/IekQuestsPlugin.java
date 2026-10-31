@@ -84,6 +84,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         List<String> doList = new ArrayList<>();
         List<Cond> conds = new ArrayList<>();
         String voice = "";
+        int limitPerDay;                     // 0 = onbeperkt; anders max N keer per kalenderdag per speler
     }
 
     static final class Stage {
@@ -171,6 +172,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private final Map<UUID, Map<String, Prog>> prog = new HashMap<>();
     private YamlConfiguration data;
     private NamespacedKey tagKey;
+    private NamespacedKey hudOffKey;
     private final Random rnd = new Random();
     private QuestWizard wizard;
     private InventoryItems invItems;
@@ -234,6 +236,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         tagKey = new NamespacedKey(this, "tag");
+        hudOffKey = new NamespacedKey(this, "hud_off");
         if (!new File(getDataFolder(), "quests.yml").exists()) saveResource("quests.yml", false);
         saveDefaultConfig();
         if (!new File(getDataFolder(), "config.yml").exists()) saveResource("config.yml", false);
@@ -241,8 +244,21 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         var cmd = Bukkit.getPluginCommand("questbook");
         if (cmd != null) cmd.setExecutor((sender, command, label, args) -> {
             if (args.length >= 1 && args[0].equalsIgnoreCase("reload") && (sender.hasPermission("iekquests.reload") || sender.hasPermission("iekquests.admin"))) {
+                reloadConfig();
+                eliteItemFiles = null;
                 load();
-                sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s) reloaded."));
+                if (invItems != null) { invItems.load(); invItems.placeForAll(); }
+                sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s) and menu items reloaded."));
+                return true;
+            }
+            if (args.length >= 1 && args[0].equalsIgnoreCase("check") && (sender.hasPermission("iekquests.admin"))) {
+                adminCheck(sender, args.length >= 2 ? args[1] : null);
+                return true;
+            }
+            if (args.length >= 1 && args[0].equalsIgnoreCase("track") && sender instanceof Player tp) {
+                boolean off = tp.getPersistentDataContainer().has(hudOffKey, PersistentDataType.BYTE);
+                if (off) tp.getPersistentDataContainer().remove(hudOffKey); else tp.getPersistentDataContainer().set(hudOffKey, PersistentDataType.BYTE, (byte) 1);
+                tp.sendMessage(legacy(off ? "&aQuest tracker on." : "&7Quest tracker off."));
                 return true;
             }
             if (args.length >= 2 && args[0].equalsIgnoreCase("reset") && (sender.hasPermission("iekquests.reset") || sender.hasPermission("iekquests.admin"))) {
@@ -281,6 +297,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         var rcmd = Bukkit.getPluginCommand("iekrestart");
         if (rcmd != null) rcmd.setExecutor(this::onRestartCommand);
         Bukkit.getScheduler().runTaskTimer(this, this::refreshOpenGuis, 40L, 40L);
+        Bukkit.getScheduler().runTaskTimer(this, this::tracker, 60L, 40L);
+        Bukkit.getScheduler().runTaskTimer(this, () -> { if (invItems != null) invItems.placeForAll(); }, 1200L, 1200L);
         Bukkit.getScheduler().runTaskTimer(this, this::saveData, 1200L, 1200L);
         load();
         getLogger().info("IekQuests " + getDescription().getVersion() + " klaar - " + quests.size() + " quest(s).");
@@ -466,6 +484,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     c.say = cv.getString("say", "");
                     c.gotoKey = cv.getString("goto", "");
                     c.close = cv.getBoolean("close", false);
+                    c.limitPerDay = cv.getInt("limit-per-day", 0);
                     c.voice = cv.getString("voice", "");
                     c.conds = conds(cv.getString("cond", ""));
                     for (var d : cv.getStringList("do")) c.doList.add(d);
@@ -483,6 +502,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     c.conds = conds(mm(cm, "cond"));
                     Object closev = cm.get("close");
                     c.close = closev instanceof Boolean b ? b : "true".equalsIgnoreCase(String.valueOf(closev));
+                    try { c.limitPerDay = Integer.parseInt(mm(cm, "limit-per-day").trim()); } catch (NumberFormatException ignored) { }
                     Object dl = cm.get("do");
                     if (dl instanceof List<?> dd) for (var d : dd) if (d != null) c.doList.add(String.valueOf(d));
                     g.choices.add(c);
@@ -650,6 +670,12 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 if (ge < 0) return false;
                 return held(p, body.substring(0, ge), null) >= Integer.parseInt(body.substring(ge + 2));
             }
+            if (c.startsWith("eco>=") || c.startsWith("eco<")) {
+                boolean ge = c.startsWith("eco>=");
+                var want = Double.parseDouble(c.substring(ge ? 5 : 4));
+                var bal = ecoBalance(p);
+                return bal < 0 ? false : (ge ? bal >= want : bal < want);
+            }
             if (c.startsWith("money")) {
                 boolean ge = c.startsWith("money>=");
                 if (!ge && !c.startsWith("money<")) return false;
@@ -800,6 +826,19 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 } else rest.add(cc);
             }
             if (!npcOk || !ok(p, q, pr, rest)) { deny(p); return; }
+            if (c.limitPerDay > 0) {
+                // teller per speler in pr.points: dag*1000 + aantal (dag = lokale kalenderdag)
+                String lk = "dl:" + q.id + ":" + s.key + ":" + i;
+                int today = (int) java.time.LocalDate.now().toEpochDay();
+                int raw = pr.points.getOrDefault(lk, 0);
+                int used = raw / 1000 == today ? raw % 1000 : 0;
+                if (used >= c.limitPerDay) {
+                    p.sendMessage(legacy("&cDaily limit reached (" + c.limitPerDay + "/day). Come back tomorrow."));
+                    deny(p);
+                    return;
+                }
+                pr.points.put(lk, today * 1000 + used + 1);
+            }
             if (!c.say.isEmpty()) p.sendMessage(legacy(c.say));
             speak(p, c.voice);
             for (var d : c.doList) run(p, q, pr, d);
@@ -965,8 +1004,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             if (held(p, r.material, r.name.isEmpty() ? null : r.name) < r.amount) { deny(p); return; }
             take(p, r.material, r.amount, r.name.isEmpty() ? null : r.name);
         }
-        if (r.money > 0) dispatch("cmi money give " + p.getName() + " -s " + r.money);
-        if (r.eco > 0) dispatch("em money add " + p.getName() + " " + r.eco);
+        if (r.money > 0) { dispatch("cmi money give " + p.getName() + " -s " + r.money); logTx(p, q, "repeat " + r.id + " money " + r.money); }
+        if (r.eco > 0) { dispatch("em money add " + p.getName() + " " + r.eco); logTx(p, q, "repeat " + r.id + " eco " + r.eco); }
         runRewards(p, q, pr, r.rewards);
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, SoundCategory.PLAYERS, 0.9f, 1.4f);
         speak(p, r.voice);
@@ -986,9 +1025,21 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         String key = sp < 0 ? a : a.substring(0, sp);
         String val = sp < 0 ? "" : a.substring(sp + 1);
         switch (key) {
+            case "say", "title", "sound", "tag+", "tag-", "point", "effect", "compass", "sequence", "chat", "joinjob", "leavejob" -> { }
+            default -> logTx(p, q, a);
+        }
+        switch (key) {
             case "money" -> dispatch("cmi money give " + p.getName() + " -s " + val);
             case "pay" -> dispatch("cmi money take " + p.getName() + " -s " + val);
             case "eco" -> dispatch("em money add " + p.getName() + " " + val);
+            case "ecopay" -> dispatch("em money remove " + p.getName() + " " + val);
+            case "eloot" -> {
+                String file = val.trim().endsWith(".yml") ? val.trim() : val.trim() + ".yml";
+                if (!eliteItemExists(file)) {
+                    getLogger().warning("eloot: EliteMobs-item niet gevonden: " + file + " (quest " + q.id + ")");
+                    p.sendMessage(legacy("&cThat item is not available right now. Tell staff."));
+                } else dispatch("em loot give " + p.getName() + " " + file);
+            }
             case "title" -> {
                 String[] ab = val.split("\\|");
                 p.showTitle(Title.title(legacy(ab[0]), ab.length > 1 ? legacy(ab[1]) : Component.empty()));
@@ -1090,6 +1141,48 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    // ---------------------------------------------------------------- tracker + staff-check
+
+    /** Actiebalk met de actieve stap (craft/deliver/walk/kill), uit te zetten met /questbook track. */
+    private void tracker() {
+        for (var p : Bukkit.getOnlinePlayers()) {
+            if (p.getOpenInventory().getTopInventory().getHolder() instanceof Holder) continue;
+            if (p.getPersistentDataContainer().has(hudOffKey, PersistentDataType.BYTE)) continue;
+            var m = prog.get(p.getUniqueId());
+            if (m == null) continue;
+            for (var q : quests) {
+                Prog pr = m.get(q.id);
+                if (pr == null || !pr.started || pr.done || pr.stage.isEmpty()) continue;
+                Stage st = q.stages.get(pr.stage);
+                if (st == null || st.kind.equals("talk") || st.kind.equals("menu")) continue;
+                p.sendActionBar(legacy("&6" + plain(q.title) + " &8» " + labelFor(p, q, pr, st)));
+                break;
+            }
+        }
+    }
+
+    /** /questbook check [speler]: quests zonder NPC + (optioneel) tags en actieve quests van een speler. */
+    private void adminCheck(CommandSender sender, String who) {
+        var none = new ArrayList<String>();
+        for (var q : quests) if (q.npcIds.isEmpty()) none.add(q.id);
+        sender.sendMessage(legacy("&6IekQuests: &f" + quests.size() + " quests, " + sequences.size() + " sequences"));
+        sender.sendMessage(legacy("&7Without NPC (" + none.size() + "): &f" + (none.isEmpty() ? "-" : String.join(", ", none))));
+        if (who == null) { sender.sendMessage(legacy("&8Use /questbook check <player> for a player's tags and active quests.")); return; }
+        var pl = Bukkit.getPlayerExact(who);
+        if (pl == null) { sender.sendMessage(legacy("&cPlayer not online: " + who)); return; }
+        var m = prog.get(pl.getUniqueId());
+        if (m == null || m.isEmpty()) { sender.sendMessage(legacy("&7" + who + " has no progress yet.")); return; }
+        var active = new ArrayList<String>();
+        var tags = new java.util.TreeSet<String>();
+        for (var e : m.entrySet()) {
+            Prog pr = e.getValue();
+            if (pr.started && !pr.done) active.add(e.getKey() + "@" + pr.stage);
+            tags.addAll(pr.tags);
+        }
+        sender.sendMessage(legacy("&7Active: &f" + (active.isEmpty() ? "-" : String.join(", ", active))));
+        sender.sendMessage(legacy("&7Tags (" + tags.size() + "): &f" + (tags.isEmpty() ? "-" : String.join(", ", tags))));
+    }
+
     /** Openstaande GUI's (cooldown-tellers) periodisch verversen. */
     private void refreshOpenGuis() {
         for (var p : Bukkit.getOnlinePlayers()) {
@@ -1118,6 +1211,23 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                                 .reduce("", (a, b) -> a + b);
                 if (!sig.equals(h.sig)) { h.sig = sig; openQuest(p, q, h.npc); }
             }
+        }
+    }
+
+    private final Object txLock = new Object();
+
+    /** Eén regel in plugins/IekQuests/transactions.log: wie kreeg/betaalde wat, via welke quest. */
+    private void logTx(Player p, Quest q, String what) {
+        try {
+            var f = new File(getDataFolder(), "transactions.log");
+            String line = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                    + " | " + p.getName() + " | " + (q == null ? "-" : q.id) + " | " + what + System.lineSeparator();
+            synchronized (txLock) {
+                java.nio.file.Files.writeString(f.toPath(), line, java.nio.charset.StandardCharsets.UTF_8,
+                        java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
+            }
+        } catch (Exception e) {
+            getLogger().warning("transactions.log: " + e.getMessage());
         }
     }
 
@@ -1478,6 +1588,37 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         } catch (Exception e) {
             return -1;
         }
+    }
+
+    /** Elite coins via EliteMobs' eigen API (reflectie); -1 als niet bereikbaar. */
+    private Method mEcoCheck;
+
+    private double ecoBalance(Player p) {
+        try {
+            if (mEcoCheck == null) {
+                Class<?> c = Class.forName("com.magmaguy.elitemobs.economy.EconomyHandler");
+                mEcoCheck = c.getMethod("checkCurrency", UUID.class);
+            }
+            return ((Number) mEcoCheck.invoke(null, p.getUniqueId())).doubleValue();
+        } catch (Throwable e) {
+            return -1;
+        }
+    }
+
+    /** Bestaat dit EliteMobs-itembestand (customitems/**)? Gecachet per laad. */
+    private java.util.Set<String> eliteItemFiles;
+
+    private boolean eliteItemExists(String file) {
+        if (eliteItemFiles == null) {
+            eliteItemFiles = new java.util.HashSet<>();
+            var root = new File(getDataFolder().getParentFile(), "EliteMobs/customitems");
+            if (root.isDirectory()) {
+                try (var w = java.nio.file.Files.walk(root.toPath())) {
+                    w.filter(x -> x.toString().endsWith(".yml")).forEach(x -> eliteItemFiles.add(x.getFileName().toString()));
+                } catch (Exception ignored) { }
+            }
+        }
+        return eliteItemFiles.contains(file);
     }
 
     private Location parseLoc(String s) {

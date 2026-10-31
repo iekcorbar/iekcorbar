@@ -11,10 +11,10 @@ const file = process.argv[2] || path.join(__dirname, '..', 'src', 'main', 'resou
 const STAGE_TYPES = new Set(['talk', 'craft', 'deliver', 'walk', 'kill', 'deliverall', 'menu']);
 // werkwoorden die run() zelf afhandelt; al het andere wordt als console-commando uitgevoerd
 const VERBS = new Set(['money', 'pay', 'eco', 'title', 'sound', 'say', 'tag+', 'tag-', 'perm+', 'perm-', 'point',
-  'effect', 'teleport', 'give', 'compass', 'shop', 'joinjob', 'leavejob', 'chat', 'sequence']);
+  'effect', 'teleport', 'give', 'compass', 'shop', 'joinjob', 'leavejob', 'chat', 'sequence', 'ecopay', 'eloot']);
 // typefouten die op een werkwoord lijken maar er geen zijn (zouden stil als console-commando falen)
 const SUSPECT = /^(tag\s*[+-]|tag[+-]{2,}|perm\s*[+-]|perm[+-]{2,}|monney|moeny|titel|sond|sequense|sequnce|compas|poin|teleprot)$/i;
-const COND = /^(!?)(tag:|qtag:|point:|item:|money>=|money<|perm:|npc:|day$|night$)/;
+const COND = /^(!?)(tag:|qtag:|point:|item:|money>=|money<|eco>=|eco<|perm:|npc:|day$|night$)/;
 
 const errors = [], warns = [];
 const err = (m) => errors.push(m);
@@ -41,8 +41,8 @@ function checkCond(where, raw) {
     if (!COND.test(c)) { warn(`${where}: onbekende voorwaarde "${c}" (de engine laat die altijd door)`); continue; }
     const body = c.replace(/^!/, '');
     if (body.startsWith('tag:')) tagsUsed.set(body.slice(4), where);
-    if (body.startsWith('money>=') || body.startsWith('money<')) {
-      if (!Number.isFinite(Number(body.replace(/^money(>=|<)/, '')))) err(`${where}: ongeldig bedrag in "${c}"`);
+    if (/^(money|eco)(>=|<)/.test(body)) {
+      if (!Number.isFinite(Number(body.replace(/^(money|eco)(>=|<)/, '')))) err(`${where}: ongeldig bedrag in "${c}"`);
     }
     if (body.startsWith('point:') && !body.includes('>=')) err(`${where}: point-voorwaarde mist ">=" in "${c}"`);
     if (body.startsWith('item:') && !body.includes('>=')) err(`${where}: item-voorwaarde mist ">=" in "${c}"`);
@@ -69,7 +69,7 @@ function checkAction(where, raw) {
     if (SUSPECT.test(key)) err(`${where}: "${key}" lijkt een typefout van een actie; wordt nu als console-commando uitgevoerd`);
     return;
   }
-  if (['money', 'pay', 'eco'].includes(key) && !Number.isFinite(Number(val))) err(`${where}: "${a}" heeft geen geldig getal`);
+  if (['money', 'pay', 'eco', 'ecopay'].includes(key) && !Number.isFinite(Number(val))) err(`${where}: "${a}" heeft geen geldig getal`);
   if (key === 'sequence' && !seqs[val.trim()]) err(`${where}: sequence "${val}" bestaat niet`);
   if (key === 'point') {
     const m = val.trim().split(/\s+/);
@@ -109,6 +109,7 @@ for (const id of ids) {
     ch.forEach((c, i) => {
       const cw = `${w} choice#${i + 1}`;
       if (!c || !c.label) warn(`${cw}: geen label`);
+      if (c && c['limit-per-day'] != null && !(Number(c['limit-per-day']) >= 1)) err(`${cw}: limit-per-day moet een geheel getal >= 1 zijn`);
       if (c && c.goto && !stages[c.goto]) err(`${cw}: goto "${c.goto}" bestaat niet`);
       checkCond(`${cw} cond`, c && c.cond);
       arr(c && c.do).forEach((d) => checkAction(cw, d));
