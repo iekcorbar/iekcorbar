@@ -25,6 +25,16 @@ export function toText(html) {
 /** Woorden uit de vraag die worth zijn om op te zoeken (stopwords eruit). */
 const STOP = new Set(['hoe', 'wat', 'waar', 'wordt', 'worden', 'kun', 'kan', 'ben', 'zijn', 'een', 'de', 'het', 'en', 'of', 'ik', 'je', 'we', 'is', 'are', 'the', 'what', 'how', 'where', 'for', 'and', 'can', 'chi', 'come', 'per', 'che', 'non', 'cosa', 'dove', 'questo']);
 
+// Plugin context map: maps keywords to plugin names for context-aware boosting
+const PLUGIN_CONTEXT = {
+  kitchen: 'Kitchen', koken: 'Kitchen', recipe: 'Kitchen', recept: 'Kitchen',
+  sakagura: 'Sakagura', brouwen: 'Sakagura', brewing: 'Sakagura', sake: 'Sakagura',
+  steamworks: 'Steamworks', stoom: 'Steamworks', steam: 'Steamworks', machine: 'Steamworks',
+  wildlife: 'Wildlife', dier: 'Wildlife', animal: 'Wildlife', natuur: 'Wildlife',
+  relics: 'Relics', relic: 'Relics',
+  sitesync: 'SiteSync', shop: 'SiteSync',
+};
+
 function keywords(q) {
   const words = String(q || '').toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, ' ').split(/\s+/).filter((w) => w.length > 2 && !STOP.has(w));
   const out = new Set(words);
@@ -53,6 +63,14 @@ export function knowledgeFor(user, question, { maxPages = 6, maxChars = 14000 } 
       const inName = name.includes(k) ? 6 : 0;
       const hits = body.split(k).length - 1;
       if (inName || hits) score += inName + Math.min(hits, 8);
+    }
+    // Context-aware boosting: if question mentions a plugin, boost docs with that plugin name
+    const qLower = String(question || '').toLowerCase();
+    for (const [kw, plugin] of Object.entries(PLUGIN_CONTEXT)) {
+      if (qLower.includes(kw)) {
+        if (name.includes(plugin.toLowerCase())) score += 10;
+        if (body.includes(plugin.toLowerCase())) score += 3;
+      }
     }
     if (score > 0) scored.push({ n: p, text, score });
   }
