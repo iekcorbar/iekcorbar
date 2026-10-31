@@ -6,7 +6,7 @@ import org.bukkit.Sound;
 /**
  * Placed Kitchen stations and props. A prop is a hidden vanilla base block
  * (barrier, or a carpet for flat ones you walk over) with our model drawn by
- * an ItemDisplay (model kitchen:&lt;id&gt; from Kitchen-pack.zip). Positions and
+ * an ItemDisplay (model kitchen:<id> from Kitchen-pack.zip). Positions and
  * contents are saved in the chunk's data; displays respawn with the chunk.
  */
 enum PropType {
@@ -29,15 +29,16 @@ enum PropType {
     ORGANIC_COMPOST(KItem.ORGANIC_COMPOST, Behaviour.COMPOST, Material.BARRIER, 0, Sound.BLOCK_ROOTED_DIRT_PLACE),
     TATAMI_MAT(KItem.TATAMI_MAT, Behaviour.DECOR, Material.WHITE_CARPET, 0, Sound.BLOCK_GRASS_PLACE),
     ZABUTON(KItem.ZABUTON, Behaviour.SEAT, Material.WHITE_CARPET, 0, Sound.BLOCK_WOOL_PLACE),
-MISO_VAT(KItem.MISO_VAT, Behaviour.STORAGE, Material.BARRIER, 9, Sound.BLOCK_WOOD_PLACE),
-TSUKEMONO_POT(KItem.TSUKEMONO_POT, Behaviour.STORAGE, Material.BARRIER, 9, Sound.BLOCK_DECORATED_POT_PLACE),
-SMOKER(KItem.SMOKER, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_STONE_PLACE),
-DRYING_RACK(KItem.DRYING_RACK, Behaviour.STORAGE, Material.BARRIER, 6, Sound.BLOCK_WOOD_PLACE),
-CLAY_OVEN(KItem.CLAY_OVEN, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_STONE_PLACE),
-STEAMER(KItem.STEAMER, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_DECORATED_POT_PLACE),
-SHIITAKE_LOG(KItem.SHIITAKE_LOG, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_WOOD_PLACE),
-ENOKI_BUNDLE(KItem.ENOKI_BUNDLE, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_GRASS_PLACE),
-NOODLE_MAKER(KItem.NOODLE_MAKER, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_WOOD_PLACE);
+    MISO_VAT(KItem.MISO_VAT, Behaviour.STORAGE, Material.BARRIER, 9, Sound.BLOCK_WOOD_PLACE),
+    TSUKEMONO_POT(KItem.TSUKEMONO_POT, Behaviour.STORAGE, Material.BARRIER, 9, Sound.BLOCK_DECORATED_POT_PLACE),
+    SMOKER(KItem.SMOKER, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_STONE_PLACE),
+    DRYING_RACK(KItem.DRYING_RACK, Behaviour.STORAGE, Material.BARRIER, 6, Sound.BLOCK_WOOD_PLACE),
+    CLAY_OVEN(KItem.CLAY_OVEN, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_STONE_PLACE),
+    STEAMER(KItem.STEAMER, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_DECORATED_POT_PLACE),
+    SHIITAKE_LOG(KItem.SHIITAKE_LOG, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_WOOD_PLACE),
+    ENOKI_BUNDLE(KItem.ENOKI_BUNDLE, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_GRASS_PLACE),
+    NOODLE_MAKER(KItem.NOODLE_MAKER, Behaviour.STORAGE, Material.BARRIER, 4, Sound.BLOCK_WOOD_PLACE),
+    STEAM_POT(KItem.STEAM_POT, Behaviour.POT, Material.BARRIER, 8, Sound.BLOCK_DECORATED_POT_PLACE);
 
     enum Behaviour { BOARD, POT, STOVE, STORAGE, BASKET, DECOR, SOIL, COMPOST, SEAT, FERMENT }
 

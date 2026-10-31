@@ -103,6 +103,18 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         getServer().getServicesManager().register(java.util.function.Supplier.class, new ZukanData(this), this, org.bukkit.plugin.ServicePriority.Normal);
         // machine output containers, for the Kura copper-golem couriers
         getServer().getServicesManager().register(java.util.function.Predicate.class, new OutputSpots(this), this, org.bukkit.plugin.ServicePriority.Normal);
+// Kitchen steam pot: tells Kitchen whether a rotating shaft is within 2 blocks
+getServer().getServicesManager().register(java.util.function.Function.class, (java.util.function.Function<org.bukkit.Location, Boolean>) loc -> {
+    if (loc == null || loc.getWorld() == null) return false;
+    for (int dx = -2; dx <= 2; dx++)
+        for (int dy = -2; dy <= 2; dy++)
+            for (int dz = -2; dz <= 2; dz++) {
+                org.bukkit.block.Block b = loc.getWorld().getBlockAt(loc.getBlockX() + dx, loc.getBlockY() + dy, loc.getBlockZ() + dz);
+                KNode n = kinetics.at(b);
+                if (n != null && n.type == PartType.SHAFT && n.speed() != 0) return true;
+            }
+    return false;
+}, this, org.bukkit.plugin.ServicePriority.Normal);
         getServer().getPluginManager().registerEvents(arms, this);
         getServer().getPluginManager().registerEvents(oil, this);
         trains = new Trains(this);

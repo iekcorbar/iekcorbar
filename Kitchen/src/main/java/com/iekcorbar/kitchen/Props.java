@@ -876,11 +876,29 @@ final class Props implements Listener {
             updateProgress(p, progressItem("Take the finished food out", NamedTextColor.GOLD));
             return;
         }
-        if (!heated(p.block())) {
+        // Steam pot: needs a rotating Steamworks shaft nearby instead of fire
+        if (p.type == PropType.STEAM_POT) {
+            boolean hasSteam = false;
+            org.bukkit.plugin.Plugin sw = plugin.getServer().getPluginManager().getPlugin("Steamworks");
+            if (sw != null && sw.isEnabled()) {
+                for (org.bukkit.plugin.RegisteredServiceProvider<?> rsp : plugin.getServer().getServicesManager().getRegistrations(java.util.function.Function.class)) {
+                    if (!rsp.getPlugin().getName().equals("Steamworks")) continue;
+                    try {
+                        Object steamResult = ((java.util.function.Function<org.bukkit.Location, ?>) rsp.getProvider()).apply(p.center());
+                        if (steamResult instanceof Boolean && (Boolean) steamResult) { hasSteam = true; break; }
+                    } catch (Exception ignored) { }
+                }
+            }
+            if (!hasSteam) {
+                updateProgress(p, progressItem("Needs a Steamworks shaft nearby", NamedTextColor.RED));
+                return;
+            }
+        } else if (!heated(p.block())) {
             updateProgress(p, progressItem("Needs heat below the pot", NamedTextColor.GOLD));
             return;
         }
-        p.progress += 10;
+        int speed = (p.type == PropType.STEAM_POT) ? 20 : 10;
+        p.progress += speed;
         Location top = p.center().add(0, 0.45, 0);
         p.world.spawnParticle(Particle.BUBBLE_POP, top, 3, 0.2, 0.05, 0.2, 0);
         if (plugin.tick % 40 == 0) {

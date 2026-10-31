@@ -124,6 +124,7 @@ enum KItem {
     // ---- baking
     CLAY_OVEN("Clay Oven", Kind.PROP, 0, 0, Rem.NONE, 64, "Bakes bread and pastries.", "Needs fire below it."),
     STEAMER("Steamer", Kind.PROP, 0, 0, Rem.NONE, 64, "Steams buns and dumplings.", "Place over a heat source."),
+    STEAM_POT("Steam Pot", Kind.PROP, 0, 0, Rem.NONE, 64, "Cooks on steam power. 2x faster than a normal pot.", "Needs a Steamworks shaft nearby."),
     RICE_BREAD("Rice Bread", Kind.FOOD, 5, 6f, Rem.NONE, 64),
     MELONPAN("Melonpan", Kind.FOOD, 6, 7f, Rem.NONE, 64, "Sweet bread with a cookie crust."),
     CASTELLA("Castella", Kind.FOOD, 7, 8f, Rem.NONE, 64, "Honey sponge cake."),
