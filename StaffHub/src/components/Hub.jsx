@@ -15,6 +15,7 @@ import ServerStatus from '@/components/ServerStatus';
 import MarkdownImport from '@/components/MarkdownImport';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
+import Notifications from '@/components/Notifications';
 import Vertaal, { kanVertalen } from '@/components/Vertaal';
 import { useLang, useDt, trServer, LangToggle, LANGS, setLeesbaar, leesbaarStand } from '@/lib/i18n';
 import { may, CAPS, PRIV, effectieveCaps } from '@/lib/caps';
@@ -114,6 +115,17 @@ useEffect(() => {
       window.history.replaceState(null, '', window.location.pathname + (p.toString() ? '?' + p : ''));
     })();
   }, []);
+
+  // Spring naar een document (bel-melding): map = openen, bestand/pagina = popup in zijn map.
+  async function openById(id) {
+    try {
+      const r = await fetch('/api/nodes/' + id);
+      if (!r.ok) { setErr(t('err.notfound')); return; }
+      const n = (await r.json()).node;
+      if (n.type === 'folder') { setSel(null); setParent(n.id); }
+      else { if (n.parent != null) setParent(n.parent); setSel(n); }
+    } catch { setErr(t('err.failed')); }
+  }
 
   async function refresh() { await load(parent); }
 
@@ -313,6 +325,7 @@ useEffect(() => {
         <div className="flex-1" />
         <div className="ml-auto flex items-center gap-2 text-xs">
           <span className="hidden sm:inline rounded-full bg-white/5 border border-bronze/30 px-2.5 py-1 text-parch/70">{me.username}{me.team ? ` · ${me.team}` : ''}</span>
+          <Notifications me={me} onOpen={openById} />
           <LangToggle vast={kiesTaal} />
           <button title={t('tip.profile')} onClick={() => setModal('profiel')} className="p-1.5 rounded hover:bg-white/10"><UserCog className="size-4" /></button>
           <button title={t('tip.desktop')} onClick={() => setModal('desktop')} className="p-1.5 rounded hover:bg-white/10"><Download className="size-4" /></button>

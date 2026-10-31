@@ -11,6 +11,7 @@
 import { getDb, now, logAudit } from '@/lib/db';
 import { hashPass, me, dropSessions } from '@/lib/auth';
 import { may, sanitizePerms } from '@/lib/caps';
+import { notify } from '@/lib/notify';
 
 async function guard() {
   const u = await me();
@@ -60,6 +61,7 @@ export async function PATCH(req) {
     if (target.role === 'owner') return Response.json({ error: 'eigenaars hebben alles al' }, { status: 400 });
     const pm = perms === null ? null : sanitizePerms(perms, u);
     d.prepare('UPDATE users SET perms = ? WHERE id = ?').run(pm ? JSON.stringify(pm) : null, target.id);
+    notify([target.id], { kind: 'perms', text: pm ? 'Your permissions were changed by ' + u.username + '.' : 'Your permissions were reset to the defaults by ' + u.username + '.', from: u.id });
     logAudit(req, { area: 'users', actie: 'permissies', wie: u.username, detail: target.username + ': ' + (pm ? pm.join(',') : 'standaard') });
   }
   return Response.json({ ok: true });

@@ -4,6 +4,7 @@ import { getDb, now } from '@/lib/db';
 import { me } from '@/lib/auth';
 import { canSee, canWrite, may } from '@/lib/acl';
 import { htmlToMd } from '@/lib/docconv';
+import { notify } from '@/lib/notify';
 
 export function stripHtml(html) {
   return String(html || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').slice(0, 20000);
@@ -76,5 +77,7 @@ export async function PUT(req, { params }) {
   if (cur) d.prepare('UPDATE pages SET html = ?, who = ?, updated = ? WHERE node = ?').run(safe, u.id, now(), n.id);
   else d.prepare('INSERT INTO pages(node,html,who,updated) VALUES(?,?,?,?)').run(n.id, safe, u.id, now());
   d.prepare('UPDATE nodes SET updated = ? WHERE id = ?').run(now(), n.id);
+  // Bewerkte iemand anders' pagina? Dan weet de eigenaar dat (samengevoegd per 10 min).
+  notify([n.owner], { kind: 'edit', text: `${u.username} edited "${n.name}"`, node: n.id, from: u.id });
   return Response.json({ ok: true });
 }
