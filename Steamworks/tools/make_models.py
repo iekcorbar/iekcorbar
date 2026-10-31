@@ -1311,6 +1311,68 @@ def deployer():
     return m
 
 
+def item_filter():
+    # low sorting box for a belt line: grate on top, slot for the filter item, lamp on the side
+    m = Model("sw_item_filter")
+    m.cube("body", (-7, -4, -7), (7, 3, 7), "steel")
+    m.cube("rim_n", (-7.4, 3, -7.4), (7.4, 4.4, -5.6), "brass")
+    m.cube("rim_s", (-7.4, 3, 5.6), (7.4, 4.4, 7.4), "brass")
+    m.cube("rim_e", (5.6, 3, -5.6), (7.4, 4.4, 5.6), "brass")
+    m.cube("rim_w", (-7.4, 3, -5.6), (-5.6, 4.4, 5.6), "brass")
+    for k in range(5):
+        m.cube(f"bar{k}", (-5.0 + k * 2.5, 3, -5.6), (-4.2 + k * 2.5, 3.9, 5.6), "dark")
+    m.cube("slot", (-2.5, -1, 7), (2.5, 1, 7.6), "black")          # filter item slot, front
+    m.cube("lamp", (-1.2, 0.2, -7.6), (1.2, 2.6, -7), "gold")       # back lamp
+    m.cube("belt_in", (-5, -2, -8), (5, 0.6, -7), "dark")          # belt openings
+    m.cube("belt_out", (-5, -2, 7.6), (5, 0.6, 8), "dark")
+    for x in (-5.5, 5.5):
+        m.cube(f"foot{x}", (x - 1, -8, -5.5), (x + 1, -4, 5.5), "darkwood")
+    return m
+
+
+def harvester():
+    # a reel with four combs turning round the axis (model Y): the arms sweep the crop in
+    m = Model("sw_harvester")
+    axle(m, 8.0)
+    rod(m, "hub", 2.8, -2.5, 2.5, "brass")
+    for k in range(4):
+        radial(m, f"arm{k}", k * 90, 2.5, 7.4, 0.6, -0.8, 0.8, "steel")
+        for t in range(5):  # tines along the comb
+            radial(m, f"tine{k}_{t}", k * 90, 7.0, 8.0, 0.3, -6.0 + t * 3.0, -5.4 + t * 3.0, "dark")
+        radial(m, f"blade{k}", k * 90, 5.0, 7.4, 0.5, -6.2, 6.2, "brass")
+    for w in (-7.2, 7.2):
+        ring(m, f"band{w}", 5.6, 0.9, w - 0.4, w + 0.4, "copper", 12)
+    return m
+
+
+def plough():
+    # three coulter discs and curved shares on a drive axle: the soil gets turned into furrows
+    m = Model("sw_plough")
+    axle(m, 8.0)
+    for k, w in enumerate((-5.0, 0.0, 5.0)):
+        disk(m, f"coulter{k}", 5.6, w - 0.4, w + 0.4, "steel")
+        rod(m, f"nut{k}", 2.0, w - 0.9, w + 0.9, "brass")
+        for t in range(6):
+            radial(m, f"edge{k}_{t}", t * 60, 5.4, 6.4, 0.5, w - 0.3, w + 0.3, "dark")
+    for k in range(3):  # shares between the discs
+        radial(m, f"share{k}", 45 + k * 120, 2.0, 6.8, 0.8, -2.5, 2.5, "copper")
+    return m
+
+
+def roller():
+    # heavy compacting drum with brass end caps and an axle
+    m = Model("sw_roller")
+    axle(m, 8.0)
+    disk(m, "drum", 6.0, -6.0, 6.0, "steel")
+    for w in (-6.6, 6.0):
+        disk(m, f"cap{w}", 6.5, w, w + 0.6, "brass")
+    for k in range(8):  # raised studs along the drum
+        radial(m, f"stud{k}", k * 45, 6.0, 6.8, 0.6, -4.5, -3.5, "dark")
+        radial(m, f"stud_b{k}", k * 45 + 22.5, 6.0, 6.8, 0.6, 3.5, 4.5, "dark")
+    ring(m, "mid", 6.2, 0.8, -0.4, 0.4, "copper", 16)
+    return m
+
+
 def build():
     parts = [shaft(), cogwheel(), large_cogwheel(), gearbox(), hand_crank(), water_wheel(),
              gauge_body("sw_speed_gauge_body", "brass"), gauge_body("sw_stress_gauge_body", "copper"),
@@ -1401,6 +1463,7 @@ def build():
     # van de bestaande modellen op en verandert elke .bbmodel in de git-diff
     parts.append(tank_wagon())
     parts.append(plateau_wagon())   # idem: laatst toegevoegd, U()-tellers blijven staan
+    parts += [item_filter(), harvester(), plough(), roller()]   # 31-10: de vier modellen die de serverlog miste
     return parts
 
 
