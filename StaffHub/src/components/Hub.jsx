@@ -4,11 +4,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Anchor, Folder, FolderPlus, FileText, File as FileIcon, Image as ImageIcon, Download, Trash2,
   Pencil, MoveRight, Search, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
-  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield, RotateCcw, Bot, ChevronRight, BarChart3, ClipboardList,
+  RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield, RotateCcw, Bot, ChevronRight, BarChart3, ClipboardList, Star,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
 import Dashboard from '@/components/Dashboard';
 import DeployChecklist from '@/components/DeployChecklist';
+import Navigation from '@/components/Navigation';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
 import Vertaal from '@/components/Vertaal';
@@ -49,6 +50,12 @@ export default function Hub({ me, onLogout }) {
     } catch (e) { setErr(t('err.load') + ': ' + e.message); }
   }, [t]);
   useEffect(() => { load(parent); }, [parent, load]);
+// Track recent views
+useEffect(() => {
+  if (sel?.id) {
+    fetch('/api/recent', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ node: sel.id }) }).catch(() => {});
+  }
+}, [sel?.id]);
 
   // ---------- prullenbak + bulk-selectie ----------
   async function verversTon() {
@@ -335,6 +342,7 @@ export default function Hub({ me, onLogout }) {
           {kan('admin') && <button title={t('adm.titel')} onClick={() => setModal('admin')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><Shield size={18} /></button>}
 <button title="Dashboard" onClick={() => setModal('dashboard')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><BarChart3 size={18} /></button>
 <button title="Deploy Checklist" onClick={() => setModal('deploy')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><ClipboardList size={18} /></button>
+<button title="Navigatie" onClick={() => setModal('nav')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><Star size={18} /></button>
 <button title="Sync docs" onClick={async () => { const r = await fetch('/api/sync', { method: 'POST' }); const j = await r.json(); alert('Synced ' + (j.synced || 0) + ' files'); load(parent); }} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><RefreshCw size={18} /></button>
           {kan('users') && <button title={t('tip.accounts')} onClick={() => setModal('users')} className="p-1.5 rounded hover:bg-white/10"><Users className="size-4" /></button>}
           <button title={t('tip.logout')} onClick={async () => { await fetch('/api/auth/logout', { method: 'POST' }); onLogout(); }} className="p-1.5 rounded hover:bg-white/10"><LogOut className="size-4" /></button>
@@ -525,6 +533,7 @@ export default function Hub({ me, onLogout }) {
       {modal === 'users' && <UsersModal onClose={() => setModal(null)} me={me} />}
 {modal === 'dashboard' && <Dashboard onClose={() => setModal(null)} />}
 {modal === 'deploy' && <DeployChecklist onClose={() => setModal(null)} />}
+{modal === 'nav' && <Navigation onClose={() => setModal(null)} onOpen={(n) => { setSel(n); setModal(null); }} />}
       {modal === 'admin' && <AdminModal onClose={() => setModal(null)} me={me} openAccounts={() => setModal('users')} />}
       {modal === 'tokens' && <TokensModal onClose={() => setModal(null)} />}
       {archief && <ArchiveModal archief={archief} sluit={() => setArchief(null)} ververst={refresh} bewaar={arBewaar} />}
