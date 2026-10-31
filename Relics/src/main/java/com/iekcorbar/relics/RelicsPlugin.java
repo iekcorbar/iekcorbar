@@ -121,6 +121,10 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     }
     private Relics relics;
     private RelicsMenu menu;
+
+    RelicsMenu menu() {
+        return menu;
+    }
     private Treats treats;
     private Discs discs;
     private Adv adv;
@@ -142,6 +146,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         getServer().getPluginManager().registerEvents(treats, this);
         getServer().getPluginManager().registerEvents(relics.jukebox(), this);
         getServer().getPluginManager().registerEvents(relics.giftBoxes(), this);
+        getServer().getPluginManager().registerEvents(relics.hangings(), this);
         relics.registerRecipes();
         discs = new Discs(this);
         getServer().getPluginManager().registerEvents(discs, this);

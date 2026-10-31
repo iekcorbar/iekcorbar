@@ -197,6 +197,10 @@ enum RelicType {
             Base.NONE, 1, 0, "byobu_screen", null, null, Effect.NONE, Use.NONE, 1f),
     WAGASA_STAND(Collection.CURIO, "Wagasa Stand", "Paper umbrellas, ready for the rain.",
             Base.NONE, 1, 0, "wagasa_stand", null, null, Effect.NONE, Use.NONE, 1f),
+    NOTICE_BOARD(Collection.CURIO, "Notice Board", "A village notice board. Sneak + right-click (placer or staff) to pin a notice; everyone can read it.",
+            Base.NONE, 1, 0, "vanilla:oak_sign", null, null, Effect.NONE, Use.NOTICE, 1f),
+    WISH_TREE(Collection.CURIO, "Wish Tree", "A little cherry tree for tanabata wishes. Right-click with a sheet of paper and type your wish; it hangs in the branches.",
+            Base.NONE, 2, 0, "vanilla:cherry_sapling", null, null, Effect.NONE, Use.TANABATA, 1f),
     PILLAR_BOX(Collection.CURIO, "Pillar Box", "A British pillar box in engine red, re-riveted in brass. Nobody has seen a postman - yet it is always empty.",
             Base.SOLID, 2, 0, "pillar_box", null, null, Effect.STEAM, Use.NONE, 1f),
 
@@ -269,7 +273,7 @@ enum RelicType {
     enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, HEART, RAINBOW, SWAP, SPARK, SHISHI, DOLL }
 
     /** What a right-click does (NONE = show the lore line). POSE = wooden dolls swap their pose model. */
-    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE, WISH, JAR, BIRD, VEND }
+    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE, WISH, JAR, BIRD, VEND, NOTICE, TANABATA }
 
     final Collection collection;
     final String displayName, lore;

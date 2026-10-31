@@ -3,6 +3,7 @@ package com.iekcorbar.relics;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -10,6 +11,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.NamespacedKey;
+import org.bukkit.persistence.PersistentDataType;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -23,26 +32,73 @@ final class RelicsMenu implements Listener {
     private static final int PAGE = 36, GRID = 9;
     private final RelicsPlugin plugin;
     private final Relics relics;
+    private final NamespacedKey ownedKey;
+    private final Map<UUID, Object[]> searching = new HashMap<>();   // player -> {tab, craftOnly}
+    private final Map<UUID, Set<String>> ownedCache = new HashMap<>();
 
     RelicsMenu(RelicsPlugin plugin, Relics relics) {
         this.plugin = plugin;
         this.relics = relics;
+        this.ownedKey = new NamespacedKey(plugin, "owned");
+        // every 10 s: remember which relics each online player has ever carried (the collection progress in this menu)
+        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            for (Player p : Bukkit.getOnlinePlayers()) for (ItemStack it : p.getInventory().getContents()) {
+                RelicType t = relics.typeOf(it);
+                if (t != null) mark(p, t);
+            }
+        }, 200L, 200L);
+    }
+
+    // ------------------------------------------------------------ collection progress (player PDC)
+
+    Set<String> owned(Player p) {
+        return ownedCache.computeIfAbsent(p.getUniqueId(), k -> {
+            String s = p.getPersistentDataContainer().get(ownedKey, PersistentDataType.STRING);
+            Set<String> out = new HashSet<>();
+            if (s != null && !s.isEmpty()) out.addAll(List.of(s.split(",")));
+            return out;
+        });
+    }
+
+    void mark(Player p, RelicType t) {
+        Set<String> o = owned(p);
+        if (!o.add(t.id())) return;
+        p.getPersistentDataContainer().set(ownedKey, PersistentDataType.STRING, String.join(",", o));
+        for (RelicType x : RelicType.values()) if (x.collection == t.collection && !o.contains(x.id())) return;
+        plugin.adv().grant(p, "full_" + t.collection.id());
+        p.sendMessage(Component.text("Collection complete: " + t.collection.title + "!", NamedTextColor.GOLD));
+    }
+
+    @EventHandler
+    public void onQuit(org.bukkit.event.player.PlayerQuitEvent e) {
+        ownedCache.remove(e.getPlayer().getUniqueId());
+        searching.remove(e.getPlayer().getUniqueId());
     }
 
     private static final class Holder implements InventoryHolder {
         RelicType.Collection tab; // null = alles
         int page;
+        String search = "";
+        boolean craftOnly;
         Inventory inv;
         @Override public Inventory getInventory() { return inv; }
     }
 
-    void open(Player p) { open(p, null, 0); }
+    void open(Player p) { open(p, null, 0, "", false); }
 
-    private void open(Player p, RelicType.Collection tab, int page) {
+    private void open(Player p, RelicType.Collection tab, int page, String search, boolean craftOnly) {
         Holder h = new Holder();
         h.tab = tab;
+        h.search = search;
+        h.craftOnly = craftOnly;
+        Set<String> have = owned(p);
         List<RelicType> list = new ArrayList<>();
-        for (RelicType t : RelicType.values()) if (tab == null || t.collection == tab) list.add(t);
+        for (RelicType t : RelicType.values()) {
+            if (tab != null && t.collection != tab) continue;
+            if (craftOnly && !plugin.craftable(t)) continue;
+            if (!search.isEmpty() && !t.displayName.toLowerCase().contains(search) && !t.id().contains(search)) continue;
+            list.add(t);
+        }
         int pages = Math.max(1, (list.size() + PAGE - 1) / PAGE);
         h.page = Math.max(0, Math.min(page, pages - 1));
         h.inv = org.bukkit.Bukkit.createInventory(h, 54, Component.text("Relics" + (tab == null ? "" : " - " + tab.title)
@@ -59,7 +115,9 @@ final class RelicsMenu implements Listener {
             ItemStack icon = first != null ? relics.item(first, 1) : new ItemStack(Material.PAPER);
             ItemMeta m = icon.getItemMeta();
             m.displayName(Component.text(cols[i].title, tab == cols[i] ? NamedTextColor.GOLD : NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
-            m.lore(List.of(Component.text(cols[i].size() + " relics", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+            int got = 0;
+            for (RelicType x : RelicType.values()) if (x.collection == cols[i] && have.contains(x.id())) got++;
+            m.lore(List.of(Component.text(got + " / " + cols[i].size() + " collected", got == cols[i].size() ? NamedTextColor.GREEN : NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
             if (tab == cols[i]) m.setEnchantmentGlintOverride(true);
             icon.setItemMeta(m);
             inv.setItem(i + 1, icon);
@@ -74,9 +132,11 @@ final class RelicsMenu implements Listener {
             ItemMeta m = it.getItemMeta();
             List<Component> lore = new ArrayList<>(m.lore() == null ? List.<Component>of() : m.lore());
             lore.add(Component.empty());
+            lore.add(Component.text(have.contains(t.id()) ? "Collected" : "Not collected yet", have.contains(t.id()) ? NamedTextColor.GREEN : NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
             lore.add(Component.text(plugin.craftable(t) ? "Craftable (recipe book)" : "Shop / event / staff only",
                     plugin.craftable(t) ? NamedTextColor.GREEN : NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
             if (give) lore.add(Component.text("Click: take 1  -  Shift-click: take 16", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("Shift-right-click: preview in front of you", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
             m.lore(lore);
             it.setItemMeta(m);
             inv.setItem(GRID + i, it);
@@ -86,6 +146,15 @@ final class RelicsMenu implements Listener {
         inv.setItem(49, named(Material.BARRIER, "Close"));
         inv.setItem(53, h.page < pages - 1 ? named(Material.ARROW, "Next page") : pane);
         inv.setItem(47, named(Material.PAPER, give ? "Browse and take relics" : "Browse the relics (staff hands them out)"));
+        inv.setItem(46, named(craftOnly ? Material.CRAFTING_TABLE : Material.BARRIER, craftOnly ? "Showing: craftable only" : "Showing: everything"));
+        ItemStack find = named(Material.COMPASS, search.isEmpty() ? "Search by name" : "Search: " + search);
+        ItemMeta fm = find.getItemMeta();
+        fm.lore(List.of(Component.text(search.isEmpty() ? "Click, then type in chat" : "Right-click to clear", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)));
+        find.setItemMeta(fm);
+        inv.setItem(48, find);
+        int allGot = 0;
+        for (RelicType x : RelicType.values()) if (have.contains(x.id())) allGot++;
+        inv.setItem(50, named(Material.NETHER_STAR, "Collected " + allGot + " / " + RelicType.values().length));
         p.openInventory(inv);
     }
 
@@ -113,18 +182,42 @@ final class RelicsMenu implements Listener {
         if (!(e.getWhoClicked() instanceof Player p) || e.getClickedInventory() != e.getView().getTopInventory()) return;
         int s = e.getRawSlot();
         RelicType.Collection[] cols = RelicType.Collection.values();
-        if (s == 0) { click(p); open(p, null, 0); }
-        else if (s >= 1 && s <= 8 && s - 1 < cols.length) { click(p); open(p, cols[s - 1], 0); }
-        else if (s == 45 && h.page > 0) { click(p); open(p, h.tab, h.page - 1); }
-        else if (s == 53 && e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.ARROW) { click(p); open(p, h.tab, h.page + 1); }
+        if (s == 0) { click(p); open(p, null, 0, h.search, h.craftOnly); }
+        else if (s >= 1 && s <= 8 && s - 1 < cols.length) { click(p); open(p, cols[s - 1], 0, h.search, h.craftOnly); }
+        else if (s == 45 && h.page > 0) { click(p); open(p, h.tab, h.page - 1, h.search, h.craftOnly); }
+        else if (s == 53 && e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.ARROW) { click(p); open(p, h.tab, h.page + 1, h.search, h.craftOnly); }
+        else if (s == 46) { click(p); open(p, h.tab, 0, h.search, !h.craftOnly); }
+        else if (s == 48) {
+            click(p);
+            if (e.isRightClick() && !h.search.isEmpty()) { open(p, h.tab, 0, "", h.craftOnly); return; }
+            searching.put(p.getUniqueId(), new Object[]{h.tab, h.craftOnly});
+            p.closeInventory();
+            p.sendMessage(Component.text("Type part of a relic name in chat (cancel to go back).", NamedTextColor.GOLD));
+        }
         else if (s == 49) p.closeInventory();
         else if (s >= GRID && s < GRID + PAGE) {
             RelicType t = relics.typeOf(e.getCurrentItem());
-            if (t == null || !p.hasPermission("relics.give")) return;
+            if (t == null) return;
+            if (e.isShiftClick() && e.isRightClick()) {
+                p.closeInventory();
+                relics.preview(p, t);
+                return;
+            }
+            if (!p.hasPermission("relics.give")) return;
             p.getInventory().addItem(relics.item(t, e.isShiftClick() ? 16 : 1)).values()
                     .forEach(r -> p.getWorld().dropItem(p.getLocation(), r));
             p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.6f, 1.2f);
         }
+    }
+
+    @EventHandler
+    public void onChat(AsyncPlayerChatEvent e) {
+        Object[] st = searching.remove(e.getPlayer().getUniqueId());
+        if (st == null) return;
+        e.setCancelled(true);
+        String q = e.getMessage().trim().toLowerCase();
+        Player p = e.getPlayer();
+        Bukkit.getScheduler().runTask(plugin, () -> open(p, (RelicType.Collection) st[0], 0, q.equals("cancel") ? "" : q, (Boolean) st[1]));
     }
 
     @EventHandler

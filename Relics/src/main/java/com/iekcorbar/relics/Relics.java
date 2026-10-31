@@ -176,6 +176,7 @@ final class Relics implements Listener {
     final List<NamespacedKey> recipeKeys = new ArrayList<>();
     private int breakHits;
     private NewYearBoards boards;
+    private Hangings hangings;
     private Jukebox jukebox;
     private Gifts giftBoxes;
 
@@ -185,6 +186,10 @@ final class Relics implements Listener {
 
     Gifts giftBoxes() {
         return giftBoxes;
+    }
+
+    Hangings hangings() {
+        return hangings;
     }
 
     NewYearBoards boards() {
@@ -202,6 +207,7 @@ final class Relics implements Listener {
         boards = new NewYearBoards(plugin, this, tagKey);
         jukebox = new Jukebox(plugin, this);
         giftBoxes = new Gifts(plugin, this);
+        hangings = new Hangings(plugin, this, tagKey);
     }
 
     java.util.Set<Relic> all() {
@@ -264,6 +270,7 @@ final class Relics implements Listener {
         it.setItemMeta(m);
         it.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics",
                 blessed && t == RelicType.BLOOD_TOKEN ? "blood_token_blessed" : t.floor));
+        if (t.floor.startsWith("vanilla:")) it.setData(DataComponentTypes.ITEM_MODEL, Key.key("minecraft", t.floor.substring(8)));   // drawn from vanilla displays, no pack model
         it.setData(DataComponentTypes.MAX_STACK_SIZE, 16);
         return it;
     }
@@ -374,6 +381,8 @@ final class Relics implements Listener {
         recipe(RelicType.BONSAI, 1, Material.FLOWER_POT, Tag.SAPLINGS);
         recipe(RelicType.BYOBU_SCREEN, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.PAPER, Tag.PLANKS, Tag.PLANKS, Material.BLACK_DYE);
         recipe(RelicType.WAGASA_STAND, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.STICK, Material.STICK, Material.STICK, Material.RED_DYE);
+        recipe(RelicType.NOTICE_BOARD, 1, Tag.PLANKS, Tag.PLANKS, Material.STICK, Material.STICK, Material.PAPER);
+        recipe(RelicType.WISH_TREE, 1, Material.CHERRY_SAPLING, Material.FLOWER_POT, Material.PAPER);
         recipe(RelicType.PILLAR_BOX, 1, Material.IRON_INGOT, Material.RED_DYE, Material.RED_DYE, Material.COPPER_INGOT, Material.GOLD_NUGGET, Material.REDSTONE);
         // Brewery & wooden helpers (Curiosities) - NOT craftable unless config crafting.<id> says true (shop/event stock)
         recipe(RelicType.SUGI_DAMA, 1, Material.SPRUCE_LEAVES, Material.SPRUCE_LEAVES, Material.HAY_BLOCK, Material.STRING);
@@ -479,6 +488,8 @@ final class Relics implements Listener {
             r.variant = eggs[ThreadLocalRandom.current().nextInt(eggs.length)];
             r.owner = p.getUniqueId();
         }
+        plugin.menu().mark(p, t);
+        if (t == RelicType.NOTICE_BOARD) r.owner = p.getUniqueId();
         if (t == RelicType.COUNTDOWN_BOARD) r.owner = p.getUniqueId(); // the placer may change its zone
         if (t == RelicType.GIANT_CANDY_CANE) r.variant = CANE_COLOURS[ThreadLocalRandom.current().nextInt(CANE_COLOURS.length)];
         if (t == RelicType.ADVENT_WREATH) r.candles = adventCandles();
@@ -576,6 +587,26 @@ final class Relics implements Listener {
     }
 
     /** Model transform: turned to its facing (+ extra turn), scaled up for big relics with the bottom kept on the ground. */
+    /** Menu preview: the relic's model floats for a few seconds in front of the player; nothing is placed. */
+    void preview(Player p, RelicType t) {
+        if (t.floor.startsWith("vanilla:")) {
+            p.sendActionBar(Component.text(t.displayName + " has no separate model to preview - place one.", NamedTextColor.GRAY));
+            return;
+        }
+        BlockFace f = p.getFacing().getOppositeFace();
+        Location at = p.getLocation().add(p.getLocation().getDirection().setY(0).normalize().multiply(2.5));
+        Relic fake = new Relic(p.getWorld(), at.getBlockX(), at.getBlockY(), at.getBlockZ(), t, "floor", f);
+        ItemDisplay d = p.getWorld().spawn(at.clone(), ItemDisplay.class, e -> {
+            e.setPersistent(false);
+            e.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
+            e.setItemStack(look(fake.model()));
+            e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
+            e.setTransformation(transform(fake, 0));
+        });
+        p.sendActionBar(Component.text("Preview of " + t.displayName + " (8 seconds)", NamedTextColor.GOLD));
+        Bukkit.getScheduler().runTaskLater(plugin, d::remove, 160L);
+    }
+
     private Transformation transform(Relic r, float extraYaw) {
         return build(r, rotation(r).rotateY(extraYaw), 1f);
     }
@@ -594,19 +625,23 @@ final class Relics implements Listener {
     void draw(Relic r) {
         erase(r);
         ItemStack look = new ItemStack(Material.PAPER);
-        look.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics", r.model()));
+        if (!r.model().startsWith("vanilla:")) look.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics", r.model()));
+        else look = new ItemStack(Material.AIR);   // the parts are spawned by Hangings
+        final ItemStack lookFinal = look;
         r.display = r.world.spawn(r.center(), ItemDisplay.class, d -> {
             d.setPersistent(false);
             d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
-            d.setItemStack(look);
+            d.setItemStack(lookFinal);
             d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
             d.setTransformation(transform(r, 0));
             if (r.type == RelicType.WARDING_TOTEM && r.lit) d.setBrightness(new Display.Brightness(15, 15));
             if (r.type.effect == RelicType.Effect.TWINKLE) d.setBrightness(new Display.Brightness(12, 15)); // lights glow
         });
         if (r.type.base != RelicType.Base.SOLID) {
-            float w = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.2f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.7f : r.type == RelicType.COUNTDOWN_BOARD ? 2.6f : r.type == RelicType.TORII_GATE ? 3.0f : r.type == RelicType.BONE_XYLOPHONE && r.mount.equals("floor") ? 1.9f : r.type == RelicType.GRAMOPHONE && r.mount.equals("floor") ? 1.1f : r.type == RelicType.GIFT_BOX && r.mount.equals("floor") ? 1.2f : r.type == RelicType.CREATURE_RIBCAGE || r.type == RelicType.ASH_PILE || !r.mount.equals("floor") ? 0.9f : 0.7f;
+            float w = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.2f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.7f : r.type == RelicType.COUNTDOWN_BOARD ? 2.6f : r.type == RelicType.NOTICE_BOARD ? 1.1f : r.type == RelicType.WISH_TREE ? 1.1f : r.type == RelicType.TORII_GATE ? 3.0f : r.type == RelicType.BONE_XYLOPHONE && r.mount.equals("floor") ? 1.9f : r.type == RelicType.GRAMOPHONE && r.mount.equals("floor") ? 1.1f : r.type == RelicType.GIFT_BOX && r.mount.equals("floor") ? 1.2f : r.type == RelicType.CREATURE_RIBCAGE || r.type == RelicType.ASH_PILE || !r.mount.equals("floor") ? 0.9f : 0.7f;
             float hh = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.9f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.4f : r.type == RelicType.COUNTDOWN_BOARD && r.mount.equals("wall") ? 2.0f : r.type == RelicType.COUNTDOWN_BOARD ? 4.8f : !r.mount.equals("floor") ? 1.0f : switch (r.type) {
+                case NOTICE_BOARD -> 1.65f;
+                case WISH_TREE -> 1.9f;
                 case ASH_PILE, TORII_GATE -> 0.25f;
                 case VIGIL_CANDLES -> 0.6f;
                 case CREATURE_RIBCAGE, SETTLERS_GRAVE, TORN_SETTLEMENT_BANNER, GIBBET_CAGE -> 0.95f;
@@ -625,11 +660,13 @@ final class Relics implements Listener {
             byHitbox.put(r.hitbox.getUniqueId(), r);
         }
         if (r.type == RelicType.COUNTDOWN_BOARD) boards.spawn(r);
+        if (Hangings.handles(r)) hangings.spawn(r);
         if (r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor")) graveSpawn(r);
     }
 
     private void erase(Relic r) {
         boards.remove(r);
+        hangings.remove(r);
         graveRemove(r);
         if (r.display != null) r.display.remove();
         if (r.hitbox != null) {
@@ -710,6 +747,7 @@ final class Relics implements Listener {
         jukebox.stop(r);
         unindex(r);
         erase(r);
+        hangings.forget(r);
         markDirty(r);
         for (int i = 0; i < height(r); i++) {
             Block part = r.world.getBlockAt(r.x, r.y + i, r.z);
@@ -884,6 +922,7 @@ final class Relics implements Listener {
             // hit or removed any more: draw it again
             boolean lost = r.display == null || !r.display.isValid() || (r.hitbox != null && !r.hitbox.isValid())
                     || (r.type == RelicType.COUNTDOWN_BOARD && boards.lost(r))
+                    || (Hangings.handles(r) && hangings.lost(r))
                     || (r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") && graveLost(r));
             if (lost) {
                 if (r.world.isChunkLoaded(r.x >> 4, r.z >> 4)) {
@@ -1142,6 +1181,7 @@ final class Relics implements Listener {
                 markDirty(r);
             }
             case GIFT -> giftBoxes.use(r, p);
+            case NOTICE, TANABATA -> hangings.use(r, p, hand);
             case POSE -> {
                 r.twinkle = !r.twinkle;
                 r.count = r.twinkle ? 1 : 0;   // persisted in the line's count column

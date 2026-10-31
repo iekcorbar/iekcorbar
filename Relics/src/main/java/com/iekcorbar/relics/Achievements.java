@@ -18,6 +18,7 @@ final class Achievements {
         a.add("valentine", "first", "pink_dye", "Valentine's", "Get a Valentine's relic.", "task");
         a.add("wish", "valentine", "gold_nugget", "Wish Upon a Heart", "Drop a coin in the wishing well.", "task");
         a.add("curio", "first", "spyglass", "Curiosities", "Get a curiosity.", "task");
+        a.add("wish_tree", "curio", "cherry_sapling", "Tanabata", "Hang a wish in the Wish Tree.", "task");
         a.add("halloween", "first", "jack_o_lantern", "Spooky Season", "Get a Halloween Party relic.", "task");
         a.add("blood_token", "halloween", "amethyst_shard", "Coin of the Crimson Hour", "Place a Blood Token.", "task");
         a.add("blood_normal", "blood_token", "brick", "A Plain One", "Hold a plain Blood Token in your hand.", "task");
@@ -50,6 +51,9 @@ final class Achievements {
             if (plugin.treats().typeOf(it) != null) return "treat";
             return plugin.discs().isDisc(it) ? "disc" : null;
         });
+        for (RelicType.Collection c : RelicType.Collection.values()) {
+            a.add("full_" + c.id(), "collector", "chest", "Complete: " + c.title, "Own every relic of " + c.title + ".", "challenge");
+        }
         for (RelicType.Collection c : RelicType.Collection.values()) a.item("c:" + c.id(), c.id());
         a.item("treat", "treat").item("disc", "disc");
         a.item("token_plain", "blood_normal").item("token_blessed", "blood_blessed");
