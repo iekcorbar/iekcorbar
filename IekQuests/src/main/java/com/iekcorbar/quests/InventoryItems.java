@@ -12,6 +12,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -113,7 +119,54 @@ final class InventoryItems implements Listener {
         Inventory top = e.getInventory();
         if (top.getType() == InventoryType.CRAFTING) {
             removeFromInventory(top);
+            // het eigen inventory-scherm geeft server-side geen open-event: direct opnieuw vullen
+            schedulePlace(p, 2L);
         }
+    }
+
+    /** Het eigen 2x2-vak bestaat altijd; vul het zonder open-event (client opent het zelf). */
+    void placeFor(Player p) {
+        if (!p.isOnline()) return;
+        Inventory top = p.getOpenInventory().getTopInventory();
+        if (top.getType() != InventoryType.CRAFTING) return;
+        removeFromInventory(top);
+        placeInCrafting(top);
+    }
+
+    private void schedulePlace(Player p, long delay) {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> placeFor(p), delay);
+    }
+
+    /** Alle spelers (na een /questbook reload of plugin-herstart). */
+    void placeForAll() {
+        for (Player p : Bukkit.getOnlinePlayers()) placeFor(p);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onJoin(PlayerJoinEvent e) { schedulePlace(e.getPlayer(), 10L); }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onRespawn(PlayerRespawnEvent e) { schedulePlace(e.getPlayer(), 10L); }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onWorld(PlayerChangedWorldEvent e) { schedulePlace(e.getPlayer(), 10L); }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onGameMode(PlayerGameModeChangeEvent e) { schedulePlace(e.getPlayer(), 5L); }
+
+    /** Bij vertrek geen items in het vak laten (anders komen ze in de inventory terecht). */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onQuit(PlayerQuitEvent e) {
+        removeFromInventory(e.getPlayer().getOpenInventory().getTopInventory());
+        remove(e.getPlayer());
+    }
+
+    /** Menu-items nooit droppen bij de dood. */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onDeath(PlayerDeathEvent e) {
+        removeFromInventory(e.getEntity().getOpenInventory().getTopInventory());
+        e.getDrops().removeIf(it -> it != null && it.hasItemMeta()
+                && it.getItemMeta().getPersistentDataContainer().has(itemKey, PersistentDataType.STRING));
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

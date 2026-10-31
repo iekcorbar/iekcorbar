@@ -265,6 +265,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         invItems = new InventoryItems(this);
         Bukkit.getPluginManager().registerEvents(invItems, this);
         invItems.load();
+        invItems.placeForAll();
         var wcmd = Bukkit.getPluginCommand("questwizard");
         if (wcmd != null) wcmd.setExecutor((sender, command, label, args) -> {
             if (args.length >= 1 && args[0].equalsIgnoreCase("delete") && (sender.hasPermission("iekquests.edit") || sender.hasPermission("iekquests.admin"))
