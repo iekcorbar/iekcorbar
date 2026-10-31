@@ -24,5 +24,11 @@ inventory-items:
     slot: 3
     name: "&eGouw Menu"
     action: "open:gouw"
-
-
+  warp:
+    material: CARTOGRAPHY_TABLE
+    slot: 4
+    name: "&eWarp"
+    action: "player:mmocore waypoints open %player%"
+    action-left: "player:homes"
+    action-right: "player:mmocore waypoints open %player%"
+    action-shift-right: "player:em adventurersguild"

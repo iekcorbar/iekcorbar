@@ -32,7 +32,7 @@ final class InventoryItems implements Listener {
     private final NamespacedKey itemKey;
     private final Map<String, ItemDef> items = new HashMap<>();
 
-    record ItemDef(String id, Material material, int slot, String name, String action, String quest, boolean cancel) {}
+    record ItemDef(String id, Material material, int slot, String name, String action, String quest, boolean cancel, String left, String right, String shiftRight) {}
 
     InventoryItems(IekQuestsPlugin plugin) {
         this.plugin = plugin;
@@ -55,7 +55,8 @@ final class InventoryItems implements Listener {
             String action = one.getString("action", "");
             String quest = one.getString("quest", "");
             boolean cancel = one.getBoolean("cancel", true);
-            items.put(key, new ItemDef(key, mat, slot, name, action, quest, cancel));
+            items.put(key, new ItemDef(key, mat, slot, name, action, quest, cancel,
+                    one.getString("action-left", ""), one.getString("action-right", ""), one.getString("action-shift-right", "")));
         }
         plugin.getLogger().info("Loaded " + items.size() + " inventory items.");
     }
@@ -134,13 +135,24 @@ final class InventoryItems implements Listener {
                 plugin.triggerQuestTag(p, qparts[0], qparts[1]);
             }
         }
-        // Trigger the action
+        // Trigger the action (per click type when configured, otherwise the default action)
         String action = def.action();
+        if (e.getClick() == org.bukkit.event.inventory.ClickType.SHIFT_RIGHT && !def.shiftRight().isEmpty()) action = def.shiftRight();
+        else if (e.isRightClick() && !def.right().isEmpty()) action = def.right();
+        else if (e.isLeftClick() && !def.left().isEmpty()) action = def.left();
+        runAction(p, action);
+        p.playSound(p.getLocation(), org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, 0.5f, 1.2f);
+    }
+
+    private void runAction(Player p, String action) {
         if (action.startsWith("quest:")) {
             String[] parts = action.split(":", 3);
             if (parts.length >= 3) {
                 plugin.triggerQuestTag(p, parts[1], parts[2]);
             }
+        } else if (action.startsWith("player:")) {
+            String cmd = action.substring("player:".length()).replace("%player%", p.getName());
+            p.performCommand(cmd);
         } else if (action.startsWith("command:")) {
             String cmd = action.substring("command:".length());
             cmd = cmd.replace("%player%", p.getName());
@@ -155,6 +167,5 @@ final class InventoryItems implements Listener {
                 default -> p.sendMessage(Component.text("Unknown open target: " + what));
             }
         }
-        p.playSound(p.getLocation(), org.bukkit.Sound.BLOCK_NOTE_BLOCK_PLING, 0.5f, 1.2f);
     }
 }
