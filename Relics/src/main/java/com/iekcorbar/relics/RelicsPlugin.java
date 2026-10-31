@@ -121,6 +121,11 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     }
     private Relics relics;
     private RelicsMenu menu;
+    private RelicGuide guide;
+
+    RelicGuide guide() {
+        return guide;
+    }
 
     RelicsMenu menu() {
         return menu;
@@ -143,6 +148,8 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         getServer().getPluginManager().registerEvents(relics, this);
         menu = new RelicsMenu(this, relics);
         getServer().getPluginManager().registerEvents(menu, this);
+        guide = new RelicGuide(this);
+        getServer().getPluginManager().registerEvents(guide, this);
         getServer().getPluginManager().registerEvents(treats, this);
         getServer().getPluginManager().registerEvents(relics.jukebox(), this);
         getServer().getPluginManager().registerEvents(relics.giftBoxes(), this);
@@ -225,6 +232,16 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             return true;
         }
         String sub = a.length == 0 ? "list" : a[0].toLowerCase(Locale.ROOT);
+        if (sub.equals("guide")) {
+            Player target = a.length > 1 && s.hasPermission("relics.give") ? Bukkit.getPlayerExact(a[1]) : s instanceof Player self ? self : null;
+            if (target == null) {
+                s.sendMessage(Component.text("/" + label + " guide" + (s.hasPermission("relics.give") ? " [player]" : ""), NamedTextColor.RED));
+                return true;
+            }
+            for (ItemStack left : target.getInventory().addItem(guide.item()).values()) target.getWorld().dropItemNaturally(target.getLocation(), left);
+            target.sendMessage(Component.text("Collector's Guide received - right-click it to read. You can also craft one: book + ink sac + feather.", NamedTextColor.GOLD));
+            return true;
+        }
         if (sub.equals("giveall")) {
             if (denied(s, "relics.give")) return true;
             Player target = a.length > 1 ? Bukkit.getPlayerExact(a[1]) : s instanceof Player self ? self : null;
@@ -705,7 +722,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"list", "give", "giveall", "random", "crate", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"menu", "guide", "list", "give", "giveall", "random", "crate", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && a[0].equalsIgnoreCase("crate")) {
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
         } else if (a.length == 3 && a[0].equalsIgnoreCase("crate")) {

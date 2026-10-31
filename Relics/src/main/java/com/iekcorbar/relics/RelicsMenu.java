@@ -222,6 +222,11 @@ final class RelicsMenu implements Listener {
         int allGot = 0;
         for (RelicType x : RelicType.values()) if (have.contains(x.id())) allGot++;
         inv.setItem(50, named(Material.NETHER_STAR, "Collected " + allGot + " / " + RelicType.values().length));
+        ItemStack gb = named(Material.WRITTEN_BOOK, "Collector's Guide");
+        ItemMeta gm = gb.getItemMeta();
+        gm.lore(List.of(line("Click to get the stamp book", NamedTextColor.GRAY)));
+        gb.setItemMeta(gm);
+        inv.setItem(51, gb);
         inv.setItem(53, h.page < pages - 1 ? named(Material.ARROW, "Next page") : pane);
         p.openInventory(inv);
     }
@@ -271,6 +276,11 @@ final class RelicsMenu implements Listener {
             searching.put(p.getUniqueId(), new Object[]{h.tab, h.favOnly, h.craftOnly});
             p.closeInventory();
             p.sendMessage(Component.text("Type part of a relic name in chat (cancel to go back).", NamedTextColor.GOLD));
+        }
+        else if (s == 51) {
+            click(p);
+            for (ItemStack left : p.getInventory().addItem(plugin.guide().item()).values()) p.getWorld().dropItemNaturally(p.getLocation(), left);
+            p.sendMessage(Component.text("Collector's Guide received - right-click it to read.", NamedTextColor.GOLD));
         }
         else if (s == 49) p.closeInventory();
         else if (s >= GRID && s < GRID + PAGE) {
