@@ -179,6 +179,9 @@ export function Model3D({ url, naam, groot = false }) {
   const [texturen, setTexturen] = useState([]);         // bbmodel-only: [{idx,naam,src}]
   const [meta, setMeta] = useState(null);               // bbmodel-only: {elementen, texturen, res}
   const [verberg, setVerberg] = useState(() => new Set());
+  const [anims, setAnims] = useState([]);                // bbmodel-only: lijst van animatienamen
+  const [animIdx, setAnimIdx] = useState(0);             // geselecteerde animatie
+  const [playing, setPlaying] = useState(true);          // speelt af of niet
 
   useEffect(() => {
     let weg = false;
@@ -237,7 +240,14 @@ export function Model3D({ url, naam, groot = false }) {
           if (weg) return;
           requestAnimationFrame(hor);
           controls.update();
-          if (apiRef.current?.spin) scene.rotation.y += 0.005;
+          if (apiRef.current?.spin && !playing) scene.rotation.y += 0.005;
+          if (playing && anims.length > 0) {
+            const a = anims[animIdx];
+            if (a && a.length > 0) {
+              const t = (Date.now() / 1000) % a.length;
+              scene.rotation.y = (t / a.length) * Math.PI * 2;
+            }
+          }
           if (mixer.h) mixer.h.update(1 / 60);
           renderer.render(scene, camera);
         };
@@ -258,6 +268,7 @@ export function Model3D({ url, naam, groot = false }) {
           full: () => { const d = doosRef.current; if (d?.requestFullscreen) d.requestFullscreen().then(herframe).catch(() => { }); },
         };
         setTexturen(object?.userData?.bb?.texturen || []);
+        setAnims(object?.userData?.bb?.animations || []);
         setMeta(object?.userData?.bb ? { elementen: object.userData.bb.elementen, texturen: object.userData.bb.texturen.length, res: object.userData.bb.res } : null);
         setKlaar(true);
       } catch (e) { if (!weg) setFout(String(e?.message || e)); }
@@ -301,6 +312,27 @@ export function Model3D({ url, naam, groot = false }) {
           <span className="w-1" />
           <button className={`${BNA} ${spin ? 'text-gold bg-gold/10' : ''}`} title={t('med.draaien')} onClick={() => { const aan = !spin; setSpin(aan); if (apiRef.current) apiRef.current.spin = aan; }}><Move3d className="size-4" /></button>
           <button className={BNA} title={t('med.herframe')} onClick={() => apiRef.current?.herstel()}>
+          {anims.length > 0 && (
+            <>
+              <span className="w-1" />
+              <select
+                value={animIdx}
+                onChange={(e) => setAnimIdx(Number(e.target.value))}
+                className="px-2 py-1 rounded text-[10px] border border-bronze/30 bg-black/40 text-parch/70"
+              >
+                {anims.map((a, i) => (
+                  <option key={i} value={i}>{a.name || 'anim ' + (i + 1)}</option>
+                ))}
+              </select>
+              <button
+                className={`${BNA} ${playing ? 'text-gold bg-gold/10' : ''}`}
+                title={playing ? 'Pauze' : 'Afspelen'}
+                onClick={() => setPlaying(!playing)}
+              >
+                {playing ? '⏸' : '▶'}
+              </button>
+            </>
+          )}
             <span className="text-sm leading-none">⟲</span>
           </button>
           <button className={BNA} title={t('med.full')} onClick={() => apiRef.current?.full()}><Maximize2 className="size-4" /></button>

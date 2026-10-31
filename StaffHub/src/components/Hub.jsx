@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Anchor, Folder, FolderPlus, FileText, File as FileIcon, Image as ImageIcon, Download, Trash2,
-  Pencil, MoveRight, Search, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
+  Pencil, MoveRight, LogOut, Upload, Lock, Globe, Users, KeyRound, History, Server, ArrowLeft,
   RefreshCw, Eye, EyeOff, Plus, X, UserCog, Shield, RotateCcw, Bot, ChevronRight, BarChart3, ClipboardList, Star, MessageSquare,
 } from 'lucide-react';
 import PageEditor from '@/components/PageEditor';
@@ -34,8 +34,7 @@ export default function Hub({ me, onLogout }) {
   const [kids, setKids] = useState([]);
   const [sel, setSel] = useState(null);           // geopend document (popup)
   const [kiesBestemming, setKiesBestemming] = useState(false);  // mapkiezer voor verplaatsen
-  const [q, setQ] = useState('');
-  const [results, setResults] = useState(null);
+  // search removed
   const [modal, setModal] = useState(null);       // 'users' | 'admin' | 'tokens' | 'dav' | 'desktop' | 'profiel' | 'ai'
   const [moveFrom, setMoveFrom] = useState(null);  // node die verplaatst wordt
   const [err, setErr] = useState('');
@@ -282,14 +281,7 @@ useEffect(() => {
     await refresh();                                  // cyclus/rechten: server meldt het netjes
   }
 
-  // ---------- zoeken ----------
-  useEffect(() => {
-    if (!q || q.length < 2) { setResults(null); return; }
-    const tm = setTimeout(async () => {
-      try { const j = await (await fetch('/api/search?q=' + encodeURIComponent(q))).json(); setResults(j.results || []); } catch { }
-    }, 300);
-    return () => clearTimeout(tm);
-  }, [q]);
+  // ---------- zoeken verwijderd ----------
 
   const TypeIcon = (n) => (ICONS[n.type] || FileIcon);
   const visBadge = (n) => n.vis === 'owner' ? <Lock className="inline size-3 text-red-300/70" /> : n.vis === 'team' ? <span className="text-[9px] text-copper">{n.team || 'team'}</span> : n.vis === 'all' ? <Globe className="inline size-3 text-emerald-300/60" /> : null;
@@ -318,23 +310,7 @@ useEffect(() => {
       <header className="flex items-center gap-3 px-4 py-2 border-b border-bronze/30 bg-panel">
         <img src="/icon-192.png" width="32" height="32" alt="" className="size-8 rounded-lg" />
         <h1 className="font-bold text-parch mr-2 tracking-tight">Staff<span className="text-gold">Hub</span></h1>
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2 size-4 text-parch/40" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('search.ph')}
-            className="w-full bg-black/40 border border-bronze/30 rounded-lg pl-8 pr-3 py-1.5 text-xs outline-none focus:border-gold" />
-          {results && (
-            <div className="absolute top-9 left-0 right-0 bg-panel border border-bronze/40 rounded-lg shadow-2xl max-h-80 overflow-auto z-40">
-              {results.length === 0 && <p className="p-3 text-xs text-parch/50">{t('search.none')}</p>}
-              {results.map((r) => (
-                <button key={r.id} className="w-full text-left px-3 py-2 text-xs hover:bg-white/5 flex items-center gap-2"
-                  onClick={() => { setQ(''); setResults(null); if (r.type === 'folder') setParent(r.id); else setSel({ id: r.id, name: r.name, type: r.type }); }}>
-                  {(() => { const I = TypeIcon(r); return <I className="size-3.5 text-gold/70" />; })()}{r.name}
-                  <span className="text-parch/40 ml-auto">{t('why.' + r.why)}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <div className="flex-1" />
         <div className="ml-auto flex items-center gap-2 text-xs">
           <span className="hidden sm:inline rounded-full bg-white/5 border border-bronze/30 px-2.5 py-1 text-parch/70">{me.username}{me.team ? ` · ${me.team}` : ''}</span>
           <LangToggle vast={kiesTaal} />

@@ -123,6 +123,25 @@ export function bouwBbmodel(THREE, data) {
       vlakken: pos.length / 18,                   // 3 hoekpunten x 2 driehoeken x 3 coordinaten = 18 pos-getallen per vlak
     });
   }
-  groep.userData.bb = { res, elementen: teller, texturen: lijst };
+  // Verzamel animatie-data voor de kijker (namen + keyframes per animator)
+  const anims = (data?.animations || []).map((a) => ({
+    uuid: a.uuid,
+    name: a.name || 'animation',
+    loop: a.loop !== false,
+    length: Number(a.length) || 0,
+    animators: Object.entries(a.animators || {}).map(([uuid, an]) => ({
+      uuid,
+      name: an.name || '',
+      type: an.type || 'bone',
+      channel: (an.keyframes?.[0]?.channel) || 'rotation',
+      keyframes: (an.keyframes || []).map((kf) => ({
+        time: Number(kf.time) || 0,
+        channel: kf.channel || 'rotation',
+        data: kf.data_points?.[0] || {},
+        interpolation: kf.interpolation || 'linear',
+      })),
+    })),
+  }));
+  groep.userData.bb = { res, elementen: teller, texturen: lijst, animations: anims };
   return groep;
 }
