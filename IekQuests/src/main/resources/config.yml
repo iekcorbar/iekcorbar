@@ -5,18 +5,29 @@ inventory-items:
     material: PLAYER_HEAD
     slot: 0
     name: "&eProfile"
+    skull: true
+    lore:
+      - "&7Click for view your profile."
+      - "&7"
     action: "player:profile"
     quest: "tutorial:profile_clicked"
   crafting:
     material: SMITHING_TABLE
     slot: 1
     name: "&eCrafting Table Portable"
+    lore:
+      - "&7Click to open your crafting table!"
     action: "open:workbench"
     quest: "tutorial:inventory_clicked"
   jobs:
     material: BOOK
     slot: 2
     name: "&eQuest Jobs"
+    lore:
+      - "&7Click to check your quests Jobs!"
+      - "&cYour jobs: &7%jobsr_user_jobs%"
+      - "&7"
+      - "&7Shift+Right-Click take your journal!"
     action: "player:jobs quests"
     action-shift-right: "player:journal"
     quest: "tutorial:jobs_clicked"
@@ -24,6 +35,13 @@ inventory-items:
     material: CARTOGRAPHY_TABLE
     slot: 3
     name: "&eWarp"
+    lore:
+      - "&7Right-Click waypoints Menu."
+      - "&7"
+      - "&7Left-Click Home."
+      - "&7"
+      - "&7Shift+Right-Click warp to the guild."
+      - "&7"
     action: "player:mmocore waypoints open %player%"
     action-left: "player:homes"
     action-right: "player:mmocore waypoints open %player%"
@@ -32,4 +50,7 @@ inventory-items:
     material: NETHERITE_HOE
     slot: 4
     name: "&eGouw Menu"
+    lore:
+      - "&7Click to open your claims (gouw) menu."
+      - "&7"
     action: "player:gouw menu"

@@ -40,7 +40,8 @@ final class InventoryItems implements Listener {
     private final NamespacedKey itemKey;
     private final Map<String, ItemDef> items = new HashMap<>();
 
-    record ItemDef(String id, Material material, int slot, String name, String action, String quest, boolean cancel, String left, String right, String shiftRight) {}
+    record ItemDef(String id, Material material, int slot, String name, String action, String quest, boolean cancel, String left, String right, String shiftRight,
+                   java.util.List<String> lore, boolean skull) {}
 
     InventoryItems(IekQuestsPlugin plugin) {
         this.plugin = plugin;
@@ -64,16 +65,34 @@ final class InventoryItems implements Listener {
             String quest = one.getString("quest", "");
             boolean cancel = one.getBoolean("cancel", true);
             items.put(key, new ItemDef(key, mat, slot, name, action, quest, cancel,
-                    one.getString("action-left", ""), one.getString("action-right", ""), one.getString("action-shift-right", "")));
+                    one.getString("action-left", ""), one.getString("action-right", ""), one.getString("action-shift-right", ""),
+                    one.getStringList("lore"), one.getBoolean("skull", false)));
         }
         plugin.getLogger().info("Loaded " + items.size() + " inventory items.");
     }
 
-    private ItemStack build(ItemDef def) {
+    private String papi(Player p, String text) {
+        String t = text.replace("%player%", p.getName());
+        try {
+            Class<?> c = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
+            return (String) c.getMethod("setPlaceholders", org.bukkit.OfflinePlayer.class, String.class).invoke(null, p, t);
+        } catch (Throwable ignored) {
+            return t;
+        }
+    }
+
+    private ItemStack build(ItemDef def, Player p) {
         ItemStack it = new ItemStack(def.material());
         ItemMeta m = it.getItemMeta();
         if (m != null) {
             m.setDisplayName(def.name().replace("&", "§"));
+            if (!def.lore().isEmpty()) {
+                java.util.List<String> lore = new java.util.ArrayList<>();
+                for (String l : def.lore()) lore.add(papi(p, l).replace("&", "§"));
+                m.setLore(lore);
+            }
+            m.addItemFlags(org.bukkit.inventory.ItemFlag.values());
+            if (def.skull() && m instanceof org.bukkit.inventory.meta.SkullMeta sm) sm.setOwningPlayer(p);
             m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, def.id());
             it.setItemMeta(m);
         }
@@ -94,7 +113,7 @@ final class InventoryItems implements Listener {
         if (!ours) return;
         ItemDef zero = null;
         for (ItemDef d : items.values()) if (d.slot() == 0) { zero = d; break; }
-        e.getInventory().setResult(zero == null ? null : build(zero));
+        e.getInventory().setResult(zero == null || !(e.getView().getPlayer() instanceof Player pl) ? null : build(zero, pl));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -103,13 +122,13 @@ final class InventoryItems implements Listener {
     }
 
     /** Place all items in the crafting grid of the given inventory. */
-    void placeInCrafting(Inventory inv) {
+    void placeInCrafting(Inventory inv, Player p) {
         if (inv == null || inv.getType() != InventoryType.CRAFTING) return;
         for (ItemDef def : items.values()) {
             if (def.slot() < 0) continue;
             int slot = def.slot();
             if (slot >= inv.getSize()) continue;
-            ItemStack it = build(def);
+            ItemStack it = build(def, p);
             inv.setItem(slot, it);
         }
     }
@@ -138,7 +157,7 @@ final class InventoryItems implements Listener {
         if (!(e.getPlayer() instanceof Player p)) return;
         Inventory top = e.getInventory();
         if (top.getType() == InventoryType.CRAFTING) {
-            Bukkit.getScheduler().runTaskLater(plugin, () -> placeInCrafting(top), 1L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> placeInCrafting(top, p), 1L);
         }
     }
 
@@ -146,11 +165,10 @@ final class InventoryItems implements Listener {
     public void onInventoryClose(InventoryCloseEvent e) {
         if (!(e.getPlayer() instanceof Player p)) return;
         Inventory top = e.getInventory();
-        if (top.getType() == InventoryType.CRAFTING) {
-            removeFromInventory(top);
-            // het eigen inventory-scherm geeft server-side geen open-event: direct opnieuw vullen
-            schedulePlace(p, 2L);
-        }
+        if (top.getType() == InventoryType.CRAFTING) removeFromInventory(top);
+        // het eigen inventory-scherm geeft server-side geen open-event, en na een menu (klik op een item)
+        // sluit alleen dat menu: bij elke sluiting het eigen vak opnieuw vullen (placeFor checkt het type)
+        schedulePlace(p, 2L);
     }
 
     /** Het eigen 2x2-vak bestaat altijd; vul het zonder open-event (client opent het zelf). */
@@ -159,7 +177,7 @@ final class InventoryItems implements Listener {
         Inventory top = p.getOpenInventory().getTopInventory();
         if (top.getType() != InventoryType.CRAFTING) return;
         removeFromInventory(top);
-        placeInCrafting(top);
+        placeInCrafting(top, p);
     }
 
     private void schedulePlace(Player p, long delay) {
