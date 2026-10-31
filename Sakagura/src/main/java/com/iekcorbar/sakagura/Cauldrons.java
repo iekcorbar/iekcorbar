@@ -222,8 +222,11 @@ final class Cauldrons implements Listener {
                     continue;
                 }
                 boolean hot = heated(b);
-                if (hot) pot.brew.cook += 1 / 60.0;
-                else pot.brew.mix += 1 / 60.0;
+                // co-op: 2+ players near the cauldron cook/mix twice as fast
+                int nearby = (int) b.getWorld().getNearbyPlayers(b.getLocation().add(0.5, 0.5, 0.5), 4).size();
+                double speed = nearby >= 2 ? 2.0 : 1.0;
+                if (hot) pot.brew.cook += speed / 60.0;
+                else pot.brew.mix += speed / 60.0;
                 Location top = b.getLocation().add(0.5, 0.95, 0.5);
                 if (hot) {
                     pot.world.spawnParticle(Particle.BUBBLE_POP, top, 2, 0.2, 0, 0.2, 0);
