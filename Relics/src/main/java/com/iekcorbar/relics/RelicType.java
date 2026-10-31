@@ -197,6 +197,22 @@ enum RelicType {
             Base.NONE, 1, 0, "byobu_screen", null, null, Effect.NONE, Use.NONE, 1f),
     WAGASA_STAND(Collection.CURIO, "Wagasa Stand", "Paper umbrellas, ready for the rain.",
             Base.NONE, 1, 0, "wagasa_stand", null, null, Effect.NONE, Use.NONE, 1f),
+    ONSEN_TUB(Collection.ONSEN, "Hinoki Bath Tub", "A cypress tub, steaming gently. Nobody remembers filling it.",
+            Base.NONE, 1, 0, "onsen_tub", null, null, Effect.STEAM, Use.NONE, 1f),
+    ONSEN_LANTERN(Collection.ONSEN, "Snow-Viewing Lantern", "A stone lantern with a wide roof, built to hold the snow and the light.",
+            Base.LIGHT, 1, 12, "onsen_lantern", null, null, Effect.FLAME, Use.NONE, 1f),
+    KOTATSU(Collection.ONSEN, "Kotatsu", "A low heated table under a heavy blanket. Nobody has ever left it willingly.",
+            Base.NONE, 1, 0, "kotatsu", null, null, Effect.NONE, Use.NONE, 1f),
+    SNOW_BUNNY(Collection.ONSEN, "Snow Bunny", "Two berries for eyes, two leaves for ears. Right-click to perk the ears up.",
+            Base.NONE, 1, 0, "snow_bunny", null, null, Effect.NONE, Use.POSE, 1f),
+    WASH_SET(Collection.ONSEN, "Wash Stool and Bucket", "Wash first, soak after. The rule is older than the tub.",
+            Base.NONE, 1, 0, "wash_set", null, null, Effect.NONE, Use.NONE, 1f),
+    TOWEL_RACK(Collection.ONSEN, "Towel Rack", "Two towels, always one damp.",
+            Base.NONE, 1, 0, "towel_rack", null, null, Effect.SWAY, Use.NONE, 1f),
+    SAKE_TRAY(Collection.ONSEN, "Floating Sake Tray", "A tokkuri and two cups, drifting on the water. Only the first cup is polite.",
+            Base.NONE, 1, 0, "sake_tray", null, null, Effect.BUBBLES, Use.NONE, 1f),
+    SNOW_PINE(Collection.ONSEN, "Snow-Laden Pine", "A small pine under a winter's worth of snow. It is built small and drawn big.",
+            Base.NONE, 2, 0, "snow_pine", null, null, Effect.NONE, Use.NONE, 1.5f),
     NOTICE_BOARD(Collection.CURIO, "Notice Board", "A village notice board. Sneak + right-click (placer or staff) to pin a notice; everyone can read it.",
             Base.NONE, 1, 0, "vanilla:oak_sign", null, null, Effect.NONE, Use.NOTICE, 1f),
     WISH_TREE(Collection.CURIO, "Wish Tree", "A little cherry tree for tanabata wishes. Right-click with a sheet of paper and type your wish; it hangs in the branches.",
@@ -242,7 +258,7 @@ enum RelicType {
 
     enum Collection {
         SHADOW("Shoutlander's Shadow"), XMAS("Xmas Town"), NEW_YEAR("New Year"), EASTER("Easter"), PATRICK("St. Patrick's Day"),
-        VALENTINE("Valentine's"), CURIO("Curiosities"), HALLOWEEN("Halloween Party");
+        VALENTINE("Valentine's"), CURIO("Curiosities"), HALLOWEEN("Halloween Party"), ONSEN("Winter Onsen");
 
         final String title;
 

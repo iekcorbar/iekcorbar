@@ -19,6 +19,7 @@ final class Achievements {
         a.add("wish", "valentine", "gold_nugget", "Wish Upon a Heart", "Drop a coin in the wishing well.", "task");
         a.add("curio", "first", "spyglass", "Curiosities", "Get a curiosity.", "task");
         a.add("wish_tree", "curio", "cherry_sapling", "Tanabata", "Hang a wish in the Wish Tree.", "task");
+        a.add("onsen", "first", "snow_block", "Winter Onsen", "Get a Winter Onsen relic.", "task");
         a.add("halloween", "first", "jack_o_lantern", "Spooky Season", "Get a Halloween Party relic.", "task");
         a.add("blood_token", "halloween", "amethyst_shard", "Coin of the Crimson Hour", "Place a Blood Token.", "task");
         a.add("blood_normal", "blood_token", "brick", "A Plain One", "Hold a plain Blood Token in your hand.", "task");
@@ -41,7 +42,7 @@ final class Achievements {
         a.add("lucky_paw", "curio", "gold_ingot", "Lucky Paw", "Click the maneki-neko seven times.", "task").hidden();
         a.add("trap", "egg_found", "gunpowder", "It Was a Trap", "Find an egg while the hider watches.", "task").hidden();
         a.add("collector", "first", "nether_star", "Collector", "Get relics from all collections.", "challenge")
-                .allOf("shadow", "xmas", "new_year", "easter", "patrick", "valentine", "curio", "halloween").glint();
+                .allOf("shadow", "xmas", "new_year", "easter", "patrick", "valentine", "curio", "halloween", "onsen").glint();
 
         a.scanner(it -> {
             RelicType t = plugin.relics().typeOf(it);

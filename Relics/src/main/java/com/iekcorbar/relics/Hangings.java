@@ -49,7 +49,9 @@ final class Hangings implements Listener {
     private final File file;
     private final YamlConfiguration data;
     private final Map<Relics.Relic, List<Entity>> parts = new HashMap<>();
-    private final Map<UUID, Object[]> pending = new HashMap<>(); // player -> {Relic, "notice"|"wish"}
+    private final Map<UUID, Object[]> pending = new HashMap<>();
+    private final NamespacedKey tanabataKey;
+    private boolean lastDay; // player -> {Relic, "notice"|"wish"}
 
     Hangings(RelicsPlugin plugin, Relics relics, NamespacedKey tagKey) {
         this.plugin = plugin;
@@ -57,7 +59,52 @@ final class Hangings implements Listener {
         this.tagKey = tagKey;
         this.file = new File(plugin.getDataFolder(), "hangings.yml");
         this.data = YamlConfiguration.loadConfiguration(file);
+        this.tanabataKey = new NamespacedKey(plugin, "tanabata_year");
+        this.lastDay = tanabata();
     }
+
+    // ------------------------------------------------------------ tanabata (7 July): the strips glow, one small reward per year
+
+    private java.time.LocalDate today() {
+        java.time.ZoneId z;
+        try {
+            z = java.time.ZoneId.of(plugin.getConfig().getString("timezone", "Europe/Amsterdam"));
+        } catch (Exception ex) {
+            z = java.time.ZoneId.systemDefault();
+        }
+        return java.time.LocalDate.now(z);
+    }
+
+    private boolean tanabata() {
+        java.time.LocalDate d = today();
+        return d.getMonthValue() == 7 && d.getDayOfMonth() == 7;
+    }
+
+    /** Called a few times a second: when the date flips to or from 7 July every tree is redrawn (glowing or not). */
+    void tick() {
+        boolean now = tanabata();
+        if (now == lastDay) return;
+        lastDay = now;
+        for (Relics.Relic r : relics.all()) if (handles(r) && r.world.isChunkLoaded(r.x >> 4, r.z >> 4)) spawn(r);
+    }
+
+    private void tanabataReward(Player p) {
+        int year = today().getYear();
+        Integer done = p.getPersistentDataContainer().get(tanabataKey, PersistentDataType.INTEGER);
+        if (done != null && done == year) return;
+        p.getPersistentDataContainer().set(tanabataKey, PersistentDataType.INTEGER, year);
+        List<String> rewards = plugin.getConfig().getStringList("tanabata.reward");
+        if (rewards.isEmpty()) rewards = List.of("EXPERIENCE_BOTTLE:3", "GOLD_NUGGET:2");
+        for (String s : rewards) {
+            String[] a = s.split(":");
+            Material m = Material.matchMaterial(a[0]);
+            if (m == null) continue;
+            int n = a.length > 1 ? parseInt(a[1]) : 1;
+            for (ItemStack left : p.getInventory().addItem(new ItemStack(m, Math.max(1, n))).values()) p.getWorld().dropItemNaturally(p.getLocation(), left);
+        }
+        p.sendMessage(Component.text("Tanabata! The stars heard you - a small gift for your wish.", NamedTextColor.GOLD));
+    }
+
 
     static boolean handles(Relics.Relic r) {
         return r.type == RelicType.NOTICE_BOARD || r.type == RelicType.WISH_TREE;
@@ -152,6 +199,7 @@ final class Hangings implements Listener {
                     d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
                     d.setBillboard(Display.Billboard.CENTER);
                     d.setBackgroundColor(Color.fromARGB(bg >>> 24, (bg >> 16) & 255, (bg >> 8) & 255, bg & 255));
+                    if (lastDay) d.setBrightness(new Display.Brightness(15, 15));
                     d.setShadowed(false);
                     d.setViewRange(0.4f);
                     d.text(Component.text("  \n  \n  "));
@@ -292,5 +340,6 @@ final class Hangings implements Listener {
         r.world.spawnParticle(org.bukkit.Particle.CHERRY_LEAVES, r.center().add(0, 1.0, 0), 14, 0.35, 0.3, 0.35, 0.02);
         p.sendMessage(Component.text("Your wish is hanging in the tree.", NamedTextColor.LIGHT_PURPLE));
         plugin.adv().grant(p, "wish_tree");
+        if (tanabata()) tanabataReward(p);
     }
 }

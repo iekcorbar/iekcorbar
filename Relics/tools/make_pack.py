@@ -42,6 +42,8 @@ BASE = {
     "rose_red": (204, 44, 74), "rose_deep": (142, 24, 52), "blush": (246, 170, 190), "lace_white": (250, 238, 242),
     "rose_gold": (228, 160, 120), "rose_leaf": (52, 110, 66), "cream_pink": (252, 220, 216),
     "well_stone": (130, 126, 128), "water_dark": (36, 74, 108),
+    # Winter Onsen
+    "hinoki": (216, 178, 122), "onsen_water": (126, 196, 206), "snow_blue": (214, 228, 240),
 }
 PALETTE = {}
 for k, (r, g, b) in BASE.items():
@@ -1473,6 +1475,92 @@ VALENTINE = {
 }
 
 
+# ------------------------------------------------------------------ Winter Onsen (0.7.0)
+
+def onsen_tub():
+    e = [box(1, 0, 3, 15, 7, 4, "hinoki"), box(1, 0, 12, 15, 7, 13, "hinoki"), box(1, 0, 4, 2, 7, 12, "hinoki"), box(14, 0, 4, 15, 7, 12, "hinoki"),
+         box(2, 0, 4, 14, 1, 12, "hinoki_d"), box(2, 1, 4, 14, 6, 12, "onsen_water"),
+         box(0.6, 7, 2.6, 15.4, 7.8, 4.4, "hinoki_l"), box(0.6, 7, 11.6, 15.4, 7.8, 13.4, "hinoki_l"),
+         box(0.6, 7, 4.4, 2.4, 7.8, 11.6, "hinoki_l"), box(13.6, 7, 4.4, 15.4, 7.8, 11.6, "hinoki_l"),
+         box(1, 2.5, 2.5, 15, 3.2, 3, "brass"), box(1, 2.5, 13, 15, 3.2, 13.5, "brass"),    # bands
+         box(0, 0, 13.5, 4, 3, 16, "stone"), box(12, 0, 0, 16, 2.5, 3, "stone_d"), box(0.5, 3, 14, 3.5, 3.7, 15.5, "snow"),
+         box(12.5, 2.5, 0.5, 15.5, 3.2, 2.5, "snow")]
+    return e
+
+
+def onsen_lantern():
+    e = [box(5, 0, 5, 11, 1.5, 11, "stone"), box(7, 1.5, 7, 9, 6, 9, "stone_d"), box(5, 6, 5, 11, 7, 11, "stone"),
+         box(5.5, 7, 5.5, 10.5, 10.5, 10.5, "stone"),
+         box(6.2, 7.5, 5.4, 9.8, 10, 5.5, "flame"), box(6.2, 7.5, 10.5, 9.8, 10, 10.6, "flame"),
+         box(5.4, 7.5, 6.2, 5.5, 10, 9.8, "flame"), box(10.5, 7.5, 6.2, 10.6, 10, 9.8, "flame"),
+         box(2, 10.5, 2, 14, 12.5, 14, "stone_l"), box(3, 12.5, 3, 13, 13.5, 13, "stone"),
+         box(2.5, 13.5, 2.5, 13.5, 14.8, 13.5, "snow"), box(7, 14.8, 7, 9, 16, 9, "stone_d")]
+    return e
+
+
+def kotatsu():
+    e = [box(0.5, 1, 0.5, 15.5, 5.5, 15.5, "umbrella_red"), box(0.2, 1, 0.2, 15.8, 2.2, 15.8, "umbrella_red_d"),
+         box(0, 5.5, 0, 16, 7, 16, "hinoki_l"), box(0, 5.5, 0, 16, 5.9, 16, "hinoki"),
+         box(2, 0, 2, 14, 1, 14, "ember"),
+         box(6.8, 7, 6.8, 9.4, 8.6, 9.4, "carrot"), box(7.8, 8.6, 7.8, 8.4, 9.2, 8.4, "pine"),
+         box(10.5, 7, 3, 13.5, 7.4, 6, "paper_white")]
+    return e
+
+
+def snow_bunny(up):
+    ear = 12.5 if up else 10.5
+    e = [box(5, 0, 5.5, 11, 4.2, 11.5, "snow"), box(5.6, 4.2, 5.2, 10.4, 8, 9.6, "snow"), box(4.5, 0, 5, 11.5, 0.7, 12, "snow_blue"),
+         box(6.6, 5.6, 4.8, 7.6, 6.6, 5.3, "xred"), box(8.4, 5.6, 4.8, 9.4, 6.6, 5.3, "xred"), box(7.4, 4.8, 4.9, 8.6, 5.4, 5.3, "blush"),
+         box(6, 8, 7, 7.4, ear, 8.2, "snow"), box(8.6, 8, 7, 10, ear, 8.2, "snow"),
+         box(6.2, 8.4, 6.8, 6.6, ear - 0.8, 7, "blush"), box(9.4, 8.4, 6.8, 9.8, ear - 0.8, 7, "blush"),
+         box(5.8, 1, 10.8, 10.2, 3.2, 12.4, "snow_blue"), box(9.5, 0.7, 4.5, 11, 1.6, 6, "pine"), box(10, 1.6, 4.8, 10.6, 2.6, 5.4, "xred")]
+    return e
+
+
+def wash_set():
+    e = [box(2, 2, 3, 8, 3, 9, "hinoki"), box(2.5, 0, 3.5, 3.5, 2, 4.5, "hinoki_d"), box(6.5, 0, 3.5, 7.5, 2, 4.5, "hinoki_d"),
+         box(2.5, 0, 7.5, 3.5, 2, 8.5, "hinoki_d"), box(6.5, 0, 7.5, 7.5, 2, 8.5, "hinoki_d"),
+         box(2.6, 3, 4.5, 7.4, 3.5, 7.5, "paper_white"),
+         box(9, 0, 8, 14, 0.8, 13, "hinoki_d"), box(9, 0.8, 8, 14, 4, 8.6, "hinoki"), box(9, 0.8, 12.4, 14, 4, 13, "hinoki"),
+         box(9, 0.8, 8.6, 9.6, 4, 12.4, "hinoki"), box(13.4, 0.8, 8.6, 14, 4, 12.4, "hinoki"),
+         box(9.6, 0.8, 8.6, 13.4, 3.2, 12.4, "onsen_water"), box(9.5, 3.9, 8, 13.5, 4.5, 8.6, "brass")]
+    return e
+
+
+def towel_rack():
+    e = [box(1, 0, 6, 2, 14, 7, "hinoki_d"), box(14, 0, 6, 15, 14, 7, "hinoki_d"),
+         box(1, 11, 6, 15, 12, 7, "hinoki"), box(1, 6.5, 6, 15, 7.5, 7, "hinoki"),
+         box(3, 6, 5.4, 7, 11.5, 5.9, "paper_white"), box(3, 6, 7.1, 7, 11.5, 7.6, "paper_white"), box(3, 11.5, 5.4, 7, 12.4, 7.6, "paper_white"),
+         box(9, 3, 5.4, 13, 7.1, 5.9, "indigo"), box(9, 3, 7.1, 13, 7.1, 7.6, "indigo"), box(9, 7.1, 5.4, 13, 7.9, 7.6, "indigo"),
+         box(0.5, 0, 5.5, 2.5, 0.8, 7.5, "stone_d"), box(13.5, 0, 5.5, 15.5, 0.8, 7.5, "stone_d")]
+    return e
+
+
+def sake_tray():
+    e = [box(3, 0, 3, 13, 1, 13, "lacquer_black"), box(3, 1, 3, 13, 1.8, 3.6, "lacquer_black"), box(3, 1, 12.4, 13, 1.8, 13, "lacquer_black"),
+         box(3, 1, 3.6, 3.6, 1.8, 12.4, "lacquer_black"), box(12.4, 1, 3.6, 13, 1.8, 12.4, "lacquer_black"),
+         box(5, 1, 6, 7.6, 5.5, 8.6, "tokkuri"), box(5.8, 5.5, 6.8, 6.8, 7.4, 7.8, "tokkuri"), box(5.4, 7.4, 6.4, 7.2, 7.9, 8.2, "tokkuri_d"),
+         box(9, 1, 5, 11, 2.8, 7, "porcelain_w"), box(9.4, 2.4, 5.4, 10.6, 2.9, 6.6, "amber"),
+         box(9.5, 1, 9, 11.5, 2.8, 11, "porcelain_w"), box(9.9, 2.4, 9.4, 11.1, 2.9, 10.6, "amber"),
+         box(4.5, 1, 9.5, 6.5, 1.6, 11.5, "onsen_water_l")]
+    return e
+
+
+def snow_pine():
+    e = [box(7, 0, 7, 9, 8, 9, "wood_warm_d"), box(5, 0, 5, 11, 1, 11, "snow"),
+         box(2, 6, 2, 14, 10, 14, "pine"), box(3.5, 10, 3.5, 12.5, 14, 12.5, "pine"), box(5, 14, 5, 11, 18, 11, "pine"), box(6.5, 18, 6.5, 9.5, 22, 9.5, "pine"),
+         box(2.4, 10, 2.4, 13.6, 10.8, 13.6, "snow"), box(3.9, 14, 3.9, 12.1, 14.8, 12.1, "snow"), box(5.4, 18, 5.4, 10.6, 18.8, 10.6, "snow"),
+         box(6.9, 22, 6.9, 9.1, 23.2, 9.1, "snow"), box(2.2, 8.5, 2.2, 5, 9.6, 5, "snow"), box(11, 8.5, 11, 13.8, 9.6, 13.8, "snow"),
+         box(7.4, 23.2, 7.4, 8.6, 24.4, 8.6, "gold")]
+    return e
+
+
+ONSEN = {
+    "onsen_tub": onsen_tub, "onsen_lantern": onsen_lantern, "kotatsu": kotatsu, "snow_bunny": lambda: snow_bunny(False),
+    "snow_bunny_b": lambda: snow_bunny(True), "wash_set": wash_set, "towel_rack": towel_rack, "sake_tray": sake_tray, "snow_pine": snow_pine,
+}
+
+
 MODELS = {
     "creature_skull": skull, "creature_skull_wall": skull_wall, "creature_ribcage": ribcage,
     "torn_settlement_banner": banner, "torn_settlement_banner_wall": banner_wall,
@@ -1487,6 +1575,7 @@ MODELS.update(NEWYEAR)
 MODELS.update(MORE)
 MODELS.update(BREWERY)
 MODELS.update(VALENTINE)
+MODELS.update(ONSEN)
 MODELS["pillar_box"] = pillar_box  # Curiosities (year-round): the steam-pillar post box
 MODELS["water_bottle"] = water_bottle      # Treat: drinkable, see Treats.java
 MODELS["blood_token"] = blood_token        # RelicType: floor + wall, plain and Blessed - 0.6.0

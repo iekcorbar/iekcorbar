@@ -381,6 +381,14 @@ final class Relics implements Listener {
         recipe(RelicType.BONSAI, 1, Material.FLOWER_POT, Tag.SAPLINGS);
         recipe(RelicType.BYOBU_SCREEN, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.PAPER, Tag.PLANKS, Tag.PLANKS, Material.BLACK_DYE);
         recipe(RelicType.WAGASA_STAND, 1, Material.PAPER, Material.PAPER, Material.PAPER, Material.STICK, Material.STICK, Material.STICK, Material.RED_DYE);
+        recipe(RelicType.ONSEN_TUB, 1, Material.BARREL, Material.STONE_BRICKS, Material.WATER_BUCKET);
+        recipe(RelicType.ONSEN_LANTERN, 1, Material.STONE_BRICKS, Material.TORCH, Material.SNOW_BLOCK);
+        recipe(RelicType.KOTATSU, 1, Tag.WOOL, Tag.PLANKS, Material.MAGMA_BLOCK);
+        recipe(RelicType.SNOW_BUNNY, 1, Material.SNOW_BLOCK, Material.SNOW_BLOCK, Material.CARROT, Material.COAL);
+        recipe(RelicType.WASH_SET, 1, Material.BUCKET, Tag.PLANKS, Material.WHITE_WOOL);
+        recipe(RelicType.TOWEL_RACK, 1, Material.STICK, Material.STICK, Material.STICK, Material.WHITE_WOOL, Material.BLUE_WOOL);
+        recipe(RelicType.SAKE_TRAY, 1, Material.BOWL, Material.GLASS_BOTTLE, Material.DARK_OAK_PLANKS);
+        recipe(RelicType.SNOW_PINE, 1, Material.SPRUCE_SAPLING, Material.SNOW_BLOCK, Material.SNOW_BLOCK);
         recipe(RelicType.NOTICE_BOARD, 1, Tag.PLANKS, Tag.PLANKS, Material.STICK, Material.STICK, Material.PAPER);
         recipe(RelicType.WISH_TREE, 1, Material.CHERRY_SAPLING, Material.FLOWER_POT, Material.PAPER);
         recipe(RelicType.PILLAR_BOX, 1, Material.IRON_INGOT, Material.RED_DYE, Material.RED_DYE, Material.COPPER_INGOT, Material.GOLD_NUGGET, Material.REDSTONE);
@@ -638,9 +646,13 @@ final class Relics implements Listener {
             if (r.type.effect == RelicType.Effect.TWINKLE) d.setBrightness(new Display.Brightness(12, 15)); // lights glow
         });
         if (r.type.base != RelicType.Base.SOLID) {
-            float w = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.2f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.7f : r.type == RelicType.COUNTDOWN_BOARD ? 2.6f : r.type == RelicType.NOTICE_BOARD ? 1.1f : r.type == RelicType.WISH_TREE ? 1.1f : r.type == RelicType.TORII_GATE ? 3.0f : r.type == RelicType.BONE_XYLOPHONE && r.mount.equals("floor") ? 1.9f : r.type == RelicType.GRAMOPHONE && r.mount.equals("floor") ? 1.1f : r.type == RelicType.GIFT_BOX && r.mount.equals("floor") ? 1.2f : r.type == RelicType.CREATURE_RIBCAGE || r.type == RelicType.ASH_PILE || !r.mount.equals("floor") ? 0.9f : 0.7f;
+            float w = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.2f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.7f : r.type == RelicType.COUNTDOWN_BOARD ? 2.6f : r.type == RelicType.NOTICE_BOARD ? 1.1f : r.type == RelicType.ONSEN_TUB ? 1.3f : r.type == RelicType.KOTATSU || r.type == RelicType.SNOW_PINE ? 1.0f : r.type == RelicType.WISH_TREE ? 1.1f : r.type == RelicType.TORII_GATE ? 3.0f : r.type == RelicType.BONE_XYLOPHONE && r.mount.equals("floor") ? 1.9f : r.type == RelicType.GRAMOPHONE && r.mount.equals("floor") ? 1.1f : r.type == RelicType.GIFT_BOX && r.mount.equals("floor") ? 1.2f : r.type == RelicType.CREATURE_RIBCAGE || r.type == RelicType.ASH_PILE || !r.mount.equals("floor") ? 0.9f : 0.7f;
             float hh = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.9f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.4f : r.type == RelicType.COUNTDOWN_BOARD && r.mount.equals("wall") ? 2.0f : r.type == RelicType.COUNTDOWN_BOARD ? 4.8f : !r.mount.equals("floor") ? 1.0f : switch (r.type) {
                 case NOTICE_BOARD -> 1.65f;
+                case SNOW_PINE -> 2.1f;
+                case ONSEN_TUB -> 0.55f;
+                case KOTATSU -> 0.5f;
+                case ONSEN_LANTERN, TOWEL_RACK -> 0.95f;
                 case WISH_TREE -> 1.9f;
                 case ASH_PILE, TORII_GATE -> 0.25f;
                 case VIGIL_CANDLES -> 0.6f;
@@ -914,6 +926,7 @@ final class Relics implements Listener {
 
     void tick(long tick) {
         jukebox.tick(tick);
+        hangings.tick();
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
         Set<Relic> all = new HashSet<>();
         for (Map<Long, Relic> m : relics.values()) all.addAll(m.values());
