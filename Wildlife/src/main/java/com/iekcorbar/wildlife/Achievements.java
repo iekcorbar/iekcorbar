@@ -136,6 +136,32 @@ final class Achievements {
         a.add("day_explorer", "root", "sunflower", "Day Explorer", "Find an animal during the day.", "task").hidden();
 
         // ============================================================
+        // 11. HUNTING & EVENTS (root → hunter → master_hunter → ...)
+        // ============================================================
+        a.add("first_hunt", "root", "iron_sword", "First Blood", "Hunt your first wild animal.", "task").hidden();
+        a.add("hunter", "first_hunt", "bow", "Hunter", "Hunt five different species.", "goal").hidden();
+        a.add("master_hunter", "hunter", "crossbow", "Master Hunter", "Hunt ten different species.", "challenge").hidden();
+        a.add("hunt_ten", "first_hunt", "arrow", "Ten Down", "Hunt ten animals in total.", "task").hidden();
+        a.add("hunt_fifty", "hunt_ten", "spectral_arrow", "Fifty Down", "Hunt fifty animals in total.", "goal").hidden();
+        a.add("hunt_hundred", "hunt_fifty", "trident", "Centurion", "Hunt one hundred animals in total.", "challenge").hidden();
+
+        // photography
+        a.add("first_photo", "root", "camera", "Say Cheese", "Take your first wildlife photo.", "task").hidden();
+        a.add("photographer", "first_photo", "filled_map", "Wildlife Photographer", "Take photos of five different species.", "goal").hidden();
+        a.add("master_photographer", "photographer", "map", "Master Photographer", "Take photos of ten different species.", "challenge").hidden();
+
+        // conservation
+        a.add("first_rescue", "root", "lead", "Animal Rescue", "Rescue a trapped animal.", "task").hidden();
+        a.add("conservationist", "first_rescue", "emerald", "Conservationist", "Rescue five animals.", "goal").hidden();
+        a.add("master_conservationist", "conservationist", "golden_apple", "Master Conservationist", "Rescue ten animals.", "challenge").hidden();
+
+        // seasonal events
+        a.add("spring_breeder", "root", "pink_petals", "Spring Breeder", "Breed an animal in spring.", "task").hidden();
+        a.add("summer_explorer", "root", "sunflower", "Summer Explorer", "Find a new species in summer.", "task").hidden();
+        a.add("autumn_hunter", "root", "orange_wool", "Autumn Hunter", "Hunt an animal in autumn.", "task").hidden();
+        a.add("winter_watcher", "root", "snowball", "Winter Watcher", "Find a sleeping animal in winter.", "task").hidden();
+
+        // ============================================================
         // 10. COMPOSITE: MASTER NATURALIST
         // ============================================================
         a.add("master", "encyclopedia", "nether_star", "Master Naturalist", "Complete every Wildlife advancement.", "challenge").hidden().allOf(
