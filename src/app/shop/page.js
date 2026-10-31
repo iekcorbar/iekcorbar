@@ -1,5 +1,20 @@
-import { permanentRedirect } from 'next/navigation';
-
 export default function ShopMovedPage() {
-  permanentRedirect('https://shop.iekcorbar.com');
+  return (
+    <div className="max-w-xl mx-auto py-20 px-6 text-center space-y-4">
+      <h1 className="font-serif text-2xl font-bold text-sp-gold uppercase tracking-wide">Shop moved</h1>
+      <p className="text-sm text-text-warm/70">
+        The shop has moved to its own home. You can find it now at{' '}
+        <a href="https://shop.iekcorbar.com" className="text-sp-gold hover:text-white underline font-bold">
+          shop.iekcorbar.com
+        </a>
+        .
+      </p>
+      <a
+        href="https://shop.iekcorbar.com"
+        className="inline-block mt-2 px-5 py-2 bg-sp-gold hover:bg-white text-black text-xs font-bold uppercase rounded cursor-pointer transition-all"
+      >
+        Go to the shop
+      </a>
+    </div>
+  );
 }
