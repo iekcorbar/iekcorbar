@@ -39,9 +39,9 @@
         <dependency>
             <groupId>com.iekcorbar</groupId>
             <artifactId>Steamworks</artifactId>
-            <version>0.3.22</version>
+            <version>0.3.33</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../Steamworks/target/Steamworks-0.3.22.jar</systemPath>
+            <systemPath>${project.basedir}/../Steamworks/target/Steamworks-0.3.33.jar</systemPath>
         </dependency>
         <!-- pinned to the version already in the local repo (paper-api pulls a newer one transitively) -->
         <dependency>
@@ -63,6 +63,7 @@
                     <target>25</target>
                 </configuration>
             </plugin>
+
         </plugins>
         <resources>
             <resource>

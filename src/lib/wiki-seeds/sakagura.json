@@ -377,7 +377,7 @@
    "title": "The five species",
    "category": "Sakagura",
    "parent": "sakagura-trees",
-   "content": "| Tree | Fruit | Grown from | Good to know |\n|---|---|---|---|\n| Sakura | 2-4 Cherries | Cherry + 2 Sticks | Pink blossom; petals drift off the canopy |\n| Ume Plum | 2-3 Ume Plums | Ume Plums + 2 Sticks | The sake fruit, off a tree instead of a bush |\n| Apple | 2-4 Apples | Apples + 2 Sticks | A classic, with bigger yields than the bush |\n| Orange | 2-4 Mikan Oranges | Mikan Oranges + 2 Sticks | Glossy green canopy |\n| Red Maple | none | 2 Red Mushrooms + 2 Sticks | Pure decoration - golden sparkles in autumn colours |\n\nBack to [Orchard Trees](/wiki?page=sakagura-trees)\n"
+   "content": "| Tree | Fruit | Grown from | Good to know |\n|---|---|---|---|\n| Sakura | 2-4 Cherries | Cherry + 2 Sticks | Pink blossom; petals drift off the canopy |\n| Ume Plum | 2-3 Ume Plums | Ume Plums + 2 Sticks | The sake fruit, off a tree instead of a bush |\n| Apple | 2-4 Apples | Apples + 2 Sticks | A classic, with bigger yields than the bush |\n| Orange | 2-4 Mikan Oranges | Mikan Oranges + 2 Sticks | Glossy green canopy |\n| Red Maple | none | 2 Red Mushrooms + 2 Sticks | Pure decoration - golden sparkles in autumn colours |\n| Cherry | 2-4 Cherries | Cherries + 2 Sticks | A smaller, denser canopy than the sakura |\n| Peach | 2-3 Peaches | Peaches + 2 Sticks | Pink blossoms, fuzzy fruit |\n| Lemon | 2-4 Yuzu | Yuzu + 2 Sticks | Glossy dark canopy, tart fruit |\n| Fig | 2-3 Figs | Figs + 2 Sticks | Broad leaves, sweet purple fruit |\n| Walnut | none | Olives + 2 Sticks | Pure decoration - broad canopy, no fruit |\n\nBack to [Orchard Trees](/wiki?page=sakagura-trees)\n"
   },
   {
    "slug": "sakagura-trees-picking-and-felling",
@@ -392,6 +392,69 @@
    "category": "Sakagura",
    "parent": "sakagura-trees",
    "content": "One craft: the tree's own fruit (or two red mushrooms for the maple) plus two sticks in any arrangement. Fruiting trees can also be bonemealed as saplings to speed them up. Wild trees do not spawn - an orchard is something you plant.\n\nBack to [Orchard Trees](/wiki?page=sakagura-trees)\n"
+  },
+  {
+   "slug": "sakagura-competitions",
+   "title": "Brewing Competitions",
+   "category": "Sakagura",
+   "parent": null,
+   "content": "## Brewing Competitions\n\nFrom time to time, the server hosts a brewing competition. Players submit their best drinks, and the highest quality brews win prizes.\n\n\n* [How it works](/wiki?page=sakagura-competitions-how-it-works)\n* [Commands](/wiki?page=sakagura-competitions-commands)\n* [Tips](/wiki?page=sakagura-competitions-tips)\n"
+  },
+  {
+   "slug": "sakagura-competitions-how-it-works",
+   "title": "How it works",
+   "category": "Sakagura",
+   "parent": "sakagura-competitions",
+   "content": "1. **An admin starts a competition** with `/brew comp start <days> [theme]`. The theme is optional (e.g. \"bloody_mary\" for a themed competition, or \"any\" for all drinks).\n2. **Players brew their best drink** and submit it while holding it: `/brew comp submit`.\n3. **Each submission is scored** based on quality (1-10 stars) and difficulty (1-10). Score = quality × 10 + difficulty × 5.\n4. **Only your best submission counts** — if you submit a better drink, it replaces your previous one.\n5. **When the competition ends** (admin runs `/brew comp stop` or the timer runs out), the top 3 players receive rewards:\n   - 1st place: $500 + 20 elite coins + \"Master of the Still\" title\n   - 2nd place: $250 + 10 elite coins + \"Skilled Brewer\" title\n   - 3rd place: $100 + 5 elite coins + \"Rising Brewer\" title\n6. **The winner** also earns the \"Master of the Still\" advancement.\n\nBack to [Brewing Competitions](/wiki?page=sakagura-competitions)\n"
+  },
+  {
+   "slug": "sakagura-competitions-commands",
+   "title": "Commands",
+   "category": "Sakagura",
+   "parent": "sakagura-competitions",
+   "content": "| Command | Who | What |\n|---|---|---|\n| `/brew comp status` | Everyone | Show if a competition is running and time remaining |\n| `/brew comp submit` | Everyone | Submit the drink you're holding |\n| `/brew comp leaderboard` | Everyone | Show the current top 10 |\n| `/brew comp start <days> [theme]` | Admin | Start a competition (1-30 days) |\n| `/brew comp stop` | Admin | End the competition and give rewards |\n\nBack to [Brewing Competitions](/wiki?page=sakagura-competitions)\n"
+  },
+  {
+   "slug": "sakagura-competitions-tips",
+   "title": "Tips",
+   "category": "Sakagura",
+   "parent": "sakagura-competitions",
+   "content": "- **Quality matters most** — a 10-star drink scores 100 points, while a 5-star scores 50. Aim for perfect recipes.\n- **Difficulty adds bonus** — harder recipes (difficulty 8-10) give up to 50 extra points.\n- **Theme competitions** — when a theme is set, only that specific drink counts. This levels the playing field.\n- **Practice first** — use `/brew recipes` to see all drinks and their difficulty, then brew the perfect one.\n- **You can resubmit** — if you brew a better version, submit again. Only your best counts.\n\nBack to [Brewing Competitions](/wiki?page=sakagura-competitions)\n"
+  },
+  {
+   "slug": "sakagura-seasons",
+   "title": "Seasons",
+   "category": "Sakagura",
+   "parent": null,
+   "content": "## Seasons\n\nThe Sakagura garden follows the seasons. Every 7 real days, the season changes, affecting which crops grow and how fast.\n\n\n* [The four seasons](/wiki?page=sakagura-seasons-the-four-seasons)\n* [How it works](/wiki?page=sakagura-seasons-how-it-works)\n* [Commands](/wiki?page=sakagura-seasons-commands)\n* [Tips](/wiki?page=sakagura-seasons-tips)\n"
+  },
+  {
+   "slug": "sakagura-seasons-the-four-seasons",
+   "title": "The four seasons",
+   "category": "Sakagura",
+   "parent": "sakagura-seasons",
+   "content": "| Season | Duration | Growing crops | Description |\n|---|---|---|---|\n| **Spring** | 7 days | Cherry, Ume, Peach, Strawberry, Apricot, Mikan, Kiwi, Tomato, Raspberry, Gooseberry | Cherry blossoms and fresh growth |\n| **Summer** | 7 days | Yuzu, Mango, Papaya, Guava, Rambutan, Longan, Mangosteen, Dragon Fruit, Passion Fruit, Vanilla, Chili, Maize, Tomato | Lush growth and tropical fruits |\n| **Autumn** | 7 days | Grape, Apple, Pear, Persimmon, Loquat, Pomegranate, Fig, Quince, Olive, Date, Lychee, Elderberry, Cranberry, Mulberry, Barley, Rye, Hops | Harvest time and falling leaves |\n| **Winter** | 7 days | Ginger, Wasabi, Daikon, Rice, Juniper, Blueberry, Blackcurrant, Strawberry | Dormant gardens and hardy crops |\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
+  },
+  {
+   "slug": "sakagura-seasons-how-it-works",
+   "title": "How it works",
+   "category": "Sakagura",
+   "parent": "sakagura-seasons",
+   "content": "- **Seasons advance automatically** every 7 real days (configurable). A broadcast announces the change.\n- **In-season crops** grow at normal speed.\n- **Out-of-season crops** grow 30-70% slower (they're not meant for this season).\n- **Wild spawns** only include crops for the current season.\n- **Admins** can force a season change with `/brew season set <spring|summer|autumn|winter>`.\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
+  },
+  {
+   "slug": "sakagura-seasons-commands",
+   "title": "Commands",
+   "category": "Sakagura",
+   "parent": "sakagura-seasons",
+   "content": "| Command | Who | What |\n|---|---|---|\n| `/brew season status` | Everyone | Show current season and time until next |\n| `/brew season list` | Everyone | List all seasons with their crops |\n| `/brew season crops` | Everyone | Show which crops grow this season |\n| `/brew season set <season>` | Admin | Force a season change |\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
+  },
+  {
+   "slug": "sakagura-seasons-tips",
+   "title": "Tips",
+   "category": "Sakagura",
+   "parent": "sakagura-seasons",
+   "content": "- **Plan ahead** — plant crops that will be in-season soon\n- **Winter is for hardy crops** — ginger, wasabi, daikon, rice, and juniper thrive\n- **Seasonal drinks** — some recipes taste better with seasonal ingredients\n- **Competition themes** — admins can run themed competitions per season\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
   }
  ]
 }

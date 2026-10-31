@@ -380,6 +380,10 @@ def props():
            box(3, 8, 3, 13, 9.5, 13, "clay_dark"), box(4, 9.5, 4, 12, 10.5, 12, "clay"), box(7, 10.5, 7, 9, 11.5, 9, "clay_dark"),
            box(0.5, 6, 7, 1.6, 7, 9, "clay_dark"), box(14.4, 6, 7, 15.5, 7, 9, "clay_dark")]
     M["cooking_pot"] = pot
+    M["steam_pot"] = [box(3, 0, 3, 13, 1, 13, "iron_dark"), box(2, 1, 2, 14, 8, 14, "iron"), box(1.6, 5, 1.6, 14.4, 6, 14.4, "iron_dark"),
+                      box(3, 8, 3, 13, 9.5, 13, "iron_dark"), box(4, 9.5, 4, 12, 10.5, 12, "iron"), box(7, 10.5, 7, 9, 11.5, 9, "iron_dark"),
+                      box(0.5, 6, 7, 1.6, 7, 9, "iron_dark"), box(14.4, 6, 7, 15.5, 7, 9, "iron_dark"),
+                      box(6, 11.5, 6, 10, 13, 10, "steam")]
     stove = [box(0, 0, 0, 16, 14, 16, "brick"), box(0, 14, 0, 16, 16, 16, "stone"), box(4, 2, -0.01, 12, 8, 0.5, "black"),
              box(2, 13.99, 2, 14, 16.01, 14, "iron_dark"), box(0, 0, 0, 16, 1, 16, "stone")]
     M["kamado_stove"] = stove
