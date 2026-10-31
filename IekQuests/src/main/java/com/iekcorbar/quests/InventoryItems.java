@@ -178,6 +178,9 @@ final class InventoryItems implements Listener {
         if (top.getType() != InventoryType.CRAFTING) return;
         removeFromInventory(top);
         placeInCrafting(top, p);
+        // de client wist het 2x2-vak zelf bij sluiten; de server-kant ziet dan geen verschil en zou niets sturen
+        p.updateInventory();
+        Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 3L);
     }
 
     private void schedulePlace(Player p, long delay) {
