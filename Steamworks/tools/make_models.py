@@ -6,7 +6,7 @@ to the real axis, then spins it around model Y. Writes <name>.bbmodel (FMM needs
 it for the texture) + <name>.json (the item/display model, true scale) into <out>.
 Element rotations stay within +-45 deg in 22.5 deg steps on one axis (vanilla rule).
 Usage: python make_models.py <out folder>"""
-import base64, json, math, os, random, struct, sys, uuid, zlib
+import base64, json, math, os, random, re, struct, sys, uuid, zlib
 
 RES = 32
 # deterministic ids: uuid4 made every regeneration a byte-diff of all 100+ files; uuid5 from a
@@ -53,6 +53,19 @@ def split(angle):
     return base % 360, angle - base
 
 
+def bone_key(name):
+    """Bone name from an element name: tine0_1 -> tine, leg_a-1 -> leg_a, wall_z1 -> wall_z, band-7.2 -> band."""
+    toks = []
+    for t in name.split("_"):
+        t2 = re.sub(r"-?\d+(\.\d+)?$", "", t)
+        if t2 == "":
+            break                       # purely numeric token: the name ends here
+        toks.append(t2)
+        if t2 != t:
+            break                       # the token had a numeric tail: stop after it
+    return "_".join(toks) or "body"
+
+
 class Model:
     def __init__(self, name, gui=1.0):
         self.name, self.gui, self.elements = name, gui, []
@@ -74,6 +87,31 @@ class Model:
         self.elements += [dict(e, uuid=U()) for e in other.elements]
         return self
 
+    def outliner(self):
+        """One bone per part (grouped by element name), so the animation editor can move parts apart.
+        Bone uuids come from the model + bone name (not from the U() counter: no churn in other files).
+        A model with a single part keeps the old single 'body' bone."""
+        order, groups = [], {}
+        for e in self.elements:
+            k = bone_key(e["name"])
+            if k not in groups:
+                groups[k] = []
+                order.append(k)
+            groups[k].append(e)
+        if len(order) < 2:
+            order, groups = ["body"], {"body": self.elements}
+            origin = {"body": [0, 0, 0]}
+        else:   # pivot = centre of the part's bounding box
+            origin = {}
+            for k, es in groups.items():
+                lo = [min(e["from"][i] for e in es) for i in range(3)]
+                hi = [max(e["to"][i] for e in es) for i in range(3)]
+                origin[k] = [round((a + b) / 2, 4) for a, b in zip(lo, hi)]
+        return [{"name": k, "origin": origin[k], "color": 0,
+                 "uuid": str(uuid.uuid5(uuid.NAMESPACE_URL, self.name + ":bone:" + k if k != "body" else self.name + ":outliner")),
+                 "export": True, "mirror_uv": False, "isOpen": False, "locked": False, "visibility": True,
+                 "autouv": 0, "children": [e["uuid"] for e in groups[k]]} for k in order]
+
     def bbmodel(self):
         return {
             "meta": {"format_version": "4.9", "model_format": "free", "box_uv": False},
@@ -81,10 +119,7 @@ class Model:
             "variable_placeholders": "", "variable_placeholder_buttons": [], "timeline_setups": [],
             "unhandled_root_fields": {}, "resolution": {"width": RES, "height": RES},
             "elements": self.elements,
-            "outliner": [{"name": "body", "origin": [0, 0, 0], "color": 0,
-                          "uuid": str(uuid.uuid5(uuid.NAMESPACE_URL, self.name + ":outliner")), "export": True,
-                          "mirror_uv": False, "isOpen": True, "locked": False, "visibility": True,
-                          "autouv": 0, "children": [e["uuid"] for e in self.elements]}],
+            "outliner": self.outliner(),
             "textures": [{"path": "", "name": "steamworks.png", "folder": "", "namespace": "", "id": "0",
                           "width": RES, "height": RES, "uv_width": RES, "uv_height": RES, "particle": False,
                           "render_mode": "default", "render_sides": "auto", "frame_time": 1,
