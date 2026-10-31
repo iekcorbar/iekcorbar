@@ -179,9 +179,31 @@ export function Model3D({ url, naam, groot = false }) {
   const [texturen, setTexturen] = useState([]);         // bbmodel-only: [{idx,naam,src}]
   const [meta, setMeta] = useState(null);               // bbmodel-only: {elementen, texturen, res}
   const [verberg, setVerberg] = useState(() => new Set());
+
   const [anims, setAnims] = useState([]);                // bbmodel-only: lijst van animatienamen
   const [animIdx, setAnimIdx] = useState(0);             // geselecteerde animatie
   const [playing, setPlaying] = useState(true);          // speelt af of niet
+  const mixerRef = useRef(null);
+
+  // Handle animation selection changes
+  useEffect(() => {
+    if (!anims.length) return;
+    // Wait for mixer to be available
+    const checkMixer = setInterval(() => {
+      if (apiRef.current?.mixer) {
+        clearInterval(checkMixer);
+        const m = apiRef.current.mixer;
+        m.stopAllAction();
+        const a = anims[animIdx];
+        if (a) {
+          const action = m.clipAction(a.clip);
+          action.setLoop(a.loop ? THREE.LoopRepeat : THREE.LoopOnce, Infinity);
+          if (playing) action.play();
+        }
+      }
+    }, 100);
+    return () => clearInterval(checkMixer);
+  }, [animIdx, playing, anims]);
 
   useEffect(() => {
     let weg = false;
@@ -210,14 +232,29 @@ export function Model3D({ url, naam, groot = false }) {
         const mixer = { h: null };
         // bron: glb/gltf via de loader; .bbmodel via eigen builder (Blockbench-project)
         let object;
+        let bbAnims = [];
         if (String(naam || '').toLowerCase().endsWith('.bbmodel')) {
           const { bouwBbmodel } = await import('@/lib/bbmodel');
-          object = bouwBbmodel(THREE, JSON.parse(await (await fetch(url)).text()));
+          const data = JSON.parse(await (await fetch(url)).text());
+          object = bouwBbmodel(THREE, data);
+          bbAnims = object?.userData?.animations || [];
         } else {
           const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
           const g = await new Promise((res, rej) => new GLTFLoader().load(url, res, undefined, rej));
           object = g.scene || g.scenes?.[0];
           if (g.animations?.length) { mixer.h = new THREE.AnimationMixer(object); for (const a of g.animations) mixer.h.clipAction(a).play(); }
+          if (bbAnims.length) {
+            mixer.h = new THREE.AnimationMixer(object);
+            // Store clips for selection
+            object.userData._clips = bbAnims.map((a) => ({ name: a.name, clip: a.clip, loop: a.loop }));
+            // Play first animation
+            const first = bbAnims[0];
+            if (first) {
+              const action = mixer.h.clipAction(first.clip);
+              action.setLoop(first.loop ? THREE.LoopRepeat : THREE.LoopOnce);
+              action.play();
+            }
+          }
         }
         if (weg) { renderer.dispose(); return; }
         if (object) {
@@ -264,11 +301,11 @@ export function Model3D({ url, naam, groot = false }) {
         document.addEventListener('fullscreenchange', ws);
         apiRef.current = {
           spin, herstel: () => { camera.position.set(2.2, 1.8, 2.6); controls.target.set(0, 0, 0); controls.update(); },
-          meshes: meshList, klei,
+          meshes: meshList, klei, mixer: mixer.h,
           full: () => { const d = doosRef.current; if (d?.requestFullscreen) d.requestFullscreen().then(herframe).catch(() => { }); },
         };
         setTexturen(object?.userData?.bb?.texturen || []);
-        setAnims(object?.userData?.bb?.animations || []);
+        setAnims(object?.userData?._clips || []);
         setMeta(object?.userData?.bb ? { elementen: object.userData.bb.elementen, texturen: object.userData.bb.texturen.length, res: object.userData.bb.res } : null);
         setKlaar(true);
       } catch (e) { if (!weg) setFout(String(e?.message || e)); }
