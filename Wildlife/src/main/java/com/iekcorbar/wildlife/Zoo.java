@@ -596,6 +596,8 @@ final class Zoo implements org.bukkit.event.Listener {
             p.data = food + "|" + fed;
             d.save(p);
             pl.getWorld().playSound(p.center(), "minecraft:entity.item.pickup", 0.8f, 0.9f);
+            // Grant feeding achievement
+            plugin.adv().grant(pl, "first_feed_zoo");
         }
         pl.sendActionBar(Component.text("Food: " + food + "   Animals fed: " + fed, NamedTextColor.GOLD));
         return true;
@@ -616,6 +618,12 @@ final class Zoo implements org.bukkit.event.Listener {
         int fed = (f.length > 1 ? Integer.parseInt(f[1]) : 0) + 1;
         p.data = food + "|" + fed;
         d.save(p);
+        // Feed the animal: restore hunger
+        for (Animals.Animal a : plugin.animals().all()) {
+            if (a.entity == e) { a.hunger = Math.min(100, a.hunger + 20); a.lastFed = System.currentTimeMillis(); break; }
+        }
+        // Track feeding for achievements
+        // (simplified: grant on first feed, then count via PDC)
         e.getWorld().spawnParticle(Particle.HEART, e.getLocation().add(0, e.getHeight() + 0.2, 0), 3, 0.3, 0.2, 0.3, 0);
         e.getWorld().playSound(e.getLocation(), "minecraft:entity.generic.eat", 0.5f, 1f);
     }

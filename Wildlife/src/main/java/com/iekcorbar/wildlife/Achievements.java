@@ -162,6 +162,13 @@ final class Achievements {
         a.add("winter_watcher", "root", "snowball", "Winter Watcher", "Find a sleeping animal in winter.", "task").hidden();
 
         // ============================================================
+        // ============================================================
+        // 11. FEEDING & ZOO CARE (root -> first_feed -> feeder -> master_feeder)
+        // ============================================================
+        a.add("first_feed_zoo", "root", "wheat", "Zoo Keeper", "Feed an animal in your zoo for the first time.", "task").hidden();
+        a.add("feeder", "first_feed_zoo", "hay_block", "Feeder", "Feed 10 animals in your zoo.", "goal").hidden();
+        a.add("master_feeder", "feeder", "golden_apple", "Master Feeder", "Feed 50 animals in your zoo.", "challenge").hidden().global();
+
         // 10. COMPOSITE: MASTER NATURALIST
         // ============================================================
         a.add("master", "encyclopedia", "nether_star", "Master Naturalist", "Complete every Wildlife advancement.", "challenge").hidden().global().allOf(

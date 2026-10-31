@@ -68,9 +68,10 @@ final class Animals implements Listener {
         final String model;
         final boolean baby;
         boolean attached, curled, sleeping, hiding, waving, frozen, fishing;
+        int hunger = 100; // 0-100, 100 = full, 0 = starving
         long busyUntil, tailBack, rideUntil, awakeAt, panicUntil, fleeUntil;
         /** Babies: world time they grow up, and how long was left when a golden dandelion froze them. Adults: love mode (plugin tick) and next breeding (world time). */
-        long growAt, frozenLeft, loveUntil, breedAfter;
+        long growAt, frozenLeft, loveUntil, breedAfter, lastFed;
         org.bukkit.Location threat;
 
         Animal(LivingEntity entity, Species species, boolean rare, String model, boolean baby) {
@@ -310,6 +311,12 @@ final class Animals implements Listener {
             breeding.tick(a, tick);
             if (!e.isValid()) continue;   // grew up: replaced by an adult
             World w = e.getWorld();
+            // Hunger decay: animals get hungry over time (~1 point per 2 min)
+            if (tick % 1200 == 0 && a.hunger > 0) a.hunger = Math.max(0, a.hunger - 1);
+            // Visual feedback for hungry animals (every 5 min, show smoke particles)
+            if (a.hunger <= 20 && tick % 600 == 0) {
+                w.spawnParticle(org.bukkit.Particle.SMOKE, e.getLocation().add(0, e.getHeight() + 0.3, 0), 3, 0.2, 0.1, 0.2, 0.01);
+            }
             long time = w.getTime();
             boolean night = time > 13000 && time < 23000;
             Player near = nearestPlayer(e, 16);
