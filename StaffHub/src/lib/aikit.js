@@ -8,7 +8,7 @@
 
 const BASE = () => String(process.env.STAFFHUB_AI_URL || '').replace(/\/+$/, '');
 const PASS = () => String(process.env.STAFFHUB_AI_PASS || '');
-const MODEL = () => String(process.env.STAFFHUB_AI_MODEL || '');
+const MODEL = () => String(process.env.STAFFHUB_AI_MODEL || 'beam-free');
 const PROVIDER = () => String(process.env.STAFFHUB_AI_PROVIDER || 'opencode-go');
 
 export function ingeschakeld() { return Boolean(BASE() && PASS()); }
