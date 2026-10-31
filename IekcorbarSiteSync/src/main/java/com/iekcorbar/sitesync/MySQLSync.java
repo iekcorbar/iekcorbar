@@ -494,7 +494,20 @@ public class MySQLSync {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
                 Connection conn = getConnection();
-                String query = "SELECT sp.id, sp.item_name, si.give_command FROM shop_purchases sp " +
+                // Read money-take templates from shop_settings (same DB), with defaults.
+                String takeCmd = "cmi money take {player} {amount}";
+                String coinsTakeCmd = "em money remove {player} {amount}";
+                try (PreparedStatement s = conn.prepareStatement("SELECT take_command, coins_take_command FROM shop_settings WHERE id = 1");
+                     ResultSet sr = s.executeQuery()) {
+                    if (sr.next()) {
+                        String t = sr.getString("take_command");
+                        String c = sr.getString("coins_take_command");
+                        if (t != null && !t.trim().isEmpty()) takeCmd = t;
+                        if (c != null && !c.trim().isEmpty()) coinsTakeCmd = c;
+                    }
+                } catch (Exception ignored) { /* fall back to defaults */ }
+
+                String query = "SELECT sp.id, sp.item_name, sp.price_paid, si.give_command, si.currency FROM shop_purchases sp " +
                         "JOIN shop_items si ON si.id = sp.item_id " +
                         "WHERE LOWER(sp.username) = LOWER(?) AND sp.status = 'queued'";
                 try (PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -504,14 +517,27 @@ public class MySQLSync {
                             String purchaseId = rs.getString("id");
                             String itemName = rs.getString("item_name");
                             String giveTemplate = rs.getString("give_command");
-                            String giveCommand = giveTemplate.replace("{player}", player.getName());
+                            String currency = rs.getString("currency");
+                            if (currency == null) currency = "balance";
+                            double price = rs.getDouble("price_paid");
+                            String giveCommand = (giveTemplate == null ? "" : giveTemplate).replace("{player}", player.getName());
                             // ';;' chains multiple console commands in one give_command
                             // (shop packs: kit + a /relics random roll). dispatchCommand
                             // takes exactly one command per call, same split as the
                             // website-side purchase route does via RCON.
                             String[] parts = giveCommand.split(";;");
 
+                            String moneyCmd = null;
+                            if ("balance".equals(currency)) moneyCmd = takeCmd.replace("{player}", player.getName())
+                                    .replace("{amount}", formatAmount(price));
+                            else if ("coins".equals(currency)) moneyCmd = coinsTakeCmd.replace("{player}", player.getName())
+                                    .replace("{amount}", formatAmount(price));
+                            final String finalMoneyCmd = moneyCmd;
+
                             Bukkit.getScheduler().runTask(plugin, () -> {
+                                if (finalMoneyCmd != null && !finalMoneyCmd.trim().isEmpty()) {
+                                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalMoneyCmd.trim());
+                                }
                                 for (String part : parts) {
                                     String cmd = part.trim();
                                     if (!cmd.isEmpty()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
@@ -536,5 +562,10 @@ public class MySQLSync {
                 }
             }
         });
+    }
+
+    private static String formatAmount(double n) {
+        if (n == Math.floor(n)) return String.valueOf((long) n);
+        return String.valueOf(n);
     }
 }
