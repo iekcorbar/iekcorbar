@@ -286,11 +286,13 @@ def woodpecker(rnd):
 
 def crickets(rnd, sec=2.0):
     out = [0.0] * n(sec)
-    f = rnd.uniform(4300, 4900)
+    # 1-11: was a pure 4.3-4.9 kHz sine with 5 ms attacks at full level - a piercing beep.
+    # Now a softer ~2.5 kHz chirp (same rnd calls, so the shared stream is unchanged).
+    f = rnd.uniform(4300, 4900) * 0.55
     t = 0.0
     while t < sec - 0.2:
-        trill = am(osc(const(f, 0.12)), 60, 1.0)
-        place(out, env(trill, 0.005, 0.02, 0.8, 0.02), t)
+        trill = lowpass(am(osc(const(f, 0.12)), 45, 0.8), 3200)
+        place(out, env(trill, 0.015, 0.03, 0.7, 0.04), t)
         t += rnd.uniform(0.25, 0.45)
     return out[:n(sec)]
 
@@ -333,8 +335,9 @@ def waves(rnd, sec=4.0):
 
 
 def cicada(rnd, sec=2.5):
-    src = mix(osc(const(rnd.uniform(3800, 4400), sec), "saw"), gain(noise(sec, rnd), 0.3))
-    return env(am(bandpass(src, 4200, 3), rnd.uniform(70, 110), 0.9), 0.4, 0.2, 0.8, 0.8)
+    # 1-11: was a 4.2 kHz saw through a narrow bandpass - shrill. Lower, wider and low-passed.
+    src = mix(osc(const(rnd.uniform(3800, 4400) * 0.6, sec), "saw"), gain(noise(sec, rnd), 0.3))
+    return env(lowpass(am(bandpass(src, 2400, 1.5), rnd.uniform(70, 110), 0.9), 3000), 0.4, 0.2, 0.8, 0.8)
 
 
 def wind(rnd, sec=4.0):

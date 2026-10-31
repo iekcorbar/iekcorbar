@@ -268,9 +268,9 @@ final class Relics implements Listener {
         m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, t.id());
         if (blessed && t == RelicType.BLOOD_TOKEN) m.getPersistentDataContainer().set(blessedKey, PersistentDataType.BYTE, (byte) 1);
         it.setItemMeta(m);
-        it.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics",
-                blessed && t == RelicType.BLOOD_TOKEN ? "blood_token_blessed" : t.floor));
-        if (t.floor.startsWith("vanilla:")) it.setData(DataComponentTypes.ITEM_MODEL, Key.key("minecraft", t.floor.substring(8)));   // drawn from vanilla displays, no pack model
+        if (t.floor.startsWith("vanilla:")) it.setData(DataComponentTypes.ITEM_MODEL, Key.key("minecraft", t.floor.substring(8)));
+        else it.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics",
+                blessed && t == RelicType.BLOOD_TOKEN ? "blood_token_blessed" : t.floor));   // drawn from vanilla displays, no pack model
         it.setData(DataComponentTypes.MAX_STACK_SIZE, 16);
         return it;
     }
