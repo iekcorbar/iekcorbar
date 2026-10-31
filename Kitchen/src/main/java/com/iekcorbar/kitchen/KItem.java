@@ -128,7 +128,12 @@ enum KItem {
     MELONPAN("Melonpan", Kind.FOOD, 6, 7f, Rem.NONE, 64, "Sweet bread with a cookie crust."),
     CASTELLA("Castella", Kind.FOOD, 7, 8f, Rem.NONE, 64, "Honey sponge cake."),
     NIKUMAN("Nikuman", Kind.FOOD, 8, 9f, Rem.NONE, 64, "Steamed meat bun."),
-    ANPAN("Anpan", Kind.FOOD, 6, 7f, Rem.NONE, 64, "Sweet bean bun.");
+    ANPAN("Anpan", Kind.FOOD, 6, 7f, Rem.NONE, 64, "Sweet bean bun."),
+    // ---- mushrooms
+    SHIITAKE("Shiitake", Kind.FOOD, 2, 1.6f, Rem.NONE, 64, "Earthy mushroom. Grows on logs."),
+    ENOKI("Enoki", Kind.INGREDIENT, 1, 0.8f, Rem.NONE, 64, "Thin white mushroom. Grows in the dark."),
+    SHIITAKE_LOG("Shiitake Log", Kind.PROP, 0, 0, Rem.NONE, 64, "Oak log inoculated with shiitake spores.", "Harvest shiitake as they grow."),
+    ENOKI_BUNDLE("Enoki Bundle", Kind.PROP, 0, 0, Rem.NONE, 64, "Bundle of enoki. Place in a dark, damp spot.", "Grows more enoki over time.");
 
     enum Kind { SEED, INGREDIENT, FOOD, DRINK, MEAL, TOOL, PROP }
 

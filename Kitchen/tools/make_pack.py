@@ -78,6 +78,10 @@ PALETTE = {
 "castella": (230, 180, 90), "castella_dark": (190, 140, 60),
 "nikuman": (230, 200, 170), "nikuman_dark": (190, 160, 130),
 "anpan": (220, 170, 100), "anpan_dark": (180, 130, 70), "anpan_bean": (140, 80, 40),
+"shiitake": (120, 90, 60), "shiitake_dark": (80, 60, 40), "shiitake_light": (160, 120, 80),
+"enoki": (240, 230, 210), "enoki_dark": (200, 190, 170),
+"log": (120, 80, 50), "log_dark": (80, 50, 30), "log_light": (160, 110, 70),
+"enoki_bundle": (200, 190, 170), "enoki_bundle_dark": (160, 150, 130),
 }
 NAMES = list(PALETTE)
 assert len(NAMES) <= 256, len(NAMES)
@@ -428,6 +432,12 @@ def props():
     M["castella"] = [box(3, 0, 3, 13, 8, 13, "castella"), box(4, 8, 4, 12, 9, 12, "castella_dark")]
     M["nikuman"] = [box(5, 0, 5, 11, 6, 11, "nikuman"), box(6, 6, 6, 10, 7, 10, "nikuman_dark")]
     M["anpan"] = [box(5, 0, 5, 11, 5, 11, "anpan"), box(7, 5, 7, 9, 6, 9, "anpan_bean")]
+    M["shiitake"] = [box(5, 0, 5, 11, 2, 11, "shiitake"), box(6, 2, 6, 10, 3, 10, "shiitake_light"), box(7, 3, 7, 9, 3.5, 9, "shiitake_dark")]
+    M["enoki"] = [box(6, 0, 6, 10, 8, 10, "enoki"), box(7, 8, 7, 9, 9, 9, "enoki_dark")]
+    M["shiitake_log"] = [box(2, 0, 2, 14, 4, 14, "log"), box(2, 4, 2, 14, 6, 14, "log_dark"),
+                         box(4, 6, 4, 12, 7, 12, "shiitake"), box(5, 7, 5, 11, 7.5, 11, "shiitake_light")]
+    M["enoki_bundle"] = [box(4, 0, 4, 12, 6, 12, "enoki_bundle"), box(5, 6, 5, 11, 7, 11, "enoki"),
+                         box(6, 7, 6, 10, 8, 10, "enoki_dark")]
     return M
 
 # ------------------------------------------------------------------ meal items (icons = the whole meal)
