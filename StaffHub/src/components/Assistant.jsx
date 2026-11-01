@@ -172,15 +172,16 @@ export default function Assistant({ onOpen }) {
                       {m.hits.map((h) => {
                         const I = ICONS[h.type] || FileIcon;
                         return (
-                          <button key={h.id} onClick={() => onOpen({ id: h.id, name: h.name, type: h.type })}
-                            className="w-full text-left bg-black/30 border border-bronze/20 rounded-lg px-2.5 py-1.5 hover:border-gold/50">
+                          <a key={h.id} href={'/?open=' + h.id}
+                            onClick={(e) => { if (e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return; e.preventDefault(); onOpen({ id: h.id, name: h.name, type: h.type }); }}
+                            className="block w-full text-left bg-black/30 border border-bronze/20 rounded-lg px-2.5 py-1.5 hover:border-gold/50">
                             <span className="flex items-center gap-1.5 text-xs">
                               <I className="size-3.5 text-gold/70 shrink-0" />
                               <span className="truncate font-bold text-parch/90">{h.name}</span>
                               <span className="text-parch/40 ml-auto shrink-0 text-[10px]">{t('why.' + h.why)}</span>
                             </span>
                             {!!h.snippet && <p className="text-[11px] text-parch/60 mt-0.5 line-clamp-2">{h.snippet}</p>}
-                          </button>
+                          </a>
                         );
                       })}
                     </div>
