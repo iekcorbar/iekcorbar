@@ -1,0 +1,39 @@
+# Muziek per speler. Voorrang: WorldGuard-regio > biome > wereld > default.
+# Alle tracks zijn eigen geluiden uit het pack (iekcorbar:music.<naam>); de vanilla-
+# muziek staat daar stil. Fade-in/-uit zit in het geluidsbestand zelf.
+#
+# seconds = lengte van het bestand; gap = stilte erna (0 = naadloos op repeat);
+# delay = seconden wachten nadat een speler het gebied binnenkomt;
+# title = korte actionbar bij binnenkomen (leeg = niets).
+default: overworld
+
+worlds:
+  iekcorbarSeason2_the_end: end
+
+# Biome (zonder namespace) -> track. Voorbeeld: cherry_grove: sakura
+biomes: {}
+
+# Regio-id -> track. Bij overlap wint de regio met de hoogste WorldGuard-prioriteit.
+regions:
+  spawn: spawn
+
+# Alles wat met dit begint (bv. betterstructures) -> track. Leeg = geen.
+region-prefixes: {}
+
+tracks:
+  overworld:
+    sound: "iekcorbar:music.overworld"
+    seconds: 223.2
+    gap: 180
+    delay: 20
+  end:
+    sound: "iekcorbar:music.end"
+    seconds: 240
+    gap: 0
+    delay: 0
+  spawn:
+    sound: "iekcorbar:music.spawn"
+    seconds: 212.56
+    gap: 0
+    delay: 0
+    title: "Spawn"

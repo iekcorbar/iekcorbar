@@ -16,6 +16,7 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
     private DeepSync deepSync;
     private AdvancementManager advancementManager;
     private BookManager bookManager;
+    private MusicManager musicManager;
     private CreativeHeadsManager creativeHeadsManager;
 
     @Override
@@ -63,6 +64,10 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
 
         // Custom written books from books/*.txt, loot-table drops, /ibook.
         bookManager = new BookManager(this);
+
+        // Muziek per wereld / biome / WorldGuard-regio (music.yml).
+        musicManager = new MusicManager(this);
+        musicManager.start();
         bookManager.enable();
 
         // HeadDatabase: free heads only for staff in creative, see CreativeHeadsManager.
@@ -82,6 +87,9 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (musicManager != null) {
+            musicManager.stop();
+        }
         if (advancementManager != null) {
             advancementManager.disable();
         }

@@ -35,7 +35,11 @@ FFMPEG = os.environ.get("FFMPEG") or (glob.glob(os.path.expandvars(
 # eventnamen in een nieuwere versie doen niets; nieuwe biomen later toevoegen.
 MUSIC_SRC = os.path.join(ROOT, "sounds", "music", "overworld.mp3")
 END_SRC = os.path.join(ROOT, "sounds", "music", "end.mp3")
+SPAWN_SRC = os.path.join(ROOT, "sounds", "music", "spawn.mp3")
+SPAWN_XFADE = 5.0  # s: staart en kop worden in elkaar gelegd, zodat de repeat geen naad heeft
 MUSIC_EVENTS = ["music.game", "music.creative", "music.under_water", "music.end", "music.dragon"] + [
+    "music.nether." + b for b in ("nether_wastes", "crimson_forest", "soul_sand_valley",
+                                   "warped_forest", "basalt_deltas")] + [
     "music.overworld." + b for b in (
         "meadow", "jungle_and_forest", "old_growth_taiga", "snowy_slopes",
         "frozen_peaks", "jagged_peaks", "stony_peaks", "flower_forest", "grove",
@@ -169,6 +173,26 @@ def music_ogg(src=MUSIC_SRC, fade=0.0, dur=0.0):
             return f.read()
 
 
+def loop_ogg(src, x=SPAWN_XFADE):
+    """Naadloos loop-bestand: eerste x s en laatste x s kruisen in elkaar (equal-power).
+    Lengte = origineel - x. Het einde loopt vanzelf door in het begin."""
+    with tempfile.TemporaryDirectory() as td:
+        probe = subprocess.run([FFMPEG.replace("ffmpeg.exe", "ffprobe.exe"), "-v", "error", "-show_entries",
+                                "format=duration", "-of", "csv=p=0", src], capture_output=True, text=True, check=True)
+        d = float(probe.stdout.strip())
+        out = os.path.join(td, "loop.ogg")
+        fc = ("[0:a]asplit=3[a][b][c];"
+              "[a]atrim=%s:%s,asetpts=PTS-STARTPTS,afade=t=out:d=%s:curve=qsin[t];"
+              "[b]atrim=0:%s,asetpts=PTS-STARTPTS,afade=t=in:d=%s:curve=qsin[h];"
+              "[t][h]amix=inputs=2:normalize=0:duration=longest[x];"
+              "[c]atrim=%s:%s,asetpts=PTS-STARTPTS[m];"
+              "[x][m]concat=n=2:v=0:a=1[o]") % (d - x, d, x, x, x, x, d - x)
+        subprocess.run([FFMPEG, "-v", "error", "-y", "-i", src, "-vn", "-map_metadata", "-1",
+                        "-filter_complex", fc, "-map", "[o]", "-c:a", "libvorbis", "-q:a", "4", out], check=True)
+        with open(out, "rb") as f:
+            return f.read()
+
+
 def silence_ogg():
     """1 s stilte: vanilla-muziekevents verwijzen hiernaartoe, zodat vanilla niets meer speelt.
     Onze eigen timer (Skript iekcorbar_music.sk) speelt iekcorbar:music.overworld."""
@@ -189,7 +213,9 @@ def own_sounds_json():
     return {"music.overworld": {"sounds": [{"name": "iekcorbar:music/overworld", "stream": True}],
                                 "subtitle": ""},
             "music.end": {"sounds": [{"name": "iekcorbar:music/end", "stream": True}],
-                          "subtitle": ""}}
+                          "subtitle": ""},
+            "music.spawn": {"sounds": [{"name": "iekcorbar:music/spawn", "stream": True}],
+                            "subtitle": ""}}
 
 
 def main():
@@ -205,6 +231,8 @@ def main():
         if os.path.exists(MUSIC_SRC):
             z.writestr("assets/iekcorbar/sounds/music/overworld.ogg", music_ogg(fade=6.0, dur=223.2))
             z.writestr("assets/iekcorbar/sounds/music/silence.ogg", silence_ogg())
+            if os.path.exists(SPAWN_SRC):
+                z.writestr("assets/iekcorbar/sounds/music/spawn.ogg", loop_ogg(SPAWN_SRC))
             if os.path.exists(END_SRC):
                 z.writestr("assets/iekcorbar/sounds/music/end.ogg", music_ogg(END_SRC))
             z.writestr("assets/iekcorbar/sounds.json", json.dumps(own_sounds_json(), indent=1))
