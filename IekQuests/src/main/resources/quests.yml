@@ -11,7 +11,35 @@
 # conditions (start / stage cond / choice cond): tag:name, point:cat>=N,
 #   item:MAT>=N, perm:node, day, night  (comma = and)
 # repeat: contracts after completion (deliver|walk, own cooldown).
-# sequences: timelines "delay|action".
+#   land_surveyor:
+    title: "&6Land Surveyor"
+    subtitle: "Buy more claim chunks"
+    icon: FILLED_MAP
+    npc-id: -1
+    order: 95
+    journal:
+      - "Buy extra claim chunks for your gouw."
+      - "The more you own, the higher the limit - up to 100 extra."
+    stages:
+      intro:
+        type: talk
+        label: "&aTalk about land."
+        lines:
+          - "&fSurveyor: &7Land is a promise written on a map."
+          - "&7Pay the fee and I will stamp more chunks onto"
+          - "&7your gouw's limit. Claim them yourself with /gouw."
+        choices:
+          - label: "&2+5 chunks  (12,500)"
+            say: "&7Surveyor: &8Stamped and filed."
+            do: ["gouw admin buychunks %player% 5 12500"]
+          - label: "&2+10 chunks  (25,000)"
+            say: "&7Surveyor: &8Stamped and filed."
+            do: ["gouw admin buychunks %player% 10 25000"]
+          - label: "&2+25 chunks  (62,500)"
+            say: "&7Surveyor: &8A serious landowner. Stamped and filed."
+            do: ["gouw admin buychunks %player% 25 62500"]
+    rewards: []
+sequences: timelines "delay|action".
 
 quests:
   milo:
@@ -6971,31 +6999,3 @@ sequences:
     - "0|say &eMad Doctor: &7The machine promised not to do anything weird."
     - "1.2|say &bMachine: &7No promises were made."
     - "2.4|say &7Type &b/rt &7yourself when you dare - nobody rides you around here."
-  land_surveyor:
-    title: "&6Land Surveyor"
-    subtitle: "Buy more claim chunks"
-    icon: FILLED_MAP
-    npc-id: -1
-    order: 95
-    journal:
-      - "Buy extra claim chunks for your gouw."
-      - "The more you own, the higher the limit - up to 100 extra."
-    stages:
-      intro:
-        type: talk
-        label: "&aTalk about land."
-        lines:
-          - "&fSurveyor: &7Land is a promise written on a map."
-          - "&7Pay the fee and I will stamp more chunks onto"
-          - "&7your gouw's limit. Claim them yourself with /gouw."
-        choices:
-          - label: "&2+5 chunks  (12,500)"
-            say: "&7Surveyor: &8Stamped and filed."
-            do: ["gouw admin buychunks %player% 5 12500"]
-          - label: "&2+10 chunks  (25,000)"
-            say: "&7Surveyor: &8Stamped and filed."
-            do: ["gouw admin buychunks %player% 10 25000"]
-          - label: "&2+25 chunks  (62,500)"
-            say: "&7Surveyor: &8A serious landowner. Stamped and filed."
-            do: ["gouw admin buychunks %player% 25 62500"]
-    rewards: []
