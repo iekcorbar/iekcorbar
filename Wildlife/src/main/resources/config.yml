@@ -65,6 +65,8 @@ species:
 dragon:
   # horizontal top speed while ridden, in blocks per tick (0.40 = 8 m/s; sprinting rider +35 %)
   ride-speed: 0.40
+  # chance that a new dragon is the Ender look (all-black, violet eyes): extremely rare on purpose
+  ender-chance: 0.003
 
 
 # breeding: right-click an adult with its food (see /wildlife help or the wiki); two of one kind in love close together get a baby
@@ -76,7 +78,3 @@ breeding:
   cooldown-minutes: 5
   # no more babies while this many of the species are already within 32 blocks
   max-near: 10
-
-# Steam Dragon: chance that a new dragon is the Ender look (all-black, violet eyes). Extremely rare on purpose.
-dragon:
-  ender-chance: 0.003
