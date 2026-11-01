@@ -14,16 +14,31 @@ Ritueel (skill pack-build): python -I scripts/make_core_pack.py  ->
 scripts/core-pack/Core-pack.zip  -> BUILD verhogen in merge-packs.py ->
 merge -> audit -> sha1 -> TE-DEPLOYEN-regel.
 """
+import glob
 import json
 import os
 import random
 import struct
+import subprocess
+import tempfile
 import zipfile
 import zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "core-pack", "Core-pack.zip")
 SR = random.Random(20261030)
+ROOT = os.path.dirname(HERE)
+FFMPEG = os.environ.get("FFMPEG") or (glob.glob(os.path.expandvars(
+    r"%LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_*\ffmpeg-*\bin\ffmpeg.exe")) or ["ffmpeg"])[0]
+# Globale muziek: ons eigen overworld-nummer vervangt de vanilla-muziekevents.
+# deep_dark blijft vanilla (de stilte/griezel daar is bedoeld). Onbekende
+# eventnamen in een nieuwere versie doen niets; nieuwe biomen later toevoegen.
+MUSIC_SRC = os.path.join(ROOT, "sounds", "music", "overworld.mp3")
+MUSIC_EVENTS = ["music.game", "music.creative", "music.under_water"] + [
+    "music.overworld." + b for b in (
+        "meadow", "jungle_and_forest", "old_growth_taiga", "snowy_slopes",
+        "frozen_peaks", "jagged_peaks", "stony_peaks", "flower_forest", "grove",
+        "swamp", "cherry_grove", "lush_caves", "dripstone_caves")]
 SZ = 32
 
 
@@ -142,9 +157,24 @@ def item_def():
     }}
 
 
+def music_ogg():
+    """mp3 -> stereo ogg (zonder albumhoes), q:a 3 ~ 112 kbps."""
+    with tempfile.TemporaryDirectory() as td:
+        out = os.path.join(td, "overworld.ogg")
+        subprocess.run([FFMPEG, "-v", "error", "-y", "-i", MUSIC_SRC, "-vn", "-map_metadata", "-1",
+                        "-c:a", "libvorbis", "-q:a", "3", out], check=True)
+        with open(out, "rb") as f:
+            return f.read()
+
+
+def music_sounds_json():
+    entry = {"replace": True, "sounds": [{"name": "iekcorbar:music/overworld", "stream": True}]}
+    return {ev: entry for ev in MUSIC_EVENTS}
+
+
 def main():
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    mcmeta = {"pack": {"description": "iekcorbar core items (quest book)",
+    mcmeta = {"pack": {"description": "iekcorbar core (quest book, overworld music)",
                        "pack_format": 64,
                        "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}}}
     with zipfile.ZipFile(OUT, "w", zipfile.ZIP_DEFLATED) as z:
@@ -152,6 +182,9 @@ def main():
         z.writestr("assets/iekcorbar/textures/item/quest_book.png", png_bytes(build_texture()))
         z.writestr("assets/iekcorbar/models/item/quest_book.json", json.dumps(build_model(), indent=1))
         z.writestr("assets/minecraft/items/written_book.json", json.dumps(item_def(), indent=1))
+        if os.path.exists(MUSIC_SRC):
+            z.writestr("assets/iekcorbar/sounds/music/overworld.ogg", music_ogg())
+            z.writestr("assets/minecraft/sounds.json", json.dumps(music_sounds_json(), indent=1))
     print("wrote", OUT, os.path.getsize(OUT), "bytes")
 
 
