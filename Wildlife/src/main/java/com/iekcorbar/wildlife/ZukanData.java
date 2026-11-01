@@ -22,7 +22,10 @@ final class ZukanData implements Supplier<Map<String, Object>> {
         all.add(plugin.items().journal());
         all.add(plugin.items().crabClaw());
         all.add(plugin.items().lizardTail());
-        for (Species s : Species.values()) if (s.animal()) all.add(plugin.items().egg(s));   // no egg for custom creatures
+        for (Species s : Species.values()) {   // every species, the wraith included, plus the rare and extra-look eggs
+            all.add(plugin.items().egg(s));
+            for (String v : plugin.items().eggVariants(s)) all.add(plugin.items().egg(s, v));
+        }
         all.addAll(plugin.zoo().allItems());
         Map<String, Object> out = new LinkedHashMap<>();
         out.put("items", all);

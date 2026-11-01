@@ -114,18 +114,20 @@ final class WildlifeCommand implements TabExecutor {
             case "egg" -> {
                 if (!admin(s)) return true;
                 Species sp = a.length > 1 ? Species.byId(a[1]) : null;
-                Player target = a.length > 2 ? Bukkit.getPlayerExact(a[2]) : s instanceof Player self ? self : null;
+                // /wildlife egg <species> [rare|<look>] [player]  (the second word is a player name when it is no variant)
+                String variant = null;
+                int pi = 2;
+                if (sp != null && a.length > 2) {
+                    for (String v : plugin.items().eggVariants(sp)) if (a[2].equalsIgnoreCase(WildItems.variantShort(sp, v)) || a[2].equalsIgnoreCase(v)) variant = v;
+                    if (variant != null) pi = 3;
+                }
+                Player target = a.length > pi ? Bukkit.getPlayerExact(a[pi]) : s instanceof Player self ? self : null;
                 if (sp == null || target == null) {
-                    s.sendMessage(Component.text("/" + label + " egg <species> [player]", NamedTextColor.RED));
+                    s.sendMessage(Component.text("/" + label + " egg <species> [rare|<look>] [player]", NamedTextColor.RED));
                     return true;
                 }
-                if (!sp.animal()) {
-                    // an egg needs a zoo:egg_<id> item model; custom creatures deliberately have none
-                    s.sendMessage(Component.text(sp.displayName + " is not an animal - no spawn egg. Use /" + label + " spawn " + sp.id() + ".", NamedTextColor.RED));
-                    return true;
-                }
-                target.getInventory().addItem(plugin.items().egg(sp));
-                s.sendMessage(Component.text("Gave a " + sp.displayName + " spawn egg to " + target.getName() + ".", NamedTextColor.GREEN));
+                target.getInventory().addItem(plugin.items().egg(sp, variant));
+                s.sendMessage(Component.text("Gave a " + (variant == null ? sp.displayName : sp.displayName + " (" + WildItems.variantShort(sp, variant) + ")") + " spawn egg to " + target.getName() + ".", NamedTextColor.GREEN));
             }
             case "giveall" -> {
                 if (!admin(s)) return true;
@@ -202,14 +204,16 @@ final class WildlifeCommand implements TabExecutor {
             for (String v : new String[]{"help", "journal", "spawn", "egg", "give", "giveall", "info", "reload", "stats", "list", "find", "tamed", "remove"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && (a[0].equalsIgnoreCase("spawn") || a[0].equalsIgnoreCase("egg") || a[0].equalsIgnoreCase("find"))) {
             boolean egg = a[0].equalsIgnoreCase("egg");
-            for (Species sp : Species.values()) if ((!egg || sp.animal()) && sp.id().startsWith(last)) out.add(sp.id());
+            for (Species sp : Species.values()) if (sp.id().startsWith(last)) out.add(sp.id());
         } else if (a.length >= 3 && a[0].equalsIgnoreCase("spawn")) {
             Species sp = Species.byId(a[1]);
             if (sp == null || sp.animal()) {   // custom creatures take no rare/baby
                 out.add("rare");
                 out.add("baby");
             }
-        } else if (a.length == 3 && a[0].equalsIgnoreCase("egg")) {
+        } else if (a.length >= 3 && a[0].equalsIgnoreCase("egg")) {
+            Species sp = Species.byId(a[1]);
+            if (a.length == 3 && sp != null) for (String v : plugin.items().eggVariants(sp)) if (WildItems.variantShort(sp, v).startsWith(last)) out.add(WildItems.variantShort(sp, v));
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
         } else if (a.length == 2 && a[0].equalsIgnoreCase("give")) {
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());

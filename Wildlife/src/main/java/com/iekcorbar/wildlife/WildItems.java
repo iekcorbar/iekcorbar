@@ -75,26 +75,53 @@ final class WildItems implements Listener {
 
     /** Spawn egg of a species: right-click a block to spawn one, sneak + right-click for a baby. Model zoo:egg_<id> (Zoo pack). */
     ItemStack egg(Species s) {
+        return egg(s, null);
+    }
+
+    /** Every egg a species has: the plain one is separate; these are the rare look and each extra look (macaw/songbird/dragon colours, the Ender dragon). */
+    List<String> eggVariants(Species s) {
+        List<String> out = new java.util.ArrayList<>();
+        if (!s.animal()) return out;
+        out.add("rare");
+        List<String> looks = s.models();
+        for (int i = 1; i < looks.size(); i++) out.add(looks.get(i));
+        if (s == Species.DRAGON) out.add("wl_dragon_ender");
+        return out;
+    }
+
+    /** Name of an egg variant as typed in commands: "rare", or the look without the wl_<species>_ prefix ("ender", "kura", "blue"). */
+    static String variantShort(Species s, String variant) {
+        return variant.startsWith("wl_" + s.id() + "_") ? variant.substring(("wl_" + s.id() + "_").length()) : variant;
+    }
+
+    /** variant: null = the plain egg, "rare" = the rare look, otherwise a model name (wl_dragon_kura ...). */
+    ItemStack egg(Species s, String variant) {
         ItemStack it = new ItemStack(Material.PAPER);
         ItemMeta m = it.getItemMeta();
-        m.displayName(Component.text(s.displayName + " Spawn Egg", NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
+        String title = variant == null ? s.displayName
+                : variant.equals("rare") ? s.rareName()
+                : variant.equals("wl_dragon_ender") ? "Ender Dragon"
+                : s.displayName + " (" + variantShort(s, variant) + ")";
+        m.displayName(Component.text(title + " Spawn Egg", NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
         m.lore(List.of(Component.text("Right-click a block to spawn one.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.text("Sneak + right-click: a baby.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.text("Breeds with " + s.foodText() + ".", NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false),
                 Component.text("Wildlife", NamedTextColor.DARK_GREEN).decoration(TextDecoration.ITALIC, false)));
-        m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, "egg:" + s.id());
+        m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, "egg:" + s.id() + (variant == null ? "" : ":" + variant));
+        if (variant != null) m.setEnchantmentGlintOverride(true);   // the special ones shimmer
         it.setItemMeta(m);
         it.setData(DataComponentTypes.ITEM_MODEL, Key.key("zoo", "egg_" + s.id()));
         return it;
     }
 
-    private void useEgg(PlayerInteractEvent e, Species s) {
+    private void useEgg(PlayerInteractEvent e, Species s, String variant) {
         e.setCancelled(true);
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getClickedBlock() == null) return;
         Player p = e.getPlayer();
         var at = e.getClickedBlock().getRelative(e.getBlockFace()).getLocation().add(0.5, 0, 0.5);
         // spawn() clears the baby flag for non-animals on its own, so a sneak-click gives the same creature
-        if (plugin.animals().spawn(s, at, false, p.isSneaking(), null) == null) {
+        boolean rare = "rare".equals(variant);
+        if (plugin.animals().spawn(s, at, rare, p.isSneaking(), variant == null || rare ? null : variant) == null) {
             p.sendActionBar(Component.text("The model isn't loaded in FreeMinecraftModels (see console).", NamedTextColor.RED));
             return;
         }
@@ -141,8 +168,9 @@ final class WildItems implements Listener {
         ItemStack held = e.getItem();
         String id = idOf(held);
         if (id != null && id.startsWith("egg:")) {
-            Species egg = Species.byId(id.substring(4));
-            if (egg != null) useEgg(e, egg);
+            String[] part = id.substring(4).split(":", 2);
+            Species egg = Species.byId(part[0]);
+            if (egg != null) useEgg(e, egg, part.length > 1 ? part[1] : null);
             return;
         }
         if (!"field_journal".equals(idOf(held))) {
