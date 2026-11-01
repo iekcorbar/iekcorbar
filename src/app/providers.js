@@ -912,6 +912,7 @@ export default function ClientProviders({ children }) {
                     { href: 'https://shop.iekcorbar.com', label: 'Shop', icon: ShoppingBag, match: () => false },
                     { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                 { href: '/wildlife', label: 'Wildlife Guide', icon: PawPrint, match: (p) => p.startsWith('/wildlife') },
+                { href: '/dragons', label: 'Dragon Guide', icon: Flame, match: (p) => p.startsWith('/dragons') },
                     { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                     { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                     { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
@@ -1111,6 +1112,7 @@ export default function ClientProviders({ children }) {
                 { href: 'https://shop.iekcorbar.com', label: 'Shop', icon: ShoppingBag, match: () => false },
                 { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                 { href: '/wildlife', label: 'Wildlife Guide', icon: PawPrint, match: (p) => p.startsWith('/wildlife') },
+                { href: '/dragons', label: 'Dragon Guide', icon: Flame, match: (p) => p.startsWith('/dragons') },
                 { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                 { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                 { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
@@ -1259,6 +1261,7 @@ export default function ClientProviders({ children }) {
                   <li><Link href="/wiki#jobs" className="hover:text-sp-copper transition-colors">RPG Jobs & Skills</Link></li>
                   <li><Link href="/sakagura" className="hover:text-sp-copper transition-colors">Sakagura Guide</Link></li>
                   <li><Link href="/wildlife" className="hover:text-sp-copper transition-colors">Wildlife Guide</Link></li>
+                  <li><Link href="/dragons" className="hover:text-sp-copper transition-colors">Dragon Guide</Link></li>
                   <li><Link href="/wiki#lands" className="hover:text-sp-copper transition-colors">Lands claim policies</Link></li>
                 </ul>
               </div>

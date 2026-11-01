@@ -154,6 +154,10 @@ export default function WildlifeExplainedPage() {
           Dragons come in five metal looks to match the server&apos;s crafts, a rare gilded one - and a
           legend: roughly one in three hundred is something else entirely.
         </p>
+        <p className="text-sm text-text-warm/80">
+          Taming, riding, the whistle, saddlebags, dyes, eggs and nests all have their own page: the{' '}
+          <Link href="/dragons" className="text-sp-gold underline">Dragon Guide</Link>.
+        </p>
       </Section>
 
       <Section id="wraith" icon={Ghost} kicker="After dark" title="The Wraith">
