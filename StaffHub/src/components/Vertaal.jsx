@@ -12,7 +12,7 @@
 // markdown (mdToHtml escaapt álle raw HTML vóórdat het eigen tags toevoegt), dus
 // er kan geen modeltekst als markup doorglippen.
 import { useEffect, useState } from 'react';
-import { Languages, Download, FileText } from 'lucide-react';
+import { Languages, Download, FileText, Printer } from 'lucide-react';
 import { useLang, trServer } from '@/lib/i18n';
 
 const TAALNAAM = { nl: 'NL', en: 'EN', it: 'IT', fi: 'FI' };
@@ -32,8 +32,22 @@ export function GidsWeergave({ html, klas = '' }) {
 }
 
 // Bestanden die we als tekst kunnen vertalen (de route toetst dit nogmaals)
-export const VERTAAL_EXT = ['md', 'txt', 'html', 'htm', 'log'];
+export const VERTAAL_EXT = ['md', 'txt', 'html', 'htm', 'log', 'pdf'];
 export const kanVertalen = (n) => n?.type === 'page' || (n?.type === 'file' && VERTAAL_EXT.includes(String(n.name || '').split('.').pop().toLowerCase()));
+
+// Vertaling printen of als PDF bewaren: eigen venster met alleen de tekst, het
+// browser-afdrukvenster doet de rest (Opslaan als PDF). Het HTML is door
+// onszelf opgebouwd uit geescapte markdown, zie boven.
+function afdrukken(html, naam, taal) {
+  const w = window.open('', '_blank');
+  if (!w) return;
+  const titel = String(naam || '').replace(/[<>&"]/g, '') + ' (' + (TAALNAAM[taal] || taal) + ')';
+  w.document.write('<!doctype html><meta charset="utf-8"><title>' + titel + '</title>' +
+    '<style>body{font:13px/1.5 Georgia,serif;max-width:760px;margin:24px auto;color:#111}h1,h2,h3{color:#6b4a12}code{background:#eee;padding:0 3px}li{margin-left:18px}</style>' + html);
+  w.document.close();
+  w.focus();
+  setTimeout(() => w.print(), 300);
+}
 
 export default function Vertaal({ node }) {
   const { t, tr } = useLang();
@@ -96,6 +110,9 @@ export default function Vertaal({ node }) {
             {resultaat.controle?.twijfel ? ' · ⚠ ' + t('tr.twijfel') : ''}
           </p>
           <GidsWeergave html={resultaat.html} klas="mt-1 max-h-52 [&_h1]:text-[13px] [&_h1]:font-bold [&_h1]:text-gold [&_h2]:font-bold [&_h2]:text-gold/90 [&_li]:ml-4 [&_li]:list-disc [&_code]:bg-black/60 [&_code]:px-1 [&_pre]:bg-black/60 [&_pre]:p-2 [&_pre]:overflow-auto" />
+          <button onClick={() => afdrukken(resultaat.html, node.name, resultaat.taal)} className="mt-1 mr-3 inline-flex items-center gap-1 text-[10px] text-parch/60 hover:text-gold">
+            <Printer className="size-3" /> print / PDF
+          </button>
           {node.type === 'page' && <a href={'/api/page/' + node.id + '?fmt=md'} download className="mt-1 inline-flex items-center gap-1 text-[10px] text-parch/60 hover:text-gold">
             <Download className="size-3" /> markdown van het origineel
           </a>}

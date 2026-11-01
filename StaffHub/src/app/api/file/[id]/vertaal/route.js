@@ -5,13 +5,15 @@ import { getDb, blobPath, latestVersion } from '@/lib/db';
 import { me } from '@/lib/auth';
 import { canSee } from '@/lib/acl';
 import { htmlToMd } from '@/lib/docconv';
+import { pdfNaarMd } from '@/lib/pdftext';
 import { vertaalBestand, TALEN } from '@/lib/vertaal';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 600;
 
-const EXT = ['md', 'txt', 'html', 'htm', 'log'];
+const EXT = ['md', 'txt', 'html', 'htm', 'log', 'pdf'];
 const MAX_BYTES = 200_000;
+const MAX_PDF = 20 * 1024 * 1024;
 
 export async function POST(req, { params }) {
   const u = await me();
@@ -29,9 +31,17 @@ export async function POST(req, { params }) {
 
   const v = latestVersion(n.id);
   if (!v || !fs.existsSync(blobPath(v.sha))) return Response.json({ error: 'bestand ontbreekt' }, { status: 404 });
-  if (fs.statSync(blobPath(v.sha)).size > MAX_BYTES) return Response.json({ error: 'bestand te groot om te vertalen' }, { status: 413 });
-  let tekst = fs.readFileSync(blobPath(v.sha), 'utf8');
-  if (ext === 'html' || ext === 'htm') tekst = htmlToMd(tekst);
+  const grootte = fs.statSync(blobPath(v.sha)).size;
+  if (grootte > (ext === 'pdf' ? MAX_PDF : MAX_BYTES)) return Response.json({ error: 'bestand te groot om te vertalen' }, { status: 413 });
+  let tekst;
+  if (ext === 'pdf') {
+    try { tekst = await pdfNaarMd(fs.readFileSync(blobPath(v.sha))); }
+    catch { return Response.json({ error: 'deze pdf kon niet gelezen worden' }, { status: 422 }); }
+    if (tekst.trim().length < 40) return Response.json({ error: 'geen tekst in deze pdf (een scan?)' }, { status: 422 });
+  } else {
+    tekst = fs.readFileSync(blobPath(v.sha), 'utf8');
+    if (ext === 'html' || ext === 'htm') tekst = htmlToMd(tekst);
+  }
 
   const r = await vertaalBestand(n, tekst, taal, { wie: u.id, opnieuw: Boolean(opnieuw) });
   if (!r.ok) return Response.json({ error: r.fout, stuk: r.stuk }, { status: r.fout === 'ai-uit' ? 503 : 502 });
