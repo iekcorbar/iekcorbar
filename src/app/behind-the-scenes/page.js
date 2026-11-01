@@ -32,7 +32,7 @@ export default function BehindTheScenesPage() {
       <div className={CARD}>
         <h2 className={H2}><Users className="w-5 h-5 text-sp-copper" /> Who makes it</h2>
         <p className={P}>
-          iekcorbar is made by a team of four. We split the work between us &ndash; building, drawing, writing,
+          iekcorbar is made by a team of four: <strong>Kooyer</strong>, <strong>Greyarts</strong>, <strong>iekjebr36</strong> and <strong>Antimatter87</strong>. We split the work between us &ndash; building, drawing, writing,
           testing and running the server &ndash; and decide together what goes live.
         </p>
       </div>
