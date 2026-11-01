@@ -24,6 +24,9 @@ public final class GouwPlugin extends JavaPlugin {
     private GouwMenu menu;
     private Expiry expiry;
     private final Set<UUID> bypassing = new HashSet<>();
+    /** Extra chunks a player bought (contract NPC), on top of the rank limit. Saved in bonus.yml. */
+    private final java.util.Map<UUID, Integer> bonus = new java.util.HashMap<>();
+    private File bonusFile;
 
     @Override
     public void onEnable() {
@@ -31,6 +34,13 @@ public final class GouwPlugin extends JavaPlugin {
         store = new ClaimStore(this, new File(getDataFolder(), "claims.json"));
         if (!store.load() || store.all().isEmpty()) {
             if (store.all().isEmpty()) LandsImporter.run(this, store);
+        }
+        bonusFile = new File(getDataFolder(), "bonus.yml");
+        if (bonusFile.exists()) {
+            org.bukkit.configuration.file.YamlConfiguration y = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(bonusFile);
+            for (String k : y.getKeys(false)) {
+                try { bonus.put(UUID.fromString(k), y.getInt(k)); } catch (IllegalArgumentException ignored) { }
+            }
         }
         expiry = new Expiry(this);
         listener = new GouwListener(this);
@@ -54,6 +64,17 @@ public final class GouwPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         if (store != null) store.save();
+    }
+
+    public int bonusOf(UUID id) {
+        return bonus.getOrDefault(id, 0);
+    }
+
+    public void setBonus(UUID id, int n) {
+        if (n <= 0) bonus.remove(id); else bonus.put(id, n);
+        org.bukkit.configuration.file.YamlConfiguration y = new org.bukkit.configuration.file.YamlConfiguration();
+        for (java.util.Map.Entry<UUID, Integer> e : bonus.entrySet()) y.set(e.getKey().toString(), e.getValue());
+        try { y.save(bonusFile); } catch (java.io.IOException ex) { getLogger().severe("Could not save bonus.yml: " + ex.getMessage()); }
     }
 
     public ClaimStore store() {
@@ -85,7 +106,7 @@ public final class GouwPlugin extends JavaPlugin {
             if (!n.startsWith("gouw.chunks.")) continue;
             try { max = Math.max(max, Integer.parseInt(n.substring(12))); } catch (NumberFormatException ignored) { }
         }
-        return max;
+        return max + bonusOf(p.getUniqueId());
     }
 
     public boolean enterMessages() {

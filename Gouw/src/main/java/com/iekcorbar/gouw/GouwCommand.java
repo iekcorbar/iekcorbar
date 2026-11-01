@@ -187,9 +187,48 @@ final class GouwCommand implements TabExecutor {
                 plugin.setBypassing(p.getUniqueId(), on);
                 msg(s, "Bypass " + (on ? "ON - build anywhere." : "off."), on ? NamedTextColor.GOLD : NamedTextColor.GREEN);
             }
-            default -> msg(s, "/gouw admin <delete <name>|import [force]|reload|bypass [on|off]>", NamedTextColor.RED);
+            case "addchunks", "buychunks" -> {
+                boolean buy = what.equals("buychunks");
+                if (a.length < 4 || (buy && a.length < 5)) { msg(s, buy ? "/gouw admin buychunks <player> <chunks> <cost>" : "/gouw admin addchunks <player> <chunks>", NamedTextColor.RED); return true; }
+                Player t = Bukkit.getPlayerExact(a[2]);
+                if (t == null) { msg(s, a[2] + " is not online.", NamedTextColor.RED); return true; }
+                int n, cost = 0;
+                try { n = Integer.parseInt(a[3]); if (buy) cost = Integer.parseInt(a[4]); } catch (NumberFormatException ex) { msg(s, "Numbers please.", NamedTextColor.RED); return true; }
+                int cap = plugin.getConfig().getInt("bonus-max", 100);
+                int have = plugin.bonusOf(t.getUniqueId());
+                if (n <= 0) { msg(s, "Chunks must be above 0.", NamedTextColor.RED); return true; }
+                if (buy && have + n > cap) {
+                    msg(t, "You can't buy more claim chunks: the limit is " + cap + " extra (you have " + have + ").", NamedTextColor.RED);
+                    msg(s, "Refused: bonus cap " + cap + ".", NamedTextColor.RED);
+                    return true;
+                }
+                if (buy && cost > 0 && !withdraw(t, cost)) {
+                    msg(t, "You need " + cost + " to buy " + n + " more claim chunks.", NamedTextColor.RED);
+                    msg(s, "Refused: not enough money.", NamedTextColor.RED);
+                    return true;
+                }
+                plugin.setBonus(t.getUniqueId(), have + n);
+                msg(t, "+" + n + " claim chunks! You now have " + (have + n) + " extra (" + plugin.getMaxChunks(t) + " in total).", NamedTextColor.GOLD);
+                msg(s, "Gave " + t.getName() + " +" + n + " chunks (bonus " + (have + n) + ").", NamedTextColor.GREEN);
+            }
+            default -> msg(s, "/gouw admin <delete <name>|import [force]|reload|bypass [on|off]|addchunks <player> <n>|buychunks <player> <n> <cost>>", NamedTextColor.RED);
         }
         return true;
+    }
+
+    /** Takes money through Vault (reflection, no compile dependency). False if no economy or too poor. */
+    private boolean withdraw(Player p, double amount) {
+        try {
+            Class<?> eco = Class.forName("net.milkbowl.vault.economy.Economy");
+            var rsp = Bukkit.getServicesManager().getRegistration(eco);
+            if (rsp == null) return false;
+            Object e = rsp.getProvider();
+            if (!(boolean) eco.getMethod("has", org.bukkit.OfflinePlayer.class, double.class).invoke(e, p, amount)) return false;
+            Object r = eco.getMethod("withdrawPlayer", org.bukkit.OfflinePlayer.class, double.class).invoke(e, p, amount);
+            return (boolean) r.getClass().getMethod("transactionSuccess").invoke(r);
+        } catch (ReflectiveOperationException ex) {
+            return false;
+        }
     }
 
     private void help(CommandSender s, boolean staff) {
@@ -235,7 +274,7 @@ final class GouwCommand implements TabExecutor {
         } else if (a.length == 2 && a[0].equalsIgnoreCase("unclaim")) {
             if ("all".startsWith(last)) out.add("all");
         } else if (a.length == 2 && a[0].equalsIgnoreCase("admin")) {
-            for (String v : new String[]{"delete", "import", "reload", "bypass"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"delete", "import", "reload", "bypass", "addchunks", "buychunks"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 3 && a[0].equalsIgnoreCase("admin") && a[1].equalsIgnoreCase("import")) {
             if ("force".startsWith(last)) out.add("force");
         } else if (a.length == 3 && a[0].equalsIgnoreCase("admin") && a[1].equalsIgnoreCase("delete")) {

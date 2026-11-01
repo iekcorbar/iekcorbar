@@ -18,3 +18,6 @@ import:
   lands-database: plugins/Lands/Data/database_v2.db
   # the "server" column of the Lands database (Lands could run multi-server)
   server: server-1
+
+# Most extra chunks one player can buy from the contract NPC (/gouw admin buychunks, on top of the rank limit).
+bonus-max: 100
