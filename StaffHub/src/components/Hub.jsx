@@ -308,6 +308,23 @@ useEffect(() => {
     const a = document.createElement('a');
     a.href = '/api/file/' + n.id; a.download = n.name; document.body.appendChild(a); a.click(); a.remove();
   }
+  function klik(href, naam) {
+    const a = document.createElement('a');
+    a.href = href; a.download = naam || ''; document.body.appendChild(a); a.click(); a.remove();
+  }
+  const dlZip = (ids, naam) => klik('/api/zip?ids=' + ids.join(',') + (naam ? '&name=' + encodeURIComponent(naam) : ''), '');
+  // PDF: de pagina in een onzichtbaar frame laden en het afdrukvenster openen (daar kies je "Opslaan als PDF").
+  async function pdfPagina(n) {
+    try {
+      const r = await fetch('/api/page/' + n.id + '?fmt=html');
+      if (!r.ok) throw new Error('x');
+      const f = document.createElement('iframe');
+      f.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0';
+      f.srcdoc = await r.text();
+      f.onload = () => { try { f.contentWindow.focus(); f.contentWindow.print(); } catch { setErr(t('err.failed')); } setTimeout(() => f.remove(), 60000); };
+      document.body.appendChild(f);
+    } catch { setErr(t('err.failed')); }
+  }
   function openMenu(e, n) {
     e.preventDefault(); e.stopPropagation();
     const meerdere = n && aan.size > 1 && aan.has(n.id);
@@ -319,6 +336,7 @@ useEffect(() => {
         kan('upload') && { label: hoofd(t('btn.upload')), icon: <Upload className="size-4" />, onClick: () => upRef.current?.click() },
         { sep: true },
         { label: hoofd(t('tip.selectAll')), icon: <CheckSquare className="size-4" />, onClick: allesSel, disabled: !(stuk.length) },
+        parent && { label: t('cm.dlZipHere'), icon: <Download className="size-4" />, onClick: () => dlZip([parent]) },
         { label: t('cm.refresh'), icon: <RefreshCw className="size-4" />, onClick: () => { refresh(); verversTon(); } },
       ].filter(Boolean);
       if (isTon && kan('purge') && kids.length > 0) items.push({ sep: true }, { label: t('btn.lege'), icon: <Trash2 className="size-4" />, danger: true, onClick: legeTon });
@@ -326,6 +344,7 @@ useEffect(() => {
       const ids = [...aan];
       items = [
         { label: t('sel.n', { n: ids.length }), disabled: true },
+        { label: t('cm.dlZipSel'), icon: <Download className="size-4" />, onClick: () => dlZip(ids) },
         { sep: true },
         kan('move') && { label: t('btn.moveSel'), icon: <MoveRight className="size-4" />, onClick: () => setMoveFrom({ ids, name: t('sel.n', { n: ids.length }) }) },
         isTon
@@ -339,6 +358,10 @@ useEffect(() => {
       items = [
         { label: t('cm.open'), icon: isMap ? <FolderOpen className="size-4" /> : <FileText className="size-4" />, onClick: () => (moveFrom ? null : isMap ? setParent(n.id) : setSel(n)) },
         n.type === 'file' && { label: hoofd(t('tip.download')), icon: <Download className="size-4" />, onClick: () => downloadNode(n) },
+        n.type === 'page' && { label: t('cm.dlMd'), icon: <Download className="size-4" />, onClick: () => klik('/api/page/' + n.id + '?fmt=md') },
+        n.type === 'page' && { label: t('cm.dlHtml'), icon: <Download className="size-4" />, onClick: () => klik('/api/page/' + n.id + '?fmt=html') },
+        n.type === 'page' && { label: t('cm.dlPdf'), icon: <FileText className="size-4" />, onClick: () => pdfPagina(n) },
+        isMap && { label: t('cm.dlZip'), icon: <Download className="size-4" />, onClick: () => dlZip([n.id]) },
         { label: t('cm.link'), icon: <Link2 className="size-4" />, onClick: () => kopieerLink(n) },
         { sep: true },
         kan('move') && { label: hoofd(t('tip.rename')), icon: <Pencil className="size-4" />, onClick: () => rename(n) },

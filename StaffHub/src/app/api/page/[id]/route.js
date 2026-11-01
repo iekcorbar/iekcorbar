@@ -43,7 +43,7 @@ export async function GET(req, { params }) {
     const bestandsnaam = schoon + (gekozen ? '-' + gekozen : '') + (fmt === 'md' ? '.md' : '.html');
     const body = fmt === 'md'
       ? htmlToMd(html)
-      : `<!doctype html><html lang="${gekozen || 'nl'}"><head><meta charset="utf-8"><title>${encodeURIComponent(n.name)}</title>` +
+      : `<!doctype html><html lang="${gekozen || 'nl'}"><head><meta charset="utf-8"><title>${String(n.name).replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))}</title>` +
         `<style>body{font:15px/1.6 system-ui;max-width:46rem;margin:3rem auto;padding:0 1rem;color:#1b1b1b}img{max-width:100%}</style>` +
         `</head><body>${html}</body></html>`;
     return new Response(body, {
