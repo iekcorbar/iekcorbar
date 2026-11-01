@@ -21,7 +21,7 @@ spawning:
 # biome soundscapes around players who are outdoors (birds, crickets, frogs, gulls, cicadas, wind);
 # played in the Ambient/Environment volume category, so players can turn them down themselves
 ambience:
-  enabled: true
+  enabled: false
   volume: 0.6
 
 # per species: enabled (true/false) and spawn weight among the species of a biome
