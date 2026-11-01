@@ -167,9 +167,25 @@ def music_ogg():
             return f.read()
 
 
+def silence_ogg():
+    """1 s stilte: vanilla-muziekevents verwijzen hiernaartoe, zodat vanilla niets meer speelt.
+    Onze eigen timer (Skript iekcorbar_music.sk) speelt iekcorbar:music.overworld."""
+    with tempfile.TemporaryDirectory() as td:
+        out = os.path.join(td, "silence.ogg")
+        subprocess.run([FFMPEG, "-v", "error", "-y", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo",
+                        "-t", "1", "-c:a", "libvorbis", "-q:a", "0", out], check=True)
+        with open(out, "rb") as f:
+            return f.read()
+
+
 def music_sounds_json():
-    entry = {"replace": True, "sounds": [{"name": "iekcorbar:music/overworld", "stream": True}]}
+    entry = {"replace": True, "sounds": [{"name": "iekcorbar:music/silence", "stream": True}]}
     return {ev: entry for ev in MUSIC_EVENTS}
+
+
+def own_sounds_json():
+    return {"music.overworld": {"sounds": [{"name": "iekcorbar:music/overworld", "stream": True}],
+                                "subtitle": ""}}
 
 
 def main():
@@ -184,6 +200,8 @@ def main():
         z.writestr("assets/minecraft/items/written_book.json", json.dumps(item_def(), indent=1))
         if os.path.exists(MUSIC_SRC):
             z.writestr("assets/iekcorbar/sounds/music/overworld.ogg", music_ogg())
+            z.writestr("assets/iekcorbar/sounds/music/silence.ogg", silence_ogg())
+            z.writestr("assets/iekcorbar/sounds.json", json.dumps(own_sounds_json(), indent=1))
             z.writestr("assets/minecraft/sounds.json", json.dumps(music_sounds_json(), indent=1))
     print("wrote", OUT, os.path.getsize(OUT), "bytes")
 

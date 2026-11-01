@@ -1,0 +1,25 @@
+# iekcorbar - globale overworld-muziek op eigen timer (1-11).
+# Vanilla-muziekevents zijn in het pack stil gezet (Core-pack, scripts/make_core_pack.py);
+# dit script speelt iekcorbar:music.overworld: eerste keer 20 s na join/wereldwissel,
+# daarna steeds 2-3 minuten NA afloop van het nummer (223 s).
+
+options:
+	world: "iekcorbarSeason2"
+	length: 223
+
+every 10 seconds:
+	loop all players:
+		if name of world of loop-player is {@world}:
+			if {music::next::%uuid of loop-player%} is not set:
+				set {music::next::%uuid of loop-player%} to now
+				add 20 seconds to {music::next::%uuid of loop-player%}
+			if now is after {music::next::%uuid of loop-player%}:
+				play sound "iekcorbar:music.overworld" in the music category with volume 1 to loop-player
+				set {_gap} to a random integer between 120 and 180
+				set {music::next::%uuid of loop-player%} to now
+				add ({@length} + {_gap}) seconds to {music::next::%uuid of loop-player%}
+		else:
+			delete {music::next::%uuid of loop-player%}
+
+on quit:
+	delete {music::next::%uuid of player%}
