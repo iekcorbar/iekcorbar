@@ -128,11 +128,10 @@ class Bone:
         self.cubes, self.children = [], []
 
 
-def _fit(axis, v, wide=False):
+def _fit(axis, v, wide=True):
     """Clamp to the 26.2 item-model limit. The export adds 8 to x and z (P = c + 8), so the real raw
-    limit is -24..24 there and -16..32 on y. Only wide=True (the dragon) uses that; every other model
-    keeps the old -16..32 on all axes so already-deployed models stay byte-identical (it squashes the
-    far end of long animals - bear, elephant, orca, zebra... - a known quirk, left alone on purpose)."""
+    limit is -24..24 there and -16..32 on y. Used for every model (before 2026-11-01 only the dragon;
+    the old -16..32 on all axes squashed the far end of long animals and let other ends overshoot)."""
     if wide and axis != 1:
         return max(-24.0, min(24.0, v))
     return max(-16.0, min(32.0, v))
@@ -355,9 +354,9 @@ class Model:
             return
         for e in self.elements:
             for key in ("from", "to", "origin"):
-                e[key] = [round(_fit(i, v * k, self.name.startswith("wl_dragon_") or self.name == "wl_dragon"), 3) for i, v in enumerate(e[key])]
+                e[key] = [round(_fit(i, v * k, True), 3) for i, v in enumerate(e[key])]
         for b in self.bones.values():
-            b.origin = [_fit(i, v * k, self.name.startswith("wl_dragon_") or self.name == "wl_dragon") for i, v in enumerate(b.origin)]
+            b.origin = [_fit(i, v * k, True) for i, v in enumerate(b.origin)]
         for an in self.anims:
             for ani in an["animators"].values():
                 for kf in ani["keyframes"]:
