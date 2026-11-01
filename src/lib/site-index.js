@@ -15,6 +15,8 @@ export const SITE_PAGES = [
   { href: '/map', title: 'Map', text: 'The live world map.', kw: 'bluemap world location' },
   { href: '/vote', title: 'Vote', text: 'Vote for the server and earn rewards.', kw: 'voting reward' },
   { href: '/shop', title: 'Shop', text: 'Spend yen and coins on kits and items.', kw: 'buy kit crate yen coins gears currency' },
+  { href: '/calendar', title: 'Calendar', text: 'Events, holidays and the seasons of the garden.', kw: 'schedule when date christmas halloween easter season' },
+  { href: '/whats-new', title: "What's new", text: 'The latest changes in plain language.', kw: 'changelog update patch new release' },
   { href: '/events', title: 'Events', text: 'Upcoming events and sign-ups.', kw: 'event signup competition' },
   { href: '/news', title: 'News', text: 'Announcements and what is coming.', kw: 'announcement update upcoming' },
   { href: '/updates', title: 'Updates', text: 'What changed on the server.', kw: 'changelog patch' },
