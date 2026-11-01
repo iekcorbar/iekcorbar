@@ -76,3 +76,7 @@ breeding:
   cooldown-minutes: 5
   # no more babies while this many of the species are already within 32 blocks
   max-near: 10
+
+# Steam Dragon: chance that a new dragon is the Ender look (all-black, violet eyes). Extremely rare on purpose.
+dragon:
+  ender-chance: 0.003

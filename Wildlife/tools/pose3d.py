@@ -18,6 +18,35 @@ CUBES = {e["uuid"]: e for e in M["elements"]}
 ANIMS = {a["name"]: a for a in M.get("animations", [])}
 
 
+def _decode_png(raw):
+    import base64 as b64
+    d = b64.b64decode(raw.split(",", 1)[1])
+    pos, idat, w = 8, b"", 0
+    while pos < len(d):
+        n = struct.unpack(">I", d[pos:pos + 4])[0]
+        t = d[pos + 4:pos + 8]
+        if t == b"IHDR":
+            w, h = struct.unpack(">II", d[pos + 8:pos + 16])
+        if t == b"IDAT":
+            idat += d[pos + 8:pos + 8 + n]
+        pos += 12 + n
+    data, rows, prev, p = zlib.decompress(idat), [], bytes(w * 4), 0
+    for _ in range(h):
+        f, cur = data[p], bytearray(data[p + 1:p + 1 + w * 4])
+        p += 1 + w * 4
+        for i in range(len(cur)):
+            if f == 1 and i >= 4:
+                cur[i] = (cur[i] + cur[i - 4]) & 255
+            elif f == 2:
+                cur[i] = (cur[i] + prev[i]) & 255
+        prev = bytes(cur)
+        rows.append([tuple(cur[i * 4:i * 4 + 3]) for i in range(w)])
+    return rows
+
+
+SKIN = (_decode_png(M["textures"][0]["source"]),) if M["resolution"]["width"] != 128 else None
+
+
 def mul(a, b):
     return [sum(a[i * 3 + k] * b[k * 3 + j] for k in range(3)) for i in range(3) for j in (0, 1, 2)]
 
@@ -111,6 +140,10 @@ def build_bones(view_quads):
 
         def colour(face):
             u, v = e["faces"][face]["uv"][:2]
+            if SKIN:   # painted skin (dragon): average the island's texels
+                u2, v2 = e["faces"][face]["uv"][2:]
+                t = [SKIN[0][y][x] for y in range(int(v), int(v2)) for x in range(int(u), int(u2))]
+                return tuple(sum(c[i] for c in t) // len(t) for i in range(3))
             return PALETTE[NAMES[(int(v) // 8) * 16 + int(u) // 8]]
 
         corners = [(x, y, z) for x in (a[0], b[0]) for y in (a[1], b[1]) for z in (a[2], b[2])]

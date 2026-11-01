@@ -122,7 +122,7 @@ final class Journal implements Listener {
             if (rares.add(id)) {
                 save(p, true, rares);
                 award(p, key(id + "_rare"));
-                p.sendActionBar(Component.text("Rare find: " + a.species.rareName() + "!", NamedTextColor.LIGHT_PURPLE));
+                p.sendActionBar(Component.text("Rare find: " + a.name() + "!", NamedTextColor.LIGHT_PURPLE));
                 p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.7f, 1.4f);
             }
             if (rares.size() >= 1) award(p, key("first_rare"));

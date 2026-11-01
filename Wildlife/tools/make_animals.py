@@ -138,6 +138,86 @@ def _fit(axis, v, wide=False):
     return max(-16.0, min(32.0, v))
 
 
+# ------------------------------------------------------------------ painted skins (dragon only)
+# The palette texture gives every box one flat colour. A model with skin=True gets its own texture
+# instead: every face of every box has its own island, painted by role (scales, riveted plates,
+# veined membrane, glowing eyes ...), so the texture follows the shape of the model.
+SKIN_D = 3   # texels per model pixel
+
+
+def _h(a, b):
+    return ((a * 73856093) ^ (b * 19349663)) % 1000 / 1000.0
+
+
+def _mul(c, k):
+    return tuple(max(0, min(255, int(v * k))) for v in c)
+
+
+def _paint(style, base, w, h, rnd, glow=None, vein=None):
+    """w x h RGBA island for one face. base = (r, g, b)."""
+    px = [[None] * w for _ in range(h)]
+    for y in range(h):
+        for x in range(w):
+            n = rnd.randint(-3, 3)
+            if style == "scale":
+                row = y // 3
+                xo = x + (2 if row % 2 else 0)
+                sx, lx, ly = xo // 4, xo % 4, y % 3
+                k = 0.86 + 0.26 * _h(row, sx)
+                if ly == 2:
+                    k *= 0.72
+                elif lx == 3:
+                    k *= 0.84
+                elif ly == 0 and lx in (1, 2):
+                    k *= 1.15
+                c = _mul(base, k)
+            elif style in ("plate", "ridge"):
+                edge = x % 8 == 0 or y % 6 == 0
+                rivet = x % 8 == 2 and y % 6 == 2 and w > 5 and h > 4
+                k = 0.7 if edge else (1.32 if rivet else 0.96 + 0.08 * _h(y, 7) + (0.05 if style == "ridge" else 0))
+                c = _mul(base, k)
+            elif style == "membrane":
+                v = (x + y // 2) % 7 == 0
+                c = _mul(base, 1.0 + 0.1 * math.sin((x + y) * 0.7))
+                if v:
+                    c = vein if vein else _mul(base, 0.62)
+            elif style == "glow":
+                gr = glow if glow else _mul(base, 1.25)
+                cx, cy = (w - 1) / 2.0, (h - 1) / 2.0
+                d = math.hypot((x - cx) / max(1.0, w / 2.0), (y - cy) / max(1.0, h / 2.0))
+                c = _mul(gr, 1.25 - 0.45 * min(1.0, d))
+            elif style == "ivory":
+                c = _mul(base, 1.1 - 0.35 * (y / max(1, h - 1)) + (0.04 if x % 3 == 0 else 0))
+            elif style == "leather":
+                c = _mul(base, 0.9 + 0.1 * _h(x, y))
+                if y % 5 == 0 and x % 3 != 0:
+                    c = _mul(base, 1.35)
+            else:
+                c = base
+            px[y][x] = (max(0, min(255, c[0] + n)), max(0, min(255, c[1] + n)), max(0, min(255, c[2] + n)), 255)
+    return px
+
+
+def _pack(sizes):
+    """Shelf-pack (w, h) islands (1 texel gutter) into the smallest power-of-two square. -> (size, [(x, y)])."""
+    order = sorted(range(len(sizes)), key=lambda i: (-sizes[i][1], -sizes[i][0]))
+    for side in (128, 256, 512, 1024):
+        pos, x, y, rowh, ok = [None] * len(sizes), 0, 0, 0, True
+        for i in order:
+            w, h = sizes[i]
+            if x + w + 1 > side:
+                x, y, rowh = 0, y + rowh + 1, 0
+            if y + h + 1 > side:
+                ok = False
+                break
+            pos[i] = (x, y)
+            x += w + 1
+            rowh = max(rowh, h)
+        if ok:
+            return side, pos
+    raise AssertionError("skin atlas too big")
+
+
 class Model:
     def __init__(self, name, recolor=None):
         self.name = name
@@ -145,6 +225,8 @@ class Model:
         self.roots, self.bones, self.elements = [], {}, []
         self.anims = []
         self.baby = name.endswith("_baby")
+        self.skin, self.style, self.tint = False, "scale", (0, 0, 0)
+        self.glow_rgb = self.vein_rgb = None
 
     def bone(self, name, origin, parent=None):
         b = Bone(name, origin)
@@ -169,6 +251,8 @@ class Model:
              "autouv": 0, "color": 0, "origin": self.bones[bone].origin, "rotation": [0, 0, 0],
              "faces": {f: {"uv": cell(col), "texture": 0} for f in ("north", "east", "south", "west", "up", "down")},
              "type": "cube", "uuid": U()}
+        if self.skin:
+            e["_style"] = self.style
         self.elements.append(e)
         self.bones[bone].cubes.append(e["uuid"])
 
@@ -250,6 +334,9 @@ class Model:
             e["from"] = [round(min(x, y), 3) for x, y in zip(a, b)]
             e["to"] = [round(max(x, y), 3) for x, y in zip(a, b)]
             e["origin"] = [round(v, 3) for v in t(e["origin"])]
+            if self.skin:   # (x, z) -> (z, -x): north->west, south->east, east->north, west->south
+                mp = {"north": "west", "south": "east", "east": "north", "west": "south", "up": "up", "down": "down"}
+                e["faces"] = {mp[k]: v for k, v in e["faces"].items()}
         for bn in self.bones.values():
             bn.origin = t(bn.origin)
         for an in self.anims:
@@ -279,21 +366,48 @@ class Model:
                             for ax in "xyz":
                                 dp[ax] = str(round(max(-16.0, min(32.0, float(dp[ax]) * k)), 2))
 
+    def skinned(self):
+        """Paint the model's own texture (skin=True): one island per face, sized from the final geometry."""
+        faces, sizes = [], []
+        for e in self.elements:
+            d = [e["to"][i] - e["from"][i] for i in range(3)]
+            dims = {"north": (d[0], d[1]), "south": (d[0], d[1]), "east": (d[2], d[1]), "west": (d[2], d[1]),
+                    "up": (d[0], d[2]), "down": (d[0], d[2])}
+            for f, (a, b) in dims.items():
+                faces.append((e, f))
+                sizes.append((max(2, int(round(a * SKIN_D))), max(2, int(round(b * SKIN_D)))))
+        side, pos = _pack(sizes)
+        px = [[(0, 0, 0, 0)] * side for _ in range(side)]
+        for (e, f), (w, h), (x0, y0) in zip(faces, sizes, pos):
+            style = e.get("_style", "scale")
+            base = PALETTE[e["name"]]
+            if style in ("scale", "plate", "ridge", "membrane"):
+                base = tuple(max(0, min(255, base[i] + self.tint[i])) for i in range(3))
+            rnd = random.Random(zlib.crc32((e["uuid"] + f).encode()))
+            isl = _paint(style, base, w, h, rnd, self.glow_rgb, self.vein_rgb)
+            for y in range(h):
+                px[y0 + y][x0:x0 + w] = isl[y]
+            e["faces"][f]["uv"] = [x0, y0, x0 + w, y0 + h]
+        for e in self.elements:
+            e.pop("_style", None)
+        return "data:image/png;base64," + base64.b64encode(png(px)).decode(), side
+
     def bbmodel(self):
         self.chibi()
         self.oriented()
         self.scaled()
         self.oriented = self.scaled = lambda: None
+        tex, res = self.skinned() if self.skin else (TEX, RES)
         return {"meta": {"format_version": "4.9", "model_format": "free", "box_uv": False},
                 "name": self.name, "model_identifier": "", "visible_box": [1, 1, 0], "variable_placeholders": "",
                 "variable_placeholder_buttons": [], "timeline_setups": [], "unhandled_root_fields": {},
-                "resolution": {"width": RES, "height": RES}, "elements": self.elements,
+                "resolution": {"width": res, "height": res}, "elements": self.elements,
                 "outliner": [self.outline(b) for b in self.roots],
-                "textures": [{"path": "", "name": "wildlife.png", "folder": "", "namespace": "", "id": "0", "width": RES,
-                              "height": RES, "uv_width": RES, "uv_height": RES, "particle": False, "render_mode": "default",
+                "textures": [{"path": "", "name": "wildlife.png", "folder": "", "namespace": "", "id": "0", "width": res,
+                              "height": res, "uv_width": res, "uv_height": res, "particle": False, "render_mode": "default",
                               "render_sides": "auto", "frame_time": 1, "frame_order_type": "loop", "frame_order": "",
                               "frame_interpolate": False, "visible": True, "internal": True, "saved": False, "uuid": U(),
-                              "relative_path": "", "source": TEX}],
+                              "relative_path": "", "source": tex}],
                 "animations": self.anims}
 
 
@@ -1423,7 +1537,7 @@ def wraith(m):
 # ------------------------------------------------------------------ steam dragons (0.8.0)
 
 def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
-           glow="dragon_furnace", spine="dragon_copper"):
+           glow="dragon_furnace", spine="dragon_copper", ender=False):
     """Steam dragon built on the vanilla Ender Dragon's proportions (boxy body, cube neck, lip + jaw,
     arm-and-sheet wings, short legs; slightly modified: furnace glow, saddle, horns). Older notes follow.
     Steampunk dragon, ~2.8 m snout-to-tail, ~3 m across the wings, drawn 16 px = 1 m with
@@ -1442,38 +1556,61 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
     flared), death (one flare, then the frame tips and the furnace goes out)."""
     # ---- torso: the vanilla Ender Dragon's boxy 24x24x64 body (drawn at 1/4: 6x6x16), a belly
     # plate, three dorsal spikes and a glowing furnace strip under the ribs (our one addition)
+    m.skin = True   # painted skin: scales on the hide, riveted plates, veined membrane, glowing eyes
+    if ender:       # the End look: near-black hide with a violet sheen, violet eyes and veins
+        m.tint, m.glow_rgb, m.vein_rgb = (14, 0, 20), (230, 80, 255), (130, 50, 185)
+    m.style = "scale"
     m.bone("body", (0, 14.0, 0))
     m.box("body", -3.0, 11.0, -8.0, 3.0, 17.0, 8.0, col)          # the body block
+    m.style = "plate"
     m.box("body", -2.0, 10.6, -7.4, 2.0, 11.2, 7.4, plate)        # belly plate
+    m.style = "glow"
     m.sym("body", 3.0, 12.2, -6.4, 3.14, 15.4, -3.0, glow)        # furnace glow behind the ribs
+    m.style = "plate"
     m.sym("body", 3.1, 12.2, -5.2, 3.24, 15.4, -4.8, plate)       # ... and its grate bar
+    m.style = "ridge"
     for z in (-7.4, 5.0, 7.0):                                    # the three vanilla spikes
         m.box("body", -0.3, 17.0, z, 0.3, 18.6, z + 2.2, spine)
     # ---- neck: three cubes climbing forward, a small spike on each (vanilla: five of 10 px)
     m.bone("neck", (0, 16.8, -8.0), "body")
     for z, y in ((-9.4, 17.0), (-11.5, 18.2), (-13.5, 19.1)):
+        m.style = "scale"
         m.box("neck", -1.3, y - 1.3, z - 1.3, 1.3, y + 1.3, z + 1.3, col)
+        m.style = "ridge"
         m.box("neck", -0.3, y + 1.3, z - 0.6, 0.3, y + 2.2, z + 0.9, spine)
     # ---- head: the big cube skull with the long upper lip, jaw below, horns on top
     m.bone("h_head", (0, 19.4, -14.6), "neck")
+    m.style = "scale"
     m.box("h_head", -2.0, 18.2, -18.6, 2.0, 22.2, -14.6, col)     # upper head
     m.box("h_head", -1.5, 18.2, -21.0, 1.5, 19.5, -18.6, col)     # upper lip (snout)
+    m.style = "plate"
     m.sym("h_head", 0.5, 19.5, -20.8, 0.9, 20.0, -19.8, plate)    # nostrils
+    m.style = "ridge"
     m.sym("h_head", 1.0, 22.2, -17.4, 1.6, 23.4, -15.6, spine)    # vanilla head spikes
     m.sym("h_head", 1.2, 21.6, -15.0, 1.7, 24.0, -13.6, plate)    # swept-back horns
+    m.style = "glow"
     m.sym("h_head", 2.0, 20.4, -17.6, 2.14, 21.4, -16.2, glow)    # eyes
+    m.style = "plate"
     m.bone("jaw", (0, 18.2, -15.2), "h_head")
     m.box("jaw", -1.5, 17.0, -19.8, 1.5, 18.2, -15.2, plate)
+    m.style = "ivory"
     m.sym("jaw", 0.6, 18.2, -19.4, 0.9, 19.0, -18.8, "fur_cream")  # fangs
+    m.style = "scale"
     # ---- tail: four tapering cubes with a spike each (vanilla: twelve, shortened)
     m.bone("tail", (0, 14.6, 7.6), "body")
     m.box("tail", -1.4, 13.2, 7.6, 1.4, 15.9, 10.6, col)
+    m.style = "ridge"
     m.box("tail", -0.3, 15.9, 8.4, 0.3, 16.9, 9.8, spine)
+    m.style = "scale"
     m.bone("tail_t", (0, 14.4, 10.6), "tail")
     m.box("tail_t", -1.2, 12.8, 10.6, 1.2, 15.2, 13.4, col)
+    m.style = "ridge"
     m.box("tail_t", -0.3, 15.2, 11.2, 0.3, 16.1, 12.4, spine)
+    m.style = "scale"
     m.box("tail_t", -1.0, 12.2, 13.4, 1.0, 14.4, 16.0, col + "_d")
+    m.style = "ridge"
     m.box("tail_t", -0.3, 14.4, 14.0, 0.3, 15.2, 15.2, spine)
+    m.style = "scale"
     m.box("tail_t", -0.8, 11.6, 16.0, 0.8, 13.4, 18.4, col + "_d")   # the tip
     # ---- wings: vanilla layout, a bone arm on the leading edge with a flat membrane sheet behind
     # it, then a second arm + sheet on the wing tip (bones at 0.15 so the span stays ~3 blocks)
@@ -1481,28 +1618,42 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
         m.bone(name, (sx * 3.0, 16.4, -3.6), "body")
         m.bone(name + "_t", (sx * 11.6, 16.4, -3.6), name)
         m.box(name, sx * 2.9, 15.6, -4.4, sx * 11.6, 17.2, -2.8, col)            # arm
+        m.style = "membrane"
         m.box(name, sx * 3.2, 16.1, -2.8, sx * 11.6, 16.45, 5.6, memb)           # membrane
+        m.style = "ivory"
         m.box(name, sx * 11.0, 15.8, -5.6, sx * 11.9, 17.0, -4.4, "fur_cream")   # wrist claw
+        m.style = "scale"
         m.box(name + "_t", sx * 11.6, 15.7, -4.3, sx * 20.0, 17.1, -2.9, col)    # tip arm
+        m.style = "membrane"
         m.box(name + "_t", sx * 11.6, 16.1, -2.9, sx * 20.0, 16.45, 6.4, memb)   # tip membrane
+        m.style = "scale"
     # ---- legs: short vanilla legs - front: thigh, shin, flat foot; hind: bigger thigh/shin/foot
     for name, x, z in (("leg_fl", 3.5, -5.4), ("leg_fr", -3.5, -5.4)):
         m.bone(name, (x, 12.2, z), "body")
         m.bone(name + "_l", (x, 6.6, z), name)
         m.box(name, x - 1.1, 6.4, z - 1.1, x + 1.1, 12.4, z + 1.1, col)
         m.box(name + "_l", x - 0.9, 1.0, z - 0.9, x + 0.9, 6.8, z + 0.9, col + "_d")
+        m.style = "plate"
         m.box(name + "_l", x - 1.1, 0.0, z - 3.0, x + 1.1, 1.2, z + 1.0, plate)  # foot
+        m.style = "ivory"
         m.box(name + "_l", x - 0.9, 0.0, z - 3.6, x + 0.9, 0.9, z - 3.0, "fur_cream")  # claws
+        m.style = "scale"
     for name, x, z in (("leg_bl", 3.8, 5.4), ("leg_br", -3.8, 5.4)):
         m.bone(name, (x, 12.6, z), "body")
         m.bone(name + "_l", (x + 0.2, 6.2, z + 0.4), name)
         m.box(name, x - 2.0, 6.0, z - 2.0, x + 2.0, 12.8, z + 2.0, col)
         m.box(name + "_l", x - 1.6, 1.4, z - 1.2, x + 1.8, 6.6, z + 2.0, col + "_d")
+        m.style = "plate"
         m.box(name + "_l", x - 2.2, 0.0, z - 3.4, x + 2.2, 1.6, z + 2.4, plate)  # foot
+        m.style = "ivory"
         m.box(name + "_l", x - 2.0, 0.0, z - 4.2, x + 2.0, 1.1, z - 3.4, "fur_cream")  # claws
+        m.style = "scale"
     # ---- saddle between the spikes: brass side rails, a spine backrest, a leather seat, and the mount bone
+    m.style = "plate"
     m.sym("body", 2.6, 17.0, -4.4, 3.0, 17.8, 3.4, plate)
+    m.style = "ridge"
     m.box("body", -1.2, 17.0, -5.4, 1.2, 18.9, -4.2, spine)       # backrest
+    m.style = "leather"
     m.box("body", -1.9, 16.9, -4.2, 1.9, 17.5, 3.2, "fur_brown")  # leather seat
     m.bone("m_seat", (0, 18.2, -0.4), "body")                     # FMM mounts riders here
     # ---------------------------------------------------------------- animations
@@ -1667,6 +1818,8 @@ EXTRA = [  # more common looks of a species (chosen at random by the plugin)
                               "glow": "dragon_furnace", "spine": "gold"}),              # lacquered barrel, gold ridge
     ("dragon_verdigris", dragon, {"col": "dragon_verdigris", "plate": "dragon_copper", "memb": "dragon_verdigris_d",
                                   "glow": "dragon_furnace", "spine": "dragon_copper"}),  # the oldest copper of all
+    ("dragon_ender", dragon, {"col": "fur_black", "plate": "fur_black", "memb": "fur_black_d", "glow": "eye_red",
+                              "spine": "fur_black_d", "ender": True}),                   # the End look: extremely rare
 ]
 
 # Solo creatures (0.7.0): custom mobs that are NOT animals. Deliberately outside SPECIES and

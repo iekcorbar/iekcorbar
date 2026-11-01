@@ -86,6 +86,7 @@ final class Animals implements Listener {
         }
 
         String name() {
+            if (species == Species.DRAGON && model != null && model.startsWith("wl_dragon_ender")) return "Ender Dragon";
             return rare ? species.rareName() : species.displayName;
         }
     }
@@ -131,10 +132,13 @@ final class Animals implements Listener {
     Animal spawn(Species s, Location at, boolean rare, boolean baby, String look) {
         // custom creatures are decoration, not animals: there is no _rare and no _baby model,
         // so those flags are off before anything can ask FreeMinecraftModels for them
-        final boolean isRare = rare && s.animal();
+        // the Ender look: an extremely rare Steam Dragon (config dragon.ender-chance, default 0.3%); it counts as rare
+        final boolean ender = s == Species.DRAGON && look == null && !baby
+                && ThreadLocalRandom.current().nextDouble() < plugin.getConfig().getDouble("dragon.ender-chance", 0.003);
+        final boolean isRare = (rare && s.animal()) || ender;
         final boolean isBaby = baby && s.animal();
         List<String> looks = s.models();
-        String adult = look != null ? look : isRare ? s.rareModel() : looks.get(ThreadLocalRandom.current().nextInt(looks.size()));
+        String adult = look != null ? look : ender ? "wl_dragon_ender" : isRare ? s.rareModel() : looks.get(ThreadLocalRandom.current().nextInt(looks.size()));
         String model = isBaby ? adult + "_baby" : adult;
         Entity e = at.getWorld().spawnEntity(at, s.base, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.CUSTOM, en -> {
             PersistentDataContainer pdc = en.getPersistentDataContainer();
