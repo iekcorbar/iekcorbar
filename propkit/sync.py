@@ -9,13 +9,14 @@ TARGETS = {
     "Kitchen": ("com.iekcorbar.kitchen", "kitchendecor"),
     "Hihou": ("com.iekcorbar.hihou", "hihou"),
     "SteamworksAdditions": ("com.iekcorbar.additions", "additions"),
+    "Atelier": ("com.iekcorbar.atelier", "atelier"),
 }
 here = os.path.dirname(os.path.abspath(__file__))
 # Adv.java (advancement helper) goes into every plugin that shows advancements
 ADV = {
     "Steamworks": "com.iekcorbar.steamworks", "Kitchen": "com.iekcorbar.kitchen", "Wildlife": "com.iekcorbar.wildlife",
     "Relics": "com.iekcorbar.relics", "Sakagura": "com.iekcorbar.sakagura", "Kura": "com.iekcorbar.kura",
-    "Zukan": "com.iekcorbar.zukan", "Satchel": "com.iekcorbar.satchel", "SteamworksAdditions": "com.iekcorbar.additions",
+    "Zukan": "com.iekcorbar.zukan", "Satchel": "com.iekcorbar.satchel", "SteamworksAdditions": "com.iekcorbar.additions", "Atelier": "com.iekcorbar.atelier",
 }
 for plugin, pkg in ADV.items():
     out = os.path.join(here, "..", plugin, "src", "main", "java", *pkg.split("."))

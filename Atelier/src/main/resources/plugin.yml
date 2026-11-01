@@ -1,0 +1,18 @@
+name: Atelier
+version: '${project.version}'
+main: com.iekcorbar.atelier.AtelierPlugin
+api-version: '26.2'
+softdepend: [Gouw, Zukan]
+description: Doors and fences in every wood, as placeable props.
+author: iekcorbar
+
+commands:
+  atelier:
+    description: Atelier commands
+    usage: /atelier <list|give|giveall>
+    aliases: [atl]
+
+permissions:
+  atelier.admin:
+    description: Give Atelier pieces
+    default: op

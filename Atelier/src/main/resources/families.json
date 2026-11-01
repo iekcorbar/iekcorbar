@@ -1,0 +1,206 @@
+[
+ {
+  "family": "japanese_door",
+  "kind": "door",
+  "label": "Japanese Door",
+  "items": [
+   {
+    "id": "oak_japanese_door",
+    "wood": "oak"
+   },
+   {
+    "id": "spruce_japanese_door",
+    "wood": "spruce"
+   },
+   {
+    "id": "birch_japanese_door",
+    "wood": "birch"
+   },
+   {
+    "id": "jungle_japanese_door",
+    "wood": "jungle"
+   },
+   {
+    "id": "acacia_japanese_door",
+    "wood": "acacia"
+   },
+   {
+    "id": "dark_oak_japanese_door",
+    "wood": "dark_oak"
+   },
+   {
+    "id": "cherry_japanese_door",
+    "wood": "cherry"
+   },
+   {
+    "id": "mangrove_japanese_door",
+    "wood": "mangrove"
+   },
+   {
+    "id": "bamboo_japanese_door",
+    "wood": "bamboo"
+   },
+   {
+    "id": "crimson_japanese_door",
+    "wood": "crimson"
+   },
+   {
+    "id": "warped_japanese_door",
+    "wood": "warped"
+   }
+  ]
+ },
+ {
+  "family": "japanese2_door",
+  "kind": "door",
+  "label": "Japanese Door II",
+  "items": [
+   {
+    "id": "oak_japanese2_door",
+    "wood": "oak"
+   },
+   {
+    "id": "spruce_japanese2_door",
+    "wood": "spruce"
+   },
+   {
+    "id": "birch_japanese2_door",
+    "wood": "birch"
+   },
+   {
+    "id": "jungle_japanese2_door",
+    "wood": "jungle"
+   },
+   {
+    "id": "acacia_japanese2_door",
+    "wood": "acacia"
+   },
+   {
+    "id": "dark_oak_japanese2_door",
+    "wood": "dark_oak"
+   },
+   {
+    "id": "cherry_japanese2_door",
+    "wood": "cherry"
+   },
+   {
+    "id": "mangrove_japanese2_door",
+    "wood": "mangrove"
+   },
+   {
+    "id": "bamboo_japanese2_door",
+    "wood": "bamboo"
+   },
+   {
+    "id": "crimson_japanese2_door",
+    "wood": "crimson"
+   },
+   {
+    "id": "warped_japanese2_door",
+    "wood": "warped"
+   }
+  ]
+ },
+ {
+  "family": "picket_fence",
+  "kind": "fence",
+  "label": "Picket Fence",
+  "items": [
+   {
+    "id": "oak_picket_fence",
+    "wood": "oak"
+   },
+   {
+    "id": "spruce_picket_fence",
+    "wood": "spruce"
+   },
+   {
+    "id": "birch_picket_fence",
+    "wood": "birch"
+   },
+   {
+    "id": "jungle_picket_fence",
+    "wood": "jungle"
+   },
+   {
+    "id": "acacia_picket_fence",
+    "wood": "acacia"
+   },
+   {
+    "id": "dark_oak_picket_fence",
+    "wood": "dark_oak"
+   },
+   {
+    "id": "cherry_picket_fence",
+    "wood": "cherry"
+   },
+   {
+    "id": "mangrove_picket_fence",
+    "wood": "mangrove"
+   },
+   {
+    "id": "bamboo_picket_fence",
+    "wood": "bamboo"
+   },
+   {
+    "id": "crimson_picket_fence",
+    "wood": "crimson"
+   },
+   {
+    "id": "warped_picket_fence",
+    "wood": "warped"
+   }
+  ]
+ },
+ {
+  "family": "stockade_fence",
+  "kind": "fence",
+  "label": "Stockade Fence",
+  "items": [
+   {
+    "id": "oak_stockade_fence",
+    "wood": "oak"
+   },
+   {
+    "id": "spruce_stockade_fence",
+    "wood": "spruce"
+   },
+   {
+    "id": "birch_stockade_fence",
+    "wood": "birch"
+   },
+   {
+    "id": "jungle_stockade_fence",
+    "wood": "jungle"
+   },
+   {
+    "id": "acacia_stockade_fence",
+    "wood": "acacia"
+   },
+   {
+    "id": "dark_oak_stockade_fence",
+    "wood": "dark_oak"
+   },
+   {
+    "id": "cherry_stockade_fence",
+    "wood": "cherry"
+   },
+   {
+    "id": "mangrove_stockade_fence",
+    "wood": "mangrove"
+   },
+   {
+    "id": "bamboo_stockade_fence",
+    "wood": "bamboo"
+   },
+   {
+    "id": "crimson_stockade_fence",
+    "wood": "crimson"
+   },
+   {
+    "id": "warped_stockade_fence",
+    "wood": "warped"
+   }
+  ]
+ }
+]
