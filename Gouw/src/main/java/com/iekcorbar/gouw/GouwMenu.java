@@ -98,7 +98,7 @@ final class GouwMenu implements Listener {
         Inventory inv = h.inv;
         panes(inv);
         Land l = store.landOf(p.getUniqueId());
-        int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks();
+        int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks(p);
         inv.setItem(LAND, icon(l == null ? Material.OAK_SIGN : Material.GOLD_NUGGET, "Your gouw", NamedTextColor.GOLD,
                 l == null ? "Claim your first chunk below." : "Chunks: " + l.chunks.size() + (max == Integer.MAX_VALUE ? "" : " / " + max),
                 l == null ? "-" : "World: " + l.world,

@@ -2,6 +2,7 @@
 
 # How many chunks one player may claim. Staff with gouw.admin: unlimited.
 max-chunks: 16
+# Ranks can raise this: give a group the permission gouw.chunks.<number> (e.g. gouw.chunks.55); the highest wins.
 
 # Action bar when walking into or out of a gouw, plus a particle pulse on the entered chunk's border.
 enter-messages: true

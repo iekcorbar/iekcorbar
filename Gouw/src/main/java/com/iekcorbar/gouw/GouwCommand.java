@@ -115,8 +115,8 @@ final class GouwCommand implements TabExecutor {
                 msg(p, l.name + " - gouw of " + nameOf(l.owner) + " in " + l.world, NamedTextColor.GOLD);
                 msg(p, " " + l.chunks.size() + " chunk(s), " + l.trusted.size() + " trusted - you are " + (l.owner.equals(p.getUniqueId()) ? "the owner" : l.trusted.contains(p.getUniqueId()) ? "a trusted member" : "a stranger") + ".", NamedTextColor.GRAY);
                 if (l.owner.equals(p.getUniqueId())) {
-                    int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks();
-                    if (max != Integer.MAX_VALUE) msg(p, " Space left: " + (max - l.chunks.size()) + " chunk(s) (config max-chunks " + max + ").", NamedTextColor.DARK_GRAY);
+                    int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks(p);
+                    if (max != Integer.MAX_VALUE) msg(p, " Space left: " + (max - l.chunks.size()) + " chunk(s) (limit " + max + ").", NamedTextColor.DARK_GRAY);
                 }
             }
             case "list" -> {

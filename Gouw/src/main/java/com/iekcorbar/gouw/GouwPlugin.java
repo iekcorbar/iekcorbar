@@ -72,6 +72,22 @@ public final class GouwPlugin extends JavaPlugin {
         return Math.max(1, getConfig().getInt("max-chunks", 16));
     }
 
+    /**
+     * Chunk limit for one player: the highest of the config value and any
+     * gouw.chunks.<n> permission node they hold (a rank group in the permission
+     * plugin grants e.g. gouw.chunks.55). No dependency on a specific permission plugin.
+     */
+    public int getMaxChunks(org.bukkit.entity.Player p) {
+        int max = getMaxChunks();
+        for (org.bukkit.permissions.PermissionAttachmentInfo i : p.getEffectivePermissions()) {
+            if (!i.getValue()) continue;
+            String n = i.getPermission();
+            if (!n.startsWith("gouw.chunks.")) continue;
+            try { max = Math.max(max, Integer.parseInt(n.substring(12))); } catch (NumberFormatException ignored) { }
+        }
+        return max;
+    }
+
     public boolean enterMessages() {
         return getConfig().getBoolean("enter-messages", true);
     }

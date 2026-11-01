@@ -165,7 +165,7 @@ final class ClaimStore {
         } else if (!l.world.equals(w.getName())) {
             return "your gouw lies in " + l.world;
         }
-        int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks();
+        int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks(p);
         if (l.chunks.size() >= max) return "you are at your limit of " + max + " chunks";
         addChunk(l, cx, cz);
         save();

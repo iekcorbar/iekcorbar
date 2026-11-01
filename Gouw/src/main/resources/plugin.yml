@@ -1,5 +1,5 @@
 name: Gouw
-version: '0.2.1'
+version: '0.3.0'
 main: com.iekcorbar.gouw.GouwPlugin
 api-version: '26.2'
 description: Chunk land claims - the in-house successor to Lands, and it reads old Lands claims on first start.
@@ -18,6 +18,9 @@ permissions:
   gouw.claim:
     description: Claim chunks for yourself
     default: true
+  gouw.chunks.*:
+    description: 'Chunk limit per rank: grant gouw.chunks.<number> (highest wins, never below config max-chunks)'
+    default: false
   gouw.admin:
     description: Unlimited chunks, delete lands, import, reload
     default: op
