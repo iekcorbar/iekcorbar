@@ -267,11 +267,19 @@ def build(out):
                         b(4, 4, 13, 12, 6, 14, "white")])
 
     # cobblestone path (flat, 1 block)
-    pk.model("path_cobble", [b(0, 0, 0, 16, 1, 16, "stone"), b(1, 1, 1, 5, 1.2, 5, "stone_dark"),
-                             b(6, 1, 2, 10, 1.2, 6, "stone_dark"), b(11, 1, 1, 15, 1.2, 5, "stone_dark"),
-                             b(1, 1, 6, 5, 1.2, 10, "stone_dark"), b(6, 1, 7, 10, 1.2, 11, "stone_dark"),
-                             b(11, 1, 6, 15, 1.2, 10, "stone_dark"), b(1, 1, 11, 5, 1.2, 15, "stone_dark"),
-                             b(6, 1, 12, 10, 1.2, 16, "stone_dark"), b(11, 1, 11, 15, 1.2, 15, "stone_dark")])
+    # The prop joins its neighbours (connect "zoopath"): the plugin asks for path_cobble_<mask>
+    # (N=1 E=2 S=4 W=8), so all 16 models must exist or the tile shows as a missing-texture cube.
+    # A side with a neighbour stays open; a side without one gets a low kerb of dark stone.
+    path_stones = [b(1, 1, 1, 5, 1.2, 5, "stone_dark"), b(6, 1, 2, 10, 1.2, 6, "stone_dark"), b(11, 1, 1, 15, 1.2, 5, "stone_dark"),
+                   b(1, 1, 6, 5, 1.2, 10, "stone_dark"), b(6, 1, 7, 10, 1.2, 11, "stone_dark"), b(11, 1, 6, 15, 1.2, 10, "stone_dark"),
+                   b(1, 1, 11, 5, 1.2, 15, "stone_dark"), b(6, 1, 12, 10, 1.2, 16, "stone_dark"), b(11, 1, 11, 15, 1.2, 15, "stone_dark")]
+    kerb = {0: (0, 1, 0, 16, 1.6, 1), 1: (15, 1, 0, 16, 1.6, 16), 2: (0, 1, 15, 16, 1.6, 16), 3: (0, 1, 0, 1, 1.6, 16)}
+    for mask in range(16):
+        es = [b(0, 0, 0, 16, 1, 16, "stone")] + list(path_stones)
+        for d in range(4):
+            if not mask & (1 << d):
+                es.append(b(*kerb[d], "stone_dark"))
+        pk.model(f"path_cobble_{mask}", es, item=(mask == 0))
 
     # welcome sign (2 tall)
     pk.model("sign_welcome", [b(7, 0, 7, 9, 30, 9, "wood_dark"), b(0, 24, 4, 16, 32, 6, "wood"),
@@ -303,10 +311,16 @@ def build(out):
                            b(5, 24, 2.5, 11, 30, 3.5, "red")])
 
     # brick wall (1 block, connects)
-    pk.model("wall_brick", [b(0, 0, 0, 16, 16, 4, "stone"), b(0, 0, 4, 16, 16, 8, "stone_dark"),
-                            b(2, 2, 0, 6, 6, 4, "clay"), b(7, 2, 0, 11, 6, 4, "clay"), b(12, 2, 0, 16, 6, 4, "clay"),
-                            b(0, 7, 0, 4, 11, 4, "clay"), b(5, 7, 0, 9, 11, 4, "clay"), b(10, 7, 0, 14, 11, 4, "clay"),
-                            b(0, 12, 0, 6, 16, 4, "clay"), b(7, 12, 0, 11, 16, 4, "clay"), b(12, 12, 0, 16, 16, 4, "clay")])
+    # Same story as the path: the plugin asks for wall_brick_<mask> (connect "zoowall"), so a central
+    # post plus a brick arm towards every neighbour, for all 16 masks.
+    wall_arms = {0: (5, 0, 0, 11, 16, 5), 1: (11, 0, 5, 16, 16, 11), 2: (5, 0, 11, 11, 16, 16), 3: (0, 0, 5, 5, 16, 11)}
+    wall_bands = {0: (4.8, 6, 0, 11.2, 10, 5), 1: (11, 6, 4.8, 16, 10, 11.2), 2: (4.8, 6, 11, 11.2, 10, 16), 3: (0, 6, 4.8, 5, 10, 11.2)}
+    for mask in range(16):
+        es = [b(5, 0, 5, 11, 16, 11, "stone_dark"), b(4.5, 16, 4.5, 11.5, 17, 11.5, "stone")]
+        for d in range(4):
+            if mask & (1 << d):
+                es += [b(*wall_arms[d], "stone"), b(*wall_bands[d], "clay")]
+        pk.model(f"wall_brick_{mask}", es, item=(mask == 0))
 
     statues(pk, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "main", "resources", "statues.csv"))
     eggs(pk)
