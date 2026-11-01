@@ -18,6 +18,7 @@ import {
   X, 
   Cog,
   Compass,
+  Search,
   MapPin,
   Heart,
   Users,
@@ -870,6 +871,7 @@ export default function ClientProviders({ children }) {
               <nav className="hidden lg:flex items-center gap-1">
                 {[
                   { href: '/', label: 'Home', icon: Compass, match: (p) => p === '/' },
+                  { href: '/search', label: 'Search', icon: Search, match: (p) => p.startsWith('/search') },
                   { href: '/wiki', label: 'Wiki', icon: BookOpen, match: (p) => p.startsWith('/wiki') },
                   { href: '/members', label: 'Members', icon: Users, match: (p) => p === '/members' },
                 ].map(({ href, label, icon: Icon, match }) => (
@@ -1069,6 +1071,7 @@ export default function ClientProviders({ children }) {
               <span className="block text-[10px] uppercase font-bold text-sp-gold/80 tracking-widest px-2 pt-1 pb-0.5">Navigation</span>
               {[
                 { href: '/', label: 'Home', icon: Compass, match: (p) => p === '/' },
+                { href: '/search', label: 'Search', icon: Search, match: (p) => p.startsWith('/search') },
                 { href: '/wiki', label: 'Wiki', icon: BookOpen, match: (p) => p.startsWith('/wiki') },
                 { href: '/members', label: 'Members', icon: Users, match: (p) => p === '/members' },
               ].map(({ href, label, icon: Icon, match }) => (
