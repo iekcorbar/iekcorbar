@@ -460,21 +460,72 @@ final class DragonAI implements Listener {
     /** Smoothly steer towards a wanted velocity, turn the body into the direction of travel, dodge walls. */
     private void glide(LivingEntity e, Vector want, double accel) {
         Vector v = e.getVelocity();
-        Vector dir = want.clone();
-        if (dir.lengthSquared() > 1.0e-4) {                                // look 4 blocks ahead; a wall means climb and sidestep
-            RayTraceResult hit = e.getWorld().rayTraceBlocks(e.getLocation().add(0, e.getHeight() * 0.5, 0), dir.clone().normalize(),
-                    4.0, FluidCollisionMode.NEVER, true);
-            if (hit != null && hit.getHitBlock() != null) {
-                want.setY(want.getY() + 0.14);
-                double yaw = Math.atan2(dir.getZ(), dir.getX()) + 0.9;
-                want.setX(want.getX() * 0.35 + Math.cos(yaw) * 0.08);
-                want.setZ(want.getZ() * 0.35 + Math.sin(yaw) * 0.08);
+        double len = want.length();
+        if (len > 0.02) {
+            Vector dir = want.clone().normalize();
+            Vector steer = pathAround(e, dir);
+            if (steer != dir) {                                            // something in the way: take the clearest way round, slower
+                want = steer.clone().normalize().multiply(len * 0.8);
             }
         }
         v.add(want.subtract(v).multiply(accel));
         e.setVelocity(v);
         if (Math.hypot(v.getX(), v.getZ()) > 0.03)
-            turn(e, (float) Math.toDegrees(Math.atan2(-v.getX(), v.getZ())), 6f);
+            turn(e, (float) Math.toDegrees(Math.atan2(-v.getX(), v.getZ())), 8f);
+    }
+
+    // ---- pathfinding for a flier: feelers instead of a fixed sidestep
+
+    private final Map<UUID, Integer> side = new HashMap<>();   // which way a dragon last swerved (+1 / -1): keeps it from dithering
+
+    /** Free distance along dir for a body about 2.4 blocks wide and as tall as the dragon: five feelers (centre, left, right, up, down). */
+    private static double clearance(LivingEntity e, Vector dir, double max) {
+        Location c = e.getLocation().add(0, e.getHeight() * 0.5, 0);
+        Vector n = dir.clone().normalize();
+        Vector sideV = new Vector(-n.getZ(), 0, n.getX());
+        if (sideV.lengthSquared() < 1.0e-6) sideV = new Vector(1, 0, 0);
+        sideV.normalize();
+        double w = Math.max(0.9, e.getWidth() * 0.6), h = Math.max(0.7, e.getHeight() * 0.45);
+        Vector[] offs = {new Vector(), sideV.clone().multiply(w), sideV.clone().multiply(-w), new Vector(0, h, 0), new Vector(0, -h, 0)};
+        double best = max;
+        for (Vector o : offs) {
+            RayTraceResult hit = e.getWorld().rayTraceBlocks(c.clone().add(o), n, max, FluidCollisionMode.NEVER, true);
+            if (hit != null && hit.getHitPosition() != null) best = Math.min(best, hit.getHitPosition().distance(c.clone().add(o).toVector()));
+        }
+        return best;
+    }
+
+    /** The wanted direction when it is clear, otherwise the clearest nearby one (sideways first, then up), with a memory of the last swerve. */
+    private Vector pathAround(LivingEntity e, Vector dir) {
+        final double look = 7.0;
+        double straight = clearance(e, dir, look);
+        if (straight >= look) {
+            side.remove(e.getUniqueId());
+            return dir;
+        }
+        int bias = side.getOrDefault(e.getUniqueId(), 0);
+        double yaw0 = Math.atan2(dir.getZ(), dir.getX());
+        double pitch0 = Math.asin(Math.max(-1, Math.min(1, dir.getY())));
+        double bestScore = straight - 1.0;                                 // staying put must be clearly worse than turning
+        Vector best = null;
+        int bestSide = 0;
+        for (int sgn : new int[]{1, -1}) {
+            for (double deg : new double[]{25, 50, 80, 110}) {
+                for (double up : new double[]{0, 35}) {
+                    double yaw = yaw0 + sgn * Math.toRadians(deg), pit = Math.min(Math.toRadians(70), pitch0 + Math.toRadians(up));
+                    Vector cand = new Vector(Math.cos(yaw) * Math.cos(pit), Math.sin(pit), Math.sin(yaw) * Math.cos(pit));
+                    double score = clearance(e, cand, look) - deg * 0.012 - up * 0.01 + (sgn == bias ? 0.8 : 0);
+                    if (score > bestScore) { bestScore = score; best = cand; bestSide = sgn; }
+                }
+            }
+        }
+        if (best == null) {                                                // boxed in: go straight up
+            Vector upV = new Vector(0, 1, 0);
+            return clearance(e, upV, 3) > 1.5 ? upV : dir;
+        }
+        side.put(e.getUniqueId(), bestSide);
+        if (straight < 2.0) best.setY(best.getY() + 0.25);                // very close: gain height as well
+        return best;
     }
 
     private static void turn(LivingEntity e, float yaw, float maxStep) {
@@ -747,7 +798,7 @@ final class DragonAI implements Listener {
         Vector v = e.getVelocity();
         v.add(want.subtract(v).multiply(moving ? 0.07 : 0.1));             // inertia: it needs a moment to speed up and to stop
         e.setVelocity(v);
-        turn(e, look.getYaw(), 5f);
+        turn(e, look.getYaw(), 9f);
         boolean flyingNow = Math.abs(v.getY()) > 0.02 || Math.hypot(v.getX(), v.getZ()) > 0.05;
         anim(e, m, flyingNow);
         if ((Math.abs(v.getY()) > 0.12 || (in != null && in.sprint)) && r.nextInt(3) == 0)   // steam from the neck vents
