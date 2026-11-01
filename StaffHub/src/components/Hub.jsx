@@ -54,6 +54,11 @@ export default function Hub({ me, onLogout }) {
     } catch (e) { setErr(t('err.load') + ': ' + e.message); }
   }, [t]);
   useEffect(() => { load(parent); }, [parent, load]);
+  useEffect(() => {                                  // Gen-san heeft iets gedaan: lijst opnieuw laden
+    const f = () => load(parent);
+    window.addEventListener('staffhub:ververs', f);
+    return () => window.removeEventListener('staffhub:ververs', f);
+  }, [parent, load]);
 // Track recent views
 useEffect(() => {
   if (sel?.id) {

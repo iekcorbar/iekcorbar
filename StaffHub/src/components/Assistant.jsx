@@ -14,7 +14,7 @@
 //  - bronnen als chips: een antwoord zonder aanwijsbare gids is hier niets waard;
 //  - geschiedenis in localStorage: een herladen wisste het hele gesprek.
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Bot, Search, Sparkles, FileText, Folder, File as FileIcon, RefreshCw } from 'lucide-react';
+import { Bot, Search, Sparkles, FileText, Folder, File as FileIcon, RefreshCw, Check, X } from 'lucide-react';
 import { useLang, trServer } from '@/lib/i18n';
 import { mdNaarJSX } from '@/lib/mdLite';
 
@@ -70,7 +70,7 @@ export default function Assistant({ onOpen }) {
           }]);
         } else {
           sid.current = j.session || sid.current;
-          setLog((l) => [...l, { ask: vraagTekst, mode: m, answer: j.answer || '', bronnen: j.bronnen || [], next: j.volgende || [] }]);
+          setLog((l) => [...l, { ask: vraagTekst, mode: m, answer: j.answer || '', bronnen: j.bronnen || [], next: j.volgende || [], voorstel: j.voorstel || [], stand: 'open' }]);
         }
       } else {
         const j = await (await fetch('/api/assistant?q=' + encodeURIComponent(vraagTekst))).json().catch(() => ({}));
@@ -85,6 +85,21 @@ export default function Assistant({ onOpen }) {
       setTimeout(() => endRef.current?.scrollIntoView({ block: 'nearest' }), 30);
     }
   }, [q, busy, mode, t]);
+
+  async function keur(i, goed) {
+    const m = log[i];
+    if (!m?.voorstel?.length) return;
+    if (!goed) { setLog((l) => l.map((x, k) => (k === i ? { ...x, stand: 'nee' } : x))); return; }
+    setLog((l) => l.map((x, k) => (k === i ? { ...x, stand: 'bezig' } : x)));
+    const acties = m.voorstel.filter((v) => v.ok && v.actie).map((v) => v.actie);
+    let resultaat = [];
+    try {
+      const j = await (await fetch('/api/ai/act', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ acties }) })).json();
+      resultaat = j.resultaat || [{ ok: false, tekst: String(j.error || 'mislukt') }];
+    } catch (e) { resultaat = [{ ok: false, tekst: String(e?.message || e) }]; }
+    setLog((l) => l.map((x, k) => (k === i ? { ...x, stand: 'klaar', resultaat } : x)));
+    window.dispatchEvent(new Event('staffhub:ververs'));
+  }
 
   function wissen() {
     setLog([]); sid.current = '';
@@ -148,6 +163,34 @@ export default function Assistant({ onOpen }) {
                     <div className="mt-1 px-1 text-[11px] text-parch/85 space-y-1 [&_p]:leading-relaxed">{mdNaarJSX(m.answer)}</div>
                   )}
                   {m.answer && <p className="text-[9px] text-parch/40 mt-0.5 px-1">{t('ai.disclaimer')}</p>}
+
+                  {!!m.voorstel?.length && (
+                    <div className="mt-1.5 mx-1 border border-gold/30 bg-gold/5 rounded-lg p-2 text-[11px]">
+                      <p className="text-gold font-semibold mb-1">{t('ai.voorstel')}</p>
+                      <ul className="space-y-0.5">
+                        {m.voorstel.map((v, k) => (
+                          <li key={k} className={v.ok ? 'text-parch/85' : 'text-red-300/80 line-through decoration-red-300/40'}>
+                            {v.ok ? '\u2022 ' : '\u2715 '}{v.tekst}
+                          </li>
+                        ))}
+                      </ul>
+                      {m.stand === 'open' && m.voorstel.some((v) => v.ok) && (
+                        <div className="flex gap-2 mt-2">
+                          <button onClick={() => keur(i, true)} className="flex items-center gap-1 px-2 py-1 rounded bg-emerald-600/80 hover:bg-emerald-500 text-white"><Check className="size-3" />{t('ai.uitvoeren')}</button>
+                          <button onClick={() => keur(i, false)} className="flex items-center gap-1 px-2 py-1 rounded bg-black/30 hover:bg-white/10"><X className="size-3" />{t('ai.annuleren')}</button>
+                        </div>
+                      )}
+                      {m.stand === 'bezig' && <p className="mt-1.5 text-parch/60">{t('ai.bezig')}</p>}
+                      {m.stand === 'nee' && <p className="mt-1.5 text-parch/50">{t('ai.afgewezen')}</p>}
+                      {m.stand === 'klaar' && (
+                        <ul className="mt-1.5 space-y-0.5">
+                          {(m.resultaat || []).map((r, k) => (
+                            <li key={k} className={r.ok ? 'text-emerald-300' : 'text-red-300'}>{r.ok ? '\u2713 ' : '\u2715 '}{r.tekst}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )}
 
                   {!!m.bronnen?.length && (
                     <div className="mt-1 px-1">
