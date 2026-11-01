@@ -79,9 +79,12 @@ final class Spoilage {
         if (item == null || item.isEmpty()) return;
         int mins = spoilMinutes(id);
         if (mins < 0) return;
-        long spoilAt = System.currentTimeMillis() + (long) mins * 60 * 1000;
-        item.getItemMeta().getPersistentDataContainer().set(key, PersistentDataType.LONG, spoilAt);
-        item.setItemMeta(item.getItemMeta());
+        // rounded up to 5-minute steps so fruit from one harvest still stacks
+        long step = 5L * 60 * 1000;
+        long spoilAt = (System.currentTimeMillis() + (long) mins * 60 * 1000 + step - 1) / step * step;
+        org.bukkit.inventory.meta.ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(key, PersistentDataType.LONG, spoilAt);
+        item.setItemMeta(meta);
     }
 
     /** Checks if an item has spoiled. */
