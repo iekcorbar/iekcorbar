@@ -91,6 +91,9 @@ OWN = [
     ("chocolate_heart_flip", ["Tangled Flip", "Cocoa Heart Flip", "Valentine's Flip"], "b3687a", 6, 13,
      ["<red>A Relics heart, melted into Sakagura foam"], ["ABSORPTION/0/120-240", "REGENERATION/0/10-30"],
      [{"type": "mix", "time": 3, "ingredients": ["Milk Bucket/1", "Cocoa Beans/2", "Sugar/2", "relics:chocolate_heart/1"]}]),
+    ("golden_koi_sake", ["Pond Water Sake", "Koi Sake", "Golden Koi Sake"], "e8c25a", 6, 15,
+     ["<gold>One koi scale, glittering at the bottom of the cup"], ["LUCK/0/120-240", "WATER_BREATHING/0/60-180"],
+     [{"type": "cook", "time": 5, "ingredients": ["sakagura:rice/4", "wildlife:koi_scale/1", "Sugar/1"]}, {"type": "distill", "runs": 1}, {"type": "age", "years": 1, "wood": "birch"}]),
     # ---- open bar (user wish 27-10 evening: "meer drankjes, creatief, effecten zelf bedenken").
     # Every ingredient token really exists: kitchen:/sakagura:/sw:/relics: ids, vanilla items,
     # or a finished drink by name (resolves via Ingredients.key). Effects are registry effect

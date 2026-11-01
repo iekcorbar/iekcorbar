@@ -458,6 +458,17 @@ recipes:
     effects: ["ABSORPTION/0/120-240", "REGENERATION/0/10-30"]
     steps:
       - {type: mix, time: 3, ingredients: ["Milk Bucket/1", "Cocoa Beans/2", "Sugar/2", "relics:chocolate_heart/1"]}
+  golden_koi_sake:
+    names: ["Pond Water Sake", "Koi Sake", "Golden Koi Sake"]
+    color: "e8c25a"
+    difficulty: 6
+    alcohol: 15
+    lore: ["<gold>One koi scale, glittering at the bottom of the cup"]
+    effects: ["LUCK/0/120-240", "WATER_BREATHING/0/60-180"]
+    steps:
+      - {type: cook, time: 5, ingredients: ["sakagura:rice/4", "wildlife:koi_scale/1", "Sugar/1"]}
+      - {type: distill, runs: 1}
+      - {type: age, years: 1, wood: "birch"}
   wasabi_fire:
     names: ["Watery Burn", "Wasabi Fire", "Dragon's Nostrils"]
     color: "ff6a00"

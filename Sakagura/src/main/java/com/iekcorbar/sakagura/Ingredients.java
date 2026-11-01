@@ -18,6 +18,7 @@ final class Ingredients {
     static final NamespacedKey KITCHEN = new NamespacedKey("kitchen", "item");
     static final NamespacedKey STEAMWORKS = new NamespacedKey("steamworks", "material");
     static final NamespacedKey RELICS_TREAT = new NamespacedKey("relics", "treat");
+    static final NamespacedKey WILDLIFE = new NamespacedKey("wildlife", "drop");
     static NamespacedKey ours, brewKey;
 
     private Ingredients() {
@@ -27,7 +28,7 @@ final class Ingredients {
     static String key(String token) {
         String t = token.trim();
         String low = t.toLowerCase(Locale.ROOT);
-        if (low.startsWith("kitchen:") || low.startsWith("sakagura:") || low.startsWith("sw:") || low.startsWith("relics:")) return low;
+        if (low.startsWith("kitchen:") || low.startsWith("sakagura:") || low.startsWith("sw:") || low.startsWith("relics:") || low.startsWith("wildlife:")) return low;
         if (low.equals("grass")) return "mc:SHORT_GRASS";
         Material m = Material.matchMaterial(t.replace(' ', '_'));
         if (m != null) return "mc:" + m.name();
@@ -52,6 +53,8 @@ final class Ingredients {
             if (id != null) return "sw:" + id;
             id = pdc.get(RELICS_TREAT, PersistentDataType.STRING);
             if (id != null) return "relics:" + id;   // a Relics treat as garnish: seasonal brews only
+            id = pdc.get(WILDLIFE, PersistentDataType.STRING);
+            if (id != null) return "wildlife:" + id;   // an animal material (koi scale ...)
             if (pdc.getKeys().stream().anyMatch(k -> !k.getNamespace().equals("minecraft"))) return null; // some other plugin's item
         }
         return "mc:" + it.getType().name();

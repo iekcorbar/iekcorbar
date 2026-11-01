@@ -129,6 +129,11 @@ public boolean inSeason(Cook c) {
             if (t == null) throw new IllegalArgumentException("unknown kitchen item " + s);
             return item -> plugin.items().typeOf(item) == t;
         }
+        if (low.startsWith("wildlife:")) {   // a Wildlife animal material, matched by its PDC tag (no dependency)
+            String id = low.substring(9);
+            org.bukkit.NamespacedKey wk = new org.bukkit.NamespacedKey("wildlife", "drop");
+            return item -> item.hasItemMeta() && id.equals(item.getItemMeta().getPersistentDataContainer().get(wk, org.bukkit.persistence.PersistentDataType.STRING));
+        }
         if (low.startsWith("sw:")) {
             String id = low.substring(3);
             return item -> id.equals(plugin.items().steamworksMaterial(item));

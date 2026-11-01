@@ -838,6 +838,7 @@ final class Animals implements Listener {
             }
             default -> { }
         }
+        d.addAll(plugin.drops().roll(a.species, a.rare));
         // Senior animals drop bonus items (age bonus)
         if (a.ageStage == 2 && !a.baby) {
             d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2)));

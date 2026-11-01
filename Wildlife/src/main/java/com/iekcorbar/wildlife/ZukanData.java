@@ -22,6 +22,7 @@ final class ZukanData implements Supplier<Map<String, Object>> {
         all.add(plugin.items().journal());
         all.add(plugin.items().crabClaw());
         all.add(plugin.items().lizardTail());
+        all.addAll(plugin.drops().all());
         for (Species s : Species.values()) {   // every species, the wraith included, plus the rare and extra-look eggs
             all.add(plugin.items().egg(s));
             for (String v : plugin.items().eggVariants(s)) all.add(plugin.items().egg(s, v));

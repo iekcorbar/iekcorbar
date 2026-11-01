@@ -43,6 +43,10 @@ Open the advancement screen and look for the **Wildlife** tab: one advancement p
 
 Build your own zoo with craftable decor props: doors, toilets, cobblestone paths, welcome/exit signs, flower boxes, picnic tables, parasols, first aid posts and brick walls. Place ticket kiosks, turnstiles and gates to create a working zoo with tickets. Animals can be kept on leads or with name tags. Statues of every animal can be crafted from stone and the animal's drop item.
 
+### Materials from the animals
+
+Adult animals that did not starve can leave a raw material behind: **ivory** (elephant), **antler** (deer), **bear pelt**, **crocodile hide**, **striped hide** (zebra), **kangaroo hide**, **ostrich**, **crane** and **macaw** plumes, **penguin down**, **rhino horn**, **koi scale**, **orca** and **piranha teeth**, and **brass scrap** from a steam dragon. A rare look drops double. Brewers use the koi scale in the Sakagura *Golden Koi Sake*; the Kitchen and Sakagura recognise all of them as ingredients.
+
 ### Feeding in the zoo
 
 Only animals that belong to someone (a name tag or a lead) get hungry; wild animals find their own food. Put food in a **feeding trough** (one kind at a time, up to 32): every few seconds it feeds the hungriest animal within six blocks that actually eats that food, and never one that is already well fed. Hunger is remembered across restarts. A starving kept animal slows down and drops nothing.

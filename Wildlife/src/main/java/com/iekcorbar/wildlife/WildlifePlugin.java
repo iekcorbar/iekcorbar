@@ -22,6 +22,7 @@ public final class WildlifePlugin extends JavaPlugin {
     private Spawner spawner;
     private Journal journal;
     private WildlifeMenu menu;
+    private Drops drops;
     private Adv adv;
     private Adv zooAdv;
     private WildItems items;
@@ -49,6 +50,7 @@ public final class WildlifePlugin extends JavaPlugin {
         pm.registerEvents(animals, this);
         pm.registerEvents(dragon, this);
         pm.registerEvents(journal, this);
+        drops = new Drops(this);
         menu = new WildlifeMenu(this);
         pm.registerEvents(menu, this);
         pm.registerEvents(items, this);
@@ -117,6 +119,7 @@ public final class WildlifePlugin extends JavaPlugin {
     Spawner spawner() { return spawner; }
     Journal journal() { return journal; }
     WildlifeMenu menu() { return menu; }
+    Drops drops() { return drops; }
     WildItems items() { return items; }
     Rescue rescue() { return rescue; }
 }

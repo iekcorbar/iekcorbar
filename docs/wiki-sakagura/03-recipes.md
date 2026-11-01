@@ -56,6 +56,7 @@ Follow a recipe closely for the best quality (up to 5 stars). Cooking needs heat
 | Petal Pilsner | Cook 5 min: 2 Torchflower Seeds, 5 Barley, 2 Hops, 2 Pink Petals -> Age 1 years (birch cask) | 6% |
 | Bunny Bounce | Cook 4 min: 4 Wheat, 3 Barley, 1 Rabbit Foot, 1 Sugar -> Distill 1x | 7% |
 | Cocoa Heart Flip | Mix (no heat) 3 min: 1 Milk Bucket, 2 Cocoa Beans, 2 Sugar, 1 Chocolate Heart | 13% |
+| Koi Sake | Cook 5 min: 4 Rice, 1 Koi Scale, 1 Sugar -> Distill 1x -> Age 1 years (birch cask) | 15% |
 | Wasabi Fire | Cook 4 min: 2 Chili, 3 Daikon Slices, 2 Sugar -> Distill 2x | 22% |
 | Miso Martini | Mix (no heat) 3 min: 2 Miso, 1 Shochu, 1 Milk Bucket -> Age 1 years | 17% |
 | Charcoal Cleanse | Mix (no heat) 2 min: 1 Ink Sac, 3 Mikan, 2 Sugar | - |
