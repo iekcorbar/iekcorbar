@@ -34,7 +34,8 @@ FFMPEG = os.environ.get("FFMPEG") or (glob.glob(os.path.expandvars(
 # deep_dark blijft vanilla (de stilte/griezel daar is bedoeld). Onbekende
 # eventnamen in een nieuwere versie doen niets; nieuwe biomen later toevoegen.
 MUSIC_SRC = os.path.join(ROOT, "sounds", "music", "overworld.mp3")
-MUSIC_EVENTS = ["music.game", "music.creative", "music.under_water"] + [
+END_SRC = os.path.join(ROOT, "sounds", "music", "end.mp3")
+MUSIC_EVENTS = ["music.game", "music.creative", "music.under_water", "music.end", "music.dragon"] + [
     "music.overworld." + b for b in (
         "meadow", "jungle_and_forest", "old_growth_taiga", "snowy_slopes",
         "frozen_peaks", "jagged_peaks", "stony_peaks", "flower_forest", "grove",
@@ -157,11 +158,12 @@ def item_def():
     }}
 
 
-def music_ogg():
+def music_ogg(src=MUSIC_SRC, fade=0.0, dur=0.0):
     """mp3 -> stereo ogg (zonder albumhoes), q:a 3 ~ 112 kbps."""
     with tempfile.TemporaryDirectory() as td:
         out = os.path.join(td, "overworld.ogg")
-        subprocess.run([FFMPEG, "-v", "error", "-y", "-i", MUSIC_SRC, "-vn", "-map_metadata", "-1",
+        subprocess.run([FFMPEG, "-v", "error", "-y", "-i", src, "-vn", "-map_metadata", "-1",
+                        *(["-af", "afade=t=in:d=%s,afade=t=out:st=%s:d=%s" % (fade, dur - fade, fade)] if fade else []),
                         "-c:a", "libvorbis", "-q:a", "3", out], check=True)
         with open(out, "rb") as f:
             return f.read()
@@ -185,7 +187,9 @@ def music_sounds_json():
 
 def own_sounds_json():
     return {"music.overworld": {"sounds": [{"name": "iekcorbar:music/overworld", "stream": True}],
-                                "subtitle": ""}}
+                                "subtitle": ""},
+            "music.end": {"sounds": [{"name": "iekcorbar:music/end", "stream": True}],
+                          "subtitle": ""}}
 
 
 def main():
@@ -199,8 +203,10 @@ def main():
         z.writestr("assets/iekcorbar/models/item/quest_book.json", json.dumps(build_model(), indent=1))
         z.writestr("assets/minecraft/items/written_book.json", json.dumps(item_def(), indent=1))
         if os.path.exists(MUSIC_SRC):
-            z.writestr("assets/iekcorbar/sounds/music/overworld.ogg", music_ogg())
+            z.writestr("assets/iekcorbar/sounds/music/overworld.ogg", music_ogg(fade=6.0, dur=223.2))
             z.writestr("assets/iekcorbar/sounds/music/silence.ogg", silence_ogg())
+            if os.path.exists(END_SRC):
+                z.writestr("assets/iekcorbar/sounds/music/end.ogg", music_ogg(END_SRC))
             z.writestr("assets/iekcorbar/sounds.json", json.dumps(own_sounds_json(), indent=1))
             z.writestr("assets/minecraft/sounds.json", json.dumps(music_sounds_json(), indent=1))
     print("wrote", OUT, os.path.getsize(OUT), "bytes")

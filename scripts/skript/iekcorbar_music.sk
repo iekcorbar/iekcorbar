@@ -1,7 +1,7 @@
 # iekcorbar - globale overworld-muziek op eigen timer (1-11).
 # Vanilla-muziekevents zijn in het pack stil gezet (Core-pack, scripts/make_core_pack.py);
-# dit script speelt iekcorbar:music.overworld: eerste keer 20 s na join/wereldwissel,
-# daarna steeds 2-3 minuten NA afloop van het nummer (223 s).
+# het nummer heeft 6 s fade-in en fade-out (in de ogg gebakken); dit script speelt iekcorbar:music.overworld: eerste keer 20 s na join/wereldwissel,
+# daarna steeds precies 3 minuten (180 s) NA afloop van het nummer (223 s).
 
 options:
 	world: "iekcorbarSeason2"
@@ -15,7 +15,7 @@ every 10 seconds:
 				add 20 seconds to {music::next::%uuid of loop-player%}
 			if now is after {music::next::%uuid of loop-player%}:
 				play sound "iekcorbar:music.overworld" in the music category with volume 1 to loop-player
-				set {_gap} to a random integer between 120 and 180
+				set {_gap} to 180
 				set {music::next::%uuid of loop-player%} to now
 				add ({@length} + {_gap}) seconds to {music::next::%uuid of loop-player%}
 		else:
@@ -23,3 +23,27 @@ every 10 seconds:
 
 on quit:
 	delete {music::next::%uuid of player%}
+
+# The End: eigen nummer (240 s) zonder pauze op repeat. Vanilla music.end en
+# music.dragon zijn in het pack stil gezet. Elke seconde controleren houdt de
+# naad tussen twee rondes onder een seconde. Wereldnaam: zie server (Paper
+# noemt de End-wereld <hoofdwereld>_the_end).
+options:
+	endworld: "iekcorbarSeason2_the_end"
+	endlength: 240
+
+every 1 second:
+	loop all players:
+		if name of world of loop-player is {@endworld}:
+			if {music::end::%uuid of loop-player%} is not set:
+				set {music::end::%uuid of loop-player%} to now
+			if now is after or equal to {music::end::%uuid of loop-player%}:
+				play sound "iekcorbar:music.end" in the music category with volume 1 to loop-player
+				set {music::end::%uuid of loop-player%} to now
+				add {@endlength} seconds to {music::end::%uuid of loop-player%}
+		else if {music::end::%uuid of loop-player%} is set:
+			stop sound "iekcorbar:music.end" from playing to loop-player
+			delete {music::end::%uuid of loop-player%}
+
+on quit:
+	delete {music::end::%uuid of player%}
