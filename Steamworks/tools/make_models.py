@@ -759,20 +759,56 @@ def pumpjack_beam():
     return m
 
 
-def pipe_center():
+_priv = _it.count(900000)
+
+
+def _own_uuids(burn, make):
+    """Build with a private uuid counter, then advance the shared one by what the old model used.
+    The pipe was redrawn (more cubes) but every other .bbmodel keeps its uuids: no churn in git."""
+    global _c
+    keep = _c
+    _c = _it.count(next(_priv))
+    try:
+        out = make()
+    finally:
+        _c = keep
+    for _ in range(burn):
+        next(_c)
+    return out
+
+
+def _pipe_center():
+    # Joint in the middle of the block: a 9.2 px cube with its edges chamfered (three 45 degree prisms),
+    # so an elbow or T reads as one rounded fitting. Brass plates cap the sides nothing connects to.
     m = Model("sw_pipe_center", 1.4)
-    m.cube("core", (-3.0, -3.0, -3.0), (3.0, 3.0, 3.0), "copper")
-    for s in (-1, 1):
-        m.cube(f"flange{s}", (-3.3, -3.3, s * 2.2 - 0.4), (3.3, 3.3, s * 2.2 + 0.4), "brass")
+    m.cube("core", (-4.6, -4.6, -4.6), (4.6, 4.6, 4.6), "copper")
+    m.cube("round_y", (-3.5, -4.5, -3.5), (3.5, 4.5, 3.5), "copper", rot=(0, 45, 0))
+    m.cube("round_x", (-4.5, -3.5, -3.5), (4.5, 3.5, 3.5), "copper", rot=(45, 0, 0))
+    m.cube("round_z", (-3.5, -3.5, -4.5), (3.5, 3.5, 4.5), "copper", rot=(0, 0, 45))
+    for ax in range(3):
+        for sg in (-1, 1):
+            a, b = [-2.2] * 3, [2.2] * 3
+            a[ax], b[ax] = (4.6, 4.95) if sg > 0 else (-4.95, -4.6)
+            m.cube(f"plate{ax}{sg}", tuple(a), tuple(b), "brass")
+    return m
+
+
+def pipe_center():
+    return _own_uuids(3, _pipe_center)
+
+
+def _pipe_arm():
+    # from the core to the block face along model +Y: a 6.8 px tube with a collar by the core and one at
+    # the block edge (the neighbour's collar sits against it, so the join reads as a flanged coupling)
+    m = Model("sw_pipe_arm")
+    m.cube("tube", (-3.4, 4.4, -3.4), (3.4, 8.0, 3.4), "copper")
+    m.cube("collar", (-4.3, 4.6, -4.3), (4.3, 5.5, 4.3), "brass")
+    m.cube("ring", (-4.3, 7.1, -4.3), (4.3, 8.0, 4.3), "brass")
     return m
 
 
 def pipe_arm():
-    # from the core to the block face along model +Y
-    m = Model("sw_pipe_arm")
-    m.cube("tube", (-2.2, 3.0, -2.2), (2.2, 8.0, 2.2), "copper")
-    m.cube("ring", (-2.6, 6.6, -2.6), (2.6, 7.6, 2.6), "brass")
-    return m
+    return _own_uuids(2, _pipe_arm)
 
 
 def tank():
@@ -1466,10 +1502,14 @@ def build():
                                   "origin": [e["origin"][0], e["origin"][1] + 5, e["origin"][2]]})
         pj.elements.append(e2)
     parts.append(pj)
-    pp = Model("sw_pipe", 1.3)
-    pp.merge(by["sw_pipe_center"])
-    pp.cube("arm_a", (-2.2, -8.0, -2.2), (2.2, 8.0, 2.2), "copper")
-    parts.append(pp)
+    def _pipe_item():
+        pp = Model("sw_pipe", 1.3)
+        pp.merge(by["sw_pipe_center"])
+        pp.cube("arm_a", (-3.4, -8.0, -3.4), (3.4, 8.0, 3.4), "copper")
+        pp.cube("ring_a", (-4.3, 7.1, -4.3), (4.3, 8.0, 4.3), "brass")
+        pp.cube("ring_b", (-4.3, -8.0, -4.3), (4.3, -7.1, 4.3), "brass")
+        return pp
+    parts.append(_own_uuids(4, _pipe_item))
     wm = Model("sw_windmill", 1.0)
     wm.merge(by["sw_windmill_bearing"]).merge(windmill_sails("tmp", 0.33))
     parts.append(wm)
