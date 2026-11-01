@@ -39,7 +39,7 @@ SOURCES = [
     "Satchel/resourcepack/Satchel-pack.zip",
     "Hihou/resourcepack/Hihou-pack.zip",
     "SteamworksAdditions/resourcepack/Additions-pack.zip",
-    "Atelier/resourcepack/Atelier-pack.zip",
+    "Bouw/resourcepack/Bouw-pack.zip",
     "IekcorbarSiteSync/resourcepack/Mmo-pack.zip",
     "scripts/core-pack/Core-pack.zip",
 ]

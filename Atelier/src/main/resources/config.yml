@@ -1,5 +1,0 @@
-# Atelier - building pieces.
-
-props:
-  # Left-clicks needed to take a piece back in survival.
-  break-hits: 2
