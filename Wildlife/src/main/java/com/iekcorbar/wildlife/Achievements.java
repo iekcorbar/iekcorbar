@@ -75,7 +75,7 @@ final class Achievements {
         a.add("kept", "root", "lead", "Keeper", "Tie up a wild animal with a lead.", "task");
         a.add("named", "kept", "name_tag", "A Name for Everything", "Name a wild animal with a name tag.", "task");
         a.add("zoo_builder", "kept", "oak_fence", "Zoo Builder", "Keep three different species on leads at once.", "goal").hidden();
-        a.add("zoo_master", "zoo_builder", "chain", "Zoo Master", "Keep five different species on leads at once.", "challenge").hidden();
+        a.add("zoo_master", "zoo_builder", "iron_chain", "Zoo Master", "Keep five different species on leads at once.", "challenge").hidden();
         a.add("released", "kept", "shears", "Set Free", "Release a leashed animal.", "task").hidden();
 
         // ============================================================
@@ -114,7 +114,7 @@ final class Achievements {
         a.add("first_death", "root", "bone", "Circle of Life", "Witness an animal die.", "task").hidden();
         a.add("first_flee", "root", "feather", "Run Away", "Make an animal flee from you.", "task").hidden();
         a.add("first_curl", "root", "brown_mushroom", "Defensive", "Make an animal curl up or hide.", "task").hidden();
-        a.add("first_sleep", "root", "bed", "Sweet Dreams", "Find a sleeping animal.", "task").hidden();
+        a.add("first_sleep", "root", "white_bed", "Sweet Dreams", "Find a sleeping animal.", "task").hidden();
         a.add("first_fish", "root", "fishing_rod", "Gone Fishing", "Watch an animal fish.", "task").hidden();
 
         // ============================================================

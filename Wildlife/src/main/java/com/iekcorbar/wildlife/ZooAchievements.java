@@ -28,7 +28,7 @@ final class ZooAchievements {
         a.add("enclosure_complete", "first_enclosure", "wheat", "Complete Enclosure", "Place a fence, a feeding trough, a water trough and an info board.", "goal");
         a.add("multi_enclosure", "enclosure_complete", "emerald", "Multi-Enclosure", "Build three complete enclosures.", "challenge").hidden();
         // comfort line
-        a.add("comfort", "first_prop", "oak_bench", "Visitor Comfort", "Place a bench, a trash bin and a lamp post.", "task");
+        a.add("comfort", "first_prop", "oak_stairs", "Visitor Comfort", "Place a bench, a trash bin and a lamp post.", "task");
         a.add("full_comfort", "comfort", "red_bed", "Full Service", "Place a bench, a trash bin, a lamp post, a toilet and a first aid post.", "goal").hidden();
         // path line
         a.add("first_path", "first_prop", "stone", "Pathway", "Place a cobblestone path tile.", "task");
