@@ -117,7 +117,7 @@ SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "
         "tanuki": 1.3, "crane": 1.25, "koi": 1.4, "macaque": 1.25,
         "kangaroo": 1.3, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.3, "mole": 1.35,
         "rhino": 0.8, "penguin": 1.35, "orca": 0.7, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0, "dragon": 1.15}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -16..32 bounds
+        "wraith": 1.0, "dragon": 1.1}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -16..32 bounds
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
@@ -126,6 +126,16 @@ class Bone:
     def __init__(self, name, origin):
         self.name, self.origin, self.uuid = name, list(origin), U()
         self.cubes, self.children = [], []
+
+
+def _fit(axis, v, wide=False):
+    """Clamp to the 26.2 item-model limit. The export adds 8 to x and z (P = c + 8), so the real raw
+    limit is -24..24 there and -16..32 on y. Only wide=True (the dragon) uses that; every other model
+    keeps the old -16..32 on all axes so already-deployed models stay byte-identical (it squashes the
+    far end of long animals - bear, elephant, orca, zebra... - a known quirk, left alone on purpose)."""
+    if wide and axis != 1:
+        return max(-24.0, min(24.0, v))
+    return max(-16.0, min(32.0, v))
 
 
 class Model:
@@ -258,9 +268,9 @@ class Model:
             return
         for e in self.elements:
             for key in ("from", "to", "origin"):
-                e[key] = [round(max(-16.0, min(32.0, v * k)), 3) for v in e[key]]
+                e[key] = [round(_fit(i, v * k, self.name.startswith("wl_dragon_") or self.name == "wl_dragon"), 3) for i, v in enumerate(e[key])]
         for b in self.bones.values():
-            b.origin = [max(-16.0, min(32.0, v * k)) for v in b.origin]
+            b.origin = [_fit(i, v * k, self.name.startswith("wl_dragon_") or self.name == "wl_dragon") for i, v in enumerate(b.origin)]
         for an in self.anims:
             for ani in an["animators"].values():
                 for kf in ani["keyframes"]:
@@ -1414,7 +1424,9 @@ def wraith(m):
 
 def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
            glow="dragon_furnace", spine="dragon_copper"):
-    """Steampunk dragon, ~2.8 m snout-to-tail, ~3 m across the wings, drawn 16 px = 1 m with
+    """Steam dragon built on the vanilla Ender Dragon's proportions (boxy body, cube neck, lip + jaw,
+    arm-and-sheet wings, short legs; slightly modified: furnace glow, saddle, horns). Older notes follow.
+    Steampunk dragon, ~2.8 m snout-to-tail, ~3 m across the wings, drawn 16 px = 1 m with
     the head at -Z. A mechanical predator in living brass: hide plates over an iron frame, a
     furnace glowing through the chest ribs, copper spine ridges and neck rings, twin exhaust
     pipes behind the helmet, and bat wings on two-jointed brass arms - a flat membrane sheet
@@ -1428,95 +1440,71 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
     tucked), walk (lateral gallop, folded wings), idle (folded, breath, one loose flutter),
     sit (haunches down, wings wrapped), eat (neck dips, jaw chews), roar (rears up, wings
     flared), death (one flare, then the frame tips and the furnace goes out)."""
-    # ---- torso: chest, mid, hips, a metal keel below and a furnace behind the ribs
-    m.bone("body", (0, 16.4, 0))
-    m.box("body", -3.6, 13.2, -8.6, 3.6, 20.4, -3.8, col)         # chest
-    m.box("body", -2.7, 12.6, -4.2, 2.7, 19.4, 2.8, col)          # mid
-    m.box("body", -3.4, 12.8, 2.4, 3.4, 19.2, 8.0, col)           # hips
-    m.box("body", -2.3, 12.2, -8.0, 2.3, 13.8, -4.1, plate)       # belly keel, three plates
-    m.box("body", -2.3, 12.2, -3.9, 2.3, 13.8, 2.5, plate)
-    m.box("body", -2.3, 12.2, 2.7, 2.3, 13.8, 7.4, plate)
-    m.box("body", -2.2, 14.0, -8.9, 2.2, 16.8, -8.2, plate)       # sternum
-    m.sym("body", 3.5, 14.4, -7.6, 3.66, 18.2, -4.2, glow)        # furnace behind the ribs
-    m.sym("body", 3.62, 14.4, -6.6, 3.8, 18.2, -6.2, plate)       # grate bar
-    m.sym("body", 3.62, 14.4, -5.2, 3.8, 18.2, -4.8, plate)       # ... and its twin
-    m.sym("body", 2.6, 18.8, -6.4, 4.8, 20.8, -2.6, plate)        # shoulder pauldrons
-    for z in (-8.0, -5.2, -2.4, 0.6, 3.4, 6.4):                   # copper spine ridge, stepping down
-        y0 = 19.8 - (z + 8.0) * 0.18
-        m.box("body", -0.55, y0, z, 0.55, y0 + 1.7, z + 1.6, spine)
-    # ---- neck on an angle: lower column in the chest, upper rising to the helmet
-    m.bone("neck", (0, 19.8, -6.8), "body")
-    m.box("neck", -1.9, 18.4, -9.4, 1.9, 22.0, -6.6, col)
-    m.box("neck", -1.7, 20.4, -11.8, 1.7, 23.8, -8.4, col)
-    m.box("neck", -1.25, 17.8, -11.0, 1.25, 19.6, -8.0, plate)    # throat guard
-    m.box("neck", -2.0, 20.0, -9.0, 2.0, 20.8, -8.4, spine)       # collar ring
-    m.box("neck", -1.75, 22.4, -11.6, 1.75, 23.2, -11.0, spine)   # crown ring
-    m.sym("neck", 1.9, 19.2, -9.6, 2.5, 20.8, -8.0, spine)        # side vents
-    # ---- head: brass helmet over a long snout, furnace-light eyes, swept-back horns
-    m.bone("h_head", (0, 23.2, -11.4), "neck")
-    m.box("h_head", -1.8, 22.2, -15.8, 1.8, 25.8, -11.0, col)     # skull
-    m.box("h_head", -1.2, 21.9, -19.0, 1.2, 24.2, -15.4, col)     # snout
-    m.box("h_head", -0.8, 24.0, -18.6, 0.8, 24.8, -16.0, col)     # nose bridge step
-    m.box("h_head", -1.95, 25.4, -16.2, 1.95, 26.4, -11.6, plate)  # brow crest
-    m.sym("h_head", 0.4, 22.6, -19.2, 0.75, 23.4, -18.8, plate)   # nostrils
-    m.sym("h_head", 1.62, 23.6, -14.8, 1.8, 24.5, -13.2, glow)    # furnace-light eyes
-    m.sym("h_head", 1.0, 25.8, -13.4, 1.5, 27.6, -11.6, plate)    # horn roots
-    m.sym("h_head", 1.15, 26.6, -11.8, 1.45, 28.4, -10.0, spine)  # ... copper tips
-    m.sym("h_head", 1.8, 23.2, -10.6, 2.4, 25.6, -9.2, memb)      # cheek fins, worn not stuck out
-    m.sym("h_head", 1.5, 24.8, -11.4, 2.2, 27.4, -10.2, plate)    # exhaust pipes
-    m.sym("h_head", 1.42, 27.2, -11.6, 2.28, 27.9, -10.0, spine)  # ... with caps
-    m.bone("jaw", (0, 22.0, -12.0), "h_head")
-    m.box("jaw", -1.05, 20.4, -17.8, 1.05, 22.0, -11.6, plate)
-    m.sym("jaw", 0.3, 21.8, -17.2, 0.6, 22.5, -16.5, "fur_cream")     # fangs on the seam
-    m.sym("jaw", 0.3, 21.8, -14.6, 0.6, 22.5, -13.9, "fur_cream")
-    # ---- tail: slim and HOVER-LEVEL (well clear of the wing sheet), ridge spikes, fin, tip
-    m.bone("tail", (0, 17.6, 7.8), "body")
-    m.box("tail", -1.5, 16.0, 7.6, 1.5, 19.2, 12.2, col)
-    m.box("tail", -0.5, 19.0, 8.4, 0.5, 20.3, 10.8, spine)
-    m.bone("tail_t", (0, 17.0, 12.0), "tail")
-    m.box("tail_t", -1.05, 15.4, 11.8, 1.05, 18.4, 16.2, col)
-    m.box("tail_t", -0.85, 15.0, 15.4, 0.85, 16.2, 16.2, spine)
-    m.box("tail_t", -0.6, 14.4, 15.8, 0.6, 17.0, 19.8, col + "_d")   # the tip, tapering
-    m.sym("tail_t", 1.05, 16.2, 12.6, 1.9, 18.8, 15.2, memb)         # dorsal fin
-    # ---- wings: brass arm forward along the leading edge, flat membrane sheet sweeping back
+    # ---- torso: the vanilla Ender Dragon's boxy 24x24x64 body (drawn at 1/4: 6x6x16), a belly
+    # plate, three dorsal spikes and a glowing furnace strip under the ribs (our one addition)
+    m.bone("body", (0, 14.0, 0))
+    m.box("body", -3.0, 11.0, -8.0, 3.0, 17.0, 8.0, col)          # the body block
+    m.box("body", -2.0, 10.6, -7.4, 2.0, 11.2, 7.4, plate)        # belly plate
+    m.sym("body", 3.0, 12.2, -6.4, 3.14, 15.4, -3.0, glow)        # furnace glow behind the ribs
+    m.sym("body", 3.1, 12.2, -5.2, 3.24, 15.4, -4.8, plate)       # ... and its grate bar
+    for z in (-7.4, 5.0, 7.0):                                    # the three vanilla spikes
+        m.box("body", -0.3, 17.0, z, 0.3, 18.6, z + 2.2, spine)
+    # ---- neck: three cubes climbing forward, a small spike on each (vanilla: five of 10 px)
+    m.bone("neck", (0, 16.8, -8.0), "body")
+    for z, y in ((-9.4, 17.0), (-11.5, 18.2), (-13.5, 19.1)):
+        m.box("neck", -1.3, y - 1.3, z - 1.3, 1.3, y + 1.3, z + 1.3, col)
+        m.box("neck", -0.3, y + 1.3, z - 0.6, 0.3, y + 2.2, z + 0.9, spine)
+    # ---- head: the big cube skull with the long upper lip, jaw below, horns on top
+    m.bone("h_head", (0, 19.4, -14.6), "neck")
+    m.box("h_head", -2.0, 18.2, -18.6, 2.0, 22.2, -14.6, col)     # upper head
+    m.box("h_head", -1.5, 18.2, -21.0, 1.5, 19.5, -18.6, col)     # upper lip (snout)
+    m.sym("h_head", 0.5, 19.5, -20.8, 0.9, 20.0, -19.8, plate)    # nostrils
+    m.sym("h_head", 1.0, 22.2, -17.4, 1.6, 23.4, -15.6, spine)    # vanilla head spikes
+    m.sym("h_head", 1.2, 21.6, -15.0, 1.7, 24.0, -13.6, plate)    # swept-back horns
+    m.sym("h_head", 2.0, 20.4, -17.6, 2.14, 21.4, -16.2, glow)    # eyes
+    m.bone("jaw", (0, 18.2, -15.2), "h_head")
+    m.box("jaw", -1.5, 17.0, -19.8, 1.5, 18.2, -15.2, plate)
+    m.sym("jaw", 0.6, 18.2, -19.4, 0.9, 19.0, -18.8, "fur_cream")  # fangs
+    # ---- tail: four tapering cubes with a spike each (vanilla: twelve, shortened)
+    m.bone("tail", (0, 14.6, 7.6), "body")
+    m.box("tail", -1.4, 13.2, 7.6, 1.4, 15.9, 10.6, col)
+    m.box("tail", -0.3, 15.9, 8.4, 0.3, 16.9, 9.8, spine)
+    m.bone("tail_t", (0, 14.4, 10.6), "tail")
+    m.box("tail_t", -1.2, 12.8, 10.6, 1.2, 15.2, 13.4, col)
+    m.box("tail_t", -0.3, 15.2, 11.2, 0.3, 16.1, 12.4, spine)
+    m.box("tail_t", -1.0, 12.2, 13.4, 1.0, 14.4, 16.0, col + "_d")
+    m.box("tail_t", -0.3, 14.4, 14.0, 0.3, 15.2, 15.2, spine)
+    m.box("tail_t", -0.8, 11.6, 16.0, 0.8, 13.4, 18.4, col + "_d")   # the tip
+    # ---- wings: vanilla layout, a bone arm on the leading edge with a flat membrane sheet behind
+    # it, then a second arm + sheet on the wing tip (bones at 0.15 so the span stays ~3 blocks)
     for name, sx in (("wing_l", 1), ("wing_r", -1)):
-        m.bone(name, (sx * 3.0, 18.8, -3.2), "body")
-        m.bone(name + "_t", (sx * 8.8, 18.2, -4.0), name)
-        m.box(name, sx * 2.9, 17.6, -5.4, sx * 9.2, 19.6, -1.8, plate)    # upper arm
-        m.box(name, sx * 3.2, 15.4, -1.2, sx * 9.0, 16.0, 3.4, memb)      # inner membrane
-        m.box(name, sx * 8.4, 16.2, 2.6, sx * 9.4, 17.0, 4.0, "fur_cream")  # elbow claw
-        m.box(name + "_t", sx * 8.6, 17.0, -6.0, sx * 15.0, 19.0, -2.2, plate)  # forearm
-        m.box(name + "_t", sx * 9.0, 16.3, -2.4, sx * 15.4, 16.9, -1.2, plate)  # finger rib
-        m.box(name + "_t", sx * 10.0, 16.2, 1.0, sx * 13.2, 16.7, 2.0, plate)   # rib two
-        m.box(name + "_t", sx * 12.6, 16.2, 3.2, sx * 14.8, 16.6, 4.2, plate)   # rib three
-        m.box(name + "_t", sx * 8.6, 15.4, -2.2, sx * 20.4, 16.0, 6.8, memb)    # outer membrane
-        m.box(name + "_t", sx * 19.6, 15.6, 6.0, sx * 20.8, 16.4, 7.4, "fur_cream")  # wrist claw
-    # ---- legs: big thighs, iron-shod feet with cream claws, toes pointing forward (-Z)
-    for name, x, z in (("leg_fl", 2.7, -5.4), ("leg_fr", -2.7, -5.4)):
-        m.bone(name, (x, 13.6, z), "body")
-        m.bone(name + "_l", (x, 8.4, z), name)
-        m.box(name, x - 1.0, 8.2, z - 1.2, x + 1.0, 14.0, z + 1.2, col)
-        m.box(name, x - 1.2, 11.8, z - 1.4, x + 1.2, 14.4, z + 1.4, plate)      # shoulder armour
-        m.box(name + "_l", x - 0.7, 1.8, z - 0.8, x + 0.7, 8.6, z + 0.8, col + "_d")
-        m.box(name + "_l", x - 0.8, 3.2, z - 0.95, x + 0.8, 4.2, z + 0.95, plate)  # ankle band
-        m.box(name + "_l", x - 1.1, 0.0, z - 2.6, x + 1.1, 1.8, z + 1.0, plate)    # foot
-        m.box(name + "_l", x - 1.1, 0.0, z - 3.2, x - 0.4, 1.0, z - 2.3, "fur_cream")  # claws
-        m.box(name + "_l", x + 0.4, 0.0, z - 3.2, x + 1.1, 1.0, z - 2.3, "fur_cream")
-    for name, x, z in (("leg_bl", 3.4, 5.4), ("leg_br", -3.4, 5.4)):
-        m.bone(name, (x, 14.2, z), "body")
-        m.bone(name + "_l", (x + 0.2, 8.8, z + 0.4), name)
-        m.box(name, x - 1.2, 8.4, z - 2.2, x + 1.2, 14.6, z + 2.2, col)
-        m.box(name, x - 1.4, 12.2, z - 2.4, x + 1.4, 14.8, z + 1.6, plate)      # hip guard
-        m.box(name + "_l", x - 0.7, 2.0, z - 0.6, x + 0.7, 9.0, z + 1.8, col + "_d")
-        m.box(name + "_l", x - 0.8, 3.4, z - 0.75, x + 0.8, 4.4, z + 1.95, plate)   # hock band
-        m.box(name + "_l", x - 1.2, 0.0, z - 2.8, x + 1.2, 2.0, z + 2.0, plate)     # long foot
-        m.box(name + "_l", x - 1.2, 0.0, z - 3.5, x - 0.4, 1.1, z - 2.6, "fur_cream")
-        m.box(name + "_l", x + 0.4, 0.0, z - 3.5, x + 1.2, 1.1, z - 2.6, "fur_cream")
-    # ---- saddle: brass side rails, a spine backrest, a leather seat, and the FMM mount bone
-    m.sym("body", 2.9, 20.0, -4.0, 3.3, 20.8, 3.6, plate)
-    m.box("body", -1.3, 20.2, -4.8, 1.3, 22.1, -3.4, spine)       # backrest
-    m.box("body", -2.0, 19.7, -3.2, 2.0, 20.4, 3.0, "fur_brown")  # leather seat
-    m.bone("m_seat", (0, 21.8, 0.2), "body")                      # FMM mounts riders here
+        m.bone(name, (sx * 3.0, 16.4, -3.6), "body")
+        m.bone(name + "_t", (sx * 11.6, 16.4, -3.6), name)
+        m.box(name, sx * 2.9, 15.6, -4.4, sx * 11.6, 17.2, -2.8, col)            # arm
+        m.box(name, sx * 3.2, 16.1, -2.8, sx * 11.6, 16.45, 5.6, memb)           # membrane
+        m.box(name, sx * 11.0, 15.8, -5.6, sx * 11.9, 17.0, -4.4, "fur_cream")   # wrist claw
+        m.box(name + "_t", sx * 11.6, 15.7, -4.3, sx * 20.0, 17.1, -2.9, col)    # tip arm
+        m.box(name + "_t", sx * 11.6, 16.1, -2.9, sx * 20.0, 16.45, 6.4, memb)   # tip membrane
+    # ---- legs: short vanilla legs - front: thigh, shin, flat foot; hind: bigger thigh/shin/foot
+    for name, x, z in (("leg_fl", 3.5, -5.4), ("leg_fr", -3.5, -5.4)):
+        m.bone(name, (x, 12.2, z), "body")
+        m.bone(name + "_l", (x, 6.6, z), name)
+        m.box(name, x - 1.1, 6.4, z - 1.1, x + 1.1, 12.4, z + 1.1, col)
+        m.box(name + "_l", x - 0.9, 1.0, z - 0.9, x + 0.9, 6.8, z + 0.9, col + "_d")
+        m.box(name + "_l", x - 1.1, 0.0, z - 3.0, x + 1.1, 1.2, z + 1.0, plate)  # foot
+        m.box(name + "_l", x - 0.9, 0.0, z - 3.6, x + 0.9, 0.9, z - 3.0, "fur_cream")  # claws
+    for name, x, z in (("leg_bl", 3.8, 5.4), ("leg_br", -3.8, 5.4)):
+        m.bone(name, (x, 12.6, z), "body")
+        m.bone(name + "_l", (x + 0.2, 6.2, z + 0.4), name)
+        m.box(name, x - 2.0, 6.0, z - 2.0, x + 2.0, 12.8, z + 2.0, col)
+        m.box(name + "_l", x - 1.6, 1.4, z - 1.2, x + 1.8, 6.6, z + 2.0, col + "_d")
+        m.box(name + "_l", x - 2.2, 0.0, z - 3.4, x + 2.2, 1.6, z + 2.4, plate)  # foot
+        m.box(name + "_l", x - 2.0, 0.0, z - 4.2, x + 2.0, 1.1, z - 3.4, "fur_cream")  # claws
+    # ---- saddle between the spikes: brass side rails, a spine backrest, a leather seat, and the mount bone
+    m.sym("body", 2.6, 17.0, -4.4, 3.0, 17.8, 3.4, plate)
+    m.box("body", -1.2, 17.0, -5.4, 1.2, 18.9, -4.2, spine)       # backrest
+    m.box("body", -1.9, 16.9, -4.2, 1.9, 17.5, 3.2, "fur_brown")  # leather seat
+    m.bone("m_seat", (0, 18.2, -0.4), "body")                     # FMM mounts riders here
     # ---------------------------------------------------------------- animations
     FOLD_L = (0, -72, 6)       # folded along the body: swept back, tipped up a finger's width
     FOLD_LT = (0, -48, -4)    # forearm folded in and down against the flank    # fly: a real stroke - fast power downbeat, slower recovery, the elbow lags a beat, the
