@@ -44,6 +44,7 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     private Recipes recipes;
     private KitchenDecor kitchenDecor;
     private Competition competition;
+    private WorldEditIntegration worldEdit;
     private CookingXP cookingXp;
     private Spoilage spoilage;
 
@@ -178,6 +179,11 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     Meals meals() { return meals; }
     Recipes recipes() { return recipes; }
 Competition competition() { return competition; }
+    /** null when neither WorldEdit nor WorldGuard is installed (their classes are then never loaded). */
+    WorldEditIntegration worldEdit() {
+        if (worldEdit == null && getServer().getPluginManager().getPlugin("WorldGuard") != null) worldEdit = new WorldEditIntegration(this);
+        return worldEdit;
+    }
 CookingXP cookingXp() { return cookingXp; }
 Spoilage spoilage() { return spoilage; }
 }

@@ -30,6 +30,7 @@ final class Competition {
     private boolean active;
     private long startTime;
     private long endTime;
+    private String region; // WorldGuard region submissions must be made in (null = anywhere)
     private String theme; // meal category ("any", "ramen", "sushi", ...)
 
     private final Map<UUID, List<Submission>> submissions = new ConcurrentHashMap<>();
@@ -90,6 +91,7 @@ final class Competition {
         startTime = data.getLong("start", 0);
         endTime = data.getLong("end", 0);
         theme = data.getString("theme", "any");
+        region = data.getString("region", null);
         submissions.clear();
         ConfigurationSection subs = data.getConfigurationSection("submissions");
         if (subs != null) {
@@ -118,6 +120,7 @@ final class Competition {
         data.set("start", startTime);
         data.set("end", endTime);
         data.set("theme", theme);
+        data.set("region", region);
         for (Map.Entry<UUID, List<Submission>> e : submissions.entrySet()) {
             List<Map<String, Object>> list = new ArrayList<>();
             for (Submission s : e.getValue()) {
@@ -165,10 +168,18 @@ final class Competition {
     }
     String theme() { return theme; }
 
+    String region() { return region; }
+
+    void setRegion(String name) { region = name; save(); }
+
     // ------------------------------------------------------------ submit
 
     String submit(Player p, ItemStack food) {
         if (!isActive()) return "No competition is running right now.";
+        if (region != null && plugin.worldEdit() != null && plugin.worldEdit().worldGuardAvailable()
+                && !plugin.worldEdit().isInRegion(p.getLocation(), region)) {
+            return "You must be inside the competition area (" + region + ") to submit.";
+        }
         KItem t = plugin.items().typeOf(food);
         if (t == null || (t.kind != KItem.Kind.FOOD && t.kind != KItem.Kind.DRINK && t.kind != KItem.Kind.MEAL)) {
             return "You must be holding a Kitchen meal or food item.";

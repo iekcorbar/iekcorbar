@@ -4,7 +4,7 @@ main: com.iekcorbar.kitchen.KitchenPlugin
 api-version: '26.2'
 description: Japanese farming and cooking - crops, cutting board, cooking pot, kitchen props and animated meals.
 author: iekcorbar
-softdepend: [AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
+softdepend: [WorldEdit, WorldGuard, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 
 commands:
   kitchen:

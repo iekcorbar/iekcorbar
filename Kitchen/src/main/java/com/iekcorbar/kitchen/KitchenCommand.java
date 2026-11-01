@@ -114,7 +114,7 @@ final class KitchenCommand implements TabExecutor {
             case "comp", "competition" -> {
                 boolean admin = s.hasPermission("kitchen.admin");
                 if (a.length < 2) {
-                    s.sendMessage(Component.text("/" + label + " comp start <days> [theme] | stop | status | submit | leaderboard", NamedTextColor.RED));
+                    s.sendMessage(Component.text("/" + label + " comp start <days> [theme] | stop | status | submit | leaderboard | area", NamedTextColor.RED));
                     return true;
                 }
                 switch (a[1].toLowerCase(Locale.ROOT)) {
@@ -153,7 +153,7 @@ final class KitchenCommand implements TabExecutor {
                         }
                         if (lb.isEmpty()) s.sendMessage(Component.text("No entries yet.", NamedTextColor.GRAY));
                     }
-                    default -> s.sendMessage(Component.text("Unknown subcommand. Use: start, stop, status, submit, leaderboard", NamedTextColor.RED));
+                    default -> s.sendMessage(Component.text("Unknown subcommand. Use: start, stop, status, submit, leaderboard, area", NamedTextColor.RED));
                 }
             }
             default -> {
@@ -164,6 +164,7 @@ final class KitchenCommand implements TabExecutor {
                 s.sendMessage(Component.text("Full guide with all recipes: ", NamedTextColor.GRAY)
                         .append(Component.text(plugin.docsUrl(), NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(plugin.docsUrl()))));
                 s.sendMessage(Component.text("/" + label + " list - all items", NamedTextColor.GRAY));
+                s.sendMessage(Component.text("/" + label + " comp status|submit|leaderboard" + (s.hasPermission("kitchen.admin") ? "|start|stop" : "") + " - cooking competition", NamedTextColor.GRAY));
                 if (s.hasPermission("kitchen.admin"))
                     s.sendMessage(Component.text("/" + label + " give|take <player> <item> [amount] | info | reload", NamedTextColor.GRAY));
             }
@@ -180,7 +181,11 @@ final class KitchenCommand implements TabExecutor {
     public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
         List<String> out = new ArrayList<>();
         if (a.length == 1) {
-            for (String v : new String[]{"help", "list", "give", "take", "giveall", "info", "reload"}) if (v.startsWith(a[0].toLowerCase(Locale.ROOT))) out.add(v);
+            for (String v : new String[]{"help", "list", "comp", "give", "take", "giveall", "info", "reload"}) if (v.startsWith(a[0].toLowerCase(Locale.ROOT))) out.add(v);
+        } else if (a.length == 3 && a[0].equalsIgnoreCase("comp") && a[1].equalsIgnoreCase("area")) {
+            for (String v : new String[]{"we", "activate", "deactivate", "remove-we", "status"}) if (v.startsWith(a[2].toLowerCase(Locale.ROOT))) out.add(v);
+        } else if (a.length == 2 && (a[0].equalsIgnoreCase("comp") || a[0].equalsIgnoreCase("competition"))) {
+            for (String v : new String[]{"status", "submit", "leaderboard", "start", "stop", "area"}) if (v.startsWith(a[1].toLowerCase(Locale.ROOT))) out.add(v);
         } else if (a.length == 2 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("take"))) {
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(a[1].toLowerCase(Locale.ROOT))) out.add(p.getName());
         } else if (a.length == 3 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("take"))) {
