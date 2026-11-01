@@ -131,6 +131,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         List<Integer> npcIds = new ArrayList<>();   // meerdere NPC's delven dezelfde quest (Backpack)
         int order = 0;
         String group = "";                     // quest group for GUI grouping (tutorial, backpack, merchant, etc.)
+        String mode = "player";               // player = volgt voorkeur van de speler | gui | chat (forceer)
         boolean fromWizard;                    // komt uit wizard-quests.yml (GUI-wizard)
         boolean randomStart;                 // bij start: willekeurige eerste stage uit 'random-stages'
         List<String> randomStages = new ArrayList<>();
@@ -170,7 +171,10 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private final List<Quest> quests = new ArrayList<>();
     private final Map<String, Seq> sequences = new HashMap<>();
     private final Map<UUID, Map<String, Prog>> prog = new HashMap<>();
+    private final Map<UUID, String[]> chatActive = new HashMap<>();   // speler -> {questId, npc} van het laatste chat-paneel
+    private final Map<UUID, Long> travelCd = new HashMap<>();
     private ItemLibrary items;
+    private NamespacedKey modeKey;
     ItemLibrary items() { return items; }
     private YamlConfiguration data;
     private NamespacedKey tagKey;
@@ -238,6 +242,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         tagKey = new NamespacedKey(this, "tag");
+        modeKey = new NamespacedKey(this, "mode");
         hudOffKey = new NamespacedKey(this, "hud_off");
         if (!new File(getDataFolder(), "quests.yml").exists()) saveResource("quests.yml", false);
         saveDefaultConfig();
@@ -275,7 +280,17 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 }
                 return true;
             }
-            if (sender instanceof Player p) openMenu(p);
+            if (args.length >= 4 && args[0].equalsIgnoreCase("do") && sender instanceof Player dp) { chatDo(dp, args); return true; }
+            if (args.length >= 2 && args[0].equalsIgnoreCase("open") && sender instanceof Player op) {
+                var oq = byId(args[1]);
+                if (oq != null) openQuest(op, oq, 0);
+                return true;
+            }
+            if (args.length >= 1 && args[0].equalsIgnoreCase("mode") && sender instanceof Player mp) {
+                modeCommand(mp, args.length > 1 ? args[1] : null);
+                return true;
+            }
+            if (sender instanceof Player p) { if (chatMode(p, null)) chatMenu(p); else openMenu(p); }
             else sender.sendMessage(Component.text("questbook: from console use reload/reset only"));
             return true;
         });
@@ -458,6 +473,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             if (q.npcId >= 0 && !q.npcIds.contains(q.npcId)) q.npcIds.add(q.npcId);
             q.order = s.getInt("order", 0);
             q.group = s.getString("group", "");
+            q.mode = s.getString("mode", "player").toLowerCase();
             q.randomStart = s.getBoolean("random", false);
             q.startConds = conds(s.getString("start", ""));
             for (var r : s.getStringList("rewards")) q.rewards.add(r);
@@ -700,6 +716,14 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 return bal < 0 ? false : (ge ? bal >= want : bal < want);
             }
             if (c.startsWith("perm:")) return p.hasPermission(c.substring(5));
+            if (c.startsWith("quest:")) {      // andere quest voltooid
+                var m = prog.get(p.getUniqueId());
+                var pp = m == null ? null : m.get(c.substring(6));
+                return pp != null && pp.done;
+            }
+            if (c.startsWith("world:")) return p.getWorld().getName().equalsIgnoreCase(c.substring(6));
+            if (c.startsWith("level>=")) return p.getLevel() >= Integer.parseInt(c.substring(7));
+            if (c.startsWith("gamemode:")) return p.getGameMode().name().equalsIgnoreCase(c.substring(9));
             if (c.equals("night")) { var t = p.getWorld().getTime(); return t > 13000 && t < 23000; }
             if (c.equals("day")) { var t = p.getWorld().getTime(); return t <= 13000 || t >= 23000; }
             return true;   // onbekende string: niet blokkeren (log het niet, te veel ruis)
@@ -793,6 +817,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
+        chatActive.remove(e.getPlayer().getUniqueId());
         prog.remove(e.getPlayer().getUniqueId());
     }
 
@@ -818,9 +843,26 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
         var q = byId(h.quest);
         if (q == null) return;
+        handleTag(p, q, tag, h.npc);
+    }
+
+    /** Eén klik/keuze van de speler: dezelfde logica voor GUI-knoppen en klikbare chat-opties. */
+    void handleTag(Player p, Quest q, String tag, int npc) {
         Prog pr = pr(p, q);
         switch (tag) {
-            case "back" -> { openMenu(p); return; }
+            case "mode:chat" -> {
+                if (!setPref(p, q, "chat")) return;
+                p.closeInventory();
+                chatQuest(p, q, npc);
+                return;
+            }
+            case "mode:gui" -> {
+                if (!setPref(p, q, "gui")) return;
+                chatActive.remove(p.getUniqueId());
+                openQuestGui(p, q, npc);
+                return;
+            }
+            case "back" -> { if (chatMode(p, null)) chatMenu(p); else openMenu(p); return; }
             case "start" -> { startQuest(p, q, pr); return; }
             case "newtry" -> { resetQuest(pr); refresh(p, q); save(); return; }
         }
@@ -837,7 +879,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             boolean npcOk = true;
             for (var cc : c.conds) {
                 if (cc.raw.startsWith("npc:")) {
-                    try { if (h.npc != Integer.parseInt(cc.raw.substring(4))) npcOk = false; }
+                    try { if (npc != Integer.parseInt(cc.raw.substring(4))) npcOk = false; }
                     catch (NumberFormatException ignored) { npcOk = false; }
                 } else rest.add(cc);
             }
@@ -936,7 +978,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (s == null) return;
         speak(p, s.voice);
         // Dialoog in GUI, niet in chat - refresh het paneel met de nieuwe tekst
-        Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) refresh(p, q); }, 2L);
+        if (!chatMode(p, q)) Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) refresh(p, q); }, 2L);
     }
 
     // ---------------------------------------------------------------- flow
@@ -1114,6 +1156,23 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     p.sendMessage(legacy("&cThat item is not available right now. Tell staff."));
                 } else items.give(p, x[0], x.length > 1 ? (int) num(x[1], 1) : 1);
             }
+            case "travel" -> travel(p, val);
+            case "xp" -> p.giveExp((int) num(val.trim(), 0));
+            case "heal" -> {
+                var mh = p.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+                p.setHealth(mh == null ? 20 : mh.getValue());
+            }
+            case "feed" -> { p.setFoodLevel(20); p.setSaturation(20f); }
+            case "broadcast" -> Bukkit.broadcast(legacy(val));
+            case "cmdplayer" -> {
+                final String cmdp = val.startsWith("/") ? val.substring(1) : val;
+                Bukkit.getScheduler().runTask(this, () -> p.performCommand(cmdp));
+            }
+            case "takeitem" -> {
+                String[] x = val.trim().split(" ");
+                take(p, x[0].toLowerCase().startsWith("item:") ? x[0] : (items.exists(x[0]) ? "item:" + x[0] : x[0]),
+                        x.length > 1 ? (int) num(x[1], 1) : 1);
+            }
             case "give" -> {
                 String[] x = val.split(" ");
                 var mt = Material.matchMaterial(x[0]);
@@ -1232,7 +1291,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                                 : held(p, s.material)))
                         + pr.cd.entrySet().stream().map(e -> e.getKey() + (e.getValue() > now() ? 1 : 0))
                                 .reduce("", (a, b) -> a + b);
-                if (!sig.equals(h.sig)) { h.sig = sig; openQuest(p, q, h.npc); }
+                if (!sig.equals(h.sig)) { h.sig = sig; openQuestGui(p, q, h.npc); }
             }
         }
     }
@@ -1393,6 +1452,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private void openQuest(Player p, Quest q) { openQuest(p, q, 0); }
 
     private void openQuest(Player p, Quest q, int npcCtx) {
+        if (chatMode(p, q)) { p.closeInventory(); chatQuest(p, q, npcCtx); }
+        else { chatActive.remove(p.getUniqueId()); openQuestGui(p, q, npcCtx); }
+    }
+
+    private void openQuestGui(Player p, Quest q, int npcCtx) {
         Prog pr = pr(p, q);
         Stage s = pr.stage.isEmpty() ? null : q.stages.get(pr.stage);
         Stage first = q.stages.isEmpty() ? null : q.stages.values().iterator().next();
@@ -1463,6 +1527,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             }
         }
         inv.setItem(40, tagged(Material.BARRIER, "&cBack", "back"));
+        if (q.mode.equals("player")) inv.setItem(4, tagged(Material.WRITABLE_BOOK, "&bConversation mode",
+                "mode:chat"));
         p.openInventory(inv);
     }
 
@@ -1480,7 +1546,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         List<Integer> l = new ArrayList<>();
         for (int i = 36; i <= 44; i++) if (i != 40) l.add(i);
         if (size > 45) {
-            for (int i = 0; i <= 17; i++) if (i != 13) l.add(i);   // overflow-rij bovenaan
+            for (int i = 0; i <= 17; i++) if (i != 13 && i != 4) l.add(i);   // overflow-rij bovenaan
         }
         return l.stream().mapToInt(Integer::intValue).toArray();
     }
@@ -1500,7 +1566,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private void refresh(Player p, Quest q) {
         var holder = p.getOpenInventory().getTopInventory().getHolder();
-        if (holder instanceof Holder h) openQuest(p, q, h.npc);
+        if (holder instanceof Holder h) openQuestGui(p, q, h.npc);
+        else {
+            var ca = chatActive.get(p.getUniqueId());
+            if (ca != null && ca[0].equals(q.id)) chatQuest(p, q, Integer.parseInt(ca[1]));
+        }
     }
 
     private String labelFor(Player p, Quest q, Prog pr, Stage s) {
@@ -1528,6 +1598,204 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     }
 
     // ---------------------------------------------------------------- items
+
+    // ---------------------------------------------------------------- gesprekmodus (chat) + keuze GUI/chat
+
+    /** Voorkeur van de speler: "gui" of "chat" (PDC), anders config default-mode. */
+    private String prefMode(Player p) {
+        String v = p.getPersistentDataContainer().get(modeKey, PersistentDataType.STRING);
+        return v != null ? v : getConfig().getString("default-mode", "gui");
+    }
+
+    /** Chat-modus voor deze speler (en quest)? Een quest kan gui of chat afdwingen. */
+    boolean chatMode(Player p, Quest q) {
+        if (q != null && q.mode.equals("gui")) return false;
+        if (q != null && q.mode.equals("chat")) return true;
+        return prefMode(p).equals("chat");
+    }
+
+    private boolean setPref(Player p, Quest q, String mode) {
+        if (q != null && !q.mode.equals("player")) {
+            p.sendMessage(legacy("&7This quest always uses &f" + q.mode + "&7 mode."));
+            return false;
+        }
+        p.getPersistentDataContainer().set(modeKey, PersistentDataType.STRING, mode);
+        p.sendMessage(legacy("&7Quest mode: &f" + (mode.equals("chat") ? "conversation (clickable chat)" : "GUI windows")
+                + "&7. Switch any time with &f/questbook mode&7."));
+        return true;
+    }
+
+    private void modeCommand(Player p, String arg) {
+        String cur = prefMode(p);
+        String want = arg == null ? (cur.equals("chat") ? "gui" : "chat") : arg.toLowerCase();
+        if (!want.equals("gui") && !want.equals("chat")) { p.sendMessage(legacy("&cUsage: /questbook mode [gui|chat]")); return; }
+        if (!setPref(p, null, want)) return;
+        var ca = chatActive.get(p.getUniqueId());
+        if (want.equals("gui")) {
+            chatActive.remove(p.getUniqueId());
+            if (ca != null && byId(ca[0]) != null) openQuestGui(p, byId(ca[0]), Integer.parseInt(ca[1]));
+            else openMenu(p);
+        } else chatMenu(p);
+    }
+
+    private Component button(String label, String command, String hover) {
+        return legacy("&8[ " + label + " &8]")
+                .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand(command))
+                .hoverEvent(net.kyori.adventure.text.event.HoverEvent.showText(legacy(hover)));
+    }
+
+    private String doCmd(Quest q, Prog pr, String tag, int npc) {
+        return "/questbook do " + q.id + " " + (pr.stage.isEmpty() ? "-" : pr.stage) + " " + tag + " " + npc;
+    }
+
+    /** Klik uit de chat: controleert dat de knop nog bij de huidige stage hoort, dan dezelfde logica als de GUI. */
+    private void chatDo(Player p, String[] a) {
+        var q = byId(a[1]);
+        if (q == null) return;
+        Prog pr = pr(p, q);
+        String tag = a[3];
+        int npc = 0;
+        try { npc = a.length > 4 ? Integer.parseInt(a[4]) : 0; } catch (NumberFormatException ignored) { }
+        boolean stateful = tag.equals("start") || tag.equals("newtry") || tag.equals("act")
+                || tag.startsWith("choice:") || tag.startsWith("menu:");
+        String cur = pr.stage.isEmpty() ? "-" : pr.stage;
+        if (stateful && !cur.equals(a[2])) {
+            p.sendMessage(legacy("&7That option is no longer available."));
+            chatQuest(p, q, npc);
+            return;
+        }
+        handleTag(p, q, tag, npc);
+    }
+
+    private void chatMenu(Player p) {
+        chatActive.remove(p.getUniqueId());
+        p.sendMessage(legacy("&6&l━━ Quests ━━"));
+        int n = 0;
+        for (var q : quests) {
+            var pr = pr(p, q);
+            if (!(ok(p, q, pr, q.startConds) || (pr.started && !pr.done))) continue;
+            p.sendMessage(button("&e" + plain(q.title), "/questbook open " + q.id, "Open this quest")
+                    .append(legacy(" " + statusLine(q, pr))));
+            n++;
+        }
+        if (n == 0) p.sendMessage(legacy("&7No quests available right now."));
+        p.sendMessage(button("&bSwitch to GUI", "/questbook mode gui", "Use windows instead of chat"));
+    }
+
+    private void chatQuest(Player p, Quest q, int npc) {
+        Prog pr = pr(p, q);
+        Stage s = pr.stage.isEmpty() ? null : q.stages.get(pr.stage);
+        Stage first = q.stages.isEmpty() ? null : q.stages.values().iterator().next();
+        chatActive.put(p.getUniqueId(), new String[]{q.id, String.valueOf(npc)});
+
+        p.sendMessage(Component.empty());
+        p.sendMessage(legacy("&6&l━━ ").append(legacy(q.title)).append(legacy(" &6&l━━")));
+        if (!q.subtitle.isEmpty()) p.sendMessage(legacy("&8" + q.subtitle));
+        if (!pr.started) {
+            p.sendMessage(legacy("&7Ready when you are."));
+            p.sendMessage(button("&a✔ Start quest", doCmd(q, pr, "start", npc), "Begin this quest"));
+        } else if (pr.done) {
+            p.sendMessage(legacy("&aThe quest is complete!"));
+            for (var j : q.journal) p.sendMessage(legacy("&7" + j));
+            for (var r : q.repeats) {
+                Long cd = pr.cd.get(r.id);
+                boolean ready = cd == null || cd <= now();
+                String cnt = r.kind.equals("deliver") && r.items.isEmpty()
+                        ? " (" + held(p, r.material, r.name.isEmpty() ? null : r.name) + "/" + r.amount + ")" : "";
+                p.sendMessage(button((ready ? "&a" : "&7") + r.label + cnt + (ready ? "" : " &7still " + fmt(cd - now())),
+                        doCmd(q, pr, "repeat:" + r.id, npc), ready ? "Hand in again" : "On cooldown"));
+            }
+            if (q.repeats.isEmpty())
+                p.sendMessage(button("&aStart the quest again", doCmd(q, pr, "newtry", npc), "Reset and begin again"));
+            if (first != null) {
+                for (int i = 0; i < first.choices.size(); i++)
+                    p.sendMessage(button("&f" + first.choices.get(i).label, doCmd(q, pr, "menu:" + i, npc), "Choose"));
+            }
+        } else if (s != null) {
+            for (var l : s.lines) p.sendMessage(legacy(l));
+            if (!s.kind.equals("menu"))
+                p.sendMessage(button(labelFor(p, q, pr, s), doCmd(q, pr, "act", npc), "Do this step"));
+            if (s.kind.equals("walk") && s.loc != null)
+                p.sendMessage(button("&6Point the way", doCmd(q, pr, "compass:" + s.loc.getWorld().getName() + ";"
+                        + s.loc.getBlockX() + ";" + s.loc.getBlockY() + ";" + s.loc.getBlockZ(), npc), "Aim your compass"));
+            for (int i = 0; i < s.choices.size(); i++)
+                p.sendMessage(button("&f▸ " + s.choices.get(i).label, doCmd(q, pr, "choice:" + i, npc), "Choose"));
+        }
+        Component foot = Component.empty();
+        if (q.mode.equals("player"))
+            foot = foot.append(button("&bGUI mode", "/questbook mode gui", "Use windows instead of chat")).append(Component.text(" "));
+        foot = foot.append(button("&7Quests", "/questbook", "All quests"));
+        p.sendMessage(foot);
+    }
+
+    // ---------------------------------------------------------------- travel (spelers mogen, anders dan 'teleport')
+
+    /**
+     * travel <bestemming> [cost=N] [warmup=S]. Bestemming = naam uit config travel.destinations of "x;y;z;wereld".
+     * Spelers wachten (warmup) zonder te bewegen; kosten worden pas bij vertrek geind (cmi money take).
+     */
+    private void travel(Player p, String val) {
+        var cfg = getConfig();
+        if (!cfg.getBoolean("travel.enabled", true)) { p.sendMessage(legacy("&7Travel is switched off right now.")); return; }
+        String[] t = val.trim().split("\\s+");
+        if (t.length == 0 || t[0].isEmpty()) return;
+        double cost = 0;
+        int warm = cfg.getInt("travel.warmup-seconds", 3);
+        for (int i = 1; i < t.length; i++) {
+            String[] kv = t[i].split("=", 2);
+            if (kv.length < 2) continue;
+            if (kv[0].equalsIgnoreCase("cost")) cost = num(kv[1], 0);
+            else if (kv[0].equalsIgnoreCase("warmup")) warm = (int) num(kv[1], warm);
+        }
+        String rawLoc = cfg.getString("travel.destinations." + t[0], t[0]);
+        Location dest = parseLoc(rawLoc);
+        if (dest == null) {
+            p.sendMessage(legacy("&cUnknown destination. Tell staff."));
+            getLogger().warning("travel: onbekende bestemming '" + t[0] + "'");
+            return;
+        }
+        long cdSec = cfg.getLong("travel.cooldown-seconds", 0);
+        Long until = travelCd.get(p.getUniqueId());
+        if (cdSec > 0 && until != null && until > System.currentTimeMillis()) {
+            p.sendMessage(legacy("&cYou can travel again in " + fmt((until - System.currentTimeMillis()) / 1000) + "."));
+            deny(p);
+            return;
+        }
+        final double fcost = cost;
+        if (fcost > 0 && balance(p) < fcost) {
+            p.sendMessage(legacy("&cTravel costs &f" + (long) fcost + "&c - you can't afford it."));
+            deny(p);
+            return;
+        }
+        p.closeInventory();
+        final Location from = p.getLocation().clone();
+        final int[] left = {Math.max(0, warm) * 2};      // halve seconden
+        final String destName = t[0];
+        Runnable go = () -> {
+            if (fcost > 0) {
+                if (balance(p) < fcost) { p.sendMessage(legacy("&cTravel cancelled - not enough money.")); return; }
+                dispatch("cmi money take " + p.getName() + " -s " + (long) fcost);
+                logTx(p, null, "travel " + destName + " cost " + (long) fcost);
+            }
+            if (cdSec > 0) travelCd.put(p.getUniqueId(), System.currentTimeMillis() + cdSec * 1000);
+            p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 0.7f, 1f);
+            p.teleportAsync(dest).thenAccept(ok -> {
+                if (ok) p.playSound(dest, Sound.ENTITY_ENDERMAN_TELEPORT, SoundCategory.PLAYERS, 0.7f, 1.2f);
+            });
+        };
+        if (left[0] == 0) { go.run(); return; }
+        Bukkit.getScheduler().runTaskTimer(this, task -> {
+            if (!p.isOnline()) { task.cancel(); return; }
+            if (!p.getWorld().equals(from.getWorld()) || p.getLocation().distanceSquared(from) > 2.25) {
+                p.sendActionBar(legacy("&cTravel cancelled - you moved."));
+                task.cancel();
+                return;
+            }
+            if (left[0] <= 0) { task.cancel(); go.run(); return; }
+            p.sendActionBar(legacy("&bTravelling in &f" + ((left[0] + 1) / 2) + "s &7- stand still"));
+            left[0]--;
+        }, 0L, 10L);
+    }
 
     private ItemStack item(String material, String name, List<String> lore) {
         var mt = Material.matchMaterial(material);

@@ -3,6 +3,8 @@ package com.iekcorbar.quests;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.attribute.AttributeModifier;
@@ -162,6 +164,24 @@ final class ItemLibrary implements Listener, TabExecutor {
             if (nk != null) im.setItemModel(nk);
         }
 
+        // kleur (leren armor / drankjes), schedel-textuur, model-data, stackgrootte
+        String color = s.getString("color", "");
+        if (!color.isEmpty()) {
+            try {
+                var col = org.bukkit.Color.fromRGB(Integer.parseInt(color.replace("#", ""), 16));
+                if (im instanceof org.bukkit.inventory.meta.LeatherArmorMeta lm) lm.setColor(col);
+                else if (im instanceof org.bukkit.inventory.meta.PotionMeta pm) pm.setColor(col);
+            } catch (Exception ex) { plugin.getLogger().warning("IekItems: " + id + ": color '" + color + "' is geen hex"); }
+        }
+        String tex = s.getString("texture", "");
+        if (!tex.isEmpty() && im instanceof org.bukkit.inventory.meta.SkullMeta sm) {
+            var prof = org.bukkit.Bukkit.createProfile(java.util.UUID.nameUUIDFromBytes(tex.getBytes()), null);
+            prof.setProperty(new com.destroystokyo.paper.profile.ProfileProperty("textures", tex));
+            sm.setPlayerProfile(prof);
+        }
+        if (s.contains("custom-model-data")) im.setCustomModelData(s.getInt("custom-model-data"));
+        if (s.contains("max-stack")) im.setMaxStackSize(Math.max(1, Math.min(99, s.getInt("max-stack", 64))));
+
         // attributes: "attack_damage 7 add_number mainhand"  (naam, waarde, operatie, slot)
         int n = 0;
         for (String a : s.getStringList("attributes")) {
@@ -230,10 +250,38 @@ final class ItemLibrary implements Listener, TabExecutor {
             return;
         }
         if (s.getBoolean("consume")) st.setAmount(st.getAmount() - 1);
+        String snd = s.getString("use-sound", "");
+        if (!snd.isEmpty()) p.playSound(p.getLocation(), snd, org.bukkit.SoundCategory.PLAYERS, 1f, 1f);
+        String umsg = s.getString("use-message", "");
+        if (!umsg.isEmpty()) p.sendMessage(legacy(umsg));
         plugin.runItemActions(p, use);
     }
 
     private final Map<String, Long> lastUse = new java.util.HashMap<>();
+
+    /** soulbound: blijft bij de speler na de dood. */
+    @EventHandler
+    public void onDeath(PlayerDeathEvent e) {
+        if (e.getKeepInventory()) return;
+        var it = e.getDrops().iterator();
+        while (it.hasNext()) {
+            var st = it.next();
+            String id = idOf(st);
+            var d = id == null ? null : defs.get(id);
+            if (d != null && d.getBoolean("soulbound")) { e.getItemsToKeep().add(st); it.remove(); }
+        }
+    }
+
+    /** undroppable: kan niet op de grond gegooid worden. */
+    @EventHandler(ignoreCancelled = true)
+    public void onDrop(PlayerDropItemEvent e) {
+        String id = idOf(e.getItemDrop().getItemStack());
+        var d = id == null ? null : defs.get(id);
+        if (d != null && d.getBoolean("undroppable")) {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage(legacy("&7You can't drop that."));
+        }
+    }
 
     // ---------------------------------------------------------------- /iekitem
 

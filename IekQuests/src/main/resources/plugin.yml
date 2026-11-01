@@ -9,7 +9,7 @@ softdepend: [Citizens, Vault, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, Kitchen
 commands:
   questbook:
     description: Open the quest menu (or admin operations)
-    usage: /questbook [reload|check [player]|track|reset <player> [quest]]
+    usage: /questbook [mode [gui|chat]|reload|check [player]|track|reset <player> [quest]]
     aliases: [questsui, iquests]
   questwizard:
     description: In-game wizard to build a new quest (and NPC) into the config

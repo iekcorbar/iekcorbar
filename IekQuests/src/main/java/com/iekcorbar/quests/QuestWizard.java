@@ -118,6 +118,8 @@ final class QuestWizard implements Listener {
                 "&7current: &f" + condText(q.startConds), "q.start");
         put(inv, 7, Material.BOOK, "&dJournal lines", "&7lines: &f" + q.journal.size(), "q.journal");
         put(inv, 8, Material.CHEST, "&dQuest rewards", "&7lines: &f" + q.rewards.size(), "q.rewards");
+        put(inv, 10, Material.WRITABLE_BOOK, "&bConversation mode", "&7current: &f" + q.mode
+                + " &8(player = player's choice, gui, chat)", "q.mode");
         put(inv, 9, Material.AMETHYST_SHARD, "&d+ Item reward (quest)", "&7Pick or create a custom item", "ipick.qrew");
 
         int s = 18;
@@ -262,6 +264,9 @@ final class QuestWizard implements Listener {
                 "&eRewards / do-actions:", "&fmoney N &7| &feco N &7| &fpay N (cost) &7| &ftitle A|B &7| &fsound ns:key",
                 "&fsay text &7| &ftag+ name &7| &ftag- name", "&fpoint cat +N &7| &feffect TYPE secs amp",
                 "&fgive MAT N &7| &fitem <id> [n] &7(IekItems) | &fshop console-cmd %player%",
+                "&ftravel <dest|x;y;z;world> [cost=N] [warmup=S] &7(players may)",
+                "&fxp N &7| &fheal &7| &ffeed &7| &fbroadcast text &7| &fcmdplayer cmd &7| &ftakeitem id N",
+                "&fconditions also: quest:id &7| world:name &7| level>=N &7| gamemode:x",
                 "&fteleport x;y;z;world &8(staff only - players get a compass)",
                 "&fcompass x;y;z;world &7| &fperm+ node &7| &fperm- node",
                 "&7anything else runs as a &fconsole command&7.",
@@ -362,6 +367,11 @@ final class QuestWizard implements Listener {
     private void route(Player p, WH h, String tag) {
         if (itemPick(p, tag)) return;
         Quest q = drafts.get(p.getUniqueId());
+        if (tag.equals("q.mode") && q != null) {
+            q.mode = switch (q.mode) { case "player" -> "gui"; case "gui" -> "chat"; default -> "player"; };
+            main(p);
+            return;
+        }
         switch (tag) {
             case "close" -> { p.closeInventory(); waiting.remove(p.getUniqueId()); return; }
             case "back" -> {
@@ -933,6 +943,7 @@ final class QuestWizard implements Listener {
         sb.append("    icon: ").append(q.icon).append('\n');
         sb.append("    npc-id: ").append(q.npcId).append('\n');
         sb.append("    order: ").append(q.order).append('\n');
+        if (!q.mode.equals("player")) sb.append("    mode: ").append(q.mode).append('\n');
         if (!q.startConds.isEmpty()) line(sb, 4, "start", join(q.startConds));
         list(sb, "journal", q.journal, 4);
         list(sb, "rewards", q.rewards, 4);

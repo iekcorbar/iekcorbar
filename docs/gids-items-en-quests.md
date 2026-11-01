@@ -174,3 +174,33 @@ Overal paarse **amethist-scherf**-knoppen: die openen dezelfde browser als kieze
 - In de kiezer kun je ook **+ New item** doen en het meteen volledig bewerken (incl. model) en daarna
   **Select this item** klikken. Bij beloningen vraagt hij daarna het aantal.
 - Wat de wizard opslaat: `item <id> <aantal>` als beloning en `material: ITEM:<ID>` bij inleveren.
+
+## H. Gesprekmodus, klikbare chat en travel (IekQuests 0.8.0)
+
+**Twee manieren om een quest te spelen**
+- **GUI-modus**: het venster met knoppen (zoals tot nu toe).
+- **Gesprekmodus**: de NPC praat in de chat en elke optie is een **aanklikbare knop** in de chat
+  (`[ ✔ Start quest ]`, `[ ▸ keuze ]`, `[ Hand in ]`). Niets typen; klikken kan ook als je de chat open hebt.
+- Wisselen: `/questbook mode` (of `/questbook mode gui|chat`), de knop **Conversation mode** (boek, bovenin het
+  quest-venster) of **[GUI mode]** onderaan het chatpaneel. De keuze wordt per speler onthouden.
+  Standaard voor nieuwe spelers: `default-mode` in config.yml.
+- Een quest kan een modus afdwingen: `mode: gui` of `mode: chat` (default `player` = speler kiest). In de
+  wizard: knop **Conversation mode** (hoofdscherm) wisselt player / gui / chat.
+- Oude knoppen in de chat werken niet meer als de stage veranderd is ("That option is no longer available").
+
+**Teleporteren voor spelers: de `travel` actie**
+- `travel <bestemming> [cost=N] [warmup=S]`, als beloning of in de do-lijst van een keuze (met `close: true`
+  voor een reismeester-NPC). Bestemming = naam uit `travel.destinations` in config.yml, of `x;y;z;wereld`.
+- De speler moet `warmup` seconden stilstaan (standaard 3), anders breekt het af. Kosten worden pas bij
+  vertrek afgeschreven (`cmi money take`) en staan in transactions.log. Optionele cooldown per speler.
+- `teleport` blijft zoals het was: alleen voor staff (spelers krijgen een kompas). `travel` is de bewuste
+  uitzondering. Uitzetten kan met `travel.enabled: false`.
+
+**Nieuwe quest-opties**
+- Condities: `quest:<id>` (die quest is klaar), `world:<naam>`, `level>=N`, `gamemode:<modus>`.
+  Met `!` ervoor omdraaien, komma = en.
+- Acties: `xp N`, `heal`, `feed`, `broadcast tekst`, `cmdplayer <commando>` (speler voert het zelf uit),
+  `takeitem <iekitem|MATERIAAL> N`, `travel ...`.
+
+**Nieuwe item-opties** (ook in de editor): `soulbound` (blijft bij dood), `undroppable`, `color` (hex, leren
+armor/drankjes), `texture` (base64, hoofden), `custom-model-data`, `max-stack`, `use-sound`, `use-message`.

@@ -167,6 +167,14 @@ final class ItemEditor implements Listener {
                 "&7Same syntax as quest rewards."));
         inv.setItem(23, btn(Material.CLOCK, "&6Use cooldown (s)", "f:use-cooldown", "&7current: &f" + s.getDouble("use-cooldown", 1.0)));
         inv.setItem(24, btn(Material.TRIPWIRE_HOOK, "&6Use permission", "f:use-permission", "&7current: &f" + s.getString("use-permission", "-")));
+        inv.setItem(25, btn(Material.SOUL_LANTERN, "&6Soulbound", "t:soulbound", yn(s.getBoolean("soulbound")), "&7Stays with the player on death."));
+        inv.setItem(26, btn(Material.BARRIER, "&6Undroppable", "t:undroppable", yn(s.getBoolean("undroppable"))));
+        inv.setItem(28, btn(Material.LEATHER_CHESTPLATE, "&6Color (hex)", "f:color", "&7current: &f" + s.getString("color", "-"), "&7Leather armor / potions, e.g. ff8800"));
+        inv.setItem(29, btn(Material.PLAYER_HEAD, "&6Head texture", "f:texture", "&7" + (s.getString("texture", "").isEmpty() ? "-" : "set"), "&7Base64 texture value (skull items)."));
+        inv.setItem(30, btn(Material.COMPARATOR, "&6Custom model data", "f:custom-model-data", "&7current: &f" + s.getString("custom-model-data", "-"), "&7Number, for old-style packs."));
+        inv.setItem(32, btn(Material.CHEST_MINECART, "&6Max stack size", "f:max-stack", "&7current: &f" + s.getString("max-stack", "default")));
+        inv.setItem(34, btn(Material.NOTE_BLOCK, "&6Use sound", "f:use-sound", "&7current: &f" + s.getString("use-sound", "-"), "&7e.g. entity.player.levelup"));
+        inv.setItem(35, btn(Material.OAK_SIGN, "&6Use message", "f:use-message", "&7current: &f" + s.getString("use-message", "-")));
         inv.setItem(31, btn(Material.CHEST, "&aGet a copy", "get"));
         inv.setItem(33, btn(Material.LAVA_BUCKET, "&cDelete (shift-click)", "delete"));
         if (ss.onPick != null) inv.setItem(40, btn(Material.EMERALD_BLOCK, "&a&lSelect this item", "select"));
@@ -426,6 +434,11 @@ final class ItemEditor implements Listener {
                 Material m = text.equalsIgnoreCase("hand") ? p.getInventory().getItemInMainHand().getType() : Material.matchMaterial(text);
                 if (m == null || m.isAir()) p.sendMessage(legacy("&cUnknown material."));
                 else lib.put(id, "material", m.name());
+                editor(p, id);
+            }
+            case "max-stack", "custom-model-data" -> {
+                if (clear) lib.put(id, ctx, null);
+                else try { lib.put(id, ctx, Integer.parseInt(text)); } catch (Exception ex) { p.sendMessage(legacy("&cNot a number.")); }
                 editor(p, id);
             }
             case "use-cooldown" -> {

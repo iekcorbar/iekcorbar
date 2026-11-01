@@ -54,3 +54,23 @@ inventory-items:
       - "&7Click to open your claims (gouw) menu."
       - "&7"
     action: "player:gouw menu"
+
+# ---- quest mode (0.8): "gui" windows or "chat" = clickable conversation in chat.
+# Players switch with /questbook mode (or the button in the quest window).
+# A quest can force one with `mode: gui|chat` (default `player` = player's choice).
+default-mode: gui
+
+# ---- travel action: "travel <destination|x;y;z;world> [cost=N] [warmup=S]"
+# Unlike `teleport` (staff only), players may use `travel`: they must stand still during warmup.
+travel:
+  enabled: true
+  warmup-seconds: 3
+  cooldown-seconds: 0
+  destinations:
+    # spawn: "0;80;0;world"
+    # guild: "2902;88;-408;iekcorbarSeason2"
+
+# ---- IekItems model browser: folders (relative to the server root) whose .zip packs are scanned
+# for item models. Default: the ResourcePackManager mixer.
+# pack-dirs:
+#   - plugins/ResourcePackManager/mixer
