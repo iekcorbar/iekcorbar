@@ -896,6 +896,7 @@ export default function ClientProviders({ children }) {
                     { href: '/events', label: 'Events', icon: Calendar, match: (p) => p.startsWith('/events') },
                     { href: '/projects', label: 'Projects', icon: Hammer, match: (p) => p.startsWith('/projects') },
                     { href: '/known-bugs', label: 'Known Bugs', icon: Bug, match: (p) => p.startsWith('/known-bugs') },
+                    { href: '/report-bug', label: 'Report a Bug', icon: Bug, match: (p) => p.startsWith('/report-bug') },
                     { href: '/behind-the-scenes', label: 'Behind the scenes', icon: Wrench, match: (p) => p === '/behind-the-scenes' },
                   ]}
                 />
@@ -1087,6 +1088,7 @@ export default function ClientProviders({ children }) {
                 { href: '/events', label: 'Events', icon: Calendar, match: (p) => p.startsWith('/events') },
                 { href: '/projects', label: 'Projects', icon: Hammer, match: (p) => p.startsWith('/projects') },
                 { href: '/known-bugs', label: 'Known Bugs', icon: Bug, match: (p) => p.startsWith('/known-bugs') },
+                { href: '/report-bug', label: 'Report a Bug', icon: Bug, match: (p) => p.startsWith('/report-bug') },
                     { href: '/behind-the-scenes', label: 'Behind the scenes', icon: Wrench, match: (p) => p === '/behind-the-scenes' },
               ].map(({ href, label, icon: Icon, match }) => (
                 <Link

@@ -19,10 +19,89 @@ function isOwnReport(user, report) {
     report.reporterEmail.toLowerCase() === user.email.toLowerCase();
 }
 
+// Anonymous submissions (no account) — in-memory per-IP limiter, same
+// "lost on restart, good enough" trade-off as global.__pending_registrations.
+const ANON_LIMIT = 3;
+const ANON_WINDOW_MS = 60 * 60 * 1000;
+function anonRateLimited(request) {
+  const fwd = request.headers.get('x-forwarded-for');
+  const ip = ((fwd ? fwd.split(',')[0] : request.headers.get('x-real-ip')) || 'unknown').trim();
+  const store = (global.__anon_bug_hits = global.__anon_bug_hits || new Map());
+  const now = Date.now();
+  const hits = (store.get(ip) || []).filter(t => now - t < ANON_WINDOW_MS);
+  if (hits.length >= ANON_LIMIT) { store.set(ip, hits); return true; }
+  hits.push(now);
+  store.set(ip, hits);
+  if (store.size > 5000) {
+    for (const [k, v] of store) if (!v.some(t => now - t < ANON_WINDOW_MS)) store.delete(k);
+  }
+  return false;
+}
+
 export async function POST(request) {
   try {
     const body = await request.json();
     const { action = 'submit' } = body;
+
+    // Report without an account. Stored with an empty reporter_email (column
+    // is NOT NULL), so it never matches a real member (isOwnReport requires a
+    // truthy email) and the fixed/contact notifications skip it. An optional
+    // contact address / in-game name is unverified and lives in the text only.
+    if (action === 'submit_anonymous') {
+      if (body.website) return NextResponse.json({ success: true }); // honeypot: bots fill it, silently drop
+      if (anonRateLimited(request)) {
+        return NextResponse.json({ error: "Too many reports from your connection — please try again in an hour." }, { status: 429 });
+      }
+
+      const { subject, description, category, customCategory, contact, ign } = body;
+      const cleanSubject = String(subject || '').trim().slice(0, 200);
+      const cleanDescription = String(description || '').trim().slice(0, 5000);
+      if (!cleanSubject || !cleanDescription) {
+        return NextResponse.json({ error: "Subject and description are required" }, { status: 400 });
+      }
+      if (!category || !BUG_CATEGORY_VALUES.includes(category)) {
+        return NextResponse.json({ error: "Please pick a category" }, { status: 400 });
+      }
+      const cleanCustom = String(customCategory || '').trim().slice(0, 150);
+      if (category === 'other' && !cleanCustom) {
+        return NextResponse.json({ error: "Please describe the category when picking \"Other\"" }, { status: 400 });
+      }
+      const cleanContact = String(contact || '').trim().slice(0, 200);
+      const cleanIgn = String(ign || '').trim().replace(/[^A-Za-z0-9_]/g, '').slice(0, 16);
+
+      const fullDescription = cleanDescription +
+        (cleanContact || cleanIgn ? `\n\n— Submitted without an account (unverified)${cleanIgn ? `\nIn-game name: ${cleanIgn}` : ''}${cleanContact ? `\nContact: ${cleanContact}` : ''}` : '\n\n— Submitted without an account');
+
+      const saved = await db.submitBugReport({
+        reporterEmail: '',
+        reporterUsername: cleanIgn || null,
+        subject: cleanSubject,
+        description: fullDescription,
+        category,
+        customCategory: category === 'other' ? cleanCustom : null
+      });
+      if (!saved) {
+        return NextResponse.json({ error: "Could not submit report (database unreachable). Please try again shortly." }, { status: 500 });
+      }
+
+      db.createNotification({
+        type: 'bug_report',
+        message: `New bug report (no account): ${cleanSubject}`,
+        link: '/moderation?tab=bugs'
+      }).catch(() => {});
+
+      try {
+        await sendMail({
+          to: BUG_REPORT_EMAIL,
+          subject: `[Iekcorbar Bug Report] ${cleanSubject}`,
+          text: `From: anonymous${cleanIgn ? ` (IGN ${cleanIgn})` : ''}${cleanContact ? `, contact ${cleanContact}` : ''}\nCategory: ${category === 'other' ? cleanCustom : category}\n\n${cleanDescription}`
+        });
+      } catch (mailErr) {
+        console.error("Failed to email bug report:", mailErr);
+      }
+
+      return NextResponse.json({ success: true });
+    }
 
     if (action === 'submit') {
       const sessionUser = await getSessionUser(request);
@@ -211,6 +290,9 @@ export async function POST(request) {
       const reports = await db.getBugReports();
       const report = reports.find(r => r.id === id);
       if (!report) return NextResponse.json({ error: "Report not found" }, { status: 404 });
+      if (!report.reporterEmail && channel !== 'chat') {
+        return NextResponse.json({ error: "This report was filed without an account — there is no bell or email to reach. Use the contact detail in the description." }, { status: 400 });
+      }
 
       const trimmed = message.trim();
 

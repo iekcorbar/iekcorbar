@@ -74,6 +74,9 @@ export default function KnownBugsPage() {
         >
           Sign In / Register
         </button>
+        <Link href="/report-bug" className="block text-xs font-bold uppercase tracking-wide text-sp-gold hover:text-white transition-colors">
+          Just want to report a bug? No account needed →
+        </Link>
       </div>
     );
   }
