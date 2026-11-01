@@ -118,6 +118,7 @@ final class QuestWizard implements Listener {
                 "&7current: &f" + condText(q.startConds), "q.start");
         put(inv, 7, Material.BOOK, "&dJournal lines", "&7lines: &f" + q.journal.size(), "q.journal");
         put(inv, 8, Material.CHEST, "&dQuest rewards", "&7lines: &f" + q.rewards.size(), "q.rewards");
+        put(inv, 9, Material.AMETHYST_SHARD, "&d+ Item reward (quest)", "&7Pick or create a custom item", "ipick.qrew");
 
         int s = 18;
         for (var st : q.stages.values()) {
@@ -172,6 +173,8 @@ final class QuestWizard implements Listener {
         put(inv, 7, st.loc == null ? Material.GRAY_DYE : Material.GREEN_DYE, "&6Location (walk)",
                 st.loc == null ? "&7not set - click to use your spot" : "&7" + fmtLoc(st.loc), "s.loc:" + i);
         put(inv, 8, Material.COMPASS, "&6Radius", "&7current: &f" + st.radius, "s.radius:" + i);
+        put(inv, 11, Material.AMETHYST_SHARD, "&d&lCustom item", "&7Custom item as Material (craft/deliver)", "ipick.smat:" + i);
+        put(inv, 22, Material.AMETHYST_SHARD, "&d+ Item reward (stage)", "&7Pick or create a custom item", "ipick.srew:" + i);
         put(inv, 9, Material.ARROW, "&eNext stage key", "&7current: &f" + (st.next.isEmpty() ? "(automatic)" : st.next), "s.next:" + i);
         put(inv, 10, Material.LAVA_BUCKET, "&eGoto override", "&7current: &f" + (st.gotoKey.isEmpty() ? "-" : st.gotoKey), "s.goto:" + i);
         put(inv, 19, Material.WRITABLE_BOOK, "&dConversation lines", "&7lines: &f" + st.lines.size(), "s.lines:" + i);
@@ -218,6 +221,7 @@ final class QuestWizard implements Listener {
         put(inv, 3, Material.TRIPWIRE_HOOK, "&6Conditions", "&7" + condText(c.conds), "c.cond:" + i + ":" + j);
         put(inv, 4, Material.NOTE_BLOCK, "&6Voice sound key", "&7current: &f" + (c.voice.isEmpty() ? "-" : c.voice), "c.voice:" + i + ":" + j);
         put(inv, 6, Material.CHEST, "&aDo-actions (rewards syntax)", "&7lines: &f" + c.doList.size(), "c.do:" + i + ":" + j);
+        put(inv, 7, Material.AMETHYST_SHARD, "&d+ Item (do-action)", "&7Pick or create a custom item", "ipick.cdo:" + i + ":" + j);
         put(inv, 40, Material.LAVA_BUCKET, "&cDelete this choice", "c.del:" + i + ":" + j);
         put(inv, 45, Material.ARROW, "&cBack", "back");
         p.openInventory(inv);
@@ -241,6 +245,8 @@ final class QuestWizard implements Listener {
                 rp.loc == null ? "&7not set - click to use your spot" : "&7" + fmtLoc(rp.loc), "r.loc:" + i);
         put(inv, 8, Material.NOTE_BLOCK, "&6Voice sound key", "&7current: &f" + (rp.voice.isEmpty() ? "-" : rp.voice), "r.voice:" + i);
         put(inv, 10, Material.CHEST, "&dExtra reward lines", "&7lines: &f" + rp.rewards.size(), "r.rewards:" + i);
+        put(inv, 9, Material.AMETHYST_SHARD, "&d&lCustom item (material)", "&7Contract asks for a custom item", "ipick.rmat:" + i);
+        put(inv, 11, Material.AMETHYST_SHARD, "&d+ Item reward (contract)", "&7Pick or create a custom item", "ipick.rrew:" + i);
         put(inv, 12, Material.DAYLIGHT_DETECTOR, "&dOnce per day", rp.daily ? "&2ON" : "&7off", "r.daily:" + i);
         put(inv, 40, Material.LAVA_BUCKET, "&cDelete contract", "r.del:" + i);
         put(inv, 45, Material.ARROW, "&cBack", "back");
@@ -255,10 +261,12 @@ final class QuestWizard implements Listener {
                 "&fmoney>=N &7| &fmoney<N",
                 "&eRewards / do-actions:", "&fmoney N &7| &feco N &7| &fpay N (cost) &7| &ftitle A|B &7| &fsound ns:key",
                 "&fsay text &7| &ftag+ name &7| &ftag- name", "&fpoint cat +N &7| &feffect TYPE secs amp",
-                "&fgive MAT N &7| &fshop console-cmd %player%",
+                "&fgive MAT N &7| &fitem <id> [n] &7(IekItems) | &fshop console-cmd %player%",
                 "&fteleport x;y;z;world &8(staff only - players get a compass)",
                 "&fcompass x;y;z;world &7| &fperm+ node &7| &fperm- node",
                 "&7anything else runs as a &fconsole command&7.",
+                "&eCustom items: material item:<id> (deliver/craft), reward item <id> [n].",
+                "&7Purple shard buttons pick or create items.",
                 "&eStage extras: 'name' filter on deliver/craft",
                 "&7(matches only items whose display name contains it - e.g. Techcore steel).",
                 "&eVoices: steamworks:milo.line01 ... igor.line12",
@@ -316,7 +324,43 @@ final class QuestWizard implements Listener {
         route(p, h, tag);
     }
 
+    /** Knoppen die de IekItems-kiezer openen; het resultaat gaat in de draft en de pagina opent opnieuw. */
+    private boolean itemPick(Player p, String tag) {
+        if (!tag.startsWith("ipick.")) return false;
+        Quest q = drafts.get(p.getUniqueId());
+        if (q == null) { open(p); return true; }
+        String[] a = tag.substring(6).split(":");
+        String kind = a[0];
+        int i = a.length > 1 ? Integer.parseInt(a[1]) : 0;
+        int j = a.length > 2 ? Integer.parseInt(a[2]) : 0;
+        boolean amount = !kind.endsWith("mat");
+        Runnable back = () -> {
+            switch (kind) {
+                case "qrew" -> main(p);
+                case "smat", "srew" -> stagePage(p, i);
+                case "cdo" -> choicePage(p, i, j);
+                default -> repPage(p, i);
+            }
+        };
+        plugin.items().editor.openPicker(p, amount, (id, n) -> {
+            String line = "item " + id + " " + n;
+            switch (kind) {
+                case "qrew" -> q.rewards.add(line);
+                case "srew" -> nthStage(q, i).rewards.add(line);
+                case "smat" -> nthStage(q, i).material = "ITEM:" + id.toUpperCase();
+                case "cdo" -> nthStage(q, i).choices.get(j).doList.add(line);
+                case "rmat" -> q.repeats.get(i).material = "ITEM:" + id.toUpperCase();
+                case "rrew" -> q.repeats.get(i).rewards.add(line);
+                default -> { }
+            }
+            msg(p, "&aAdded &f" + id + "&a.");
+            back.run();
+        }, back);
+        return true;
+    }
+
     private void route(Player p, WH h, String tag) {
+        if (itemPick(p, tag)) return;
         Quest q = drafts.get(p.getUniqueId());
         switch (tag) {
             case "close" -> { p.closeInventory(); waiting.remove(p.getUniqueId()); return; }

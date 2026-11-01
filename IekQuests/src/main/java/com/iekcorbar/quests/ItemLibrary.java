@@ -65,6 +65,60 @@ final class ItemLibrary implements Listener, TabExecutor {
         plugin.getLogger().info("IekItems: " + defs.size() + " item(s) geladen.");
     }
 
+    java.util.Set<String> ids() { return defs.keySet(); }
+
+    ConfigurationSection def(String id) { return defs.get(id.toLowerCase(Locale.ROOT)); }
+
+    /** Eén veld schrijven (null = verwijderen), opslaan en opnieuw laden. */
+    void put(String id, String field, Object value) {
+        yaml.set("items." + id.toLowerCase(Locale.ROOT) + "." + field, value);
+        saveYaml();
+        load();
+    }
+
+    void remove(String id) {
+        yaml.set("items." + id.toLowerCase(Locale.ROOT), null);
+        saveYaml();
+        load();
+    }
+
+    void setEnchants(String id, List<String> lines) {
+        String base = "items." + id.toLowerCase(Locale.ROOT) + ".enchants";
+        yaml.set(base, null);
+        for (String l : lines) {
+            String[] x = l.trim().split("\s+");
+            if (x[0].isEmpty()) continue;
+            int lvl = 1;
+            try { if (x.length > 1) lvl = Integer.parseInt(x[1]); } catch (Exception ignore) { }
+            yaml.set(base + "." + x[0].toLowerCase(Locale.ROOT), lvl);
+        }
+        saveYaml();
+        load();
+    }
+
+    void saveFromStack(String id, ItemStack st) {
+        String base = "items." + id.toLowerCase(Locale.ROOT) + ".";
+        yaml.set(base + "material", st.getType().name());
+        var im = st.getItemMeta();
+        if (im != null) {
+            var ser = LegacyComponentSerializer.legacyAmpersand();
+            if (im.displayName() != null) yaml.set(base + "name", ser.serialize(im.displayName()));
+            if (im.lore() != null) {
+                List<String> lo = new ArrayList<>();
+                for (var c : im.lore()) lo.add(ser.serialize(c));
+                yaml.set(base + "lore", lo);
+            }
+            for (var en : im.getEnchants().entrySet())
+                yaml.set(base + "enchants." + en.getKey().getKey().getKey(), en.getValue());
+            if (im.isUnbreakable()) yaml.set(base + "unbreakable", true);
+            if (im.hasItemModel() && im.getItemModel() != null) yaml.set(base + "item-model", im.getItemModel().asString());
+        }
+        saveYaml();
+        load();
+    }
+
+    ItemEditor editor;
+
     boolean exists(String id) { return defs.containsKey(id.toLowerCase(Locale.ROOT)); }
 
     /** Id van een IekItem-stack, of null. */
@@ -189,8 +243,13 @@ final class ItemLibrary implements Listener, TabExecutor {
             sender.sendMessage(Component.text("IekItems is for staff only."));
             return true;
         }
-        String sub = a.length == 0 ? "help" : a[0].toLowerCase(Locale.ROOT);
+        String sub = a.length == 0 ? (sender instanceof Player ? "browse" : "help") : a[0].toLowerCase(Locale.ROOT);
         switch (sub) {
+            case "edit", "browse", "gui" -> {
+                if (!(sender instanceof Player p)) { sender.sendMessage(legacy("&cPlayers only.")); return true; }
+                if (a.length >= 2 && exists(a[1])) editor.edit(p, a[1].toLowerCase(Locale.ROOT));
+                else editor.open(p);
+            }
             case "list" -> {
                 sender.sendMessage(legacy("&6IekItems (" + defs.size() + "): &7" + String.join(", ", defs.keySet())));
             }
@@ -217,9 +276,7 @@ final class ItemLibrary implements Listener, TabExecutor {
             }
             case "delete" -> {
                 if (a.length < 2 || !exists(a[1])) { sender.sendMessage(legacy("&cUnknown item.")); return true; }
-                yaml.set("items." + a[1].toLowerCase(Locale.ROOT), null);
-                saveYaml();
-                load();
+                remove(a[1]);
                 sender.sendMessage(legacy("&aDeleted " + a[1] + " from items.yml."));
             }
             case "info" -> {
@@ -229,7 +286,7 @@ final class ItemLibrary implements Listener, TabExecutor {
                         + (exists(id) ? "" : " &c(no longer in items.yml)")));
             }
             default -> {
-                sender.sendMessage(legacy("&6/" + label + " &7list | get <id> [n] | give <player> <id> [n] | create <id> | delete <id> | info | reload"));
+                sender.sendMessage(legacy("&6/" + label + " &7(no args = editor) edit [id] | list | get <id> [n] | give <player> <id> [n] | create <id> | delete <id> | info | reload"));
                 sender.sendMessage(legacy("&7Quests: reward &fitem <id> [n]&7, deliver/craft with material &fitem:<id>&7."));
             }
         }
@@ -244,37 +301,20 @@ final class ItemLibrary implements Listener, TabExecutor {
             p.sendMessage(legacy("&cHold an item in your main hand and use a simple id (a-z, 0-9, _)."));
             return;
         }
-        String base = "items." + id + ".";
-        yaml.set(base + "material", st.getType().name());
-        var im = st.getItemMeta();
-        if (im != null) {
-            var ser = LegacyComponentSerializer.legacyAmpersand();
-            if (im.displayName() != null) yaml.set(base + "name", ser.serialize(im.displayName()));
-            if (im.lore() != null) {
-                List<String> lo = new ArrayList<>();
-                for (var c : im.lore()) lo.add(ser.serialize(c));
-                yaml.set(base + "lore", lo);
-            }
-            for (var en : im.getEnchants().entrySet())
-                yaml.set(base + "enchants." + en.getKey().getKey().getKey(), en.getValue());
-            if (im.isUnbreakable()) yaml.set(base + "unbreakable", true);
-            if (im.hasItemModel() && im.getItemModel() != null) yaml.set(base + "item-model", im.getItemModel().asString());
-        }
-        saveYaml();
-        load();
-        p.sendMessage(legacy("&aSaved &f" + id + "&a to items.yml. Edit the file for attributes, flags and use: actions, then /iekitem reload."));
+        saveFromStack(id, st);
+        p.sendMessage(legacy("&aSaved &f" + id + "&a. Open the editor with &f/iekitem edit " + id + "&a."));
     }
 
-    private void saveYaml() {
+    void saveYaml() {
         try { yaml.save(file); } catch (Exception e) { plugin.getLogger().warning("items.yml: " + e.getMessage()); }
     }
 
     @Override
     public List<String> onTabComplete(CommandSender s, Command c, String l, String[] a) {
         List<String> out = new ArrayList<>();
-        if (a.length == 1) out.addAll(List.of("list", "get", "give", "create", "delete", "info", "reload"));
+        if (a.length == 1) out.addAll(List.of("edit", "list", "get", "give", "create", "delete", "info", "reload"));
         else if (a.length == 2 && a[0].equalsIgnoreCase("give")) org.bukkit.Bukkit.getOnlinePlayers().forEach(p -> out.add(p.getName()));
-        else if ((a.length == 2 && List.of("get", "delete").contains(a[0].toLowerCase())) || (a.length == 3 && a[0].equalsIgnoreCase("give"))) out.addAll(defs.keySet());
+        else if ((a.length == 2 && List.of("get", "delete", "edit").contains(a[0].toLowerCase())) || (a.length == 3 && a[0].equalsIgnoreCase("give"))) out.addAll(defs.keySet());
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(x -> !x.toLowerCase(Locale.ROOT).startsWith(last));
         return out;

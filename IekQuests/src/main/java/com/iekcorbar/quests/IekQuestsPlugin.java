@@ -171,6 +171,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private final Map<String, Seq> sequences = new HashMap<>();
     private final Map<UUID, Map<String, Prog>> prog = new HashMap<>();
     private ItemLibrary items;
+    ItemLibrary items() { return items; }
     private YamlConfiguration data;
     private NamespacedKey tagKey;
     private NamespacedKey hudOffKey;
@@ -281,6 +282,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         items = new ItemLibrary(this);
         Bukkit.getPluginManager().registerEvents(items, this);
         items.load();
+        items.editor = new ItemEditor(this, items);
+        Bukkit.getPluginManager().registerEvents(items.editor, this);
         var icmd = Bukkit.getPluginCommand("iekitem");
         if (icmd != null) { icmd.setExecutor(items); icmd.setTabCompleter(items); }
         wizard = new QuestWizard(this);

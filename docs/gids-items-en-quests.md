@@ -149,3 +149,28 @@ list, get, give, create, delete, info, reload. `/questbook reload` laadt items.y
 
 Let op: `tag+` en `point` in een `use:`-lijst worden niet bewaard (alleen quests hebben voortgang).
 De bestaande MMOItems blijven werken; IekItems is er naast.
+
+## G. De item-editor (GUI, IekQuests 0.7.1)
+
+`/iekitem` zonder argumenten opent de **IekItems-browser** (`/iekitem edit <id>` springt direct naar een item).
+
+- **Browser**: alle items; klik = bewerken, shift-klik = kopie krijgen. Knoppen: zoeken, **+ New item**
+  (id typen in chat), **From my hand** (item in je hand wordt een IekItem).
+- **Editor** (per item): Material, Name, Lore, Enchants, Glow, Unbreakable, Consume, Attributes, Flags,
+  rechtsklik-acties, cooldown, permissie, kopie halen, verwijderen (shift-klik).
+  Tekst typ je in de chat; lijsten sluit je af met `done`, `clear` maakt leeg, `cancel` stopt.
+- **Model toewijzen** (de verfbusknop "Model"): toont alle item-modellen uit de resourcepacks in
+  `plugins/ResourcePackManager/mixer/` (en `plugins/IekQuests/packs/`; aanpasbaar met `pack-dirs:` in
+  config.yml), elk met een voorbeeld van je eigen item erin. Klik = toewijzen. Je kunt ook zoeken of een
+  model-id typen (bv. `mmoitems:sword/long_sword`), en "Remove model" zet het vanilla-uiterlijk terug.
+  Eerste keer scant hij de packs (paar seconden); "Rescan packs" na een nieuw pack.
+  Je ziet het model alleen als je client het pack geladen heeft.
+
+### In de quest-wizard
+Overal paarse **amethist-scherf**-knoppen: die openen dezelfde browser als kiezer.
+- Hoofdscherm: **+ Item reward (quest)**; stage: **Custom item** (als material voor craft/deliver) en
+  **+ Item reward (stage)**; keuze: **+ Item (do-action)**; contract: **Custom item (material)** en
+  **+ Item reward**.
+- In de kiezer kun je ook **+ New item** doen en het meteen volledig bewerken (incl. model) en daarna
+  **Select this item** klikken. Bij beloningen vraagt hij daarna het aantal.
+- Wat de wizard opslaat: `item <id> <aantal>` als beloning en `material: ITEM:<ID>` bij inleveren.
