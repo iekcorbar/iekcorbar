@@ -81,6 +81,7 @@ final class WildlifeCommand implements TabExecutor {
                         }
                     }
                     case "pet", "pets" -> {
+                        if (s instanceof Player pp && !DragonAI.allowed(pp, "pet")) return true;
                         if (!(s instanceof Player p)) {
                             s.sendMessage(Component.text("Only players can use this.", NamedTextColor.RED));
                             return true;

@@ -197,7 +197,7 @@ final class WildItems implements Listener {
         }
         if ("dragon_whistle".equals(id)) {
             e.setCancelled(true);
-            plugin.dragon().whistle(e.getPlayer());
+            if (DragonAI.allowed(e.getPlayer(), "whistle")) plugin.dragon().whistle(e.getPlayer());
             return;
         }
         if (!"field_journal".equals(idOf(held))) {

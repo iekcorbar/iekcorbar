@@ -71,6 +71,7 @@ final class DragonPets implements Listener {
 
     /** Right-click with a chest: fit saddlebags (one chest). Returns true when the click was used. */
     boolean installBag(Player p, LivingEntity e, ItemStack hand) {
+        if (!DragonAI.allowed(p, "bag")) return true;
         if (hasBag(e)) {
             p.sendActionBar(Component.text("It already carries saddlebags.", NamedTextColor.GRAY));
             return true;
@@ -84,6 +85,7 @@ final class DragonPets implements Listener {
     }
 
     void openBag(Player p, LivingEntity e) {
+        if (!DragonAI.allowed(p, "bag")) return;
         if (!hasBag(e)) {
             p.sendMessage(Component.text("This dragon has no saddlebags: right-click it with a chest.", NamedTextColor.RED));
             return;

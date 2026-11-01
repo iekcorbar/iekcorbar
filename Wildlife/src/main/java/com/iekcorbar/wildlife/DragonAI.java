@@ -61,6 +61,13 @@ final class DragonAI implements Listener {
         return s == null ? null : UUID.fromString(s);
     }
 
+    /** A dragon permission (all default true); tells the player when it is missing. */
+    static boolean allowed(Player p, String node) {
+        if (p.hasPermission("wildlife.dragon." + node)) return true;
+        p.sendActionBar(Component.text("You are not allowed to do that with a dragon.", NamedTextColor.RED));
+        return false;
+    }
+
     boolean isTamedBy(Animals.Animal a, Player p) {
         return tamer(a.entity) != null && tamer(a.entity).equals(p.getUniqueId());
     }
@@ -97,6 +104,7 @@ final class DragonAI implements Listener {
             default -> null;
         };
         if (skin != null && p.getUniqueId().equals(tamer(e))) {
+            if (!allowed(p, "paint")) return true;
             String cur = a.model.endsWith("_baby") ? a.model.substring(0, a.model.length() - 5) : a.model;
             if (cur.equals(skin)) {
                 p.sendActionBar(Component.text("It already wears that colour.", NamedTextColor.GRAY));
@@ -128,6 +136,7 @@ final class DragonAI implements Listener {
             if (a.baby || tamer(e) != null) return false;                  // babies grow on it, the tamed breed on it
             if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
             e.getWorld().spawnParticle(Particle.HEART, e.getLocation().add(0, e.getHeight(), 0), 3, 0.3, 0.2, 0.3, 0);
+            if (!allowed(p, "tame")) return true;
             if (ThreadLocalRandom.current().nextDouble() < 0.35) {
                 tame(a, p);
                 return true;
@@ -135,9 +144,10 @@ final class DragonAI implements Listener {
             p.sendActionBar(Component.text("It eyes the coal. Not yet.", NamedTextColor.GRAY));
             return true;
         }
-        if (held == Material.CHEST && !a.baby && p.getUniqueId().equals(tamer(e))) return plugin.pets().installBag(p, e, hand);
+        if (held == Material.CHEST && !a.baby && p.getUniqueId().equals(tamer(e))) return allowed(p, "bag") ? plugin.pets().installBag(p, e, hand) : true;
         if (!held.isAir() || a.baby || !p.getUniqueId().equals(tamer(e))) return false;   // strangers just look
         if (sneaking) {
+            if (!allowed(p, "pet")) return true;
             setSitting(a, p, !isSitting(e));
             return true;
         }
@@ -145,6 +155,7 @@ final class DragonAI implements Listener {
             e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) 0);
             plugin.fmm().stop(e);
         }
+        if (!allowed(p, "ride")) return true;
         if (!seatRider(e, p)) {
             p.sendActionBar(Component.text("There is no room on the saddle.", NamedTextColor.RED));
             return true;
@@ -684,7 +695,7 @@ final class DragonAI implements Listener {
                 if (to.lengthSquared() > 2.25) glide(e, to.normalize().multiply(0.14), 0.1);
                 if (descend(e, m)) {
                     m.mode = Mode.ROOST;
-                    if (own == null && to.lengthSquared() <= 9) plugin.nests().claim(e, tamer(e), nest);   // landed on a free nest: it is theirs
+                    if (own == null && to.lengthSquared() <= 9 && owner != null && owner.hasPermission("wildlife.dragon.nest")) plugin.nests().claim(e, tamer(e), nest);   // landed on a free nest: it is theirs
                 }
                 return;
             }

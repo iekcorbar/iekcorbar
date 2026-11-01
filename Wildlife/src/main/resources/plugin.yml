@@ -27,4 +27,36 @@ permissions:
   wildlife.use:
     description: Use basic wildlife commands (journal, stats, list, find, tamed)
     default: true
+  wildlife.dragon.*:
+    description: Everything a player can do with a dragon (all default true; set one to false to take it away)
+    default: true
+    children:
+      wildlife.dragon.tame: true
+      wildlife.dragon.ride: true
+      wildlife.dragon.pet: true
+      wildlife.dragon.whistle: true
+      wildlife.dragon.bag: true
+      wildlife.dragon.paint: true
+      wildlife.dragon.nest: true
+  wildlife.dragon.tame:
+    description: Tame a wild dragon with coal
+    default: true
+  wildlife.dragon.ride:
+    description: Ride your own dragon
+    default: true
+  wildlife.dragon.pet:
+    description: /wildlife pet, sit/stand, come, rename and release your dragon
+    default: true
+  wildlife.dragon.whistle:
+    description: Use the Dragon Whistle
+    default: true
+  wildlife.dragon.bag:
+    description: Fit and open saddlebags
+    default: true
+  wildlife.dragon.paint:
+    description: Repaint your dragon with a dye
+    default: true
+  wildlife.dragon.nest:
+    description: Let your dragon claim a Dragon Nest (staff free any nest with wildlife.admin)
+    default: true
 
