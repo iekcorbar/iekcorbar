@@ -19,6 +19,7 @@ public final class WildlifePlugin extends JavaPlugin {
     private Fmm fmm;
     private Animals animals;
     private DragonAI dragon;
+    private DragonPets pets;
     private Spawner spawner;
     private Journal journal;
     private WildlifeMenu menu;
@@ -39,6 +40,7 @@ public final class WildlifePlugin extends JavaPlugin {
         rescue = new Rescue(this);
         animals = new Animals(this);
         dragon = new DragonAI(this);
+        pets = new DragonPets(this);
         spawner = new Spawner(this);
         journal = new Journal(this);
         items = new WildItems(this);
@@ -49,6 +51,7 @@ public final class WildlifePlugin extends JavaPlugin {
         var pm = getServer().getPluginManager();
         pm.registerEvents(animals, this);
         pm.registerEvents(dragon, this);
+        pm.registerEvents(pets, this);
         pm.registerEvents(journal, this);
         drops = new Drops(this);
         menu = new WildlifeMenu(this);
@@ -115,6 +118,7 @@ public final class WildlifePlugin extends JavaPlugin {
     Fmm fmm() { return fmm; }
     Animals animals() { return animals; }
     DragonAI dragon() { return dragon; }
+    DragonPets pets() { return pets; }
     Molehills molehills() { return molehills; }
     Spawner spawner() { return spawner; }
     Journal journal() { return journal; }

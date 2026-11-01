@@ -10,7 +10,7 @@ final class ZooAchievements {
     }
 
     static Adv create(WildlifePlugin plugin) {
-        Adv a = new Adv(plugin, "zoo", "Zoo", "Build your own zoo", "oak_sign", "minecraft:textures/block/oak_planks.png", true);
+        Adv a = new Adv(plugin, "zoo", "Zoo", "Build your own zoo", "oak_sign", "minecraft:block/oak_planks", true);
         // ---- statue / zoo line (migrated from Wildlife tab)
         a.add("statue", "root", "stone_bricks", "Stone Still", "Get an animal statue.", "task");
         a.add("zoo_prop", "statue", "oak_fence", "Zookeeper", "Get a zoo prop.", "task");

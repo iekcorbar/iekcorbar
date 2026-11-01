@@ -67,6 +67,7 @@ dragon:
   ride-speed: 0.55
   # chance that a new dragon is the Ender look (all-black, violet eyes): extremely rare on purpose
   ender-chance: 0.003
+  egg-hatch-minutes: 8        # a dragon egg hatches after this long in a player inventory
 
 
 # breeding: right-click an adult with its food (see /wildlife help or the wiki); two of one kind in love close together get a baby

@@ -105,6 +105,76 @@
    "category": "Wildlife",
    "parent": "wildlife-statues",
    "content": "* Right-click a block with the statue to place it. It turns to face you.\n* **Hit it a few times** to pick it up again.\n* The elephant statue is three blocks tall, so leave some room.\n\nStatues stand still; the real animals are found in the wild. They go well with the **Zoo** props: fences, gates, troughs and info boards.\n\nBack to [Statues](/wiki?page=wildlife-statues)\n"
+  },
+  {
+   "slug": "wildlife-dragons",
+   "title": "Steam Dragons",
+   "category": "Wildlife",
+   "parent": null,
+   "content": "## Steam Dragons\n\nA Steam Dragon is brass over an iron frame with a furnace ticking behind its ribs. It lives deep in the big caverns, and it can become your companion, your mount and your pack animal.\n\n\n* [Finding and taming](/wiki?page=wildlife-dragons-finding-and-taming)\n* [Commands for your dragon](/wiki?page=wildlife-dragons-commands-for-your-dragon)\n* [Riding](/wiki?page=wildlife-dragons-riding)\n* [The Dragon Whistle](/wiki?page=wildlife-dragons-the-dragon-whistle)\n* [Saddlebags](/wiki?page=wildlife-dragons-saddlebags)\n* [Hunger](/wiki?page=wildlife-dragons-hunger)\n* [Dyes - a new coat of paint](/wiki?page=wildlife-dragons-dyes-a-new-coat-of-paint)\n* [Eggs](/wiki?page=wildlife-dragons-eggs)\n* [Good to know](/wiki?page=wildlife-dragons-good-to-know)\n"
+  },
+  {
+   "slug": "wildlife-dragons-finding-and-taming",
+   "title": "Finding and taming",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "* You do not see it so much as hear it: follow the hiss through the large caves, far underground.\n* Feed it **coal or charcoal** (right-click). Each lump has a 35 % chance; the furnace decides when it trusts you.\n* A tamed dragon follows you, circles at a distance, and lands a few blocks away when you stand still.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-commands-for-your-dragon",
+   "title": "Commands for your dragon",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "Look at your dragon (or stand close) and use:\n\n* **/wildlife pet** - a small menu: sit or stand, come here, rename, saddlebags and set free.\n* **/wildlife pet list** - your dragons and where they are.\n* **/wildlife pet sit | stand | come** - the same as the menu buttons.\n* **/wildlife pet name <name>** - give it a name (24 characters).\n* **/wildlife pet bag** - open the saddlebags.\n* **/wildlife pet release confirm** - set it free for good.\n\nSneak + right-click with an empty hand also makes it sit or stand.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-riding",
+   "title": "Riding",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "Right-click with an empty hand to climb on. W/A/S/D steers where you look, space climbs, back descends, sprint is faster. With no input it hovers. You take no fall or wall damage on the saddle, and stepping off in mid-air gives you a soft landing (Slow Falling for a few seconds).\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-the-dragon-whistle",
+   "title": "The Dragon Whistle",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "Craft it from a **copper ingot, an iron nugget and a coal**. Right-click: every tamed dragon of yours in the same world flies to you, even one that was far away in an unloaded part of the world. Four seconds between whistles. A dragon in another world (such as the Nether) cannot come.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-saddlebags",
+   "title": "Saddlebags",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "Right-click your dragon with a **chest** to fit saddlebags (nine slots). Open them with **/wildlife pet bag** or from the menu while the dragon is within eight blocks. The contents stay with the dragon through restarts. If the dragon dies, everything drops where it fell.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-hunger",
+   "title": "Hunger",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "A dragon you keep gets hungry over time. Below half it flies slower, and when it is starving it is very slow. Feed it **coal** (right-click) to restore hunger. A well fed dragon (90 and up) flies a little faster. The menu shows its hunger.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-dyes-a-new-coat-of-paint",
+   "title": "Dyes - a new coat of paint",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "Right-click your dragon with a dye to change its look:\n\n| Dye | Look |\n|---|---|\n| Orange | Brass (the original) |\n| Red | Sakagura |\n| Yellow | Kitchen |\n| Blue | Kura |\n| Green | Verdigris |\n\nIts name, saddlebags, hunger and owner stay. Rare looks (the gilded dragon) are not affected by dyes, and a dyed dragon loses its rare look.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-eggs",
+   "title": "Eggs",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "Two tamed dragons that are fed coal at the same time lay a **Dragon Egg** instead of a baby. Carry it in your inventory: after about eight minutes (server setting) it hatches into a baby dragon that belongs to you. Only the owner of the parents can hatch the egg.\n\nYou can also make a **nest**: sneak and right-click a **hay block** with the egg. It rests on top of the straw and stays warm without you; it hatches when its keeper is around. Sneak + right-click the straw with an empty hand takes the egg back, and breaking the hay block frees it.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
+  },
+  {
+   "slug": "wildlife-dragons-good-to-know",
+   "title": "Good to know",
+   "category": "Wildlife",
+   "parent": "wildlife-dragons",
+   "content": "* A grown-up baby keeps its owner and saddlebags.\n* A dragon is made of brass: it cannot suffocate, drown or take fall damage. Fire and lava still hurt.\n* If you teleport far away (home, warp, tpa), your dragon follows if it was within about 40 blocks and is not sitting.\n\nBack to [Steam Dragons](/wiki?page=wildlife-dragons)\n"
   }
  ]
 }

@@ -99,6 +99,10 @@ final class Achievements {
         a.add("dragon_follow", "dragon_tame", "lead", "Following You", "Have a tamed dragon follow you.", "task").hidden();
         a.add("dragon_roar", "dragon_tame", "note_block", "Hear Me Roar", "Hear a tamed dragon roar.", "task").hidden();
         a.add("dragon_landing", "dragon_rider", "feather", "Smooth Landing", "Dismount a dragon safely.", "task").hidden();
+        a.add("dragon_whistle", "dragon_tame", "goat_horn", "Fluit", "Blow a Dragon Whistle and call your dragon.", "task").hidden();
+        a.add("dragon_nest", "dragon_breeder", "hay_block", "Nestbouwer", "Rest a dragon egg in a nest of straw.", "task").hidden();
+        a.add("dragon_paint", "dragon_tame", "red_dye", "Nieuwe verf", "Give your dragon a new coat of paint with a dye.", "task").hidden();
+        a.add("dragon_bags", "dragon_tame", "chest", "Zadeltassen vol", "Fit saddlebags on your dragon.", "task").hidden();
 
         // wraith line (root, hidden - sfeer-wezen)
         a.add("wraith_night", "root", "soul_lantern", "Night Visitor", "See a wraith at night.", "task").hidden();

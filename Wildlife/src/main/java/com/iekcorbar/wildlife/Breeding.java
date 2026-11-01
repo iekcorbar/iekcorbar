@@ -147,6 +147,15 @@ final class Breeding {
         ThreadLocalRandom r = ThreadLocalRandom.current();
         boolean rare = a.rare || b.rare ? r.nextDouble() < 0.4 : r.nextDouble() < plugin.spawner().rareChance();
         Location at = a.entity.getLocation().add(b.entity.getLocation()).multiply(0.5);
+        if (a.species == Species.DRAGON) {                                 // dragons lay an egg: it hatches in the keeper's inventory
+            String look = r.nextBoolean() ? a.model : b.model;
+            if (look.endsWith("_baby")) look = look.substring(0, look.length() - 5);
+            if (rare) look = a.species.rareModel();
+            hearts(a.entity, 5);
+            hearts(b.entity, 5);
+            plugin.pets().layEgg(at.add(0, 0.5, 0), look, DragonAI.tamer(a.entity) != null ? DragonAI.tamer(a.entity) : DragonAI.tamer(b.entity));
+            return;
+        }
         Animals.Animal child = animals.spawn(a.species, at, rare, true, null);
         hearts(a.entity, 5);
         hearts(b.entity, 5);

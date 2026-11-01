@@ -1080,6 +1080,21 @@ def dragon_vent(rnd):
     return fade(normalize(out, 0.7))
 
 
+def dragon_whistle(rnd):
+    """Dragon Whistle (0.9.7): a small steam whistle, two rising notes (a fifth apart) with a breathy
+    edge. Own local Random: the shared stream is left alone."""
+    import random
+    r = random.Random(4417)
+    def note(f0, f1, sec):
+        tone = env(osc(vibrato(glide(f0, f1, sec, 0.6), 6, 10), "sine"), a=0.04, d=0.15, s=0.8, r=0.18)
+        air = bandpass(env(noise(sec, r), a=0.03, d=0.2, s=0.5, r=0.2), f1, 1.2)
+        return mix(gain(tone, 0.9), gain(air, 0.25), gain(env(osc(glide(f0 * 2, f1 * 2, sec, 0.6), "sine"), a=0.04, d=0.15, s=0.6, r=0.18), 0.18))
+    out = []
+    place(out, note(1180, 1250, 0.32), 0)
+    place(out, note(1770, 1900, 0.55), 0.3)
+    return fade(normalize(out, 0.7))
+
+
 # Wraith (Wildlife 0.7.0): appended AFTER both CATALOGUE and EXTRA. The RNG stream must not
 # shift for anything already in the pack, so new events never go into EXTRA's wildlife block
 # (that block is drawn BEFORE the relics EXTRA events, which would all change byte-wise).
@@ -1090,6 +1105,7 @@ LATE = {
         "wraith.death": (wraith_fade, 2, "Wraith fades away"),
         "dragon.ambient": (dragon_rumble, 3, "Steam Dragon rumbles"), "dragon.hurt": (dragon_clank, 2, "Steam Dragon clanks"),
         "dragon.death": (dragon_vent, 2, "Steam Dragon vents"),
+        "dragon.whistle": (dragon_whistle, 1, "Dragon Whistle blows"),
     },
 }
 

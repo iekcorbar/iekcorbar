@@ -42,7 +42,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 final class DragonAI implements Listener {
     private final WildlifePlugin plugin;
-    private final NamespacedKey tamerKey, sittingKey, dragonsKey;
+    private final NamespacedKey tamerKey, sittingKey, dragonsKey, lastKey;
     private final Map<UUID, Input> inputs = new HashMap<>();
     private final Map<UUID, Long> lastRoar = new HashMap<>();
 
@@ -79,6 +79,7 @@ final class DragonAI implements Listener {
         Keeps.TAMER = tamerKey = new NamespacedKey(plugin, "dragon_tamer");
         Keeps.SIT = sittingKey = new NamespacedKey(plugin, "dragon_sitting");
         dragonsKey = new NamespacedKey(plugin, "dragons_tamed");
+        lastKey = new NamespacedKey(plugin, "dragons_last");
     }
 
     // ------------------------------------------------------------ right-click (from Animals.onInteract)
@@ -87,6 +88,38 @@ final class DragonAI implements Listener {
     boolean interact(Animals.Animal a, Player p, ItemStack hand, boolean sneaking) {
         LivingEntity e = a.entity;
         Material held = hand.getType();
+        String skin = switch (held) {                                      // dye = a new coat of paint (the five looks)
+            case ORANGE_DYE -> "wl_dragon";
+            case RED_DYE -> "wl_dragon_sakagura";
+            case YELLOW_DYE -> "wl_dragon_kitchen";
+            case BLUE_DYE -> "wl_dragon_kura";
+            case GREEN_DYE -> "wl_dragon_verdigris";
+            default -> null;
+        };
+        if (skin != null && p.getUniqueId().equals(tamer(e))) {
+            String cur = a.model.endsWith("_baby") ? a.model.substring(0, a.model.length() - 5) : a.model;
+            if (cur.equals(skin)) {
+                p.sendActionBar(Component.text("It already wears that colour.", NamedTextColor.GRAY));
+                return true;
+            }
+            if (!plugin.animals().reskin(a, skin)) {
+                p.sendActionBar(Component.text("The paint will not take (model missing).", NamedTextColor.RED));
+                return true;
+            }
+            if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+            p.sendActionBar(Component.text("A fresh coat of paint.", NamedTextColor.GOLD));
+            plugin.adv().grant(p, "dragon_paint");
+            return true;
+        }
+        if ((held == Material.COAL || held == Material.CHARCOAL) && p.getUniqueId().equals(tamer(e)) && a.hunger < 70) {
+            a.hunger = Math.min(100, a.hunger + 30);                       // a hungry dragon is fed before it is bred
+            e.getPersistentDataContainer().set(plugin.animals().hungerKey, PersistentDataType.INTEGER, a.hunger);
+            if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+            e.getWorld().spawnParticle(Particle.FLAME, e.getLocation().add(0, e.getHeight() * 0.6, 0), 8, 0.3, 0.2, 0.3, 0.02);
+            e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 0.8f, 1.1f);
+            p.sendActionBar(Component.text("The furnace roars. Hunger " + a.hunger + "/100.", NamedTextColor.GOLD));
+            return true;
+        }
         if (held == Material.COAL || held == Material.CHARCOAL) {
             if (tamer(e) != null && tamer(e).equals(p.getUniqueId())) plugin.adv().grant(p, "dragon_feed");
             if (a.baby || tamer(e) != null) return false;                  // babies grow on it, the tamed breed on it
@@ -99,15 +132,10 @@ final class DragonAI implements Listener {
             p.sendActionBar(Component.text("It eyes the coal. Not yet.", NamedTextColor.GRAY));
             return true;
         }
+        if (held == Material.CHEST && !a.baby && p.getUniqueId().equals(tamer(e))) return plugin.pets().installBag(p, e, hand);
         if (!held.isAir() || a.baby || !p.getUniqueId().equals(tamer(e))) return false;   // strangers just look
         if (sneaking) {
-            boolean sit = !isSitting(e);
-            e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) (sit ? 1 : 0));
-            if (sit) {
-                plugin.fmm().play(e, "sit", true);
-                plugin.adv().grant(p, "dragon_sit");
-            } else plugin.fmm().stop(e);
-            p.sendActionBar(Component.text(sit ? "The dragon sits." : "The dragon gets up.", NamedTextColor.GRAY));
+            setSitting(a, p, !isSitting(e));
             return true;
         }
         if (isSitting(e)) {                                                // mounting gets it back on its feet
@@ -119,8 +147,177 @@ final class DragonAI implements Listener {
             return true;
         }
         plugin.adv().grant(p, "dragon_rider");
+        if (a.hunger <= 20) p.sendActionBar(Component.text("Your dragon is hungry and slow - feed it coal.", NamedTextColor.GRAY));
         e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 0.9f, 0.8f);
         return true;
+    }
+
+    // ------------------------------------------------------------ pet commands (/wildlife pet ...)
+
+    /** Sit or stand up, same as sneak + right-click. */
+    void setSitting(Animals.Animal a, Player p, boolean sit) {
+        LivingEntity e = a.entity;
+        e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) (sit ? 1 : 0));
+        if (sit) {
+            plugin.fmm().play(e, "sit", true);
+            plugin.adv().grant(p, "dragon_sit");
+        } else plugin.fmm().stop(e);
+        p.sendActionBar(Component.text(sit ? "The dragon sits." : "The dragon gets up.", NamedTextColor.GRAY));
+    }
+
+    /** The player's dragon: the one they look at (40 blocks), else the nearest loaded one of theirs. */
+    Animals.Animal petOf(Player p) {
+        Location eye = p.getEyeLocation();
+        RayTraceResult hit = p.getWorld().rayTraceEntities(eye, eye.getDirection(), 40, 1.0, en -> en instanceof LivingEntity);
+        if (hit != null && hit.getHitEntity() != null) {
+            Animals.Animal a = plugin.animals().get(hit.getHitEntity());
+            if (a != null && a.species == Species.DRAGON && isTamedBy(a, p)) return a;
+        }
+        Animals.Animal best = null;
+        double bd = Double.MAX_VALUE;
+        for (Animals.Animal a : plugin.animals().all()) {
+            if (a.species != Species.DRAGON || !isTamedBy(a, p) || a.entity.getWorld() != p.getWorld()) continue;
+            double d = a.entity.getLocation().distanceSquared(p.getLocation());
+            if (d < bd) { bd = d; best = a; }
+        }
+        return best;
+    }
+
+    /** Call the dragon to the owner's side (a sitting one gets up first). */
+    boolean come(Animals.Animal a, Player p) {
+        LivingEntity e = a.entity;
+        if (e.getWorld() != p.getWorld() || !e.getPassengers().isEmpty()) return false;
+        if (isSitting(e)) {
+            e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) 0);
+            plugin.fmm().stop(e);
+        }
+        Location at = safeSpot(p, e);
+        e.teleport(at);
+        e.getWorld().spawnParticle(Particle.CLOUD, at, 6, 0.3, 0.2, 0.3, 0.01);
+        return true;
+    }
+
+    /** Give the dragon back to the wild. */
+    void release(Animals.Animal a, Player p) {
+        LivingEntity e = a.entity;
+        var pdc = e.getPersistentDataContainer();
+        pdc.remove(tamerKey);
+        forget(p, e.getUniqueId());
+        pdc.set(sittingKey, PersistentDataType.BYTE, (byte) 0);
+        plugin.fmm().stop(e);
+        e.eject();
+        if (e instanceof Parrot par) { par.setOwner(null); par.setTamed(false); }
+        var pp = p.getPersistentDataContainer();
+        Integer n = pp.get(dragonsKey, PersistentDataType.INTEGER);
+        pp.set(dragonsKey, PersistentDataType.INTEGER, Math.max(0, (n == null ? 1 : n) - 1));
+    }
+
+    void rename(Animals.Animal a, String name) {
+        a.entity.customName(name == null ? null : Component.text(name, NamedTextColor.GOLD));
+        a.entity.setCustomNameVisible(name != null);
+    }
+
+    // ------------------------------------------------------------ the Dragon Whistle
+
+    /** Player PDC: "uuid,world,x,y,z" per tamed dragon, ';' between them - where each was last seen, also when its chunk is gone. */
+    private void remember(UUID owner, LivingEntity e) {
+        Player p = Bukkit.getPlayer(owner);
+        if (p == null) return;
+        Location l = e.getLocation();
+        String mine = e.getUniqueId() + "," + l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ();
+        StringBuilder sb = new StringBuilder(mine);
+        String old = p.getPersistentDataContainer().get(lastKey, PersistentDataType.STRING);
+        int n = 1;
+        if (old != null) for (String part : old.split(";")) {
+            if (part.isEmpty() || part.startsWith(e.getUniqueId().toString()) || n >= 8) continue;
+            sb.append(';').append(part);
+            n++;
+        }
+        p.getPersistentDataContainer().set(lastKey, PersistentDataType.STRING, sb.toString());
+    }
+
+    private void forget(Player p, UUID dragon) {
+        String old = p.getPersistentDataContainer().get(lastKey, PersistentDataType.STRING);
+        if (old == null) return;
+        StringBuilder sb = new StringBuilder();
+        for (String part : old.split(";")) {
+            if (part.isEmpty() || part.startsWith(dragon.toString())) continue;
+            if (sb.length() > 0) sb.append(';');
+            sb.append(part);
+        }
+        p.getPersistentDataContainer().set(lastKey, PersistentDataType.STRING, sb.toString());
+    }
+
+    /** A dragon's chunk unloads: write down where it was. */
+    @EventHandler
+    public void onEntitiesUnload(org.bukkit.event.world.EntitiesUnloadEvent ev) {
+        for (Entity en : ev.getEntities()) {
+            if (!(en instanceof LivingEntity le)) continue;
+            UUID t = tamer(le);
+            if (t != null && plugin.animals().get(le) != null) remember(t, le);
+        }
+    }
+
+    private final Map<UUID, Long> whistled = new HashMap<>();
+
+    /** Blow the whistle: every tamed dragon of this player in the same world flies to them, loaded or not. */
+    void whistle(Player p) {
+        long now = System.currentTimeMillis();
+        Long last = whistled.get(p.getUniqueId());
+        if (last != null && now - last < 4000) return;
+        whistled.put(p.getUniqueId(), now);
+        p.getWorld().playSound(p.getLocation(), "wildlife:dragon.whistle", org.bukkit.SoundCategory.PLAYERS, 0.9f, 1f);
+        plugin.adv().grant(p, "dragon_whistle");
+        String all = p.getPersistentDataContainer().get(lastKey, PersistentDataType.STRING);
+        if (all == null || all.isEmpty()) {
+            p.sendActionBar(Component.text("You have no dragon to call.", NamedTextColor.GRAY));
+            return;
+        }
+        int called = 0, far = 0;
+        for (String part : all.split(";")) {
+            String[] f = part.split(",");
+            if (f.length < 5) continue;
+            UUID id;
+            try { id = UUID.fromString(f[0]); } catch (IllegalArgumentException ex) { continue; }
+            org.bukkit.World w = Bukkit.getWorld(f[1]);
+            if (w == null || w != p.getWorld()) { far++; continue; }
+            Entity en = Bukkit.getEntity(id);
+            if (en instanceof LivingEntity le && le.isValid()) {
+                if (summon(le, p)) called++;
+                continue;
+            }
+            int cx, cz;
+            try { cx = Integer.parseInt(f[2]) >> 4; cz = Integer.parseInt(f[4]) >> 4; } catch (NumberFormatException ex) { continue; }
+            called++;
+            w.getChunkAtAsync(cx, cz, true).thenAccept(ch -> {            // the chunk (and the dragon in it) comes back for a moment
+                Entity again = Bukkit.getEntity(id);
+                if (again instanceof LivingEntity le && le.isValid() && p.isOnline()) summon(le, p);
+                else if (p.isOnline()) forget(p, id);                       // it is gone for good
+            });
+        }
+        p.sendActionBar(Component.text(called > 0 ? "A shrill whistle - your dragon answers." : far > 0 ? "Your dragon is in another world." : "No answer.", called > 0 ? NamedTextColor.GOLD : NamedTextColor.GRAY));
+    }
+
+    private boolean summon(LivingEntity e, Player p) {
+        if (!p.getUniqueId().equals(tamer(e)) || e.getWorld() != p.getWorld() || !e.getPassengers().isEmpty()) return false;
+        if (isSitting(e)) {
+            e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) 0);
+            plugin.fmm().stop(e);
+        }
+        Location at = safeSpot(p, e);
+        e.teleport(at);
+        e.getWorld().spawnParticle(Particle.CLOUD, at, 8, 0.3, 0.2, 0.3, 0.01);
+        remember(p.getUniqueId(), e);
+        return true;
+    }
+
+    /** A hatchling: tamed from the first second, no coal needed. */
+    void adopt(Animals.Animal a, Player p) {
+        LivingEntity e = a.entity;
+        e.getPersistentDataContainer().set(tamerKey, PersistentDataType.STRING, p.getUniqueId().toString());
+        e.getPersistentDataContainer().set(plugin.animals().keptKey, PersistentDataType.BYTE, (byte) 1);
+        if (e instanceof Parrot par) { par.setTamed(true); par.setOwner(p); }
+        remember(p.getUniqueId(), e);
     }
 
     private void tame(Animals.Animal a, Player p) {
@@ -135,6 +332,7 @@ final class DragonAI implements Listener {
         e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 1f, 0.65f);
         p.sendMessage(Component.text("The dragon folds its wings and bows its helmeted head - it is yours.", NamedTextColor.GOLD));
         plugin.adv().grant(p, "dragon_tame");
+        remember(p.getUniqueId(), e);
         var pdc = p.getPersistentDataContainer();
         int n = 1 + (pdc.get(dragonsKey, PersistentDataType.INTEGER) == null ? 0 : pdc.get(dragonsKey, PersistentDataType.INTEGER));
         pdc.set(dragonsKey, PersistentDataType.INTEGER, n);
@@ -164,8 +362,24 @@ final class DragonAI implements Listener {
             if (e.getDismounted() instanceof LivingEntity d0) minds.remove(d0.getUniqueId());
             if (e.getDismounted() instanceof LivingEntity le) {
                 Animals.Animal a = plugin.animals().get(le);
-                if (a != null && a.species == Species.DRAGON) plugin.adv().grant(p, "dragon_landing");
+                if (a != null && a.species == Species.DRAGON) {
+                    plugin.adv().grant(p, "dragon_landing");
+                    p.setFallDistance(0);                                  // stepping off mid-air: a soft landing, not a broken leg
+                    p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SLOW_FALLING, 20 * 8, 0, false, false, true));
+                }
             }
+        }
+    }
+
+    /** On the saddle the rider takes no damage from the ride itself: falls, flying into walls, being squeezed or stuck in blocks. */
+    @EventHandler(ignoreCancelled = true)
+    public void onRiderHurt(org.bukkit.event.entity.EntityDamageEvent e) {
+        if (!(e.getEntity() instanceof Player p) || !(p.getVehicle() instanceof LivingEntity v)) return;
+        Animals.Animal a = plugin.animals().get(v);
+        if (a == null || a.species != Species.DRAGON) return;
+        switch (e.getCause()) {
+            case FALL, FLY_INTO_WALL, SUFFOCATION, CRAMMING -> e.setCancelled(true);
+            default -> { }
         }
     }
 
@@ -213,6 +427,7 @@ final class DragonAI implements Listener {
             } else {
                 Player owner = Bukkit.getPlayer(tamer(e));
                 if (owner != null) plugin.adv().grant(owner, "dragon_follow");
+                if (owner != null && now % 100 == 0) remember(owner.getUniqueId(), e);
                 companion(e, m, owner, now, r);
             }
         }
@@ -346,6 +561,60 @@ final class DragonAI implements Listener {
         }
     }
 
+    /** A spot next to the owner where the dragon fits (2 free blocks high, nothing solid): behind, beside, above, else the owner's own spot. */
+    private Location safeSpot(Player owner, LivingEntity e) {
+        Location me = owner.getLocation();
+        Vector back = me.getDirection().setY(0);
+        if (back.lengthSquared() < 1.0e-4) back = new Vector(0, 0, 1);
+        back.normalize().multiply(-1);
+        Vector side = new Vector(-back.getZ(), 0, back.getX());
+        double[][] tries = {{2.5, 0, 1.5}, {2.5, 2.5, 1.5}, {2.5, -2.5, 1.5}, {0, 0, 3.0}, {4.0, 0, 2.5}, {0, 0, 1.0}};
+        int h = (int) Math.ceil(e.getHeight()) + 1;
+        for (double[] t : tries) {
+            Location c = me.clone().add(back.clone().multiply(t[0])).add(side.clone().multiply(t[1])).add(0, t[2], 0);
+            boolean free = true;
+            for (int dy = 0; dy < h && free; dy++) if (!c.clone().add(0, dy, 0).getBlock().isPassable()) free = false;
+            if (free) return c;
+        }
+        return me.clone().add(0, 1.0, 0);
+    }
+
+    /** The dragon is made of brass: it cannot suffocate, drown or take falls. (It died "in a wall" after a /home.) */
+    @EventHandler(ignoreCancelled = true)
+    public void onDragonHurt(org.bukkit.event.entity.EntityDamageEvent ev) {
+        if (!(ev.getEntity() instanceof LivingEntity le)) return;
+        Animals.Animal a = plugin.animals().get(le);
+        if (a == null || a.species != Species.DRAGON) return;
+        switch (ev.getCause()) {
+            case SUFFOCATION, FALL, FLY_INTO_WALL, CRAMMING, DROWNING -> ev.setCancelled(true);
+            default -> { }
+        }
+    }
+
+    /** A tamed, standing dragon farther away than this from its owner flies to them (a wolf uses 12). */
+    private static final double TELEPORT_DIST = 24;
+
+    /** The owner teleports (home, warp, /tpa): the dragon that was nearby comes along, like a dog does. */
+    @EventHandler(priority = org.bukkit.event.EventPriority.MONITOR, ignoreCancelled = true)
+    public void onOwnerTeleport(org.bukkit.event.player.PlayerTeleportEvent ev) {
+        Player p = ev.getPlayer();
+        Location from = ev.getFrom();
+        Location to = ev.getTo();
+        if (to == null || from.getWorld() != to.getWorld() || from.distanceSquared(to) < TELEPORT_DIST * TELEPORT_DIST) return;
+        for (Animals.Animal a : plugin.animals().all()) {
+            if (a.species != Species.DRAGON || !a.attached || !isTamedBy(a, p)) continue;
+            LivingEntity e = a.entity;
+            if (isSitting(e) || !e.getPassengers().isEmpty() || e.getWorld() != from.getWorld()) continue;
+            if (e.getLocation().distanceSquared(from) > 40 * 40) continue;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!e.isValid() || !p.isOnline() || p.getWorld() != e.getWorld()) return;
+                Location at = safeSpot(p, e);
+                e.teleport(at);
+                e.getWorld().spawnParticle(Particle.CLOUD, at, 6, 0.3, 0.2, 0.3, 0.01);
+            }, 5L);
+        }
+    }
+
     /** A free point within 24 blocks of home, 2-9 blocks up; null when the cave is too cramped to fly. */
     private Vector pickWaypoint(LivingEntity e, Mind m, ThreadLocalRandom r) {
         Location at = e.getLocation().add(0, e.getHeight() * 0.5, 0);
@@ -370,8 +639,8 @@ final class DragonAI implements Listener {
         Location at = e.getLocation();
         Location me = owner.getLocation();
         double dist = at.distance(me);
-        if (dist > 48) {                                                   // fell behind: catch up like a wolf does
-            Location to = me.clone().add(me.getDirection().setY(0).multiply(-2.5)).add(0, 1.5, 0);
+        if (dist > TELEPORT_DIST) {                                        // fell behind: catch up like a wolf does
+            Location to = safeSpot(owner, e);
             e.teleport(to);
             e.getWorld().spawnParticle(Particle.CLOUD, to, 6, 0.3, 0.2, 0.3, 0.01);
             plugin.adv().grant(owner, "dragon_reunion");
@@ -381,10 +650,10 @@ final class DragonAI implements Listener {
         if (m.ownerAt != null && m.ownerAt.getWorld() == me.getWorld() && m.ownerAt.distanceSquared(me) < 0.04) m.still++;
         else m.still = 0;
         m.ownerAt = me.clone();
-        boolean resting = m.still > 80 && dist < 7;                        // owner has stood still for 4 s: come down beside them
+        boolean resting = m.still > 140 && dist < 14;                        // owner has stood still for 4 s: come down beside them
         if (resting) {
             if (m.mode != Mode.ROOST) m.mode = Mode.LAND;
-            if (dist > 3.5) {
+            if (dist > 7.0) {                                              // land a few blocks away, never on top of the owner
                 Vector to = me.toVector().subtract(at.toVector());
                 to.setY(0);
                 if (to.lengthSquared() > 0.01) glide(e, to.normalize().multiply(0.12), 0.1);
@@ -394,12 +663,12 @@ final class DragonAI implements Listener {
         }
         m.mode = Mode.FLIGHT;
         anim(e, m, true);
-        if (dist > 9) {                                                    // fly to the owner
-            Vector to = me.toVector().add(new Vector(0, 3.0, 0)).subtract(at.toVector());
+        if (dist > 16) {                                                   // fly to the owner
+            Vector to = me.toVector().add(new Vector(0, 5.0, 0)).subtract(at.toVector());
             glide(e, to.normalize().multiply(Math.min(0.5, 0.12 + dist * 0.018)), 0.09);
         } else {                                                           // lazy circles round the owner
-            m.orbit += 0.035;
-            Vector p = me.toVector().add(new Vector(Math.cos(m.orbit) * 5, 3.0 + Math.sin(m.orbit * 0.7) * 1.2, Math.sin(m.orbit) * 5));
+            m.orbit += 0.022;
+            Vector p = me.toVector().add(new Vector(Math.cos(m.orbit) * 10, 5.0 + Math.sin(m.orbit * 0.7) * 1.5, Math.sin(m.orbit) * 10));
             glide(e, p.subtract(at.toVector()).multiply(0.06), 0.09);
         }
     }
@@ -409,7 +678,9 @@ final class DragonAI implements Listener {
     private void steer(LivingEntity e, Player rider, ThreadLocalRandom r, Mind m) {
         Input in = inputs.get(rider.getUniqueId());
         Location look = rider.getLocation();
-        double speed = plugin.getConfig().getDouble("dragon.ride-speed", 0.55) * (in != null && in.sprint ? 1.5 : 1);
+        Animals.Animal self = plugin.animals().get(e);
+        double fed = self == null ? 1 : self.hunger <= 20 ? 0.6 : self.hunger <= 50 ? 0.85 : self.hunger >= 90 ? 1.1 : 1;   // a hungry furnace is slow
+        double speed = plugin.getConfig().getDouble("dragon.ride-speed", 0.55) * fed * (in != null && in.sprint ? 1.5 : 1);
         double pitch = Math.max(-55, Math.min(55, look.getPitch()));
         double yawR = Math.toRadians(look.getYaw()), pitchR = Math.toRadians(pitch);
         Vector fwd = new Vector(-Math.sin(yawR) * Math.cos(pitchR), -Math.sin(pitchR), Math.cos(yawR) * Math.cos(pitchR));

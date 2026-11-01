@@ -31,7 +31,7 @@ final class WildlifeCommand implements TabExecutor {
                 if (s instanceof Player p && p.hasPermission("wildlife.use")) plugin.menu().open(p);
                 else s.sendMessage(Component.text("You don't have permission for that.", NamedTextColor.RED));
             }
-            case "journal", "stats", "list", "find", "tamed" -> {
+            case "journal", "stats", "list", "find", "tamed", "pet", "pets" -> {
                 if (!s.hasPermission("wildlife.use")) {
                     s.sendMessage(Component.text("You don't have permission for that.", NamedTextColor.RED));
                     return true;
@@ -78,6 +78,62 @@ final class WildlifeCommand implements TabExecutor {
                             s.sendMessage(Component.text("No " + sp.displayName + " found within 128 blocks.", NamedTextColor.GRAY));
                         } else {
                             s.sendMessage(Component.text(count + " " + sp.displayName + "(s) within 128 blocks.", NamedTextColor.GREEN));
+                        }
+                    }
+                    case "pet", "pets" -> {
+                        if (!(s instanceof Player p)) {
+                            s.sendMessage(Component.text("Only players can use this.", NamedTextColor.RED));
+                            return true;
+                        }
+                        String act = a.length > 1 ? a[1].toLowerCase(Locale.ROOT) : "menu";
+                        if (act.equals("list")) {
+                            int n = 0;
+                            for (Animals.Animal an : plugin.animals().all()) {
+                                if (an.species != Species.DRAGON || !plugin.dragon().isTamedBy(an, p)) continue;
+                                n++;
+                                var l = an.entity.getLocation();
+                                String nm = an.entity.customName() == null ? "Dragon"
+                                        : net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(an.entity.customName());
+                                s.sendMessage(Component.text("  " + nm + " - " + l.getWorld().getName() + " " + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()
+                                        + (DragonAI.isSitting(an.entity) ? " (sitting)" : ""), NamedTextColor.GRAY));
+                            }
+                            s.sendMessage(n == 0 ? Component.text("You have no tamed pets nearby (only loaded ones are listed).", NamedTextColor.GRAY)
+                                    : Component.text(n + " pet(s). Use /" + label + " pet sit|stand|come|name|release - on the one you look at.", NamedTextColor.GREEN));
+                            return true;
+                        }
+                        Animals.Animal pet = plugin.dragon().petOf(p);
+                        if (pet == null) {
+                            s.sendMessage(Component.text("No tamed pet of yours is loaded nearby. Look at it, or get closer.", NamedTextColor.RED));
+                            return true;
+                        }
+                        switch (act) {
+                            case "menu" -> plugin.pets().openMenu(p, pet);
+                            case "bag", "bags" -> plugin.pets().openBag(p, pet.entity);
+                            case "sit" -> plugin.dragon().setSitting(pet, p, true);
+                            case "stand", "up" -> plugin.dragon().setSitting(pet, p, false);
+                            case "come", "here" -> s.sendMessage(plugin.dragon().come(pet, p)
+                                    ? Component.text("Your dragon comes to you.", NamedTextColor.GREEN)
+                                    : Component.text("It cannot come (another world, or someone is riding it).", NamedTextColor.RED));
+                            case "name" -> {
+                                if (a.length < 3) {
+                                    plugin.dragon().rename(pet, null);
+                                    s.sendMessage(Component.text("Name removed.", NamedTextColor.GRAY));
+                                } else {
+                                    String nm = String.join(" ", java.util.Arrays.copyOfRange(a, 2, a.length));
+                                    if (nm.length() > 24) nm = nm.substring(0, 24);
+                                    plugin.dragon().rename(pet, nm);
+                                    s.sendMessage(Component.text("Your dragon is now called " + nm + ".", NamedTextColor.GREEN));
+                                }
+                            }
+                            case "release" -> {
+                                if (a.length < 3 || !a[2].equalsIgnoreCase("confirm")) {
+                                    s.sendMessage(Component.text("This sets the dragon free for good. Type /" + label + " pet release confirm.", NamedTextColor.YELLOW));
+                                    return true;
+                                }
+                                plugin.dragon().release(pet, p);
+                                s.sendMessage(Component.text("The dragon is free again.", NamedTextColor.GRAY));
+                            }
+                            default -> s.sendMessage(Component.text("/" + label + " pet [list|sit|stand|come|name <name>|release]", NamedTextColor.RED));
                         }
                     }
                     case "tamed" -> {
@@ -150,6 +206,7 @@ final class WildlifeCommand implements TabExecutor {
                 ItemStack it = switch (what) {
                     case "crab_claw" -> plugin.items().crabClaw();
                     case "lizard_tail" -> plugin.items().lizardTail();
+                    case "dragon_whistle", "whistle" -> plugin.items().whistle();
                     default -> plugin.items().journal();
                 };
                 if (t == null) {
@@ -187,7 +244,7 @@ final class WildlifeCommand implements TabExecutor {
                 s.sendMessage(Component.text("Guide: ", NamedTextColor.GRAY).append(Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url))));
                 if (s.hasPermission("wildlife.admin"))
                     s.sendMessage(Component.text("/" + label + " spawn <species> [rare] [baby] | egg <species> [player] | give <player> <item> [amount] | info | reload | remove <radius>", NamedTextColor.GRAY));
-                s.sendMessage(Component.text("/" + label + " stats [player] | list [filter] | find <species> | tamed", NamedTextColor.GRAY));
+                s.sendMessage(Component.text("/" + label + " stats [player] | list [filter] | find <species> | tamed | pet [list|bag|sit|stand|come|name|release] (no argument = menu)", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Feed an adult its food to breed it; a golden dandelion keeps a baby small.", NamedTextColor.GRAY));
             }
         }
@@ -205,7 +262,9 @@ final class WildlifeCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"help", "menu", "journal", "spawn", "egg", "give", "giveall", "info", "reload", "stats", "list", "find", "tamed", "remove"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"help", "menu", "journal", "spawn", "egg", "give", "giveall", "info", "reload", "stats", "list", "find", "tamed", "pet", "remove"}) if (v.startsWith(last)) out.add(v);
+        } else if (a.length == 2 && (a[0].equalsIgnoreCase("pet") || a[0].equalsIgnoreCase("pets"))) {
+            for (String v : new String[]{"list", "bag", "sit", "stand", "come", "name", "release"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && (a[0].equalsIgnoreCase("spawn") || a[0].equalsIgnoreCase("egg") || a[0].equalsIgnoreCase("find"))) {
             boolean egg = a[0].equalsIgnoreCase("egg");
             for (Species sp : Species.values()) if (sp.id().startsWith(last)) out.add(sp.id());
@@ -222,7 +281,7 @@ final class WildlifeCommand implements TabExecutor {
         } else if (a.length == 2 && a[0].equalsIgnoreCase("give")) {
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
         } else if (a.length == 3 && a[0].equalsIgnoreCase("give")) {
-            for (String v : new String[]{"journal", "crab_claw", "lizard_tail"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"journal", "crab_claw", "lizard_tail", "dragon_whistle"}) if (v.startsWith(last)) out.add(v);
         }
         return out;
     }

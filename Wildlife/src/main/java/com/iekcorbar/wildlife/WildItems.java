@@ -30,12 +30,13 @@ import java.util.List;
 /** Field Journal, Crab Claw (+1 reach in the off hand) and Lizard Tail; looks come from FMM display models. */
 final class WildItems implements Listener {
     private final WildlifePlugin plugin;
-    final NamespacedKey itemKey, journalRecipe;
+    final NamespacedKey itemKey, journalRecipe, whistleRecipe;
 
     WildItems(WildlifePlugin plugin) {
         this.plugin = plugin;
         itemKey = new NamespacedKey(plugin, "item");
         journalRecipe = new NamespacedKey(plugin, "field_journal");
+        whistleRecipe = new NamespacedKey(plugin, "dragon_whistle");
     }
 
     private ItemStack make(Material base, String id, String name, String model, String... lore) {
@@ -141,7 +142,27 @@ final class WildItems implements Listener {
         return make(Material.PAPER, "lizard_tail", "Lizard Tail", "wl_lizard_tail", "Still wriggling a little.", "Don't worry - it grows back.");
     }
 
+    /** Calls every tamed dragon of the owner (blown from anywhere in the same world). Looks like a goat horn. */
+    ItemStack whistle() {
+        ItemStack it = new ItemStack(Material.PAPER);
+        ItemMeta m = it.getItemMeta();
+        m.displayName(Component.text("Dragon Whistle", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
+        m.lore(List.of(Component.text("Right-click: your dragons fly to you,", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("wherever they were in this world.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("Wildlife", NamedTextColor.DARK_GREEN).decoration(TextDecoration.ITALIC, false)));
+        m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, "dragon_whistle");
+        it.setItemMeta(m);
+        it.setData(DataComponentTypes.ITEM_MODEL, Key.key("minecraft", "goat_horn"));
+        return it;
+    }
+
     void registerRecipes() {
+        Bukkit.removeRecipe(whistleRecipe, false);
+        ShapelessRecipe w = new ShapelessRecipe(whistleRecipe, whistle());
+        w.addIngredient(Material.COPPER_INGOT);
+        w.addIngredient(Material.IRON_NUGGET);
+        w.addIngredient(Material.COAL);
+        Bukkit.addRecipe(w);
         Bukkit.removeRecipe(journalRecipe, false);
         ShapelessRecipe r = new ShapelessRecipe(journalRecipe, journal());
         r.addIngredient(Material.BOOK);
@@ -160,6 +181,7 @@ final class WildItems implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         e.getPlayer().discoverRecipe(journalRecipe);
+        e.getPlayer().discoverRecipe(whistleRecipe);
     }
 
     @EventHandler
@@ -171,6 +193,11 @@ final class WildItems implements Listener {
             String[] part = id.substring(4).split(":", 2);
             Species egg = Species.byId(part[0]);
             if (egg != null) useEgg(e, egg, part.length > 1 ? part[1] : null);
+            return;
+        }
+        if ("dragon_whistle".equals(id)) {
+            e.setCancelled(true);
+            plugin.dragon().whistle(e.getPlayer());
             return;
         }
         if (!"field_journal".equals(idOf(held))) {

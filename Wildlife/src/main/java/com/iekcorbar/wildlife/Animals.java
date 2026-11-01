@@ -293,10 +293,52 @@ final class Animals implements Listener {
             ne.setCustomNameVisible(old.isCustomNameVisible());
         }
         if (old.getPersistentDataContainer().has(keptKey, PersistentDataType.BYTE)) ne.getPersistentDataContainer().set(keptKey, PersistentDataType.BYTE, (byte) 1);
+        for (String k : new String[]{"dragon_tamer", "dragon_bag"}) {      // a grown dragon stays its owner's (and keeps its saddlebags)
+            NamespacedKey nk = new NamespacedKey(plugin, k);
+            if (old.getPersistentDataContainer().has(nk, PersistentDataType.STRING))
+                ne.getPersistentDataContainer().set(nk, PersistentDataType.STRING, old.getPersistentDataContainer().get(nk, PersistentDataType.STRING));
+            else if (old.getPersistentDataContainer().has(nk, PersistentDataType.BYTE_ARRAY))
+                ne.getPersistentDataContainer().set(nk, PersistentDataType.BYTE_ARRAY, old.getPersistentDataContainer().get(nk, PersistentDataType.BYTE_ARRAY));
+        }
         animals.remove(old.getUniqueId());
         old.remove();
         at.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, at.add(0, ne.getHeight() * 0.5, 0), 12, 0.4, 0.4, 0.4, 0);
         for (org.bukkit.entity.Player pl : at.getWorld().getNearbyPlayers(at, 24)) plugin.adv().grant(pl, "grown_up");
+        return true;
+    }
+
+    /** A new coat of paint: the same dragon with another look (a new entity; owner, saddlebags, name, hunger and sitting carry over). */
+    boolean reskin(Animal a, String look) {
+        LivingEntity old = a.entity;
+        Location at = old.getLocation();
+        old.eject();
+        Animal n = spawn(a.species, at, false, a.baby, look);
+        if (n == null) return false;
+        LivingEntity ne = n.entity;
+        ne.setRotation(at.getYaw(), at.getPitch());
+        var from = old.getPersistentDataContainer();
+        var to = ne.getPersistentDataContainer();
+        if (named(old)) {
+            ne.customName(old.customName());
+            ne.setCustomNameVisible(old.isCustomNameVisible());
+        }
+        for (String k : new String[]{"dragon_tamer", "dragon_bag"}) {
+            NamespacedKey nk = new NamespacedKey(plugin, k);
+            if (from.has(nk, PersistentDataType.STRING)) to.set(nk, PersistentDataType.STRING, from.get(nk, PersistentDataType.STRING));
+            else if (from.has(nk, PersistentDataType.BYTE_ARRAY)) to.set(nk, PersistentDataType.BYTE_ARRAY, from.get(nk, PersistentDataType.BYTE_ARRAY));
+        }
+        NamespacedKey sit = new NamespacedKey(plugin, "dragon_sitting");
+        if (from.has(sit, PersistentDataType.BYTE)) to.set(sit, PersistentDataType.BYTE, from.get(sit, PersistentDataType.BYTE));
+        if (from.has(keptKey, PersistentDataType.BYTE)) to.set(keptKey, PersistentDataType.BYTE, (byte) 1);
+        if (from.has(growKey, PersistentDataType.LONG)) to.set(growKey, PersistentDataType.LONG, from.get(growKey, PersistentDataType.LONG));
+        if (from.has(breedKey, PersistentDataType.LONG)) to.set(breedKey, PersistentDataType.LONG, from.get(breedKey, PersistentDataType.LONG));
+        n.hunger = a.hunger;
+        to.set(hungerKey, PersistentDataType.INTEGER, a.hunger);
+        n.growAt = a.growAt;
+        n.breedAfter = a.breedAfter;
+        animals.remove(old.getUniqueId());
+        old.remove();
+        at.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, at.add(0, ne.getHeight() * 0.5, 0), 14, 0.4, 0.4, 0.4, 0);
         return true;
     }
 

@@ -1695,7 +1695,7 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
     m.box("body", -1.2, 17.0, -5.4, 1.2, 18.9, -4.2, spine)       # backrest
     m.style = "leather"
     m.box("body", -1.9, 16.9, -4.2, 1.9, 17.5, 3.2, "fur_brown")  # leather seat
-    m.bone("m_seat", (0, 18.2, -0.4), "body")                     # FMM mounts riders here
+    m.bone("m_seat", (0, 23.2, -0.4), "body")                     # FMM mounts riders here (raised 5 px: the rider sat inside the body)
     # ---------------------------------------------------------------- animations
     FOLD_L = (0, -72, 6)       # folded along the body: swept back, tipped up a finger's width
     FOLD_LT = (0, -48, -4)    # forearm folded in and down against the flank    # fly: a real stroke - fast power downbeat, slower recovery, the elbow lags a beat, the

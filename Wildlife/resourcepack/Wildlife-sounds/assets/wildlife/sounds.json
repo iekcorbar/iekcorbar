@@ -283,5 +283,11 @@
    "wildlife:dragon/death_2"
   ],
   "subtitle": "subtitles.wildlife.dragon.death"
+ },
+ "dragon.whistle": {
+  "sounds": [
+   "wildlife:dragon/whistle_1"
+  ],
+  "subtitle": "subtitles.wildlife.dragon.whistle"
  }
 }

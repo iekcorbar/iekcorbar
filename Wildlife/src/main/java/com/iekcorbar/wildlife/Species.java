@@ -158,7 +158,7 @@ enum Species {
     // Cave spawning is the Spawner's underground pass - biomes list stays empty on purpose so
     // the surface loop never picks it. Taming/riding live in DragonAI; statues/journal/eggs
     // follow the species loop.
-    DRAGON("Steam Dragon", EntityType.PARROT, 2.5, 26, 0.09, Habitat.CAVE, Time.ANY, 1, 2, 3,
+    DRAGON("Steam Dragon", EntityType.PARROT, 1.5, 26, 0.09, Habitat.CAVE, Time.ANY, 1, 2, 3,
             List.of(), "coal",
             "Brass over an iron frame, a furnace ticking behind its ribs. It drifts through the deep "
             + "caverns on slow wingbeats and heats its own steam. Feed it coal and it is yours: it will "
