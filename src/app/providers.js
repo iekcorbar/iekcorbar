@@ -18,6 +18,7 @@ import {
   X, 
   Cog,
   Compass,
+  MapPin,
   Heart,
   Users,
   Sparkles,
@@ -906,6 +907,7 @@ export default function ClientProviders({ children }) {
                   icon={FlaskConical}
                   pathname={pathname}
                   items={[
+                    { href: '/start', label: 'New here? Start', icon: Compass, match: (p) => p === '/start' },
                     { href: '/map', label: 'Map', icon: Map, match: (p) => p === '/map' },
                     { href: '/vote', label: 'Vote', icon: ThumbsUp, match: (p) => p === '/vote' },
                     { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
@@ -913,6 +915,7 @@ export default function ClientProviders({ children }) {
                     { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                 { href: '/wildlife', label: 'Wildlife Guide', icon: PawPrint, match: (p) => p.startsWith('/wildlife') },
                 { href: '/dragons', label: 'Dragon Guide', icon: Flame, match: (p) => p.startsWith('/dragons') },
+                { href: '/gouw', label: 'Gouw Guide', icon: MapPin, match: (p) => p.startsWith('/gouw') },
                     { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                     { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                     { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
@@ -1106,6 +1109,7 @@ export default function ClientProviders({ children }) {
 
               <span className="block text-[10px] uppercase font-bold text-sp-gold/80 tracking-widest px-2 pt-2 pb-0.5">Play</span>
               {[
+                { href: '/start', label: 'New here? Start', icon: Compass, match: (p) => p === '/start' },
                 { href: '/map', label: 'Map', icon: Map, match: (p) => p === '/map' },
                 { href: '/vote', label: 'Vote', icon: ThumbsUp, match: (p) => p === '/vote' },
                 { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
@@ -1113,6 +1117,7 @@ export default function ClientProviders({ children }) {
                 { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                 { href: '/wildlife', label: 'Wildlife Guide', icon: PawPrint, match: (p) => p.startsWith('/wildlife') },
                 { href: '/dragons', label: 'Dragon Guide', icon: Flame, match: (p) => p.startsWith('/dragons') },
+                { href: '/gouw', label: 'Gouw Guide', icon: MapPin, match: (p) => p.startsWith('/gouw') },
                 { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                 { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                 { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
@@ -1262,6 +1267,8 @@ export default function ClientProviders({ children }) {
                   <li><Link href="/sakagura" className="hover:text-sp-copper transition-colors">Sakagura Guide</Link></li>
                   <li><Link href="/wildlife" className="hover:text-sp-copper transition-colors">Wildlife Guide</Link></li>
                   <li><Link href="/dragons" className="hover:text-sp-copper transition-colors">Dragon Guide</Link></li>
+                  <li><Link href="/gouw" className="hover:text-sp-copper transition-colors">Gouw Guide</Link></li>
+                  <li><Link href="/start" className="hover:text-sp-copper transition-colors">New here? Start</Link></li>
                   <li><Link href="/wiki#lands" className="hover:text-sp-copper transition-colors">Lands claim policies</Link></li>
                 </ul>
               </div>

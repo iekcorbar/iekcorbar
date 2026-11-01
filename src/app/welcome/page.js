@@ -138,7 +138,9 @@ export default function WelcomePage() {
         <div className="flex flex-wrap gap-2 text-xs">
           <a href={DISCORD} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Join our Discord</a>
           <Link href="/wiki" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Wiki</Link>
+          <Link href="/start" className="px-3 py-1.5 rounded-full border border-sp-gold text-sp-gold">Your first hours</Link>
           <Link href="/wildlife" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Wildlife guide</Link>
+          <Link href="/gouw" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Gouw guide</Link>
           <Link href="/sakagura" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Sakagura</Link>
           <Link href="/steamworks" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Steamworks</Link>
         </div>
