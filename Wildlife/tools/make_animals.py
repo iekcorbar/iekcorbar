@@ -647,10 +647,18 @@ def hedgehog(m, spine="spine"):
     m.box("body", -1.8, 0.8, -1.8, 1.8, 3.4, 2.6, spine)
     m.box("body", -1.4, 3.4, -1.4, 1.4, 4.0, 2.2, spine + "_d")
     rnd = random.Random(3)
-    for i in range(16):
-        x, z = rnd.uniform(-1.6, 1.3), rnd.uniform(-1.4, 2.2)
-        y = 3.2 + rnd.uniform(0, 0.6)
-        m.box("body", x, y, z, x + 0.35, y + 0.55, z + 0.35, "spine_tip" if i % 3 == 0 else spine + "_l")
+    for i in range(26):   # big spikes on the back, varied in height and width
+        w = rnd.uniform(0.6, 0.85)
+        x, z = rnd.uniform(-1.8, 1.8 - w), rnd.uniform(-1.5, 2.3 - w)
+        y = 3.2 + rnd.uniform(0, 0.4)
+        h = rnd.uniform(0.95, 1.5)
+        m.box("body", x, y, z, x + w, y + h, z + w, "spine_tip" if i % 3 == 0 else spine + "_l")
+    for sx in (-1, 1):    # and spikes along the flanks, sticking out sideways and a little down
+        for j in range(6):
+            z = -1.2 + j * 0.62 + rnd.uniform(-0.1, 0.1)
+            y = 1.6 + rnd.uniform(0, 1.2)
+            x0 = 1.8 if sx > 0 else -1.8 - 0.75
+            m.box("body", x0, y, z, x0 + 0.75, y + 0.7, z + 0.6, "spine_tip" if j % 2 else spine + "_l")
     m.box("body", -1.5, 0.6, -1.2, 1.5, 0.9, 2.0, "hedgehog_face_d")
     m.bone("h_head", (0, 1.8, -1.8), "body")
     m.box("h_head", -1.2, 0.8, -3.2, 1.2, 2.6, -1.6, "hedgehog_face")
