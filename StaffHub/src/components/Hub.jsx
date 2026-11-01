@@ -528,7 +528,7 @@ useEffect(() => {
         {/* De AI-man: uitgebreid, de volle hoogte van de hub. Bronnen klik je
             open - het document verschijnt dan als popup voor je neus. */}
         <aside className="hidden lg:flex flex-col border-l border-bronze/20 bg-black/20 overflow-hidden">
-          <Assistant onOpen={(n) => setSel(n)} />
+          <Assistant onOpen={(n) => openById(n.id)} />
         </aside>
 
         {/* Telefoon/tablet: géén vaste kolom, maar een knop die de assistent
@@ -577,7 +577,7 @@ useEffect(() => {
             <Bot className="size-4 text-gold" /><b className="text-gold">{t('ai.title')}</b>
             <button onClick={() => setModal(null)} title={t('dt.close')} className="ml-auto p-2 rounded hover:bg-white/10"><X className="size-4" /></button>
           </div>
-          <Assistant onOpen={(n) => { setModal(null); setSel(n); }} />
+          <Assistant onOpen={(n) => { setModal(null); openById(n.id); }} />
         </div>
       )}
 
@@ -591,7 +591,7 @@ useEffect(() => {
       {modal === 'users' && <UsersModal onClose={() => setModal(null)} me={me} />}
 {modal === 'dashboard' && <Dashboard onClose={() => setModal(null)} />}
 {modal === 'deploy' && <DeployChecklist onClose={() => setModal(null)} />}
-{modal === 'nav' && <Navigation onClose={() => setModal(null)} onOpen={(n) => { setSel(n); setModal(null); }} />}
+{modal === 'nav' && <Navigation onClose={() => setModal(null)} onOpen={(n) => { openById(n.id); setModal(null); }} />}
 {modal === 'versions' && sel && <VersionHistory node={sel} onClose={() => setModal(null)} onRestore={() => { /* reload */ }} />}
 {modal === 'server' && <ServerStatus onClose={() => setModal(null)} />}
 {modal === 'mdimport' && <MarkdownImport parent={parent?.id} onDone={() => load(parent?.id)} onClose={() => setModal(null)} />}

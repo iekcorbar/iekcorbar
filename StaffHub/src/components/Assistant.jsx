@@ -37,14 +37,16 @@ export default function Assistant({ onOpen }) {
   useEffect(() => {
     try {
       const oud = JSON.parse(localStorage.getItem(SLEUTEL) || 'null');
-      if (Array.isArray(oud) && oud.length) setLog(oud);
+      // zoekgeschiedenis staat uit: alleen Boord-AI-gesprekken komen terug
+      const ai = Array.isArray(oud) ? oud.filter((m) => m.mode === 'ai') : [];
+      if (ai.length) setLog(ai);
       sid.current = String(localStorage.getItem(SLEUTEL + ':sid') || '');
     } catch { /* prullenbak van een vorige versie mag het never breken */ }
     fetch('/api/ai').then((r) => r.json()).then(setSt).catch(() => setSt({ on: false, reden: 'time-out' }));
   }, []);
   useEffect(() => {
     try {
-      localStorage.setItem(SLEUTEL, JSON.stringify(log.slice(-24)));
+      localStorage.setItem(SLEUTEL, JSON.stringify(log.filter((m) => m.mode === 'ai').slice(-24)));
       localStorage.setItem(SLEUTEL + ':sid', sid.current);
     } catch { }
   }, [log]);
