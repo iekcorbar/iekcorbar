@@ -1,0 +1,210 @@
+{
+ "textures": {
+  "aparticle": "bouw:block/jungle_barn_door_lower",
+  "abottom": "bouw:block/jungle_barn_door_lower",
+  "atop": "bouw:block/jungle_barn_door_upper",
+  "bbottom": "bouw:block/jungle_barn_door_lower",
+  "bparticle": "bouw:block/jungle_barn_door_lower",
+  "btop": "bouw:block/jungle_barn_glass_door_upper",
+  "particle": "bouw:block/jungle_barn_door_lower"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    13
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "down": {
+     "uv": [
+      13,
+      0,
+      16,
+      16
+     ],
+     "texture": "#abottom",
+     "cullface": "down"
+    },
+    "west": {
+     "uv": [
+      3,
+      0,
+      0,
+      16
+     ],
+     "texture": "#abottom",
+     "cullface": "north"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      3,
+      16
+     ],
+     "texture": "#abottom",
+     "cullface": "south"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#abottom",
+     "cullface": "west"
+    },
+    "north": {
+     "uv": [
+      16,
+      0,
+      0,
+      16
+     ],
+     "texture": "#abottom"
+    }
+   }
+  },
+  {
+   "from": [
+    0,
+    16,
+    13
+   ],
+   "to": [
+    16,
+    32,
+    16
+   ],
+   "faces": {
+    "west": {
+     "uv": [
+      3,
+      0,
+      0,
+      16
+     ],
+     "texture": "#bbottom"
+    },
+    "north": {
+     "uv": [
+      16,
+      0,
+      0,
+      16
+     ],
+     "texture": "#btop"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      3,
+      16
+     ],
+     "texture": "#bbottom"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#btop"
+    },
+    "up": {
+     "uv": [
+      8,
+      16,
+      5,
+      0
+     ],
+     "texture": "#bbottom",
+     "cullface": "up"
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.28,
+    0.28,
+    0.28
+   ]
+  },
+  "ground": {
+   "translation": [
+    0,
+    2,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "fixed": {
+   "scale": [
+    0.28,
+    0.28,
+    0.28
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.5,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "head": {
+   "scale": [
+    0.28,
+    0.28,
+    0.28
+   ]
+  }
+ }
+}

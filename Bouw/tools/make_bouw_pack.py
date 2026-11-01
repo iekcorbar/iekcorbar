@@ -14,14 +14,46 @@ SRC = os.path.join(HERE, "..", "..", "archief", "macaws-mit")
 NS = "bouw"
 WOODS = ["oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "cherry", "mangrove", "bamboo", "crimson", "warped"]
 # (family id, kind, source mod, pattern with {w}, display name)
-DOORS = [
-    ("japanese_door", "japanese/{w}_japanese_door", "Japanese Door"),
-    ("japanese2_door", "japanese/{w}_japanese2_door", "Japanese Door II"),
+DOOR_FAMILIES = [  # (family id, blockstate pattern, label)
+    ("japanese_door", "{w}_japanese_door", "Japanese Door"),
+    ("japanese2_door", "{w}_japanese2_door", "Japanese Door II"),
+    ("bamboo_door", "{w}_bamboo_door", "Bamboo Door"),
+    ("bark_glass_door", "{w}_bark_glass_door", "Bark Glass Door"),
+    ("barn_door", "{w}_barn_door", "Barn Door"),
+    ("barn_glass_door", "{w}_barn_glass_door", "Barn Glass Door"),
+    ("beach_door", "{w}_beach_door", "Beach Door"),
+    ("cottage_door", "{w}_cottage_door", "Cottage Door"),
+    ("four_panel_door", "{w}_four_panel_door", "Four Panel Door"),
+    ("glass_door", "{w}_glass_door", "Glass Door"),
+    ("modern_door", "{w}_modern_door", "Modern Door"),
+    ("mystic_door", "{w}_mystic_door", "Mystic Door"),
+    ("nether_door", "{w}_nether_door", "Nether Door"),
+    ("paper_door", "{w}_paper_door", "Paper Door"),
+    ("stable_door", "{w}_stable_door", "Stable Door"),
+    ("stable_head_door", "{w}_stable_head_door", "Stable Head Door"),
+    ("swamp_door", "{w}_swamp_door", "Swamp Door"),
+    ("tropical_door", "{w}_tropical_door", "Tropical Door"),
+    ("waffle_door", "{w}_waffle_door", "Waffle Door"),
+    ("western_door", "{w}_western_door", "Western Door"),
+    ("whispering_door", "{w}_whispering_door", "Whispering Door"),
 ]
-FENCES = [
-    ("picket_fence", "{w}_picket_fence", "Picket Fence"),
-    ("stockade_fence", "{w}_stockade_fence", "Stockade Fence"),
+STONES = ["andesite", "blackstone", "deepslate", "deepslate_brick", "diorite", "end_brick", "granite", "mud_brick",
+          "nether_brick", "prismarine", "quartz", "brick", "stone_brick", "sandstone", "red_sandstone", "red_nether_brick",
+          "mossy_stone_brick", "mossy_cobblestone", "cobblestone", "stone", "blackstone_brick", "prismarine_brick"]
+LEAVES = ["oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "cherry", "mangrove", "azalea", "flowering_azalea"]
+# (family id, blockstate pattern, label, materials list, recipe kind)
+FENCE_FAMILIES = [
+    ("picket_fence", "{w}_picket_fence", "Picket Fence", WOODS, "wood"),
+    ("stockade_fence", "{w}_stockade_fence", "Stockade Fence", WOODS, "wood"),
+    ("horse_fence", "{w}_horse_fence", "Horse Fence", WOODS, "wood"),
+    ("hedge", "{w}_hedge", "Hedge", LEAVES, "leaves"),
+    ("grass_topped_wall", "{w}_grass_topped_wall", "Grass Topped Wall", STONES, "stone"),
+    ("pillar_wall", "{w}_pillar_wall", "Pillar Wall", STONES, "stone"),
+    ("modern_wall", "modern_{w}_wall", "Modern Wall", STONES, "stone"),
 ]
+METAL = ["acorn", "bastion", "cathedral", "curved", "double_curved", "expanded_mesh", "fortress", "gothic", "guardian", "mesh"]
+for _m in METAL:
+    FENCE_FAMILIES.append((_m + "_metal_fence", _m + "_metal_fence", _m.replace("_", " ").title() + " Metal Fence", [""], "metal"))
 
 used_tex = {}      # source mod -> set of texture paths (without namespace/ext)
 missing = []
@@ -169,26 +201,41 @@ class Out:
         self.count += 1
 
 
+def pick(st, half, openb):
+    """facing=west, hinge=left variant -> (model ref, y rotation)."""
+    for k, v in st.get("variants", {}).items():
+        d = dict(x.split("=") for x in k.split(","))
+        if d.get("facing") == "west" and d.get("half") == half and d.get("open") == openb and d.get("hinge", "left") == "left":
+            v = v[0] if isinstance(v, list) else v
+            if v.get("x"):
+                return None
+            return v["model"], v.get("y", 0) // 90
+    return None
+
+
 def build_door(out, mod, fam, pattern, woods):
     items = []
     for w in woods:
-        base = pattern.format(w=w)
-        d, b = os.path.dirname(base), os.path.basename(base)
+        st = mod.state(pattern.format(w=w))
+        if not st or "variants" not in st:
+            continue
         parts = {}
-        for key in ("closed", "top_closed", "bottom_left", "top_left"):
-            r = flatten(mod, f"mcwdoors:block/{d}/{b}_{key}")
-            if r is None or r[0] is None:
+        for key, (half, op) in {"closed": ("lower", "false"), "top_closed": ("upper", "false"),
+                                "bottom_left": ("lower", "true"), "top_left": ("upper", "true")}.items():
+            pk = pick(st, half, op)
+            r = flatten(mod, pk[0]) if pk else None
+            if not r or not r[0]:
                 parts = None
                 break
-            parts[key] = (r[0], resolve_tex(r[1]))
+            parts[key] = (turn_y(r[0], pk[1]), resolve_tex(r[1]))
         if not parts:
-            missing.append(base)
+            missing.append(pattern.format(w=w))
             continue
 
         def join(low, up):
             tex = {}
             elems = []
-            for tag, (e, t), dy in (("a", low, 0), ("b", up, 16)):
+            for tag, (e, t) in (("a", low), ("b", up)):
                 for el in copy.deepcopy(e):
                     for f in el["faces"].values():
                         if f["texture"].startswith("#"):
@@ -196,10 +243,9 @@ def build_door(out, mod, fam, pattern, woods):
                     elems.append(el)
                 for k, v in retarget(mod, t).items():
                     tex[tag + k] = v
-                # lift upper elements
             n = len(low[0])
             elems = elems[:n] + lift(elems[n:], 16)
-            elems = turn_y(elems, 1)    # source panel lies in the YZ plane; the engine's facing 0/180 needs XY
+            elems = turn_y(elems, 1)    # engine facing 0/180 needs the panel in the XY plane
             tex["particle"] = tex.get("aparticle", next(iter(tex.values())))
             return elems, tex
 
@@ -208,7 +254,7 @@ def build_door(out, mod, fam, pattern, woods):
         out.model(name, e, t, 0.28)
         e, t = join(parts["bottom_left"], parts["top_left"])
         out.model(name + "_open", e, t, 0.28)
-        items.append({"id": name, "wood": w})
+        items.append({"id": name, "mat": w})
     return items
 
 
@@ -217,7 +263,6 @@ def build_fence(out, mod, fam, pattern, woods):
     for w in woods:
         st = mod.state(pattern.format(w=w))
         if not st or "multipart" not in st:
-            missing.append(pattern.format(w=w))
             continue
         post, side = None, None
         for part in st["multipart"]:
@@ -245,14 +290,14 @@ def build_fence(out, mod, fam, pattern, woods):
             for k, v in retarget(mod, ts).items():
                 tex[tag + k] = v
         tex["particle"] = next(iter(tex.values()))
-        name = f"{w}_{fam}"
+        name = f"{w}_{fam}" if w else fam
         for mask in range(16):
             es = copy.deepcopy(pe)
             for d in range(4):
                 if mask & (1 << d):
                     es += turn_y(se, d)
             out.model(f"{name}_{mask}", es, tex)
-        items.append({"id": name, "wood": w})
+        items.append({"id": name, "mat": w})
     return items
 
 
@@ -261,10 +306,14 @@ def main():
     out = Out(outdir)
     doors, fences = Mod("doors", "mcwdoors"), Mod("fences", "mcwfences")
     families = []
-    for fam, pattern, label in DOORS:
-        families.append({"family": fam, "kind": "door", "label": label, "items": build_door(out, doors, fam, pattern, WOODS)})
-    for fam, pattern, label in FENCES:
-        families.append({"family": fam, "kind": "fence", "label": label, "items": build_fence(out, fences, fam, pattern, WOODS)})
+    for fam, pattern, label in DOOR_FAMILIES:
+        its = build_door(out, doors, fam, pattern, WOODS)
+        if its:
+            families.append({"family": fam, "kind": "door", "label": label, "recipe": "door", "items": its})
+    for fam, pattern, label, mats, rec in FENCE_FAMILIES:
+        its = build_fence(out, fences, fam, pattern, mats)
+        if its:
+            families.append({"family": fam, "kind": "fence", "label": label, "recipe": rec, "items": its})
     folders = {"mcwdoors": doors, "mcwfences": fences}
     for ns, paths in used_tex.items():
         for p in sorted(paths):

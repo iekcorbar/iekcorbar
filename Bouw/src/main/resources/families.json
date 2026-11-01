@@ -3,50 +3,51 @@
   "family": "japanese_door",
   "kind": "door",
   "label": "Japanese Door",
+  "recipe": "door",
   "items": [
    {
     "id": "oak_japanese_door",
-    "wood": "oak"
+    "mat": "oak"
    },
    {
     "id": "spruce_japanese_door",
-    "wood": "spruce"
+    "mat": "spruce"
    },
    {
     "id": "birch_japanese_door",
-    "wood": "birch"
+    "mat": "birch"
    },
    {
     "id": "jungle_japanese_door",
-    "wood": "jungle"
+    "mat": "jungle"
    },
    {
     "id": "acacia_japanese_door",
-    "wood": "acacia"
+    "mat": "acacia"
    },
    {
     "id": "dark_oak_japanese_door",
-    "wood": "dark_oak"
+    "mat": "dark_oak"
    },
    {
     "id": "cherry_japanese_door",
-    "wood": "cherry"
+    "mat": "cherry"
    },
    {
     "id": "mangrove_japanese_door",
-    "wood": "mangrove"
+    "mat": "mangrove"
    },
    {
     "id": "bamboo_japanese_door",
-    "wood": "bamboo"
+    "mat": "bamboo"
    },
    {
     "id": "crimson_japanese_door",
-    "wood": "crimson"
+    "mat": "crimson"
    },
    {
     "id": "warped_japanese_door",
-    "wood": "warped"
+    "mat": "warped"
    }
   ]
  },
@@ -54,50 +55,991 @@
   "family": "japanese2_door",
   "kind": "door",
   "label": "Japanese Door II",
+  "recipe": "door",
   "items": [
    {
     "id": "oak_japanese2_door",
-    "wood": "oak"
+    "mat": "oak"
    },
    {
     "id": "spruce_japanese2_door",
-    "wood": "spruce"
+    "mat": "spruce"
    },
    {
     "id": "birch_japanese2_door",
-    "wood": "birch"
+    "mat": "birch"
    },
    {
     "id": "jungle_japanese2_door",
-    "wood": "jungle"
+    "mat": "jungle"
    },
    {
     "id": "acacia_japanese2_door",
-    "wood": "acacia"
+    "mat": "acacia"
    },
    {
     "id": "dark_oak_japanese2_door",
-    "wood": "dark_oak"
+    "mat": "dark_oak"
    },
    {
     "id": "cherry_japanese2_door",
-    "wood": "cherry"
+    "mat": "cherry"
    },
    {
     "id": "mangrove_japanese2_door",
-    "wood": "mangrove"
+    "mat": "mangrove"
    },
    {
     "id": "bamboo_japanese2_door",
-    "wood": "bamboo"
+    "mat": "bamboo"
    },
    {
     "id": "crimson_japanese2_door",
-    "wood": "crimson"
+    "mat": "crimson"
    },
    {
     "id": "warped_japanese2_door",
-    "wood": "warped"
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "bamboo_door",
+  "kind": "door",
+  "label": "Bamboo Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_bamboo_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_bamboo_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_bamboo_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_bamboo_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_bamboo_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_bamboo_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_bamboo_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_bamboo_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "crimson_bamboo_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_bamboo_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "bark_glass_door",
+  "kind": "door",
+  "label": "Bark Glass Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_bark_glass_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_bark_glass_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_bark_glass_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_bark_glass_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_bark_glass_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_bark_glass_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_bark_glass_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_bark_glass_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_bark_glass_door",
+    "mat": "bamboo"
+   }
+  ]
+ },
+ {
+  "family": "barn_door",
+  "kind": "door",
+  "label": "Barn Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_barn_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_barn_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_barn_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_barn_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_barn_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_barn_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_barn_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_barn_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_barn_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_barn_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_barn_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "barn_glass_door",
+  "kind": "door",
+  "label": "Barn Glass Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_barn_glass_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_barn_glass_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_barn_glass_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_barn_glass_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_barn_glass_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_barn_glass_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_barn_glass_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_barn_glass_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_barn_glass_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_barn_glass_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_barn_glass_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "beach_door",
+  "kind": "door",
+  "label": "Beach Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_beach_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_beach_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_beach_door",
+    "mat": "birch"
+   },
+   {
+    "id": "acacia_beach_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_beach_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_beach_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_beach_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_beach_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_beach_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_beach_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "cottage_door",
+  "kind": "door",
+  "label": "Cottage Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_cottage_door",
+    "mat": "oak"
+   },
+   {
+    "id": "birch_cottage_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_cottage_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_cottage_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_cottage_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_cottage_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_cottage_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_cottage_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_cottage_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_cottage_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "four_panel_door",
+  "kind": "door",
+  "label": "Four Panel Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_four_panel_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_four_panel_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_four_panel_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_four_panel_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_four_panel_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "cherry_four_panel_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_four_panel_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_four_panel_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_four_panel_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_four_panel_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "glass_door",
+  "kind": "door",
+  "label": "Glass Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_glass_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_glass_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_glass_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_glass_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_glass_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_glass_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_glass_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_glass_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_glass_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_glass_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_glass_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "modern_door",
+  "kind": "door",
+  "label": "Modern Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_modern_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_modern_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_modern_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_modern_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_modern_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_modern_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_modern_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_modern_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_modern_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_modern_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_modern_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "mystic_door",
+  "kind": "door",
+  "label": "Mystic Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_mystic_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_mystic_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_mystic_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_mystic_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_mystic_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_mystic_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_mystic_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_mystic_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_mystic_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_mystic_door",
+    "mat": "crimson"
+   }
+  ]
+ },
+ {
+  "family": "nether_door",
+  "kind": "door",
+  "label": "Nether Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_nether_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_nether_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_nether_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_nether_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_nether_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_nether_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_nether_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_nether_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_nether_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "warped_nether_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "paper_door",
+  "kind": "door",
+  "label": "Paper Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_paper_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_paper_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "jungle_paper_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_paper_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_paper_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_paper_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_paper_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_paper_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_paper_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_paper_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "stable_door",
+  "kind": "door",
+  "label": "Stable Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_stable_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_stable_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_stable_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_stable_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_stable_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_stable_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_stable_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_stable_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_stable_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_stable_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_stable_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "stable_head_door",
+  "kind": "door",
+  "label": "Stable Head Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_stable_head_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_stable_head_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_stable_head_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_stable_head_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_stable_head_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_stable_head_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_stable_head_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_stable_head_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_stable_head_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_stable_head_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_stable_head_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "swamp_door",
+  "kind": "door",
+  "label": "Swamp Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_swamp_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_swamp_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_swamp_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_swamp_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_swamp_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_swamp_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_swamp_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "bamboo_swamp_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_swamp_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_swamp_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "tropical_door",
+  "kind": "door",
+  "label": "Tropical Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_tropical_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_tropical_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_tropical_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_tropical_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "dark_oak_tropical_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_tropical_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_tropical_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_tropical_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_tropical_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_tropical_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "waffle_door",
+  "kind": "door",
+  "label": "Waffle Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_waffle_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_waffle_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_waffle_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_waffle_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_waffle_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_waffle_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "mangrove_waffle_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_waffle_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_waffle_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_waffle_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "western_door",
+  "kind": "door",
+  "label": "Western Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_western_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_western_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_western_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_western_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_western_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_western_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_western_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_western_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_western_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_western_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_western_door",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "whispering_door",
+  "kind": "door",
+  "label": "Whispering Door",
+  "recipe": "door",
+  "items": [
+   {
+    "id": "oak_whispering_door",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_whispering_door",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_whispering_door",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_whispering_door",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_whispering_door",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_whispering_door",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_whispering_door",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_whispering_door",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_whispering_door",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_whispering_door",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_whispering_door",
+    "mat": "warped"
    }
   ]
  },
@@ -105,50 +1047,51 @@
   "family": "picket_fence",
   "kind": "fence",
   "label": "Picket Fence",
+  "recipe": "wood",
   "items": [
    {
     "id": "oak_picket_fence",
-    "wood": "oak"
+    "mat": "oak"
    },
    {
     "id": "spruce_picket_fence",
-    "wood": "spruce"
+    "mat": "spruce"
    },
    {
     "id": "birch_picket_fence",
-    "wood": "birch"
+    "mat": "birch"
    },
    {
     "id": "jungle_picket_fence",
-    "wood": "jungle"
+    "mat": "jungle"
    },
    {
     "id": "acacia_picket_fence",
-    "wood": "acacia"
+    "mat": "acacia"
    },
    {
     "id": "dark_oak_picket_fence",
-    "wood": "dark_oak"
+    "mat": "dark_oak"
    },
    {
     "id": "cherry_picket_fence",
-    "wood": "cherry"
+    "mat": "cherry"
    },
    {
     "id": "mangrove_picket_fence",
-    "wood": "mangrove"
+    "mat": "mangrove"
    },
    {
     "id": "bamboo_picket_fence",
-    "wood": "bamboo"
+    "mat": "bamboo"
    },
    {
     "id": "crimson_picket_fence",
-    "wood": "crimson"
+    "mat": "crimson"
    },
    {
     "id": "warped_picket_fence",
-    "wood": "warped"
+    "mat": "warped"
    }
   ]
  },
@@ -156,50 +1099,399 @@
   "family": "stockade_fence",
   "kind": "fence",
   "label": "Stockade Fence",
+  "recipe": "wood",
   "items": [
    {
     "id": "oak_stockade_fence",
-    "wood": "oak"
+    "mat": "oak"
    },
    {
     "id": "spruce_stockade_fence",
-    "wood": "spruce"
+    "mat": "spruce"
    },
    {
     "id": "birch_stockade_fence",
-    "wood": "birch"
+    "mat": "birch"
    },
    {
     "id": "jungle_stockade_fence",
-    "wood": "jungle"
+    "mat": "jungle"
    },
    {
     "id": "acacia_stockade_fence",
-    "wood": "acacia"
+    "mat": "acacia"
    },
    {
     "id": "dark_oak_stockade_fence",
-    "wood": "dark_oak"
+    "mat": "dark_oak"
    },
    {
     "id": "cherry_stockade_fence",
-    "wood": "cherry"
+    "mat": "cherry"
    },
    {
     "id": "mangrove_stockade_fence",
-    "wood": "mangrove"
+    "mat": "mangrove"
    },
    {
     "id": "bamboo_stockade_fence",
-    "wood": "bamboo"
+    "mat": "bamboo"
    },
    {
     "id": "crimson_stockade_fence",
-    "wood": "crimson"
+    "mat": "crimson"
    },
    {
     "id": "warped_stockade_fence",
-    "wood": "warped"
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "horse_fence",
+  "kind": "fence",
+  "label": "Horse Fence",
+  "recipe": "wood",
+  "items": [
+   {
+    "id": "oak_horse_fence",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_horse_fence",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_horse_fence",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_horse_fence",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_horse_fence",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_horse_fence",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_horse_fence",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_horse_fence",
+    "mat": "mangrove"
+   },
+   {
+    "id": "bamboo_horse_fence",
+    "mat": "bamboo"
+   },
+   {
+    "id": "crimson_horse_fence",
+    "mat": "crimson"
+   },
+   {
+    "id": "warped_horse_fence",
+    "mat": "warped"
+   }
+  ]
+ },
+ {
+  "family": "hedge",
+  "kind": "fence",
+  "label": "Hedge",
+  "recipe": "leaves",
+  "items": [
+   {
+    "id": "oak_hedge",
+    "mat": "oak"
+   },
+   {
+    "id": "spruce_hedge",
+    "mat": "spruce"
+   },
+   {
+    "id": "birch_hedge",
+    "mat": "birch"
+   },
+   {
+    "id": "jungle_hedge",
+    "mat": "jungle"
+   },
+   {
+    "id": "acacia_hedge",
+    "mat": "acacia"
+   },
+   {
+    "id": "dark_oak_hedge",
+    "mat": "dark_oak"
+   },
+   {
+    "id": "cherry_hedge",
+    "mat": "cherry"
+   },
+   {
+    "id": "mangrove_hedge",
+    "mat": "mangrove"
+   },
+   {
+    "id": "azalea_hedge",
+    "mat": "azalea"
+   },
+   {
+    "id": "flowering_azalea_hedge",
+    "mat": "flowering_azalea"
+   }
+  ]
+ },
+ {
+  "family": "pillar_wall",
+  "kind": "fence",
+  "label": "Pillar Wall",
+  "recipe": "stone",
+  "items": [
+   {
+    "id": "andesite_pillar_wall",
+    "mat": "andesite"
+   },
+   {
+    "id": "blackstone_pillar_wall",
+    "mat": "blackstone"
+   },
+   {
+    "id": "deepslate_pillar_wall",
+    "mat": "deepslate"
+   },
+   {
+    "id": "deepslate_brick_pillar_wall",
+    "mat": "deepslate_brick"
+   },
+   {
+    "id": "diorite_pillar_wall",
+    "mat": "diorite"
+   },
+   {
+    "id": "end_brick_pillar_wall",
+    "mat": "end_brick"
+   },
+   {
+    "id": "granite_pillar_wall",
+    "mat": "granite"
+   },
+   {
+    "id": "mud_brick_pillar_wall",
+    "mat": "mud_brick"
+   },
+   {
+    "id": "nether_brick_pillar_wall",
+    "mat": "nether_brick"
+   },
+   {
+    "id": "prismarine_pillar_wall",
+    "mat": "prismarine"
+   },
+   {
+    "id": "quartz_pillar_wall",
+    "mat": "quartz"
+   },
+   {
+    "id": "sandstone_pillar_wall",
+    "mat": "sandstone"
+   },
+   {
+    "id": "red_sandstone_pillar_wall",
+    "mat": "red_sandstone"
+   },
+   {
+    "id": "stone_pillar_wall",
+    "mat": "stone"
+   }
+  ]
+ },
+ {
+  "family": "modern_wall",
+  "kind": "fence",
+  "label": "Modern Wall",
+  "recipe": "stone",
+  "items": [
+   {
+    "id": "andesite_modern_wall",
+    "mat": "andesite"
+   },
+   {
+    "id": "blackstone_modern_wall",
+    "mat": "blackstone"
+   },
+   {
+    "id": "deepslate_modern_wall",
+    "mat": "deepslate"
+   },
+   {
+    "id": "deepslate_brick_modern_wall",
+    "mat": "deepslate_brick"
+   },
+   {
+    "id": "diorite_modern_wall",
+    "mat": "diorite"
+   },
+   {
+    "id": "end_brick_modern_wall",
+    "mat": "end_brick"
+   },
+   {
+    "id": "granite_modern_wall",
+    "mat": "granite"
+   },
+   {
+    "id": "mud_brick_modern_wall",
+    "mat": "mud_brick"
+   },
+   {
+    "id": "nether_brick_modern_wall",
+    "mat": "nether_brick"
+   },
+   {
+    "id": "prismarine_modern_wall",
+    "mat": "prismarine"
+   },
+   {
+    "id": "quartz_modern_wall",
+    "mat": "quartz"
+   },
+   {
+    "id": "stone_brick_modern_wall",
+    "mat": "stone_brick"
+   },
+   {
+    "id": "sandstone_modern_wall",
+    "mat": "sandstone"
+   },
+   {
+    "id": "red_sandstone_modern_wall",
+    "mat": "red_sandstone"
+   }
+  ]
+ },
+ {
+  "family": "acorn_metal_fence",
+  "kind": "fence",
+  "label": "Acorn Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "acorn_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "bastion_metal_fence",
+  "kind": "fence",
+  "label": "Bastion Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "bastion_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "cathedral_metal_fence",
+  "kind": "fence",
+  "label": "Cathedral Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "cathedral_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "curved_metal_fence",
+  "kind": "fence",
+  "label": "Curved Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "curved_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "double_curved_metal_fence",
+  "kind": "fence",
+  "label": "Double Curved Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "double_curved_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "expanded_mesh_metal_fence",
+  "kind": "fence",
+  "label": "Expanded Mesh Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "expanded_mesh_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "fortress_metal_fence",
+  "kind": "fence",
+  "label": "Fortress Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "fortress_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "gothic_metal_fence",
+  "kind": "fence",
+  "label": "Gothic Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "gothic_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "guardian_metal_fence",
+  "kind": "fence",
+  "label": "Guardian Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "guardian_metal_fence",
+    "mat": ""
+   }
+  ]
+ },
+ {
+  "family": "mesh_metal_fence",
+  "kind": "fence",
+  "label": "Mesh Metal Fence",
+  "recipe": "metal",
+  "items": [
+   {
+    "id": "mesh_metal_fence",
+    "mat": ""
    }
   ]
  }

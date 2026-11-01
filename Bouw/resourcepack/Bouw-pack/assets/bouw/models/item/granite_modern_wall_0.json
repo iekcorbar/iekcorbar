@@ -1,0 +1,215 @@
+{
+ "textures": {
+  "pparticle": "minecraft:block/polished_granite",
+  "pwall": "minecraft:block/polished_granite",
+  "s1": "minecraft:block/granite",
+  "sparticle": "minecraft:block/granite",
+  "swall": "minecraft:block/polished_granite",
+  "particle": "minecraft:block/polished_granite"
+ },
+ "elements": [
+  {
+   "name": "Center post",
+   "from": [
+    6,
+    0,
+    6
+   ],
+   "to": [
+    10,
+    16,
+    10
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      3,
+      0,
+      7,
+      16
+     ],
+     "texture": "#pwall"
+    },
+    "east": {
+     "uv": [
+      3,
+      0,
+      7,
+      16
+     ],
+     "texture": "#pwall"
+    },
+    "south": {
+     "uv": [
+      3,
+      0,
+      7,
+      16
+     ],
+     "texture": "#pwall"
+    },
+    "west": {
+     "uv": [
+      3,
+      0,
+      7,
+      16
+     ],
+     "texture": "#pwall"
+    },
+    "up": {
+     "uv": [
+      8,
+      2,
+      12,
+      6
+     ],
+     "texture": "#pwall"
+    },
+    "down": {
+     "uv": [
+      6,
+      0,
+      10,
+      4
+     ],
+     "texture": "#pwall"
+    }
+   }
+  },
+  {
+   "name": "Center post",
+   "from": [
+    6.025,
+    -2.025,
+    6.025
+   ],
+   "to": [
+    9.975,
+    0,
+    9.975
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      3,
+      0,
+      7,
+      2
+     ],
+     "texture": "#pwall"
+    },
+    "east": {
+     "uv": [
+      3,
+      0,
+      7,
+      2
+     ],
+     "texture": "#pwall"
+    },
+    "south": {
+     "uv": [
+      3,
+      0,
+      7,
+      2
+     ],
+     "texture": "#pwall"
+    },
+    "west": {
+     "uv": [
+      3,
+      0,
+      7,
+      2
+     ],
+     "texture": "#pwall"
+    },
+    "down": {
+     "uv": [
+      6,
+      0,
+      10,
+      4
+     ],
+     "texture": "#pwall"
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  },
+  "ground": {
+   "translation": [
+    0,
+    2,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "fixed": {
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.5,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "head": {
+   "scale": [
+    0.4,
+    0.4,
+    0.4
+   ]
+  }
+ }
+}

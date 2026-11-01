@@ -1,0 +1,227 @@
+{
+ "textures": {
+  "aparticle": "bouw:block/oak_barn_door_lower",
+  "a1": "bouw:block/oak_barn_door_lower",
+  "abottom": "bouw:block/stable/oak_stable_door_lower",
+  "bparticle": "bouw:block/oak_barn_door_lower",
+  "b1": "bouw:block/oak_barn_door_lower",
+  "bbottom": "bouw:block/stable/oak_stable_door_upper",
+  "particle": "bouw:block/oak_barn_door_lower"
+ },
+ "elements": [
+  {
+   "from": [
+    -12,
+    0,
+    13.02
+   ],
+   "to": [
+    4,
+    16,
+    16.02
+   ],
+   "rotation": {
+    "angle": 0,
+    "axis": "y",
+    "origin": [
+     -4,
+     8,
+     8.2
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      16,
+      0,
+      0,
+      16
+     ],
+     "texture": "#abottom"
+    },
+    "east": {
+     "uv": [
+      7,
+      0,
+      10,
+      16
+     ],
+     "texture": "#a1"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#abottom"
+    },
+    "west": {
+     "uv": [
+      9,
+      0,
+      6,
+      16
+     ],
+     "texture": "#a1"
+    },
+    "down": {
+     "uv": [
+      7,
+      0,
+      10,
+      16
+     ],
+     "rotation": 90,
+     "texture": "#a1",
+     "cullface": "down"
+    }
+   }
+  },
+  {
+   "from": [
+    -12,
+    15.98,
+    13.02
+   ],
+   "to": [
+    4,
+    31.98,
+    16.02
+   ],
+   "rotation": {
+    "angle": 0,
+    "axis": "y",
+    "origin": [
+     -4,
+     24,
+     21.1
+    ]
+   },
+   "faces": {
+    "north": {
+     "uv": [
+      16,
+      0,
+      0,
+      16
+     ],
+     "texture": "#bbottom"
+    },
+    "east": {
+     "uv": [
+      10,
+      0,
+      7,
+      16
+     ],
+     "texture": "#b1"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#bbottom"
+    },
+    "west": {
+     "uv": [
+      7,
+      0,
+      10,
+      16
+     ],
+     "texture": "#b1"
+    },
+    "up": {
+     "uv": [
+      7,
+      0,
+      10,
+      16
+     ],
+     "rotation": 90,
+     "texture": "#b1",
+     "cullface": "up"
+    }
+   }
+  }
+ ],
+ "display": {
+  "gui": {
+   "rotation": [
+    30,
+    225,
+    0
+   ],
+   "translation": [
+    0,
+    0,
+    0
+   ],
+   "scale": [
+    0.28,
+    0.28,
+    0.28
+   ]
+  },
+  "ground": {
+   "translation": [
+    0,
+    2,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "fixed": {
+   "scale": [
+    0.28,
+    0.28,
+    0.28
+   ]
+  },
+  "thirdperson_righthand": {
+   "rotation": [
+    75,
+    45,
+    0
+   ],
+   "translation": [
+    0,
+    2.5,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "firstperson_righthand": {
+   "rotation": [
+    0,
+    45,
+    0
+   ],
+   "scale": [
+    0.3,
+    0.3,
+    0.3
+   ]
+  },
+  "head": {
+   "scale": [
+    0.28,
+    0.28,
+    0.28
+   ]
+  }
+ }
+}
