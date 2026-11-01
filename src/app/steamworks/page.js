@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Cog, Gauge, Waves, Flame, Pickaxe, Droplet, Blocks, Wrench, ListOrdered, Train, Zap, Link2, Lightbulb, CircleHelp } from 'lucide-react';
 import SteamworksPlayground from '@/components/SteamworksPlayground';
+import BuiltBy from '@/components/BuiltBy';
 
 export const metadata = {
   title: 'Steamworks, explained — Iekcorbar',
@@ -535,6 +536,7 @@ export default function SteamworksExplainedPage() {
         </div>
         <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Steamworks {`0.3.38`} + Additions {`0.1.3`} + Power {`0.2.0`}). For exact per-machine stats, always right-click the part in-game.</p>
       </Section>
+      <BuiltBy what="Steamworks" />
     </div>
   );
 }

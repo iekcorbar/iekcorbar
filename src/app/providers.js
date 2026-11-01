@@ -1329,8 +1329,8 @@ export default function ClientProviders({ children }) {
                   Terms of Service
                 </Link>
                 <span className="text-sp-bronze/30">|</span>
-                <Link href="/hire" className="hover:text-sp-gold underline transition-colors">
-                  Hire the builder
+                <Link href="/hire" className="inline-flex items-center gap-1 text-sp-copper/90 hover:text-sp-gold underline transition-colors">
+                  <Hammer className="w-3 h-3" /> Built by one person &ndash; hire the builder
                 </Link>
               </div>
               <div className="flex items-center gap-1.5 text-center">

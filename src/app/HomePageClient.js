@@ -31,6 +31,7 @@ import {
   Newspaper,
   Rocket
 } from 'lucide-react';
+import BuiltBy from '@/components/BuiltBy';
 
 export default function HomePage() {
   const { user, setIsLoginOpen, setIsRegisterMode } = useUser();
@@ -904,6 +905,7 @@ export default function HomePage() {
 
       </section>
 
+      <BuiltBy what="This server" />
     </div>
   );
 }

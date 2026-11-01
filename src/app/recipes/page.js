@@ -4,6 +4,7 @@ import { BookOpen, Search, Hammer, Compass } from 'lucide-react';
 import data from '@/lib/recipes-data.json';
 import iconIds from '@/lib/recipe-icons.json';
 import pictureIds from '@/lib/recipe-pictures.json';
+import BuiltBy from '@/components/BuiltBy';
 
 // Pictures: our own items use a render of their model (public/recipes/<plugin>/, from the plugins' preview3d.py),
 // everything else a small drawn icon (scripts/make-recipe-icons.py). The plugin being viewed is looked at first.
@@ -192,6 +193,7 @@ export default function RecipesPage() {
         {tab === 'recipes' ? <Browser /> : <Guide />}
       </section>
       <p className="text-xs text-text-warm/40">Generated from the plugin files ({data.generated}). Relics and Wildlife items are listed in-game in Zukan.</p>
+      <BuiltBy what="This recipe browser" />
     </div>
   );
 }

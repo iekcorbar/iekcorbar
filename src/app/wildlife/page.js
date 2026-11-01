@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { CircleHelp, Binoculars, PawPrint, Egg, Flame, Landmark, Ghost, Trophy, Lightbulb, ListOrdered } from 'lucide-react';
+import BuiltBy from '@/components/BuiltBy';
 
 export const metadata = {
   title: 'Wildlife, explained — Iekcorbar',
@@ -176,6 +177,7 @@ export default function WildlifeExplainedPage() {
         </div>
         <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Wildlife {`0.9.0`}).</p>
       </Section>
+      <BuiltBy what="Wildlife" />
     </div>
   );
 }

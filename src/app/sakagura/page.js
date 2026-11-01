@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { CircleHelp, Flame, Wine, Timer, Cog, Sprout, Trees, Droplets, Lightbulb, BookOpen, ListOrdered, Sparkles, AlertTriangle } from 'lucide-react';
 import SakaguraPlayground from '@/components/SakaguraPlayground';
+import BuiltBy from '@/components/BuiltBy';
 
 export const metadata = {
   title: 'Sakagura, explained — Iekcorbar',
@@ -498,6 +499,7 @@ export default function SakaguraExplainedPage() {
         </div>
         <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Sakagura {`0.7.9`}). Exact times are always shown in-game: right-click anything, or use /zukan.</p>
       </Section>
+      <BuiltBy what="Sakagura" />
     </div>
   );
 }
