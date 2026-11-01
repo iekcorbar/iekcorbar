@@ -4,6 +4,7 @@ import { sendRconCommand } from '@/lib/rcon';
 import { hashPassword } from '@/lib/password';
 import { createSession, attachSessionCookie } from '@/lib/session';
 import { bindPushTokenFromRequest } from '@/lib/push';
+import { currentRulesVersion } from '@/lib/rules-version';
 
 // Registration (reworked 2026-09-27). The account is created right away with
 // link_status 'pending' and the player is whitelisted + logged in. Linking the
@@ -20,7 +21,7 @@ const IGN_RE = /^[A-Za-z0-9_]{3,16}$/; // Minecraft Java username rules
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { email, password, mcUsername, action = 'initiate' } = body;
+    const { email, password, mcUsername, acceptRules, action = 'initiate' } = body;
 
     if (action !== 'initiate') {
       // The old send_code/verify steps moved to /api/account/link.
@@ -29,6 +30,9 @@ export async function POST(request) {
 
     if (!email || !password || !mcUsername) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    }
+    if (acceptRules !== true) {
+      return NextResponse.json({ error: "Please read the server rules and tick the box to agree before creating your account." }, { status: 400 });
     }
     const ign = String(mcUsername).trim();
     if (!EMAIL_RE.test(String(email).trim())) {
@@ -66,14 +70,16 @@ export async function POST(request) {
     if (!saved) {
       return NextResponse.json({ error: "Could not save your account (database unreachable). Please try again shortly." }, { status: 500 });
     }
+    // Store that (and which version of) the rules they agreed to.
+    await db.acceptRules(newUser.email, await currentRulesVersion());
     const deadline = new Date(Date.now() + LINK_WINDOW_MS);
     await db.updateLinkState(newUser.email, { status: 'pending', deadline });
 
     await db.createUserNotification({
       recipientEmail: newUser.email,
       type: 'account_link',
-      message: `Welcome to Iekcorbar! Link your Minecraft account "${ign}" within 3 days to keep access to the server.`,
-      link: '/link',
+      message: `Welcome to Iekcorbar! Follow the welcome checklist and link your Minecraft account "${ign}" within 3 days to keep access to the server.`,
+      link: '/welcome',
       pushTitle: '🔗 Link your Minecraft account',
       pushBody: `Join the server as ${ign} and enter your code within 3 days.`,
       tag: 'account-link'

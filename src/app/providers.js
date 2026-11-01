@@ -369,6 +369,7 @@ export default function ClientProviders({ children }) {
   const [user, setUser] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterMode, setIsRegisterMode] = useState(false);
+  const [acceptRules, setAcceptRules] = useState(false);
   
   // Auth Form State
   const [email, setEmail] = useState('');
@@ -658,6 +659,7 @@ export default function ClientProviders({ children }) {
   };
 
   const resetRegisterForm = () => {
+    setAcceptRules(false);
     setVerificationRequired(false);
     setVerificationCode('');
     setDevVerificationCode('');
@@ -700,7 +702,7 @@ export default function ClientProviders({ children }) {
         const res = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, mcUsername, action: 'initiate' })
+          body: JSON.stringify({ email, password, mcUsername, acceptRules, action: 'initiate' })
         });
         const data = await res.json();
         if (res.ok && data.success) {
@@ -713,7 +715,7 @@ export default function ClientProviders({ children }) {
           setPassword('');
           setMcUsername('');
           resetRegisterForm();
-          router.push('/link');
+          router.push('/welcome');
         } else {
           setError(data.error || "Registration failed");
         }
@@ -1567,6 +1569,12 @@ export default function ClientProviders({ children }) {
                         <p className="mt-2 text-[11px] text-text-warm/60 leading-relaxed">
                           Your exact Minecraft Java name. After creating your account you'll <strong className="text-text-warm/90">link it in-game with a code</strong> (takes a minute) â€” you have <strong className="text-text-warm/90">3 days</strong>, otherwise you're removed from the whitelist until you do.
                         </p>
+                        <label className="mt-3 flex items-start gap-2 text-[11px] text-text-warm/80 leading-relaxed cursor-pointer">
+                          <input type="checkbox" required checked={acceptRules} onChange={e => setAcceptRules(e.target.checked)} className="mt-0.5 accent-[#d4a017]" />
+                          <span>
+                            I have read the <a href="/rules" target="_blank" rel="noopener noreferrer" className="text-sp-gold underline">server rules</a> (with the reason behind each one) and agree to follow them, and I accept the <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-sp-gold underline">terms</a> and <a href="/privacy" target="_blank" rel="noopener noreferrer" className="text-sp-gold underline">privacy policy</a>.
+                          </span>
+                        </label>
                       </div>
                     )}
                   </>

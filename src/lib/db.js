@@ -300,6 +300,21 @@ async function ensureLinkColumns() {
   linkColumnsReady = true;
 }
 
+let rulesColumnsReady = false;
+async function ensureRulesColumns() {
+  if (rulesColumnsReady) return;
+  const existing = await query("SHOW COLUMNS FROM users LIKE 'rules\\_%'");
+  const have = new Set((existing || []).map(c => c.Field));
+  const defs = {
+    rules_accepted_at: 'DATETIME NULL DEFAULT NULL',
+    rules_version: 'VARCHAR(64) NULL DEFAULT NULL'
+  };
+  for (const [col, def] of Object.entries(defs)) {
+    if (!have.has(col)) await query(`ALTER TABLE users ADD COLUMN ${col} ${def}`);
+  }
+  rulesColumnsReady = true;
+}
+
 // Profile personalisation columns on users (bio, banner theme, hidden public
 // sections). Added on first use so no manual SQL is needed. Kept out of
 // getUsers() on purpose — see profile-theme.js for the allowed values.
@@ -3710,6 +3725,30 @@ export const db = {
       return true;
     } catch (err) {
       console.error('Failed to update link state:', err);
+      return false;
+    }
+  },
+
+  // RULES ACCEPTANCE (onboarding, 2026-11-01): new players must tick "I have read and
+  // agree to the rules" when they register. rules_accepted_at + rules_version (hash of the
+  // rules text at that moment) are added on first use, so no manual SQL is needed.
+  getRulesAcceptance: async (email) => {
+    try {
+      await ensureRulesColumns();
+      const rows = await query('SELECT rules_accepted_at AS at, rules_version AS version FROM users WHERE LOWER(email) = ?', [String(email).toLowerCase()]);
+      return rows && rows[0] ? rows[0] : null;
+    } catch {
+      return null;
+    }
+  },
+
+  acceptRules: async (email, version) => {
+    try {
+      await ensureRulesColumns();
+      await query('UPDATE users SET rules_accepted_at = NOW(), rules_version = ? WHERE LOWER(email) = ?', [String(version || '').slice(0, 64), String(email).toLowerCase()]);
+      return true;
+    } catch (err) {
+      console.error('Failed to store rules acceptance:', err);
       return false;
     }
   },

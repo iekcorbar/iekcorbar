@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, ChevronRight, AlertTriangle, Search, Info } from 'lucide-react';
 import { linkifyHtml, lineVideoEmbed, VideoEmbed } from '@/lib/linkify';
+import { whyFor } from '@/lib/rule-reasons';
 
 function extractEmoji(title) {
   // Find unicode emojis or symbols at the start of the string
@@ -162,8 +163,14 @@ export default function RulesPage() {
                       <h2 className="font-serif text-base text-white font-black tracking-wide uppercase">{cleanTitle}</h2>
                     </div>
                     <div className="pl-2 space-y-1">
-                      {renderContent(rule.content)}
+                      {renderContent(whyFor(rule).body)}
                     </div>
+                    {whyFor(rule).why && (
+                      <p className="flex items-start gap-2 text-xs text-sp-copper/90 bg-sp-gold/5 border border-sp-bronze/30 rounded-lg px-3 py-2 text-left leading-relaxed">
+                        <Info className="w-3.5 h-3.5 shrink-0 mt-0.5 text-sp-gold/70" />
+                        <span><strong className="text-sp-gold">Why this rule:</strong> {whyFor(rule).why}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
