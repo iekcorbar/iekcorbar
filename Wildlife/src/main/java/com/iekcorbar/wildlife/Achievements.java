@@ -102,6 +102,7 @@ final class Achievements {
         a.add("dragon_whistle", "dragon_tame", "goat_horn", "Fluit", "Blow a Dragon Whistle and call your dragon.", "task").hidden();
         a.add("dragon_nest", "dragon_breeder", "hay_block", "Nestbouwer", "Rest a dragon egg in a nest of straw.", "task").hidden();
         a.add("dragon_paint", "dragon_tame", "red_dye", "Nieuwe verf", "Give your dragon a new coat of paint with a dye.", "task").hidden();
+        a.add("dragon_nesting", "dragon_tame", "hay_block", "Home Is Where the Hay Is", "Your dragon claims a Dragon Nest.", "goal").hidden();
         a.add("dragon_bags", "dragon_tame", "chest", "Zadeltassen vol", "Fit saddlebags on your dragon.", "task").hidden();
 
         // wraith line (root, hidden - sfeer-wezen)

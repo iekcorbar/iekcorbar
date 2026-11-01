@@ -41,7 +41,7 @@ Right-click your dragon with a **chest** to fit saddlebags (nine slots). Open th
 
 ### Hunger
 
-A dragon you keep gets hungry over time. Below half it flies slower, and when it is starving it is very slow. Feed it **coal** (right-click) to restore hunger. A well fed dragon (90 and up) flies a little faster. The menu shows its hunger.
+A dragon you keep gets hungry over time. Below half it flies slower, and when it is starving it is very slow. Feed it **coal** (right-click) to restore hunger. Coal also heals a hurt dragon. A well fed dragon (90 and up) flies a little faster. The menu shows its hunger.
 
 ### Dyes - a new coat of paint
 
@@ -62,6 +62,20 @@ Its name, saddlebags, hunger and owner stay. Rare looks (the gilded dragon) are 
 Two tamed dragons that are fed coal at the same time lay a **Dragon Egg** instead of a baby. Carry it in your inventory: after about eight minutes (server setting) it hatches into a baby dragon that belongs to you. Only the owner of the parents can hatch the egg.
 
 You can also make a **nest**: sneak and right-click a **hay block** with the egg. It rests on top of the straw and stays warm without you; it hatches when its keeper is around. Sneak + right-click the straw with an empty hand takes the egg back, and breaking the hay block frees it.
+
+### Dragon Nests
+
+The **Dragon Nest** (a Relics prop: two hay blocks, two sticks, a copper ingot and a coal) is a warm straw nest with a brass egg in it. Dragons go looking for places like this.
+
+* **Wild dragons** that find a free nest within 64 blocks settle down near it.
+* **A tame dragon claims a nest** by landing on it while you rest nearby. One nest per dragon and one dragon per nest, so dragons never fight over one. A claimed nest is skipped by every other dragon.
+* Your dragon rests on its nest when you stand still close by, and **eggs are laid in your own nest** when two of your dragons breed near it.
+* Right-click a nest to see who lives there. **Sneak + right-click with an empty hand** lets it go (owner or staff).
+* A claim ends when the dragon dies or is set free, when the nest is broken, or when the dragon has stayed away for 14 days (server setting).
+
+### Name tags
+
+A tame dragon shows its name (or "<Owner>'s Dragon") and its owner above the model. Look straight at a dragon and the action bar shows its hunger and whether it has a nest.
 
 ### Good to know
 

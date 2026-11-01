@@ -1454,6 +1454,26 @@ def pillar_box():
     return e
 
 
+def dragon_nest():
+    """A dragon's nest: a wide ring of woven straw and twigs on a brass-banded base, a bed of embers
+    in the hollow, and one big egg of riveted brass lying in it. Dragons go looking for these."""
+    e = [box(1.5, 0, 1.5, 14.5, 1.2, 14.5, "wood_warm"), box(2, 1.2, 2, 14, 2.4, 14, "straw"),
+         box(1.2, 1.4, 4, 2.6, 4.2, 12, "straw"), box(13.4, 1.4, 4, 14.8, 4.2, 12, "straw"),
+         box(4, 1.4, 1.2, 12, 4.2, 2.6, "straw"), box(4, 1.4, 13.4, 12, 4.2, 14.8, "straw"),
+         box(1.6, 1.4, 1.6, 4.4, 4.0, 4.4, "straw_d"), box(11.6, 1.4, 1.6, 14.4, 4.0, 4.4, "straw_d"),
+         box(1.6, 1.4, 11.6, 4.4, 4.0, 14.4, "straw_d"), box(11.6, 1.4, 11.6, 14.4, 4.0, 14.4, "straw_d")]
+    e += [box(0.8, 3.0, 5, 1.6, 6.4, 6, "wood_warm"), box(14.4, 3.0, 9, 15.2, 6.2, 10, "wood_warm"),    # loose twigs
+          box(6, 3.0, 0.8, 7, 6.0, 1.6, "wood_warm"), box(9, 3.0, 14.4, 10, 6.4, 15.2, "wood_warm")]
+    e += [box(1.2, 3.6, 1.2, 14.8, 4.4, 2.0, "brass"), box(1.2, 3.6, 14, 14.8, 4.4, 14.8, "brass"),   # brass rim bands
+          box(1.2, 3.6, 2, 2, 4.4, 14, "brass"), box(14, 3.6, 2, 14.8, 4.4, 14, "brass")]
+    e += [box(4.4, 2.4, 4.4, 11.6, 2.9, 11.6, "ember"), box(5.4, 2.9, 5.4, 10.6, 3.2, 10.6, "flame")]  # the warm bed
+    e += [box(6, 3.2, 6, 10, 5.2, 10, "copper"), box(6.6, 5.2, 6.6, 9.4, 6.6, 9.4, "copper"),          # the egg
+          box(5.6, 3.2, 6.6, 6, 4.8, 9.4, "brass"), box(10, 3.2, 6.6, 10.4, 4.8, 9.4, "brass"),
+          box(6.8, 6.6, 6.8, 9.2, 7.2, 9.2, "brass"), box(6.2, 4.0, 5.8, 9.8, 4.5, 6.0, "brass_d"),
+          box(6.2, 4.0, 10.0, 9.8, 4.5, 10.2, "brass_d")]
+    return e
+
+
 # Relics.java special-cases PILLAR_BOX in the STEAM effect: the cloud puffs escape at the vent's
 # height (front of the block, one block up) instead of the block centre.
 
@@ -1576,6 +1596,7 @@ MODELS.update(MORE)
 MODELS.update(BREWERY)
 MODELS.update(VALENTINE)
 MODELS.update(ONSEN)
+MODELS["dragon_nest"] = dragon_nest      # Curiosities: the nest wild dragons look for (Wildlife 0.9.8)
 MODELS["pillar_box"] = pillar_box  # Curiosities (year-round): the steam-pillar post box
 MODELS["water_bottle"] = water_bottle      # Treat: drinkable, see Treats.java
 MODELS["blood_token"] = blood_token        # RelicType: floor + wall, plain and Blessed - 0.6.0

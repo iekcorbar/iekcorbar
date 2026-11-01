@@ -19,6 +19,8 @@ public final class WildlifePlugin extends JavaPlugin {
     private Fmm fmm;
     private Animals animals;
     private DragonAI dragon;
+    private Nests nests;
+    private DragonTags tags;
     private DragonPets pets;
     private Spawner spawner;
     private Journal journal;
@@ -40,6 +42,8 @@ public final class WildlifePlugin extends JavaPlugin {
         rescue = new Rescue(this);
         animals = new Animals(this);
         dragon = new DragonAI(this);
+        nests = new Nests(this);
+        tags = new DragonTags(this);
         pets = new DragonPets(this);
         spawner = new Spawner(this);
         journal = new Journal(this);
@@ -51,6 +55,7 @@ public final class WildlifePlugin extends JavaPlugin {
         var pm = getServer().getPluginManager();
         pm.registerEvents(animals, this);
         pm.registerEvents(dragon, this);
+        pm.registerEvents(nests, this);
         pm.registerEvents(pets, this);
         pm.registerEvents(journal, this);
         drops = new Drops(this);
@@ -93,12 +98,17 @@ public final class WildlifePlugin extends JavaPlugin {
             if (tick % 20 == 0) for (Player p : getServer().getOnlinePlayers()) rescue.trySpawn(p, java.util.concurrent.ThreadLocalRandom.current());
         }, 5L, 5L);
         getServer().getScheduler().runTaskTimer(this, dragon::tick, 20L, 1L);   // riding and staying want every tick
+        getServer().getScheduler().runTaskTimer(this, nests::tick, 200L, 200L);
+        getServer().getScheduler().runTaskTimer(this, tags::tick, 40L, 20L);
+        getServer().getScheduler().runTaskTimer(this, tags::lookTick, 40L, 10L);
         getLogger().info("Wildlife enabled with " + Species.values().length + " species.");
     }
 
     @Override
     public void onDisable() {
         if (dragon != null) dragon.removeSeats();
+        if (tags != null) tags.removeAll();
+        if (nests != null) nests.save();
         if (animals != null) animals.removeAllUnnamed();
         if (molehills != null && !getServer().isStopping()) molehills.removeAll();
         if (zoo != null && !getServer().isStopping()) { // props and recipes vanish with the server anyway
@@ -119,6 +129,7 @@ public final class WildlifePlugin extends JavaPlugin {
     Fmm fmm() { return fmm; }
     Animals animals() { return animals; }
     DragonAI dragon() { return dragon; }
+    Nests nests() { return nests; }
     DragonPets pets() { return pets; }
     Molehills molehills() { return molehills; }
     Spawner spawner() { return spawner; }

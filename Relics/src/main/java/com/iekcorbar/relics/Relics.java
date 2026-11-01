@@ -216,6 +216,16 @@ final class Relics implements Listener {
         return out;
     }
 
+    /** Wildlife asks: every Dragon Nest within r blocks of 'from' (centres, nearest first). */
+    List<Location> nestsNear(Location from, double r) {
+        List<Relic> found = new ArrayList<>();
+        for (Relic n : all()) if (n.type == RelicType.DRAGON_NEST && n.world == from.getWorld() && n.center().distanceSquared(from) < r * r) found.add(n);
+        found.sort(java.util.Comparator.comparingDouble(n -> n.center().distanceSquared(from)));
+        List<Location> out = new ArrayList<>();
+        for (Relic n : found) out.add(n.center());
+        return out;
+    }
+
     List<Relic> launchersNear(Location at, double r) {
         List<Relic> out = new ArrayList<>();
         for (Relic l : all()) if (l.type == RelicType.FIREWORK_LAUNCHER && l.world == at.getWorld() && l.center().distanceSquared(at) < r * r) out.add(l);
@@ -391,6 +401,7 @@ final class Relics implements Listener {
         recipe(RelicType.SNOW_PINE, 1, Material.SPRUCE_SAPLING, Material.SNOW_BLOCK, Material.SNOW_BLOCK);
         recipe(RelicType.NOTICE_BOARD, 1, Tag.PLANKS, Tag.PLANKS, Material.STICK, Material.STICK, Material.PAPER);
         recipe(RelicType.WISH_TREE, 1, Material.CHERRY_SAPLING, Material.FLOWER_POT, Material.PAPER);
+        recipe(RelicType.DRAGON_NEST, 1, Material.HAY_BLOCK, Material.HAY_BLOCK, Material.STICK, Material.STICK, Material.COPPER_INGOT, Material.COAL);
         recipe(RelicType.PILLAR_BOX, 1, Material.IRON_INGOT, Material.RED_DYE, Material.RED_DYE, Material.COPPER_INGOT, Material.GOLD_NUGGET, Material.REDSTONE);
         // Brewery & wooden helpers (Curiosities) - NOT craftable unless config crafting.<id> says true (shop/event stock)
         recipe(RelicType.SUGI_DAMA, 1, Material.SPRUCE_LEAVES, Material.SPRUCE_LEAVES, Material.HAY_BLOCK, Material.STRING);

@@ -65,6 +65,8 @@ species:
 dragon:
   # horizontal top speed while ridden, in blocks per tick (0.55 = 11 m/s; sprinting rider +50 %)
   seat-height: 2.0   # height of the rider above the dragon feet (adult): too low = inside the dragon, too high = floating
+  nest-claim-days: 14   # a claimed Dragon Nest is freed when its dragon has not come near for this many days
+  nest-range: 64        # how far dragons look for a nest
   ride-speed: 0.55
   # chance that a new dragon is the Ender look (all-black, violet eyes): extremely rare on purpose
   ender-chance: 0.003

@@ -162,6 +162,9 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         adv = Achievements.create(this);
         adv.start();
         getServer().getServicesManager().register(java.util.function.Supplier.class, new ZukanData(this, relics), this, org.bukkit.plugin.ServicePriority.Normal); // recipe viewer (Zukan)
+        getServer().getServicesManager().register(java.util.function.BiFunction.class,
+                (java.util.function.BiFunction<org.bukkit.Location, Double, java.util.List<org.bukkit.Location>>) (from, r) -> relics.nestsNear(from, r),
+                this, org.bukkit.plugin.ServicePriority.Normal);   // Wildlife: where are the dragon nests?
         getCommand("relics").setExecutor(this);
         getCommand("relics").setTabCompleter(this);
         getServer().getScheduler().runTask(this, () -> {

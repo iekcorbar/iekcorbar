@@ -153,6 +153,9 @@ final class Breeding {
             if (rare) look = a.species.rareModel();
             hearts(a.entity, 5);
             hearts(b.entity, 5);
+            java.util.UUID eggOwner = DragonAI.tamer(a.entity) != null ? DragonAI.tamer(a.entity) : DragonAI.tamer(b.entity);
+            Location nest = eggOwner == null ? null : plugin.nests().ownNestNear(eggOwner, at, 16);   // the egg goes into their own nest
+            if (nest != null) at = nest.clone().add(0, 0.2, 0);
             plugin.pets().layEgg(at.add(0, 0.5, 0), look, DragonAI.tamer(a.entity) != null ? DragonAI.tamer(a.entity) : DragonAI.tamer(b.entity));
             return;
         }

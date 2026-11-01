@@ -111,13 +111,16 @@ final class DragonAI implements Listener {
             plugin.adv().grant(p, "dragon_paint");
             return true;
         }
-        if ((held == Material.COAL || held == Material.CHARCOAL) && p.getUniqueId().equals(tamer(e)) && a.hunger < 70) {
-            a.hunger = Math.min(100, a.hunger + 30);                       // a hungry dragon is fed before it is bred
+        var maxHp = e.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+        boolean hurt = maxHp != null && e.getHealth() < maxHp.getValue() - 0.01;
+        if ((held == Material.COAL || held == Material.CHARCOAL) && p.getUniqueId().equals(tamer(e)) && (a.hunger < 70 || hurt)) {
+            a.hunger = Math.min(100, a.hunger + 30);                       // a hungry or hurt dragon is fed before it is bred
+            if (hurt) e.setHealth(Math.min(maxHp.getValue(), e.getHealth() + Math.max(4.0, maxHp.getValue() * 0.25)));   // coal heals too
             e.getPersistentDataContainer().set(plugin.animals().hungerKey, PersistentDataType.INTEGER, a.hunger);
             if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
             e.getWorld().spawnParticle(Particle.FLAME, e.getLocation().add(0, e.getHeight() * 0.6, 0), 8, 0.3, 0.2, 0.3, 0.02);
             e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 0.8f, 1.1f);
-            p.sendActionBar(Component.text("The furnace roars. Hunger " + a.hunger + "/100.", NamedTextColor.GOLD));
+            p.sendActionBar(Component.text("The furnace roars. Hunger " + a.hunger + "/100" + (maxHp != null ? ", health " + (int) Math.ceil(e.getHealth()) + "/" + (int) maxHp.getValue() : "") + ".", NamedTextColor.GOLD));
             return true;
         }
         if (held == Material.COAL || held == Material.CHARCOAL) {
@@ -206,6 +209,7 @@ final class DragonAI implements Listener {
         pdc.set(sittingKey, PersistentDataType.BYTE, (byte) 0);
         plugin.fmm().stop(e);
         endRide(e);
+        plugin.nests().release(e);
         if (e instanceof Parrot par) { par.setOwner(null); par.setTamed(false); }
         var pp = p.getPersistentDataContainer();
         Integer n = pp.get(dragonsKey, PersistentDataType.INTEGER);
@@ -214,7 +218,7 @@ final class DragonAI implements Listener {
 
     void rename(Animals.Animal a, String name) {
         a.entity.customName(name == null ? null : Component.text(name, NamedTextColor.GOLD));
-        a.entity.setCustomNameVisible(name != null);
+        a.entity.setCustomNameVisible(false);
     }
 
     // ------------------------------------------------------------ the Dragon Whistle
@@ -402,6 +406,7 @@ final class DragonAI implements Listener {
         Location ownerAt;                 // tamed: where the owner was a moment ago
         int still;                        // ticks the owner has stood still
         double orbit;                     // tamed: angle around the owner
+        Location nest;                    // wild: a free nest it settles near
     }
 
     private final Map<UUID, Mind> minds = new HashMap<>();
@@ -514,6 +519,11 @@ final class DragonAI implements Listener {
     private void wild(Animals.Animal a, LivingEntity e, Mind m, long now, ThreadLocalRandom r) {
         Location at = e.getLocation();
         if (m.home == null) m.home = at.clone();
+        if (now % 100 == 0 && (m.mode == Mode.ROOST || m.mode == Mode.FLIGHT)) {        // a free nest nearby draws a wild dragon in
+            Location free = plugin.nests().freeNear(at, plugin.nests().range());
+            m.nest = free;
+            if (free != null && (m.home == null || m.home.getWorld() != free.getWorld() || m.home.distanceSquared(free) > 400)) m.home = free.clone();
+        }
         Player near = nearest(e, 6.0);
         if (near != null && !near.isSneaking() && now - lastRoar.getOrDefault(e.getUniqueId(), -9999L) > 400) {
             lastRoar.put(e.getUniqueId(), now);
@@ -559,6 +569,11 @@ final class DragonAI implements Listener {
             }
             case LAND -> {
                 anim(e, m, true);
+                if (m.nest != null && m.nest.getWorld() == at.getWorld()) {                // settle on the nest itself
+                    Vector to = m.nest.toVector().subtract(at.toVector());
+                    to.setY(0);
+                    if (to.lengthSquared() > 4) glide(e, to.normalize().multiply(0.15), 0.1);
+                }
                 if (descend(e, m)) {
                     m.mode = Mode.ROOST;
                     m.until = 0;
@@ -657,8 +672,22 @@ final class DragonAI implements Listener {
         else m.still = 0;
         m.ownerAt = me.clone();
         boolean resting = m.still > 140 && dist < 14;                        // owner has stood still for 4 s: come down beside them
+        if (now % 100 == 0) plugin.nests().touch(e);
         if (resting) {
             if (m.mode != Mode.ROOST) m.mode = Mode.LAND;
+            Location own = plugin.nests().claimedBy(e);                    // home first; else a free nest close to the owner
+            Location nest = own != null && own.getWorld() == me.getWorld() && own.distanceSquared(me) < 24 * 24 ? own
+                    : own == null ? plugin.nests().freeNear(me, 20) : null;
+            if (nest != null) {
+                Vector to = nest.toVector().subtract(at.toVector());
+                to.setY(0);
+                if (to.lengthSquared() > 2.25) glide(e, to.normalize().multiply(0.14), 0.1);
+                if (descend(e, m)) {
+                    m.mode = Mode.ROOST;
+                    if (own == null && to.lengthSquared() <= 9) plugin.nests().claim(e, tamer(e), nest);   // landed on a free nest: it is theirs
+                }
+                return;
+            }
             if (dist > 7.0) {                                              // land a few blocks away, never on top of the owner
                 Vector to = me.toVector().subtract(at.toVector());
                 to.setY(0);
