@@ -48,7 +48,7 @@ final class DragonAI implements Listener {
 
     /** Brain's Control goal asks: is this dragon too busy (sitting / carrying) for its own brain? */
     static boolean blocked(Animals.Animal a) {
-        return a.species == Species.DRAGON && (isSitting(a.entity) || !a.entity.getPassengers().isEmpty());
+        return a.species == Species.DRAGON && (isSitting(a.entity) || ridden(a.entity));
     }
 
     static boolean isSitting(LivingEntity e) {
@@ -142,7 +142,7 @@ final class DragonAI implements Listener {
             e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) 0);
             plugin.fmm().stop(e);
         }
-        if (!e.addPassenger(p)) {
+        if (!seatRider(e, p)) {
             p.sendActionBar(Component.text("There is no room on the saddle.", NamedTextColor.RED));
             return true;
         }
@@ -186,7 +186,7 @@ final class DragonAI implements Listener {
     /** Call the dragon to the owner's side (a sitting one gets up first). */
     boolean come(Animals.Animal a, Player p) {
         LivingEntity e = a.entity;
-        if (e.getWorld() != p.getWorld() || !e.getPassengers().isEmpty()) return false;
+        if (e.getWorld() != p.getWorld() || ridden(e)) return false;
         if (isSitting(e)) {
             e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) 0);
             plugin.fmm().stop(e);
@@ -205,7 +205,7 @@ final class DragonAI implements Listener {
         forget(p, e.getUniqueId());
         pdc.set(sittingKey, PersistentDataType.BYTE, (byte) 0);
         plugin.fmm().stop(e);
-        e.eject();
+        endRide(e);
         if (e instanceof Parrot par) { par.setOwner(null); par.setTamed(false); }
         var pp = p.getPersistentDataContainer();
         Integer n = pp.get(dragonsKey, PersistentDataType.INTEGER);
@@ -299,7 +299,7 @@ final class DragonAI implements Listener {
     }
 
     private boolean summon(LivingEntity e, Player p) {
-        if (!p.getUniqueId().equals(tamer(e)) || e.getWorld() != p.getWorld() || !e.getPassengers().isEmpty()) return false;
+        if (!p.getUniqueId().equals(tamer(e)) || e.getWorld() != p.getWorld() || ridden(e)) return false;
         if (isSitting(e)) {
             e.getPersistentDataContainer().set(sittingKey, PersistentDataType.BYTE, (byte) 0);
             plugin.fmm().stop(e);
@@ -343,7 +343,8 @@ final class DragonAI implements Listener {
 
     @EventHandler
     public void onInput(PlayerInputEvent e) {
-        if (!(e.getPlayer().getVehicle() instanceof LivingEntity v)) return;
+        LivingEntity v = dragonOf(e.getPlayer().getVehicle());
+        if (v == null) return;
         Animals.Animal a = plugin.animals().get(v);
         if (a == null || a.species != Species.DRAGON) return;
         Input in = inputs.computeIfAbsent(e.getPlayer().getUniqueId(), k -> new Input());
@@ -359,8 +360,10 @@ final class DragonAI implements Listener {
     public void onDismount(EntityDismountEvent e) {
         if (e.getEntity() instanceof Player p) {
             inputs.remove(p.getUniqueId());
-            if (e.getDismounted() instanceof LivingEntity d0) minds.remove(d0.getUniqueId());
-            if (e.getDismounted() instanceof LivingEntity le) {
+            LivingEntity le = dragonOf(e.getDismounted());
+            if (le != null) {
+                minds.remove(le.getUniqueId());
+                Bukkit.getScheduler().runTask(plugin, () -> endRide(le));
                 Animals.Animal a = plugin.animals().get(le);
                 if (a != null && a.species == Species.DRAGON) {
                     plugin.adv().grant(p, "dragon_landing");
@@ -374,7 +377,9 @@ final class DragonAI implements Listener {
     /** On the saddle the rider takes no damage from the ride itself: falls, flying into walls, being squeezed or stuck in blocks. */
     @EventHandler(ignoreCancelled = true)
     public void onRiderHurt(org.bukkit.event.entity.EntityDamageEvent e) {
-        if (!(e.getEntity() instanceof Player p) || !(p.getVehicle() instanceof LivingEntity v)) return;
+        if (!(e.getEntity() instanceof Player p)) return;
+        LivingEntity v = dragonOf(p.getVehicle());
+        if (v == null) return;
         Animals.Animal a = plugin.animals().get(v);
         if (a == null || a.species != Species.DRAGON) return;
         switch (e.getCause()) {
@@ -431,6 +436,7 @@ final class DragonAI implements Listener {
                 companion(e, m, owner, now, r);
             }
         }
+        moveSeats();
     }
 
     // ---- shared movement helpers
@@ -604,7 +610,7 @@ final class DragonAI implements Listener {
         for (Animals.Animal a : plugin.animals().all()) {
             if (a.species != Species.DRAGON || !a.attached || !isTamedBy(a, p)) continue;
             LivingEntity e = a.entity;
-            if (isSitting(e) || !e.getPassengers().isEmpty() || e.getWorld() != from.getWorld()) continue;
+            if (isSitting(e) || ridden(e) || e.getWorld() != from.getWorld()) continue;
             if (e.getLocation().distanceSquared(from) > 40 * 40) continue;
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (!e.isValid() || !p.isOnline() || p.getWorld() != e.getWorld()) return;
@@ -708,10 +714,88 @@ final class DragonAI implements Listener {
             e.getWorld().spawnParticle(Particle.CLOUD, e.getLocation().add(0, e.getHeight() * 0.85, 0), 1, 0.1, 0.05, 0.1, 0.008);
     }
 
+    // ------------------------------------------------------------ the saddle: our own seat entity
+    // The base mob (a parrot) is tiny, so a rider put straight on it ends up INSIDE the dragon. Like FMM's
+    // own mounts we seat the rider on an invisible Interaction that follows the dragon at saddle height.
+
+    private static final Map<UUID, UUID> SEAT_OF = new HashMap<>();   // dragon -> seat
+    private static final Map<UUID, UUID> DRAGON_OF = new HashMap<>(); // seat -> dragon
+
+    private double seatHeight(LivingEntity e) {
+        var sc = e.getAttribute(org.bukkit.attribute.Attribute.SCALE);
+        double k = sc == null ? 1 : sc.getValue() / 1.5;                 // the height below is for an adult at scale 1.5
+        return plugin.getConfig().getDouble("dragon.seat-height", 2.0) * k;
+    }
+
+    private Location seatSpot(LivingEntity e) {
+        return e.getLocation().add(e.getVelocity()).add(0, seatHeight(e), 0);   // one tick ahead: the rider does not trail behind
+    }
+
+    static boolean ridden(LivingEntity e) {
+        UUID id = SEAT_OF.get(e.getUniqueId());
+        return id != null && Bukkit.getEntity(id) instanceof Entity s && !s.getPassengers().isEmpty();
+    }
+
     private static Player riderOf(LivingEntity e) {
-        for (Entity p : e.getPassengers())
-            if (p instanceof Player pl) return pl;
+        UUID id = SEAT_OF.get(e.getUniqueId());
+        if (id == null || !(Bukkit.getEntity(id) instanceof Entity s)) return null;
+        for (Entity p : s.getPassengers()) if (p instanceof Player pl) return pl;
         return null;
+    }
+
+    /** The dragon a vehicle (our seat) belongs to, or null. */
+    static LivingEntity dragonOf(Entity vehicle) {
+        if (vehicle == null) return null;
+        UUID d = DRAGON_OF.get(vehicle.getUniqueId());
+        return d != null && Bukkit.getEntity(d) instanceof LivingEntity le ? le : null;
+    }
+
+    private boolean seatRider(LivingEntity e, Player p) {
+        endRide(e);
+        Entity seat = e.getWorld().spawn(seatSpot(e), org.bukkit.entity.Interaction.class, i -> {
+            i.setInteractionWidth(0.1f);
+            i.setInteractionHeight(0f);
+            i.setPersistent(false);
+            i.setInvulnerable(true);
+            i.setResponsive(false);
+        });
+        if (!seat.addPassenger(p)) { seat.remove(); return false; }
+        SEAT_OF.put(e.getUniqueId(), seat.getUniqueId());
+        DRAGON_OF.put(seat.getUniqueId(), e.getUniqueId());
+        return true;
+    }
+
+    /** Remove the seat (the rider, if any, drops off it). */
+    void endRide(LivingEntity e) {
+        UUID id = SEAT_OF.remove(e.getUniqueId());
+        if (id == null) return;
+        DRAGON_OF.remove(id);
+        Entity s = Bukkit.getEntity(id);
+        if (s != null) { s.eject(); s.remove(); }
+    }
+
+    void removeSeats() {
+        for (UUID id : new java.util.ArrayList<>(DRAGON_OF.keySet())) {
+            Entity s = Bukkit.getEntity(id);
+            if (s != null) { s.eject(); s.remove(); }
+        }
+        SEAT_OF.clear();
+        DRAGON_OF.clear();
+    }
+
+    /** Every tick: carry each seat along with its dragon; drop seats whose dragon is gone or whose rider got off. */
+    private void moveSeats() {
+        for (Map.Entry<UUID, UUID> en : new java.util.ArrayList<>(SEAT_OF.entrySet())) {
+            Entity d = Bukkit.getEntity(en.getKey());
+            Entity s = Bukkit.getEntity(en.getValue());
+            if (!(d instanceof LivingEntity le) || !d.isValid() || s == null || !s.isValid() || s.getPassengers().isEmpty()) {
+                SEAT_OF.remove(en.getKey());
+                DRAGON_OF.remove(en.getValue());
+                if (s != null) { s.eject(); s.remove(); }
+                continue;
+            }
+            s.teleport(seatSpot(le), io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_PASSENGERS);
+        }
     }
 
     private static Player nearest(LivingEntity e, double r) {

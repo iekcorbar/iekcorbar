@@ -98,6 +98,7 @@ public final class WildlifePlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (dragon != null) dragon.removeSeats();
         if (animals != null) animals.removeAllUnnamed();
         if (molehills != null && !getServer().isStopping()) molehills.removeAll();
         if (zoo != null && !getServer().isStopping()) { // props and recipes vanish with the server anyway
