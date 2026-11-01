@@ -100,6 +100,11 @@ final class BouwCommand implements TabExecutor {
                     p.getWorld().dropItemNaturally(p.getLocation(), left);
                 c++;
             }
+            if (fam.isEmpty()) for (ItemStack it : plugin.shapes.allItems()) {
+                for (ItemStack left : p.getInventory().addItem(it).values())
+                    p.getWorld().dropItemNaturally(p.getLocation(), left);
+                c++;
+            }
             s.sendMessage(Component.text("Gave " + c + " pieces.", NamedTextColor.GREEN));
             return true;
         }

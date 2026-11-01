@@ -24,6 +24,28 @@ LINES = [
     ("yakisugi_charred", "Yakisugi Charred Wood", "wood", "DARK_OAK_PLANKS", "CHARCOAL", "charred"),
     ("bamboo_slat", "Bamboo Slat", "wood", "BAMBOO", "STRING", "bamboo"),
 ]
+LINES += [
+    # plain building blocks
+    ("slate_tile", "Slate Tile", "stone", "COBBLED_DEEPSLATE", "FLINT", "slate", (92, 100, 112)),
+    ("slate_cobble", "Slate Cobble", "stone", "DEEPSLATE", "GRAVEL", "cobble", (88, 94, 104)),
+    ("marble_white", "White Marble", "stone", "QUARTZ_BLOCK", "CALCITE", "marble", (236, 236, 232)),
+    ("marble_black", "Black Marble", "stone", "BLACKSTONE", "QUARTZ", "marble", (40, 40, 46)),
+    ("limestone_brick", "Limestone Brick", "stone", "SMOOTH_SANDSTONE", "BONE_MEAL", "bricks", (214, 204, 170)),
+    ("flagstone", "Flagstone", "stone", "ANDESITE", "STONE", "flags", (128, 130, 134)),
+    ("basalt_brick", "Basalt Brick", "stone", "BASALT", "COAL", "bricks", (70, 72, 78)),
+    ("sandy_brick", "Sandy Brick", "stone", "SANDSTONE", "CLAY_BALL", "bricks", (200, 168, 112)),
+    ("cement_plain", "Plain Cement", "stone", "LIGHT_GRAY_CONCRETE_POWDER", "CLAY_BALL", "cement", (160, 160, 158)),
+    ("dark_brick", "Dark Brick", "stone", "NETHER_BRICKS", "COAL", "bricks", (74, 40, 44)),
+    ("terracotta_shingle", "Terracotta Shingle", "stone", "TERRACOTTA", "BRICK", "shingle", (176, 96, 64)),
+    ("walnut_planks", "Walnut Planks", "wood", "DARK_OAK_PLANKS", "COCOA_BEANS", "planks", (92, 62, 44)),
+    ("cedar_planks", "Cedar Planks", "wood", "SPRUCE_PLANKS", "ORANGE_DYE", "planks", (170, 98, 62)),
+    ("weathered_planks", "Weathered Planks", "wood", "OAK_PLANKS", "GRAY_DYE", "planks", (148, 142, 132)),
+    ("whitewash_planks", "Whitewash Planks", "wood", "BIRCH_PLANKS", "WHITE_DYE", "planks", (226, 220, 206)),
+    ("driftwood", "Driftwood", "wood", "STRIPPED_OAK_LOG", "KELP", "driftwood", (176, 164, 142)),
+    ("thatch", "Thatch", "wood", "HAY_BLOCK", "VINE", "thatch", (206, 176, 82)),
+    ("painted_blue", "Blue Painted Boards", "wood", "JUNGLE_PLANKS", "BLUE_DYE", "planks", (60, 96, 164)),
+    ("painted_green", "Green Painted Boards", "wood", "ACACIA_PLANKS", "GREEN_DYE", "planks", (66, 128, 84)),
+]
 PIECES = ["block", "stairs", "slab", "wall", "fence", "gate", "trapdoor", "door", "button", "plate"]
 
 
@@ -56,7 +78,8 @@ def disc(px, cx, cy, r, c):
                 px[y][x] = c
 
 
-def texture(style, rnd):
+def texture(style, rnd, color=None):
+    c = color or (128, 128, 128)
     if style == "cogs":
         px = canvas((196, 158, 64))
         for ox, oy in ((0, 0), (8, 0), (0, 8), (8, 8)):
@@ -163,6 +186,102 @@ def texture(style, rnd):
             x, y = rnd.randint(0, 14), rnd.randint(0, 14)
             rect(px, x, y, x + 1, y + rnd.randint(2, 5), (14, 12, 12))
         noise(px, rnd, 5)
+    elif style == "slate":
+        px = canvas(c)
+        for y in range(0, 16, 3):
+            rect(px, 0, y, 16, y + 1, shade(c, 18))
+            rect(px, 0, y + 2, 16, y + 3, shade(c, -22))
+        for _ in range(5):
+            x, y = rnd.randint(0, 13), rnd.randint(0, 14)
+            rect(px, x, y, x + 3, y + 1, shade(c, -14))
+        noise(px, rnd, 5)
+    elif style == "cobble":
+        px = canvas(shade(c, -26))
+        for _ in range(9):
+            x, y = rnd.randint(0, 12), rnd.randint(0, 12)
+            w, h = rnd.randint(4, 6), rnd.randint(3, 5)
+            col = shade(c, rnd.randint(-8, 14))
+            rect(px, x, y, x + w, y + h, col)
+            rect(px, x, y, x + w, y + 1, shade(col, 14))
+            rect(px, x, y + h - 1, x + w, y + h, shade(col, -16))
+        noise(px, rnd, 4)
+    elif style == "marble":
+        px = canvas(c)
+        light = sum(c) > 400
+        vein = shade(c, -50 if light else 60)
+        x = rnd.randint(0, 15)
+        for y in range(16):
+            x = max(0, min(15, x + rnd.randint(-1, 1)))
+            px[y][x] = vein
+            if rnd.random() < 0.4 and x < 15:
+                px[y][x + 1] = shade(vein, 14 if light else -10)
+        x = rnd.randint(0, 15)
+        for y in range(16):
+            x = max(0, min(15, x + rnd.randint(-1, 1)))
+            if y % 3:
+                px[y][x] = shade(c, -24 if light else 30)
+        noise(px, rnd, 3)
+    elif style == "bricks":
+        px = canvas(c)
+        mortar = shade(c, 40 if sum(c) < 400 else -46)
+        for y in range(0, 16, 4):
+            rect(px, 0, y + 3, 16, y + 4, mortar)
+            off = 4 if (y // 4) % 2 else 0
+            for x in range(off, 16, 8):
+                rect(px, x, y, x + 1, y + 3, mortar)
+            for x in range(0, 16, 8):
+                bx = (x + off) % 16
+                tint = rnd.randint(-10, 10)
+                rect(px, bx + 1, y, min(16, bx + 8), y + 3, shade(c, tint))
+        noise(px, rnd, 4)
+    elif style == "flags":
+        px = canvas(shade(c, -34))
+        for (x, y, w, h) in ((0, 0, 7, 6), (7, 0, 9, 5), (0, 6, 5, 6), (5, 5, 6, 7), (11, 5, 5, 6), (0, 12, 8, 4), (8, 12, 8, 4), (11, 11, 5, 1)):
+            col = shade(c, rnd.randint(-8, 12))
+            rect(px, x, y, x + w - 1, y + h - 1, col)
+        noise(px, rnd, 5)
+    elif style == "cement":
+        px = canvas(c)
+        for _ in range(30):
+            px[rnd.randint(0, 15)][rnd.randint(0, 15)] = shade(c, rnd.choice((-26, 22)))
+        noise(px, rnd, 4)
+    elif style == "shingle":
+        px = canvas(c)
+        for row in range(0, 16, 4):
+            for x in range(16):
+                edge = [3, 2, 1, 1, 1, 1, 2, 3][(x + (4 if (row // 4) % 2 else 0)) % 8]
+                rect(px, x, row + edge, x + 1, row + 4, shade(c, 10 if (x // 4) % 2 else -6))
+                px[row + 3][x] = shade(c, -52)
+        noise(px, rnd, 5)
+    elif style == "planks":
+        px = canvas(c)
+        for y in range(0, 16, 4):
+            rect(px, 0, y + 3, 16, y + 4, shade(c, -40))
+            rect(px, 0, y, 16, y + 1, shade(c, 14))
+            sx = rnd.randint(2, 13)
+            rect(px, sx, y, sx + 1, y + 3, shade(c, -34))
+            for _ in range(3):
+                gx = rnd.randint(0, 12)
+                rect(px, gx, y + rnd.randint(1, 2), gx + rnd.randint(2, 4), y + 3 - 1 + 0, shade(c, rnd.choice((-12, 10))))
+        noise(px, rnd, 4)
+    elif style == "driftwood":
+        px = canvas(c)
+        for y in range(16):
+            tone = (y * 7 + rnd.randint(0, 2)) % 5
+            rect(px, 0, y, 16, y + 1, shade(c, (-18, -6, 0, 8, 16)[tone]))
+        for _ in range(6):
+            x, y = rnd.randint(0, 11), rnd.randint(0, 15)
+            rect(px, x, y, x + rnd.randint(3, 5), y + 1, shade(c, -44))
+        noise(px, rnd, 5)
+    elif style == "thatch":
+        px = canvas(c)
+        for x in range(0, 16, 2):
+            for y in range(16):
+                if rnd.random() < 0.7:
+                    px[y][x] = shade(c, rnd.randint(-30, 22))
+        for y in (5, 11):
+            rect(px, 0, y, 16, y + 1, shade(c, -58))
+        noise(px, rnd, 5)
     else:  # bamboo
         px = canvas((148, 170, 78))
         for x in (0, 5, 10):
@@ -246,9 +365,9 @@ def generate(out, resdir, png):
     """out = pack writer with .write(rel, data); png = png encoder taking [[rgba]]. Returns the lines list."""
     models = model_set()
     lines = []
-    for (lid, name, kind, a, b, style) in LINES:
+    for (lid, name, kind, a, b, style, *col) in LINES:
         rnd = random.Random(lid)
-        px = texture(style, rnd)
+        px = texture(style, rnd, col[0] if col else None)
         out.write("assets/bouw/textures/block/%s.png" % lid, png([[(r, g, bl, 255) for (r, g, bl) in row] for row in px]))
         for mname, elems in models.items():
             mj = {"textures": {"t": "bouw:block/%s" % lid, "particle": "bouw:block/%s" % lid}, "elements": elems, "display": DISPLAY}
