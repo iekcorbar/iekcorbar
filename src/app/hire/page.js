@@ -23,7 +23,7 @@ export default function HirePage() {
         </h1>
         <p className="text-sm text-text-warm/70 mt-2">
           Everything you see on iekcorbar &ndash; the website, the plugins, the models, the tooling &ndash; is
-          built by one person. If you want something like it for yourself, you can hire me.
+          built by a small team of four. If you want something like it for yourself, you can hire me.
         </p>
       </div>
 

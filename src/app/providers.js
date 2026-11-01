@@ -1330,7 +1330,7 @@ export default function ClientProviders({ children }) {
                 </Link>
                 <span className="text-sp-bronze/30">|</span>
                 <Link href="/hire" className="inline-flex items-center gap-1 text-sp-copper/90 hover:text-sp-gold underline transition-colors">
-                  <Hammer className="w-3 h-3" /> Built by one person &ndash; hire the builder
+                  <Hammer className="w-3 h-3" /> Built by a small team &ndash; hire the builder
                 </Link>
               </div>
               <div className="flex items-center gap-1.5 text-center">

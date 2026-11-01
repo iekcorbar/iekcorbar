@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Wrench, Globe, Boxes, Palette, BookOpen, ShieldCheck, Hammer } from 'lucide-react';
+import { Wrench, Users, Globe, Boxes, Palette, BookOpen, ShieldCheck, Hammer } from 'lucide-react';
 
 export const metadata = {
   title: 'Behind the scenes | iekcorbar',
@@ -26,6 +26,14 @@ export default function BehindTheScenesPage() {
         <p className="text-sm text-text-warm/70 mt-2">
           A look at how iekcorbar is put together: what runs where, how things are made and checked,
           and which tools help along the way.
+        </p>
+      </div>
+
+      <div className={CARD}>
+        <h2 className={H2}><Users className="w-5 h-5 text-sp-copper" /> Who makes it</h2>
+        <p className={P}>
+          iekcorbar is made by a team of four. We split the work between us &ndash; building, drawing, writing,
+          testing and running the server &ndash; and decide together what goes live.
         </p>
       </div>
 
@@ -75,7 +83,7 @@ export default function BehindTheScenesPage() {
           AI is part of the toolbox, and there is no reason to hide that. It is used the way you would use a
           reference work: to look things up, to check how an API or a game version behaves, to talk through an
           approach, and as a second pair of eyes on code. The ideas, the design choices, the content and the
-          decision of what goes live come from a person. Like any reference, it can be wrong, which is why
+          decision of what goes live come from the team. Like any reference, it can be wrong, which is why
           things are built, tried and checked before they are released.
         </p>
       </div>
