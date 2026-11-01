@@ -541,7 +541,7 @@ export default function HomePage() {
 
               {/* Online Player List */}
               <div className="space-y-1.5">
-                <span className="block text-[10px] uppercase font-bold text-text-warm/50 tracking-wider">Active Crew Members</span>
+                <span className="block text-[10px] uppercase font-bold text-text-warm/50 tracking-wider">Players Online</span>
                 <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto pr-1">
                   {Array.isArray(status?.players?.list) && status.players.list.length > 0 ? (
                     status.players.list.map((p, i) => (
@@ -555,7 +555,7 @@ export default function HomePage() {
                       </Link>
                     ))
                   ) : (
-                    <span className="text-xs text-text-warm/40 italic">No pilots currently active on server.</span>
+                    <span className="text-xs text-text-warm/40 italic">No players currently online.</span>
                   )}
                 </div>
               </div>

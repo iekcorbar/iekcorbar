@@ -2840,7 +2840,7 @@ function ModerationContent() {
                 {/* Stats Summary Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 bg-neutral-950/30 p-4 border border-sp-bronze/10 rounded-lg">
                   <div className="text-left">
-                    <span className="block text-[8px] uppercase font-bold text-text-warm/40">Total Pilots</span>
+                    <span className="block text-[8px] uppercase font-bold text-text-warm/40">Total Players</span>
                     <span className="font-serif text-lg font-black text-white">{users.length}</span>
                   </div>
                   <div className="text-left">
@@ -2904,7 +2904,7 @@ function ModerationContent() {
                 {loading ? (
                   <div className="py-8 text-center text-text-warm/40">Searching...</div>
                 ) : filteredMembers.length === 0 ? (
-                  <div className="py-8 text-center text-text-warm/40">No matching pilots found.</div>
+                  <div className="py-8 text-center text-text-warm/40">No matching players found.</div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs divide-y divide-sp-bronze/10">

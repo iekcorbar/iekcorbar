@@ -38,7 +38,7 @@
 // server-only half that touches sessions/the database.
 export const STAFF_TABS = [
   // --- Community ---
-  { key: 'moderation', label: 'Crew & Sanctions', description: 'Issue kicks, bans, and tempbans (dispatched live in-game via RCON), and add staff notes to player accounts.', group: 'Community' },
+  { key: 'moderation', label: 'Players & Sanctions', description: 'Issue kicks, bans, and tempbans (dispatched live in-game via RCON), and add staff notes to player accounts.', group: 'Community' },
   { key: 'reports', label: 'Reports Inbox', description: 'Review and resolve anonymous player-submitted reports.', group: 'Community' },
   { key: 'bugs', label: 'Bug Reports', description: 'Triage player bug reports, message reporters back, mark fixed/duplicate/wont-fix.', group: 'Community' },
 

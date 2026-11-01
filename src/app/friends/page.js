@@ -106,7 +106,7 @@ export default function FriendsPage() {
         </div>
         <h2 className="font-serif text-2xl font-bold text-rose-300 uppercase tracking-wider">Access Restrained</h2>
         <p className="text-sm text-text-warm/85 leading-relaxed">
-          You must align your transmitter and authenticate to view your crew roster.
+          You must align your transmitter and authenticate to view your friends list.
         </p>
         <button
           onClick={() => setIsLoginOpen(true)}
@@ -124,13 +124,13 @@ export default function FriendsPage() {
         <h1 className="font-serif text-3xl font-bold text-sp-gold tracking-wide flex items-center gap-2 uppercase">
           <Users className="w-8 h-8 text-sp-copper" /> {siteContent.title_friends_page}
         </h1>
-        <p className="text-xs text-text-warm/60 mt-1">Add fellow pilots as friends to share logbook pages and see their journal.</p>
+        <p className="text-xs text-text-warm/60 mt-1">Add other players as friends to share logbook pages and see their journal.</p>
       </div>
 
       {/* Add Friend */}
       <div className="bg-sp-dark/60 border border-sp-bronze/40 rounded-xl p-5 steampunk-glass">
         <h2 className="font-serif text-sm text-sp-gold uppercase tracking-wide flex items-center gap-2 mb-3">
-          <UserPlus className="w-4 h-4 text-sp-copper" /> Recruit a {siteContent.role_label_player}
+          <UserPlus className="w-4 h-4 text-sp-copper" /> Add a {siteContent.role_label_player}
         </h2>
         <form onSubmit={handleAddFriend} className="flex flex-col sm:flex-row gap-2">
           <input
@@ -153,7 +153,7 @@ export default function FriendsPage() {
       </div>
 
       {loading ? (
-        <div className="text-xs text-text-warm/40 italic text-center py-10">Charting crew connections...</div>
+        <div className="text-xs text-text-warm/40 italic text-center py-10">Loading friends...</div>
       ) : (
         <>
           {/* Incoming Requests */}
@@ -216,10 +216,10 @@ export default function FriendsPage() {
 
           {/* Friends List */}
           <div className="bg-sp-dark/60 border border-sp-bronze/40 rounded-xl p-5 steampunk-glass">
-            <h2 className="font-serif text-sm text-sp-gold uppercase tracking-wide mb-3">Your Crew ({friends.length})</h2>
+            <h2 className="font-serif text-sm text-sp-gold uppercase tracking-wide mb-3">Your Friends ({friends.length})</h2>
             {friends.length === 0 ? (
               <div className="text-center py-10 border border-dashed border-sp-bronze/30 rounded-xl text-text-warm/40 text-xs italic">
-                No crew yet. Recruit a fellow pilot above to get started.
+                No friends yet. Add another player above to get started.
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -230,7 +230,7 @@ export default function FriendsPage() {
                       <span className="text-sm font-bold text-white">{f.username}</span>
                     </Link>
                     <button
-                      onClick={() => { if (confirm(`Remove ${f.username} from your crew?`)) handleAction({ action: 'remove', friendshipId: f.id }); }}
+                      onClick={() => { if (confirm(`Remove ${f.username} from your friends?`)) handleAction({ action: 'remove', friendshipId: f.id }); }}
                       className="p-1.5 border border-sp-bronze/30 hover:border-crimson rounded text-text-warm/50 hover:text-rose-400 cursor-pointer transition-colors"
                       title="Remove Friend"
                     >

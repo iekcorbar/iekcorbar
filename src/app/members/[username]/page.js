@@ -386,7 +386,7 @@ function PlayerStatsContent({ params: paramsPromise }) {
       )}
       {friendRelation === 'friends' && (
         <button
-          onClick={() => { if (confirm(`Remove ${username} from your crew?`)) handleFriendAction({ action: 'remove', friendshipId }); }}
+          onClick={() => { if (confirm(`Remove ${username} from your friends?`)) handleFriendAction({ action: 'remove', friendshipId }); }}
           disabled={friendActionBusy}
           className="w-full py-2.5 px-4 bg-emerald-600/10 border border-emerald-500/30 text-emerald-400 hover:bg-crimson/15 hover:border-crimson hover:text-rose-400 text-[10px] font-bold uppercase tracking-wider rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50 group"
         >

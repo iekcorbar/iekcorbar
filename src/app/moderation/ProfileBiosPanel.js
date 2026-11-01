@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { UserRound, Search, Eraser, RefreshCw } from 'lucide-react';
 
-// Staff Panel > Crew & Sanctions: every profile bio players have written, with
+// Staff Panel > Players & Sanctions: every profile bio players have written, with
 // a "Clear" action. Clearing asks for an optional reason, which goes to the
 // player (bell notification) and the audit log. API: /api/admin/profile-bios.
 export default function ProfileBiosPanel() {

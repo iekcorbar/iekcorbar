@@ -77,3 +77,26 @@ export async function getCmiPlayerData(username) {
     return null;
   }
 }
+
+// Rank (CMI rank key) for many players in ONE query, for the members list.
+// Non-fatal like getCmiPlayerData: unreachable DB -> empty map. Cached for 5 minutes
+// so a busy members page does not hit the plugin database on every request.
+let rankCache = { at: 0, map: {} };
+export async function getCmiRanks(usernames) {
+  if (Date.now() - rankCache.at < 5 * 60 * 1000) return rankCache.map;
+  try {
+    const names = [...new Set((usernames || []).filter(Boolean))];
+    if (!names.length) return {};
+    const rows = await query(
+      `SELECT username, Rank FROM CMI_users WHERE username IN (${names.map(() => '?').join(',')})`,
+      names
+    );
+    const map = {};
+    for (const r of rows || []) if (r.username && r.Rank) map[String(r.username).toLowerCase()] = r.Rank;
+    rankCache = { at: Date.now(), map };
+    return map;
+  } catch (err) {
+    console.warn(`[CMI DB Warning] ${err.message}`);
+    return {};
+  }
+}

@@ -878,7 +878,7 @@ export default function ProfilePage() {
         </div>
         <h2 className="font-serif text-2xl font-bold text-rose-300 uppercase tracking-wider">Access Restrained</h2>
         <p className="text-sm text-text-warm/85 leading-relaxed">
-          You must align your transmitter and authenticate to view your pilot profile deck.
+          You must align your transmitter and authenticate to view your profile.
         </p>
         <button
           onClick={() => setIsLoginOpen(true)}
@@ -951,7 +951,7 @@ export default function ProfilePage() {
           <div className="mb-3 bg-neutral-900/60 border border-sp-bronze/30 rounded-lg p-2.5 flex items-center gap-2 shrink-0">
             {journalFriends.length === 0 ? (
               <p className="text-[10px] text-text-warm/40 italic">
-                No friends yet — <Link href="/friends" className="text-sp-gold hover:underline">recruit some crew</Link> to share pages with.
+                No friends yet — <Link href="/friends" className="text-sp-gold hover:underline">add some friends</Link> to share pages with.
               </p>
             ) : (
               <>
@@ -1079,7 +1079,7 @@ export default function ProfilePage() {
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-left">
               <div className="space-y-1">
-                <span className="block text-text-warm/40 font-bold uppercase text-[9px] tracking-wider">Pilot Account (Email)</span>
+                <span className="block text-text-warm/40 font-bold uppercase text-[9px] tracking-wider">Account (Email)</span>
                 <span className="text-white font-medium flex items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5 text-sp-copper" /> {user.email}
                 </span>
@@ -1142,7 +1142,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between flex-wrap gap-3 border-b border-sp-bronze/25 pb-3 mb-5">
               <div>
                 <h2 className="font-serif text-lg text-sp-gold uppercase tracking-wide flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-sp-copper" /> Pilot&apos;s Logbook
+                  <BookOpen className="w-5 h-5 text-sp-copper" /> Logbook
                 </h2>
                 <p className="text-[11px] text-text-warm/50 mt-0.5">Private by default — share a page with a friend or copy a public link from the icons on each entry.</p>
               </div>

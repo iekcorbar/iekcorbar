@@ -408,7 +408,7 @@ function buildContentPush(type, action, { id, title, link, extra }) {
             actions: [{ label: 'Sign up', link: `/events?event=${encodeURIComponent(id)}&signup=1` }, { label: 'View', link }] };
     case 'project':
       return created
-        ? { pushTitle: `🔨 New community project: ${t}`, pushBody: 'Builders wanted! Join the crew and help build it together.',
+        ? { pushTitle: `🔨 New community project: ${t}`, pushBody: 'Builders wanted! Join in and help build it together.',
             actions: [{ label: 'Join project', link: `/projects?project=${encodeURIComponent(id)}&signup=1` }, { label: 'View', link }] }
         : { pushTitle: `🔨 Project updated: ${t}`, pushBody: 'Check the latest plans — there may still be a spot for you!',
             actions: [{ label: 'Join project', link: `/projects?project=${encodeURIComponent(id)}&signup=1` }, { label: 'View', link }] };

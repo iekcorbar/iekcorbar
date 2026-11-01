@@ -63,7 +63,7 @@ export default function MembersPage() {
             <Users className="w-8 h-8 text-sp-copper" /> {siteContent.title_members_page}
           </h1>
           <p className="text-xs text-text-warm/60 mt-1">
-            Registered pilots and commanding staff connected to the steam engines of Iekcorbar.
+            Registered players and staff of the Iekcorbar server.
           </p>
         </div>
 
@@ -71,7 +71,7 @@ export default function MembersPage() {
         <div className="relative max-w-sm w-full">
           <input
             type="text"
-            placeholder="Search pilot by IGN..."
+            placeholder="Search player by IGN..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg pl-9 pr-3 py-2.5 focus:outline-hidden focus:border-sp-gold"
@@ -83,8 +83,8 @@ export default function MembersPage() {
       {/* Role legend — the steampunk role names aren't self-explanatory for new visitors */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-[10px] text-text-warm/40 -mt-4">
         <span className="uppercase tracking-wider font-bold text-text-warm/30">Roles:</span>
-        <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-rose-400" /> {siteContent.role_label_admin} = Server admin</span>
-        <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-400" /> {siteContent.role_label_moderator} = Moderator</span>
+        <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-rose-400" /> {siteContent.role_label_admin} = Server admin (in-game group Admin)</span>
+        <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-400" /> {siteContent.role_label_moderator} = Engineer (in-game group Engineer)</span>
         <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-sp-gold" /> {siteContent.role_label_player} = Regular player</span>
         <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-400" /> Other staff roles (e.g. Helper)</span>
       </div>
@@ -93,21 +93,21 @@ export default function MembersPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-neutral-900/40 border border-sp-bronze/35 p-4 rounded-xl flex items-center justify-between backdrop-blur-xs">
           <div>
-            <span className="block text-[9px] uppercase font-bold text-text-warm/40">Total Active Crew</span>
+            <span className="block text-[9px] uppercase font-bold text-text-warm/40">Total Members</span>
             <span className="font-serif text-2xl font-black text-white">{totalMembersCount}</span>
           </div>
           <Cpu className="w-8 h-8 text-sp-gold/40" />
         </div>
         <div className="bg-neutral-900/40 border border-sp-bronze/35 p-4 rounded-xl flex items-center justify-between backdrop-blur-xs">
           <div>
-            <span className="block text-[9px] uppercase font-bold text-text-warm/40">Commanding Officers</span>
+            <span className="block text-[9px] uppercase font-bold text-text-warm/40">Staff</span>
             <span className="font-serif text-2xl font-black text-rose-300">{staffCount}</span>
           </div>
           <Shield className="w-8 h-8 text-rose-300/40" />
         </div>
         <div className="bg-neutral-900/40 border border-sp-bronze/35 p-4 rounded-xl flex items-center justify-between backdrop-blur-xs">
           <div>
-            <span className="block text-[9px] uppercase font-bold text-text-warm/40">Registered Pilots</span>
+            <span className="block text-[9px] uppercase font-bold text-text-warm/40">Players</span>
             <span className="font-serif text-2xl font-black text-sp-copper">{crewCount}</span>
           </div>
           <Award className="w-8 h-8 text-sp-copper/40" />
@@ -125,7 +125,7 @@ export default function MembersPage() {
           {staff.length > 0 && (
             <div className="space-y-4 text-left">
               <h2 className="font-serif text-xl font-bold text-rose-300 uppercase tracking-wider flex items-center gap-2 border-b border-sp-bronze/25 pb-2">
-                <Shield className="w-5 h-5 text-crimson" /> Command & Officers
+                <Shield className="w-5 h-5 text-crimson" /> Staff
               </h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -162,6 +162,7 @@ export default function MembersPage() {
                         <span className={`text-[9px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider ${roleBadgeClass(member.role, member.roleColor)}`}>
                           {roleName(member)}
                         </span>
+                        {member.gameRank && <span className="text-[9px] px-2 py-0.5 rounded-md font-bold uppercase tracking-wider bg-white/5 text-text-warm/60">{member.gameRank}</span>}
                       </div>
                       <p className="text-[10px] text-text-warm/40 italic">
                         {member.role === 'admin' ? siteContent.role_description_admin : member.role === 'moderator' ? siteContent.role_description_moderator : 'Part of the staff team'}
@@ -176,12 +177,12 @@ export default function MembersPage() {
           {/* CREW REGISTRY SECTION */}
           <div className="space-y-4 text-left">
             <h2 className="font-serif text-xl font-bold text-sp-gold uppercase tracking-wider flex items-center gap-2 border-b border-sp-bronze/25 pb-2">
-              <Users className="w-5 h-5 text-sp-copper" /> Crew Directory
+              <Users className="w-5 h-5 text-sp-copper" /> Players
             </h2>
 
             {crew.length === 0 ? (
               <div className="bg-neutral-900/10 border border-sp-bronze/20 rounded-xl p-8 text-center text-text-warm/30 italic">
-                No active crew members matching query.
+                No players matching your search.
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
@@ -204,7 +205,7 @@ export default function MembersPage() {
 
                     <div className="w-full min-w-0">
                       <span className="block font-bold text-white text-xs truncate">{member.mcUsername}</span>
-                      <span className="block text-[8px] uppercase tracking-widest text-text-warm/40 font-bold mt-0.5">{member.roleLabel ? <span className={`inline-block px-1.5 py-0.5 rounded ${roleBadgeClass(member.role, member.roleColor)}`}>{roleName(member)}</span> : roleName(member)}</span>
+                      <span className="block text-[8px] uppercase tracking-widest text-text-warm/40 font-bold mt-0.5">{member.roleLabel ? <span className={`inline-block px-1.5 py-0.5 rounded ${roleBadgeClass(member.role, member.roleColor)}`}>{roleName(member)}</span> : (member.gameRank || roleName(member))}</span>
                     </div>
                   </Link>
                 ))}
@@ -220,7 +221,7 @@ export default function MembersPage() {
       {!user && (
         <div className="bg-sp-dark/70 border border-sp-bronze/40 rounded-xl p-6 text-center space-y-3">
           <p className="text-sm text-text-warm/70">
-            Don&apos;t see your name yet? Create an account to join the crew registry.
+            Don&apos;t see your name yet? Create an account to join the member list.
           </p>
           <button
             onClick={() => { setIsLoginOpen(true); setIsRegisterMode(true); }}

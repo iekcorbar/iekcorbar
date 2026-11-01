@@ -17,7 +17,7 @@ export async function generateMetadata({ params }) {
   if (!entry) {
     return { title: 'Logbook Page Not Found — Iekcorbar' };
   }
-  const author = entry.mcUsername || 'A Pilot';
+  const author = entry.mcUsername || 'A Player';
   const dateStr = dateFormatter.format(new Date(entry.entryDate));
   const preview = entry.content.length > 160 ? `${entry.content.slice(0, 157)}...` : entry.content;
   const title = `${author}'s Iekcorbar Logbook — ${dateStr}`;
@@ -61,7 +61,7 @@ export default async function SharedJournalPage({ params }) {
       <div className="text-center space-y-1">
         <span className="text-[10px] uppercase tracking-widest text-text-warm/40 font-mono">Shared Logbook Page</span>
         <h1 className="font-serif text-2xl font-bold text-sp-gold flex items-center justify-center gap-2">
-          <BookOpen className="w-6 h-6 text-sp-copper" /> {entry.mcUsername || 'A Pilot'}&apos;s Logbook
+          <BookOpen className="w-6 h-6 text-sp-copper" /> {entry.mcUsername || 'A Player'}&apos;s Logbook
         </h1>
       </div>
 
