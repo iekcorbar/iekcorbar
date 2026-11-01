@@ -302,6 +302,10 @@ def build_fence(out, mod, fam, pattern, woods):
 
 
 def main():
+    sys.path.insert(0, HERE)
+    sys.path.insert(0, os.path.join(HERE, '..', '..', 'propkit'))
+    import lines_gen
+    from propmodels import png
     outdir = sys.argv[1] if len(sys.argv) > 1 and not sys.argv[1].startswith("--") else "resourcepack"
     out = Out(outdir)
     doors, fences = Mod("doors", "mcwdoors"), Mod("fences", "mcwfences")
@@ -322,6 +326,7 @@ def main():
                 out.write(f"assets/{NS}/textures/{p}.png", open(f, "rb").read())
             else:
                 missing.append("texture " + ns + ":" + p)
+    lines_gen.generate(out, os.path.join(HERE, '..', 'src', 'main', 'resources'), png)
     out.write("pack.mcmeta", {"pack": {"description": "Bouw (Macaw's Doors/Fences, MIT)", "pack_format": 64,
                                        "supported_formats": {"min_inclusive": 1, "max_inclusive": 999}, "min_format": 1, "max_format": 999}})
     out.write("LICENSE-MACAWS.txt", (

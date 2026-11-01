@@ -32,7 +32,7 @@ final class BouwMenu implements Listener {
     private static final class Holder implements InventoryHolder {
         String family = "";
         int page;
-        List<DecorDef> shown = new ArrayList<>();
+        List<ItemStack> shown = new ArrayList<>();
         Inventory inv;
 
         @Override
@@ -54,14 +54,17 @@ final class BouwMenu implements Listener {
     private void draw(Player p, Holder h) {
         h.shown.clear();
         for (DecorDef d : plugin.bouw.decor.defs.values())
-            if (h.family.isEmpty() || h.family.equals(plugin.bouw.familyOf.get(d.id))) h.shown.add(d);
+            if (h.family.isEmpty() || h.family.equals(plugin.bouw.familyOf.get(d.id))) h.shown.add(plugin.bouw.decor.item(d, 1));
+        for (Shapes.Line l : plugin.shapes.lines.values())
+            if (h.family.isEmpty() || h.family.equals(l.id()))
+                for (Shapes.Piece pc : Shapes.Piece.values()) h.shown.add(plugin.shapes.item(l, pc, 1));
         int pages = Math.max(1, (h.shown.size() + 44) / 45);
         h.page = Math.max(0, Math.min(h.page, pages - 1));
         h.inv = plugin.getServer().createInventory(h, 54, Component.text("Bouw " + (h.family.isEmpty() ? "- all" : "- " + h.family) + " (" + (h.page + 1) + "/" + pages + ")"));
         for (int i = 0; i < 45; i++) {
             int at = h.page * 45 + i;
             if (at >= h.shown.size()) break;
-            h.inv.setItem(i, plugin.bouw.decor.item(h.shown.get(at), 1));
+            h.inv.setItem(i, h.shown.get(at).clone());
         }
         h.inv.setItem(45, button(Material.ARROW, "Previous page"));
         h.inv.setItem(53, button(Material.ARROW, "Next page"));
@@ -86,6 +89,7 @@ final class BouwMenu implements Listener {
         if (s == 49) {
             List<String> fams = new ArrayList<>();
             fams.add("");
+            for (Shapes.Line l : plugin.shapes.lines.values()) fams.add(l.id());
             for (String[] f : plugin.bouw.families) fams.add(f[0]);
             h.family = fams.get((fams.indexOf(h.family) + 1) % fams.size());
             h.page = 0;
@@ -94,7 +98,8 @@ final class BouwMenu implements Listener {
         }
         int at = h.page * 45 + s;
         if (s >= 45 || at >= h.shown.size()) return;
-        ItemStack give = plugin.bouw.decor.item(h.shown.get(at), e.isShiftClick() ? 64 : 1);
+        ItemStack give = h.shown.get(at).clone();
+        give.setAmount(e.isShiftClick() ? 64 : 1);
         for (ItemStack left : p.getInventory().addItem(give).values()) p.getWorld().dropItemNaturally(p.getLocation(), left);
     }
 

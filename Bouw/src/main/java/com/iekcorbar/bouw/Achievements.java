@@ -10,12 +10,14 @@ final class Achievements {
         a.add("door", null, "oak_door", "Come On In", "Open an Bouw door.", "task");
         a.add("fence", null, "oak_fence", "Good Neighbours", "Hold an Bouw fence.", "task");
         a.add("any_door", "door", "jungle_door", "Behind Every Door", "Hold an Bouw door.", "task");
+        a.add("line", "fence", "stone_bricks", "Block By Block", "Hold a Bouw block, stairs, slab, wall, door or other piece.", "task");
         a.scanner(it -> {
+            if (plugin.shapes.isOurs(it)) return "line";
             DecorDef d = plugin.bouw.decor.defOf(it);
             if (d == null) return null;
             return d.height > 1 ? "any_door" : "fence";
         });
-        a.item("any_door", "any_door").item("fence", "fence");
+        a.item("any_door", "any_door").item("fence", "fence").item("line", "line");
         return a;
     }
 }

@@ -51,6 +51,19 @@ final class BouwCommand implements TabExecutor {
             }
             Player t = plugin.getServer().getPlayerExact(a[1]);
             DecorDef def = plugin.bouw.decor.defs.get(a[2].toLowerCase(Locale.ROOT));
+            ItemStack piece = def == null ? plugin.shapes.itemById(a[2].toLowerCase(Locale.ROOT), 1) : null;
+            if (t != null && piece != null) {
+                int cnt = 1;
+                try {
+                    if (a.length > 3) cnt = Math.max(1, Math.min(64, Integer.parseInt(a[3])));
+                } catch (NumberFormatException ex) {
+                    cnt = 1;
+                }
+                piece.setAmount(cnt);
+                for (ItemStack left : t.getInventory().addItem(piece).values()) t.getWorld().dropItemNaturally(t.getLocation(), left);
+                s.sendMessage(Component.text("Gave " + piece.getItemMeta().getDisplayName() + " to " + t.getName() + ".", NamedTextColor.GREEN));
+                return true;
+            }
             if (t == null || def == null) {
                 s.sendMessage(Component.text(t == null ? "Player not online." : "Unknown piece. /" + label + " list", NamedTextColor.RED));
                 return true;
@@ -65,6 +78,13 @@ final class BouwCommand implements TabExecutor {
             for (ItemStack left : t.getInventory().addItem(plugin.bouw.decor.item(def, n)).values())
                 t.getWorld().dropItemNaturally(t.getLocation(), left);
             s.sendMessage(Component.text("Gave " + def.name + " to " + t.getName() + ".", NamedTextColor.GREEN));
+            return true;
+        }
+        if (sub.equals("reload")) {
+            if (!s.hasPermission("bouw.admin")) return true;
+            plugin.reloadConfig();
+            plugin.shapes.reloadConfig();
+            s.sendMessage(Component.text("Bouw config reloaded.", NamedTextColor.GREEN));
             return true;
         }
         if (sub.equals("giveall")) {
@@ -90,10 +110,10 @@ final class BouwCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
         List<String> out = new ArrayList<>();
-        if (a.length == 1) out.addAll(List.of("menu", "list", "give", "giveall"));
+        if (a.length == 1) out.addAll(List.of("menu", "list", "give", "giveall", "reload"));
         else if (a.length == 2 && a[0].equalsIgnoreCase("give")) plugin.getServer().getOnlinePlayers().forEach(p -> out.add(p.getName()));
         else if (a.length == 2) for (String[] f : plugin.bouw.families) out.add(f[0]);
-        else if (a.length == 3 && a[0].equalsIgnoreCase("give")) out.addAll(plugin.bouw.decor.defs.keySet());
+        else if (a.length == 3 && a[0].equalsIgnoreCase("give")) { out.addAll(plugin.bouw.decor.defs.keySet()); for (ItemStack it : plugin.shapes.allItems()) out.add(it.getItemMeta().getPersistentDataContainer().get(new org.bukkit.NamespacedKey(plugin, "piece"), org.bukkit.persistence.PersistentDataType.STRING).replace(":", "_")); }
         String pre = a[a.length - 1].toLowerCase(Locale.ROOT);
         out.removeIf(x -> !x.toLowerCase(Locale.ROOT).startsWith(pre));
         return out;

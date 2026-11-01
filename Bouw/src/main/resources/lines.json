@@ -1,0 +1,114 @@
+{
+ "pieces": [
+  "block",
+  "stairs",
+  "slab",
+  "wall",
+  "fence",
+  "gate",
+  "trapdoor",
+  "door",
+  "button",
+  "plate"
+ ],
+ "lines": [
+  {
+   "id": "cogwork_brass",
+   "name": "Cogwork Brass",
+   "kind": "stone",
+   "a": "GOLD_INGOT",
+   "b": "IRON_NUGGET"
+  },
+  {
+   "id": "pipework_copper",
+   "name": "Pipework Copper",
+   "kind": "stone",
+   "a": "COPPER_INGOT",
+   "b": "IRON_INGOT"
+  },
+  {
+   "id": "verdigris_scale",
+   "name": "Verdigris Scale",
+   "kind": "stone",
+   "a": "OXIDIZED_COPPER",
+   "b": "PRISMARINE_SHARD"
+  },
+  {
+   "id": "boiler_brick",
+   "name": "Boiler Brick",
+   "kind": "stone",
+   "a": "BRICK",
+   "b": "COPPER_INGOT"
+  },
+  {
+   "id": "blackened_iron",
+   "name": "Blackened Iron",
+   "kind": "stone",
+   "a": "IRON_INGOT",
+   "b": "COAL"
+  },
+  {
+   "id": "kawara_grey",
+   "name": "Kawara Grey",
+   "kind": "stone",
+   "a": "DEEPSLATE_TILES",
+   "b": "CLAY_BALL"
+  },
+  {
+   "id": "moss_garden_stone",
+   "name": "Moss Garden Stone",
+   "kind": "stone",
+   "a": "COBBLESTONE",
+   "b": "MOSS_BLOCK"
+  },
+  {
+   "id": "shikkui_plaster",
+   "name": "Shikkui Plaster",
+   "kind": "stone",
+   "a": "CALCITE",
+   "b": "WHITE_DYE"
+  },
+  {
+   "id": "sakura_lattice",
+   "name": "Sakura Lattice",
+   "kind": "wood",
+   "a": "CHERRY_PLANKS",
+   "b": "STICK"
+  },
+  {
+   "id": "shoji_paper",
+   "name": "Shoji Paper",
+   "kind": "wood",
+   "a": "PAPER",
+   "b": "BIRCH_PLANKS"
+  },
+  {
+   "id": "tatami_weave",
+   "name": "Tatami Weave",
+   "kind": "wood",
+   "a": "WHEAT",
+   "b": "GREEN_DYE"
+  },
+  {
+   "id": "vermilion_lacquer",
+   "name": "Vermilion Lacquer",
+   "kind": "wood",
+   "a": "MANGROVE_PLANKS",
+   "b": "RED_DYE"
+  },
+  {
+   "id": "yakisugi_charred",
+   "name": "Yakisugi Charred Wood",
+   "kind": "wood",
+   "a": "DARK_OAK_PLANKS",
+   "b": "CHARCOAL"
+  },
+  {
+   "id": "bamboo_slat",
+   "name": "Bamboo Slat",
+   "kind": "wood",
+   "a": "BAMBOO",
+   "b": "STRING"
+  }
+ ]
+}
