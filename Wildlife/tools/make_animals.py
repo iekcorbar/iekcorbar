@@ -1830,6 +1830,15 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
                         "data_points": [{"x": "0", "y": str(round(fan(k, sx, i), 2)), "z": "0"}],
                         "uuid": U(), "time": round(t, 3), "color": -1, "interpolation": "linear"} for t, k in pts]
                 an["animators"][m.bones[bn].uuid] = {"name": bn, "type": "bone", "keyframes": kfs}
+    # In-game the wings swept FORWARD (FMM turns the sweep about Y the other way round than the
+    # Blockbench-style preview), so every wing sweep/fan angle gets its sign flipped here.
+    for an in m.anims:
+        for ani in an["animators"].values():
+            if ani["name"].startswith("wing_"):
+                for kf in ani["keyframes"]:
+                    if kf["channel"] == "rotation":
+                        d0 = kf["data_points"][0]
+                        d0["y"] = str(round(-float(d0["y"]), 2))
 
 
 # ------------------------------------------------------------------ species list
