@@ -75,6 +75,7 @@ const NAV = [
   ['#orchard', 'Orchard'],
   ['#drinking', 'Drinking'],
   ['#first', 'First brew'],
+  ['#seasons', 'Seasons'],
   ['#seasonal', 'Seasonal'],
   ['#faq', 'FAQ'],
 ];
@@ -431,6 +432,24 @@ export default function SakaguraExplainedPage() {
         </div>
       </Section>
 
+      {/* ---------- seasons, co-op, competitions ---------- */}
+      <Section id="seasons" icon={Timer} kicker="Since 0.6" title="Seasons, teamwork & competitions">
+        <div className="grid sm:grid-cols-3 gap-4">
+          <div className="rounded-xl border border-sp-bronze/30 bg-black/40 p-4 space-y-1.5">
+            <p className="font-serif text-lg text-sp-gold leading-tight">🌸 The garden has seasons</p>
+            <p className="text-sm text-text-warm/80">Spring, summer, autumn and winter last <b>seven real days</b> each, and the server announces every change. A crop in its own season grows at full speed; out of season it grows <b>30–70% slower</b>. Wild patches only appear for the current season. <code>/brew season status</code> shows what is growing now and when the next season starts; <code>/brew season crops</code> lists this season&apos;s crops.</p>
+          </div>
+          <div className="rounded-xl border border-sp-bronze/30 bg-black/40 p-4 space-y-1.5">
+            <p className="font-serif text-lg text-sp-gold leading-tight">🤝 Two brewers, twice the speed</p>
+            <p className="text-sm text-text-warm/80">Stand within four blocks of a cauldron together with at least one other player and the batch cooks or mixes <b>twice as fast</b>. Bring a friend, or the whole street.</p>
+          </div>
+          <div className="rounded-xl border border-sp-bronze/30 bg-black/40 p-4 space-y-1.5">
+            <p className="font-serif text-lg text-sp-gold leading-tight">🏆 Brewing competitions</p>
+            <p className="text-sm text-text-warm/80">Staff open a competition now and then, sometimes themed on one drink. Hold your best bottle and run <code>/brew comp submit</code>; only your best counts. Score = quality × 10 + difficulty × 5, so a perfect hard recipe wins. The top three receive prizes and titles; <code>/brew comp leaderboard</code> shows the standings.</p>
+          </div>
+        </div>
+      </Section>
+
       {/* ---------- seasonal shelf ---------- */}
       <Section id="seasonal" icon={Sparkles} kicker="Twelve times a year" title="The seasonal shelf">
         <p className="text-sm text-text-warm/80">
@@ -477,7 +496,7 @@ export default function SakaguraExplainedPage() {
           <Link href="/wiki?page=sakagura" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Sakagura Wiki (quick reference)</Link>
           <Link href="/recipes" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><BookOpen className="w-4 h-4" /> All Recipes</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Sakagura {`0.5.0`}). Exact times are always shown in-game: right-click anything, or use /zukan.</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Sakagura {`0.7.9`}). Exact times are always shown in-game: right-click anything, or use /zukan.</p>
       </Section>
     </div>
   );

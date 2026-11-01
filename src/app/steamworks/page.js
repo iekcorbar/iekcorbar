@@ -86,6 +86,7 @@ const NAV = [
   ['#ores', 'Ores'],
   ['#oil', 'Oil'],
   ['#build', 'First build'],
+  ['#latest', 'Latest'],
   ['#faq', 'FAQ'],
 ];
 
@@ -474,6 +475,29 @@ export default function SteamworksExplainedPage() {
       </Section>
 
       {/* ---------- fresh ---------- */}
+      <Section id="latest" icon={Cog} kicker="Newest additions" title="Since the last update: farm hands, lines and a pot">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Card title="Six new machines" stat="power them from behind">
+            <p>The <b>Sieve</b> sifts gravel into flint and sand into stones, the <b>Item Filter</b> sits on a belt and only lets the item you chose through (right-click to set it), the <b>Mechanical Harvester</b> reaps crops in front of it, the <b>Mechanical Plough</b> tills dirt into farmland, the <b>Mechanical Roller</b> presses concrete powder into concrete and the <b>Deployer</b> places or breaks the block in front of it. Faster rotation means faster work.</p>
+          </Card>
+          <Card title="Machines face you" stat="and the wrench turns them">
+            <p>Kettle, mixer, tank, refinery, boiler, whistle, arm and depot now look the way you looked when you placed them on a floor. Side-clicks still follow the surface you clicked, and the <b>Steam Wrench</b> turns any machine&apos;s front without picking it up.</p>
+          </Card>
+          <Card title="Train lines & new wagons" stat="timetables, tanks, cargo">
+            <p>Right-click a locomotive with paper to open the <b>line board</b>: pick the named stations the train should stop at and it passes all the others, shuttling back and forth at the ends. Two new wagons join the cargo wagon: a <b>Tank Wagon</b> (3000 mB of fluid, pumped to or from a tank at a station) and a <b>Plateau Wagon</b> that carries one block, loaded and unloaded with a click.</p>
+          </Card>
+          <Card title="Steam pot for the kitchen" stat="Kitchen link">
+            <p>The Kitchen cooking pot cooks <b>twice as fast</b> while a turning shaft is within two blocks of it. The Power press and mixer also accept Kitchen ingredients now.</p>
+          </Card>
+          <Card title="Power machines in the base" stat="Turbine · Press · Ticker · Flywheel · Sieve funnel">
+            <p>All five Power machines are craftable with the regular Steamworks recipes and show up in <code>/zukan</code> next to everything else.</p>
+          </Card>
+          <Card title="Little things" stat="">
+            <p>Zinc and tin ores drop a pinch of XP, the ejector throws items by weight and takes whatever sits on the depot, a windmill now sounds like wind through trees instead of a creaking saw, and middle-click copying a part is creative-only.</p>
+          </Card>
+        </div>
+      </Section>
+
       <Section id="fresh" icon={Cog} kicker="Fresh from the foundry" title="What landed on 26 October">
         <div className="grid sm:grid-cols-2 gap-4">
           <Card title="Create-true crafting" stat="alloy → casing → everything">
