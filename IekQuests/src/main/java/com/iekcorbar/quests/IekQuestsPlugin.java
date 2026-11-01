@@ -170,6 +170,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private final List<Quest> quests = new ArrayList<>();
     private final Map<String, Seq> sequences = new HashMap<>();
     private final Map<UUID, Map<String, Prog>> prog = new HashMap<>();
+    private ItemLibrary items;
     private YamlConfiguration data;
     private NamespacedKey tagKey;
     private NamespacedKey hudOffKey;
@@ -247,6 +248,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 reloadConfig();
                 eliteItemFiles = null;
                 load();
+                items.load();
                 if (invItems != null) { invItems.load(); invItems.placeForAll(); }
                 sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s) and menu items reloaded."));
                 return true;
@@ -276,6 +278,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             else sender.sendMessage(Component.text("questbook: from console use reload/reset only"));
             return true;
         });
+        items = new ItemLibrary(this);
+        Bukkit.getPluginManager().registerEvents(items, this);
+        items.load();
+        var icmd = Bukkit.getPluginCommand("iekitem");
+        if (icmd != null) { icmd.setExecutor(items); icmd.setTabCompleter(items); }
         wizard = new QuestWizard(this);
         Bukkit.getPluginManager().registerEvents(wizard, this);
         invItems = new InventoryItems(this);
@@ -627,6 +634,12 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private Prog pr(Player p, Quest q) {
         return prog.computeIfAbsent(p.getUniqueId(), k -> new HashMap<>()).computeIfAbsent(q.id, k -> new Prog());
+    }
+
+    /** Acties van een IekItem (rechtsklik); zelfde syntax als quest-rewards, tags/points tellen niet mee. */
+    void runItemActions(Player p, List<String> acts) {
+        var scratch = new Prog();
+        for (var a : acts) run(p, null, scratch, a);
     }
 
     private Quest byId(String id) {
@@ -1091,6 +1104,13 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     }
                 }
             }
+            case "item" -> {
+                String[] x = val.trim().split(" ");
+                if (!items.exists(x[0])) {
+                    getLogger().warning("item reward: onbekend IekItem '" + x[0] + "' (quest " + (q == null ? "-" : q.id) + ")");
+                    p.sendMessage(legacy("&cThat item is not available right now. Tell staff."));
+                } else items.give(p, x[0], x.length > 1 ? (int) num(x[1], 1) : 1);
+            }
             case "give" -> {
                 String[] x = val.split(" ");
                 var mt = Material.matchMaterial(x[0]);
@@ -1260,7 +1280,18 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private int held(Player p, String material) { return held(p, material, null); }
 
+    /** IekItems-id uit "item:<id>" (material-veld van stages/contracten), of null. */
+    private static String itemId(String material) {
+        return material != null && material.regionMatches(true, 0, "item:", 0, 5) ? material.substring(5).trim().toLowerCase() : null;
+    }
+
     private int held(Player p, String material, String nameContains) {
+        String iid = itemId(material);
+        if (iid != null) {
+            int n = 0;
+            for (var st : p.getInventory().getStorageContents()) if (st != null && iid.equals(items.idOf(st))) n += st.getAmount();
+            return n;
+        }
         var mt = Material.matchMaterial(material);
         if (mt == null) return 0;
         int n = 0;
@@ -1288,13 +1319,15 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private void take(Player p, String material, int amount) { take(p, material, amount, null); }
 
     private void take(Player p, String material, int amount, String nameContains) {
-        var mt = Material.matchMaterial(material);
-        if (mt == null) return;
+        String iid = itemId(material);
+        var mt = iid != null ? null : Material.matchMaterial(material);
+        if (iid == null && mt == null) return;
         int left = amount;
         var content = p.getInventory().getStorageContents();
         for (int i = 0; i < content.length && left > 0; i++) {
             var it = content[i];
-            if (it == null || it.getType() != mt) continue;
+            if (it == null) continue;
+            if (iid != null ? !iid.equals(items.idOf(it)) : it.getType() != mt) continue;
             if (nameContains != null && !nameContains.isEmpty() && !displayNameIs(it, nameContains)) continue;
             int use = Math.min(it.getAmount(), left);
             left -= use;

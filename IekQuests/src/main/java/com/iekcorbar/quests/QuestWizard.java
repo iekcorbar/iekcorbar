@@ -697,7 +697,7 @@ final class QuestWizard implements Listener {
         if (q.stages.isEmpty() && q.repeats.isEmpty()) { msg(p, "&cAdd at least one stage or contract."); return; }
         for (var st : q.stages.values()) {
             if (st.kind.equals("craft") || st.kind.equals("deliver")) {
-                if (Material.matchMaterial(st.material) == null) { msg(p, "&cMaterial unknown in stage &f" + st.key + "&c: " + st.material); return; }
+                if (!st.material.toLowerCase().startsWith("item:") && Material.matchMaterial(st.material) == null) { msg(p, "&cMaterial unknown in stage &f" + st.key + "&c: " + st.material); return; }
             }
         }
         q.fromWizard = true;

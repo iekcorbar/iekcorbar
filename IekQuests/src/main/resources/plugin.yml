@@ -17,6 +17,12 @@ commands:
     permission: iekquests.admin
     permission-message: The quest wizard is for staff only.
     aliases: [qwiz]
+  iekitem:
+    description: IekItems - list, give, create and delete custom items (items.yml)
+    usage: /iekitem <list|get|give|create|delete|info|reload>
+    permission: iekquests.items
+    permission-message: IekItems is for staff only.
+    aliases: [iitem, ii]
   iekrestart:
     description: Announce a server restart with a title and countdown, then stop and restart via the VPS watcher
     usage: /iekrestart <minutes 1-60 | seconds 61-3600 | now | cancel>
@@ -51,6 +57,9 @@ permissions:
     default: op
   iekquests.npc:
     description: Create and manage quest NPCs
+    default: op
+  iekquests.items:
+    description: Use /iekitem (create, give, delete custom items)
     default: op
   iekquests.info:
     description: View quest statistics and debug info
