@@ -5,6 +5,16 @@
 export const WHATS_NEW = [
   {
     date: '2026-11-01',
+    title: 'More guides, a calendar and a live garden season',
+    tag: 'Website',
+    link: { href: '/calendar', label: 'Open the calendar' },
+    items: [
+      'New guides for Kitchen (farming and cooking), Relics (props and holiday sets) and the everyday tools: Zukan, backpacks and Kura storage.',
+      'The calendar shows events, the next holidays and which season the Sakagura garden is in right now, with a countdown to the next one.',
+    ],
+  },
+  {
+    date: '2026-11-01',
     title: 'Dragons have their own guide - and their own nests',
     tag: 'Wildlife',
     link: { href: '/dragons', label: 'Dragon Guide' },

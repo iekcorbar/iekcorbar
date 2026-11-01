@@ -14,6 +14,7 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
     private Economy economy = null;
     private MySQLSync mysqlSync;
     private DeepSync deepSync;
+    private SeasonSync seasonSync;
     private AdvancementManager advancementManager;
     private BookManager bookManager;
     private MusicManager musicManager;
@@ -50,6 +51,9 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
             // Deep sync (vanilla stats + advancements → player_stats) rides the same connection.
             deepSync = new DeepSync(this, mysqlSync);
             deepSync.start();
+            // Sakagura garden season -> settings table, for the website calendar.
+            seasonSync = new SeasonSync(this, mysqlSync);
+            seasonSync.start();
         }
 
         // Real vote verification (VoteSpeed's built-in NuVotifier receiver,
@@ -95,6 +99,9 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
         }
         if (creativeHeadsManager != null) {
             creativeHeadsManager.disable();
+        }
+        if (seasonSync != null) {
+            seasonSync.stop();
         }
         if (mysqlSync != null) {
             mysqlSync.stop();

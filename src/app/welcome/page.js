@@ -141,6 +141,8 @@ export default function WelcomePage() {
           <Link href="/start" className="px-3 py-1.5 rounded-full border border-sp-gold text-sp-gold">Your first hours</Link>
           <Link href="/wildlife" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Wildlife guide</Link>
           <Link href="/gouw" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Gouw guide</Link>
+          <Link href="/kitchen" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Kitchen</Link>
+          <Link href="/tools" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Tools</Link>
           <Link href="/sakagura" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Sakagura</Link>
           <Link href="/steamworks" className="px-3 py-1.5 rounded-full border border-sp-bronze/40 hover:border-sp-gold text-sp-gold">Steamworks</Link>
         </div>
