@@ -25,8 +25,12 @@ final class WildlifeCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender s, Command cmd, String label, String[] a) {
-        String sub = a.length == 0 ? "help" : a[0].toLowerCase(Locale.ROOT);
+        String sub = a.length == 0 ? (s instanceof Player ? "menu" : "help") : a[0].toLowerCase(Locale.ROOT);
         switch (sub) {
+            case "menu" -> {
+                if (s instanceof Player p && p.hasPermission("wildlife.use")) plugin.menu().open(p);
+                else s.sendMessage(Component.text("You don't have permission for that.", NamedTextColor.RED));
+            }
             case "journal", "stats", "list", "find", "tamed" -> {
                 if (!s.hasPermission("wildlife.use")) {
                     s.sendMessage(Component.text("You don't have permission for that.", NamedTextColor.RED));
@@ -179,7 +183,7 @@ final class WildlifeCommand implements TabExecutor {
                 s.sendMessage(Component.text("Wildlife - shy animals to find and record", NamedTextColor.DARK_GREEN));
                 s.sendMessage(Component.text("Watch an animal through a spyglass for a moment to add it to your Field Journal.", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Each species lives in its own biomes; rare colour variants exist too.", NamedTextColor.GRAY));
-                s.sendMessage(Component.text("/" + label + " journal - read your journal (or craft one: book + feather + seeds)", NamedTextColor.GRAY));
+                s.sendMessage(Component.text("/" + label + " - open the Wildlife menu | /" + label + " journal - read your journal (or craft one: book + feather + seeds)", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Guide: ", NamedTextColor.GRAY).append(Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url))));
                 if (s.hasPermission("wildlife.admin"))
                     s.sendMessage(Component.text("/" + label + " spawn <species> [rare] [baby] | egg <species> [player] | give <player> <item> [amount] | info | reload | remove <radius>", NamedTextColor.GRAY));
@@ -201,7 +205,7 @@ final class WildlifeCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"help", "journal", "spawn", "egg", "give", "giveall", "info", "reload", "stats", "list", "find", "tamed", "remove"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"help", "menu", "journal", "spawn", "egg", "give", "giveall", "info", "reload", "stats", "list", "find", "tamed", "remove"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && (a[0].equalsIgnoreCase("spawn") || a[0].equalsIgnoreCase("egg") || a[0].equalsIgnoreCase("find"))) {
             boolean egg = a[0].equalsIgnoreCase("egg");
             for (Species sp : Species.values()) if (sp.id().startsWith(last)) out.add(sp.id());

@@ -584,46 +584,63 @@ final class Zoo implements org.bukkit.event.Listener {
 
     // ------------------------------------------------------------ feeding trough, info board, bin
 
-    /** Trough data: food|fed. */
+    /** Trough data: food|fed|material (the food type, set by the first thing put in). */
     private boolean trough(Decor d, Decor.Prop p, Player pl, ItemStack hand) {
         String[] f = p.data.split("\\|");
         int food = f.length > 0 && !f[0].isEmpty() ? Integer.parseInt(f[0]) : 0;
         int fed = f.length > 1 ? Integer.parseInt(f[1]) : 0;
-        if (hand != null && !hand.isEmpty() && hand.getType().isEdible() && food < 32) {
-            int put = Math.min(hand.getAmount(), 32 - food);
-            if (pl.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - put);
-            food += put;
-            p.data = food + "|" + fed;
-            d.save(p);
-            pl.getWorld().playSound(p.center(), "minecraft:entity.item.pickup", 0.8f, 0.9f);
-            // Grant feeding achievement
-            plugin.adv().grant(pl, "first_feed_zoo");
+        Material type = f.length > 2 ? Material.matchMaterial(f[2]) : null;
+        if (food <= 0) type = null;
+        if (hand != null && !hand.isEmpty()) {
+            Material m = hand.getType();
+            boolean useful = false;
+            for (Species sp : Species.values()) if (sp.animal() || sp == Species.DRAGON) if (sp.isFood(m)) { useful = true; break; }
+            if (!useful) {
+                pl.sendActionBar(Component.text("No zoo animal eats that.", NamedTextColor.RED));
+            } else if (type != null && type != m) {
+                pl.sendActionBar(Component.text("The trough holds " + pretty(type) + " - use that up first.", NamedTextColor.RED));
+            } else if (food < 32) {
+                int put = Math.min(hand.getAmount(), 32 - food);
+                if (pl.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - put);
+                food += put;
+                type = m;
+                p.data = food + "|" + fed + "|" + m.name();
+                d.save(p);
+                pl.getWorld().playSound(p.center(), "minecraft:entity.item.pickup", 0.8f, 0.9f);
+                plugin.adv().grant(pl, "first_feed_zoo");
+            }
         }
-        pl.sendActionBar(Component.text("Food: " + food + "   Animals fed: " + fed, NamedTextColor.GOLD));
+        pl.sendActionBar(Component.text("Food: " + food + (type == null ? "" : " " + pretty(type)) + "   Animals fed: " + fed, NamedTextColor.GOLD));
         return true;
     }
 
+    private static String pretty(Material m) {
+        return m.name().toLowerCase(java.util.Locale.ROOT).replace('_', ' ');
+    }
+
     private void troughTick(Decor d, Decor.Prop p, long tick) {
+        if (((tick / 10) + p.x + p.z) % 4 != 0) return; // a bite every ~6 s
         String[] f = p.data.split("\\|");
         int food = f.length > 0 && !f[0].isEmpty() ? Integer.parseInt(f[0]) : 0;
-        if (food <= 0) return;
-        List<LivingEntity> hungry = new ArrayList<>();
+        Material type = f.length > 2 ? Material.matchMaterial(f[2]) : null;
+        if (food <= 0 || type == null) return;
+        // the hungriest kept animal in reach that actually eats this food
+        Animals.Animal best = null;
         for (Animals.Animal a : plugin.animals().all()) {
             LivingEntity e = a.entity;
-            if (e != null && e.isValid() && e.getWorld() == p.world && e.getLocation().distanceSquared(p.center()) <= 36) hungry.add(e);
+            if (e == null || !e.isValid() || e.getWorld() != p.world || a.hunger > 80 || !plugin.animals().kept(e)) continue;
+            if (!a.species.isFood(type) || e.getLocation().distanceSquared(p.center()) > 36) continue;
+            if (best == null || a.hunger < best.hunger) best = a;
         }
-        if (hungry.isEmpty() || ((tick / 10) + p.x + p.z) % 4 != 0) return; // a bite every ~6 s
-        LivingEntity e = hungry.get(0);
+        if (best == null) return;
         food--;
         int fed = (f.length > 1 ? Integer.parseInt(f[1]) : 0) + 1;
-        p.data = food + "|" + fed;
+        p.data = food + "|" + fed + (food > 0 ? "|" + type.name() : "");
         d.save(p);
-        // Feed the animal: restore hunger
-        for (Animals.Animal a : plugin.animals().all()) {
-            if (a.entity == e) { a.hunger = Math.min(100, a.hunger + 20); a.lastFed = System.currentTimeMillis(); break; }
-        }
-        // Track feeding for achievements
-        // (simplified: grant on first feed, then count via PDC)
+        best.hunger = Math.min(100, best.hunger + 20);
+        best.lastFed = System.currentTimeMillis();
+        LivingEntity e = best.entity;
+        e.getPersistentDataContainer().set(plugin.animals().hungerKey, org.bukkit.persistence.PersistentDataType.INTEGER, best.hunger);
         e.getWorld().spawnParticle(Particle.HEART, e.getLocation().add(0, e.getHeight() + 0.2, 0), 3, 0.3, 0.2, 0.3, 0);
         e.getWorld().playSound(e.getLocation(), "minecraft:entity.generic.eat", 0.5f, 1f);
     }

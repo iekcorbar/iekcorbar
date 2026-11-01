@@ -26,6 +26,7 @@ Open the advancement screen and look for the **Wildlife** tab: one advancement p
 
 ### Commands
 
+* **/wildlife** - open the Wildlife menu: every species (found ones show details and a click points you to the nearest one), your totals, and shortcuts to the journal, your dragons and the zoo help.
 * **/wildlife journal** - read your Field Journal.
 * **/wildlife stats [player]** - see how many species you have recorded.
 * **/wildlife list [filter]** - list all species and where they live.
@@ -41,6 +42,10 @@ Open the advancement screen and look for the **Wildlife** tab: one advancement p
 ### Zoo-builder
 
 Build your own zoo with craftable decor props: doors, toilets, cobblestone paths, welcome/exit signs, flower boxes, picnic tables, parasols, first aid posts and brick walls. Place ticket kiosks, turnstiles and gates to create a working zoo with tickets. Animals can be kept on leads or with name tags. Statues of every animal can be crafted from stone and the animal's drop item.
+
+### Feeding in the zoo
+
+Only animals that belong to someone (a name tag or a lead) get hungry; wild animals find their own food. Put food in a **feeding trough** (one kind at a time, up to 32): every few seconds it feeds the hungriest animal within six blocks that actually eats that food, and never one that is already well fed. Hunger is remembered across restarts. A starving kept animal slows down and drops nothing.
 
 ### Graveyard spawning
 

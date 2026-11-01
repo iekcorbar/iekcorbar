@@ -90,7 +90,7 @@ export default function WildlifeExplainedPage() {
           <li><b>Find an animal</b> in its biome. Some only appear by day, fireflies only at night, snails like rain.</li>
           <li><b>Approach like a naturalist.</b> Deer, zebras, cranes and songbirds bolt from an upright or sprinting player; a sneaking, still one may get close. Tortoises hide and hedgehogs curl up.</li>
           <li><b>Watch it through the spyglass</b> until the dots fill: about a second for a calm species, up to four for a shy one. Far away goes twice as fast, right in front of it takes twice as long, and a bolted animal resets the meter.</li>
-          <li><b>Read your journal</b> with <code>/wildlife journal</code>, or craft a <b>Field Journal</b> (book, feather, wheat seeds). Unfound species show a hint; recorded ones show a true fact and a myth.</li>
+          <li><b>Read your journal</b> with <code>/wildlife journal</code>, or craft a <b>Field Journal</b> (book, feather, wheat seeds). Type <code>/wildlife</code> for the Wildlife menu: every species at a glance, with a click to find the nearest one. Unfound species show a hint; recorded ones show a true fact and a myth.</li>
         </ol>
         <p className="text-sm text-text-warm/80">
           Milestone advancements wait at 5 species, 10 species, every species, your first rare find and
@@ -136,7 +136,7 @@ export default function WildlifeExplainedPage() {
       <Section id="zoo" icon={Landmark} kicker="Build your own" title="The zoo">
         <div className="grid sm:grid-cols-2 gap-4">
           <Card title="Props & tickets"><p>Craftable decor for paths, signs, picnic tables, parasols, first-aid posts and enclosures, plus <b>ticket kiosks</b>, <b>turnstiles</b> and <b>gates</b> that turn a fenced field into a working zoo.</p></Card>
-          <Card title="Feeding & ageing"><p>Zoo animals get hungry and eat from troughs. A starving animal slows down, smokes and drops nothing. They also age from baby to adult to senior, and old animals leave a little extra behind.</p></Card>
+          <Card title="Feeding & ageing"><p>Animals you keep (name tag or lead) get hungry; wild ones feed themselves. A trough holds one kind of food and feeds the hungriest animal nearby that eats it. A starving animal slows down, smokes and drops nothing. They also age from baby to adult to senior, and old animals leave a little extra behind.</p></Card>
         </div>
         <p className="text-sm text-text-warm/80">The Zoo advancement tab tracks keeper, feeder, breeder and veterinarian milestones.</p>
       </Section>
@@ -174,7 +174,7 @@ export default function WildlifeExplainedPage() {
           <Link href="/wiki?page=wildlife" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><ListOrdered className="w-4 h-4" /> Wildlife Wiki</Link>
           <Link href="/achievements" className="steampunk-btn px-4 py-2 rounded-lg text-white inline-flex items-center gap-2"><Trophy className="w-4 h-4" /> Achievements</Link>
         </div>
-        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Wildlife {`0.8.12`}).</p>
+        <p className="text-xs text-text-warm/50 text-center">Numbers on this page match the live plugin (Wildlife {`0.9.0`}).</p>
       </Section>
     </div>
   );

@@ -92,7 +92,7 @@ final class Animals implements Listener {
     }
 
     private final WildlifePlugin plugin;
-    final NamespacedKey speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey;
+    final NamespacedKey hungerKey, speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey;
     final Breeding breeding;
     private final Map<UUID, Animal> animals = new HashMap<>();
     private boolean warnedModels;
@@ -110,6 +110,7 @@ final class Animals implements Listener {
         breedKey = new NamespacedKey(plugin, "breed_after");
     birthKey = new NamespacedKey(plugin, "birth_time");
     ageKey = new NamespacedKey(plugin, "age_stage");
+    hungerKey = new NamespacedKey(plugin, "hunger");
         brain = new Brain(plugin);
         breeding = new Breeding(plugin, this);
     }
@@ -235,6 +236,7 @@ final class Animals implements Listener {
         a.breedAfter = pdc.getOrDefault(breedKey, PersistentDataType.LONG, 0L);
         a.birthTime = pdc.getOrDefault(birthKey, PersistentDataType.LONG, System.currentTimeMillis());
         a.ageStage = pdc.getOrDefault(ageKey, PersistentDataType.INTEGER, a.baby ? 0 : 1);
+        a.hunger = pdc.getOrDefault(hungerKey, PersistentDataType.INTEGER, 100);
         if (pdc.has(frozenKey, PersistentDataType.LONG)) {
             a.frozen = true;
             a.frozenLeft = pdc.get(frozenKey, PersistentDataType.LONG);
@@ -325,19 +327,24 @@ final class Animals implements Listener {
             if (!e.isValid()) continue;   // grew up: replaced by an adult
             World w = e.getWorld();
             // Hunger decay: animals get hungry over time (~1 point per 2 min)
-            if (tick % 1200 == 0 && a.hunger > 0) a.hunger = Math.max(0, a.hunger - 1);
+            // only animals that belong to someone (name tag, lead) get hungry: wild ones find their own food
+            boolean owned = kept(e);
+            if (owned && tick % 1200 == 0 && a.hunger > 0) {
+                a.hunger = Math.max(0, a.hunger - 1);
+                e.getPersistentDataContainer().set(hungerKey, PersistentDataType.INTEGER, a.hunger);
+            }
             // Hunger effects: slow movement when hungry
-            if (a.hunger <= 20) {
+            if (owned && a.hunger <= 20) {
                 if (e instanceof org.bukkit.entity.Mob mob) {
                     mob.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SLOWNESS, 200, 1, false, false));
                 }
             }
             // Visual feedback for hungry animals (every 5 min, show smoke particles)
-            if (a.hunger <= 20 && tick % 600 == 0) {
+            if (owned && a.hunger <= 20 && tick % 600 == 0) {
                 w.spawnParticle(org.bukkit.Particle.SMOKE, e.getLocation().add(0, e.getHeight() + 0.3, 0), 3, 0.2, 0.1, 0.2, 0.01);
             }
             // Sick state: when hunger = 0, show poison particles
-            if (a.hunger == 0 && tick % 600 == 0) {
+            if (owned && a.hunger == 0 && tick % 600 == 0) {
                 w.spawnParticle(org.bukkit.Particle.ENTITY_EFFECT, e.getLocation().add(0, e.getHeight() + 0.3, 0), 5, 0.2, 0.1, 0.2, 0, org.bukkit.Color.fromRGB(50, 200, 50));
             }
             // Aging: baby -> adult -> senior
@@ -800,7 +807,7 @@ final class Animals implements Listener {
         if (a == null) return;
         e.getDrops().clear();
         // Starving animals drop nothing (they died of hunger)
-        if (a.hunger == 0) {
+        if (a.hunger == 0 && kept(e.getEntity())) {
             e.setDroppedExp(0);
             return;
         }
