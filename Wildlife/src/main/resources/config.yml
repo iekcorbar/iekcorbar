@@ -63,8 +63,8 @@ species:
 
 # the steam dragon (0.8.0): tamed with coal, ridden by its owner
 dragon:
-  # horizontal top speed while ridden, in blocks per tick (0.40 = 8 m/s; sprinting rider +35 %)
-  ride-speed: 0.40
+  # horizontal top speed while ridden, in blocks per tick (0.55 = 11 m/s; sprinting rider +50 %)
+  ride-speed: 0.55
   # chance that a new dragon is the Ender look (all-black, violet eyes): extremely rare on purpose
   ender-chance: 0.003
 

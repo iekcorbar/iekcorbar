@@ -8,7 +8,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Particle;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Parrot;
@@ -159,6 +161,7 @@ final class DragonAI implements Listener {
     public void onDismount(EntityDismountEvent e) {
         if (e.getEntity() instanceof Player p) {
             inputs.remove(p.getUniqueId());
+            if (e.getDismounted() instanceof LivingEntity d0) minds.remove(d0.getUniqueId());
             if (e.getDismounted() instanceof LivingEntity le) {
                 Animals.Animal a = plugin.animals().get(le);
                 if (a != null && a.species == Species.DRAGON) plugin.adv().grant(p, "dragon_landing");
@@ -166,81 +169,272 @@ final class DragonAI implements Listener {
         }
     }
 
-    /** Every tick: steer the dragons that carry a rider, keep the tamed ones near their owner. */
+    // ------------------------------------------------------------ the mind: one state machine per dragon
+
+    private enum Mode { ROOST, TAKEOFF, FLIGHT, LAND }
+
+    /** Transient per-dragon state (not saved: a reloaded dragon simply roosts again). */
+    private static final class Mind {
+        Mode mode = Mode.ROOST;
+        long until;                       // game tick at which the current mode ends
+        Vector wp;                        // current waypoint
+        Location home;                    // wild: where it lives
+        boolean flyAnim;
+        Location ownerAt;                 // tamed: where the owner was a moment ago
+        int still;                        // ticks the owner has stood still
+        double orbit;                     // tamed: angle around the owner
+    }
+
+    private final Map<UUID, Mind> minds = new HashMap<>();
+
+    /** Every tick: steer the dragons that carry a rider, let every other one think (only near players). */
     void tick() {
         ThreadLocalRandom r = ThreadLocalRandom.current();
         for (Animals.Animal a : plugin.animals().all()) {
             if (a.species != Species.DRAGON || !a.attached) continue;
             LivingEntity e = a.entity;
             Player rider = riderOf(e);
+            Mind m = minds.computeIfAbsent(e.getUniqueId(), k -> new Mind());
             if (rider != null) {
-                steer(e, rider, r);
+                steer(e, rider, r, m);
                 if (e.getLocation().getY() > 100) plugin.adv().grant(rider, "dragon_flight");
                 else if (e.getLocation().getY() < 40) plugin.adv().grant(rider, "dragon_caver");
                 Input in = inputs.get(rider.getUniqueId());
                 if (in != null && in.sprint) plugin.adv().grant(rider, "dragon_speed");
                 if (e.getWorld().getTime() > 13000 && e.getWorld().getTime() < 23000) plugin.adv().grant(rider, "dragon_night");
-            } else if (tamer(e) == null) {                                 // wild: roar at anyone too close
-                long now = e.getWorld().getFullTime();
-                Player near = nearest(e, 4.0);
-                if (near != null && !near.isSneaking() && now - lastRoar.getOrDefault(e.getUniqueId(), -9999L) > 400) {
-                    lastRoar.put(e.getUniqueId(), now);
-                    plugin.fmm().play(e, "roar", false);
-                    e.getWorld().playSound(e.getLocation(), "wildlife:dragon.ambient", 1f, 0.5f);
-                    plugin.adv().grant(near, "dragon_wild");
-                    plugin.adv().grant(near, "dragon_roar");
-                }
-            } else if (tamer(e) != null && !isSitting(e)) {
-                follow(e);
+                continue;
+            }
+            if (nearest(e, 96) == null && tamer(e) == null) continue;      // nobody around: a wild dragon sleeps for free
+            long now = e.getWorld().getFullTime();
+            if (isSitting(e)) {
+                settle(e, m);                                              // sat down in mid-air: come down first
+            } else if (tamer(e) == null) {
+                wild(a, e, m, now, r);
+            } else {
                 Player owner = Bukkit.getPlayer(tamer(e));
                 if (owner != null) plugin.adv().grant(owner, "dragon_follow");
-            } else {
-                follow(e);
+                companion(e, m, owner, now, r);
             }
         }
     }
 
-    private void steer(LivingEntity e, Player rider, ThreadLocalRandom r) {
-        Input in = inputs.get(rider.getUniqueId());
-        Location look = rider.getLocation();
-        Vector fwd = new Vector(-Math.sin(Math.toRadians(look.getYaw())), 0, Math.cos(Math.toRadians(look.getYaw())));
-        Vector right = new Vector(fwd.getZ(), 0, -fwd.getX());
-        double speed = plugin.getConfig().getDouble("dragon.ride-speed", 0.40) * (in != null && in.sprint ? 1.35 : 1);
-        Vector want = new Vector();
-        if (in != null) {
-            if (in.forward) want.add(fwd.clone().multiply(speed));
-            if (in.back) want.add(fwd.clone().multiply(-speed * 0.55));
-            if (in.left) want.add(right.clone().multiply(speed * 0.5));
-            if (in.right) want.add(right.clone().multiply(-speed * 0.5));
-        }
+    // ---- shared movement helpers
+
+    /** Smoothly steer towards a wanted velocity, turn the body into the direction of travel, dodge walls. */
+    private void glide(LivingEntity e, Vector want, double accel) {
         Vector v = e.getVelocity();
-        v.setX(v.getX() + (want.getX() - v.getX()) * 0.18);
-        v.setZ(v.getZ() + (want.getZ() - v.getZ()) * 0.18);
-        double vy = v.getY();
-        if (in != null && in.jump) vy = Math.min(vy + 0.03, 0.42);
-        else if (in != null && in.back) vy = Math.max(vy - 0.02, -0.42);
-        else vy += (-0.02 - vy) * 0.08;                                    // no keys: hold a slow hover
-        v.setY(vy);
+        Vector dir = want.clone();
+        if (dir.lengthSquared() > 1.0e-4) {                                // look 4 blocks ahead; a wall means climb and sidestep
+            RayTraceResult hit = e.getWorld().rayTraceBlocks(e.getLocation().add(0, e.getHeight() * 0.5, 0), dir.clone().normalize(),
+                    4.0, FluidCollisionMode.NEVER, true);
+            if (hit != null && hit.getHitBlock() != null) {
+                want.setY(want.getY() + 0.14);
+                double yaw = Math.atan2(dir.getZ(), dir.getX()) + 0.9;
+                want.setX(want.getX() * 0.35 + Math.cos(yaw) * 0.08);
+                want.setZ(want.getZ() * 0.35 + Math.sin(yaw) * 0.08);
+            }
+        }
+        v.add(want.subtract(v).multiply(accel));
         e.setVelocity(v);
-        float cur = e.getLocation().getYaw();                              // the body turns where the rider looks
-        float d = ((look.getYaw() - cur) % 360 + 540) % 360 - 180;
-        e.setRotation(cur + (float) Math.max(-9, Math.min(9, d * 0.3f)), 0);
-        if (Math.abs(vy) > 0.08 && r.nextInt(3) == 0)                      // steam off the neck vents while climbing
-            e.getWorld().spawnParticle(Particle.CLOUD, e.getLocation().add(0, e.getHeight() * 0.85, 0), 1, 0.1, 0.05, 0.1, 0.008);
+        if (Math.hypot(v.getX(), v.getZ()) > 0.03)
+            turn(e, (float) Math.toDegrees(Math.atan2(-v.getX(), v.getZ())), 6f);
     }
 
-    /** A tamed dragon keeps itself near its owner and teleports like a wolf when it fell behind. */
-    private void follow(LivingEntity e) {
-        if (isSitting(e) || !e.getPassengers().isEmpty()) return;
-        UUID id = tamer(e);
-        Player owner = id == null ? null : Bukkit.getPlayer(id);
+    private static void turn(LivingEntity e, float yaw, float maxStep) {
+        float cur = e.getLocation().getYaw();
+        float d = ((yaw - cur) % 360 + 540) % 360 - 180;
+        e.setRotation(cur + Math.max(-maxStep, Math.min(maxStep, d)), 0);
+    }
+
+    /** Free height above this spot (up to cap blocks). */
+    private static double headroom(Location l, double cap) {
+        RayTraceResult r = l.getWorld().rayTraceBlocks(l, new Vector(0, 1, 0), cap, FluidCollisionMode.NEVER, true);
+        return r == null || r.getHitPosition() == null ? cap : r.getHitPosition().getY() - l.getY();
+    }
+
+    /** Y of the floor straight below (null if none within max blocks). */
+    private static Double floorBelow(Location l, double max) {
+        RayTraceResult r = l.getWorld().rayTraceBlocks(l.clone().add(0, 0.3, 0), new Vector(0, -1, 0), max, FluidCollisionMode.NEVER, true);
+        return r == null || r.getHitPosition() == null ? null : r.getHitPosition().getY();
+    }
+
+    private void anim(LivingEntity e, Mind m, boolean flying) {
+        if (m.flyAnim == flying) return;
+        m.flyAnim = flying;
+        if (flying) plugin.fmm().play(e, "fly", true);
+        else plugin.fmm().stop(e);                                         // FMM falls back to idle/walk on its own
+    }
+
+    /** Lower to the floor and stand there. Returns true once it stands. */
+    private boolean descend(LivingEntity e, Mind m) {
+        Double fy = floorBelow(e.getLocation(), 60);
+        if (fy == null) {                                                  // nothing below: just hover
+            glide(e, new Vector(0, 0, 0), 0.2);
+            return false;
+        }
+        double h = e.getLocation().getY() - fy;
+        if (h < 0.15) {
+            Vector v = e.getVelocity();
+            e.setVelocity(new Vector(v.getX() * 0.5, 0, v.getZ() * 0.5));
+            anim(e, m, false);
+            return true;
+        }
+        glide(e, new Vector(0, -Math.min(0.28, 0.04 + h * 0.06), 0), 0.16);
+        return false;
+    }
+
+    private void settle(LivingEntity e, Mind m) {
+        m.mode = Mode.ROOST;
+        if (!descend(e, m)) anim(e, m, true);
+    }
+
+    // ---- wild dragons: roost, take off, patrol round the home cave, land again
+
+    private void wild(Animals.Animal a, LivingEntity e, Mind m, long now, ThreadLocalRandom r) {
+        Location at = e.getLocation();
+        if (m.home == null) m.home = at.clone();
+        Player near = nearest(e, 6.0);
+        if (near != null && !near.isSneaking() && now - lastRoar.getOrDefault(e.getUniqueId(), -9999L) > 400) {
+            lastRoar.put(e.getUniqueId(), now);
+            plugin.fmm().play(e, "roar", false);
+            e.getWorld().playSound(at, "wildlife:dragon.ambient", 1f, 0.5f);
+            plugin.adv().grant(near, "dragon_wild");
+            plugin.adv().grant(near, "dragon_roar");
+            if (m.mode == Mode.ROOST) {                                    // crowded: it takes to the air
+                m.mode = Mode.TAKEOFF;
+                m.until = now + 60;
+            }
+        }
+        switch (m.mode) {
+            case ROOST -> {
+                if (!descend(e, m)) return;
+                if (m.until == 0) m.until = now + 400 + r.nextInt(900);    // 20-65 s on the floor
+                if (now >= m.until && headroom(at, 8) > 5) {
+                    m.mode = Mode.TAKEOFF;
+                    m.until = now + 60;
+                }
+            }
+            case TAKEOFF -> {
+                anim(e, m, true);
+                glide(e, new Vector(0, 0.2, 0), 0.12);
+                if (now >= m.until || headroom(at, 6) < 2.5) {
+                    m.mode = Mode.FLIGHT;
+                    m.until = now + 500 + r.nextInt(700);                  // 25-60 s on the wing
+                    m.wp = null;
+                }
+            }
+            case FLIGHT -> {
+                anim(e, m, true);
+                if (m.wp == null || at.toVector().distanceSquared(m.wp) < 9) m.wp = pickWaypoint(e, m, r);
+                if (m.wp == null) {
+                    m.mode = Mode.LAND;
+                    return;
+                }
+                Vector to = m.wp.clone().subtract(at.toVector());
+                double dist = to.length();
+                glide(e, to.normalize().multiply(Math.min(0.2, 0.06 + dist * 0.02)), 0.07);
+                if (r.nextInt(220) == 0) e.getWorld().playSound(at, "wildlife:dragon.ambient", 0.7f, 0.9f);
+                if (now >= m.until) m.mode = Mode.LAND;
+            }
+            case LAND -> {
+                anim(e, m, true);
+                if (descend(e, m)) {
+                    m.mode = Mode.ROOST;
+                    m.until = 0;
+                }
+            }
+        }
+    }
+
+    /** A free point within 24 blocks of home, 2-9 blocks up; null when the cave is too cramped to fly. */
+    private Vector pickWaypoint(LivingEntity e, Mind m, ThreadLocalRandom r) {
+        Location at = e.getLocation().add(0, e.getHeight() * 0.5, 0);
+        for (int i = 0; i < 8; i++) {
+            Vector p = m.home.toVector().add(new Vector(r.nextDouble(-24, 24), r.nextDouble(2, 9), r.nextDouble(-24, 24)));
+            Vector d = p.clone().subtract(at.toVector());
+            double len = d.length();
+            if (len < 6) continue;
+            RayTraceResult hit = at.getWorld().rayTraceBlocks(at, d.clone().normalize(), len, FluidCollisionMode.NEVER, true);
+            if (hit != null && hit.getHitBlock() != null) continue;        // a wall in the way
+            Location pl = p.toLocation(at.getWorld());
+            if (pl.getBlock().isSolid() || pl.clone().add(0, 1, 0).getBlock().isSolid()) continue;
+            return p;
+        }
+        return null;
+    }
+
+    // ---- tamed dragons without a rider: stay close, circle, land beside a resting owner
+
+    private void companion(LivingEntity e, Mind m, Player owner, long now, ThreadLocalRandom r) {
         if (owner == null || owner.getWorld() != e.getWorld()) return;
-        if (owner.getLocation().distanceSquared(e.getLocation()) > 34 * 34) {
-            Location to = owner.getLocation().add(0, 1.2, 0);
+        Location at = e.getLocation();
+        Location me = owner.getLocation();
+        double dist = at.distance(me);
+        if (dist > 48) {                                                   // fell behind: catch up like a wolf does
+            Location to = me.clone().add(me.getDirection().setY(0).multiply(-2.5)).add(0, 1.5, 0);
             e.teleport(to);
             e.getWorld().spawnParticle(Particle.CLOUD, to, 6, 0.3, 0.2, 0.3, 0.01);
             plugin.adv().grant(owner, "dragon_reunion");
+            m.mode = Mode.FLIGHT;
+            return;
         }
+        if (m.ownerAt != null && m.ownerAt.getWorld() == me.getWorld() && m.ownerAt.distanceSquared(me) < 0.04) m.still++;
+        else m.still = 0;
+        m.ownerAt = me.clone();
+        boolean resting = m.still > 80 && dist < 7;                        // owner has stood still for 4 s: come down beside them
+        if (resting) {
+            if (m.mode != Mode.ROOST) m.mode = Mode.LAND;
+            if (dist > 3.5) {
+                Vector to = me.toVector().subtract(at.toVector());
+                to.setY(0);
+                if (to.lengthSquared() > 0.01) glide(e, to.normalize().multiply(0.12), 0.1);
+            }
+            if (descend(e, m)) m.mode = Mode.ROOST;
+            return;
+        }
+        m.mode = Mode.FLIGHT;
+        anim(e, m, true);
+        if (dist > 9) {                                                    // fly to the owner
+            Vector to = me.toVector().add(new Vector(0, 3.0, 0)).subtract(at.toVector());
+            glide(e, to.normalize().multiply(Math.min(0.5, 0.12 + dist * 0.018)), 0.09);
+        } else {                                                           // lazy circles round the owner
+            m.orbit += 0.035;
+            Vector p = me.toVector().add(new Vector(Math.cos(m.orbit) * 5, 3.0 + Math.sin(m.orbit * 0.7) * 1.2, Math.sin(m.orbit) * 5));
+            glide(e, p.subtract(at.toVector()).multiply(0.06), 0.09);
+        }
+    }
+
+    // ---- riding: the rider is the pilot
+
+    private void steer(LivingEntity e, Player rider, ThreadLocalRandom r, Mind m) {
+        Input in = inputs.get(rider.getUniqueId());
+        Location look = rider.getLocation();
+        double speed = plugin.getConfig().getDouble("dragon.ride-speed", 0.55) * (in != null && in.sprint ? 1.5 : 1);
+        double pitch = Math.max(-55, Math.min(55, look.getPitch()));
+        double yawR = Math.toRadians(look.getYaw()), pitchR = Math.toRadians(pitch);
+        Vector fwd = new Vector(-Math.sin(yawR) * Math.cos(pitchR), -Math.sin(pitchR), Math.cos(yawR) * Math.cos(pitchR));
+        Vector flat = new Vector(-Math.sin(yawR), 0, Math.cos(yawR));
+        Vector right = new Vector(flat.getZ(), 0, -flat.getX());
+        Vector want = new Vector();
+        boolean moving = false;
+        if (in != null) {
+            if (in.forward) {
+                want.add(fwd.clone().multiply(speed));                     // look up to climb, down to dive
+                moving = true;
+            }
+            if (in.back) want.add(flat.clone().multiply(-speed * 0.35));   // brake, then back up a little
+            if (in.left) want.add(right.clone().multiply(speed * 0.4));
+            if (in.right) want.add(right.clone().multiply(-speed * 0.4));
+            if (in.jump) want.add(new Vector(0, speed * 0.55, 0));         // straight up, hovering
+        }
+        Vector v = e.getVelocity();
+        v.add(want.subtract(v).multiply(moving ? 0.07 : 0.1));             // inertia: it needs a moment to speed up and to stop
+        e.setVelocity(v);
+        turn(e, look.getYaw(), 5f);
+        boolean flyingNow = Math.abs(v.getY()) > 0.02 || Math.hypot(v.getX(), v.getZ()) > 0.05;
+        anim(e, m, flyingNow);
+        if ((Math.abs(v.getY()) > 0.12 || (in != null && in.sprint)) && r.nextInt(3) == 0)   // steam from the neck vents
+            e.getWorld().spawnParticle(Particle.CLOUD, e.getLocation().add(0, e.getHeight() * 0.85, 0), 1, 0.1, 0.05, 0.1, 0.008);
     }
 
     private static Player riderOf(LivingEntity e) {

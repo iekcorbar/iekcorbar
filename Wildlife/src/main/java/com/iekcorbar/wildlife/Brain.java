@@ -54,10 +54,11 @@ final class Brain {
             // parrots land on the player's shoulder and beelines to hives/flowers will empty the scene.
             if (a.species == Species.SONGBIRD) strip(g, m, VanillaGoal.PARROT_LAND_ON_OWNERS_SHOULDER);
             if (a.species == Species.DRAGON) {
-                // a 2.5-metre dragon on your shoulder is not cute; the Control goal takes the MOVE
-                // slot whenever it sits or carries a rider (DragonAI steers it then)
-                strip(g, m, VanillaGoal.PARROT_LAND_ON_OWNERS_SHOULDER);
-                if (!g.hasGoal(m, controlKey)) g.addGoal(m, 0, new Control(m, a));
+                // the dragon has its own mind (DragonAI: roost, take off, patrol, land, follow, carry a rider):
+                // every vanilla parrot goal goes, otherwise its random flutter fights the steering
+                g.removeAllGoals(m);
+                g.removeAllGoals(m, GoalType.TARGET);
+                return;
             }
             if (m instanceof org.bukkit.entity.Bee) {
                 strip(g, m, VanillaGoal.BEE_LOCATE_HIVE);

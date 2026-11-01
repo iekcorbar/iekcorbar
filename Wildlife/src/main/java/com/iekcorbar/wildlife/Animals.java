@@ -92,7 +92,7 @@ final class Animals implements Listener {
     }
 
     private final WildlifePlugin plugin;
-    final NamespacedKey hungerKey, speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey;
+    final NamespacedKey autoNameKey, hungerKey, speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey;
     final Breeding breeding;
     private final Map<UUID, Animal> animals = new HashMap<>();
     private boolean warnedModels;
@@ -111,6 +111,7 @@ final class Animals implements Listener {
     birthKey = new NamespacedKey(plugin, "birth_time");
     ageKey = new NamespacedKey(plugin, "age_stage");
     hungerKey = new NamespacedKey(plugin, "hunger");
+        autoNameKey = new NamespacedKey(plugin, "auto_name");
         brain = new Brain(plugin);
         breeding = new Breeding(plugin, this);
     }
@@ -153,6 +154,11 @@ final class Animals implements Listener {
             pdc.set(birthKey, PersistentDataType.LONG, System.currentTimeMillis());
             pdc.set(ageKey, PersistentDataType.INTEGER, isBaby ? 0 : 1);
             setup((LivingEntity) en, s, isBaby);
+            // a plain (hidden) name so death messages and kill logs say "Steam Dragon", not "Parrot"
+            String nm = ender ? "Ender Dragon" : isRare ? s.rareName() : s.displayName;
+            en.customName(net.kyori.adventure.text.Component.text(nm));
+            en.setCustomNameVisible(false);
+            pdc.set(autoNameKey, PersistentDataType.STRING, nm);
         });
         Animal a = register((LivingEntity) e);
         if (a == null || !a.attached) {
@@ -282,7 +288,7 @@ final class Animals implements Listener {
         if (n == null) return false;
         LivingEntity ne = n.entity;
         ne.setRotation(at.getYaw(), at.getPitch());
-        if (old.customName() != null) {
+        if (named(old)) {
             ne.customName(old.customName());
             ne.setCustomNameVisible(old.isCustomNameVisible());
         }
@@ -294,9 +300,16 @@ final class Animals implements Listener {
         return true;
     }
 
+    /** True when a player named it (a name tag); our own hidden species name does not count. */
+    boolean named(Entity en) {
+        if (en.customName() == null) return false;
+        String auto = en.getPersistentDataContainer().get(autoNameKey, PersistentDataType.STRING);
+        return auto == null || !auto.equals(net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(en.customName()));
+    }
+
     /** A named, leashed or once-leashed animal belongs to someone and stays. */
     boolean kept(Entity en) {
-        return en.customName() != null || en.getPersistentDataContainer().has(keptKey, PersistentDataType.BYTE)
+        return named(en) || en.getPersistentDataContainer().has(keptKey, PersistentDataType.BYTE)
                 || (en instanceof org.bukkit.entity.Mob m && m.isLeashed());
     }
 

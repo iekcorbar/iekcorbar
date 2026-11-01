@@ -1641,20 +1641,31 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
     m.box("tail_t", -0.3, 14.4, 14.0, 0.3, 15.2, 15.2, spine)
     m.style = "scale"
     m.box("tail_t", -0.8, 11.6, 16.0, 0.8, 13.4, 18.4, col + "_d")   # the tip
-    # ---- wings: vanilla layout, a bone arm on the leading edge with a flat membrane sheet behind
-    # it, then a second arm + sheet on the wing tip (bones at 0.15 so the span stays ~3 blocks)
+    # ---- wings (0.9.3): a bat wing. Upper arm along the leading edge, a forearm, and three finger bones
+    # that fan out from the wrist; between the fingers hangs the veined membrane, so the trailing edge
+    # is scalloped instead of one flat plank. The fan angle is animated (open in flight, bundled at rest).
     for name, sx in (("wing_l", 1), ("wing_r", -1)):
         m.bone(name, (sx * 3.0, 16.4, -3.6), "body")
-        m.bone(name + "_t", (sx * 11.6, 16.4, -3.6), name)
-        m.box(name, sx * 2.9, 15.6, -4.4, sx * 11.6, 17.2, -2.8, col)            # arm
-        m.style = "membrane"
-        m.box(name, sx * 3.2, 16.1, -2.8, sx * 11.6, 16.45, 5.6, memb)           # membrane
-        m.style = "ivory"
-        m.box(name, sx * 11.0, 15.8, -5.6, sx * 11.9, 17.0, -4.4, "fur_cream")   # wrist claw
+        m.bone(name + "_t", (sx * 10.4, 16.4, -3.6), name)
         m.style = "scale"
-        m.box(name + "_t", sx * 11.6, 15.7, -4.3, sx * 20.0, 17.1, -2.9, col)    # tip arm
+        m.box(name, sx * 2.9, 15.6, -4.4, sx * 10.6, 17.2, -2.8, col)            # upper arm
         m.style = "membrane"
-        m.box(name + "_t", sx * 11.6, 16.1, -2.9, sx * 20.0, 16.45, 6.4, memb)   # tip membrane
+        m.box(name, sx * 3.2, 16.1, -2.8, sx * 10.4, 16.45, 5.4, memb)           # body membrane
+        m.style = "ivory"
+        m.box(name, sx * 9.9, 15.8, -5.6, sx * 10.9, 17.0, -4.4, "fur_cream")    # wrist claw
+        m.style = "scale"
+        m.box(name + "_t", sx * 10.4, 15.8, -4.2, sx * 15.2, 17.0, -3.0, col)    # forearm
+        m.style = "membrane"
+        m.box(name + "_t", sx * 10.4, 16.1, -3.0, sx * 15.0, 16.45, 4.6, memb)   # forearm membrane
+        for i, chord in enumerate((3.4, 3.4, 3.0)):
+            f = "%s_f%d" % (name, i + 1)
+            m.bone(f, (sx * 15.0, 16.4, -3.6), name + "_t")
+            m.style = "plate"
+            m.box(f, sx * 15.0, 15.9 - 0.04 * i, -4.1, sx * 21.4, 16.9 - 0.04 * i, -3.1, plate)    # finger rib
+            m.style = "membrane"
+            m.box(f, sx * 15.0, 16.12 + 0.03 * i, -3.1, sx * 21.0, 16.42 + 0.03 * i, -3.1 + chord, memb)
+            m.style = "ivory"
+            m.box(f, sx * 21.0, 15.8, -4.0, sx * 21.9, 16.9, -3.2, "fur_cream")  # finger tip claw
         m.style = "scale"
     # ---- legs: short vanilla legs - front: thigh, shin, flat foot; hind: bigger thigh/shin/foot
     for name, x, z in (("leg_fl", 3.5, -5.4), ("leg_fr", -3.5, -5.4)):
@@ -1710,10 +1721,10 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
                               (0.85 * M, (-3, 0, 0)), (M, (-4, 0, 0))]},
         "tail_t": {"rotation": [(0.12 * M, (-7, 0, 0)), (0.45 * M, (6, 0, 0)), (0.7 * M, (8, 0, 0)),
                                 (0.95 * M, (-5, 0, 0)), (M, (-7, 0, 0))]},
-        "leg_fl": {"rotation": hold(M, (20, 0, 0))}, "leg_fr": {"rotation": hold(M, (20, 0, 0))},
-        "leg_bl": {"rotation": hold(M, (-16, 0, 0))}, "leg_br": {"rotation": hold(M, (-16, 0, 0))},
-        "leg_fl_l": {"rotation": hold(M, (46, 0, 0))}, "leg_fr_l": {"rotation": hold(M, (46, 0, 0))},
-        "leg_bl_l": {"rotation": hold(M, (30, 0, 0))}, "leg_br_l": {"rotation": hold(M, (30, 0, 0))},
+        "leg_fl": {"rotation": hold(M, (-42, 0, 0))}, "leg_fr": {"rotation": hold(M, (-42, 0, 0))},
+        "leg_bl": {"rotation": hold(M, (38, 0, 0))}, "leg_br": {"rotation": hold(M, (38, 0, 0))},
+        "leg_fl_l": {"rotation": hold(M, (-70, 0, 0))}, "leg_fr_l": {"rotation": hold(M, (-70, 0, 0))},
+        "leg_bl_l": {"rotation": hold(M, (-66, 0, 0))}, "leg_br_l": {"rotation": hold(M, (-66, 0, 0))},
     })
     # walk: lateral-sequence gallop; folded wings rock a touch with each beat for balance.
     Pw = 1.0
@@ -1793,6 +1804,33 @@ def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
         "jaw": {"rotation": [(0, (0, 0, 0)), (0.3, (-22, 0, 0)), (0.7, (-22, 0, 0))]},
         "h_head": {"rotation": [(0, (0, 0, 0)), (0.5, (-12, 0, 0)), (0.7, (-12, 0, 0))]},
     }, loop="hold")
+    # ---- finger fan: open in flight, bundled along the forearm when folded (keys added to every clip)
+    FAN_OPEN, FAN_SHUT = (-8, -28, -48), (-3, -7, -11)
+
+    def fan(k, sx, i):
+        return sx * (FAN_SHUT[i] + (FAN_OPEN[i] - FAN_SHUT[i]) * k)
+
+    FAN_CLIPS = {
+        "fly": [(0, 0.45), (0.14 * M, 0.8), (down, 1.0), (0.52 * M, 0.9), (up, 0.45), (M, 0.45)],
+        "walk": [(0, 0.0), (1.0, 0.0)],
+        "idle": [(0, 0.0), (2.8, 0.0), (2.95, 0.7), (3.1, 0.0), (4.2, 0.0)],
+        "sit": [(0, 0.0), (0.8, 0.0)],
+        "eat": [(0, 0.0), (1.1, 0.0)],
+        "roar": [(0, 0.0), (0.28, 1.0), (0.95, 0.6), (1.3, 0.0), (1.5, 0.0)],
+        "death": [(0, 0.0), (0.18, 1.0), (0.6, 0.0), (0.7, 0.0)],
+    }
+    for an in m.anims:
+        pts = FAN_CLIPS.get(an["name"])
+        if not pts:
+            continue
+        for wname, sx in (("wing_l", 1), ("wing_r", -1)):
+            for i in range(3):
+                bn = "%s_f%d" % (wname, i + 1)
+                kfs = [{"channel": "rotation",
+                        "data_points": [{"x": "0", "y": str(round(fan(k, sx, i), 2)), "z": "0"}],
+                        "uuid": U(), "time": round(t, 3), "color": -1, "interpolation": "linear"} for t, k in pts]
+                an["animators"][m.bones[bn].uuid] = {"name": bn, "type": "bone", "keyframes": kfs}
+
 
 # ------------------------------------------------------------------ species list
 
