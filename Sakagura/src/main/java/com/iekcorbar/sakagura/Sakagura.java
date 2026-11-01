@@ -595,7 +595,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                 s.sendMessage(Component.text("1. Water cauldron + heat below, throw in ingredients, wait, take bottles out.", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("2. Some drinks: distill them in a Steam Still (bottles + glowstone inside, fire below). 3. Some: age in a Sake Cask.", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Recipes on the website: ", NamedTextColor.GRAY).append(Component.text(url, NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(url))));
-                s.sendMessage(Component.text("/" + label + " recipes | drunk | taste | stats | model [status|spawn|item] | comp [...] | season [...] | woods" + (admin ? " | give | take | reload" : ""), NamedTextColor.GRAY));
+                s.sendMessage(Component.text("/" + label + " recipes | drunk | taste | stats | model [status|spawn|item] | comp [status|submit|leaderboard" + (admin ? "|start|stop|area" : "") + "] | season [...] | woods" + (admin ? " | give | take | reload" : ""), NamedTextColor.GRAY));
             }
         }
         return true;
@@ -635,7 +635,11 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"help", "recipes", "drunk", "give", "take", "giveall", "reload"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"help", "recipes", "drunk", "taste", "stats", "comp", "season", "woods", "model", "give", "take", "giveall", "reload"}) if (v.startsWith(last)) out.add(v);
+        } else if (a.length == 2 && a[0].equalsIgnoreCase("comp")) {
+            for (String v : new String[]{"status", "submit", "leaderboard", "start", "stop", "area"}) if (v.startsWith(last)) out.add(v);
+        } else if (a.length == 2 && a[0].equalsIgnoreCase("season")) {
+            for (String v : new String[]{"status", "list", "crops", "set"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("take") || a[0].equalsIgnoreCase("drunk"))) {
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
         } else if (a.length == 3 && (a[0].equalsIgnoreCase("give") || a[0].equalsIgnoreCase("take"))) {
