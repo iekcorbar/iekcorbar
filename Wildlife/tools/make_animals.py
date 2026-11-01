@@ -114,9 +114,9 @@ def cell(col):
 # larger so they read well next to vanilla mobs (cow 1.4 m, horse 1.6 m, player 1.8 m). Keep Species.scale in sync.
 SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "capybara": 0.9, "duck": 1.4, "tortoise": 1.3, "hedgehog": 1.3,
         "lizard": 1.3, "crab": 1.2, "songbird": 1.3, "snail": 1.3, "butterfly": 1.2, "dragonfly": 1.2,
-        "tanuki": 1.3, "crane": 1.25, "koi": 1.4, "macaque": 1.25,
-        "kangaroo": 1.3, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.3, "mole": 1.35,
-        "rhino": 0.8, "penguin": 1.35, "orca": 0.7, "piranha": 1.35, "macaw": 1.35,
+        "tanuki": 1.3, "crane": 1.25, "koi": 1.2, "macaque": 1.25,
+        "kangaroo": 1.0, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.0, "mole": 1.35,
+        "rhino": 0.8, "penguin": 0.95, "orca": 0.7, "piranha": 1.35, "macaw": 1.35,
         "wraith": 1.0, "dragon": 1.1}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -16..32 bounds
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
@@ -1111,9 +1111,9 @@ def koi(m):
     m.sym("h_head", 0.3, 4.0, -3.8, 0.36, 4.1, -3.4, wh)         # barbels
     m.sym("h_head", 0.9, 4.0, -2.9, 0.98, 4.5, -2.6, "eye")
     m.bone("tail", (0, 3.8, 2.6), "body")
-    m.box("tail", -0.05, 3.6, 2.6, 0.05, 6.3, 4.6, "koi_fin")    # upper lobe
-    m.box("tail", -0.05, 1.5, 2.6, 0.05, 4.0, 4.6, "koi_fin")    # lower lobe
-    m.box("tail", -0.06, 3.3, 2.8, 0.06, 4.5, 4.9, or_)          # coloured middle
+    m.box("tail", -0.05, 3.8, 2.6, 0.05, 5.2, 3.9, "koi_fin")    # upper lobe
+    m.box("tail", -0.05, 2.4, 2.6, 0.05, 3.8, 3.9, "koi_fin")    # lower lobe
+    m.box("tail", -0.06, 3.4, 2.7, 0.06, 4.2, 3.7, or_)          # coloured middle
     p = 0.5
     m.anim("walk", p, {"tail": {"rotation": wave(6, p, 16, 0, axis=1)},
                        "body": {"rotation": wave(6, p, 5, math.pi, axis=1),
@@ -1125,32 +1125,38 @@ def koi(m):
 
 
 def macaque(m):
-    """Japanese macaque (snow monkey): stocky sandy-grey body, pink face with a brow ridge, small
-    ears and a short up-curved tail. Drawn ~55 cm."""
-    c, pk = "macaque", "pink"
+    """Japanese macaque (snow monkey, ~55 cm): thick grey-brown fur with a heavy shoulder ruff, a
+    bare red-pink face with a brow ridge and a forward muzzle, cheek whiskers, long arms and a short
+    stump of a tail. Walks on all fours with the shoulders higher than the hips."""
+    c, cl, cd, pk = "macaque", "macaque_l", "macaque_d", "pink"
     m.bone("body", (0, 6.4, 0))
-    m.box("body", -2.7, 4.0, -4.6, 2.7, 9.6, -1.2, c)            # broad chest/shoulders
-    m.box("body", -2.4, 3.6, -1.2, 2.4, 8.8, 2.4, c)
-    m.box("body", -2.5, 4.2, 2.4, 2.5, 8.6, 4.6, c)              # rump
-    m.box("body", -1.6, 3.4, -3.0, 1.6, 4.0, 3.2, "fur_cream")  # pale belly
-    m.bone("tail", (0, 8.0, 4.6), "body")                        # short, curled up
-    m.box("tail", -0.4, 7.8, 4.6, 0.4, 8.6, 5.5, c)
-    m.box("tail", -0.35, 8.5, 5.2, 0.35, 9.5, 5.8, c)
-    m.bone("h_head", (0, 8.0, -4.4), "body")
-    m.box("h_head", -2.1, 6.0, -6.6, 2.1, 9.6, -4.3, c)          # skull
-    m.box("h_head", -1.5, 6.2, -7.2, 1.5, 8.2, -6.6, pk)         # pink face
-    m.box("h_head", -2.15, 8.4, -6.7, 2.15, 9.0, -6.2, "fur_dark")  # brow ridge
-    m.box("h_head", -1.1, 6.3, -7.5, 1.1, 7.2, -7.1, pk)         # muzzle
-    m.sym("h_head", 1.1, 7.4, -7.3, 1.35, 7.9, -7.15, "eye")
-    m.sym("h_head", 2.1, 6.6, -5.4, 2.6, 8.0, -4.7, c)           # small side ears
-    m.sym("h_head", 2.25, 6.9, -5.3, 2.5, 7.7, -4.85, pk)
-    for name, x, z in (("leg_fl", 2.1, -3.0), ("leg_fr", -2.1, -3.0), ("leg_bl", 2.3, 3.0), ("leg_br", -2.3, 3.0)):
-        leg(m, name, x, z, 4.8, 2.4, 2.4, 1.7, 1.3, c, foot=pk, foot_h=0.35)
+    m.box("body", -2.6, 4.4, -4.6, 2.6, 9.4, -0.8, c)                # chest and shoulders
+    m.box("body", -2.3, 4.0, -0.8, 2.3, 8.4, 3.6, c)                 # hips
+    m.box("body", -3.0, 7.0, -4.4, 3.0, 10.0, -1.4, cl)              # thick shoulder ruff
+    m.box("body", -1.6, 7.9, -1.2, 1.6, 8.6, 3.0, cd)                # darker back
+    m.box("body", -1.7, 3.8, -3.6, 1.7, 4.5, 3.0, "fur_cream")       # pale belly
+    m.box("body", -1.2, 4.2, 3.5, 1.2, 5.6, 3.9, pk)                 # bare rump patch
+    m.bone("tail", (0, 7.6, 3.6), "body")                            # short stump
+    m.box("tail", -0.4, 7.2, 3.6, 0.4, 8.2, 5.4, c)
+    m.box("tail", -0.35, 8.0, 5.0, 0.35, 9.6, 5.8, cd)
+    m.bone("h_head", (0, 8.8, -4.4), "body")
+    m.box("h_head", -2.1, 7.0, -7.0, 2.1, 10.6, -4.2, c)             # skull
+    m.box("h_head", -2.15, 9.6, -6.9, 2.15, 10.9, -4.1, cd)          # dark crown
+    m.sym("h_head", 1.8, 7.0, -6.6, 2.8, 9.2, -4.4, cl)              # cheek whiskers
+    m.box("h_head", -1.7, 7.4, -7.5, 1.7, 9.5, -7.0, pk)             # bare red face
+    m.box("h_head", -1.15, 7.2, -8.3, 1.15, 8.7, -7.4, "pink_d")     # forward muzzle
+    m.box("h_head", -0.8, 7.3, -8.4, 0.8, 7.55, -8.25, "fur_dark")   # mouth line
+    m.box("h_head", -1.95, 9.4, -7.6, 1.95, 9.9, -7.1, "fur_dark")   # brow ridge
+    m.sym("h_head", 0.85, 8.5, -7.65, 1.3, 9.1, -7.5, "eye")
+    m.sym("h_head", 2.1, 8.2, -5.9, 2.8, 9.6, -5.0, pk)              # bare ears
+    for name, x, z in (("leg_fl", 2.5, -3.5), ("leg_fr", -2.5, -3.5)):
+        leg(m, name, x, z, 6.6, 3.3, 3.2, 1.7, 1.4, c, foot=pk, foot_h=0.5)      # long arms
+    for name, x, z in (("leg_bl", 2.3, 2.6), ("leg_br", -2.3, 2.6)):
+        leg(m, name, x, z, 5.2, 2.6, 2.6, 2.0, 1.5, c, foot=pk, foot_h=0.5)
     gait(m, 0.95, 15, head=4, tail=6, style="walk", bob=0.16)
     quad_idle(m, 4)
     m.anim("eat", 2.0, {"h_head": {"rotation": [(0, (0, 0, 0)), (0.4, (30, 0, 0)), (1.4, (30, 0, 0)), (2.0, (0, 0, 0))]}}, loop="once")
     death(m, drop=2)
-
 
 # ------------------------------------------------------------------ batch 2 (0.5.0)
 
@@ -1207,29 +1213,38 @@ def kangaroo(m):
 
 
 def ostrich(m):
-    """Common ostrich, ~2.2 m: the tallest bird alive. Bare pink-grey neck, black body plumage
-    (white wing and tail tufts), two-toed legs built for sprinting."""
+    """Common ostrich (~2 m): a big round black body with white wing edges and a white tail plume,
+    an S-curved bare neck with a white collar, a small flat head with a blunt bill and huge dark
+    eyes, and thick pink legs with a feathered thigh and a two-toed foot."""
     bl, wh, sk = "black", "white", "fur_cream"
     m.bone("body", (0, 14.5, 0))
-    m.box("body", -3.2, 12.0, -3.8, 3.2, 17.5, 3.2, bl)
-    m.box("body", -2.6, 11.4, -3.2, 2.6, 12.6, 2.6, bl + "_d")
-    m.sym("body", 3.2, 12.6, -1.6, 4.3, 15.0, 3.0, wh)          # loose white wing feathers
-    m.box("body", -1.3, 14.0, 3.0, 1.3, 16.4, 5.2, wh)          # tail tuft
-    m.bone("h_head", (0, 17.0, -3.0), "body")
-    m.box("h_head", -0.6, 17.0, -4.1, 0.6, 21.4, -2.9, sk)      # long bare neck
-    m.box("h_head", -0.9, 21.2, -5.6, 0.9, 22.9, -3.8, sk)      # small skull
-    m.box("h_head", -0.65, 21.4, -7.6, 0.65, 22.3, -5.6, wh)    # flat blunt bill
-    m.sym("h_head", 0.85, 21.9, -5.0, 0.95, 22.5, -4.5, "eye")
-    for name, x in (("leg_l", 1.15), ("leg_r", -1.15)):
-        m.bone(name, (x, 12.4, 0.2), "body")
-        m.box(name, x - 0.28, 1.6, -0.1, x + 0.28, 12.5, 0.5, sk + "_d")   # bare shin
-        m.box(name, x - 0.85, 0.0, -2.4, x + 0.85, 0.8, 0.9, sk)           # two-toed foot
+    m.box("body", -3.4, 11.6, -3.6, 3.4, 17.2, 3.6, bl)             # main body
+    m.box("body", -2.8, 17.2, -2.8, 2.8, 18.4, 3.0, bl)             # rounded back
+    m.box("body", -2.9, 12.0, 3.6, 2.9, 16.6, 5.6, bl)              # rump
+    m.box("body", -2.6, 11.0, -3.0, 2.6, 11.8, 3.2, bl + "_d")      # belly
+    m.sym("body", 3.4, 12.6, -2.4, 4.4, 17.0, 3.2, bl)              # folded wings
+    m.sym("body", 3.4, 12.2, -2.4, 4.45, 13.4, 3.2, wh)             # pale wing edge
+    m.box("body", -1.6, 14.6, 5.6, 1.6, 17.8, 8.4, wh)              # tail plume
+    m.box("body", -1.0, 15.2, 8.2, 1.0, 17.0, 9.4, wh)
+    m.box("body", -1.1, 17.0, -4.5, 1.1, 18.2, -2.6, wh)            # white collar
+    m.bone("h_head", (0, 17.4, -3.2), "body")
+    m.box("h_head", -0.7, 17.4, -4.4, 0.7, 21.0, -3.0, sk)          # lower neck, leaning forward
+    m.box("h_head", -0.55, 21.0, -5.0, 0.55, 24.4, -3.9, sk)        # upper neck, S-curve
+    m.box("h_head", -0.95, 24.0, -6.6, 0.95, 25.9, -4.2, sk)        # small head
+    m.box("h_head", -0.65, 24.3, -8.4, 0.65, 25.2, -6.6, sk + "_d")  # flat blunt bill
+    m.sym("h_head", 0.9, 25.0, -5.9, 1.05, 25.7, -5.2, "eye")       # big dark eyes
+    m.box("h_head", -0.4, 25.9, -5.8, 0.4, 26.2, -4.6, "fur_dark")  # tuft of down
+    for name, x in (("leg_l", 1.7), ("leg_r", -1.7)):
+        m.bone(name, (x, 12.0, 0.6), "body")
+        m.box(name, x - 0.9, 7.4, -0.4, x + 0.9, 12.2, 1.8, sk)           # thigh
+        m.box(name, x - 0.5, 0.9, 0.1, x + 0.5, 7.6, 1.1, sk + "_d")      # tarsus
+        m.box(name, x - 0.8, 0.0, -2.6, x + 0.8, 0.9, 1.4, sk)            # big toe and heel
+        m.box(name, x - 0.4, 0.0, -3.0, x + 0.4, 0.6, -2.6, "fur_dark")   # claw
     stilt_walk(m, 0.85, 28)
     m.anim("idle", 3.4, {"h_head": {"rotation": [(0, (0, 0, 0)), (0.7, (0, 20, 0)), (1.7, (0, 20, 0)), (2.5, (0, -15, 0)), (3.4, (0, 0, 0))]},
                          "body": {"position": [(0, (0, 0, 0)), (1.7, (0, 0.12, 0)), (3.4, (0, 0, 0))]}})
     m.anim("eat", 1.6, {"h_head": {"rotation": [(0, (0, 0, 0)), (0.3, (50, 0, 0)), (1.2, (50, 0, 0)), (1.6, (0, 0, 0))]}}, loop="once")
     death(m, drop=3)
-
 
 def crocodile(m):
     """Siamese crocodile, ~2 m: low-slung armour, long jaws with tooth rows, the tail is the
@@ -1272,28 +1287,35 @@ def gait_bob(bob, period):
 
 
 def koala(m):
-    """Koala: a round grey ball with a coat of chinchilla fur, giant fluffy ears, a black nose
-    and no visible tail. Lazy: it sits, it sleeps, it eats leaves. Drawn ~65 cm."""
+    """Koala (~65 cm): a chunky grey bear-like marsupial. Big round head wider than the body, huge
+    round fluffy ears with cream insides, a large black spoon nose, small eyes, cream chest and
+    cheek tufts, strong gripping arms and no tail. Lazy: it sits, it sleeps, it eats leaves."""
     c, dk, ft = "elephant", "fur_dark", "fur_cream"
     m.bone("body", (0, 4.0, 0))
-    m.box("body", -2.3, 1.6, -3.0, 2.3, 6.6, 2.2, c)
-    m.box("body", -1.6, 6.4, -2.4, 1.6, 7.2, 1.6, c + "_l")     # lighter back
-    m.box("body", -1.8, 1.4, -2.6, 1.8, 2.2, 1.8, ft)           # cream belly
-    m.bone("h_head", (0, 6.2, -2.6), "body")
-    m.box("h_head", -1.5, 5.0, -4.4, 1.5, 7.6, -2.4, c)         # round head
-    m.box("h_head", -0.4, 5.4, -4.9, 0.4, 6.4, -4.4, dk)        # big black nose
-    m.sym("h_head", 0.8, 6.1, -4.1, 1.0, 6.6, -3.9, "eye")
-    m.sym("h_head", 1.4, 7.2, -3.4, 2.5, 9.4, -2.6, c)          # giant fluffy ears
-    m.sym("h_head", 1.6, 7.5, -3.3, 2.3, 9.0, -2.8, ft)
-    for name, x, z in (("leg_fl", 1.7, -1.6), ("leg_fr", -1.7, -1.6), ("leg_bl", 1.7, 0.8), ("leg_br", -1.7, 0.8)):
-        leg(m, name, x, z, 2.6, 1.4, 1.2, 1.3, 1.1, c, foot=ft, foot_h=0.3)
+    m.box("body", -2.5, 1.9, -0.6, 2.5, 6.6, 3.3, c)                 # fluffy rump
+    m.box("body", -2.3, 2.4, -3.3, 2.3, 7.2, 0.2, c)                 # torso
+    m.box("body", -1.9, 7.0, -2.8, 1.9, 7.5, 2.8, c + "_l")          # lighter back
+    m.box("body", -1.8, 2.4, -3.6, 1.8, 6.2, -3.2, ft)               # cream chest
+    m.box("body", -2.0, 1.8, 2.8, 2.0, 2.6, 3.5, ft)                 # fluffy cream bottom
+    m.bone("h_head", (0, 6.4, -3.0), "body")
+    m.box("h_head", -2.3, 4.9, -5.7, 2.3, 8.5, -2.4, c)              # big round head
+    m.box("h_head", -1.8, 8.3, -5.3, 1.8, 8.8, -2.9, c + "_l")       # forehead
+    m.sym("h_head", 2.0, 5.1, -5.5, 2.7, 6.7, -3.5, ft)              # cream cheek tufts
+    m.box("h_head", -1.1, 4.9, -6.2, 1.1, 6.3, -5.6, c + "_d")       # muzzle
+    m.box("h_head", -1.0, 5.7, -6.7, 1.0, 7.0, -6.1, dk)             # big black spoon nose
+    m.sym("h_head", 1.15, 7.1, -5.8, 1.5, 7.6, -5.6, "eye")          # small close eyes
+    m.sym("h_head", 2.0, 7.4, -4.4, 4.5, 10.3, -3.0, c)              # giant round ears
+    m.sym("h_head", 2.4, 7.8, -4.5, 4.1, 9.9, -4.3, ft)              # cream inside of the ear
+    for name, x, z in (("leg_fl", 2.1, -2.3), ("leg_fr", -2.1, -2.3)):
+        leg(m, name, x, z, 3.6, 1.9, 1.7, 1.7, 1.4, c, foot=ft, foot_h=0.5)      # strong arms
+    for name, x, z in (("leg_bl", 2.2, 1.9), ("leg_br", -2.2, 1.9)):
+        leg(m, name, x, z, 3.0, 1.6, 1.4, 1.8, 1.3, c, foot=ft, foot_h=0.45)
     gait(m, 1.4, 12, head=3, tail=0, style="walk", bob=0.1)
     quad_idle(m, 0)
     m.anim("eat", 2.4, {"h_head": {"rotation": [(0, (0, 0, 0)), (0.5, (28, 0, 0)), (1.9, (28, 0, 0)), (2.4, (0, 0, 0))]}}, loop="once")
     m.anim("sleep", 2.0, {"body": {"position": hold(2.0, (0, -0.6, 0))},
                           "h_head": {"rotation": hold(2.0, (25, 10, 0))}}, loop="hold")
     death(m, drop=1)
-
 
 def mole(m):
     """European mole, ~15 cm: velvety grey cylinder, pink nose, and spade paws that are
