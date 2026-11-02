@@ -36,20 +36,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * QuestWizard 0.3 - de in-game bouw-wizard voor nieuwe quests (+NPC's).
- *
- * Alles via GUI-knoppen en chat-input; het resultaat gaat naar
- * plugins/IekQuests/wizard-quests.yml - handmatige quests uit quests.yml
- * blijven onaangeroerd. Alleen met iekquests.admin te openen.
- *
- * Stappen:_basis, stages (talk/craft/deliver/walk/kill) met keuzes,
- * herhaal-contracten, beloningen, condities, NPC binden of nieuws aanmaken
- * (via Citizens-reflectie) en opslaan + direct reload.
- */
+
+
+
+
+
+
+
+
+
+
+
 final class QuestWizard implements Listener {
 
-    // ---------------------------------------------------------------- staat
+    
 
     static final class WH implements InventoryHolder {
         final UUID who;
@@ -79,8 +79,8 @@ final class QuestWizard implements Listener {
     // ---------------------------------------------------------------- entry
 
     void open(Player p) {
-        if (!p.hasPermission("iekquests.admin")) {
-            p.sendMessage(legacy("&cYou need iekquests.admin for the quest wizard."));
+        if (!p.hasPermission("iekquests.admin") && !p.hasPermission("iekquests.wizard")) {
+            p.sendMessage(legacy("&cYou need iekquests.wizard or iekquests.admin for the quest wizard."));
             return;
         }
         drafts.computeIfAbsent(p.getUniqueId(), u -> {
@@ -91,7 +91,6 @@ final class QuestWizard implements Listener {
             Stage t = new Stage();
             t.key = "s1";
             t.label = "&aContinue";
-            t.lines.add("&fNPC: &7Hello there!");
             q.stages.put("s1", t);
             return q;
         });
@@ -118,8 +117,9 @@ final class QuestWizard implements Listener {
                 "&7current: &f" + condText(q.startConds), "q.start");
         put(inv, 7, Material.BOOK, "&dJournal lines", "&7lines: &f" + q.journal.size(), "q.journal");
         put(inv, 8, Material.CHEST, "&dQuest rewards", "&7lines: &f" + q.rewards.size(), "q.rewards");
-        put(inv, 10, Material.WRITABLE_BOOK, "&bConversation mode", "&7current: &f" + q.mode
+        put(inv, 10, Material.WRITABLE_BOOK, "&bQuest menu mode", "&7current: &f" + q.mode
                 + " &8(player = player's choice, gui, chat)", "q.mode");
+        put(inv, 11, Material.WRITABLE_BOOK, "&bDialogue graph editor", "&7Create and edit YAML NPC dialogue data", "dialogue-editor");
         put(inv, 9, Material.AMETHYST_SHARD, "&d+ Item reward (quest)", "&7Pick or create a custom item", "ipick.qrew");
 
         int s = 18;
@@ -151,10 +151,11 @@ final class QuestWizard implements Listener {
         var inv = Bukkit.createInventory(new WH(p.getUniqueId(), "npc", 0, 0), 45,
                 legacy("&8✚ NPC binding"));
         put(inv, 13, Material.PLAYER_HEAD, "&aNPC: " + (q.npcId < 0 ? "&cnot bound" : "&f" + q.npcId),
-                q.npcId < 0 ? "&7bind or create one below" : "&7the quest opens on clicking this NPC", "-");
+                q.npcId < 0 ? "&7quest NPC association; dialogue is configured separately" : "&7quest NPC association; use the dialogue graph editor for conversations", "-");
         put(inv, 19, Material.PAPER, "&eEnter existing NPC id", "&7e.g. 79 - the Citizens id", "npcid");
         put(inv, 20, Material.ARMOR_STAND, "&aCreate new NPC", "&7name via chat, spawns at YOU", "npcnew");
         put(inv, 21, Material.ENDER_PEARL, "&dPull NPC to me", "&7teleport the bound NPC here", "npcpull");
+        put(inv, 22, Material.WRITABLE_BOOK, "&bEdit dialogue binding", "&7Open the YAML graph editor", "dialogue-editor");
         put(inv, 40, Material.BARRIER, "&cBack", "back");
         p.openInventory(inv);
     }
@@ -179,8 +180,7 @@ final class QuestWizard implements Listener {
         put(inv, 22, Material.AMETHYST_SHARD, "&d+ Item reward (stage)", "&7Pick or create a custom item", "ipick.srew:" + i);
         put(inv, 9, Material.ARROW, "&eNext stage key", "&7current: &f" + (st.next.isEmpty() ? "(automatic)" : st.next), "s.next:" + i);
         put(inv, 10, Material.LAVA_BUCKET, "&eGoto override", "&7current: &f" + (st.gotoKey.isEmpty() ? "-" : st.gotoKey), "s.goto:" + i);
-        put(inv, 19, Material.WRITABLE_BOOK, "&dConversation lines", "&7lines: &f" + st.lines.size(), "s.lines:" + i);
-        put(inv, 20, Material.OAK_DOOR, "&dChoices (branching)", "&7choices: &f" + st.choices.size(), "s.choices:" + i);
+        put(inv, 19, Material.WRITABLE_BOOK, "&bDialogue graph editor", "&7Create and edit YAML dialogues and responses", "dialogue-editor");
         put(inv, 21, Material.CHEST, "&dStage rewards", "&7lines: &f" + st.rewards.size(), "s.rewards:" + i);
         put(inv, 29, Material.LIME_DYE, "&aType: talk", st.kind.equals("talk") ? "&2◄ current" : "", "s.kind:" + i + ":talk");
         put(inv, 30, Material.CRAFTING_TABLE, "&aType: craft", st.kind.equals("craft") ? "&2◄ current" : "", "s.kind:" + i + ":craft");
@@ -222,6 +222,8 @@ final class QuestWizard implements Listener {
         put(inv, 2, Material.ARROW, "&dGo to stage key", "&7current: &f" + (c.gotoKey.isEmpty() ? "-" : c.gotoKey), "c.goto:" + i + ":" + j);
         put(inv, 3, Material.TRIPWIRE_HOOK, "&6Conditions", "&7" + condText(c.conds), "c.cond:" + i + ":" + j);
         put(inv, 4, Material.NOTE_BLOCK, "&6Voice sound key", "&7current: &f" + (c.voice.isEmpty() ? "-" : c.voice), "c.voice:" + i + ":" + j);
+        put(inv, 5, Material.REPEATER, "&dResponse action: &f" + (c.action.isEmpty() ? "continue" : c.action),
+                "&7Click to cycle: continue / accept / refuse / close", "c.action:" + i + ":" + j);
         put(inv, 6, Material.CHEST, "&aDo-actions (rewards syntax)", "&7lines: &f" + c.doList.size(), "c.do:" + i + ":" + j);
         put(inv, 7, Material.AMETHYST_SHARD, "&d+ Item (do-action)", "&7Pick or create a custom item", "ipick.cdo:" + i + ":" + j);
         put(inv, 40, Material.LAVA_BUCKET, "&cDelete this choice", "c.del:" + i + ":" + j);
@@ -329,7 +331,7 @@ final class QuestWizard implements Listener {
         route(p, h, tag);
     }
 
-    /** Knoppen die de IekItems-kiezer openen; het resultaat gaat in de draft en de pagina opent opnieuw. */
+    
     private boolean itemPick(Player p, String tag) {
         if (!tag.startsWith("ipick.")) return false;
         Quest q = drafts.get(p.getUniqueId());
@@ -390,6 +392,7 @@ final class QuestWizard implements Listener {
             case "manage" -> { managePage(p); return; }
             case "save" -> { save(p); return; }
             case "npc" -> { npcPage(p); return; }
+            case "dialogue-editor" -> { plugin.openDialogueWizard(p); return; }
             case "npcid" -> { ask(p, "q.npcid", "Enter the Citizens NPC id (number, or -1 for menu-only)", q == null ? "" : String.valueOf(q.npcId)); return; }
             case "npcnew" -> { ask(p, "q.npcnew", "Type the NAME for the new NPC - it spawns right at you", ""); return; }
             case "npcpull" -> {
@@ -428,6 +431,15 @@ final class QuestWizard implements Listener {
             choicePage(p, Integer.parseInt(a[0]), Integer.parseInt(a[1]));
             return;
         }
+        if (tag.startsWith("c.action:")) {
+            String[] a = tag.substring(9).split(":");
+            var c = nthStage(q, Integer.parseInt(a[0])).choices.get(Integer.parseInt(a[1]));
+            List<String> actions = List.of("", "start", "refuse", "continue", "close");
+            int at = actions.indexOf(c.action == null ? "" : c.action.toLowerCase(java.util.Locale.ROOT));
+            c.action = actions.get((at + 1 + actions.size()) % actions.size());
+            choicePage(p, Integer.parseInt(a[0]), Integer.parseInt(a[1]));
+            return;
+        }
         if (tag.startsWith("addchoice:")) {
             var st = nthStage(q, Integer.parseInt(tag.substring(10)));
             IekQuestsPlugin.Choice c = new IekQuestsPlugin.Choice();
@@ -459,7 +471,7 @@ final class QuestWizard implements Listener {
             else managePage(p);
             return;
         }
-        if (q == null) { open(p); return; }   // rest heeft een draft nodig
+        if (q == null) { open(p); return; }   
         if (tag.startsWith("s.kind:")) {
             String[] a = tag.substring(7).split(":");
             var st = nthStage(q, Integer.parseInt(a[0]));
@@ -510,7 +522,7 @@ final class QuestWizard implements Listener {
             choicesPage(p, Integer.parseInt(a[0]));
             return;
         }
-        // veld-inputs
+        
         if (tag.startsWith("q.")) {
             if (q == null) return;
             switch (tag) {
@@ -551,9 +563,7 @@ final class QuestWizard implements Listener {
                 case "radius" -> ask(p, "s.radius:" + i, "Radius in blocks (number)", String.valueOf(st.radius));
                 case "next" -> ask(p, "s.next:" + i, "Next stage key (empty = automatic order)", st.next);
                 case "goto" -> ask(p, "s.goto:" + i, "Goto override after completing (empty = none)", st.gotoKey);
-                case "lines" -> askMulti(p, "s.lines:" + i, "Conversation lines, finish with 'done'", st.lines);
                 case "rewards" -> askMulti(p, "s.rewards:" + i, "Stage reward lines (rewards syntax), 'done' to end", st.rewards);
-                case "choices" -> choicesPage(p, i);
                 default -> { }
             }
         } else if (mode == 1) {
@@ -608,7 +618,7 @@ final class QuestWizard implements Listener {
             return;
         }
         waiting.remove(u);
-        if (!commitOne(p, in.ctx, text)) { waiting.put(u, in); return; }   // ongeldige input: opnieuw vragen
+        if (!commitOne(p, in.ctx, text)) { waiting.put(u, in); return; }   
         resume(p, in.ctx);
     }
 
@@ -823,7 +833,7 @@ final class QuestWizard implements Listener {
         q.stages.putAll(m);
     }
 
-    /** Diepe kopie - de wizard edit nooit de live-lijst direct. */
+    
     private static Quest copyOf(Quest s) {
         Quest q = new Quest();
         q.id = s.id; q.title = s.title; q.subtitle = s.subtitle; q.icon = s.icon;
@@ -840,7 +850,7 @@ final class QuestWizard implements Listener {
             n.next = st.next; n.gotoKey = st.gotoKey; n.rewards = new ArrayList<>(st.rewards);
             for (var c : st.choices) {
                 IekQuestsPlugin.Choice cc = new IekQuestsPlugin.Choice();
-                cc.label = c.label; cc.say = c.say; cc.gotoKey = c.gotoKey; cc.voice = c.voice;
+                cc.label = c.label; cc.say = c.say; cc.gotoKey = c.gotoKey; cc.voice = c.voice; cc.action = c.action;
                 cc.conds = new ArrayList<>(c.conds); cc.doList = new ArrayList<>(c.doList);
                 n.choices.add(cc);
             }
@@ -920,7 +930,7 @@ final class QuestWizard implements Listener {
 
     // ---------------------------------------------------------------- config
 
-    /** Schrijft alle wizard-quests weg naar wizard-quests.yml (handmatige blijft heel). */
+    
     static void writeWizardFile(File f, List<Quest> wizardQuests) {
         StringBuilder sb = new StringBuilder();
         sb.append("# IekQuests - wizard-made quests (Quest Wizard GUI, ").append("admin-editable by hand too).\n");
@@ -972,6 +982,7 @@ final class QuestWizard implements Listener {
                         sb.append("          c").append(n++).append(":\n");
                         line(sb, 12, "label", c.label);
                         if (c.say != null && !c.say.isEmpty()) line(sb, 12, "say", c.say);
+                        if (c.action != null && !c.action.isEmpty()) line(sb, 12, "action", c.action);
                         if (!c.gotoKey.isEmpty()) line(sb, 12, "goto", c.gotoKey);
                         if (!c.voice.isEmpty()) line(sb, 12, "voice", c.voice);
                         if (!c.conds.isEmpty()) line(sb, 12, "cond", join(c.conds));

@@ -1,8 +1,15 @@
 package com.iekcorbar.quests;
 
+import io.papermc.paper.dialog.Dialog;
+import io.papermc.paper.registry.data.dialog.ActionButton;
+import io.papermc.paper.registry.data.dialog.DialogBase;
+import io.papermc.paper.registry.data.dialog.action.DialogAction;
+import io.papermc.paper.registry.data.dialog.body.DialogBody;
+import io.papermc.paper.registry.data.dialog.type.DialogType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.title.Title;
+import net.kyori.adventure.text.event.ClickCallback;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,6 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -38,37 +46,19 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Random;
 import java.util.UUID;
 
-/**
- * IekQuests 0.2 - de eigen quest-engine van iekcorbar (30-10).
- *
- * Alles in quests.yml:
- *   quests.<id>:  title, subtitle, icon, npc-id, order, startcondities,
- *                 stages (talk/craft/deliver/walk/kill/repeat, met condities +
- *                 keys van de repeat-map), een vertakking "goto" op een stage,
- *                 rewards bij finish, repeats (herhaalcontracten met cooldown +
- *                 random-tag), journal-regels, sequences (timede actie-reeksen).
- *   stages.<key>: type, material, amount, location, radius, label, voice, lines,
- *                 condities, rewards (extra), next of goto, choices: [ {label, say,
- *                 goto/do, condities} ] - choices maken een gesprek vertakkend.
- *   rewards:  money N | eco N | title A|B | sound ns:key | say tekst | tag +/-:naam |
- *             point cat +N | effect TYPE secs amp | teleport x;y;z;w | give mat N |
- *             sequence <id> | commando | shop <commando> | compass x;y;z;w
- *   condities: "tag:naam" | "!tag:naam" | "point:cat>=N" | "item:MAT>=N" |
- *              "perm:node" | "night" | "day"  ( komma = alles moet )
- *
- * Progressie per speler in data.yml: state, tags, points, cooldowns, sequences.
- * BQ blijft buiten dit alles - alleen CMI/Vault + EliteMobs worden via console
- * aangeroerd.
- */
+
 public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     // ---------------------------------------------------------------- model
@@ -79,21 +69,21 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     }
 
     static final class Choice {
-        String label, say, gotoKey = "";
-        boolean close;                       // menu-sluiten na deze keuze (gids-loop)
+        String label, say, gotoKey = "", action = "";
+        boolean close;                       
         List<String> doList = new ArrayList<>();
         List<Cond> conds = new ArrayList<>();
         String voice = "";
-        int limitPerDay;                     // 0 = onbeperkt; anders max N keer per kalenderdag per speler
+        int limitPerDay;                     
     }
 
     static final class Stage {
-        String key = "", kind = "talk";      // talk|craft|deliver|deliverall|walk|kill|menu
+        String key = "", kind = "talk";      
         String material = "PAPER";
         String mobType = "";                 // kill: entity type naam of "monster"
-        String nameFilter = "";              // deliver/craft: display-naam moet dit bevatten (Techcore-staal)
+        String nameFilter = "";              
         int amount = 1;
-        boolean flat;                        // walk: alleen XZ-afstand (regios met volle hoogte)
+        boolean flat;                        
         List<String[]> items = new ArrayList<>();   // deliverall: [material, amount, naam?]
         Location loc;
         double radius = 6;
@@ -102,8 +92,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         List<String> lines = new ArrayList<>();
         List<Cond> conds = new ArrayList<>();
         List<Choice> choices = new ArrayList<>();
-        String next = "";                    // key van volgende stage; "" = sequentieel
-        String gotoKey = "";                 // directe sprong na voltooien van deze stage
+        String next = "";                    
+        String gotoKey = "";                 
         List<String> rewards = new ArrayList<>();
     }
 
@@ -113,13 +103,13 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         String material = "PUMPKIN";
         String name = "";                    // display-naam filter (MMOItems-vissen)
         int amount = 2;
-        List<String[]> items = new ArrayList<>();   // deliverall-contract: [material, amount, naam?]
+        List<String[]> items = new ArrayList<>();   
         Location loc;
         double radius = 6;
         long cooldown = 600;
         int money = 100;
         int eco = 2;
-        boolean daily;                       // max 1x per gamemiddag (24u)
+        boolean daily;                       
         String label = "&aHand in";
         String voice = "";
         List<String> rewards = new ArrayList<>();
@@ -128,12 +118,12 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     static final class Quest {
         String id = "", title = "&fQuest", subtitle = "", icon = "BOOK";
         int npcId = -1;
-        List<Integer> npcIds = new ArrayList<>();   // meerdere NPC's delven dezelfde quest (Backpack)
+        List<Integer> npcIds = new ArrayList<>();   
         int order = 0;
-        String group = "";                     // quest group for GUI grouping (tutorial, backpack, merchant, etc.)
-        String mode = "player";               // player = volgt voorkeur van de speler | gui | chat (forceer)
-        boolean fromWizard;                    // komt uit wizard-quests.yml (GUI-wizard)
-        boolean randomStart;                 // bij start: willekeurige eerste stage uit 'random-stages'
+        String group = "";                     
+        String mode = "player";               
+        boolean fromWizard;                    
+        boolean randomStart;                 
         List<String> randomStages = new ArrayList<>();
         List<Cond> startConds = new ArrayList<>();
         LinkedHashMap<String, Stage> stages = new LinkedHashMap<>();
@@ -142,13 +132,29 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         List<String> journal = new ArrayList<>();
     }
 
+    private record DialogueOption(String label, String tag) {}
+
+    private static final class DialogueSession {
+        final UUID player;
+        final String quest;
+        final int npc;
+        int textPage;
+        int choicePage;
+        final List<String> replyLines = new ArrayList<>();
+        DialogueSession(UUID player, String quest, int npc) {
+            this.player = player;
+            this.quest = quest;
+            this.npc = npc;
+        }
+    }
+
     static final class Seq {
         List<String> steps = new ArrayList<>();
         long[] delays;
     }
 
     static final class Prog {
-        String stage = "";                   // key van actieve stage; "" = klaar/niet gestart
+        String stage = "";                   
         boolean started, done;
         List<String> tags = new ArrayList<>();
         Map<String, Integer> points = new HashMap<>();
@@ -159,9 +165,9 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     static final class Holder implements InventoryHolder {
         final UUID who;
         final String quest;
-        String sig = "";                   // tekenvinger van de vorige render - geen flicker
+        String sig = "";                   
         int page;                          // questboek-paginering
-        int npc;                           // NPC-ID van de klik bron (0 = via boek); voor npc:keuzes
+        int npc;                           
         Holder(UUID who, String quest) { this.who = who; this.quest = quest == null ? "" : quest; }
         Holder(UUID who, String quest, int page) { this(who, quest); this.page = page; }
         Holder(UUID who, String quest, int page, int npc) { this(who, quest, page); this.npc = npc; }
@@ -171,7 +177,14 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private final List<Quest> quests = new ArrayList<>();
     private final Map<String, Seq> sequences = new HashMap<>();
     private final Map<UUID, Map<String, Prog>> prog = new HashMap<>();
-    private final Map<UUID, String[]> chatActive = new HashMap<>();   // speler -> {questId, npc} van het laatste chat-paneel
+    private final Map<UUID, String[]> chatActive = new HashMap<>();   
+    private final Map<UUID, DialogueSession> dialogueSessions = new HashMap<>();
+    private final Set<UUID> suppressDialogueRefresh = new HashSet<>();
+    private DialogueManager dialogueManager;
+    private EventsManager eventsManager;
+    private ObjectivesManager objectivesManager;
+    private JournalManager journalManager;
+    private SequencesManager sequencesManager;
     private final Map<UUID, Long> travelCd = new HashMap<>();
     private ItemLibrary items;
     private NamespacedKey modeKey;
@@ -181,15 +194,42 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private NamespacedKey hudOffKey;
     private final Random rnd = new Random();
     private QuestWizard wizard;
+    private DialogueWizard dialogueWizard;
     private InventoryItems invItems;
 
-    /** Trigger a quest action by setting a tag on the player. Used by InventoryItems. */
-    /** Set a tag on the player's active quests. Used by InventoryItems. */
+    Prog progress(Player p, Quest q) { return pr(p, q); }
+    YamlConfiguration dialogueData() { return data; }
+    DialogueManager dialogueManager() { return dialogueManager; }
+    EventsManager eventsManager() { return eventsManager; }
+    ObjectivesManager objectivesManager() { return objectivesManager; }
+    JournalManager journalManager() { return journalManager; }
+    SequencesManager sequencesManager() { return sequencesManager; }
+    String itemIdOf(ItemStack stack) { return items == null ? null : items.idOf(stack); }
+    String dialogueConfig(String key, String fallback) { return getConfig().getString("dialogue." + key, fallback); }
+    boolean conditionsPass(Player p, Quest q, Prog pr, List<Cond> conditions) { return ok(p, q, pr, conditions); }
+    boolean questConditionsPass(Player p, Quest q, Prog pr, List<String> conditions) {
+        List<Cond> parsed = new ArrayList<>();
+        if (conditions != null) for (String condition : conditions) if (condition != null && !condition.isBlank()) parsed.add(new Cond(condition));
+        return ok(p, q, pr, parsed);
+    }
+    boolean beginDialogueQuestAction(Player p) {
+        UUID id = p.getUniqueId();
+        boolean alreadySuppressed = suppressDialogueRefresh.contains(id);
+        suppressDialogueRefresh.add(id);
+        return alreadySuppressed;
+    }
+
+    void endDialogueQuestAction(Player p, boolean alreadySuppressed) {
+        if (!alreadySuppressed) suppressDialogueRefresh.remove(p.getUniqueId());
+    }
+
+    
+    
     public void triggerQuestTag(Player p, String questId, String actionName) {
         String tag = questId + "_" + actionName;
         var m = prog.get(p.getUniqueId());
         if (m != null) {
-            // Add tag to all active quests (the quest engine checks tags as conditions)
+            
             for (var entry : m.entrySet()) {
                 var pr = entry.getValue();
                 if (!pr.tags.contains(tag)) {
@@ -201,16 +241,16 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         getLogger().info("Quest tag set: " + tag + " by " + p.getName());
     }
 
-    // ---------------------------------------------------------------- wizard-toegang
+    
 
-    /** Lijst voor de GUI-wizard (niet muteren buiten de plugin). */
+    
     List<Quest> questsView() { return quests; }
 
     Quest questById(String id) { return byId(id); }
 
     List<Cond> condsOf(String s) { return conds(s); }
 
-    /** Wizard-quest toevoegen/vervangen, wegenschrijven en direct inladen. */
+    
     void storeWizardQuest(Quest q) {
         q.fromWizard = true;
         quests.removeIf(x -> x.id.equals(q.id));
@@ -230,7 +270,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return true;
     }
 
-    /** Alle wizard-quests terugschrijven naar wizard-quests.yml (handgemaakte blijft heel). */
+    
     private void writeWizardFile() {
         var l = new ArrayList<Quest>();
         for (var q : quests) if (q.fromWizard) l.add(q);
@@ -247,16 +287,29 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (!new File(getDataFolder(), "quests.yml").exists()) saveResource("quests.yml", false);
         saveDefaultConfig();
         if (!new File(getDataFolder(), "config.yml").exists()) saveResource("config.yml", false);
+        dialogueManager = new DialogueManager(this);
+        eventsManager = new EventsManager(this);
+        objectivesManager = new ObjectivesManager(this);
+        journalManager = new JournalManager(this);
+        sequencesManager = new SequencesManager(this);
         Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(eventsManager, this);
+        Bukkit.getPluginManager().registerEvents(objectivesManager, this);
+        Bukkit.getPluginManager().registerEvents(sequencesManager, this);
+        var dcmd = Bukkit.getPluginCommand("iekdialogue");
+        if (dcmd != null) dcmd.setExecutor((sender, command, label, args) -> {
+            if (!sender.hasPermission("iekquests.dialogue") && !sender.hasPermission("iekquests.admin")) {
+                sender.sendMessage(Component.text("Dialogue editing requires iekquests.dialogue or iekquests.admin."));
+                return true;
+            }
+            dialogueManager.adminCommand(sender, args);
+            return true;
+        });
         var cmd = Bukkit.getPluginCommand("questbook");
         if (cmd != null) cmd.setExecutor((sender, command, label, args) -> {
             if (args.length >= 1 && args[0].equalsIgnoreCase("reload") && (sender.hasPermission("iekquests.reload") || sender.hasPermission("iekquests.admin"))) {
-                reloadConfig();
-                eliteItemFiles = null;
-                load();
-                items.load();
-                if (invItems != null) { invItems.load(); invItems.placeForAll(); }
-                sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s) and menu items reloaded."));
+                reloadAllData();
+                sender.sendMessage(Component.text("IekQuests: " + quests.size() + " quest(s), dialogues, tags, NPC bindings, and menu items reloaded."));
                 return true;
             }
             if (args.length >= 1 && args[0].equalsIgnoreCase("check") && (sender.hasPermission("iekquests.admin"))) {
@@ -294,6 +347,51 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             else sender.sendMessage(Component.text("questbook: from console use reload/reset only"));
             return true;
         });
+        var objectiveCommand = Bukkit.getPluginCommand("iekobjective");
+        if (objectiveCommand != null) objectiveCommand.setExecutor((sender, command, label, args) -> {
+            if (!sender.hasPermission("iekquests.objective") && !sender.hasPermission("iekquests.admin")) {
+                sender.sendMessage(Component.text("Objective administration requires iekquests.objective or iekquests.admin."));
+                return true;
+            }
+            objectivesManager.command(sender, args);
+            return true;
+        });
+        var iekQuestCommand = Bukkit.getPluginCommand("iekquest");
+        if (iekQuestCommand != null) iekQuestCommand.setExecutor((sender, command, label, args) -> {
+            if (!sender.isOp() && !sender.hasPermission("iekquests.admin")) {
+                sender.sendMessage(Component.text("This IekQuests command is for operators only."));
+                return true;
+            }
+            try {
+                if (args.length == 4 && args[0].equalsIgnoreCase("event") && args[1].equalsIgnoreCase("start")) {
+                    Player target = Bukkit.getPlayerExact(args[2]);
+                    if (target == null) throw new IllegalArgumentException("Player must be online: " + args[2]);
+                    int started = eventsManager.startById(target, args[3]);
+                    sender.sendMessage(Component.text(started == 0
+                            ? "No eligible configured event entry named '" + args[3] + "' was started for " + target.getName() + "."
+                            : "Started " + started + " event entry/entries named '" + args[3] + "' for " + target.getName() + "."));
+                    return true;
+                }
+                if (args.length == 4 && args[0].equalsIgnoreCase("journal")
+                        && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
+                    journalManager.changeOnlinePlayer(sender, args[2], args[3], args[1].equalsIgnoreCase("add"));
+                    return true;
+                }
+                sender.sendMessage(Component.text("Usage: /iekquest event start <player> <event-id> | /iekquest journal <add|remove> <player> <entry-id>"));
+            } catch (IllegalArgumentException ex) {
+                sender.sendMessage(Component.text("IekQuests command failed: " + ex.getMessage()));
+            }
+            return true;
+        });
+        var journalCommand = Bukkit.getPluginCommand("journal");
+        if (journalCommand != null) journalCommand.setExecutor((sender, command, label, args) -> {
+            if (!(sender instanceof Player player)) {
+                sender.sendMessage(Component.text("Only players can open the Journal."));
+                return true;
+            }
+            journalManager.open(player);
+            return true;
+        });
         items = new ItemLibrary(this);
         Bukkit.getPluginManager().registerEvents(items, this);
         items.load();
@@ -303,6 +401,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (icmd != null) { icmd.setExecutor(items); icmd.setTabCompleter(items); }
         wizard = new QuestWizard(this);
         Bukkit.getPluginManager().registerEvents(wizard, this);
+        dialogueWizard = new DialogueWizard(this, dialogueManager);
+        Bukkit.getPluginManager().registerEvents(dialogueWizard, this);
         invItems = new InventoryItems(this);
         Bukkit.getPluginManager().registerEvents(invItems, this);
         invItems.load();
@@ -316,7 +416,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 return true;
             }
             if (sender instanceof Player p && (p.hasPermission("iekquests.wizard") || p.hasPermission("iekquests.admin"))) wizard.open(p);
-            else sender.sendMessage(Component.text("questwizard: iekquests.wizard or iekquests.admin required."));
+            else if (sender instanceof Player p && p.hasPermission("iekquests.dialogue")) dialogueWizard.open(p);
+            else sender.sendMessage(Component.text("questwizard requires iekquests.wizard, iekquests.dialogue, or iekquests.admin."));
             return true;
         });
         var rcmd = Bukkit.getPluginCommand("iekrestart");
@@ -332,6 +433,9 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         if (restartTask != null) restartTask.cancel();
+        if (objectivesManager != null) objectivesManager.shutdown();
+        if (sequencesManager != null) sequencesManager.shutdown();
+        if (dialogueManager != null) dialogueManager.shutdown();
         saveData();
     }
 
@@ -340,12 +444,12 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private BukkitTask restartTask;
     private int restartLeft;
 
-    /**
-     * In-game restart met aankondiging (eigenaar, 30-10): titel + afteller in de chat.
-     * De container draait java als PID 1 zonder restart-loop, dus Paper's eigen /restart
-     * zou alleen stoppen. Daarom: markerfile .restart-request + /stop; een cron op de VPS
-     * (/usr/local/sbin/iekcorbar-restart-watcher.sh) start de container dan opnieuw op.
-     */
+    
+
+
+
+
+
     private boolean onRestartCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         if (!sender.hasPermission("iekquests.admin")) {
             sender.sendMessage(Component.text("Only staff can schedule restarts."));
@@ -452,9 +556,16 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data.yml"));
         prog.clear();
         loadData();
+        if (journalManager != null) journalManager.load();
+        if (dialogueManager != null) dialogueManager.load();
+        if (objectivesManager != null) objectivesManager.load();
+        if (dialogueManager != null) dialogueManager.validateObjectiveReferences();
+        if (sequencesManager != null) sequencesManager.load();
+        if (eventsManager != null) eventsManager.load();
+        if (dialogueManager != null) dialogueManager.validateSequenceReferences();
     }
 
-    /** Eén quests:-sectie inlezen; fromWizard markeert de GUI-wizard-bestanden. */
+    
     private void parseQuests(ConfigurationSection sec, boolean fromWizard) {
         if (sec == null) return;
         for (String id : sec.getKeys(false)) {
@@ -509,6 +620,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     c.label = cv.getString("label", ck);
                     c.say = cv.getString("say", "");
                     c.gotoKey = cv.getString("goto", "");
+                    c.action = cv.getString("action", "").toLowerCase();
                     c.close = cv.getBoolean("close", false);
                     c.limitPerDay = cv.getInt("limit-per-day", 0);
                     c.voice = cv.getString("voice", "");
@@ -516,14 +628,15 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     for (var d : cv.getStringList("do")) c.doList.add(d);
                     g.choices.add(c);
                 } else for (var cm : v.getMapList("choices")) {
-                    // lijstnotatie - zoals het hele quests.yml die schrijft (vorkan,
-                    // backpack). Vóór deze tak verdwenen die keuzes spoorloos: de map-
-                    // parser gaf null en de menu-knoppen bleven weg. Nooit meer.
+                    
+                    
+                    
                     Choice c = new Choice();
                     c.label = mm(cm, "label");
                     if (c.label.isEmpty()) c.label = "…";
                     c.say = mm(cm, "say");
                     c.gotoKey = mm(cm, "goto");
+                    c.action = mm(cm, "action").toLowerCase();
                     c.voice = mm(cm, "voice");
                     c.conds = conds(mm(cm, "cond"));
                     Object closev = cm.get("close");
@@ -563,7 +676,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** Spelersprogressie uit data.yml in het geheugen zetten. */
+    
     private void loadData() {
         var ps = data.getConfigurationSection("players");
         if (ps != null) for (String uuid : ps.getKeys(false)) {
@@ -597,7 +710,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         try { return Double.parseDouble(s.trim()); } catch (Exception e) { return def; }
     }
 
-    /** Waarde uit een willekeurs-map (keuze-uit-een-lijst), altijd als string. */
+    
     private static String mm(Map<?, ?> m, String k) {
         Object o = m.get(k);
         return o == null ? "" : String.valueOf(o);
@@ -626,7 +739,20 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return out;
     }
 
-    private void save() { saveData(); }
+    void save() { saveData(); }
+    void saveDialogueProgress() { saveData(); }
+
+    void reloadAllData() {
+        reloadConfig();
+        eliteItemFiles = null;
+        load();
+        if (items != null) items.load();
+        if (invItems != null) { invItems.load(); invItems.placeForAll(); }
+    }
+
+    void reloadDialogueConfiguration() { reloadAllData(); }
+    void openDialogueWizard(Player player) { if (dialogueWizard != null) dialogueWizard.open(player); }
+    QuestWizard questWizard() { return wizard; }
 
     private void saveData() {
         if (data == null) return;
@@ -655,7 +781,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return prog.computeIfAbsent(p.getUniqueId(), k -> new HashMap<>()).computeIfAbsent(q.id, k -> new Prog());
     }
 
-    /** Acties van een IekItem (rechtsklik); zelfde syntax als quest-rewards, tags/points tellen niet mee. */
+    
     void runItemActions(Player p, List<String> acts) {
         var scratch = new Prog();
         for (var a : acts) run(p, null, scratch, a);
@@ -666,7 +792,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return null;
     }
 
-    // ---------------------------------------------------------------- condities
+    
 
     private boolean ok(Player p, Quest q, Prog pr, List<Cond> cs) {
         for (var c : cs) if (!ok(p, q, pr, c.raw)) return false;
@@ -681,7 +807,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 return pr.tags.contains(want) || q.stages.keySet().contains(want) && pr.stage.equals(want);
             }
             if (c.startsWith("qtag:")) {
-                // tag van ÁNDER quest: qtag:<questId>:<tag> - voor de Backpack-ketting
+                
                 var x = c.split(":", 3);
                 if (x.length < 3) return false;
                 var m = prog.get(p.getUniqueId());
@@ -716,7 +842,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 return bal < 0 ? false : (ge ? bal >= want : bal < want);
             }
             if (c.startsWith("perm:")) return p.hasPermission(c.substring(5));
-            if (c.startsWith("quest:")) {      // andere quest voltooid
+            if (c.startsWith("quest:")) {      
                 var m = prog.get(p.getUniqueId());
                 var pp = m == null ? null : m.get(c.substring(6));
                 return pp != null && pp.done;
@@ -726,7 +852,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             if (c.startsWith("gamemode:")) return p.getGameMode().name().equalsIgnoreCase(c.substring(9));
             if (c.equals("night")) { var t = p.getWorld().getTime(); return t > 13000 && t < 23000; }
             if (c.equals("day")) { var t = p.getWorld().getTime(); return t <= 13000 || t >= 23000; }
-            return true;   // onbekende string: niet blokkeren (log het niet, te veel ruis)
+            return true;   
         } catch (Exception e) {
             return false;
         }
@@ -739,12 +865,13 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (e.getHand() == EquipmentSlot.OFF_HAND) return;
         int id = citizensId(e.getRightClicked());
         if (id < 0) return;
-        for (var q : quests) {
-            if (q.npcIds.contains(id)) {
-                e.setCancelled(true);
-                openQuest(e.getPlayer(), q, id);
-                return;
-            }
+        boolean legacyManaged = quests.stream().anyMatch(q -> q.npcIds.contains(id));
+        if (dialogueManager != null && dialogueManager.hasNpc(id)) {
+            e.setCancelled(true);
+            if (dialogueManager.canPlayerSeeNpc(e.getPlayer(), id)) dialogueManager.openForNpc(e.getPlayer(), id);
+        } else if (legacyManaged) {
+            e.setCancelled(true);
+            getLogger().warning("Quest NPC " + id + " has no binding in npcs.yml; legacy dialogue was not opened.");
         }
     }
 
@@ -816,8 +943,16 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     }
 
     @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        if (dialogueManager != null) Bukkit.getScheduler().runTask(this, () -> dialogueManager.refreshNpcVisibility(e.getPlayer()));
+    }
+
+    @EventHandler
     public void onQuit(PlayerQuitEvent e) {
+        if (sequencesManager != null) sequencesManager.cancelPlayer(e.getPlayer().getUniqueId());
+        if (dialogueManager != null) dialogueManager.close(e.getPlayer());
         chatActive.remove(e.getPlayer().getUniqueId());
+        dialogueSessions.remove(e.getPlayer().getUniqueId());
         prog.remove(e.getPlayer().getUniqueId());
     }
 
@@ -846,7 +981,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         handleTag(p, q, tag, h.npc);
     }
 
-    /** Eén klik/keuze van de speler: dezelfde logica voor GUI-knoppen en klikbare chat-opties. */
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onInventoryDrag(InventoryDragEvent event) {
+    }
+
+    
     void handleTag(Player p, Quest q, String tag, int npc) {
         Prog pr = pr(p, q);
         switch (tag) {
@@ -864,6 +1003,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             }
             case "back" -> { if (chatMode(p, null)) chatMenu(p); else openMenu(p); return; }
             case "start" -> { startQuest(p, q, pr); return; }
+            case "refuse" -> { closeNpcDialogue(p); return; }
             case "newtry" -> { resetQuest(pr); refresh(p, q); save(); return; }
         }
         if (tag.startsWith("choice:") || tag.startsWith("menu:")) {
@@ -874,7 +1014,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             int i = Integer.parseInt(tag.substring(tag.indexOf(':') + 1));
             if (i < 0 || i >= s.choices.size()) return;
             Choice c = s.choices.get(i);
-            // npc:<id> conditions kijken naar WELKE NPC de GUI opende (baan-meesters)
+            
             List<Cond> rest = new ArrayList<>();
             boolean npcOk = true;
             for (var cc : c.conds) {
@@ -884,28 +1024,78 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 } else rest.add(cc);
             }
             if (!npcOk || !ok(p, q, pr, rest)) { deny(p); return; }
+            String action = c.action == null ? "" : c.action.toLowerCase(Locale.ROOT);
+            if ((action.equals("start") || action.equals("accept")) && (pr.started || pr.done)) {
+                dialogueMessage(p, dialogueLabel("errors.unavailable", "&7That option is no longer available."));
+                deny(p);
+                return;
+            }
+            if ((action.equals("start") || action.equals("accept")) && !ok(p, q, pr, q.startConds)) {
+                dialogueMessage(p, dialogueLabel("errors.requirements", "&cYou do not meet the requirements for this quest."));
+                deny(p);
+                return;
+            }
+            if (action.equals("continue")) {
+                Stage active = pr.started && !pr.done ? q.stages.get(pr.stage) : null;
+                if (active == null) {
+                    dialogueMessage(p, dialogueLabel("errors.unavailable", "&7That option is no longer available."));
+                    deny(p);
+                    return;
+                }
+                if (!stageActionReady(p, q, pr, active)) {
+                    dialogueMessage(p, dialogueLabel("errors.requirements", "&cYou do not meet the requirements for this quest."));
+                    deny(p);
+                    return;
+                }
+                handleTag(p, q, "act", npc);
+                if (!c.say.isEmpty()) sayDialogueOrChat(p, q, c.say);
+                speak(p, c.voice);
+                for (var d : c.doList) run(p, q, pr, d);
+                save();
+                return;
+            }
             if (c.limitPerDay > 0) {
-                // teller per speler in pr.points: dag*1000 + aantal (dag = lokale kalenderdag)
+                
                 String lk = "dl:" + q.id + ":" + s.key + ":" + i;
                 int today = (int) java.time.LocalDate.now().toEpochDay();
                 int raw = pr.points.getOrDefault(lk, 0);
                 int used = raw / 1000 == today ? raw % 1000 : 0;
                 if (used >= c.limitPerDay) {
-                    p.sendMessage(legacy("&cDaily limit reached (" + c.limitPerDay + "/day). Come back tomorrow."));
+                    dialogueMessage(p, "&cDaily limit reached (" + c.limitPerDay + "/day). Come back tomorrow.");
                     deny(p);
                     return;
                 }
                 pr.points.put(lk, today * 1000 + used + 1);
             }
-            if (!c.say.isEmpty()) p.sendMessage(legacy(c.say));
+            if (action.equals("start") || action.equals("accept")) {
+                startQuest(p, q, pr);
+                if (!pr.started) return;
+                if (!c.say.isEmpty()) sayDialogueOrChat(p, q, c.say);
+                speak(p, c.voice);
+                for (var d : c.doList) run(p, q, pr, d);
+                save();
+                return;
+            }
+            if (!c.say.isEmpty()) sayDialogueOrChat(p, q, c.say);
             speak(p, c.voice);
             for (var d : c.doList) run(p, q, pr, d);
-            if (c.close) { save(); p.closeInventory(); return; }
+            if (action.equals("refuse")) {
+                save();
+                closeNpcDialogue(p);
+                if (!dialogueSessions.containsKey(p.getUniqueId())) p.closeInventory();
+                return;
+            }
+            if (action.equals("close") || c.close) {
+                
+                save();
+                refresh(p, q);
+                return;
+            }
             if (!pr.stage.isEmpty() && !c.gotoKey.isEmpty() && q.stages.containsKey(c.gotoKey)) {
                 pr.stage = c.gotoKey;
                 speakFirst(p, q, pr);
             } else if (pr.done && !c.gotoKey.isEmpty() && q.stages.containsKey(c.gotoKey)) {
-                // dienst-NPC semantics: een voltooide quest heropent op de gekozen stage
+                
                 pr.done = false;
                 pr.started = true;
                 pr.stage = c.gotoKey;
@@ -943,7 +1133,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** walk-vereiste: vlak (alleen XZ) bij flat:true, anders 3D. */
+    
     private boolean walkReached(Stage s, Player p) {
         if (s.flat) {
             double dx = p.getLocation().getBlockX() - s.loc.getBlockX();
@@ -968,23 +1158,33 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, SoundCategory.PLAYERS, 0.6f, 0.7f);
     }
 
-    /**
-     * Eerste uiting van een nieuwe stage: stem + dialoog in de GUI (niet in chat).
-     * De dialoogregels worden getoond in het quest-paneel (openQuest), zodat de
-     * speler een visuele conversatie heeft in plaats van chat-spam.
-     */
-    private void speakFirst(Player p, Quest q, Prog pr) {
+    boolean stageActionReady(Player p, Quest q, Prog pr, Stage s) {
+        if (!ok(p, q, pr, s.conds)) return false;
+        return switch (s.kind) {
+            case "menu" -> false;
+            case "talk" -> true;
+            case "walk" -> s.loc != null && p.getWorld().equals(s.loc.getWorld()) && walkReached(s, p);
+            case "kill" -> pr.points.getOrDefault("kill:" + q.id + ":" + s.key, 0) >= s.amount;
+            case "deliverall" -> allHeld(p, s.items);
+            default -> held(p, s.material, s.nameFilter.isEmpty() ? null : s.nameFilter) >= s.amount;
+        };
+    }
+
+    
+    void speakFirst(Player p, Quest q, Prog pr) {
         var s = q.stages.get(pr.stage);
         if (s == null) return;
         speak(p, s.voice);
-        // Dialoog in GUI, niet in chat - refresh het paneel met de nieuwe tekst
-        if (!chatMode(p, q)) Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) refresh(p, q); }, 2L);
+        
+        if (dialogueManager != null && dialogueManager.hasSession(p)) return;
+        if (!chatMode(p, q) || dialogueSessions.containsKey(p.getUniqueId()))
+            Bukkit.getScheduler().runTaskLater(this, () -> { if (p.isOnline()) refresh(p, q); }, 2L);
     }
 
     // ---------------------------------------------------------------- flow
 
-    private void startQuest(Player p, Quest q, Prog pr) {
-        if (q.stages.isEmpty()) { p.sendMessage(legacy("&7This quest is not ready yet.")); return; }
+    void startQuest(Player p, Quest q, Prog pr) {
+        if (q.stages.isEmpty()) { dialogueMessage(p, "&7This quest is not ready yet."); return; }
         if (!ok(p, q, pr, q.startConds)) { deny(p); return; }
         pr.started = true;
         pr.done = false;
@@ -996,6 +1196,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             first = q.stages.keySet().iterator().next();
         }
         pr.stage = first;
+        if (eventsManager != null) eventsManager.questAccepted(p, q.id);
         speakFirst(p, q, pr);
         openQuest(p, q);
         save();
@@ -1007,8 +1208,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         pr.done = false;
     }
 
-    /** Stage voltooid: extra rewards, volgende stage (next/goto) of klaar. */
-    private void advance(Player p, Quest q, Prog pr, Stage s) {
+    
+    void advance(Player p, Quest q, Prog pr, Stage s) {
         for (var r : s.rewards) run(p, q, pr, r);
         String nxt = !s.gotoKey.isEmpty() ? s.gotoKey : (!s.next.isEmpty() ? s.next : nextKey(q, s));
         if (nxt == null || !q.stages.containsKey(nxt)) {
@@ -1022,7 +1223,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         save();
     }
 
-    // closeForDialogue verwijderd - dialoog wordt nu in de GUI getoond (paneel blijft open)
+    
 
     private String nextKey(Quest q, Stage cur) {
         var it = q.stages.keySet().iterator();
@@ -1035,21 +1236,34 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return null;
     }
 
-    private void finish(Player p, Quest q, Prog pr) {
+    void finish(Player p, Quest q, Prog pr) {
         pr.done = true;
         pr.stage = "";
         if (!q.rewards.isEmpty()) runRewards(p, q, pr, q.rewards);
+        if (eventsManager != null) eventsManager.questCompleted(p, q.id);
         refresh(p, q);
         save();
     }
 
-    private void doRepeat(Player p, Quest q, Prog pr, String id) {
+    boolean repeatActionReady(Player p, Quest q, String id) {
+        Repeat repeat = null;
+        for (Repeat candidate : q.repeats) if (candidate.id.equals(id)) repeat = candidate;
+        if (repeat == null) return false;
+        Long cooldown = pr(p, q).cd.get(repeat.id);
+        if (cooldown != null && cooldown > now()) return false;
+        if (repeat.kind.equals("walk")) return repeat.loc != null && p.getWorld().equals(repeat.loc.getWorld())
+                && p.getLocation().distanceSquared(repeat.loc) <= repeat.radius * repeat.radius;
+        if (!repeat.items.isEmpty()) return allHeld(p, repeat.items);
+        return held(p, repeat.material, repeat.name.isEmpty() ? null : repeat.name) >= repeat.amount;
+    }
+
+    void doRepeat(Player p, Quest q, Prog pr, String id) {
         Repeat r = null;
         for (var x : q.repeats) if (x.id.equals(id)) r = x;
         if (r == null) return;
         Long cd = pr.cd.get(r.id);
         if (cd != null && cd > now()) {
-            p.sendMessage(legacy("&7Not yet - the queue clears in " + fmt(cd - now()) + "."));
+            dialogueMessage(p, "&7Not yet - the queue clears in " + fmt(cd - now()) + ".");
             return;
         }
         if (r.kind.equals("walk")) {
@@ -1072,11 +1286,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         save();
     }
 
-    // ---------------------------------------------------------------- acties
+    
 
-    /** Eén actie-regel uit de config (rewards/do/sequence-stap). */
-    private void run(Player p, Quest q, Prog pr, String raw) {
-        var a = raw.trim();
+    
+    void run(Player p, Quest q, Prog pr, String raw) {
+        var a = raw.trim().replaceFirst("(?i)\\s+-s\\s*$", "").trim();
         if (a.isEmpty()) return;
         a = a.replace("%player%", p.getName());
         int sp = a.indexOf(' ');
@@ -1094,8 +1308,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             case "eloot" -> {
                 String file = val.trim().endsWith(".yml") ? val.trim() : val.trim() + ".yml";
                 if (!eliteItemExists(file)) {
-                    getLogger().warning("eloot: EliteMobs-item niet gevonden: " + file + " (quest " + q.id + ")");
-                    p.sendMessage(legacy("&cThat item is not available right now. Tell staff."));
+                    getLogger().warning("eloot: EliteMobs-item niet gevonden: " + file + " (quest " + (q == null ? "-" : q.id) + ")");
+                    dialogueMessage(p, "&cThat item is not available right now. Tell staff.");
                 } else dispatch("em loot give " + p.getName() + " " + file);
             }
             case "title" -> {
@@ -1107,26 +1321,40 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 if (snd != null) {
                     p.playSound(p.getLocation(), snd, SoundCategory.PLAYERS, 0.8f, 1f);
                 } else {
-                    // Pakcet-only events (steamworks:quest.complete) staan NIET in de
-                    // server-registry: speel op naam, de client resolvet via het pack.
+                    
+                    
                     p.playSound(p.getLocation(), namespaced(val), SoundCategory.PLAYERS, 0.8f, 1f);
                 }
             }
-            case "say" -> p.sendMessage(legacy(val));
-            case "tag+" -> { if (!pr.tags.contains(val)) pr.tags.add(val); save(); }
-            case "tag-" -> { pr.tags.remove(val); save(); }
+            case "say" -> dialogueMessage(p, val);
+            case "tag+" -> {
+                if (pr != null) { if (!pr.tags.contains(val)) pr.tags.add(val); save(); }
+                else if (dialogueManager != null) dialogueManager.changeRewardPlayerTag(p, val, true);
+            }
+            case "tag-" -> {
+                if (pr != null) { pr.tags.remove(val); save(); }
+                else if (dialogueManager != null) dialogueManager.changeRewardPlayerTag(p, val, false);
+            }
             case "perm+" -> dispatch("lp user " + p.getName() + " permission set " + val + true);
             case "perm-" -> dispatch("lp user " + p.getName() + " permission unset " + val);
             case "point" -> {
-                // vorm: point <cat> +N  (optellen) | point <cat> =N (zetten)
+                
                 String[] x = val.split(" ");
                 if (x.length >= 2) {
                     String cat = x[0];
                     String op = x[1];
                     int n = Integer.parseInt(op.replace("+", "").replace("=", "").replace("-", ""));
-                    if (op.startsWith("+")) pr.points.merge(cat, n, Integer::sum);
-                    else if (op.startsWith("-")) pr.points.merge(cat, -n, Integer::sum);
-                    else pr.points.put(cat, n);
+                    if (pr != null) {
+                        if (op.startsWith("+")) pr.points.merge(cat, n, Integer::sum);
+                        else if (op.startsWith("-")) pr.points.merge(cat, -n, Integer::sum);
+                        else pr.points.put(cat, n);
+                    } else {
+                        String path = "rewards.player-points." + p.getUniqueId() + "." + cat;
+                        int current = data.getInt(path);
+                        if (op.startsWith("+")) data.set(path, current + n);
+                        else if (op.startsWith("-")) data.set(path, current - n);
+                        else data.set(path, n);
+                    }
                     save();
                 }
             }
@@ -1139,13 +1367,13 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             case "teleport" -> {
                 var l = parseLoc(val);
                 if (l != null) {
-                    // EIGENAAR-REGEL 30-10: spelers worden NOOIT_remote gestuurd.
-                    // Teleport is een staff-hulpmiddel (iekquests.admin); een
-                    // speler krijgt het kompas en loopt/zoeft zelf.
+                    
+                    
+                    
                     if (p.hasPermission("iekquests.admin")) p.teleport(l);
                     else {
                         setCompass(p, l);
-                        p.sendMessage(legacy("&7No ride for you - the compass points the way. Make the journey yourself!"));
+                        dialogueMessage(p, "&7No ride for you - the compass points the way. Make the journey yourself!");
                     }
                 }
             }
@@ -1153,7 +1381,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 String[] x = val.trim().split(" ");
                 if (!items.exists(x[0])) {
                     getLogger().warning("item reward: onbekend IekItem '" + x[0] + "' (quest " + (q == null ? "-" : q.id) + ")");
-                    p.sendMessage(legacy("&cThat item is not available right now. Tell staff."));
+                    dialogueMessage(p, "&cThat item is not available right now. Tell staff.");
                 } else items.give(p, x[0], x.length > 1 ? (int) num(x[1], 1) : 1);
             }
             case "travel" -> travel(p, val);
@@ -1188,7 +1416,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 dispatch(val);
             }
             case "joinjob" -> {
-                // de Jobs-plugin (NuJobs NG) praten alsof de speler typt: /jobs join <job>
+                
                 final String j = val;
                 Bukkit.getScheduler().runTask(this, () -> p.performCommand("jobs join " + j));
             }
@@ -1197,7 +1425,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 Bukkit.getScheduler().runTask(this, () -> p.performCommand("jobs leave " + j));
             }
             case "chat" -> {
-                // als speler een chatbericht laten zeggen (Orion-shops: "say hi 1")
+                
                 final String msg = val;
                 p.closeInventory();
                 Bukkit.getScheduler().runTask(this, () -> p.chat(msg));
@@ -1207,11 +1435,20 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    private void runRewards(Player p, Quest q, Prog pr, List<String> rewards) {
+    void runRewards(Player p, Quest q, Prog pr, List<String> rewards) {
         for (var r : rewards) run(p, q, pr, r);
     }
 
-    /** Tijdlijn: steps met eigen vertraging (notify/cmd), als folder uit BQ-land. */
+    void runStandaloneRewards(Player player, List<String> rewards) {
+        for (String reward : rewards) run(player, null, null, reward);
+    }
+
+    boolean hasSequence(String id) { return sequences.containsKey(id); }
+    boolean hasIekItemReward(String id) { return items.exists(id); }
+    boolean hasEliteItemReward(String file) { return eliteItemExists(file.endsWith(".yml") ? file : file + ".yml"); }
+    boolean isValidRewardLocation(String value) { return parseLoc(value) != null; }
+
+    
     private void playSeq(Player p, Quest q, Prog pr, String seqId) {
         var s = sequences.get(seqId);
         if (s == null) return;
@@ -1225,7 +1462,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     // ---------------------------------------------------------------- tracker + staff-check
 
-    /** Actiebalk met de actieve stap (craft/deliver/walk/kill), uit te zetten met /questbook track. */
+    
     private void tracker() {
         for (var p : Bukkit.getOnlinePlayers()) {
             if (p.getOpenInventory().getTopInventory().getHolder() instanceof Holder) continue;
@@ -1243,7 +1480,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** /questbook check [speler]: quests zonder NPC + (optioneel) tags en actieve quests van een speler. */
+    
     private void adminCheck(CommandSender sender, String who) {
         var none = new ArrayList<String>();
         for (var q : quests) if (q.npcIds.isEmpty()) none.add(q.id);
@@ -1298,7 +1535,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private final Object txLock = new Object();
 
-    /** Eén regel in plugins/IekQuests/transactions.log: wie kreeg/betaalde wat, via welke quest. */
+    
     private void logTx(Player p, Quest q, String what) {
         try {
             var f = new File(getDataFolder(), "transactions.log");
@@ -1317,11 +1554,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         Bukkit.getScheduler().runTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), consoleCmd));
     }
 
-    private void speak(Player p, String key) {
+    void speak(Player p, String key) {
         if (key == null || key.isEmpty()) return;
-        // Stem-events (steamworks:igor.lineXX) leven alleen IN het resourcepack:
-        // Registry.SOUNDS kent ze niet en gaf null -> er speelde niets af.
-        // Altijd op naam sturen; de client resolvet via pack of vanilla.
+        
+        
+        
         p.playSound(p.getLocation(), namespaced(key), SoundCategory.RECORDS, 0.9f, 1f);
     }
 
@@ -1342,7 +1579,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
 
     private int held(Player p, String material) { return held(p, material, null); }
 
-    /** IekItems-id uit "item:<id>" (material-veld van stages/contracten), of null. */
+    
     private static String itemId(String material) {
         return material != null && material.regionMatches(true, 0, "item:", 0, 5) ? material.substring(5).trim().toLowerCase() : null;
     }
@@ -1408,7 +1645,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             var pr = pr(p, q);
             if (ok(p, q, pr, q.startConds) || (pr.started && !pr.done)) vis.add(q);
         }
-        // Group quests by their group field
+        
         Map<String, List<Quest>> groups = new LinkedHashMap<>();
         for (var q : vis) {
             String g = q.group.isEmpty() ? "Other" : q.group;
@@ -1420,7 +1657,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             flat.addAll(entry.getValue());
         }
         boolean admin = p.hasPermission("iekquests.admin");
-        int per = 35;                                   // slots 10-44, onder-rij is navigatie
+        int per = 35;                                   
         int pages = Math.max(1, (flat.size() + per - 1) / per);
         if (page < 0) page = 0;
         if (page >= pages) page = pages - 1;
@@ -1452,6 +1689,17 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private void openQuest(Player p, Quest q) { openQuest(p, q, 0); }
 
     private void openQuest(Player p, Quest q, int npcCtx) {
+        if (suppressDialogueRefresh.contains(p.getUniqueId())) return;
+        if (dialogueManager != null && dialogueManager.hasSession(p)) return;
+        if (npcCtx > 0) {
+            if (dialogueManager != null && dialogueManager.hasNpc(npcCtx)) dialogueManager.openForNpc(p, npcCtx);
+            return;
+        }
+        DialogueSession activeDialog = dialogueSessions.get(p.getUniqueId());
+        if (activeDialog != null && activeDialog.quest.equals(q.id)) {
+            renderNpcDialog(p, q, activeDialog);
+            return;
+        }
         if (chatMode(p, q)) { p.closeInventory(); chatQuest(p, q, npcCtx); }
         else { chatActive.remove(p.getUniqueId()); openQuestGui(p, q, npcCtx); }
     }
@@ -1483,7 +1731,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             inv.setItem(31, tagged(Material.LIME_DYE, "&a✔ Start quest", "start"));
         } else if (pr.done) {
             if (!q.repeats.isEmpty()) {
-                // contracten-rij: slots 18-34 (max 17 contracts naast elkaar)
+                
                 int slot = 18;
                 for (var r : q.repeats) {
                     Long cd = pr.cd.get(r.id);
@@ -1501,7 +1749,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     if (slot < 35) { inv.setItem(slot, tagged(Material.LIME_DYE, lab, "repeat:" + r.id)); slot++; }
                 }
             } else inv.setItem(31, tagged(Material.PAPER, "&aStart the quest again", "newtry"));
-            // dienstknoppen blijven beschikbaar na voltooiing (keuzes zonder goto van de eerste stage)
+            
             if (first != null) {
                 int[] slots = menuDoneSlots(size);
                 int n = 0;
@@ -1518,7 +1766,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                             "compass:" + s.loc.getWorld().getName() + ";" + s.loc.getBlockX()
                                     + ";" + s.loc.getBlockY() + ";" + s.loc.getBlockZ()));
             }
-            // keuzes: klein veld 19-25, groot veld verbreed (18-35 + 36-44, gaten voor act/back)
+            
             int[] slots = choiceSlots(size);
             int n = 0;
             for (var c : s.choices) {
@@ -1532,7 +1780,207 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         p.openInventory(inv);
     }
 
-    /** Keuzeslots tijdens een stage: 7 gewoon, 25 in het brede 54-veld. */
+    
+    private void openNpcDialog(Player p, Quest q, int npc, int textPage, int choicePage, List<String> replies) {
+        DialogueSession session = dialogueSessions.get(p.getUniqueId());
+        if (session == null || !session.quest.equals(q.id) || session.npc != npc) {
+            session = new DialogueSession(p.getUniqueId(), q.id, npc);
+            dialogueSessions.put(p.getUniqueId(), session);
+        }
+        session.textPage = textPage;
+        session.choicePage = choicePage;
+        session.replyLines.clear();
+        session.replyLines.addAll(replies);
+        renderNpcDialog(p, q, session);
+    }
+
+    private void closeNpcDialogue(Player p) {
+        dialogueSessions.remove(p.getUniqueId());
+        p.closeDialog();
+    }
+
+    private void dialogueMessage(Player p, String message) {
+        if (dialogueManager != null && dialogueManager.hasSession(p)) {
+            dialogueManager.appendLine(p, message);
+            return;
+        }
+        DialogueSession session = dialogueSessions.get(p.getUniqueId());
+        if (session == null) {
+            p.sendMessage(legacy(message));
+            return;
+        }
+        session.replyLines.add(message);
+        Quest q = byId(session.quest);
+        if (q != null) renderNpcDialog(p, q, session);
+    }
+
+    private void sayDialogueOrChat(Player p, Quest q, String message) {
+        DialogueSession session = dialogueSessions.get(p.getUniqueId());
+        if (session != null && session.quest.equals(q.id)) dialogueMessage(p, message);
+        else p.sendMessage(legacy(message));
+    }
+
+    private Stage dialogueStage(Quest q, Prog pr) {
+        if (!pr.stage.isEmpty()) return q.stages.get(pr.stage);
+        return q.stages.isEmpty() ? null : q.stages.values().iterator().next();
+    }
+
+    private List<String> dialogueLines(Quest q, Prog pr) {
+        List<String> lines = new ArrayList<>();
+        if (!q.subtitle.isEmpty()) lines.add("&8" + q.subtitle);
+        if (pr.done) {
+            lines.add(dialogueLabel("complete-text", "&aThe quest is complete!"));
+            for (var line : q.journal) lines.add("&7" + line);
+        } else {
+            Stage stage = dialogueStage(q, pr);
+            if (stage != null) lines.addAll(stage.lines);
+            if (!pr.started) lines.add(dialogueLabel("ready-text", "&7Ready when you are."));
+        }
+        if (lines.isEmpty()) lines.add(dialogueLabel("empty-text", "&7There is nothing more to say right now."));
+        return lines;
+    }
+
+    private boolean dialogueChoiceAllowed(Player p, Quest q, Prog pr, Stage stage, Choice choice, int npc) {
+        List<Cond> rest = new ArrayList<>();
+        for (var cond : choice.conds) {
+            if (cond.raw.startsWith("npc:")) {
+                try { if (npc != Integer.parseInt(cond.raw.substring(4))) return false; }
+                catch (NumberFormatException ignored) { return false; }
+            } else rest.add(cond);
+        }
+        return ok(p, q, pr, rest);
+    }
+
+    private List<DialogueOption> dialogueOptions(Player p, Quest q, int npc) {
+        Prog pr = pr(p, q);
+        Stage stage = dialogueStage(q, pr);
+        List<DialogueOption> options = new ArrayList<>();
+        if (!pr.started) {
+            if (stage != null) for (int i = 0; i < stage.choices.size(); i++) {
+                Choice choice = stage.choices.get(i);
+                if ((choice.action.equals("start") || choice.action.equals("accept")
+                        || choice.action.equals("refuse") || choice.action.equals("close"))
+                        && dialogueChoiceAllowed(p, q, pr, stage, choice, npc))
+                    options.add(new DialogueOption(choice.label, "choice:" + i));
+            }
+            if (options.isEmpty()) {
+                options.add(new DialogueOption(dialogueLabel("start", "&aYes, I want to begin"), "start"));
+                options.add(new DialogueOption(dialogueLabel("refuse", "&cNo, not now"), "refuse"));
+            }
+            return options;
+        }
+        if (pr.done) {
+            if (q.repeats.isEmpty()) options.add(new DialogueOption(dialogueLabel("restart", "&aStart the quest again"), "newtry"));
+            else for (var repeat : q.repeats) {
+                Long cooldown = pr.cd.get(repeat.id);
+                boolean ready = cooldown == null || cooldown <= now();
+                String label = (ready ? "&a" : "&7") + repeat.label
+                        + (ready ? "" : " &7(" + fmt(cooldown - now()) + ")");
+                options.add(new DialogueOption(label, "repeat:" + repeat.id));
+            }
+            Stage first = q.stages.isEmpty() ? null : q.stages.values().iterator().next();
+            if (first != null) for (int i = 0; i < first.choices.size(); i++) {
+                Choice choice = first.choices.get(i);
+                if (dialogueChoiceAllowed(p, q, pr, first, choice, npc))
+                    options.add(new DialogueOption(choice.label, "menu:" + i));
+            }
+            return options;
+        }
+        if (stage == null) return options;
+        if (!stage.kind.equals("menu")) options.add(new DialogueOption(labelFor(p, q, pr, stage), "act"));
+        for (int i = 0; i < stage.choices.size(); i++) {
+            Choice choice = stage.choices.get(i);
+            if ("start".equalsIgnoreCase(choice.action) || "accept".equalsIgnoreCase(choice.action)) continue;
+            if (dialogueChoiceAllowed(p, q, pr, stage, choice, npc))
+                options.add(new DialogueOption(choice.label, "choice:" + i));
+        }
+        if (options.isEmpty()) options.add(new DialogueOption(dialogueLabel("close", "&cGoodbye"), "refuse"));
+        return options;
+    }
+
+    private String dialogueLabel(String key, String fallback) {
+        return getConfig().getString("dialogue." + key, fallback);
+    }
+
+    private void renderNpcDialog(Player p, Quest q, DialogueSession session) {
+        if (!p.isOnline() || !dialogueSessions.containsKey(p.getUniqueId())) return;
+        Prog pr = pr(p, q);
+        List<String> lines = dialogueLines(q, pr);
+        lines.addAll(session.replyLines);
+        int linesPerPage = Math.max(1, Math.min(32, getConfig().getInt("dialogue.lines-per-page", 8)));
+        int textPages = Math.max(1, (lines.size() + linesPerPage - 1) / linesPerPage);
+        List<DialogueOption> options = dialogueOptions(p, q, session.npc);
+        int optionPages = Math.max(1, (options.size() + 5) / 6);
+        session.textPage = Math.max(0, Math.min(session.textPage, textPages - 1));
+        session.choicePage = Math.max(0, Math.min(session.choicePage, optionPages - 1));
+
+        List<DialogBody> body = new ArrayList<>();
+        int from = session.textPage * linesPerPage;
+        int to = Math.min(lines.size(), from + linesPerPage);
+        for (int i = from; i < to; i++) body.add(DialogBody.plainMessage(legacy(lines.get(i)), 200));
+        body.add(DialogBody.plainMessage(legacy(dialogueLabel("text-page", "&8Text") + " " + (session.textPage + 1) + "/" + textPages
+                + " &7| " + dialogueLabel("answers-page", "&8Answers") + " " + (session.choicePage + 1) + "/" + optionPages), 200));
+
+        List<ActionButton> buttons = new ArrayList<>();
+        if (textPages > 1) {
+            buttons.add(dialogueButton(session.textPage > 0 ? dialogueLabel("previous-text", "&e↑ Previous text") : "&8↑ Previous text",
+                    "text:-", session));
+            buttons.add(dialogueButton(session.textPage + 1 < textPages ? dialogueLabel("next-text", "&e↓ More text") : "&8↓ More text",
+                    "text:+", session));
+        }
+        if (optionPages > 1) {
+            buttons.add(dialogueButton(session.choicePage > 0 ? dialogueLabel("previous-options", "&7◀ Earlier answers") : "&8◀ Earlier answers",
+                    "choices:-", session));
+            buttons.add(dialogueButton(session.choicePage + 1 < optionPages ? dialogueLabel("next-options", "&7Later answers ▶") : "&8Later answers ▶",
+                    "choices:+", session));
+        }
+        int optionStart = session.choicePage * 6;
+        int optionEnd = Math.min(options.size(), optionStart + 6);
+        for (int i = optionStart; i < optionEnd; i++) {
+            DialogueOption option = options.get(i);
+            buttons.add(dialogueButton("&f" + (i - optionStart + 1) + ": " + option.label(), "answer:" + option.tag(), session));
+        }
+        if (buttons.isEmpty()) buttons.add(dialogueButton(dialogueLabel("empty-options", "&7There are no available responses."), "noop", session));
+        ActionButton close = ActionButton.builder(legacy(dialogueLabel("close", "&cClose conversation")))
+                .action(DialogAction.customClick((view, audience) -> {
+                    if (audience instanceof Player player) closeNpcDialogue(player);
+                }, ClickCallback.Options.builder().uses(1).build())).build();
+        Dialog dialog = Dialog.create(builder -> builder.empty()
+                .base(DialogBase.builder(legacy(q.title)).body(body).canCloseWithEscape(false).pause(false)
+                        .afterAction(DialogBase.DialogAfterAction.NONE).build())
+                .type(DialogType.multiAction(buttons).exitAction(close).columns(2).build()));
+        p.showDialog(dialog);
+    }
+
+    private ActionButton dialogueButton(String label, String action, DialogueSession session) {
+        UUID playerId = session.player;
+        String questId = session.quest;
+        int npcId = session.npc;
+        return ActionButton.builder(legacy(label)).action(DialogAction.customClick((view, audience) -> {
+            if (!(audience instanceof Player player) || !player.getUniqueId().equals(playerId)) return;
+            DialogueSession current = dialogueSessions.get(playerId);
+            if (current == null || !current.quest.equals(questId) || current.npc != npcId) return;
+            Quest quest = byId(questId);
+            if (quest == null) { closeNpcDialogue(player); return; }
+            switch (action) {
+                case "text:-" -> current.textPage--;
+                case "text:+" -> current.textPage++;
+                case "choices:-" -> current.choicePage--;
+                case "choices:+" -> current.choicePage++;
+                case "noop" -> { }
+                default -> {
+                    if (!action.startsWith("answer:")) return;
+                    String tag = action.substring("answer:".length());
+                    if (dialogueOptions(player, quest, npcId).stream().noneMatch(option -> option.tag().equals(tag))) return;
+                    handleTag(player, quest, tag, npcId);
+                }
+            }
+            DialogueSession updated = dialogueSessions.get(playerId);
+            if (updated != null && updated.quest.equals(questId)) renderNpcDialog(player, quest, updated);
+        }, ClickCallback.Options.builder().uses(1).build())).build();
+    }
+
+    
     private static int[] choiceSlots(int size) {
         if (size <= 45) return new int[]{19, 20, 21, 22, 23, 24, 25};
         int[] t = new int[26]; int n = 0;
@@ -1541,7 +1989,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return java.util.Arrays.copyOf(t, n);
     }
 
-    /** Dienstknoppen op het voltooide paneel: 8 gewoon, extra bovenrij in het brede veld. */
+    
     private static int[] menuDoneSlots(int size) {
         List<Integer> l = new ArrayList<>();
         for (int i = 36; i <= 44; i++) if (i != 40) l.add(i);
@@ -1565,6 +2013,11 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     }
 
     private void refresh(Player p, Quest q) {
+        DialogueSession session = dialogueSessions.get(p.getUniqueId());
+        if (session != null && session.quest.equals(q.id)) {
+            renderNpcDialog(p, q, session);
+            return;
+        }
         var holder = p.getOpenInventory().getTopInventory().getHolder();
         if (holder instanceof Holder h) openQuestGui(p, q, h.npc);
         else {
@@ -1597,17 +2050,17 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return "&eStage " + i + "/" + q.stages.size() + (s == null ? "" : " - " + plain(s.label));
     }
 
-    // ---------------------------------------------------------------- items
+    
 
-    // ---------------------------------------------------------------- gesprekmodus (chat) + keuze GUI/chat
+    
 
-    /** Voorkeur van de speler: "gui" of "chat" (PDC), anders config default-mode. */
+    
     private String prefMode(Player p) {
         String v = p.getPersistentDataContainer().get(modeKey, PersistentDataType.STRING);
         return v != null ? v : getConfig().getString("default-mode", "gui");
     }
 
-    /** Chat-modus voor deze speler (en quest)? Een quest kan gui of chat afdwingen. */
+    
     boolean chatMode(Player p, Quest q) {
         if (q != null && q.mode.equals("gui")) return false;
         if (q != null && q.mode.equals("chat")) return true;
@@ -1648,7 +2101,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         return "/questbook do " + q.id + " " + (pr.stage.isEmpty() ? "-" : pr.stage) + " " + tag + " " + npc;
     }
 
-    /** Klik uit de chat: controleert dat de knop nog bij de huidige stage hoort, dan dezelfde logica als de GUI. */
+    
     private void chatDo(Player p, String[] a) {
         var q = byId(a[1]);
         if (q == null) return;
@@ -1660,7 +2113,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 || tag.startsWith("choice:") || tag.startsWith("menu:");
         String cur = pr.stage.isEmpty() ? "-" : pr.stage;
         if (stateful && !cur.equals(a[2])) {
-            p.sendMessage(legacy("&7That option is no longer available."));
+            p.sendMessage(legacy(dialogueLabel("errors.unavailable", "&7That option is no longer available.")));
             chatQuest(p, q, npc);
             return;
         }
@@ -1728,15 +2181,15 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         p.sendMessage(foot);
     }
 
-    // ---------------------------------------------------------------- travel (spelers mogen, anders dan 'teleport')
+    
 
-    /**
-     * travel <bestemming> [cost=N] [warmup=S]. Bestemming = naam uit config travel.destinations of "x;y;z;wereld".
-     * Spelers wachten (warmup) zonder te bewegen; kosten worden pas bij vertrek geind (cmi money take).
-     */
+    
+
+
+
     private void travel(Player p, String val) {
         var cfg = getConfig();
-        if (!cfg.getBoolean("travel.enabled", true)) { p.sendMessage(legacy("&7Travel is switched off right now.")); return; }
+        if (!cfg.getBoolean("travel.enabled", true)) { dialogueMessage(p, "&7Travel is switched off right now."); return; }
         String[] t = val.trim().split("\\s+");
         if (t.length == 0 || t[0].isEmpty()) return;
         double cost = 0;
@@ -1750,20 +2203,20 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         String rawLoc = cfg.getString("travel.destinations." + t[0], t[0]);
         Location dest = parseLoc(rawLoc);
         if (dest == null) {
-            p.sendMessage(legacy("&cUnknown destination. Tell staff."));
+            dialogueMessage(p, "&cUnknown destination. Tell staff.");
             getLogger().warning("travel: onbekende bestemming '" + t[0] + "'");
             return;
         }
         long cdSec = cfg.getLong("travel.cooldown-seconds", 0);
         Long until = travelCd.get(p.getUniqueId());
         if (cdSec > 0 && until != null && until > System.currentTimeMillis()) {
-            p.sendMessage(legacy("&cYou can travel again in " + fmt((until - System.currentTimeMillis()) / 1000) + "."));
+            dialogueMessage(p, "&cYou can travel again in " + fmt((until - System.currentTimeMillis()) / 1000) + ".");
             deny(p);
             return;
         }
         final double fcost = cost;
         if (fcost > 0 && balance(p) < fcost) {
-            p.sendMessage(legacy("&cTravel costs &f" + (long) fcost + "&c - you can't afford it."));
+            dialogueMessage(p, "&cTravel costs &f" + (long) fcost + "&c - you can't afford it.");
             deny(p);
             return;
         }
@@ -1773,7 +2226,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         final String destName = t[0];
         Runnable go = () -> {
             if (fcost > 0) {
-                if (balance(p) < fcost) { p.sendMessage(legacy("&cTravel cancelled - not enough money.")); return; }
+                if (balance(p) < fcost) { dialogueMessage(p, "&cTravel cancelled - not enough money."); return; }
                 dispatch("cmi money take " + p.getName() + " -s " + (long) fcost);
                 logTx(p, null, "travel " + destName + " cost " + (long) fcost);
             }
@@ -1866,7 +2319,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    private Component legacy(String s) {
+    Component legacy(String s) {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(s == null ? "" : s);
     }
 
@@ -1875,7 +2328,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 org.bukkit.ChatColor.translateAlternateColorCodes('&', s == null ? "" : s));
     }
 
-    /** Echte geldbalans via Vault (reflectie, geen compile-afhankelijkheid). */
+    
     private Object econProvider;
     private Method mBalance;
 
@@ -1894,7 +2347,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** Elite coins via EliteMobs' eigen API (reflectie); -1 als niet bereikbaar. */
+    
     private Method mEcoCheck;
 
     private double ecoBalance(Player p) {
@@ -1909,7 +2362,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    /** Bestaat dit EliteMobs-itembestand (customitems/**)? Gecachet per laad. */
+    
     private java.util.Set<String> eliteItemFiles;
 
     private boolean eliteItemExists(String file) {

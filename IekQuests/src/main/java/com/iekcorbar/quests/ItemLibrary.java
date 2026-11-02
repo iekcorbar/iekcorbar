@@ -32,14 +32,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/**
- * IekItems: eigen custom items, gedefinieerd in plugins/IekQuests/items.yml.
- * Elk item draagt zijn id in de PDC (iekquests:item), dus quests kunnen het exact
- * herkennen ("item:<id>" als material in een deliver/craft-stage of contract),
- * en "item <id> [n]" als beloning geeft het. Items kunnen ook in-game worden
- * gemaakt (/iekitem create <id> van het item in je hand) en acties uitvoeren bij
- * rechtsklik (use: lijst, zelfde syntax als quest-rewards).
- */
+
+
+
+
+
+
+
+
 final class ItemLibrary implements Listener, TabExecutor {
     private final IekQuestsPlugin plugin;
     private final NamespacedKey idKey;
@@ -71,7 +71,7 @@ final class ItemLibrary implements Listener, TabExecutor {
 
     ConfigurationSection def(String id) { return defs.get(id.toLowerCase(Locale.ROOT)); }
 
-    /** Eén veld schrijven (null = verwijderen), opslaan en opnieuw laden. */
+    
     void put(String id, String field, Object value) {
         yaml.set("items." + id.toLowerCase(Locale.ROOT) + "." + field, value);
         saveYaml();
@@ -123,13 +123,18 @@ final class ItemLibrary implements Listener, TabExecutor {
 
     boolean exists(String id) { return defs.containsKey(id.toLowerCase(Locale.ROOT)); }
 
-    /** Id van een IekItem-stack, of null. */
+    Material materialOf(String id) {
+        var def = defs.get(id.toLowerCase(Locale.ROOT));
+        return def == null ? null : Material.matchMaterial(def.getString("material", "PAPER"));
+    }
+
+    
     String idOf(ItemStack st) {
         if (st == null || !st.hasItemMeta()) return null;
         return st.getItemMeta().getPersistentDataContainer().get(idKey, PersistentDataType.STRING);
     }
 
-    // ---------------------------------------------------------------- bouwen
+    
 
     ItemStack build(String id, int amount) {
         var s = defs.get(id.toLowerCase(Locale.ROOT));
@@ -182,7 +187,7 @@ final class ItemLibrary implements Listener, TabExecutor {
         if (s.contains("custom-model-data")) im.setCustomModelData(s.getInt("custom-model-data"));
         if (s.contains("max-stack")) im.setMaxStackSize(Math.max(1, Math.min(99, s.getInt("max-stack", 64))));
 
-        // attributes: "attack_damage 7 add_number mainhand"  (naam, waarde, operatie, slot)
+        
         int n = 0;
         for (String a : s.getStringList("attributes")) {
             String[] x = a.trim().split("\\s+");
@@ -224,7 +229,7 @@ final class ItemLibrary implements Listener, TabExecutor {
         }
     }
 
-    // ---------------------------------------------------------------- rechtsklik-acties
+    
 
     @EventHandler
     public void onUse(PlayerInteractEvent e) {
@@ -259,7 +264,7 @@ final class ItemLibrary implements Listener, TabExecutor {
 
     private final Map<String, Long> lastUse = new java.util.HashMap<>();
 
-    /** soulbound: blijft bij de speler na de dood. */
+    
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         if (e.getKeepInventory()) return;
@@ -272,7 +277,7 @@ final class ItemLibrary implements Listener, TabExecutor {
         }
     }
 
-    /** undroppable: kan niet op de grond gegooid worden. */
+    
     @EventHandler(ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent e) {
         String id = idOf(e.getItemDrop().getItemStack());
@@ -341,7 +346,7 @@ final class ItemLibrary implements Listener, TabExecutor {
         return true;
     }
 
-    /** Maakt een item-definitie van het item in de hoofdhand en schrijft het naar items.yml. */
+    
     private void create(Player p, String rawId) {
         String id = rawId.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9_]", "");
         var st = p.getInventory().getItemInMainHand();

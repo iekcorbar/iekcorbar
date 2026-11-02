@@ -30,11 +30,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Lightweight ItemJoin replacement for IekQuests: places custom items in the
- * player's crafting grid (2x2) on inventory open and triggers actions when clicked.
- * Each item is identified by a PDC key so clicks can be matched reliably.
- */
+
+
+
+
+
 final class InventoryItems implements Listener {
     private final IekQuestsPlugin plugin;
     private final NamespacedKey itemKey;
@@ -104,7 +104,7 @@ final class InventoryItems implements Listener {
                 && it.getItemMeta().getPersistentDataContainer().has(itemKey, PersistentDataType.STRING);
     }
 
-    /** Vanilla rekent het resultaatvak (slot 0) bij elke rasterwijziging opnieuw uit: zet daar ons slot-0-item. */
+    
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPrepare(PrepareItemCraftEvent e) {
         if (e.getInventory().getType() != InventoryType.CRAFTING) return;
@@ -121,7 +121,7 @@ final class InventoryItems implements Listener {
         if (isOurs(e.getCurrentItem())) e.setCancelled(true);
     }
 
-    /** Place all items in the crafting grid of the given inventory. */
+    
     void placeInCrafting(Inventory inv, Player p) {
         if (inv == null || inv.getType() != InventoryType.CRAFTING) return;
         for (ItemDef def : items.values()) {
@@ -133,7 +133,7 @@ final class InventoryItems implements Listener {
         }
     }
 
-    /** Remove all our items from an inventory. */
+    
     void removeFromInventory(Inventory inv) {
         if (inv == null) return;
         for (int i = 0; i < inv.getSize(); i++) {
@@ -147,7 +147,7 @@ final class InventoryItems implements Listener {
         }
     }
 
-    /** Remove all inventory items from a player's main inventory (on quit or reset). */
+    
     void remove(Player p) {
         removeFromInventory(p.getInventory());
     }
@@ -166,19 +166,19 @@ final class InventoryItems implements Listener {
         if (!(e.getPlayer() instanceof Player p)) return;
         Inventory top = e.getInventory();
         if (top.getType() == InventoryType.CRAFTING) removeFromInventory(top);
-        // het eigen inventory-scherm geeft server-side geen open-event, en na een menu (klik op een item)
-        // sluit alleen dat menu: bij elke sluiting het eigen vak opnieuw vullen (placeFor checkt het type)
+        
+        
         schedulePlace(p, 2L);
     }
 
-    /** Het eigen 2x2-vak bestaat altijd; vul het zonder open-event (client opent het zelf). */
+    
     void placeFor(Player p) {
         if (!p.isOnline()) return;
         Inventory top = p.getOpenInventory().getTopInventory();
         if (top.getType() != InventoryType.CRAFTING) return;
         removeFromInventory(top);
         placeInCrafting(top, p);
-        // de client wist het 2x2-vak zelf bij sluiten; de server-kant ziet dan geen verschil en zou niets sturen
+        
         p.updateInventory();
         Bukkit.getScheduler().runTaskLater(plugin, p::updateInventory, 3L);
     }
@@ -187,7 +187,7 @@ final class InventoryItems implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, () -> placeFor(p), delay);
     }
 
-    /** Alle spelers (na een /questbook reload of plugin-herstart). */
+    
     void placeForAll() {
         for (Player p : Bukkit.getOnlinePlayers()) placeFor(p);
     }
@@ -204,14 +204,14 @@ final class InventoryItems implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onGameMode(PlayerGameModeChangeEvent e) { schedulePlace(e.getPlayer(), 5L); }
 
-    /** Bij vertrek geen items in het vak laten (anders komen ze in de inventory terecht). */
+    
     @EventHandler(priority = EventPriority.LOWEST)
     public void onQuit(PlayerQuitEvent e) {
         removeFromInventory(e.getPlayer().getOpenInventory().getTopInventory());
         remove(e.getPlayer());
     }
 
-    /** Menu-items nooit droppen bij de dood. */
+    
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent e) {
         removeFromInventory(e.getEntity().getOpenInventory().getTopInventory());
@@ -231,14 +231,14 @@ final class InventoryItems implements Listener {
         ItemDef def = items.get(id);
         if (def == null) return;
         if (def.cancel()) e.setCancelled(true);
-        // Trigger quest tag if defined
+        
         if (!def.quest().isEmpty()) {
             String[] qparts = def.quest().split(":", 2);
             if (qparts.length == 2) {
                 plugin.triggerQuestTag(p, qparts[0], qparts[1]);
             }
         }
-        // Trigger the action (per click type when configured, otherwise the default action)
+        
         String action = def.action();
         if (e.getClick() == org.bukkit.event.inventory.ClickType.SHIFT_RIGHT && !def.shiftRight().isEmpty()) action = def.shiftRight();
         else if (e.isRightClick() && !def.right().isEmpty()) action = def.right();
@@ -248,6 +248,7 @@ final class InventoryItems implements Listener {
     }
 
     private void runAction(Player p, String action) {
+        action = action == null ? "" : action.trim().replaceFirst("(?i)\\s+-s\\s*$", "").trim();
         if (action.startsWith("quest:")) {
             String[] parts = action.split(":", 3);
             if (parts.length >= 3) {

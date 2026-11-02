@@ -28,11 +28,11 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-/**
- * IekItems GUI: item-browser, item-editor en model-kiezer (items uit de resourcepacks).
- * Werkt los (/iekitem) of als kiezer voor de quest-wizard (openPicker). Alle wijzigingen
- * gaan direct naar items.yml via ItemLibrary.
- */
+
+
+
+
+
 final class ItemEditor implements Listener {
 
     static final class IH implements InventoryHolder {
@@ -41,7 +41,7 @@ final class ItemEditor implements Listener {
         @Override public Inventory getInventory() { return null; }
     }
 
-    /** Per speler: kiezer-callbacks + wachtende chat-invoer + filters. */
+    
     static final class Sess {
         BiConsumer<String, Integer> onPick; Runnable onCancel; boolean askAmount;
         String ctx; String ctxId; List<String> acc = new ArrayList<>(); boolean multi, clearRequested;
@@ -72,7 +72,7 @@ final class ItemEditor implements Listener {
 
     void edit(Player p, String id) { session(p).reset(); editor(p, id); }
 
-    /** Voor de quest-wizard: speler kiest/maakt een item; callback krijgt id (+aantal). */
+    
     void openPicker(Player p, boolean askAmount, BiConsumer<String, Integer> onPick, Runnable onCancel) {
         var ss = session(p);
         ss.reset();
@@ -182,7 +182,7 @@ final class ItemEditor implements Listener {
         p.openInventory(inv);
     }
 
-    // ---------------------------------------------------------------- modellen uit de resourcepacks
+    
 
     private File packDir(String path) {
         var f = new File(path);
