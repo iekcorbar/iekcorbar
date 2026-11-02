@@ -76,6 +76,8 @@ public class AdvancementManager implements Listener, TabExecutor {
     private final Map<String, AdvDef> advancements = new LinkedHashMap<>();
     /** key -> the JSON we last successfully loaded for it; lets registerAll() skip untouched work. */
     private final Map<NamespacedKey, String> registeredJson = new LinkedHashMap<>();
+    /** Changed advancements that are parked on disk and only go live after a restart. */
+    private int pendingRestart;
     private BukkitTask checkTask;
     private Method papiSetPlaceholders;
     private boolean papiResolved;
@@ -165,7 +167,8 @@ public class AdvancementManager implements Listener, TabExecutor {
         long interval = Math.max(5, cfg.getInt("check-interval-seconds", 20)) * 20L;
         checkTask = Bukkit.getScheduler().runTaskTimer(plugin, this::checkAllOnline, interval, interval);
 
-        String msg = "Loaded " + tabs.size() + " tab(s) and " + registered + " custom advancement(s).";
+        String msg = "Loaded " + tabs.size() + " tab(s) and " + registered + " custom advancement(s)."
+                + (pendingRestart > 0 ? " " + pendingRestart + " changed one(s) apply after the next server restart." : "");
         plugin.getLogger().info("[Advancements] " + msg);
         return msg;
     }
@@ -212,11 +215,19 @@ public class AdvancementManager implements Listener, TabExecutor {
         // the startup double-load (onEnable + ServerResourcesReloadedEvent) into a wall of
         // "already exists" warnings. Nothing changed -> no registry touch, no savePlayers() either
         // (that save is where the "manual (plugin-induced) save" warning came from).
+        // Fresh boot: registeredJson is empty, but Paper has already read the copies that
+        // loadAdvancement persisted in <world>/datapacks/bukkit/. If such a copy is identical
+        // to what we want it is ADOPTED instead of removed + reloaded - the old route deleted
+        // those files while the in-memory copy stayed, so the reload failed with
+        // "already exists" and the files were gone again on the next start.
         Set<NamespacedKey> keep = new HashSet<>();
         for (Map.Entry<NamespacedKey, JsonObject> e : want.entrySet()) {
+            String json = e.getValue().toString();
             String last = registeredJson.get(e.getKey());
-            if (last != null && last.equals(e.getValue().toString()) && Bukkit.getAdvancement(e.getKey()) != null) {
+            if (Bukkit.getAdvancement(e.getKey()) == null) continue;
+            if ((last != null && last.equals(json)) || (last == null && matchesPersisted(e.getKey(), e.getValue()))) {
                 keep.add(e.getKey());
+                registeredJson.put(e.getKey(), json);
             }
         }
 
@@ -236,8 +247,18 @@ public class AdvancementManager implements Listener, TabExecutor {
         }
 
         int count = 0;
+        pendingRestart = 0;
         for (Map.Entry<NamespacedKey, JsonObject> e : want.entrySet()) {
             if (keep.contains(e.getKey())) {
+                count++;
+                continue;
+            }
+            // Still registered although we just tried to remove it: removeAdvancement cannot drop
+            // a live advancement (it only deletes the persisted file). Park the NEW definition in
+            // that file so the next start picks it up, and keep running on the old one meanwhile.
+            if (Bukkit.getAdvancement(e.getKey()) != null) {
+                writePersisted(e.getKey(), e.getValue());
+                pendingRestart++;
                 count++;
                 continue;
             }
@@ -247,6 +268,35 @@ public class AdvancementManager implements Listener, TabExecutor {
             }
         }
         return count;
+    }
+
+    private File persistedFile(NamespacedKey key) {
+        return new File(new File(Bukkit.getWorldContainer(), Bukkit.getWorlds().get(0).getName()),
+                "datapacks/bukkit/data/" + key.getNamespace() + "/advancement/" + key.getKey() + ".json");
+    }
+
+    private void writePersisted(NamespacedKey key, JsonObject json) {
+        try {
+            File f = persistedFile(key);
+            File dir = f.getParentFile();
+            if (dir != null) dir.mkdirs();
+            java.nio.file.Files.writeString(f.toPath(), json.toString(), java.nio.charset.StandardCharsets.UTF_8);
+        } catch (Exception ex) {
+            warn("Could not park the new definition of '" + key.getKey() + "': " + ex.getMessage());
+        }
+    }
+
+    /** True when the copy Paper persisted for this key in the world's bukkit datapack equals {@code want}. */
+    private boolean matchesPersisted(NamespacedKey key, JsonObject want) {
+        try {
+            if (Bukkit.getWorlds().isEmpty()) return false;
+            File f = persistedFile(key);
+            if (!f.isFile()) return false;
+            String text = java.nio.file.Files.readString(f.toPath(), java.nio.charset.StandardCharsets.UTF_8);
+            return JsonParser.parseString(text).equals(want);
+        } catch (Exception ex) {
+            return false;
+        }
     }
 
     @SuppressWarnings("deprecation")
@@ -403,7 +453,20 @@ public class AdvancementManager implements Listener, TabExecutor {
                 return p.hasPermission(str(r, "permission"));
             case "location": {
                 Location loc = p.getLocation();
-                if (loc.getWorld() == null || !loc.getWorld().getName().equalsIgnoreCase(str(r, "world"))) return false;
+                if (loc.getWorld() == null) return false;
+                // environment: normal | nether | the_end - by dimension type, so it does not
+                // depend on how the worlds are named (this server's nether is not "world_nether").
+                if (r.get("environment") != null) {
+                    String env = str(r, "environment").toLowerCase(Locale.ROOT).replace("minecraft:", "");
+                    String actual = switch (loc.getWorld().getEnvironment()) {
+                        case NORMAL -> "normal";
+                        case NETHER -> "nether";
+                        case THE_END -> "the_end";
+                        default -> "custom";
+                    };
+                    return env.equals(actual);
+                }
+                if (!loc.getWorld().getName().equalsIgnoreCase(str(r, "world"))) return false;
                 if (r.get("x") == null || r.get("z") == null) return true;
                 double radius = num(r, "radius", 10);
                 double dx = loc.getX() - num(r, "x", 0), dz = loc.getZ() - num(r, "z", 0);

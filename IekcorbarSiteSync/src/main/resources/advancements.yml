@@ -38,6 +38,20 @@ tabs:
     # minecraft:block/copper_block, minecraft:block/deepslate_tiles
     background: minecraft:block/cherry_planks
 
+  # Tab ids are part of every advancement key (iekcorbar/<id>, delver/<id>, ...):
+  # never rename a tab that players already earned something in.
+  delver:
+    title: "&8Delvers and Hunters"
+    description: "Dig deep, fight hard"
+    icon: minecraft:iron_pickaxe
+    background: minecraft:block/deepslate_tiles
+
+  homestead:
+    title: "&2Homesteaders"
+    description: "Build, farm, trade and brew"
+    icon: minecraft:wheat
+    background: minecraft:block/moss_block
+
 # ---------------------------------------------------------------------------
 #  ADVANCEMENTS
 # ---------------------------------------------------------------------------
@@ -62,6 +76,8 @@ tabs:
 #    - type: permission, permission: "group.vip"
 #    - type: location, world: world_nether                      (just being in that world)
 #    - type: location, world: world, x: 120, z: -340, radius: 30   (near a spot)
+#    - type: location, environment: nether                      (by dimension: normal | nether | the_end -
+#          works whatever the worlds are called)
 #    - type: advancements, list: [first_steps, miner]           (other advancements from this file)
 #    - type: website, achievement: first-chat-message           (earned when the website awards that
 #          achievement slug — see Staff Panel achievements)
@@ -153,7 +169,7 @@ advancements:
     frame: task
     requirements:
       - type: location
-        world: world_nether
+        environment: nether
 
   website_chatter:
     tab: iekcorbar
@@ -231,3 +247,609 @@ advancements:
           - "afkcinema:afkcinema/extra"
           - "afkcinema:afkcinema/closing_credits"
           - "afkcinema:afkcinema/directors_cut"
+
+  # =========================================================================
+  #  JOURNEY  (tab iekcorbar) — time played, distance travelled, lore
+  # =========================================================================
+  settled_in:
+    tab: iekcorbar
+    parent: first_steps
+    title: "Settled In"
+    description: "Play for 10 hours"
+    icon: minecraft:white_bed
+    requirements:
+      - type: playtime
+        hours: 10
+
+  regular:
+    tab: iekcorbar
+    parent: settled_in
+    title: "A Regular Face"
+    description: "Play for 50 hours"
+    icon: minecraft:lantern
+    frame: goal
+    requirements:
+      - type: playtime
+        hours: 50
+    rewards:
+      xp: 100
+
+  on_the_road:
+    tab: iekcorbar
+    parent: first_steps
+    title: "On the Road"
+    description: "Walk 10 kilometres"
+    icon: minecraft:compass
+    requirements:
+      - type: statistic
+        statistic: WALK_ONE_CM
+        amount: 1000000
+
+  wanderer:
+    tab: iekcorbar
+    parent: on_the_road
+    title: "Wanderer"
+    description: "Walk 100 kilometres"
+    icon: minecraft:filled_map
+    frame: goal
+    requirements:
+      - type: statistic
+        statistic: WALK_ONE_CM
+        amount: 10000000
+    rewards:
+      xp: 150
+
+  globetrotter:
+    tab: iekcorbar
+    parent: wanderer
+    title: "Globetrotter"
+    description: "Walk 500 kilometres"
+    icon: minecraft:spyglass
+    frame: challenge
+    announce: true
+    requirements:
+      - type: statistic
+        statistic: WALK_ONE_CM
+        amount: 50000000
+    rewards:
+      xp: 500
+
+  sailor:
+    tab: iekcorbar
+    parent: on_the_road
+    title: "Smooth Sailing"
+    description: "Travel 5 kilometres by boat"
+    icon: minecraft:oak_boat
+    requirements:
+      - type: statistic
+        statistic: BOAT_ONE_CM
+        amount: 500000
+
+  rider:
+    tab: iekcorbar
+    parent: on_the_road
+    title: "Born in the Saddle"
+    description: "Ride a horse for 10 kilometres"
+    icon: minecraft:saddle
+    requirements:
+      - type: statistic
+        statistic: HORSE_ONE_CM
+        amount: 1000000
+
+  sky_high:
+    tab: iekcorbar
+    parent: on_the_road
+    title: "Head in the Clouds"
+    description: "Fly 10 kilometres with an elytra"
+    icon: minecraft:elytra
+    frame: goal
+    requirements:
+      - type: statistic
+        statistic: AVIATE_ONE_CM
+        amount: 1000000
+
+  deep_diver:
+    tab: iekcorbar
+    parent: on_the_road
+    title: "Deep Diver"
+    description: "Swim 3 kilometres"
+    icon: minecraft:cod
+    requirements:
+      - type: statistic
+        statistic: SWIM_ONE_CM
+        amount: 300000
+
+  end_traveler:
+    tab: iekcorbar
+    parent: nether_traveler
+    title: "The End of the Road"
+    description: "Enter the End"
+    icon: minecraft:end_stone
+    requirements:
+      - type: location
+        environment: the_end
+
+  bookworm:
+    tab: iekcorbar
+    parent: first_steps
+    title: "Bookworm"
+    description: "Read 3 different lore books"
+    icon: minecraft:book
+    requirements:
+      - type: books_read
+        amount: 3
+
+  lorekeeper:
+    tab: iekcorbar
+    parent: bookworm
+    title: "Lorekeeper"
+    description: "Read 10 different lore books"
+    icon: minecraft:enchanted_book
+    frame: goal
+    requirements:
+      - type: books_read
+        amount: 10
+    rewards:
+      xp: 200
+
+  pillar:
+    tab: iekcorbar
+    parent: veteran
+    title: "&6Pillar of Iekcorbar"
+    description: "Earn Wanderer, Diamond Hunter, Master Angler and Yokai Slayer"
+    icon: minecraft:beacon
+    frame: challenge
+    announce: true
+    requirements:
+      - type: advancements
+        list: [wanderer, diamond_hunter, master_angler, monster_slayer]
+    rewards:
+      xp: 1000
+      message: "&6You are a pillar of the community. &eThank you for playing!"
+
+  # =========================================================================
+  #  DELVERS & HUNTERS  (tab delver) — mining and fighting
+  # =========================================================================
+  pick_and_shovel:
+    tab: delver
+    title: "Pick and Shovel"
+    description: "Mine 1,000 stone or deepslate"
+    icon: minecraft:stone_pickaxe
+    requirements:
+      - type: break_block
+        blocks: [stone, deepslate]
+        amount: 1000
+
+  coal_miner:
+    tab: delver
+    parent: pick_and_shovel
+    title: "Coal for the Boiler"
+    description: "Mine 256 coal ore"
+    icon: minecraft:coal
+    requirements:
+      - type: break_block
+        blocks: [coal_ore, deepslate_coal_ore]
+        amount: 256
+
+  copper_rush:
+    tab: delver
+    parent: pick_and_shovel
+    title: "Copper Rush"
+    description: "Mine 256 copper ore"
+    icon: minecraft:copper_ingot
+    requirements:
+      - type: break_block
+        blocks: [copper_ore, deepslate_copper_ore]
+        amount: 256
+
+  gold_fever:
+    tab: delver
+    parent: copper_rush
+    title: "Gold Fever"
+    description: "Mine 64 gold ore"
+    icon: minecraft:gold_ingot
+    frame: goal
+    requirements:
+      - type: break_block
+        blocks: [gold_ore, deepslate_gold_ore, nether_gold_ore]
+        amount: 64
+    rewards:
+      xp: 100
+
+  emerald_eyes:
+    tab: delver
+    parent: gold_fever
+    title: "Emerald Eyes"
+    description: "Mine 16 emerald ore"
+    icon: minecraft:emerald
+    requirements:
+      - type: break_block
+        blocks: [emerald_ore, deepslate_emerald_ore]
+        amount: 16
+
+  debris_diver:
+    tab: delver
+    parent: gold_fever
+    title: "Debris Diver"
+    description: "Mine 16 ancient debris"
+    icon: minecraft:ancient_debris
+    frame: goal
+    requirements:
+      - type: break_block
+        block: ancient_debris
+        amount: 16
+    rewards:
+      xp: 200
+
+  netherite_smith:
+    tab: delver
+    parent: debris_diver
+    title: "Forged in Fire"
+    description: "Craft a netherite ingot"
+    icon: minecraft:netherite_ingot
+    frame: challenge
+    announce: true
+    requirements:
+      - type: craft_item
+        item: netherite_ingot
+        amount: 1
+    rewards:
+      xp: 300
+
+  pest_control:
+    tab: delver
+    title: "Pest Control"
+    description: "Defeat 100 hostile mobs"
+    icon: minecraft:iron_sword
+    requirements:
+      - type: statistic
+        statistic: MOB_KILLS
+        amount: 100
+
+  monster_hunter:
+    tab: delver
+    parent: pest_control
+    title: "Monster Hunter"
+    description: "Defeat 1,000 mobs"
+    icon: minecraft:diamond_sword
+    frame: goal
+    announce: true
+    requirements:
+      - type: statistic
+        statistic: MOB_KILLS
+        amount: 1000
+    rewards:
+      xp: 250
+
+  skeleton_crew:
+    tab: delver
+    parent: pest_control
+    title: "Bone Collector"
+    description: "Defeat 100 skeletons"
+    icon: minecraft:bone
+    requirements:
+      - type: kill_entity
+        entity: skeleton
+        amount: 100
+
+  creeper_sweeper:
+    tab: delver
+    parent: pest_control
+    title: "Creeper Sweeper"
+    description: "Defeat 50 creepers"
+    icon: minecraft:gunpowder
+    requirements:
+      - type: kill_entity
+        entity: creeper
+        amount: 50
+
+  witch_hunt:
+    tab: delver
+    parent: pest_control
+    title: "Witch Hunt"
+    description: "Defeat 10 witches"
+    icon: minecraft:cauldron
+    requirements:
+      - type: kill_entity
+        entity: witch
+        amount: 10
+
+  ender_hunter:
+    tab: delver
+    parent: creeper_sweeper
+    title: "Don't Look Up"
+    description: "Defeat 50 endermen"
+    icon: minecraft:ender_pearl
+    frame: goal
+    requirements:
+      - type: kill_entity
+        entity: enderman
+        amount: 50
+
+  blaze_runner:
+    tab: delver
+    parent: skeleton_crew
+    title: "Blaze Runner"
+    description: "Defeat 32 blazes"
+    icon: minecraft:blaze_rod
+    frame: goal
+    requirements:
+      - type: kill_entity
+        entity: blaze
+        amount: 32
+
+  wither_watch:
+    tab: delver
+    parent: blaze_runner
+    title: "Skull Collector"
+    description: "Defeat 20 wither skeletons"
+    icon: minecraft:wither_skeleton_skull
+    frame: goal
+    requirements:
+      - type: kill_entity
+        entity: wither_skeleton
+        amount: 20
+
+  wither_slayer:
+    tab: delver
+    parent: wither_watch
+    title: "Wither Slayer"
+    description: "Defeat the Wither"
+    icon: minecraft:nether_star
+    frame: challenge
+    announce: true
+    requirements:
+      - type: kill_entity
+        entity: wither
+        amount: 1
+    rewards:
+      xp: 500
+
+  dragon_slayer:
+    tab: delver
+    parent: ender_hunter
+    title: "Dragon Slayer"
+    description: "Defeat the Ender Dragon"
+    icon: minecraft:dragon_head
+    frame: challenge
+    announce: true
+    requirements:
+      - type: kill_entity
+        entity: ender_dragon
+        amount: 1
+    rewards:
+      xp: 1000
+
+  warden_walker:
+    tab: delver
+    parent: pest_control
+    title: "Quiet, Please"
+    description: "Defeat a Warden"
+    icon: minecraft:sculk_shrieker
+    frame: challenge
+    announce: true
+    hidden: true
+    requirements:
+      - type: kill_entity
+        entity: warden
+        amount: 1
+    rewards:
+      xp: 500
+
+  learning_experience:
+    tab: delver
+    title: "Learning Experience"
+    description: "Die for the first time. It happens to everyone"
+    icon: minecraft:skeleton_skull
+    hidden: true
+    requirements:
+      - type: statistic
+        statistic: DEATHS
+        amount: 1
+
+  # =========================================================================
+  #  HOMESTEADERS  (tab homestead) — building, farming, trading, brewing
+  # =========================================================================
+  sakura_builder:
+    tab: homestead
+    title: "Sakura Builder"
+    description: "Place 256 cherry planks"
+    icon: minecraft:cherry_planks
+    requirements:
+      - type: place_block
+        block: cherry_planks
+        amount: 256
+
+  stonemason:
+    tab: homestead
+    parent: sakura_builder
+    title: "Stonemason"
+    description: "Place 1,000 stone bricks"
+    icon: minecraft:stone_bricks
+    frame: goal
+    requirements:
+      - type: place_block
+        block: stone_bricks
+        amount: 1000
+    rewards:
+      xp: 100
+
+  green_thumb:
+    tab: homestead
+    parent: sakura_builder
+    title: "Green Thumb"
+    description: "Harvest 256 wheat"
+    icon: minecraft:wheat
+    requirements:
+      - type: break_block
+        block: wheat
+        amount: 256
+
+  harvest_season:
+    tab: homestead
+    parent: green_thumb
+    title: "Harvest Season"
+    description: "Harvest 256 carrots and 256 potatoes"
+    icon: minecraft:carrot
+    frame: goal
+    requirements:
+      - type: break_block
+        block: carrots
+        amount: 256
+      - type: break_block
+        block: potatoes
+        amount: 256
+    rewards:
+      xp: 100
+
+  shepherd:
+    tab: homestead
+    parent: green_thumb
+    title: "Shepherd"
+    description: "Breed 25 animals"
+    icon: minecraft:hay_block
+    requirements:
+      - type: statistic
+        statistic: ANIMALS_BRED
+        amount: 25
+
+  rancher:
+    tab: homestead
+    parent: shepherd
+    title: "Rancher"
+    description: "Breed 100 animals"
+    icon: minecraft:lead
+    frame: goal
+    requirements:
+      - type: statistic
+        statistic: ANIMALS_BRED
+        amount: 100
+    rewards:
+      xp: 150
+
+  angler:
+    tab: homestead
+    title: "Gone Fishing"
+    description: "Catch 25 fish"
+    icon: minecraft:fishing_rod
+    requirements:
+      - type: statistic
+        statistic: FISH_CAUGHT
+        amount: 25
+
+  master_angler:
+    tab: homestead
+    parent: angler
+    title: "Master Angler"
+    description: "Catch 200 fish"
+    icon: minecraft:tropical_fish
+    frame: goal
+    requirements:
+      - type: statistic
+        statistic: FISH_CAUGHT
+        amount: 200
+    rewards:
+      xp: 200
+
+  trader:
+    tab: homestead
+    title: "Fair Trade"
+    description: "Trade with villagers 25 times"
+    icon: minecraft:emerald
+    requirements:
+      - type: statistic
+        statistic: TRADED_WITH_VILLAGER
+        amount: 25
+
+  tycoon:
+    tab: homestead
+    parent: trader
+    title: "Merchant Prince"
+    description: "Trade with villagers 200 times"
+    icon: minecraft:bell
+    frame: goal
+    requirements:
+      - type: statistic
+        statistic: TRADED_WITH_VILLAGER
+        amount: 200
+    rewards:
+      xp: 200
+
+  enchanter:
+    tab: homestead
+    parent: trader
+    title: "Arcane Apprentice"
+    description: "Enchant 10 items"
+    icon: minecraft:enchanting_table
+    requirements:
+      - type: statistic
+        statistic: ITEM_ENCHANTED
+        amount: 10
+
+  brewer:
+    tab: homestead
+    parent: enchanter
+    title: "Bubbling Cauldron"
+    description: "Craft a brewing stand"
+    icon: minecraft:brewing_stand
+    requirements:
+      - type: craft_item
+        item: brewing_stand
+        amount: 1
+
+  blacksmith:
+    tab: homestead
+    parent: sakura_builder
+    title: "Blacksmith"
+    description: "Craft an anvil"
+    icon: minecraft:anvil
+    requirements:
+      - type: craft_item
+        item: anvil
+        amount: 1
+
+  sweet_tooth:
+    tab: homestead
+    parent: green_thumb
+    title: "Sweet Tooth"
+    description: "Eat 10 slices of cake"
+    icon: minecraft:cake
+    requirements:
+      - type: statistic
+        statistic: CAKE_SLICES_EATEN
+        amount: 10
+
+  sleepy_head:
+    tab: homestead
+    parent: sakura_builder
+    title: "Sleepy Head"
+    description: "Sleep in a bed 25 times"
+    icon: minecraft:red_bed
+    requirements:
+      - type: statistic
+        statistic: SLEEP_IN_BED
+        amount: 25
+
+  pogo:
+    tab: homestead
+    title: "Pogo Stick"
+    description: "Jump 10,000 times"
+    icon: minecraft:rabbit_foot
+    requirements:
+      - type: statistic
+        statistic: JUMP
+        amount: 10000
+
+  all_rounder:
+    tab: homestead
+    parent: harvest_season
+    title: "&6Jack of All Trades"
+    description: "Earn Merchant Prince, Rancher, Stonemason and Master Angler"
+    icon: minecraft:golden_apple
+    frame: challenge
+    announce: true
+    requirements:
+      - type: advancements
+        list: [tycoon, rancher, stonemason, master_angler]
+    rewards:
+      xp: 750
