@@ -81,6 +81,11 @@ final class NodeStorage {
                 k.set(waterKey, PersistentDataType.INTEGER, n.fluidAmount);
                 pdc.set(millKey(n), PersistentDataType.TAG_CONTAINER, k);
             }
+            if (n.type == PartType.PIPE && n.itemModes != null && !n.itemModes.equals("NNNNNN")) {
+                PersistentDataContainer k = pdc.getAdapterContext().newPersistentDataContainer();
+                k.set(labelKey, PersistentDataType.STRING, n.itemModes);
+                pdc.set(millKey(n), PersistentDataType.TAG_CONTAINER, k);
+            }
             if (n.type == PartType.STEAM_BOILER && n.burnTicks > 0) {
                 PersistentDataContainer k = pdc.getAdapterContext().newPersistentDataContainer();
                 k.set(waterKey, PersistentDataType.INTEGER, n.burnTicks);
@@ -197,6 +202,10 @@ final class NodeStorage {
                             n.fluid = null;
                         }
                     }
+                }
+                if (type == PartType.PIPE) {
+                    PersistentDataContainer k = pdc.get(millKey(n), PersistentDataType.TAG_CONTAINER);
+                    if (k != null) n.itemModes = k.get(labelKey, PersistentDataType.STRING);
                 }
                 if (type == PartType.STEAM_BOILER) {
                     PersistentDataContainer k = pdc.get(millKey(n), PersistentDataType.TAG_CONTAINER);

@@ -37,6 +37,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
     private Decor decor;
     private DecorShapes shapes;
     private Oil oil;
+    private ItemPipes itemPipes;
     private Breakers breakers;
     private Belts belts;
     private Arms arms;
@@ -90,6 +91,7 @@ public final class SteamworksPlugin extends JavaPlugin implements KineticsHost {
         shapes.registerRecipes();
         getServer().getPluginManager().registerEvents(shapes, this);
         oil = new Oil(this);
+        itemPipes = new ItemPipes(this);
         breakers = new Breakers(this);
         belts = new Belts(this);
         arms = new Arms(this);
@@ -142,6 +144,7 @@ getServer().getServicesManager().register(java.util.function.Function.class, (ja
 }, this, org.bukkit.plugin.ServicePriority.Normal);
         getServer().getPluginManager().registerEvents(arms, this);
         getServer().getPluginManager().registerEvents(oil, this);
+        getServer().getPluginManager().registerEvents(itemPipes, this);
         trains = new Trains(this);
         getServer().getPluginManager().registerEvents(trains, this);
         SteamworksCommand cmd = new SteamworksCommand(this);
@@ -181,6 +184,7 @@ getServer().getServicesManager().register(java.util.function.Function.class, (ja
             kinetics.tick();
             trains.tick(kinetics.tick);
             oil.tick(kinetics.tick);
+            if (kinetics.tick % 10 == 0) itemPipes.tick();
             if (kinetics.tick % 2 == 0) breakers.tick(kinetics.tick);
             belts.tick();
             belts.eject();

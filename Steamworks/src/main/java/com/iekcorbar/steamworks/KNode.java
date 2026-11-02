@@ -88,6 +88,8 @@ final class KNode {
 
     // power plants: windmill wind / boiler fire
     int burnTicks;
+    /** Pipe item sides, six chars in Kinetics.FACES order: N = off, I = takes items out, O = puts items in. */
+    String itemModes;
     boolean blocked;
 
     // drill / saw

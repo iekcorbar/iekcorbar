@@ -1,6 +1,6 @@
 # Steamworks: pijpen-systeem (ontwerp)
 
-Status: **fase 1 gebouwd (Steamworks 0.3.39, nog niet live).** Fase 2 (transport) nog niet gebouwd. Besluiten staan onder punt 4.
+Status: **fase 1 en fase 2 (automatisch deel) gebouwd in Steamworks 0.3.40, nog niet live.** Nog open: de aangedreven as-pomp (fase 2b). Besluiten staan onder punt 4.
 
 Dit document gaat over de pijpen van Steamworks (vloeistof, olie-achtig). Het staat los van:
 - `docs/steamworks-kinetics-design.md`: de rotatie-kant (tandwielen, assen).

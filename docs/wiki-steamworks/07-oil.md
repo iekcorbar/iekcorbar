@@ -9,7 +9,8 @@ About 1 in 12 overworld chunks has an oil field underneath - more often in deser
 
 ## The oil chain
 1. **Pumpjack** - place it on the field and power it with a shaft through its side. Its beam nods up and down. At crank speed it pumps 32 mB of crude oil per second (load 8 Tq per RPM).
-2. **Pipes** - connect pumpjacks, tanks and refineries. They join up on their own; fluids flow without power.
+2. **Pipes** - connect pumpjacks, tanks and refineries. They join up on their own; fluids flow without power. A pipe also joins up with a vanilla **chest, trapped chest, barrel, hopper, dispenser, dropper, furnace, blast furnace, smoker or brewing stand** that touches it. Shulker boxes and ender chests are left out.
+   - **Items in pipes:** use a steam wrench on a container next to a pipe to set that side of the pipe: *off* → *takes items out* → *puts items in* → *off*. A network moves one item type at a time, 8 per second, and stops when the target is full. The axle-driven pump comes later.
 3. **Tanks** - hold 16 buckets (16,000 mB) of one fluid. You see the level and colour: crude oil black, fuel amber, chemical waste green.
 4. **Refinery** - needs **heat** under it (fire, a lit campfire, lava or magma). It turns 100 mB of crude oil per second into **60% fuel** and **40% chemical waste**. It stops when there is no room for fuel.
 
