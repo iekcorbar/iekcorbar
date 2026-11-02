@@ -918,18 +918,26 @@ export default function ClientProviders({ children }) {
                     { href: '/start', label: 'New here? Start', icon: Compass, match: (p) => p === '/start' },
                     { href: '/map', label: 'Map', icon: Map, match: (p) => p === '/map' },
                     { href: '/vote', label: 'Vote', icon: ThumbsUp, match: (p) => p === '/vote' },
-                    { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
                     { href: 'https://shop.iekcorbar.com', label: 'Shop', icon: ShoppingBag, match: () => false },
-                    { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
-                { href: '/wildlife', label: 'Wildlife Guide', icon: PawPrint, match: (p) => p.startsWith('/wildlife') },
-                { href: '/dragons', label: 'Dragon Guide', icon: Flame, match: (p) => p.startsWith('/dragons') },
-                { href: '/gouw', label: 'Gouw Guide', icon: MapPin, match: (p) => p.startsWith('/gouw') },
-                { href: '/kitchen', label: 'Kitchen Guide', icon: ChefHat, match: (p) => p.startsWith('/kitchen') },
-                { href: '/relics', label: 'Relics Guide', icon: Gift, match: (p) => p.startsWith('/relics') },
-                { href: '/tools', label: 'Storage & Tools', icon: Boxes, match: (p) => p.startsWith('/tools') },
-                    { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                     { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
                     { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
+                  ]}
+                />
+
+                <NavDropdown
+                  label="Guides"
+                  icon={BookOpen}
+                  pathname={pathname}
+                  items={[
+                    { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
+                    { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
+                    { href: '/wildlife', label: 'Wildlife Guide', icon: PawPrint, match: (p) => p.startsWith('/wildlife') },
+                    { href: '/dragons', label: 'Dragon Guide', icon: Flame, match: (p) => p.startsWith('/dragons') },
+                    { href: '/gouw', label: 'Gouw Guide', icon: MapPin, match: (p) => p.startsWith('/gouw') },
+                    { href: '/kitchen', label: 'Kitchen Guide', icon: ChefHat, match: (p) => p.startsWith('/kitchen') },
+                    { href: '/relics', label: 'Relics Guide', icon: Gift, match: (p) => p.startsWith('/relics') },
+                    { href: '/tools', label: 'Storage & Tools', icon: Boxes, match: (p) => p.startsWith('/tools') },
+                    { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
                   ]}
                 />
 
@@ -1126,8 +1134,25 @@ export default function ClientProviders({ children }) {
                 { href: '/start', label: 'New here? Start', icon: Compass, match: (p) => p === '/start' },
                 { href: '/map', label: 'Map', icon: Map, match: (p) => p === '/map' },
                 { href: '/vote', label: 'Vote', icon: ThumbsUp, match: (p) => p === '/vote' },
-                { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
                 { href: 'https://shop.iekcorbar.com', label: 'Shop', icon: ShoppingBag, match: () => false },
+                { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
+                { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
+              ].map(({ href, label, icon: Icon, match }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                    match(pathname) ? 'bg-sp-gold/10 text-sp-gold' : 'text-text-warm/80 hover:bg-sp-charcoal hover:text-white'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" /> {label}
+                </Link>
+              ))}
+
+              <span className="block text-[10px] uppercase font-bold text-sp-gold/80 tracking-widest px-2 pt-2 pb-0.5">Guides</span>
+              {[
+                { href: '/steamworks', label: 'Steamworks Guide', icon: Cog, match: (p) => p.startsWith('/steamworks') },
                 { href: '/sakagura', label: 'Sakagura Guide', icon: Wine, match: (p) => p.startsWith('/sakagura') },
                 { href: '/wildlife', label: 'Wildlife Guide', icon: PawPrint, match: (p) => p.startsWith('/wildlife') },
                 { href: '/dragons', label: 'Dragon Guide', icon: Flame, match: (p) => p.startsWith('/dragons') },
@@ -1136,8 +1161,6 @@ export default function ClientProviders({ children }) {
                 { href: '/relics', label: 'Relics Guide', icon: Gift, match: (p) => p.startsWith('/relics') },
                 { href: '/tools', label: 'Storage & Tools', icon: Boxes, match: (p) => p.startsWith('/tools') },
                 { href: '/recipes', label: 'Recipes', icon: BookOpen, match: (p) => p.startsWith('/recipes') },
-                { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
-                { href: '/achievements', label: 'Achievements', icon: Trophy, match: (p) => p.startsWith('/achievements') },
               ].map(({ href, label, icon: Icon, match }) => (
                 <Link
                   key={href}
