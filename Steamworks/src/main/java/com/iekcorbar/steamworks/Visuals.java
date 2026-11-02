@@ -369,7 +369,8 @@ final class Visuals {
         });
         for (BlockFace f : Kinetics.FACES) {
             KNode m = plugin.kinetics().rel(n, f.getModX(), f.getModY(), f.getModZ());
-            if (!Oil.fluidPart(m)) continue;
+            boolean link = Oil.fluidPart(m) || (m == null && Oil.containerBlock(n.block().getRelative(f)));
+            if (!link) continue;
             BlockFace front = Kinetics.axisOf(f) == Axis.Y ? BlockFace.SOUTH : BlockFace.UP;
             add(n, "sw_pipe_arm", Role.ARM, orientation(f, front), 1);
         }

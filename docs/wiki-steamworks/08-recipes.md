@@ -82,7 +82,7 @@ This page is generated from the plugin's own recipe table - run `node scripts/bu
 ### Oil
 | Item | Grid | Makes |
 |---|---|---|
-| Pipe | copper plate copper ingot copper plate | 4 |
+| Pipe | copper ingot / copper ingot | 4 |
 | Tank | copper plate / barrel / copper plate | 1 |
 | Pump | cogwheel / pipe | 1 |
 | Valve | iron plate / pipe | 1 |

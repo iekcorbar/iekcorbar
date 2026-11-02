@@ -97,6 +97,36 @@ final class Oil implements Listener {
                 || n.type == PartType.STEAM_BOILER || n.type == PartType.PUMP || n.type == PartType.VALVE);
     }
 
+    /** Vanilla containers a pipe connects to (shulker boxes and ender chests are left out on purpose). */
+    static final Set<Material> CONTAINERS = java.util.EnumSet.of(Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL,
+            Material.HOPPER, Material.DISPENSER, Material.DROPPER, Material.FURNACE, Material.BLAST_FURNACE, Material.SMOKER,
+            Material.BREWING_STAND);
+
+    static boolean containerBlock(Block b) {
+        return CONTAINERS.contains(b.getType());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onContainerPlace(org.bukkit.event.block.BlockPlaceEvent e) {
+        refreshPipesBeside(e.getBlock());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onContainerBreak(org.bukkit.event.block.BlockBreakEvent e) {
+        refreshPipesBeside(e.getBlock());
+    }
+
+    /** Pipes next to a changed block redraw their arms one tick later (the block is only gone after the event). */
+    private void refreshPipesBeside(Block b) {
+        if (!containerBlock(b)) return;
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            for (BlockFace f : FACES) {
+                KNode m = plugin.kinetics().at(b.getRelative(f));
+                if (m != null && m.type == PartType.PIPE) plugin.visuals().updatePipe(m);
+            }
+        });
+    }
+
     /** Fluid may pass this neighbour node on its way to a tank: pipes and pumps always, valves only while turning. */
     private boolean conducts(KNode m) {
         if (m.type == PartType.PIPE || m.type == PartType.PUMP) return true;

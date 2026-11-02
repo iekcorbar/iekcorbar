@@ -256,7 +256,7 @@ final class PartItems {
         r.put(PartType.STATION, new Object[]{1, new String[]{"LBL", " T ", " T "}, 'L', Material.LANTERN, 'B', new RecipeChoice.MaterialChoice(Tag.ITEMS_SIGNS), 'T', Material.STICK});
         r.put(PartType.SIGNAL, new Object[]{1, new String[]{"L", "P", "B"}, 'L', Material.REDSTONE_LAMP, 'P', MaterialType.IRON_PLATE, 'B', Material.IRON_BARS});
         r.put(PartType.PUMPJACK, new Object[]{1, new String[]{"BPB", "ISI", "I I"}, 'B', MaterialType.BRASS_PLATE, 'P', Material.PISTON, 'I', MaterialType.IRON_PLATE, 'S', PartType.SHAFT});
-        r.put(PartType.PIPE, new Object[]{4, new String[]{"SCS"}, 'S', MaterialType.COPPER_PLATE, 'C', Material.COPPER_INGOT}); // Create's fluid pipe
+        r.put(PartType.PIPE, new Object[]{4, new String[]{"C", "C"}, 'C', Material.COPPER_INGOT}); // two copper ingots, four pipes (no plate chain needed)
         r.put(PartType.TANK, new Object[]{1, new String[]{"B", "C", "B"}, 'B', MaterialType.COPPER_PLATE, 'C', Material.BARREL}); // Create's fluid tank
         r.put(PartType.REFINERY, new Object[]{1, new String[]{"PTP", "BKB", "BFB"}, 'P', PartType.PIPE, 'T', PartType.TANK, 'B', MaterialType.BRASS_PLATE, 'K', PartType.KETTLE, 'F', Material.BLAST_FURNACE});
         r.put(PartType.DRILL, new Object[]{1, new String[]{" A ", "AIA", " C "}, 'A', MaterialType.ANDESITE_ALLOY, 'I', Material.IRON_INGOT, 'C', MaterialType.ANDESITE_CASING});

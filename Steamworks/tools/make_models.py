@@ -781,14 +781,14 @@ def _pipe_center():
     # Joint in the middle of the block: a 9.2 px cube with its edges chamfered (three 45 degree prisms),
     # so an elbow or T reads as one rounded fitting. Brass plates cap the sides nothing connects to.
     m = Model("sw_pipe_center", 1.4)
-    m.cube("core", (-4.6, -4.6, -4.6), (4.6, 4.6, 4.6), "copper")
-    m.cube("round_y", (-3.5, -4.5, -3.5), (3.5, 4.5, 3.5), "copper", rot=(0, 45, 0))
-    m.cube("round_x", (-4.5, -3.5, -3.5), (4.5, 3.5, 3.5), "copper", rot=(45, 0, 0))
-    m.cube("round_z", (-3.5, -3.5, -4.5), (3.5, 3.5, 4.5), "copper", rot=(0, 0, 45))
+    m.cube("core", (-5.5, -5.5, -5.5), (5.5, 5.5, 5.5), "copper")
+    m.cube("round_y", (-4.2, -5.4, -4.2), (4.2, 5.4, 4.2), "copper", rot=(0, 45, 0))
+    m.cube("round_x", (-5.4, -4.2, -4.2), (5.4, 4.2, 4.2), "copper", rot=(45, 0, 0))
+    m.cube("round_z", (-4.2, -4.2, -5.4), (4.2, 4.2, 5.4), "copper", rot=(0, 0, 45))
     for ax in range(3):
         for sg in (-1, 1):
-            a, b = [-2.2] * 3, [2.2] * 3
-            a[ax], b[ax] = (4.6, 4.95) if sg > 0 else (-4.95, -4.6)
+            a, b = [-2.6] * 3, [2.6] * 3
+            a[ax], b[ax] = (5.5, 5.9) if sg > 0 else (-5.9, -5.5)
             m.cube(f"plate{ax}{sg}", tuple(a), tuple(b), "brass")
     return m
 
@@ -801,9 +801,9 @@ def _pipe_arm():
     # from the core to the block face along model +Y: a 6.8 px tube with a collar by the core and one at
     # the block edge (the neighbour's collar sits against it, so the join reads as a flanged coupling)
     m = Model("sw_pipe_arm")
-    m.cube("tube", (-3.4, 4.4, -3.4), (3.4, 8.0, 3.4), "copper")
-    m.cube("collar", (-4.3, 4.6, -4.3), (4.3, 5.5, 4.3), "brass")
-    m.cube("ring", (-4.3, 7.1, -4.3), (4.3, 8.0, 4.3), "brass")
+    m.cube("tube", (-4.0, 5.3, -4.0), (4.0, 8.0, 4.0), "copper")
+    m.cube("collar", (-5.2, 5.4, -5.2), (5.2, 6.4, 5.2), "brass")
+    m.cube("ring", (-5.2, 7.2, -5.2), (5.2, 8.0, 5.2), "brass")
     return m
 
 
@@ -1505,9 +1505,9 @@ def build():
     def _pipe_item():
         pp = Model("sw_pipe", 1.3)
         pp.merge(by["sw_pipe_center"])
-        pp.cube("arm_a", (-3.4, -8.0, -3.4), (3.4, 8.0, 3.4), "copper")
-        pp.cube("ring_a", (-4.3, 7.1, -4.3), (4.3, 8.0, 4.3), "brass")
-        pp.cube("ring_b", (-4.3, -8.0, -4.3), (4.3, -7.1, 4.3), "brass")
+        pp.cube("arm_a", (-4.0, -8.0, -4.0), (4.0, 8.0, 4.0), "copper")
+        pp.cube("ring_a", (-5.2, 7.2, -5.2), (5.2, 8.0, 5.2), "brass")
+        pp.cube("ring_b", (-5.2, -8.0, -5.2), (5.2, -7.2, 5.2), "brass")
         return pp
     parts.append(_own_uuids(4, _pipe_item))
     wm = Model("sw_windmill", 1.0)
