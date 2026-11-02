@@ -14,7 +14,7 @@ import org.joml.Vector3f;
  * Shared orientation maths for the barrel-covers (Steam Still and Sake Casks).
  * Pattern copied from SteamworksAdditions Decor.java: the model's front is its NORTH side
  * (-Z), and an ItemDisplay shows the model turned 180 degrees about Y, so a cover gets
- * yaw(facing) + 180 to make the front really point the way the player looked when placing.
+ * yaw(facing) to make the front really point the way the player looked when placing.
  */
 final class CoverTransform {
     private CoverTransform() { }
@@ -58,7 +58,7 @@ final class CoverTransform {
             default -> 0f;
         };
         Quaternionf q = new Quaternionf();
-        q.rotateY((float) Math.toRadians(yaw + 180));
+        q.rotateY((float) Math.toRadians(yaw));
         return new Transformation(new Vector3f(), q, new Vector3f(1.01f, 1.01f, 1.01f), new Quaternionf());
     }
 }
