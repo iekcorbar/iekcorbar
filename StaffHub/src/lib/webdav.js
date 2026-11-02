@@ -2,13 +2,30 @@
 // netwerkschijf zien. Draait in server.js vóór Next (route handlers kennen geen
 // PROPFIND/MKCOL/MOVE). Rechten: dezelfde mappen-ACL als de web-UI.
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import { getDb, blobPath, clean, uniqueName, findChild, storeBlob, now, deleteNodeTree, gcBlobs, latestVersion } from './db.js';
 import { userFromBasic } from './secure.js';
 import { canSee, canWrite } from './acl.js';
 
 const ROOT = '/dav';
 const MAX = 512 * 1024 * 1024;
-const ALLOW = 'OPTIONS, PROPFIND, PROPPATCH, GET, HEAD, PUT, DELETE, MKCOL, MOVE, COPY';
+const ALLOW = 'OPTIONS, PROPFIND, PROPPATCH, GET, HEAD, PUT, DELETE, MKCOL, MOVE, COPY, LOCK, UNLOCK';
+
+// Windows (Verkenner, Office) behandelt een WebDAV-schijf zonder werkende LOCK als
+// ALLEEN-LEZEN: bestanden openen "alleen lezen", opslaan faalt. Daarom adverteert de
+// server exclusieve schrijf-locks en beantwoordt LOCK/UNLOCK echt. De locks zijn
+// bewust licht (geheugen, verlopen vanzelf): het zijn geen toegangscontrole - die
+// blijft de mappen-ACL - maar het signaal dat de client mag schrijven.
+const SUPPORTED_LOCK = '<d:supportedlock><d:lockentry><d:lockscope><d:exclusive/></d:lockscope><d:locktype><d:write/></d:locktype></d:lockentry></d:supportedlock>';
+const locks = new Map();   // pad -> { token, owner, expires, timeout }
+const LOCK_SECONDS = 3600;
+
+function lockXml(token, owner, seconds) {
+  return '<?xml version="1.0" encoding="utf-8"?><d:prop xmlns:d="DAV:"><d:lockdiscovery><d:activelock>'
+    + '<d:locktype><d:write/></d:locktype><d:lockscope><d:exclusive/></d:lockscope><d:depth>0</d:depth>'
+    + '<d:owner>' + xmlEsc(owner || 'staffhub') + '</d:owner><d:timeout>Second-' + seconds + '</d:timeout>'
+    + '<d:locktoken><d:href>' + token + '</d:href></d:locktoken></d:activelock></d:lockdiscovery></d:prop>';
+}
 
 const enc = (s) => s.split('/').map(encodeURIComponent).join('/');
 const xmlEsc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -78,6 +95,7 @@ function propXml(node, hrefBase) {
     + '<d:getlastmodified>' + rdate(node.updated) + '</d:getlastmodified>'
     + '<d:creationdate>' + new Date(node.created).toISOString() + '</d:creationdate>'
     + '<d:getetag>"' + node.id + '-' + node.updated + '"</d:getetag>'
+    + SUPPORTED_LOCK
     + '</d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response>';
 }
 
@@ -96,6 +114,7 @@ function selfXml(user, node, pathname) {
     + (node.type === 'file' ? '<d:getcontentlength>' + (v ? v.size : 0) + '</d:getcontentlength><d:getcontenttype>' + xmlEsc((v && v.mime) || 'application/octet-stream') + '</d:getcontenttype>' : '')
     + '<d:getlastmodified>' + rdate(node.updated) + '</d:getlastmodified>'
     + '<d:getetag>"' + node.id + '-' + node.updated + '"</d:getetag>'
+    + SUPPORTED_LOCK
     + '</d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response>';
 }
 
@@ -210,7 +229,14 @@ export async function handleWebDav(req, res) {
     const sha = storeBlob(buf);
     let node = findChild(loc.parentId, name);
     if (node && node.type === 'folder') return send(res, 405, 'map bestaat al');
-    if (node && node.type === 'page') return send(res, 405, 'pagina met die naam');
+    if (node && node.type === 'page') {
+      // Een pagina (als .html in de schijf) bewerken en opslaan werkt nu gewoon.
+      if (!canWrite(user, node)) return send(res, 403, 'verboden');
+      const html = buf.toString('utf8').slice(0, 2_000_000);
+      d.prepare('UPDATE pages SET html = ?, who = ?, updated = ? WHERE node = ?').run(html, user.id, now(), node.id);
+      d.prepare('UPDATE nodes SET updated = ? WHERE id = ?').run(now(), node.id);
+      return send(res, 204);
+    }
     if (node) {
       const last = latestVersion(node.id);
       if (!last || last.sha !== sha)
@@ -283,8 +309,27 @@ export async function handleWebDav(req, res) {
     return send(res, conflict ? 204 : 201);
   }
 
-  if (method === 'LOCK' || method === 'UNLOCK') {
-    res.writeHead(501, { Allow: ALLOW, 'Content-Length': '0' });
+  if (method === 'LOCK') {
+    const key = decodeURIComponent(req.url.split('?')[0]);
+    for (const [k, l] of locks) if (l.expires < Date.now()) locks.delete(k);
+    const m = /Second-(\d+)/i.exec(String(req.headers.timeout || ''));
+    const seconds = Math.min(Number(m && m[1]) || LOCK_SECONDS, 86400);
+    let body = '';
+    try { body = (await readBody(req)).toString('utf8'); } catch { /* geen body = verlengen */ }
+    const own = /<[^>]*href[^>]*>([^<]*)</i.exec(body);
+    const held = locks.get(key);
+    let token = held && held.expires >= Date.now() ? held.token : null;
+    // Zelfde gebruiker mag opnieuw/verlengen; een ander krijgt 423 zolang de lock leeft.
+    if (held && held.expires >= Date.now() && held.user !== user.id) return send(res, 423, 'vergrendeld');
+    if (!token) token = 'opaquelocktoken:' + crypto.randomUUID();
+    locks.set(key, { token, user: user.id, owner: (own && own[1]) || user.username || 'staffhub', expires: Date.now() + seconds * 1000 });
+    const xml = Buffer.from(lockXml(token, locks.get(key).owner, seconds));
+    res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8', 'Content-Length': String(xml.length), 'Lock-Token': '<' + token + '>' });
+    return res.end(xml);
+  }
+  if (method === 'UNLOCK') {
+    locks.delete(decodeURIComponent(req.url.split('?')[0]));
+    res.writeHead(204, { 'Content-Length': '0' });
     return res.end();
   }
   return send(res, 405, '', 'text/plain', { Allow: ALLOW });
