@@ -275,7 +275,7 @@ final class PartItems {
         r.put(PartType.EJECTOR, new Object[]{1, new String[]{"A", "D", "I"}, 'A', MaterialType.GOLDEN_PLATE, 'D', PartType.DEPOT, 'I', PartType.COGWHEEL});
         r.put(PartType.PUMP, new Object[]{1, new String[]{"C", "P"}, 'C', PartType.COGWHEEL, 'P', PartType.PIPE});   // Create: shapeless cog + pipe, as a column here
         r.put(PartType.VALVE, new Object[]{1, new String[]{"I", "P"}, 'I', MaterialType.IRON_PLATE, 'P', PartType.PIPE});
-        r.put(PartType.WHISTLE, new Object[]{1, new String[]{"P", "C"}, 'P', MaterialType.GOLDEN_PLATE, 'C', Material.COPPER_INGOT});
+        r.put(PartType.WHISTLE, new Object[]{1, new String[]{"CNK"}, 'C', Material.COPPER_INGOT, 'N', Material.IRON_NUGGET, 'K', Material.COAL});
         r.put(PartType.SIEVE, new Object[]{1, new String[]{"I", "C"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL});
         r.put(PartType.ITEM_FILTER, new Object[]{1, new String[]{"I", "P"}, 'I', MaterialType.IRON_PLATE, 'P', PartType.PIPE});
         r.put(PartType.HARVESTER, new Object[]{1, new String[]{"I", "C", "I"}, 'I', MaterialType.IRON_PLATE, 'C', PartType.COGWHEEL});
