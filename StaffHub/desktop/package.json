@@ -1,6 +1,6 @@
 {
   "name": "staffhub-desktop",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "description": "StaffHub desktop-app: het staff-netwerk in één klik.",
   "author": "Iekcorbar",
@@ -18,6 +18,6 @@
     "productName": "StaffHub",
     "electronDist": "node_modules/electron/dist",
     "files": ["main.js", "config.json"],
-    "win": { "target": "nsis" }
+    "win": { "target": "nsis", "signAndEditExecutable": true, "signingHashAlgorithms": ["sha256"], "publisherName": ["Iekcorbar StaffHub"] }
   }
 }
