@@ -49,3 +49,12 @@ Cosa cambia per lo staff:
 - Dungeon, boss personalizzati ed eventi non cambiano: questi valori riguardano solo i mob che spawnano da soli.
 - Se un giocatore chiede perché un mob ora è più debole o più raro, la risposta è questa modifica. Non promettere una data per un eventuale ritorno ai valori precedenti.
 - Il reload si fa con il comando del plugin, `em reload`, non con il `/reload` generale (vedi la regola d'oro in 00-Indice).
+
+## Aggiornamenti del 2 novembre 2026
+
+- **Sakagura 0.7.13 (online):** la Steam Still e le botti di sakè non si girano più di 180 gradi al momento del posizionamento. Se vedete ancora una botte storta, segnalatelo: potrebbe dipendere dal modello e non dal plugin.
+- **IekcorbarSiteSync 1.17.2 (online):** le advancement doppie al riavvio sono sparite. Ci sono tre nuove schede (Iekcorbar, Delvers and Hunters, Homesteaders) con 61 advancement personalizzate. Attenzione: al primo `/iadv check` molti giocatori ricevono di colpo una serie di advancement, perché le statistiche già raccolte vengono contate. È normale.
+- **Sito - menu e ricettario:** il menu Play è stato diviso in Play e Guides. Il ricettario (Play > Recipes) ha ora una ricerca e un pannello con render, "Made by" e "Used in". Il pacchetto del sito è pronto ma non ancora online: lo carica il proprietario su Plesk.
+- **Whistle (Steamworks):** il recipe sul sito ora corrisponde al gioco: rame in lingotto, nugget di ferro e carbone, sulla riga in alto della griglia. Nel gioco il cambio non è ancora attivo: serve la nuova jar di Steamworks, che non è ancora stata caricata.
+- **Pipe (Steamworks):** il recipe sul sito è aggiornato a 2 lingotti di rame in colonna = 4 pipe.
+- **Steamworks sul server:** la jar sul server non è identica alla versione di questo repository. Non la sostituiamo finché non è chiaro quale versione è la più recente.
