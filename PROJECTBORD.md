@@ -80,3 +80,4 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 - Afgerond → meteen bijwerken + opruimen volgens skill `cleanup` (artefact uit deploy/, punt uit de lijst).
 - Niets hier = geen persoonlijke namen/gegevens: die blijven in gitignore-mappen.
 | IekQuests 0.5.0 - golf 3b+4: Rod, 24 guards, Backpack x3, JobsRank1-5 gemigreerd | ✅ LIVE | 🟢 30-10 uitgerold door agent; 51 quests, log groen; alleen tutorial (golf 5) nog niet - wacht op greyarts |
+| Steamworks 0.3.40 (pijpen: aansluiten op containers + items vervoeren) + Wildlife 0.9.10 (dieren-maten) | TE-DEPLOYEN punt 140/141 | LIVE 02-11 10:32 (log groen); wacht op in-game test door eigenaar |
