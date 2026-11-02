@@ -4,18 +4,29 @@ main: com.iekcorbar.quests.IekQuestsPlugin
 api-version: '26.2'
 description: Own quest engine - conversations, goals, rewards, compass and a click GUI.
 author: iekcorbar
-softdepend: [Citizens, Vault, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
+softdepend: [Citizens, Vault, WorldGuard, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 
 commands:
   questbook:
     description: Open the quest menu (or admin operations)
     usage: /questbook [mode [gui|chat]|reload|check [player]|track|reset <player> [quest]]
     aliases: [questsui, iquests]
+  iekdialogue:
+    description: Administer and validate the NPC dialogue graph
+    usage: /iekdialogue <help|list|validate|show|delete|npc|tag|cooldown|test|events|sequences|reload>
+  iekobjective:
+    description: Administer and validate tag-gated objectives
+    usage: /iekobjective <help|list|show|validate|reload|progress|reset|create|set|task|delete>
+  iekquest:
+    description: Start configured events and manage player Journal entries
+    usage: /iekquest event start <player> <event-id> | /iekquest journal <add|remove> <player> <entry-id>
+  journal:
+    description: Open the player's IekQuests Journal book
+    usage: /journal
+    permission: iekquests.use
   questwizard:
-    description: In-game wizard to build a new quest (and NPC) into the config
+    description: In-game GUI editor for quests and the NPC dialogue graph
     usage: /questwizard [delete <quest-id>]
-    permission: iekquests.admin
-    permission-message: The quest wizard is for staff only.
     aliases: [qwiz]
   iekitem:
     description: IekItems - list, give, create and delete custom items (items.yml)
@@ -40,6 +51,12 @@ permissions:
     default: true
 
   # ---- staff permissions (granular)
+  iekquests.dialogue:
+    description: Create and edit NPC dialogues, responses, NPC bindings and tag definitions
+    default: op
+  iekquests.objective:
+    description: Administer Objective.yml definitions and player objective progress
+    default: op
   iekquests.wizard:
     description: Use the in-game quest wizard to create and delete quests
     default: op

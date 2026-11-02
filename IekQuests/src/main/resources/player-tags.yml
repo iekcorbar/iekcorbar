@@ -1,0 +1,7 @@
+# IekQuests player tag registry.
+# Register valid tag IDs under "tags". Registering a tag does not assign it to a player.
+# Assign tags through supported dialogue, event, objective, or administrative operations.
+# Positive prerequisites require the tag to be assigned. Prefix a prerequisite with "!" to require it to be absent.
+# Tag IDs are case-sensitive. Unknown or unregistered tags fail prerequisites and are reported by validation.
+# Example: tags: [has_seen_intro, quest_active]
+tags: []

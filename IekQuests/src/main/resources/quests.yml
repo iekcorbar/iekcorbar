@@ -1,7 +1,6 @@
-# IekQuests 0.2 - quest definitions (30-10)
+# IekQuests quest definitions.
 #
-# NOTE: everything the PLAYER can see is English (staff + players are
-# international). Code comments may stay Dutch.
+# Player-facing text and source comments are written in English.
 #
 # stages: talk | craft | deliver | walk | kill   (order = sequence;
 # next/goto to jump). choices = branching options with labels.
@@ -1577,7 +1576,7 @@ quests:
           - "title &aCONTRACT COMPLETE|&7Yuki pays 400 coins"
           - "sound steamworks:quest.complete"
 
-  # ---- golf 3 (30-10): preek- en service-quests uit BQ overgezet ------------
+  # ---- Golf 3: sermon and service quests migrated from BetonQuest ------------
   mad_doctor:
     title: "&dThe Mad Doctor"
     subtitle: "Volunteer for science - Machine Hill"
@@ -1956,7 +1955,7 @@ quests:
     rewards:
       - "say &7Cleric: &fMay the gods watch over your path."
 
-  # Unbind Scroll verkoop (31-10): Citizens-NPC naast Ulfric (de EliteMobs-Unbinder); npc-id invullen na /npc create
+  # Unbind Scroll vendor: Citizens NPC beside Ulfric (the EliteMobs unbinder); set npc-id after /npc create
   unbind_scrolls:
     title: "&5Scroll Seller"
     subtitle: "Unbind Scrolls for the Unbinder"
@@ -1983,7 +1982,7 @@ quests:
             say: "&7Scroll Seller: &cYou do not have enough coins. Come back with 50,000."
     rewards: []
 
-# Tijdlijnen (seconden|actie) - de BQ-folders na. %player% werkt in elke stap.
+# Timelines (seconds|action), following the previous BetonQuest folders. %player% works in every step.
   # >>> wave3b gegenereerd (scripts/gen-iekquests-wave3b.py) >>>
   rod_merchant:
     title: "&bFishing Rod Merchant"
