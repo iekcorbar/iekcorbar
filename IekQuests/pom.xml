@@ -7,7 +7,7 @@
     <groupId>com.iekcorbar</groupId>
     <artifactId>IekQuests</artifactId>
     <!-- IekQuests provides quests, dialogue, objectives, rewards, tracking, and menus. -->
-    <version>0.10.0</version>
+    <version>0.10.1</version>
     <packaging>jar</packaging>
 
     <name>IekQuests</name>
