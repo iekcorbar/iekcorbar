@@ -1,145 +1,98 @@
 #!/usr/bin/env node
-// Offline controle van IekQuests' quests.yml (geen server nodig):
-//   node IekQuests/tools/validate-quests.js [pad-naar-quests.yml]
-// Standaard: IekQuests/src/main/resources/quests.yml. Exit 1 bij fouten, 0 bij alleen waarschuwingen.
-// Spiegelt de grammatica van IekQuestsPlugin (stage-types, actie-werkwoorden, voorwaarden).
+// Offline structural validation for IekQuests Quest bundle YAML files.
+// Usage: node tools/validate-quests.js [Quest-directory-or-yml-file]
 const fs = require('fs');
 const path = require('path');
 const yaml = require(path.join(__dirname, '..', '..', 'node_modules', 'js-yaml'));
 
-const file = process.argv[2] || path.join(__dirname, '..', 'src', 'main', 'resources', 'quests.yml');
-const STAGE_TYPES = new Set(['talk', 'craft', 'deliver', 'walk', 'kill', 'deliverall', 'menu']);
-// werkwoorden die run() zelf afhandelt; al het andere wordt als console-commando uitgevoerd
-const VERBS = new Set(['money', 'pay', 'eco', 'title', 'sound', 'say', 'tag+', 'tag-', 'perm+', 'perm-', 'point',
-  'effect', 'teleport', 'give', 'compass', 'shop', 'joinjob', 'leavejob', 'chat', 'sequence', 'ecopay', 'eloot']);
-// typefouten die op een werkwoord lijken maar er geen zijn (zouden stil als console-commando falen)
-const SUSPECT = /^(tag\s*[+-]|tag[+-]{2,}|perm\s*[+-]|perm[+-]{2,}|monney|moeny|titel|sond|sequense|sequnce|compas|poin|teleprot)$/i;
-const COND = /^(!?)(tag:|qtag:|point:|item:|money>=|money<|eco>=|eco<|perm:|npc:|day$|night$)/;
+const target = process.argv[2] || path.join(__dirname, '..', 'Quest');
+const chapters = new Set([
+  'server-tags', 'Reward', 'responses', 'quests', 'player-tags', 'Objective',
+  'npcs', 'Journal', 'events', 'dialogues', 'Sequences'
+]);
+const entityChapters = new Set(['Reward', 'responses', 'quests', 'Objective', 'Journal', 'dialogues', 'Sequences']);
+const errors = [];
+const warnings = [];
+const definitions = new Map();
+const npcIds = new Map();
+const bundles = fs.existsSync(target)
+  ? (fs.statSync(target).isDirectory()
+      ? fs.readdirSync(target).filter(name => name.toLowerCase().endsWith('.yml')).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).map(name => path.join(target, name))
+      : [target])
+  : [];
 
-const errors = [], warns = [];
-const err = (m) => errors.push(m);
-const warn = (m) => warns.push(m);
+const isMapping = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+const reportDuplicate = (chapter, id, file) => {
+  const key = `${chapter}/${id}`;
+  const old = definitions.get(key);
+  if (old) errors.push(`${path.basename(file)}: duplicate ${chapter} ID '${id}' also declared in ${path.basename(old)}.`);
+  else definitions.set(key, file);
+};
 
-let doc;
-try {
-  doc = yaml.load(fs.readFileSync(file, 'utf8'));
-} catch (e) {
-  console.error('YAML-fout: ' + e.reason + ' (regel ' + (e.mark ? e.mark.line + 1 : '?') + ')');
-  process.exit(1);
+if (!bundles.length) {
+  console.log(`No Quest bundle YAML files found at ${target}; nothing to validate.`);
+  process.exit(0);
 }
-const quests = (doc && doc.quests) || {};
-const seqs = (doc && doc.sequences) || {};
-const ids = Object.keys(quests);
-const tagsSet = new Set(), tagsUsed = new Map();
-const npcOwner = new Map(), unplaced = [];
 
-const arr = (v) => (Array.isArray(v) ? v : v == null ? [] : [v]);
-
-function checkCond(where, raw) {
-  if (!raw) return;
-  for (const c of String(raw).split(',').map((s) => s.trim()).filter(Boolean)) {
-    if (!COND.test(c)) { warn(`${where}: onbekende voorwaarde "${c}" (de engine laat die altijd door)`); continue; }
-    const body = c.replace(/^!/, '');
-    if (body.startsWith('tag:')) tagsUsed.set(body.slice(4), where);
-    if (/^(money|eco)(>=|<)/.test(body)) {
-      if (!Number.isFinite(Number(body.replace(/^(money|eco)(>=|<)/, '')))) err(`${where}: ongeldig bedrag in "${c}"`);
+for (const file of bundles) {
+  let bundle;
+  try {
+    bundle = yaml.load(fs.readFileSync(file, 'utf8')) || {};
+  } catch (error) {
+    errors.push(`${path.basename(file)}: YAML error at line ${error.mark ? error.mark.line + 1 : '?'}: ${error.reason || error.message}`);
+    continue;
+  }
+  if (!isMapping(bundle)) {
+    errors.push(`${path.basename(file)}: bundle root must be a YAML mapping.`);
+    continue;
+  }
+  for (const [chapter, contents] of Object.entries(bundle)) {
+    if (!chapters.has(chapter)) {
+      errors.push(`${path.basename(file)}: unsupported chapter '${chapter}'.`);
+      continue;
     }
-    if (body.startsWith('point:') && !body.includes('>=')) err(`${where}: point-voorwaarde mist ">=" in "${c}"`);
-    if (body.startsWith('item:') && !body.includes('>=')) err(`${where}: item-voorwaarde mist ">=" in "${c}"`);
-    if (body.startsWith('qtag:') && body.split(':').length < 3) err(`${where}: qtag moet qtag:<quest>:<tag> zijn ("${c}")`);
-    if (body.startsWith('qtag:')) {
-      const qid = body.split(':')[1];
-      if (!quests[qid]) warn(`${where}: qtag verwijst naar onbekende quest "${qid}"`);
+    if (!isMapping(contents)) {
+      errors.push(`${path.basename(file)}: chapter '${chapter}' must be a YAML mapping.`);
+      continue;
+    }
+    if (chapter === 'player-tags' || chapter === 'server-tags') {
+      const tags = contents.tags;
+      if (tags != null && !Array.isArray(tags) && !isMapping(tags))
+        errors.push(`${path.basename(file)}: ${chapter}.tags must be a list or mapping.`);
+    }
+    if (chapter === 'events') {
+      for (const [eventType, entries] of Object.entries(contents)) {
+        if (!isMapping(entries)) {
+          errors.push(`${path.basename(file)}: events.${eventType} must be a mapping.`);
+          continue;
+        }
+        for (const id of Object.keys(entries)) reportDuplicate(`events.${eventType}`, id, file);
+      }
+    }
+    if (entityChapters.has(chapter)) {
+      for (const id of Object.keys(contents)) {
+        if (!/^[A-Za-z0-9_-]{1,64}$/.test(id)) errors.push(`${path.basename(file)}: malformed ${chapter} ID '${id}'.`);
+        reportDuplicate(chapter, id, file);
+      }
+    }
+    if (chapter === 'npcs') {
+      for (const [key, binding] of Object.entries(contents)) {
+        if (!isMapping(binding) || !Number.isInteger(Number(binding['npc-id'])) || Number(binding['npc-id']) < 0) {
+          errors.push(`${path.basename(file)}: NPC binding '${key}' must have a non-negative integer npc-id.`);
+          continue;
+        }
+        const id = Number(binding['npc-id']);
+        const old = npcIds.get(id);
+        if (old && JSON.stringify(old.visibility) !== JSON.stringify(binding['visibility-prerequisites'] || []))
+          errors.push(`${path.basename(file)}: Citizens NPC ${id} has conflicting visibility-prerequisites (first used in ${path.basename(old.file)}).`);
+        else if (old) warnings.push(`Citizens NPC ${id} appears in multiple bundles; IekQuests will merge its dialogue lists.`);
+        else npcIds.set(id, {file, visibility: binding['visibility-prerequisites'] || []});
+      }
     }
   }
 }
 
-function checkAction(where, raw) {
-  const a = String(raw).trim();
-  if (!a) return;
-  const sp = a.indexOf(' ');
-  const key = sp < 0 ? a : a.slice(0, sp);
-  const val = sp < 0 ? '' : a.slice(sp + 1);
-  if ((key === 'tag' || key === 'perm') && /^[+-]/.test(val.trim())) {
-    err(`${where}: "${a}" lijkt een typefout (bedoeld: "${key}${val.trim()[0]} ..." zonder spatie); wordt nu als console-commando uitgevoerd`);
-    return;
-  }
-  if (key === 'tag+') tagsSet.add(val.trim());
-  if (!VERBS.has(key)) {
-    if (SUSPECT.test(key)) err(`${where}: "${key}" lijkt een typefout van een actie; wordt nu als console-commando uitgevoerd`);
-    return;
-  }
-  if (['money', 'pay', 'eco', 'ecopay'].includes(key) && !Number.isFinite(Number(val))) err(`${where}: "${a}" heeft geen geldig getal`);
-  if (key === 'sequence' && !seqs[val.trim()]) err(`${where}: sequence "${val}" bestaat niet`);
-  if (key === 'point') {
-    const m = val.trim().split(/\s+/);
-    if (m.length < 2 || !/^[+-]\d+$/.test(m[1])) err(`${where}: point verwacht "<categorie> +N" ("${a}")`);
-  }
-  if (key === 'tag-' ) tagsUsed.set(val.trim(), where);
-}
-
-for (const id of ids) {
-  const q = quests[id] || {};
-  const at = `quest ${id}`;
-  if (!q.title) warn(`${at}: geen title`);
-  if (typeof q['npc-id'] !== 'number') warn(`${at}: npc-id ontbreekt of is geen getal`);
-  else if (q['npc-id'] < 0) unplaced.push(id);
-  else {
-    npcOwner.set(q['npc-id'], id);
-  }
-  checkCond(`${at} start`, q.start);
-  arr(q.rewards).forEach((r) => checkAction(`${at} rewards`, r));
-  const stages = q.stages || {};
-  const keys = Object.keys(stages);
-  if (!keys.length) warn(`${at}: geen stages`);
-  for (const k of keys) {
-    const s = stages[k] || {};
-    const w = `${at}/${k}`;
-    const type = s.type || 'talk';
-    if (!STAGE_TYPES.has(type)) err(`${w}: onbekend stage-type "${type}"`);
-    if ((type === 'craft' || type === 'deliver') && !s.material) warn(`${w}: ${type} zonder material (standaard PAPER)`);
-    if (type === 'walk' && !s.location) err(`${w}: walk-stage zonder location`);
-    if (type === 'kill' && !s.mob) err(`${w}: kill-stage zonder mob`);
-    if (type === 'deliverall' && !arr(s.items).length) err(`${w}: deliverall zonder items`);
-    if (s.location && String(s.location).split(';').length < 4) err(`${w}: location "${s.location}" moet x;y;z;wereld zijn`);
-    for (const t of ['next', 'goto']) if (s[t] && !stages[s[t]]) err(`${w}: ${t} "${s[t]}" bestaat niet`);
-    checkCond(`${w} cond`, s.cond);
-    arr(s.rewards).forEach((r) => checkAction(`${w} rewards`, r));
-    const ch = Array.isArray(s.choices) ? s.choices : s.choices ? Object.values(s.choices) : [];
-    ch.forEach((c, i) => {
-      const cw = `${w} choice#${i + 1}`;
-      if (!c || !c.label) warn(`${cw}: geen label`);
-      if (c && c['limit-per-day'] != null && !(Number(c['limit-per-day']) >= 1)) err(`${cw}: limit-per-day moet een geheel getal >= 1 zijn`);
-      if (c && c.goto && !stages[c.goto]) err(`${cw}: goto "${c.goto}" bestaat niet`);
-      checkCond(`${cw} cond`, c && c.cond);
-      arr(c && c.do).forEach((d) => checkAction(cw, d));
-    });
-  }
-  for (const [rk, r] of Object.entries(q.repeat || {})) {
-    const w = `${at}/repeat/${rk}`;
-    if (!r || (!r.material && !arr(r.items).length && !r.location)) warn(`${w}: geen material, items of location`);
-    if (r && r.cooldown != null && !(Number(r.cooldown) >= 0)) err(`${w}: ongeldige cooldown`);
-    arr(r && r.rewards).forEach((x) => checkAction(w, x));
-  }
-}
-
-for (const [sid, seq] of Object.entries(seqs)) {
-  arr(seq).forEach((st, i) => {
-    const m = String(st).match(/^(\d+(?:\.\d+)?)\|(.*)$/);
-    if (!m) { err(`sequence ${sid}#${i + 1}: verwacht "vertraging|actie" maar kreeg "${st}"`); return; }
-    checkAction(`sequence ${sid}#${i + 1}`, m[2]);
-  });
-}
-
-for (const [t, where] of tagsUsed) {
-  if (!tagsSet.has(t) && !ids.some((i) => (quests[i].stages || {})[t])) {
-    warn(`${where}: tag "${t}" wordt nergens met "tag+" gezet (alleen automatische tags zoals menu:/choice: kunnen dit zijn)`);
-  }
-}
-
-console.log(`${ids.length} quests, ${Object.keys(seqs).length} sequences gecontroleerd in ${path.basename(file)}`);
-if (unplaced.length) console.log(`Nog zonder NPC (npc-id < 0): ${unplaced.join(', ')}`);
-warns.forEach((m) => console.log('  waarschuwing: ' + m));
-errors.forEach((m) => console.log('  FOUT: ' + m));
-console.log(`${errors.length} fout(en), ${warns.length} waarschuwing(en)`);
+errors.forEach(message => console.error(`ERROR: ${message}`));
+warnings.forEach(message => console.log(`warning: ${message}`));
+console.log(`${bundles.length} bundle file(s), ${definitions.size} named definition(s), ${errors.length} error(s), ${warnings.length} warning(s).`);
 process.exit(errors.length ? 1 : 0);
