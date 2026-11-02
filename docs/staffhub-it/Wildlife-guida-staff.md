@@ -66,6 +66,8 @@ Gli animali con guinzaglio o cartellino hanno fame; una mangiatoia nutre ogni po
 
 Drago a vapore: vive in profondità nelle grotte ed è raro (appare solo sottoterra, probabilità tramite spawning.cave-chance). Si doma con il carbone (probabilità per ogni offerta), sneak + clic destro = siediti, clic destro = monta. Si guida con WASD, la direzione dello sguardo e spazio. Ci sono cinque aspetti e un raro Gilded. L'aspetto Ender è rarissimo (dragon.ender-chance).
 
+Novità 0.9.6-0.9.8: fischietto, borse da sella, nido del drago, etichette col nome, sedile del pilota, permessi per azione (wildlife.dragon.tame/ride/pet/whistle/bag/paint/nest, tutti true di default). Vedi "Novità dal 1 novembre 2026" e la pagina del sito /dragons.
+
 Nota: il lavoro sul drago (IA e modello) non è ancora testato in gioco. Se vedi cose strane, annota cosa e dove, e passalo a Claude. Puoi spegnere il drago con species.dragon.enabled: false.
 
 Wraith: una creatura d'atmosfera, non un animale. Spento in natura; piazzalo tu con /wildlife spawn wraith. Vaga di notte, svanisce all'alba, non è nel diario e non si riproduce.

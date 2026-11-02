@@ -32,6 +32,7 @@ Gouw è il nostro plugin di claim (il successore di Lands). Un giocatore rivendi
 |---|---|
 | gouw.claim | Rivendicare (tutti). |
 | gouw.admin | Chunk illimitati, cancellare claim, import, reload. |
+| gouw.chunks.N | Limite di chunk per rango (per esempio gouw.chunks.55); vince il numero più alto. |
 | gouw.bypass | Può usare l'interruttore del bypass. |
 
 Nota: il bypass è un interruttore per singolo giocatore, non un diritto permanente. Attivalo per ispezionare o riparare, poi spegnilo.
@@ -44,6 +45,7 @@ Il menu ha tre pagine: principale (statistiche, claim, autoclaim 5x5, mostra con
 
 | Chiave | Predefinito | Cosa fa |
 |---|---|---|
+| bonus-max | 100 | Massimo di chunk bonus acquistabili (/gouw admin buychunks giocatore n costo, /gouw admin addchunks giocatore n). |
 | max-chunks | 16 | Chunk per giocatore. Staff con gouw.admin: illimitati. |
 | enter-messages | true | Action bar e particelle quando si entra nel gouw di un altro. |
 | expire-inactive-days | 0 | I gouw dei giocatori offline da tanto tempo vengono liberati. 0 = spento (attualmente spento). |

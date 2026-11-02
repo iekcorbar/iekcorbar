@@ -15,6 +15,7 @@ Questa cartella contiene i manuali dello staff di iekcorbar tradotti in italiano
 | Gestire il server | Avvio, arresto, riavvii annunciati, reload. |
 | Sakagura - bevande, giardino, gare | Produzione, stagioni, gare. |
 | Negozio e ricompense | Articoli, valute, kit, casse. |
+| Novità dal 1 novembre 2026 | Riepilogo di draghi, gare, Gouw, musica, sito, StaffHub. |
 | StaffHub - la bacheca dello staff | Questo strumento: permessi, traduzione, drive. |
 | Steamworks - vapore e ingranaggi | Reti, macchine, treni, petrolio. |
 | TechCore - tecnologia e macchine | Blueprint, file, collaborazione. |
