@@ -33,3 +33,19 @@ Nuove pagine pubbliche: /dragons (guida al drago), /gouw (guida ai claim), /star
 
 - **Gen-san**: l'assistente IA può ora proporre azioni (una scheda da confermare). Usa i tuoi permessi e il cestino (Trashbin) invece di cancellare per davvero.
 - **Download con il tasto destro**: una pagina come Markdown, HTML o PDF; una cartella o una selezione come zip.
+
+## EliteMobs: livelli degli elite troppo alti (2 novembre 2026)
+
+> **Nota per greyarts:** questa modifica l'ha fatta antimatter, perché i mob vanilla nell'overworld erano diventati elite di livello troppo alto. Sul server ho cambiato tre valori in `plugins/EliteMobs/MobCombatSettings.yml`. Il file di prima è salvato come `MobCombatSettings.yml.bak-20261102-antimatter` nella stessa cartella. Il server non è stato riavviato. Il file sul server è aggiornato; il reload di EliteMobs (`em reload`) è ancora da confermare. Se il comportamento non va bene, ripristina il backup e ricarica di nuovo EliteMobs. Nel repo la stessa configurazione è in `EliteMobs-config/MobCombatSettings.yml` (commit "changed by antimatter").
+
+| Impostazione | Prima | Ora | Effetto |
+|---|---|---|---|
+| `naturalEliteMobsLevelCap` | 100 | 60 | Gli elite naturali non superano più il livello 60. |
+| `useScaledCombatForNaturalElites` | false | true | L'elite viene simulato al livello del giocatore: conta l'equipaggiamento, non il livello. |
+| `eliteMobsSpawnPercentage` | 1.0 | 0.5 | Metà degli spawn naturali diventa elite rispetto a prima. |
+
+Cosa cambia per lo staff:
+- Negli spawn naturali nell'overworld vedrete meno elite e nessuno sopra il livello 60.
+- Dungeon, boss personalizzati ed eventi non cambiano: questi valori riguardano solo i mob che spawnano da soli.
+- Se un giocatore chiede perché un mob ora è più debole o più raro, la risposta è questa modifica. Non promettere una data per un eventuale ritorno ai valori precedenti.
+- Il reload si fa con il comando del plugin, `em reload`, non con il `/reload` generale (vedi la regola d'oro in 00-Indice).
