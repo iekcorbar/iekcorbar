@@ -47,8 +47,7 @@ final class EventsManager implements Listener {
     EventsManager(IekQuestsPlugin plugin) { this.plugin = plugin; }
 
     void load() {
-        File file = new File(plugin.getDataFolder(), "events.yml");
-        if (!file.exists()) plugin.saveResource("events.yml", false);
+        File file = plugin.organizationFile("events.yml");
         config = YamlConfiguration.loadConfiguration(file);
         for (String type : TYPES) {
             if (config.get(type) == null) config.createSection(type);
@@ -376,7 +375,10 @@ final class EventsManager implements Listener {
     }
 
     private void save() {
-        try { config.save(new File(plugin.getDataFolder(), "events.yml")); }
+        try {
+            plugin.questPackageManager().persistGeneratedEdit("events.yml", config);
+            config.save(plugin.organizationFile("events.yml"));
+        }
         catch (Exception ex) { plugin.getLogger().severe("Could not save events.yml: " + ex.getMessage()); }
     }
 

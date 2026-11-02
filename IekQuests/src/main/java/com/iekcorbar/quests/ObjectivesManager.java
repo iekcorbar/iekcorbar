@@ -68,8 +68,7 @@ final class ObjectivesManager implements Listener {
     ObjectivesManager(IekQuestsPlugin plugin) { this.plugin = plugin; }
 
     void load() {
-        File target = new File(plugin.getDataFolder(), "Objective.yml");
-        if (!target.exists()) plugin.saveResource("Objective.yml", false);
+        File target = plugin.organizationFile("Objective.yml");
         file = YamlConfiguration.loadConfiguration(target);
         definitions.clear();
         for (String id : file.getKeys(false)) {
@@ -304,9 +303,10 @@ final class ObjectivesManager implements Listener {
     }
 
     private void saveDefinitions() {
-        File target = new File(plugin.getDataFolder(), "Objective.yml");
-        File temp = new File(plugin.getDataFolder(), "Objective.yml.tmp");
+        File target = plugin.organizationFile("Objective.yml");
+        File temp = new File(target.getParentFile(), "Objective.yml.tmp");
         try {
+            plugin.questPackageManager().persistGeneratedEdit(target.getName(), file);
             file.save(temp);
             try { Files.move(temp.toPath(), target.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING); }
             catch (Exception unsupportedAtomic) { Files.move(temp.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING); }

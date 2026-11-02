@@ -34,8 +34,7 @@ final class JournalManager {
     JournalManager(IekQuestsPlugin plugin) { this.plugin = plugin; }
 
     void load() {
-        File file = new File(plugin.getDataFolder(), "Journal.yml");
-        if (!file.exists()) plugin.saveResource("Journal.yml", false);
+        File file = plugin.organizationFile("Journal.yml");
         config = YamlConfiguration.loadConfiguration(file);
         entries.clear();
         for (String id : config.getKeys(false)) {

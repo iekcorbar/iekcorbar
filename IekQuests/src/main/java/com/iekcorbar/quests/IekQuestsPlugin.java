@@ -185,6 +185,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private ObjectivesManager objectivesManager;
     private JournalManager journalManager;
     private SequencesManager sequencesManager;
+    private QuestPackageManager questPackageManager;
     private final Map<UUID, Long> travelCd = new HashMap<>();
     private ItemLibrary items;
     private NamespacedKey modeKey;
@@ -195,7 +196,6 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     private final Random rnd = new Random();
     private QuestWizard wizard;
     private DialogueWizard dialogueWizard;
-    private InventoryItems invItems;
 
     Prog progress(Player p, Quest q) { return pr(p, q); }
     YamlConfiguration dialogueData() { return data; }
@@ -204,6 +204,8 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     ObjectivesManager objectivesManager() { return objectivesManager; }
     JournalManager journalManager() { return journalManager; }
     SequencesManager sequencesManager() { return sequencesManager; }
+    File organizationFile(String name) { return new File(new File(getDataFolder(), "organization"), name); }
+    QuestPackageManager questPackageManager() { return questPackageManager; }
     String itemIdOf(ItemStack stack) { return items == null ? null : items.idOf(stack); }
     String dialogueConfig(String key, String fallback) { return getConfig().getString("dialogue." + key, fallback); }
     boolean conditionsPass(Player p, Quest q, Prog pr, List<Cond> conditions) { return ok(p, q, pr, conditions); }
@@ -255,7 +257,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         q.fromWizard = true;
         quests.removeIf(x -> x.id.equals(q.id));
         quests.add(q);
-        writeWizardFile();
+        writeWizardQuest(q);
         saveData();
         load();
     }
@@ -264,17 +266,15 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         var q = byId(id);
         if (q == null || !q.fromWizard) return false;
         quests.remove(q);
-        writeWizardFile();
+        questPackageManager.removeWizardQuest(id);
         saveData();
         load();
         return true;
     }
 
-    
-    private void writeWizardFile() {
-        var l = new ArrayList<Quest>();
-        for (var q : quests) if (q.fromWizard) l.add(q);
-        QuestWizard.writeWizardFile(new File(getDataFolder(), "wizard-quests.yml"), l);
+    private void writeWizardQuest(Quest q) {
+        File target = new File(questPackageManager.questFolder(), "_wizard-" + q.id + ".yml");
+        QuestWizard.writeWizardFile(target, List.of(q));
     }
 
     // ---------------------------------------------------------------- lifecycle
@@ -284,9 +284,9 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         tagKey = new NamespacedKey(this, "tag");
         modeKey = new NamespacedKey(this, "mode");
         hudOffKey = new NamespacedKey(this, "hud_off");
-        if (!new File(getDataFolder(), "quests.yml").exists()) saveResource("quests.yml", false);
         saveDefaultConfig();
         if (!new File(getDataFolder(), "config.yml").exists()) saveResource("config.yml", false);
+        questPackageManager = new QuestPackageManager(this);
         dialogueManager = new DialogueManager(this);
         eventsManager = new EventsManager(this);
         objectivesManager = new ObjectivesManager(this);
@@ -363,6 +363,23 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                 return true;
             }
             try {
+                if (args.length == 2 && args[0].equalsIgnoreCase("reload") && args[1].equalsIgnoreCase("quest")) {
+                    QuestPackageManager.ReloadReport report = questPackageManager.reload();
+                    for (String warning : report.warnings()) sender.sendMessage(Component.text("Warning: " + warning));
+                    for (String error : report.errors()) sender.sendMessage(Component.text("Error: " + error));
+                    if (!report.success()) {
+                        sender.sendMessage(Component.text("Quest reload stopped; the previous organization files were kept."));
+                        return true;
+                    }
+                    loadAggregateData();
+                    sender.sendMessage(Component.text("Quest packages reloaded: " + report.bundles() + " bundle(s), "
+                            + report.quests() + " legacy quest definition(s)."));
+                    dialogueManager.adminCommand(sender, new String[]{"validate"});
+                    objectivesManager.command(sender, new String[]{"validate"});
+                    eventsManager.command(sender, new String[]{"events", "validate"});
+                    sequencesManager.validate(sender, null);
+                    return true;
+                }
                 if (args.length == 4 && args[0].equalsIgnoreCase("event") && args[1].equalsIgnoreCase("start")) {
                     Player target = Bukkit.getPlayerExact(args[2]);
                     if (target == null) throw new IllegalArgumentException("Player must be online: " + args[2]);
@@ -377,9 +394,9 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
                     journalManager.changeOnlinePlayer(sender, args[2], args[3], args[1].equalsIgnoreCase("add"));
                     return true;
                 }
-                sender.sendMessage(Component.text("Usage: /iekquest event start <player> <event-id> | /iekquest journal <add|remove> <player> <entry-id>"));
-            } catch (IllegalArgumentException ex) {
-                sender.sendMessage(Component.text("IekQuests command failed: " + ex.getMessage()));
+                sender.sendMessage(Component.text("Usage: /iekquest reload quest | /iekquest event start <player> <event-id> | /iekquest journal <add|remove> <player> <entry-id>"));
+            } catch (Exception ex) {
+                sender.sendMessage(Component.text("IekQuests command failed: " + codeErrorLocation(ex)));
             }
             return true;
         });
@@ -403,16 +420,12 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(wizard, this);
         dialogueWizard = new DialogueWizard(this, dialogueManager);
         Bukkit.getPluginManager().registerEvents(dialogueWizard, this);
-        invItems = new InventoryItems(this);
-        Bukkit.getPluginManager().registerEvents(invItems, this);
-        invItems.load();
-        invItems.placeForAll();
         var wcmd = Bukkit.getPluginCommand("questwizard");
         if (wcmd != null) wcmd.setExecutor((sender, command, label, args) -> {
             if (args.length >= 1 && args[0].equalsIgnoreCase("delete") && (sender.hasPermission("iekquests.edit") || sender.hasPermission("iekquests.admin"))
                     && args.length >= 2) {
                 if (removeWizardQuest(args[1])) sender.sendMessage(Component.text("Wizard-quest " + args[1] + " deleted."));
-                else sender.sendMessage(Component.text("Only wizard-made quests can be deleted here (not quests.yml ones)."));
+                else sender.sendMessage(Component.text("Only wizard-managed quests can be deleted here; edit the source bundle for uploaded quests."));
                 return true;
             }
             if (sender instanceof Player p && (p.hasPermission("iekquests.wizard") || p.hasPermission("iekquests.admin"))) wizard.open(p);
@@ -424,7 +437,6 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         if (rcmd != null) rcmd.setExecutor(this::onRestartCommand);
         Bukkit.getScheduler().runTaskTimer(this, this::refreshOpenGuis, 40L, 40L);
         Bukkit.getScheduler().runTaskTimer(this, this::tracker, 60L, 40L);
-        Bukkit.getScheduler().runTaskTimer(this, () -> { if (invItems != null) invItems.placeForAll(); }, 1200L, 1200L);
         Bukkit.getScheduler().runTaskTimer(this, this::saveData, 1200L, 1200L);
         load();
         getLogger().info("IekQuests " + getDescription().getVersion() + " klaar - " + quests.size() + " quest(s).");
@@ -516,6 +528,15 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             p.showTitle(Title.title(legacy("&6Server restart"), legacy("&e" + fmt(left) + " left"), times));
     }
 
+    private String codeErrorLocation(Exception ex) {
+        StackTraceElement source = null;
+        for (StackTraceElement element : ex.getStackTrace()) {
+            if (element.getClassName().startsWith("com.iekcorbar.quests.")) { source = element; break; }
+        }
+        String location = source == null ? "" : " at " + source.getFileName() + ":" + source.getLineNumber();
+        return ex.getClass().getSimpleName() + ": " + ex.getMessage() + location;
+    }
+
     private static String fmt(int s) {
         if (s >= 60) {
             int m = s / 60, r = s % 60;
@@ -527,9 +548,19 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
     // ---------------------------------------------------------------- load + save
 
     private void load() {
+        if (questPackageManager != null) {
+            QuestPackageManager.ReloadReport report = questPackageManager.reload();
+            for (String warning : report.warnings()) getLogger().warning(warning);
+            for (String error : report.errors()) getLogger().severe(error);
+            if (!report.success()) getLogger().severe("Quest package reload failed; existing organization files remain active.");
+        }
+        loadAggregateData();
+    }
+
+    private void loadAggregateData() {
         quests.clear();
         sequences.clear();
-        var qc = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "quests.yml"));
+        var qc = YamlConfiguration.loadConfiguration(organizationFile("quests.yml"));
 
         var sq = qc.getConfigurationSection("sequences");
         if (sq != null) for (String k : sq.getKeys(false)) {
@@ -548,9 +579,6 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         }
 
         parseQuests(qc.getConfigurationSection("quests"), false);
-        var wf = new File(getDataFolder(), "wizard-quests.yml");
-        if (wf.exists()) parseQuests(
-                YamlConfiguration.loadConfiguration(wf).getConfigurationSection("quests"), true);
         quests.sort((a, b) -> Integer.compare(a.order, b.order));
 
         data = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "data.yml"));
@@ -572,7 +600,7 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
             var s = sec.getConfigurationSection(id);
             if (s == null) continue;
             Quest q = new Quest();
-            q.fromWizard = fromWizard;
+            q.fromWizard = fromWizard || questPackageManager != null && questPackageManager.isWizardQuest(id);
             q.id = id;
             q.title = s.getString("title", id);
             q.subtitle = s.getString("subtitle", "");
@@ -747,7 +775,6 @@ public final class IekQuestsPlugin extends JavaPlugin implements Listener {
         eliteItemFiles = null;
         load();
         if (items != null) items.load();
-        if (invItems != null) { invItems.load(); invItems.placeForAll(); }
     }
 
     void reloadDialogueConfiguration() { reloadAllData(); }

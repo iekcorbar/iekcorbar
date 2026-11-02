@@ -38,8 +38,7 @@ final class SequencesManager implements Listener {
 
     void load() {
         cancelAll();
-        File file = new File(plugin.getDataFolder(), "Sequences.yml");
-        if (!file.exists()) plugin.saveResource("Sequences.yml", false);
+        File file = plugin.organizationFile("Sequences.yml");
         config = YamlConfiguration.loadConfiguration(file);
         definitions.clear();
         loadErrors.clear();
