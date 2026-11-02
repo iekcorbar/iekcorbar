@@ -36,7 +36,7 @@ Nuove pagine pubbliche: /dragons (guida al drago), /gouw (guida ai claim), /star
 
 ## EliteMobs: livelli degli elite troppo alti (2 novembre 2026)
 
-> **Nota per greyarts:** questa modifica l'ha fatta antimatter, perché i mob vanilla nell'overworld erano diventati elite di livello troppo alto. Sul server ho cambiato tre valori in `plugins/EliteMobs/MobCombatSettings.yml`. Il file di prima è salvato come `MobCombatSettings.yml.bak-20261102-antimatter` nella stessa cartella. Il server non è stato riavviato. Il file sul server è aggiornato; il reload di EliteMobs (`em reload`) è ancora da confermare. Se il comportamento non va bene, ripristina il backup e ricarica di nuovo EliteMobs. Nel repo la stessa configurazione è in `EliteMobs-config/MobCombatSettings.yml` (commit "changed by antimatter").
+> **Nota per greyarts:** questa modifica l'ha fatta antimatter, perché i mob vanilla nell'overworld erano diventati elite di livello troppo alto. Sul server ho cambiato tre valori in `plugins/EliteMobs/MobCombatSettings.yml`. Il file di prima è salvato come `MobCombatSettings.yml.bak-20261102-antimatter` nella stessa cartella. Il server non è stato riavviato. Il file sul server è aggiornato e il reload di EliteMobs (`em reload`) è stato eseguito. Se il comportamento non va bene, ripristina il backup e ricarica di nuovo EliteMobs. Nel repo la stessa configurazione è in `EliteMobs-config/MobCombatSettings.yml` (commit "changed by antimatter").
 
 | Impostazione | Prima | Ora | Effetto |
 |---|---|---|---|
