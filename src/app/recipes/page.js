@@ -91,46 +91,97 @@ function RecipeCard({ r }) {
 
 function Browser() {
   const [plugin, setPlugin] = useState(data.plugins[0].id);
-  const [cat, setCat] = useState('all');
   const [q, setQ] = useState('');
+  const [selected, setSelected] = useState(null);
   const current = data.plugins.find((p) => p.id === plugin);
-  const cats = useMemo(() => [...new Set(current.recipes.map((r) => r.category))], [current]);
+
+  const items = useMemo(() => {
+    const byName = new Map();
+    const entry = (name) => {
+      if (!byName.has(name)) byName.set(name, { name, makes: [], uses: [] });
+      return byName.get(name);
+    };
+    for (const r of current.recipes) {
+      if (r.result) entry(r.result).makes.push(r);
+      for (const o of r.outputs || []) entry(o.name).makes.push(r);
+      const used = new Set([...(r.grid || []).flat(), ...(r.ingredients || []).map((i) => i.name)].filter(Boolean));
+      for (const n of used) entry(n).uses.push(r);
+    }
+    return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name));
+  }, [current]);
+
   const shown = useMemo(() => {
     const t = q.trim().toLowerCase();
-    return current.recipes.filter((r) => {
-      if (cat !== 'all' && r.category !== cat) return false;
-      if (!t) return true;
-      const hay = [r.result, ...(r.ingredients || []).map((i) => i.name), ...(r.outputs || []).map((i) => i.name)].filter(Boolean).join(' ').toLowerCase();
-      return hay.includes(t);
-    });
-  }, [current, cat, q]);
+    return items.filter((i) => !t || i.name.toLowerCase().includes(t));
+  }, [items, q]);
+
+  const sel = items.find((i) => i.name === selected) || null;
 
   return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap gap-2">
-        {data.plugins.map((p) => (
-          <button key={p.id} onClick={() => { setPlugin(p.id); setCat('all'); }} className={`px-4 py-2 rounded-lg text-sm font-bold border ${plugin === p.id ? 'bg-sp-copper/30 border-sp-gold text-sp-gold' : 'border-sp-bronze/40 text-text-warm/70 hover:text-sp-gold'}`}>
-            {p.name}
-          </button>
-        ))}
-      </div>
-      <p className="text-sm text-text-warm/70">{current.blurb}</p>
-      <div className="flex flex-wrap gap-3 items-center">
-        <div className="relative flex-1 min-w-[200px]">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-warm/50" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search an item…" className="w-full bg-black/50 border border-sp-bronze/40 rounded-lg pl-9 pr-3 py-2 text-sm text-text-warm" />
+    <PluginCtx.Provider value={plugin}>
+      <div className="space-y-5">
+        <div className="flex flex-wrap gap-2">
+          {data.plugins.map((p) => (
+            <button key={p.id} onClick={() => { setPlugin(p.id); setSelected(null); setQ(''); }} className={`px-4 py-2 rounded-lg text-sm font-bold border ${plugin === p.id ? 'bg-sp-copper/30 border-sp-gold text-sp-gold' : 'border-sp-bronze/40 text-text-warm/70 hover:text-sp-gold'}`}>
+              {p.name}
+            </button>
+          ))}
         </div>
-        <select value={cat} onChange={(e) => setCat(e.target.value)} className="bg-black/50 border border-sp-bronze/40 rounded-lg px-3 py-2 text-sm text-text-warm">
-          <option value="all">All types</option>
-          {cats.map((c) => <option key={c} value={c}>{c}</option>)}
-        </select>
+        <p className="text-sm text-text-warm/70">{current.blurb}</p>
+        <div className="relative">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-warm/50" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search an item…" className="w-full bg-black/50 border border-sp-bronze/40 rounded-lg pl-9 pr-3 py-2.5 text-sm text-text-warm" />
+        </div>
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+          <div className="space-y-2">
+            <div className="text-xs text-text-warm/50">{shown.length} item{shown.length === 1 ? '' : 's'}</div>
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[60vh] overflow-y-auto pr-1">
+              {shown.map((i) => {
+                const active = sel && sel.name === i.name;
+                return (
+                  <button key={i.name} onClick={() => setSelected(i.name)} title={i.name} className={`flex flex-col items-center gap-1 p-1.5 rounded-md border text-center ${active ? 'border-sp-gold bg-sp-gold/10' : 'border-sp-bronze/30 bg-black/30 hover:border-sp-gold/60'}`}>
+                    <div className="h-12 w-12 flex items-center justify-center">
+                      <Pic name={i.name} className="h-12 w-12 object-contain" />
+                    </div>
+                    <span className="text-[10px] leading-tight line-clamp-2 break-words text-text-warm/80">{i.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {shown.length === 0 && <p className="text-text-warm/60 text-sm">No item matches.</p>}
+          </div>
+          <div className="space-y-4">
+            {!sel && <p className="text-text-warm/60 text-sm">Pick an item on the left to see how it is made and what it is used for.</p>}
+            {sel && (
+              <>
+                <div className="flex items-center gap-4">
+                  <div className="h-28 w-28 rounded-xl border border-sp-bronze/40 bg-black/40 flex items-center justify-center">
+                    <Pic name={sel.name} className="h-24 w-24 object-contain" />
+                  </div>
+                  <div>
+                    <h2 className="font-serif text-2xl text-sp-gold">{sel.name}</h2>
+                    <p className="text-xs text-text-warm/60">{sel.makes.length} recipe{sel.makes.length === 1 ? '' : 's'} · used in {sel.uses.length}</p>
+                  </div>
+                </div>
+                {sel.makes.length > 0 && (
+                  <div className="space-y-3">
+                    <h3 className="text-xs uppercase tracking-wide text-sp-copper font-bold">Made by</h3>
+                    {sel.makes.map((r, i) => <RecipeCard key={`m${i}`} r={r} />)}
+                  </div>
+                )}
+                {sel.uses.length > 0 && (
+                  <div className="space-y-3">
+                    <h3 className="text-xs uppercase tracking-wide text-sp-copper font-bold">Used in</h3>
+                    {sel.uses.slice(0, 12).map((r, i) => <RecipeCard key={`u${i}`} r={r} />)}
+                    {sel.uses.length > 12 && <p className="text-xs text-text-warm/50">+{sel.uses.length - 12} more: search for them.</p>}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       </div>
-      <div className="text-xs text-text-warm/50">{shown.length} recipe{shown.length === 1 ? '' : 's'}</div>
-      <div className="grid gap-3 md:grid-cols-2">
-        {shown.map((r, i) => <PluginCtx.Provider key={i} value={plugin}><RecipeCard r={r} /></PluginCtx.Provider>)}
-      </div>
-      {shown.length === 0 && <p className="text-text-warm/60 text-sm">No recipe matches.</p>}
-    </div>
+    </PluginCtx.Provider>
   );
 }
 
