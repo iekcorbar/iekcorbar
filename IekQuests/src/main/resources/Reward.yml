@@ -1,0 +1,17 @@
+# IekQuests reusable reward definitions.
+# Each top-level ID names an ordered list of actions using the existing quest reward syntax.
+# Dialogue entries can call rewards with:
+#   Reward:
+#     - reward_id
+# A reward runs once whenever its dialogue is selected. Use dialogue prerequisites, tags, or cooldowns
+# when a reward should only be claimable once. Reopening the dialogue selects it again.
+# Reward actions retain the same player context, placeholders, and execution behavior as quest rewards.
+# Standalone tag+ and tag- actions use registered player tags; standalone point values are stored separately from quest progress.
+# Item grants can use the existing "give DIAMOND 2" Bukkit-material action or "item custom_item_id 1" IekItem action.
+# Custom sound actions require the sound resource pack to already be loaded by the client.
+# This example is safe to leave unused; remove it or reference it from a dialogue as needed.
+welcome_reward:
+  - "money 100"
+  - "eco 5"
+  - "sound steamworks:quest.complete"
+  - "say &aWelcome!"
