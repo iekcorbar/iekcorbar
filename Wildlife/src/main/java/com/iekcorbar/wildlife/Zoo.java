@@ -103,7 +103,7 @@ final class Zoo implements org.bukkit.event.Listener {
         l.add(new DecorDef("zoo_bench", "Zoo Bench", "Right-click to sit.")
                 .seat(0.45f).hit(0.9f, 0.7f).recipe(1, planks, planks, Material.STICK, Material.STICK));
         l.add(new DecorDef("trash_bin", "Animal Trash Bin", "Right-click with an item to throw it away.")
-                .use(this::bin).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.COAL));
+                .scale(2f).height(2).use(this::bin).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.COAL));
         l.add(new DecorDef("lamp_post", "Lamp Post", "Three blocks of iron post with a lantern on top.")
                 .height(3).scale(1.5625f).glow(15).recipe(1, Material.IRON_INGOT, Material.IRON_INGOT, Material.STICK, Material.LANTERN));
         l.add(new DecorDef("souvenir_stall", "Souvenir Stall", "A little striped stall. Decoration.")
