@@ -657,7 +657,7 @@ final class Relics implements Listener {
             if (r.type.effect == RelicType.Effect.TWINKLE) d.setBrightness(new Display.Brightness(12, 15)); // lights glow
         });
         if (r.type.base != RelicType.Base.SOLID) {
-            float w = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.2f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.7f : r.type == RelicType.COUNTDOWN_BOARD ? 2.6f : r.type == RelicType.NOTICE_BOARD ? 1.1f : r.type == RelicType.ONSEN_TUB ? 1.3f : r.type == RelicType.KOTATSU || r.type == RelicType.SNOW_PINE ? 1.0f : r.type == RelicType.WISH_TREE ? 1.1f : r.type == RelicType.TORII_GATE ? 3.0f : r.type == RelicType.BONE_XYLOPHONE && r.mount.equals("floor") ? 1.9f : r.type == RelicType.GRAMOPHONE && r.mount.equals("floor") ? 1.1f : r.type == RelicType.GIFT_BOX && r.mount.equals("floor") ? 1.2f : r.type == RelicType.CREATURE_RIBCAGE || r.type == RelicType.ASH_PILE || !r.mount.equals("floor") ? 0.9f : 0.7f;
+            float w = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.2f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.7f : r.type == RelicType.COUNTDOWN_BOARD ? 2.6f : r.type == RelicType.NOTICE_BOARD ? 1.1f : r.type == RelicType.ONSEN_TUB ? 1.3f : r.type == RelicType.KOTATSU || r.type == RelicType.SNOW_PINE ? 1.0f : r.type == RelicType.WISH_TREE ? 1.1f : r.type == RelicType.TORII_GATE ? 3.0f : r.type == RelicType.BONE_XYLOPHONE && r.mount.equals("floor") ? 1.9f : r.type == RelicType.GRAMOPHONE && r.mount.equals("floor") ? 1.1f : r.type == RelicType.GIFT_BOX && r.mount.equals("floor") ? 1.2f : r.type == RelicType.LOVERS_BENCH && r.mount.equals("floor") ? 1.9f : r.type == RelicType.CREATURE_RIBCAGE || r.type == RelicType.ASH_PILE || !r.mount.equals("floor") ? 0.9f : 0.7f;
             float hh = r.type == RelicType.SETTLERS_GRAVE && r.mount.equals("floor") ? 2.9f : r.type == RelicType.CREATURE_RIBCAGE && r.mount.equals("floor") ? 2.4f : r.type == RelicType.COUNTDOWN_BOARD && r.mount.equals("wall") ? 2.0f : r.type == RelicType.COUNTDOWN_BOARD ? 4.8f : !r.mount.equals("floor") ? 1.0f : switch (r.type) {
                 case NOTICE_BOARD -> 1.65f;
                 case SNOW_PINE -> 2.1f;
@@ -670,6 +670,7 @@ final class Relics implements Listener {
                 case CREATURE_RIBCAGE, SETTLERS_GRAVE, TORN_SETTLEMENT_BANNER, GIBBET_CAGE -> 0.95f;
                 case GRAMOPHONE -> 1.3f;
                 case GIFT_BOX -> 1.2f;
+                case LOVERS_BENCH -> 1.0f;
                 case BONE_XYLOPHONE -> 1.5f;
                 default -> 0.7f;
             };

@@ -139,7 +139,7 @@ enum RelicType {
     CLOCKWORK_HEART(Collection.VALENTINE, "Clockwork Heart", "Brass, glass and a steady beat. The inventor kept it for herself.",
             Base.SOLID, 1, 0, "clockwork_heart", null, null, Effect.PULSE, Use.NONE, 1f),
     LOVERS_BENCH(Collection.VALENTINE, "Lovers' Bench", "Wide enough for two, warm enough for one. Right-click to sit.",
-            Base.NONE, 1, 0, "lovers_bench", null, null, Effect.NONE, Use.SEAT, 1f),
+            Base.NONE, 1, 0, "lovers_bench", null, null, Effect.NONE, Use.SEAT, 2f),
     HEART_WINDOW(Collection.VALENTINE, "Heart Window", "Stained glass that only shows its heart when the sun is behind it.",
             Base.LIGHT, 1, 6, "heart_window", "heart_window", null, Effect.NONE, Use.NONE, 1f),
     AMORE_MACHINE(Collection.VALENTINE, "Amore Automatron", "Right-click with a gold nugget: two chocolate hearts for one coin. It never makes change.",
