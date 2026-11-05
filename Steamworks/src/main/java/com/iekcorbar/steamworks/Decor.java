@@ -86,6 +86,35 @@ final class Decor implements Listener {
             plugin.items().addRecipe("decor_" + t.id(), item(t, 4), new Object[]{4, new String[]{"BB", "BA"}, 'B', t.base, 'A', t.accent});
     }
 
+    // ---- self-healing: vanilla re-derives a note block's instrument from the blocks above/below it, and that
+    // shape update fires no BlockPhysicsEvent we could cancel. So a reserved block (decor or ore) next to a block
+    // that is placed or broken is remembered first and put back one tick later if it changed.
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void guardPlace(BlockPlaceEvent e) {
+        guardAround(e.getBlockPlaced());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
+    public void guardBreak(BlockBreakEvent e) {
+        guardAround(e.getBlock());
+    }
+
+    private void guardAround(Block centre) {
+        java.util.Map<Block, BlockData> saved = new java.util.HashMap<>();
+        for (org.bukkit.block.BlockFace f : new org.bukkit.block.BlockFace[]{org.bukkit.block.BlockFace.UP, org.bukkit.block.BlockFace.DOWN,
+                org.bukkit.block.BlockFace.NORTH, org.bukkit.block.BlockFace.EAST, org.bukkit.block.BlockFace.SOUTH, org.bukkit.block.BlockFace.WEST}) {
+            Block n = centre.getRelative(f);
+            if (n.getType() == Material.NOTE_BLOCK && key(n.getBlockData()) >= 0) saved.put(n, n.getBlockData());
+        }
+        if (saved.isEmpty()) return;
+        org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> {
+            for (var en : saved.entrySet()) {
+                Block n = en.getKey();
+                if (n.getType() == Material.NOTE_BLOCK && !n.getBlockData().equals(en.getValue())) n.setBlockData(en.getValue(), false);
+            }
+        });
+    }
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlace(BlockPlaceEvent e) {
         DecorType t = itemType(e.getItemInHand());

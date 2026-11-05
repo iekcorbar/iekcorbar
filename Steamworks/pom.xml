@@ -9,7 +9,7 @@
     <!-- Own kinetic machine system (shafts, cogs, cranks, water wheels, millstone)
          with FreeMinecraftModels display models. Mechanics inspired by how Create
          works, own numbers/models, no Create assets. See ../docs/steamworks-kinetics-design.md -->
-    <version>0.3.40</version>
+    <version>0.3.41</version>
     <packaging>jar</packaging>
 
     <name>Steamworks</name>
