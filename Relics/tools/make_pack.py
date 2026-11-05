@@ -123,14 +123,17 @@ def model(name, es):
     size = max(hi[i] - lo[i] for i in range(3))
     s = round(min(1.2, 0.625 * 16 / max(size, 1)), 3)
     ty = round((8 - (lo[1] + hi[1]) / 2) * s * 0.9, 2)
+    # flat models (cookies, buns) sit at y 0..1, far below the pivot the hand display turns around, so in the hand
+    # they floated away from it: lift them so their middle is on the pivot (first person only; others unchanged)
+    hand_dy = round((8 - (lo[1] + hi[1]) / 2) * s * 0.5, 2) if hi[1] - lo[1] <= 3 else 0
     write(f"assets/relics/models/item/{name}.json", {
         "textures": {"p": "relics:item/palette", "particle": "relics:item/palette"}, "elements": es,
         "display": {"gui": {"rotation": [30, 225, 0], "translation": [0, ty, 0], "scale": [s] * 3},
                     "ground": {"translation": [0, 2, 0], "scale": [s * 0.5] * 3},
                     "fixed": {"translation": [0, ty * 0.6, 0], "scale": [s * 0.8] * 3},
                     "thirdperson_righthand": {"rotation": [75, 45, 0], "translation": [0, 2.5, 0], "scale": [s * 0.45] * 3},
-                    "firstperson_righthand": {"rotation": [0, 45, 0], "scale": [s * 0.5] * 3},
-                    "firstperson_lefthand": {"rotation": [0, 225, 0], "scale": [s * 0.5] * 3},
+                    "firstperson_righthand": {"rotation": [0, 45, 0], "translation": [0, hand_dy, 0], "scale": [s * 0.5] * 3},
+                    "firstperson_lefthand": {"rotation": [0, 225, 0], "translation": [0, hand_dy, 0], "scale": [s * 0.5] * 3},
                     **HEAD_DISPLAY.get(name, {})}})
     write(f"assets/relics/items/{name}.json", {"model": {"type": "minecraft:model", "model": f"relics:item/{name}"}})
 
