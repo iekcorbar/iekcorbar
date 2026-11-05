@@ -43,8 +43,14 @@ final class Molehills implements Listener {
         tagKey = new NamespacedKey(plugin, "molehill");
     }
 
+    /** Off by default (2026-11-05: hills could not be broken or built over, looked like a hologram). */
+    private boolean enabled() {
+        return plugin.getConfig().getBoolean("molehills.enabled", false);
+    }
+
     /** A mole appeared near this spot: dig a hill within five blocks, unless the area is used up. */
     void digNear(Location at) {
+        if (!enabled()) return;
         World w = at.getWorld();
         ThreadLocalRandom r = ThreadLocalRandom.current();
         for (Location h : hills.keySet())
@@ -97,6 +103,7 @@ final class Molehills implements Listener {
     }
 
     void loadChunk(Chunk c) {
+        if (!enabled()) return;
         String data = c.getPersistentDataContainer().get(dataKey, PersistentDataType.STRING);
         if (data == null) return;
         for (String line : data.split("\n")) {
