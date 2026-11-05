@@ -270,15 +270,22 @@ def build(out):
     # The prop joins its neighbours (connect "zoopath"): the plugin asks for path_cobble_<mask>
     # (N=1 E=2 S=4 W=8), so all 16 models must exist or the tile shows as a missing-texture cube.
     # A side with a neighbour stays open; a side without one gets a low kerb of dark stone.
-    path_stones = [b(1, 1, 1, 5, 1.2, 5, "stone_dark"), b(6, 1, 2, 10, 1.2, 6, "stone_dark"), b(11, 1, 1, 15, 1.2, 5, "stone_dark"),
-                   b(1, 1, 6, 5, 1.2, 10, "stone_dark"), b(6, 1, 7, 10, 1.2, 11, "stone_dark"), b(11, 1, 6, 15, 1.2, 10, "stone_dark"),
-                   b(1, 1, 11, 5, 1.2, 15, "stone_dark"), b(6, 1, 12, 10, 1.2, 16, "stone_dark"), b(11, 1, 11, 15, 1.2, 15, "stone_dark")]
-    kerb = {0: (0, 1, 0, 16, 1.6, 1), 1: (15, 1, 0, 16, 1.6, 16), 2: (0, 1, 15, 16, 1.6, 16), 3: (0, 1, 0, 1, 1.6, 16)}
+    # 2026-11-05 redo: walk-through flat tile (no kerb walls - the old ones made it look like a tray). A dark
+    # mortar slab with 4x4 irregular cobbles in three greys/browns, fixed layout so neighbouring tiles line up.
+    import random as _r
+    _rng = _r.Random(7)
+    cobbles = []
+    for gx in range(4):
+        for gz in range(4):
+            x0, z0 = gx * 4 + _rng.uniform(0.25, 0.7), gz * 4 + _rng.uniform(0.25, 0.7)
+            x1, z1 = gx * 4 + 4 - _rng.uniform(0.25, 0.7), gz * 4 + 4 - _rng.uniform(0.25, 0.7)
+            h = 0.9 + _rng.uniform(0, 0.7)
+            col = ("stone", "stone_dark", "stone", "dirt", "bark_light", "stone")[_rng.randrange(6)]
+            cobbles.append(b(x0, 0.1, z0, x1, h, z1, col))
+    cobbles.append(b(1.2, 0.1, 5.1, 2.4, 1.7, 6.3, "moss"))
+    cobbles.append(b(11.6, 0.1, 10.4, 13.0, 1.6, 11.6, "moss"))
     for mask in range(16):
-        es = [b(0, 0, 0, 16, 1, 16, "stone")] + list(path_stones)
-        for d in range(4):
-            if not mask & (1 << d):
-                es.append(b(*kerb[d], "stone_dark"))
+        es = [b(0, 0.1, 0, 16, 0.7, 16, "stone_dark")] + list(cobbles)
         pk.model(f"path_cobble_{mask}", es, item=(mask == 0))
 
     # welcome sign (2 tall)

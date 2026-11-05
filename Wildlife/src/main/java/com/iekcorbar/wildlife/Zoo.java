@@ -114,7 +114,7 @@ final class Zoo implements org.bukkit.event.Listener {
         l.add(new DecorDef("toilet", "Toilet", "A simple toilet. Right-click to use.")
                 .recipe(1, Material.WHITE_CONCRETE, Material.WHITE_CONCRETE, Material.WATER_BUCKET, Material.IRON_INGOT));
         l.add(new DecorDef("path_cobble", "Cobblestone Path", "A cobblestone path tile. Joins its neighbours.")
-                .connect("zoopath").recipe(4, Material.COBBLESTONE, Material.COBBLESTONE));
+                .connect("zoopath").hit(1f, 0.2f).recipe(4, Material.COBBLESTONE, Material.COBBLESTONE));
         l.add(new DecorDef("sign_welcome", "Welcome Sign", "A sign that says 'Welcome to the Zoo'.")
                 .height(2).hit(0.8f, 1.2f).recipe(1, planks, planks, Material.PAPER, Material.STICK));
         l.add(new DecorDef("sign_exit", "Exit Sign", "A sign that says 'Exit'.")
