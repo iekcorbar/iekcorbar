@@ -30,11 +30,11 @@ final class KitchenDecor {
         List<DecorDef> l = new ArrayList<>();
         Tag<Material> planks = Tag.PLANKS;
         l.add(new DecorDef("kitchen_counter", "Kitchen Counter", "A counter with a stone top. Joins its neighbours.")
-                .connect("kcounter").recipe(2, planks, planks, Material.STONE_SLAB, Material.STONE_SLAB));
+                .connect("kcounter").oriented().recipe(2, planks, planks, Material.STONE_SLAB, Material.STONE_SLAB));
         l.add(new DecorDef("counter_sink", "Kitchen Sink", "Right-click with a glass bottle or bucket to draw water from the tap.")
-                .connect("kcounter").use(this::sink).recipe(1, planks, planks, Material.STONE_SLAB, Material.IRON_INGOT, Material.BUCKET));
+                .connect("kcounter").oriented().use(this::sink).recipe(1, planks, planks, Material.STONE_SLAB, Material.IRON_INGOT, Material.BUCKET));
         l.add(new DecorDef("stove_top", "Stove Top", "Right-click to light or put out the flame. Joins counters.")
-                .connect("kcounter").use(this::stove).tick(1, this::flame).recipe(1, planks, planks, Material.IRON_INGOT, Material.IRON_INGOT, Material.FLINT_AND_STEEL));
+                .connect("kcounter").oriented().use(this::stove).tick(1, this::flame).recipe(1, planks, planks, Material.IRON_INGOT, Material.IRON_INGOT, Material.FLINT_AND_STEEL));
         l.add(new DecorDef("dining_table", "Dining Table", "A wooden table. Joins its neighbours.")
                 .connect("ktable").recipe(2, planks, planks, planks, Material.STICK));
         l.add(new DecorDef("chair", "Dining Chair", "Right-click to sit.")

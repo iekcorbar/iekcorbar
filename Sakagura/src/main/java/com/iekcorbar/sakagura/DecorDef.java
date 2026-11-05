@@ -31,6 +31,8 @@ final class DecorDef {
     float scale = 1f;
     /** Joins neighbouring props of the same group: model "&lt;model&gt;_&lt;mask&gt;" (N=1, E=2, S=4, W=8). */
     boolean connect;
+    /** Connecting prop with a front (sink, stove): turns with its facing; the join mask is rotated to match. */
+    boolean oriented;
     String group;
     /** Has a closed model and "&lt;model&gt;_open"; open() clears the base blocks for a while. */
     boolean openable;
@@ -69,6 +71,7 @@ final class DecorDef {
     DecorDef hit(float w, float h) { base = Base.NONE; hitW = w; hitH = h; return this; }
     DecorDef scale(float s) { scale = s; return this; }
     DecorDef connect(String g) { connect = true; group = g; return this; }
+    DecorDef oriented() { oriented = true; return this; }
     DecorDef group(String g) { group = g; return this; }
     DecorDef openable() { openable = true; return this; }
     DecorDef wall() { wall = true; return this; }

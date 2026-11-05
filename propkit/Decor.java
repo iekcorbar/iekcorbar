@@ -124,7 +124,7 @@ final class Decor implements Listener {
 
         String model() {
             String m = variant.isEmpty() ? def.model : variant;
-            if (def.connect) return m + "_" + mask;
+            if (def.connect) return m + "_" + (def.oriented ? modelMask(mask, facing) : mask);
             if (def.openable && open) return m + "_open";
             return m;
         }
@@ -381,13 +381,21 @@ final class Decor implements Listener {
         };
     }
 
+    /** World join mask -> mask of the model as authored (front = north), for a prop turned to {@code facing}. */
+    static int modelMask(int world, BlockFace facing) {
+        int k = switch (facing) { case EAST -> 1; case SOUTH -> 2; case WEST -> 3; default -> 0; };
+        int m = 0;
+        for (int w = 0; w < 4; w++) if ((world & (1 << w)) != 0) m |= 1 << ((w - k + 4) % 4);
+        return m;
+    }
+
     private Transformation transform(Prop r) {
         float ts = r.def.scale;
         float s = ts * 1.001f;
         Quaternionf q = new Quaternionf();
         // an item display shows the model turned 180 degrees about Y (north face towards the south), so every prop gets
         // a half turn on top of its facing: the model's front (north, -Z) then really points the way the prop faces
-        q.rotateY((float) Math.toRadians(r.def.connect ? 180 : yaw(r.facing) + 180));
+        q.rotateY((float) Math.toRadians(r.def.connect && !r.def.oriented ? 180 : yaw(r.facing) + 180));
         Vector3f up = new Vector3f(0, (ts - 1) * 0.5f, 0);
         if (r.wall) up.add(new Vector3f(r.facing.getDirection().toVector3f()).mul(-0.0f));
         return new Transformation(up, q, new Vector3f(s, s, s), new Quaternionf());
@@ -465,6 +473,19 @@ final class Decor implements Listener {
     // ------------------------------------------------------------ use / seats
 
     private void use(Prop r, Player p, ItemStack hand) {
+        // a plain stick turns a prop a quarter turn clockwise (sneak = counter-clockwise)
+        if (hand != null && hand.getType() == Material.STICK && !r.wall && r.facing.getModY() == 0) {
+            BlockFace[] ring = {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+            int i = java.util.Arrays.asList(ring).indexOf(r.facing);
+            if (i >= 0) {
+                r.facing = ring[(i + (p.isSneaking() ? 3 : 1)) % 4];
+                draw(r);
+                save(r);
+                r.world.playSound(r.center(), "minecraft:block.wood.place", 0.6f, 1.4f);
+                p.sendActionBar(net.kyori.adventure.text.Component.text("Turned to face " + r.facing.name().toLowerCase()));
+                return;
+            }
+        }
         if (r.def.use != null && r.def.use.use(this, r, p, hand)) return;
         if (r.def.seat) sit(r, p);
     }
