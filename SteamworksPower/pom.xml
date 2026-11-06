@@ -17,7 +17,7 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.api.version>26.2.build.135-stable</paper.api.version>
+        <paper.api.version>26.3.build.230-stable</paper.api.version>
     </properties>
 
     <repositories>
@@ -39,9 +39,9 @@
         <dependency>
             <groupId>com.iekcorbar</groupId>
             <artifactId>Steamworks</artifactId>
-            <version>0.3.33</version>
+            <version>0.3.40</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../Steamworks/target/Steamworks-0.3.33.jar</systemPath>
+            <systemPath>${project.basedir}/../Steamworks/target/Steamworks-0.3.40.jar</systemPath>
         </dependency>
         <!-- pinned to the version already in the local repo (paper-api pulls a newer one transitively) -->
         <dependency>

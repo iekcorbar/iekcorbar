@@ -20,6 +20,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | **IekQuests 0.5.4 + Igor conversatie-quest** | 30-10 18:05 | stage-dialoog in chat + paneel sluit voor leespauze; Igor: 4 verduidelijkte stages + receptuur in de praat |
 | Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
+| **Custom plugins 26.3 (15 jars)** | deploy/ + TE-DEPLOYEN | Herbouwd tegen Paper 26.3 API; klaar om uit te rollen zodra Paper 26.3 jar + third-party plugins (docs/update-naar-26.3.md) live staan |
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|

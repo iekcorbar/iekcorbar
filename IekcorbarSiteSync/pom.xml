@@ -50,7 +50,7 @@
         <!-- The live server's actual version Ã¢â‚¬â€ default builds (what actually
              gets shipped) always compile against this. 26.2 since
              2026-09-27 (was 26.1.2.build.74-stable). -->
-        <paper.api.version>26.2.build.135-stable</paper.api.version>
+        <paper.api.version>26.3.build.230-stable</paper.api.version>
     </properties>
 
     <repositories>
@@ -97,10 +97,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
-            <scope>provided</scope>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultUnlocked</artifactId>
+            <version>2.20.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/VaultUnlocked.jar</systemPath>
         </dependency>
         <!-- provided, not bundled: Paper/Spigot already ships Gson on the
              server's own classpath (used internally for chat components/NBT),
@@ -119,6 +120,18 @@
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.9</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sk89q.worldedit</groupId>
+                    <artifactId>worldedit-bukkit</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.3.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
