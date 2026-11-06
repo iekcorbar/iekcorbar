@@ -1675,7 +1675,10 @@ def add_discs():
     if os.path.exists(frag):
         shutil.copytree(os.path.join(out, "assets"), os.path.join(ROOT, "assets"), dirs_exist_ok=True)
         sj = os.path.join(ROOT, "assets", "relics", "sounds.json")
-        data = json.load(open(sj, encoding="utf-8"))
+        if os.path.exists(sj):
+            data = json.load(open(sj, encoding="utf-8"))
+        else:
+            data = {}
         data.update(json.load(open(frag, encoding="utf-8")))
         json.dump(data, open(sj, "w", encoding="utf-8"), indent=1)
         lp = os.path.join(ROOT, "assets", "relics", "lang", "en_us.json")

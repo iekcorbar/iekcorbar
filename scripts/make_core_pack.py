@@ -177,7 +177,7 @@ def loop_ogg(src, x=SPAWN_XFADE):
     """Naadloos loop-bestand: eerste x s en laatste x s kruisen in elkaar (equal-power).
     Lengte = origineel - x. Het einde loopt vanzelf door in het begin."""
     with tempfile.TemporaryDirectory() as td:
-        probe = subprocess.run([FFMPEG.replace("ffmpeg.exe", "ffprobe.exe"), "-v", "error", "-show_entries",
+        probe = subprocess.run(["ffprobe", "-v", "error", "-show_entries",
                                 "format=duration", "-of", "csv=p=0", src], capture_output=True, text=True, check=True)
         d = float(probe.stdout.strip())
         out = os.path.join(td, "loop.ogg")

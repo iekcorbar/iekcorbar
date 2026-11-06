@@ -72,7 +72,7 @@ PALETTE = {
 "rack": (140, 100, 60), "rack_dark": (90, 65, 40),
 "smoker": (60, 60, 60), "smoker_dark": (40, 40, 40), "smoker_iron": (120, 120, 130),
 "clay_oven": (180, 120, 80), "clay_oven_dark": (120, 80, 50), "clay_oven_light": (220, 170, 120),
-"steamer": (140, 100, 70), "steamer_dark": (90, 65, 45), "steamer_lid": (160, 120, 80),
+"steam": (230, 235, 245), "steamer": (140, 100, 70), "steamer_dark": (90, 65, 45), "steamer_lid": (160, 120, 80),
 "bread": (220, 180, 110), "bread_dark": (180, 140, 80),
 "melonpan": (240, 200, 100), "melonpan_dark": (200, 160, 70),
 "castella": (230, 180, 90), "castella_dark": (190, 140, 60),
