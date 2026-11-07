@@ -21,6 +21,14 @@ Dit bestand houdt de harde regels vast die áltijd gelden (ook als de sessie ver
 4. **Na elke packbouw:** `python -I scripts/merge-packs.py && python -I scripts/audit-pack.py`
    (laatste kiest automatisch de nieuwste pack in `deploy/`, exit-code 0 = schoon).
 
+## Deploy-regels (userregel 07-11 avond)
+
+- **Server bezet?** → niet deployen, wachten.
+- **Resource pack update:** upload nieuwe zip naar `mixer/`, verwijder oude pack-zip, `resourcepacks reload` in de console. **Geen server-restart.** Alleen de client moet herstarten.
+- **Plugin update:** altijd eerst vragen of de gebruiker wil compilen of nog meer wil toevoegen. De gebruiker heeft het laatste woord. Pas na bevestiging: compile + upload + restart.
+- **Nooit deployen of herstarten zonder bevestiging van de gebruiker bij plugin-wijzigingen.**
+- **Alleen bij plugin-wijzigingen een restart; bij pack-only updates nooit.**
+
 ## Deploy-batching (userregel 26-10 avond)
 
 De gebruiker deployt NIET na elke klus, maar in batching wanneer het hem uitkomt. Daarom:
