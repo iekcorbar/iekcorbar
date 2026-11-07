@@ -1715,10 +1715,10 @@ def kitsune(m):
     p = 1.4
     m.anim("walk", p, {
         "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.3, 0)), (p, (0, 0, 0))]},
-        "leg_fl": {"rotation": wave(4, p, 22.0, 0.0, axis=0)},
-        "leg_fr": {"rotation": wave(4, p, 22.0, math.pi, axis=0)},
-        "leg_bl": {"rotation": wave(4, p, 20.0, math.pi, axis=0)},
-        "leg_br": {"rotation": wave(4, p, 20.0, 0.0, axis=0)},
+        "leg_fl": {"rotation": wave(4, p, 22.0, math.pi/2, axis=0)},
+        "leg_fr": {"rotation": wave(4, p, 22.0, 3*math.pi/2, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 20.0, 0.0, axis=0)},
+        "leg_br": {"rotation": wave(4, p, 20.0, math.pi, axis=0)},
         "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)},
         "tail_c": {"rotation": wave(4, p, 6.0, 0.0, axis=2)},
         "tail_l": {"rotation": wave(4, p, 7.0, 0.5, axis=2)},
@@ -2114,8 +2114,8 @@ def fennec(m):
     m.anim("idle", p, {"body": {"position": wave(6, p, 0.15, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 2.0, 0.4, axis=2)}, "tail": {"rotation": wave(6, p, 4.0, 0.0, axis=2)}})
     p = 1.3
     m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.2, 0)), (p, (0, 0, 0))]},
-        "leg_fl": {"rotation": wave(4, p, 24.0, 0.0, axis=0)}, "leg_fr": {"rotation": wave(4, p, 24.0, math.pi, axis=0)},
-        "leg_bl": {"rotation": wave(4, p, 22.0, math.pi, axis=0)}, "leg_br": {"rotation": wave(4, p, 22.0, 0.0, axis=0)},
+        "leg_fl": {"rotation": wave(4, p, 24.0, math.pi/2, axis=0)}, "leg_fr": {"rotation": wave(4, p, 24.0, 3*math.pi/2, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 22.0, 0.0, axis=0)}, "leg_br": {"rotation": wave(4, p, 22.0, math.pi, axis=0)},
         "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)}, "tail": {"rotation": wave(4, p, 6.0, 0.0, axis=2)}})
     m.anim("death", 0.6, {"body": {"rotation": [(0, (0, 0, 0)), (0.4, (12, 0, 0)), (0.6, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.4, (0, -2.5, 0)), (0.6, (0, -2.5, 0))]}}, loop="hold")
 
@@ -2151,8 +2151,8 @@ def meerkat(m):
         "tail": {"rotation": wave(6, p, 3.0, 0.0, axis=2)}})
     p = 1.4
     m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.2, 0)), (p, (0, 0, 0))]},
-        "leg_l": {"rotation": wave(4, p, 24.0, 0.0, axis=0)}, "leg_r": {"rotation": wave(4, p, 24.0, math.pi, axis=0)},
-        "leg_bl": {"rotation": wave(4, p, 22.0, math.pi, axis=0)}, "leg_br": {"rotation": wave(4, p, 22.0, 0.0, axis=0)},
+        "leg_l": {"rotation": wave(4, p, 24.0, math.pi/2, axis=0)}, "leg_r": {"rotation": wave(4, p, 24.0, 3*math.pi/2, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 22.0, 0.0, axis=0)}, "leg_br": {"rotation": wave(4, p, 22.0, math.pi, axis=0)},
         "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)}, "tail": {"rotation": wave(4, p, 5.0, 0.0, axis=2)}})
     m.anim("death", 0.6, {"body": {"rotation": [(0, (0, 0, 0)), (0.4, (12, 0, 0)), (0.6, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.4, (0, -2.5, 0)), (0.6, (0, -2.5, 0))]}}, loop="hold")
 
