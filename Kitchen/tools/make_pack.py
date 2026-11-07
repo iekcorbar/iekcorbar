@@ -278,6 +278,14 @@ def items():
     M["cannabis_buds"] = [box(4, 0, 6, 12, 2, 10, "leaf"), box(5, 2, 7, 11, 3.5, 9, "leaf_dark"), box(6, 3.5, 7.5, 10, 4.5, 8.5, "gold")]
     M["hemp_seeds"] = pile("straw", "straw_dark", 10, 8)
     M["hemp_leaves"] = [box(4, 0, 4, 12, 1, 12, "leaf"), box(5, 1, 5, 11, 1.5, 11, "leaf_dark")]
+    M["dried_cannabis"] = [box(4, 0, 6, 12, 1.5, 10, "leaf_dark"), box(5, 1.5, 7, 11, 2.5, 9, "leaf")]
+    M["hash"] = [box(5, 0, 5, 11, 3, 11, "wood_dark"), box(6, 0, 6, 10, 3.2, 10, "wood")]
+    M["hemp_fiber"] = [box(6, 0, 4, 10, 0.6, 12, "straw"), box(5, 0.6, 5, 11, 1.2, 11, "straw_dark")]
+    M["hemp_string"] = [box(7, 0, 2, 9, 0.8, 14, "straw"), box(7.5, 0.8, 3, 8.5, 1.2, 13, "straw_dark")]
+    M["hemp_rope"] = [box(6, 0, 4, 10, 1.5, 12, "straw_dark"), box(7, 1.5, 5, 9, 2.5, 11, "straw")]
+    M["hemp_cloth"] = [box(4, 0, 4, 12, 0.8, 12, "straw"), box(4, 0.8, 4, 12, 1.6, 12, "straw_dark")]
+    M["joint"] = [box(7, 0, 4, 9, 0.8, 12, "straw"), box(7.2, 0.8, 5, 8.8, 1.2, 11, "leaf")]
+    M["hash_pipe"] = [box(6, 0, 6, 10, 2, 10, "clay"), box(7, 2, 7, 9, 3, 9, "wood_dark")]
     M["cabbage_leaf"] = [box(4, 0, 5, 12, 0.6, 11, "cabbage_light"), box(5, 0.6, 6, 11, 0.8, 10, "leaf")]
     M["daikon_slices"] = disc(2.2, 0, 0.8, "daikon", cx=6, cz=8) + disc(2.2, 0.8, 1.6, "daikon", cx=8, cz=8) + disc(2.2, 0, 0.8, "daikon", cx=10, cz=8)
     M["chopped_green_onion"] = pile("negi", "negi_white", 10, 6)

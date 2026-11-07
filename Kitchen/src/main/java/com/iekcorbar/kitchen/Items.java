@@ -283,6 +283,14 @@ final class Items implements Listener {
         shapeless("bento_box", create(KItem.BENTO_BOX, 1), Tag.WOODEN_SLABS, KItem.STEAMED_RICE, KItem.TAMAGOYAKI,
                 KItem.TEMPURA, KItem.TAKUAN, KItem.SALMON_SASHIMI);
         shapeless("tea_set", create(KItem.TEA_SET, 1), KItem.PLATE, KItem.GREEN_TEA, KItem.GREEN_TEA, KItem.GREEN_TEA, KItem.GREEN_TEA);
+        // cannabis & hemp
+        shapeless("hemp_fiber", create(KItem.HEMP_FIBER, 2), KItem.HEMP_LEAVES, KItem.HEMP_LEAVES, KItem.HEMP_LEAVES, KItem.HEMP_LEAVES);
+        shapeless("hemp_string", create(KItem.HEMP_STRING, 1), KItem.HEMP_FIBER, KItem.HEMP_FIBER);
+        shapeless("hemp_rope", create(KItem.HEMP_ROPE, 1), KItem.HEMP_STRING, KItem.HEMP_STRING, KItem.HEMP_STRING);
+        shapeless("hemp_cloth", create(KItem.HEMP_CLOTH, 1), KItem.HEMP_FIBER, KItem.HEMP_FIBER, KItem.HEMP_FIBER, KItem.HEMP_FIBER);
+        shapeless("dried_cannabis", create(KItem.DRIED_CANNABIS, 1), KItem.CANNABIS_BUDS);
+        shapeless("hash", create(KItem.HASH, 1), KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS);
+        shapeless("joint", create(KItem.JOINT, 1), Material.PAPER, KItem.DRIED_CANNABIS);
         for (Player p : Bukkit.getOnlinePlayers()) p.discoverRecipes(recipeKeys);
     }
 

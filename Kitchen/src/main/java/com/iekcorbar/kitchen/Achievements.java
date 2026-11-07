@@ -23,6 +23,10 @@ final class Achievements {
         a.add("sesame", "harvest", "sugar", "Open Sesame", "Harvest sesame.", "task");
         a.add("cannabis", "harvest", "green_dye", "Green Thumb", "Harvest cannabis.", "task");
         a.add("hemp", "harvest", "string", "Fiber and Thread", "Harvest hemp.", "task");
+        a.add("hash", "cannabis", "coal", "Compressed", "Make hash from dried cannabis.", "task");
+        a.add("joint", "hash", "paper", "Roll It Up", "Roll a joint.", "task");
+        a.add("hemp_rope", "hemp", "lead", "Strong Rope", "Craft hemp rope.", "task");
+        a.add("hemp_cloth", "hemp", "white_wool", "Woven", "Craft hemp cloth.", "task");
         a.add("six_crops", "harvest", "golden_hoe", "The Whole Garden", "Harvest all six new crops.", "challenge").allOf("rice", "soybeans", "napa", "onion", "daikon", "tea");
         a.add("soil", "planted", "podzol", "Rich Soil", "Make Rich Soil from Organic Compost.", "task");
         // tools and stations
