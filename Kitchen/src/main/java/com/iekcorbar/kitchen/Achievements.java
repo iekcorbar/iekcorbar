@@ -23,6 +23,7 @@ final class Achievements {
         a.add("sesame", "harvest", "sugar", "Open Sesame", "Harvest sesame.", "task");
         a.add("cannabis", "harvest", "green_dye", "Green Thumb", "Harvest cannabis.", "task");
         a.add("hemp", "harvest", "string", "Fiber and Thread", "Harvest hemp.", "task");
+        a.add("magic_mushroom", "harvest", "red_mushroom", "Trip", "Harvest a magic mushroom.", "task");
         a.add("hash", "cannabis", "coal", "Compressed", "Make hash from dried cannabis.", "task");
         a.add("joint", "hash", "paper", "Roll It Up", "Roll a joint.", "task");
         a.add("hemp_rope", "hemp", "lead", "Strong Rope", "Craft hemp rope.", "task");

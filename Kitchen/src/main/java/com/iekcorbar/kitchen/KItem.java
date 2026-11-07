@@ -38,6 +38,9 @@ enum KItem {
     CANNABIS_BUDS("Cannabis Buds", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Harvested from a cannabis plant. Dry it for hash."),
     HEMP_SEEDS("Hemp Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Grows into hemp."),
     HEMP_LEAVES("Hemp Leaves", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Harvested from hemp. Craft into fiber."),
+    // ---- magic mushrooms
+    MAGIC_MUSHROOM_SPORES("Magic Mushroom Spores", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland in the dark. Grows into a magic mushroom."),
+    MAGIC_MUSHROOM("Magic Mushroom", Kind.FOOD, 2, 1.2f, Rem.NONE, 64, "A psychedelic mushroom. Eat at your own risk."),
     // ---- cannabis & hemp products
     DRIED_CANNABIS("Dried Cannabis", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Dried buds. Smoke or compress into hash."),
     HASH("Hash", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Compressed cannabis resin. Strong."),

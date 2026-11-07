@@ -286,6 +286,8 @@ def items():
     M["hemp_cloth"] = [box(4, 0, 4, 12, 0.8, 12, "straw"), box(4, 0.8, 4, 12, 1.6, 12, "straw_dark")]
     M["joint"] = [box(7, 0, 4, 9, 0.8, 12, "straw"), box(7.2, 0.8, 5, 8.8, 1.2, 11, "leaf")]
     M["hash_pipe"] = [box(6, 0, 6, 10, 2, 10, "clay"), box(7, 2, 7, 9, 3, 9, "wood_dark")]
+    M["magic_mushroom_spores"] = pile("straw_dark", "brown", 10, 9)
+    M["magic_mushroom"] = [box(5, 0, 5, 11, 2, 11, "straw"), box(6, 2, 6, 10, 3.5, 10, "cap_red" if "cap_red" in PALETTE else "chili"), box(7, 3.5, 7, 9, 4, 9, "white")]
     M["cabbage_leaf"] = [box(4, 0, 5, 12, 0.6, 11, "cabbage_light"), box(5, 0.6, 6, 11, 0.8, 10, "leaf")]
     M["daikon_slices"] = disc(2.2, 0, 0.8, "daikon", cx=6, cz=8) + disc(2.2, 0.8, 1.6, "daikon", cx=8, cz=8) + disc(2.2, 0, 0.8, "daikon", cx=10, cz=8)
     M["chopped_green_onion"] = pile("negi", "negi_white", 10, 6)
@@ -699,10 +701,26 @@ def sprite(crop, stage, wild=False):
                 for dy in range(max(1, hh - 2), hh + 1):
                     put(px, x - 2, dy, PALETTE["leaf"])
                     put(px, x + 2, dy, PALETTE["leaf"])
+    elif crop == "magic_mushroom":
+        # red cap with white spots, grows in the dark
+        cap_color = PALETTE["cap_red"] if "cap_red" in PALETTE else PALETTE["chili"]
+        spot_color = PALETTE["white"]
+        stem_color = PALETTE["straw"]
+        for stage_h in range(2, h + 1):
+            put(px, 7, stage_h, stem_color)
+            put(px, 8, stage_h, stem_color)
+        if stage >= 1:
+            for x in range(5, 11):
+                for y in range(max(2, h - 2), h + 1):
+                    put(px, x, y, cap_color)
+            # white spots
+            for _ in range(4 if stage == 3 else 2):
+                x, y = rnd.randint(5, 10), rnd.randint(max(2, h - 2), h)
+                put(px, x, y, spot_color)
     return png(px)
 
 
-CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant", "cannabis", "hemp"]  # CropType order
+CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant", "cannabis", "hemp", "magic_mushroom"]  # CropType order
 
 # ------------------------------------------------------------------ sounds
 

@@ -209,6 +209,13 @@ final class Items implements Listener {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 200, 0));
                 p.sendActionBar(Component.text("Strong stuff...", NamedTextColor.DARK_GREEN));
             }
+            case MAGIC_MUSHROOM -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 600, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 0));
+                p.sendActionBar(Component.text("The world shifts...", NamedTextColor.LIGHT_PURPLE));
+            }
             default -> { }
         }
         // Sakagura sake-pairing: if the player is drunk, food gives a bonus
