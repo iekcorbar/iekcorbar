@@ -4,6 +4,20 @@
 // tag = which guide to point to.
 export const WHATS_NEW = [
   {
+    date: '2026-11-07',
+    title: 'New spirits in the wild',
+    tag: 'Wildlife',
+    link: { href: '/wildlife', label: 'Wildlife guide' },
+    items: [
+      'Five new Will-o\\'wisps now drift through the night: green (draws monsters), red (hunts you), gold (leaves a gift), white (heals) and purple (speed and jump).',
+      'A Kappa waits in rivers and swamps, tugging at swimmers.',
+      'A Tengu rides the wind above the mountain peaks and lifts those below.',
+      'A clockwork Automaton patrols the caves on heavy, ticking steps.',
+      'A Kitsune with three glowing tails watches from the tree line of old forests.',
+      'All of these are rare sights placed by staff - keep your eyes open at night.',
+    ],
+  },
+  {
     date: '2026-11-01',
     title: 'More guides, a calendar and a live garden season',
     tag: 'Website',
