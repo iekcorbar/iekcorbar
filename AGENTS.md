@@ -5,6 +5,8 @@ Dit bestand houdt de harde regels vast die áltijd gelden (ook als de sessie ver
 
 ## Harde regels
 
+0. **Discord-berichten zijn ALTIJD in het Engels** — speler-kanaal, staff-kanaal en alle
+   aankondigingen. Nooit Nederlands, ook niet als de gebruiker in het Nederlands vraagt.
 1. **Git: gebruik de skill `git-beheer`.** Commit per afgewerkte werkblok, direct pushen,
    repos altijd privé, nooit secrets/binary-bouwrommel meenemen. De gebruiker kent git zelf
    niet: rapporteer in gewoon Nederlands ("opgeslagen", "online gezet").
