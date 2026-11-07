@@ -117,7 +117,7 @@ SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "
         "tanuki": 1.3, "crane": 1.25, "koi": 1.2, "macaque": 1.25,
         "kangaroo": 1.0, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.0, "mole": 1.35,
         "rhino": 0.8, "penguin": 0.95, "orca": 0.42, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.35, "lion": 0.9, "hyena": 1.0}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 0.42 = whole length inside the limit, head and tail no longer cut off
+        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.35, "lion": 0.9, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 0.9}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 0.42 = whole length inside the limit, head and tail no longer cut off
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
@@ -2002,6 +2002,197 @@ def hyena(m):
     m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.8, (12, 0, 0))],
                                     "position": [(0, (0, 0, 0)), (0.5, (0, -4, 0)), (0.8, (0, -4, 0))]}}, loop="hold")
 
+def arcticfox(m):
+    fur, dark, eye = "fur_white", "fur_dark", "eye"
+    m.bone("body", (0, 5, 0))
+    m.box("body", -1.6, 4.5, -3.0, 1.6, 7.5, 2.5, fur)
+    m.box("body", -1.8, 4.0, -3.4, 1.8, 7.0, -2.4, dark)
+    m.bone("h_head", (0, 7.0, -2.8), "body")
+    m.box("h_head", -1.6, 7.0, -5.0, 1.6, 9.5, -2.8, fur)
+    m.box("h_head", -1.2, 6.5, -5.5, 1.2, 8.5, -4.8, dark)
+    m.sym("h_head", 0.8, 9.0, -4.0, 1.2, 10.5, -3.4, fur)
+    m.sym("h_head", 0.7, 9.0, -4.2, 1.0, 10.0, -3.6, dark)
+    m.sym("h_head", 0.7, 8.0, -5.1, 1.1, 8.6, -4.9, eye)
+    for name, sx, z in (("leg_fl", 1, -2.0), ("leg_fr", -1, -2.0), ("leg_bl", 1, 1.8), ("leg_br", -1, 1.8)):
+        m.bone(name, (sx * 1.2, 4.5, z), "body")
+        x1, x2 = (0.9, 1.5) if sx > 0 else (-1.5, -0.9)
+        m.box(name, x1, 0.0, z - 0.5, x2, 4.7, z + 0.5, fur)
+    m.bone("tail", (0, 6.0, 2.3), "body")
+    m.box("tail", -1.0, 3.5, 2.3, 1.0, 6.2, 7.0, fur)
+    m.box("tail", -0.8, 3.0, 6.5, 0.8, 5.0, 7.5, fur)
+    p = 2.0
+    m.anim("idle", p, {"body": {"position": wave(6, p, 0.2, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 2.0, 0.4, axis=2)}, "tail": {"rotation": wave(6, p, 5.0, 0.0, axis=2)}})
+    p = 1.4
+    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.25, 0)), (p, (0, 0, 0))]},
+        "leg_fl": {"rotation": wave(4, p, 22.0, 0.0, axis=0)}, "leg_fr": {"rotation": wave(4, p, 22.0, math.pi, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 20.0, math.pi, axis=0)}, "leg_br": {"rotation": wave(4, p, 20.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)}, "tail": {"rotation": wave(4, p, 7.0, 0.0, axis=2)}})
+    m.anim("death", 0.7, {"body": {"rotation": [(0, (0, 0, 0)), (0.4, (12, 0, 0)), (0.7, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.4, (0, -3, 0)), (0.7, (0, -3, 0))]}}, loop="hold")
+
+
+def snowyowl(m):
+    fur, dark, eye, beak = "fur_white", "fur_dark", "eye", "beak"
+    m.bone("body", (0, 8, 0))
+    m.box("body", -2.0, 7.0, -2.5, 2.0, 10.0, 2.0, fur)
+    m.box("body", -1.6, 6.5, -2.0, 1.6, 9.5, 1.5, dark)
+    m.bone("h_head", (0, 9.5, -2.0), "body")
+    m.box("h_head", -2.2, 9.5, -4.5, 2.2, 12.5, -2.0, fur)
+    m.box("h_head", -1.8, 9.0, -4.8, 1.8, 12.0, -4.2, dark)
+    m.sym("h_head", 0.6, 12.0, -3.5, 1.0, 14.0, -2.8, fur)
+    m.sym("h_head", 0.9, 10.5, -4.6, 1.3, 11.2, -4.4, eye)
+    m.box("h_head", -0.5, 10.0, -4.9, 0.5, 10.8, -4.6, beak)
+    # wings
+    for name, sx in (("wing_l", 1), ("wing_r", -1)):
+        m.bone(name, (sx * 1.6, 9.0, 0), "body")
+        x1, x2 = (1.6, 5.5) if sx > 0 else (-5.5, -1.6)
+        m.box(name, x1, 7.0, -0.4, x2, 10.2, 0.4, fur)
+    # legs
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 0.8, 7.0, 0), "body")
+        x1, x2 = (0.5, 1.1) if sx > 0 else (-1.1, -0.5)
+        m.box(name, x1, 0.0, -0.5, x2, 7.2, 0.5, dark)
+    p = 2.0
+    m.anim("idle", p, {"body": {"position": wave(6, p, 0.15, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 1.5, 0.4, axis=2)},
+        "wing_l": {"rotation": wave(6, p, 6.0, 0.0, axis=0)}, "wing_r": {"rotation": wave(6, p, 6.0, math.pi, axis=0)}})
+    p = 1.6
+    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.2, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 14.0, 0.0, axis=0)}, "leg_r": {"rotation": wave(4, p, 14.0, math.pi, axis=0)},
+        "wing_l": {"rotation": wave(4, p, 10.0, 0.0, axis=0)}, "wing_r": {"rotation": wave(4, p, 10.0, math.pi, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.0, 0.3, axis=2)}})
+    m.anim("death", 0.7, {"body": {"rotation": [(0, (0, 0, 0)), (0.4, (12, 0, 0)), (0.7, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.4, (0, -4, 0)), (0.7, (0, -4, 0))]}}, loop="hold")
+
+
+def reindeer(m):
+    fur, dark, hoof, antler, eye = "fur_brown", "fur_dark", "hoof", "antler", "eye"
+    m.bone("body", (0, 9, 0))
+    m.box("body", -2.6, 8.0, -5.0, 2.6, 11.5, 4.5, fur)
+    m.box("body", -2.8, 7.5, -5.2, 2.8, 11.0, -4.0, dark)
+    m.bone("h_head", (0, 10.5, -4.5), "body")
+    m.box("h_head", -1.8, 10.5, -7.0, 1.8, 13.0, -4.5, fur)
+    m.box("h_head", -1.4, 10.0, -7.5, 1.4, 12.0, -6.8, dark)
+    m.sym("h_head", 1.0, 12.5, -6.0, 1.4, 14.5, -5.5, antler)
+    m.sym("h_head", 0.8, 14.0, -5.8, 1.2, 15.5, -5.2, antler)
+    m.sym("h_head", 0.6, 12.0, -6.5, 1.0, 13.5, -6.0, antler)
+    m.sym("h_head", 0.9, 11.8, -7.1, 1.3, 12.5, -6.9, eye)
+    for name, sx, z in (("leg_fl", 1, -3.5), ("leg_fr", -1, -3.5), ("leg_bl", 1, 3.0), ("leg_br", -1, 3.0)):
+        m.bone(name, (sx * 1.6, 8.0, z), "body")
+        x1, x2 = (1.2, 2.0) if sx > 0 else (-2.0, -1.2)
+        m.box(name, x1, 0.0, z - 0.7, x2, 8.2, z + 0.7, fur)
+        m.box(name, x1, 0.0, z - 0.9, x2, 1.2, z + 0.9, hoof)
+    m.bone("tail", (0, 9.5, 4.2), "body")
+    m.box("tail", -0.5, 8.0, 4.2, 0.5, 10.0, 5.5, fur)
+    p = 2.2
+    m.anim("idle", p, {"body": {"position": wave(6, p, 0.2, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 1.5, 0.4, axis=2)}, "tail": {"rotation": wave(6, p, 3.0, 0.0, axis=2)}})
+    p = 1.8
+    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.3, 0)), (p, (0, 0, 0))]},
+        "leg_fl": {"rotation": wave(4, p, 22.0, 0.0, axis=0)}, "leg_fr": {"rotation": wave(4, p, 22.0, math.pi, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 20.0, math.pi, axis=0)}, "leg_br": {"rotation": wave(4, p, 20.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.0, 0.3, axis=2)}, "tail": {"rotation": wave(4, p, 5.0, 0.0, axis=2)}})
+    m.anim("death", 0.9, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.9, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.5, (0, -6, 0)), (0.9, (0, -6, 0))]}}, loop="hold")
+
+
+def fennec(m):
+    fur, dark, eye = "fur_cream", "fur_brown", "eye"
+    m.bone("body", (0, 4, 0))
+    m.box("body", -1.4, 3.5, -2.5, 1.4, 6.0, 2.0, fur)
+    m.box("body", -1.5, 3.0, -2.8, 1.5, 5.5, -2.0, dark)
+    m.bone("h_head", (0, 5.5, -2.2), "body")
+    m.box("h_head", -1.5, 5.5, -4.5, 1.5, 8.0, -2.2, fur)
+    m.box("h_head", -1.2, 5.0, -4.8, 1.2, 7.5, -4.0, dark)
+    # huge ears
+    m.sym("h_head", 1.2, 7.5, -3.8, 1.7, 11.0, -3.0, fur)
+    m.sym("h_head", 1.3, 7.8, -3.6, 1.6, 10.5, -3.2, dark)
+    m.sym("h_head", 0.7, 7.0, -4.6, 1.1, 7.6, -4.4, eye)
+    for name, sx, z in (("leg_fl", 1, -1.8), ("leg_fr", -1, -1.8), ("leg_bl", 1, 1.5), ("leg_br", -1, 1.5)):
+        m.bone(name, (sx * 1.1, 3.5, z), "body")
+        x1, x2 = (0.8, 1.4) if sx > 0 else (-1.4, -0.8)
+        m.box(name, x1, 0.0, z - 0.4, x2, 3.7, z + 0.4, fur)
+    m.bone("tail", (0, 4.5, 1.8), "body")
+    m.box("tail", -0.8, 2.0, 1.8, 0.8, 4.7, 6.0, fur)
+    m.box("tail", -0.6, 1.5, 5.5, 0.6, 3.5, 6.5, fur)
+    p = 2.0
+    m.anim("idle", p, {"body": {"position": wave(6, p, 0.15, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 2.0, 0.4, axis=2)}, "tail": {"rotation": wave(6, p, 4.0, 0.0, axis=2)}})
+    p = 1.3
+    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.2, 0)), (p, (0, 0, 0))]},
+        "leg_fl": {"rotation": wave(4, p, 24.0, 0.0, axis=0)}, "leg_fr": {"rotation": wave(4, p, 24.0, math.pi, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 22.0, math.pi, axis=0)}, "leg_br": {"rotation": wave(4, p, 22.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)}, "tail": {"rotation": wave(4, p, 6.0, 0.0, axis=2)}})
+    m.anim("death", 0.6, {"body": {"rotation": [(0, (0, 0, 0)), (0.4, (12, 0, 0)), (0.6, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.4, (0, -2.5, 0)), (0.6, (0, -2.5, 0))]}}, loop="hold")
+
+
+def meerkat(m):
+    fur, dark, eye = "fur_brown", "fur_dark", "eye"
+    m.bone("body", (0, 4, 0))
+    m.box("body", -1.0, 3.0, -1.8, 1.0, 6.0, 1.5, fur)
+    m.box("body", -1.1, 2.5, -2.0, 1.1, 5.5, -1.2, dark)
+    m.bone("h_head", (0, 5.8, -1.6), "body")
+    m.box("h_head", -1.2, 5.8, -3.5, 1.2, 8.0, -1.6, fur)
+    m.box("h_head", -0.9, 5.3, -3.8, 0.9, 7.5, -3.0, dark)
+    m.sym("h_head", 0.6, 7.2, -3.6, 0.9, 7.8, -3.4, eye)
+    m.box("h_head", -0.6, 5.8, -4.0, 0.6, 6.8, -3.5, fur)
+    # ears
+    m.sym("h_head", 0.9, 7.5, -2.8, 1.2, 8.2, -2.4, dark)
+    # arms (short, often raised)
+    for name, sx in (("arm_l", 1), ("arm_r", -1)):
+        m.bone(name, (sx * 1.2, 5.0, -0.8), "body")
+        x1, x2 = (1.0, 1.4) if sx > 0 else (-1.4, -1.0)
+        m.box(name, x1, 2.5, -1.2, x2, 5.2, -0.4, fur)
+    # legs
+    for name, sx, z in (("leg_l", 1, -1.2), ("leg_r", -1, -1.2), ("leg_bl", 1, 1.0), ("leg_br", -1, 1.0)):
+        m.bone(name, (sx * 0.8, 3.0, z), "body")
+        x1, x2 = (0.6, 1.0) if sx > 0 else (-1.0, -0.6)
+        m.box(name, x1, 0.0, z - 0.4, x2, 3.2, z + 0.4, fur)
+    # tail (thin, raised)
+    m.bone("tail", (0, 4.5, 1.3), "body")
+    m.box("tail", -0.2, 4.5, 1.3, 0.2, 7.5, 1.7, fur)
+    p = 2.0
+    m.anim("idle", p, {"body": {"position": wave(6, p, 0.15, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 1.5, 0.4, axis=2)},
+        "arm_l": {"rotation": wave(6, p, 4.0, 0.0, axis=0)}, "arm_r": {"rotation": wave(6, p, 4.0, math.pi, axis=0)},
+        "tail": {"rotation": wave(6, p, 3.0, 0.0, axis=2)}})
+    p = 1.4
+    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.2, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 24.0, 0.0, axis=0)}, "leg_r": {"rotation": wave(4, p, 24.0, math.pi, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 22.0, math.pi, axis=0)}, "leg_br": {"rotation": wave(4, p, 22.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)}, "tail": {"rotation": wave(4, p, 5.0, 0.0, axis=2)}})
+    m.anim("death", 0.6, {"body": {"rotation": [(0, (0, 0, 0)), (0.4, (12, 0, 0)), (0.6, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.4, (0, -2.5, 0)), (0.6, (0, -2.5, 0))]}}, loop="hold")
+
+
+def vulture(m):
+    fur, dark, eye, beak = "fur_dark", "fur_black", "eye", "beak"
+    m.bone("body", (0, 9, 0))
+    m.box("body", -2.4, 8.0, -3.0, 2.4, 11.0, 2.5, fur)
+    m.box("body", -2.0, 7.5, -2.5, 2.0, 10.5, 2.0, dark)
+    m.bone("h_head", (0, 10.5, -2.5), "body")
+    m.box("h_head", -1.6, 10.5, -4.5, 1.6, 13.0, -2.5, fur)
+    m.box("h_head", -1.2, 10.0, -4.8, 1.2, 12.5, -4.0, dark)
+    # bald head
+    m.box("h_head", -1.0, 12.5, -4.2, 1.0, 13.5, -3.5, "pink")
+    m.sym("h_head", 0.8, 11.2, -4.6, 1.2, 11.9, -4.4, eye)
+    m.box("h_head", -0.4, 10.5, -4.9, 0.4, 11.2, -4.6, beak)
+    # wings (broad)
+    for name, sx in (("wing_l", 1), ("wing_r", -1)):
+        m.bone(name, (sx * 2.0, 9.5, 0), "body")
+        x1, x2 = (2.0, 7.0) if sx > 0 else (-7.0, -2.0)
+        m.box(name, x1, 7.5, -0.5, x2, 11.5, 0.5, fur)
+        m.box(name, x1 + 0.5, 7.0, -0.3, x2 - 0.5, 8.0, 0.3, dark)
+    # legs
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 1.0, 8.0, 0), "body")
+        x1, x2 = (0.7, 1.3) if sx > 0 else (-1.3, -0.7)
+        m.box(name, x1, 0.0, -0.5, x2, 8.2, 0.5, dark)
+    # tail (short)
+    m.bone("tail", (0, 9.0, 2.3), "body")
+    m.box("tail", -0.6, 8.0, 2.3, 0.6, 10.0, 3.5, fur)
+    p = 2.4
+    m.anim("idle", p, {"body": {"position": wave(6, p, 0.15, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 1.5, 0.4, axis=2)},
+        "wing_l": {"rotation": wave(6, p, 5.0, 0.0, axis=0)}, "wing_r": {"rotation": wave(6, p, 5.0, math.pi, axis=0)}})
+    p = 1.8
+    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.2, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 16.0, 0.0, axis=0)}, "leg_r": {"rotation": wave(4, p, 16.0, math.pi, axis=0)},
+        "wing_l": {"rotation": wave(4, p, 8.0, 0.0, axis=0)}, "wing_r": {"rotation": wave(4, p, 8.0, math.pi, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.0, 0.3, axis=2)}})
+    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.8, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.5, (0, -5, 0)), (0.8, (0, -5, 0))]}}, loop="hold")
+
 # ------------------------------------------------------------------ steam dragons (0.8.0)
 
 def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
@@ -2316,6 +2507,12 @@ SPECIES = [  # (id, builder, kwargs, rare recolour, rare kwargs)
     ("giraffe", giraffe, {}, {"fur_light": "fur_white", "fur_brown": "fur_cream", "spot": "fur_light"}, {}),
     ("lion", lion, {}, {"fur_gold": "fur_cream", "fur_brown": "fur_white", "mane": "fur_light"}, {}),
     ("hyena", hyena, {}, {"fur_brown": "fur_cream", "spot": "fur_light", "fur_dark": "fur_brown"}, {}),
+    ("arcticfox", arcticfox, {}, {"fur_white": "fur_cream", "fur_dark": "fur_brown"}, {}),
+    ("snowyowl", snowyowl, {}, {"fur_white": "fur_cream", "fur_dark": "fur_brown"}, {}),
+    ("reindeer", reindeer, {}, {"fur_brown": "fur_cream", "fur_dark": "fur_light", "antler": "fur_white"}, {}),
+    ("fennec", fennec, {}, {"fur_cream": "fur_white", "fur_brown": "fur_dark"}, {}),
+    ("meerkat", meerkat, {}, {"fur_brown": "fur_cream", "fur_dark": "fur_light"}, {}),
+    ("vulture", vulture, {}, {"fur_dark": "fur_brown", "fur_black": "fur_dark"}, {}),
     # steam dragon (0.8.0): the brass steamworks look is the species base; the other traits live
     # in EXTRA below as extra looks, chosen at random by the plugin (songbird/macaw style).
     # rare = the gilded one: every brass cell to gold, iron to charcoal, furnace to bright ember.

@@ -815,6 +815,38 @@ final class Animals implements Listener {
                     if (r.nextInt(60) == 0)
                         w.spawnParticle(Particle.SMOKE, e.getLocation().add(0, 0.5, 0), 1, 0.15, 0.1, 0.15, 0.0);
                 }
+                case ARCTICFOX -> {
+                    if (r.nextInt(150) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.7f, a.species.pitch);
+                }
+                case SNOWYOWL -> {
+                    if (r.nextInt(120) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.6f, a.species.pitch);
+                    if (r.nextInt(80) == 0)
+                        w.spawnParticle(Particle.WHITE_ASH, e.getLocation().add(0, 0.8, 0), 2, 0.2, 0.1, 0.2, 0.0);
+                }
+                case REINDEER -> {
+                    if (r.nextInt(100) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.7f, a.species.pitch);
+                }
+                case FENNEC -> {
+                    if (r.nextInt(120) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.9f, a.species.pitch);
+                }
+                case MEERKAT -> {
+                    // sentinels stand up occasionally
+                    if (r.nextInt(60) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.8, 0), 1, 0.05, 0.1, 0.05, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(180, 140, 80), 0.7f));
+                    if (r.nextInt(180) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.6f, a.species.pitch);
+                }
+                case VULTURE -> {
+                    if (r.nextInt(100) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.5f, a.species.pitch);
+                    if (r.nextInt(40) == 0)
+                        w.spawnParticle(Particle.ASH, e.getLocation().add(0, 0.6, 0), 1, 0.3, 0.1, 0.3, 0.0);
+                }
                 case CRAB -> {
                     // waves its big claw at a player who comes close, turned to face them
                     Player close = nearestPlayer(e, 6);
@@ -1175,6 +1207,12 @@ final class Animals implements Listener {
             case GIRAFFE -> { d.add(new ItemStack(Material.LEATHER, 2 + r.nextInt(3))); add(d, Material.BEEF, r.nextInt(3)); }
             case LION -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.BEEF, 1 + r.nextInt(3)); }
             case HYENA -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.ROTTEN_FLESH, r.nextInt(2)); }
+            case ARCTICFOX -> { d.add(new ItemStack(Material.WHITE_WOOL, 1 + r.nextInt(2))); add(d, Material.RABBIT, r.nextInt(2)); }
+            case SNOWYOWL -> { add(d, Material.FEATHER, 1 + r.nextInt(3)); add(d, Material.CHICKEN, r.nextInt(2)); }
+            case REINDEER -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.BEEF, 1 + r.nextInt(3)); }
+            case FENNEC -> { d.add(new ItemStack(Material.RABBIT_HIDE, 1 + r.nextInt(2))); add(d, Material.RABBIT, r.nextInt(2)); }
+            case MEERKAT -> { add(d, Material.RABBIT, r.nextInt(2)); }
+            case VULTURE -> { add(d, Material.FEATHER, 2 + r.nextInt(3)); add(d, Material.ROTTEN_FLESH, r.nextInt(2)); }
             default -> { }
         }
         d.addAll(plugin.drops().roll(a.species, a.rare));

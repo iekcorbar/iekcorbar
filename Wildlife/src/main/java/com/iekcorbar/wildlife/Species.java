@@ -167,6 +167,38 @@ enum Species {
             "A laughing scavenger of the plains. It lives in a clan and never travels alone.",
             "Open savanna at dusk - you hear the laugh before you see them.",
             "entity.wolf.ambient", "entity.wolf.hurt", "entity.wolf.death", 0.9f),
+    // Cold set (0.9.16): animals of snow and ice.
+    ARCTICFOX("Arctic Fox", EntityType.FOX, 0.8, 10, 0.14, Habitat.LAND, Time.ANY, 1, 2, 5,
+            List.of("snowy", "ice", "frozen", "grove", "taiga"), "white_wool",
+            "A small fox in a white winter coat. It disappears into the snow when you blink.",
+            "Snowy tundra and frozen rivers - watch for the moving snow.",
+            "entity.fox.ambient", "entity.fox.hurt", "entity.fox.death", 1.3f),
+    SNOWYOWL("Snowy Owl", EntityType.PARROT, 0.9, 8, 0.18, Habitat.AIR, Time.DAY, 1, 2, 4,
+            List.of("snowy", "ice", "frozen", "taiga", "grove"), "feather",
+            "A silent white hunter of the tundra. It sits still for hours, then drops like a stone.",
+            "Snowy plains and taiga by day - look for a white shape on a fence post.",
+            "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.7f),
+    REINDEER("Reindeer", EntityType.HORSE, 1.2, 20, 0.09, Habitat.LAND, Time.ANY, 2, 5, 6,
+            List.of("snowy", "ice", "frozen", "taiga", "grove"), "leather",
+            "A sturdy grazer of the cold north. The herd moves together across the snow.",
+            "Snowy taiga and frozen plains - listen for the crunch of hooves.",
+            "entity.horse.ambient", "entity.horse.hurt", "entity.horse.death", 0.8f),
+    // Desert set (0.9.16): animals of sand and heat.
+    FENNEC("Fennec Fox", EntityType.FOX, 0.6, 8, 0.15, Habitat.LAND, Time.NIGHT, 1, 2, 5,
+            List.of("desert", "badlands", "savanna"), "rabbit_foot",
+            "A tiny fox with enormous ears. It hunts at night and sleeps in the sand by day.",
+            "Deserts and badlands after dark - listen for the high-pitched bark.",
+            "entity.fox.ambient", "entity.fox.hurt", "entity.fox.death", 1.6f),
+    MEERKAT("Meerkat", EntityType.RABBIT, 0.5, 6, 0.16, Habitat.LAND, Time.DAY, 3, 6, 6,
+            List.of("desert", "badlands", "savanna"), "rabbit_hide",
+            "A small sentinel that stands on its hind legs to watch for danger. Always in a group.",
+            "Deserts and badlands by day - look for the sentinels on the rocks.",
+            "entity.rabbit.ambient", "entity.rabbit.hurt", "entity.rabbit.death", 1.2f),
+    VULTURE("Vulture", EntityType.PARROT, 1.1, 10, 0.15, Habitat.AIR, Time.DAY, 1, 3, 4,
+            List.of("desert", "badlands", "savanna", "plains"), "feather",
+            "A broad-winged scavenger of the open sky. It circles high and lands where something has fallen.",
+            "Deserts and open plains by day - look up for the circling shadow.",
+            "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.5f),
     // Steam Dragon (0.8.0): the rideable companion. PARROT base = proven 3D flight (all gravity
     // off in setup(): it hovers, never falls, takes no fall damage). Coal to tame like a wolf;
     // two of one kind in love make a baby like every other animal; the lead works as always.
@@ -339,8 +371,8 @@ enum Species {
     int shy() {
         return switch (this) {
             case DEER, ZEBRA, KANGAROO, SONGBIRD, MACAW, LIZARD, MOLE, TANUKI, CRANE -> 3;
-            case BOAR, DUCK, CRAB, KOALA, MACAQUE, OSTRICH, ELEPHANT, GIRAFFE -> 2;
-            case HYENA -> 1;
+            case BOAR, DUCK, CRAB, KOALA, MACAQUE, OSTRICH, ELEPHANT, GIRAFFE, ARCTICFOX, SNOWYOWL, REINDEER, FENNEC, MEERKAT -> 2;
+            case HYENA, VULTURE -> 1;
             default -> 0;
         };
     }
@@ -411,6 +443,12 @@ enum Species {
             case GIRAFFE -> "White Giraffe";
             case LION -> "White Lion";
             case HYENA -> "Golden Hyena";
+            case ARCTICFOX -> "Blue Arctic Fox";
+            case SNOWYOWL -> "Golden Snowy Owl";
+            case REINDEER -> "White Reindeer";
+            case FENNEC -> "Black Fennec";
+            case MEERKAT -> "Golden Meerkat";
+            case VULTURE -> "White Vulture";
             case DRAGON -> "Gilded Dragon";   // the gilded one: every brass cell turned to gold
             case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> displayName;
@@ -452,6 +490,12 @@ enum Species {
             case GIRAFFE -> Tag.LEAVES.isTagged(m) || m == Material.APPLE || m == Material.HAY_BLOCK;
             case LION -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.MUTTON || m == Material.CHICKEN || m == Material.RABBIT;
             case HYENA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.MUTTON || m == Material.CHICKEN || m == Material.ROTTEN_FLESH;
+            case ARCTICFOX -> m == Material.COD || m == Material.SALMON || m == Material.RABBIT || m == Material.SWEET_BERRIES;
+            case SNOWYOWL -> m == Material.RABBIT || m == Material.CHICKEN || m == Material.COD || m == Material.SALMON;
+            case REINDEER -> m == Material.WHEAT || m == Material.HAY_BLOCK || m == Material.APPLE || m == Material.CARROT;
+            case FENNEC -> m == Material.RABBIT || m == Material.CHICKEN || m == Material.SPIDER_EYE;
+            case MEERKAT -> m == Material.SPIDER_EYE || m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS;
+            case VULTURE -> m == Material.ROTTEN_FLESH || m == Material.BEEF || m == Material.MUTTON || m == Material.CHICKEN;
             case DRAGON -> m == Material.COAL || m == Material.CHARCOAL;   // coal: it is a furnace
             case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> false;
@@ -493,6 +537,12 @@ enum Species {
             case GIRAFFE -> "leaves, apples or hay";
             case LION -> "any raw meat";
             case HYENA -> "meat or rotten flesh";
+            case ARCTICFOX -> "fish, rabbit or sweet berries";
+            case SNOWYOWL -> "rabbit, chicken or fish";
+            case REINDEER -> "wheat, hay, apples or carrots";
+            case FENNEC -> "rabbit, chicken or spider eyes";
+            case MEERKAT -> "spider eyes or seeds";
+            case VULTURE -> "rotten flesh or raw meat";
             case DRAGON -> "coal or charcoal";
             case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> "nothing - it is not an animal and cannot be bred";

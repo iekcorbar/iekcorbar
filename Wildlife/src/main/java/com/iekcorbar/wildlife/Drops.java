@@ -50,6 +50,11 @@ final class Drops {
         def("giraffe_hide", Material.LEATHER, "Giraffe Hide", "Long, patterned leather. Tanners pay well for it.");
         def("lion_pelt", Material.RABBIT_HIDE, "Lion Pelt", "Golden fur with a dark mane. Hunters prize it.");
         def("hyena_pelt", Material.RABBIT_HIDE, "Hyena Pelt", "Coarse spotted fur. Smells of the plains.");
+        def("arctic_fox_pelt", Material.RABBIT_HIDE, "Arctic Fox Pelt", "White and warm. Hunters of the north prize it.");
+        def("owl_feather", Material.FEATHER, "Snowy Owl Feather", "Pure white, silent in flight.");
+        def("reindeer_antler", Material.POINTED_DRIPSTONE, "Reindeer Antler", "Branching and light. Carvers love it.");
+        def("fennec_ear", Material.RABBIT_HIDE, "Fennec Ear", "Oversized and impossibly soft.");
+        def("vulture_feather", Material.FEATHER, "Vulture Feather", "Dark and broad. Scribes use it for quills.");
 
         roll(Species.ELEPHANT, "ivory", 60, 1, 2);
         roll(Species.DEER, "antler", 50, 1, 1);
@@ -69,6 +74,11 @@ final class Drops {
         roll(Species.GIRAFFE, "giraffe_hide", 70, 1, 2);
         roll(Species.LION, "lion_pelt", 75, 1, 1);
         roll(Species.HYENA, "hyena_pelt", 65, 1, 2);
+        roll(Species.ARCTICFOX, "arctic_fox_pelt", 70, 1, 1);
+        roll(Species.SNOWYOWL, "owl_feather", 60, 1, 2);
+        roll(Species.REINDEER, "reindeer_antler", 50, 1, 2);
+        roll(Species.FENNEC, "fennec_ear", 60, 1, 2);
+        roll(Species.VULTURE, "vulture_feather", 70, 2, 4);
     }
 
     private void def(String id, Material base, String name, String lore) {
