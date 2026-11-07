@@ -595,7 +595,7 @@ final class Animals implements Listener {
                     if (p2 != null && r.nextInt(6) == 0) {
                         Vector to = p2.getLocation().toVector().subtract(e.getLocation().toVector());
                         float yaw = (float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ()));
-                        e.setRotation(yaw, 0);
+                        e.setRotation(yaw + 90, 0);
                     }
                 }
                 case ONI -> {
@@ -702,7 +702,7 @@ final class Animals implements Listener {
                     if (pa != null && r.nextInt(8) == 0) {
                         Vector to = pa.getLocation().toVector().subtract(e.getLocation().toVector());
                         float yaw = (float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ()));
-                        e.setRotation(yaw, 0);
+                        e.setRotation(yaw + 90, 0);
                     }
                 }
                 case WILLOWISP_GREEN -> {
@@ -1000,7 +1000,7 @@ final class Animals implements Listener {
         if (!(a.entity instanceof Mob m)) return;
         Location spot = water.clone().add(0.5, 1.0, 0.5);
         Vector to = spot.toVector().subtract(a.entity.getLocation().toVector());
-        a.entity.setRotation((float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ())), 0);
+        a.entity.setRotation((float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ())) + 90, 0);
         m.getPathfinder().moveTo(spot.clone().subtract(to.clone().normalize().multiply(1.2)), 1.0);
         a.fishing = true;
         a.busyUntil = tick + 60;
