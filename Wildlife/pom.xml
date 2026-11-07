@@ -8,7 +8,7 @@
     <artifactId>Wildlife</artifactId>
     <!-- New wildlife (added next to vanilla mobs, never replacing them) with FreeMinecraftModels models,
          a field journal and a Wildlife advancement tab. Inspired by the MIT-licensed Naturalist mod; own models. -->
-    <version>0.9.18</version>
+    <version>0.9.19</version>
     <packaging>jar</packaging>
 
     <name>Wildlife</name>
