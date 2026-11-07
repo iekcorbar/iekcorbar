@@ -791,6 +791,30 @@ final class Animals implements Listener {
                         }
                     }
                 }
+                case GIRAFFE -> {
+                    // browses high leaves: eats occasionally
+                    if (r.nextInt(200) == 0) {
+                        plugin.fmm().play(e, "eat", false);
+                        a.busyUntil = tick + 60;
+                    }
+                    if (r.nextInt(120) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.7f, a.species.pitch);
+                }
+                case LION -> {
+                    // rests in shade; roars occasionally
+                    if (r.nextInt(200) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.9f, a.species.pitch * 0.8f);
+                    if (r.nextInt(80) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.6, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(220, 180, 60), 0.8f));
+                }
+                case HYENA -> {
+                    // laughs occasionally
+                    if (r.nextInt(150) == 0)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.8f, a.species.pitch * 0.7f);
+                    if (r.nextInt(60) == 0)
+                        w.spawnParticle(Particle.SMOKE, e.getLocation().add(0, 0.5, 0), 1, 0.15, 0.1, 0.15, 0.0);
+                }
                 case CRAB -> {
                     // waves its big claw at a player who comes close, turned to face them
                     Player close = nearestPlayer(e, 6);
@@ -1148,6 +1172,9 @@ final class Animals implements Listener {
                 add(d, Material.COPPER_INGOT, r.nextInt(3));
                 add(d, Material.COAL, r.nextInt(2));
             }
+            case GIRAFFE -> { d.add(new ItemStack(Material.LEATHER, 2 + r.nextInt(3))); add(d, Material.BEEF, r.nextInt(3)); }
+            case LION -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.BEEF, 1 + r.nextInt(3)); }
+            case HYENA -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.ROTTEN_FLESH, r.nextInt(2)); }
             default -> { }
         }
         d.addAll(plugin.drops().roll(a.species, a.rare));

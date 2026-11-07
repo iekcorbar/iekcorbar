@@ -25,7 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * flying species keep theirs.
  */
 final class Brain {
-    static final Set<Species> DANGEROUS = EnumSet.of(Species.BEAR, Species.BOAR);
+    static final Set<Species> DANGEROUS = EnumSet.of(Species.BEAR, Species.BOAR, Species.LION);
 
     private final WildlifePlugin plugin;
     private final GoalKey<Mob> wanderKey, panicKey, controlKey;

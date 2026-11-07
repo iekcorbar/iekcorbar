@@ -89,6 +89,15 @@ stat_piranha_baby,2.0000,0.55,0.59
 stat_macaw,1.0000,1.05,0.47
 stat_macaw_rare,1.0000,1.05,0.47
 stat_macaw_baby,1.0000,0.56,0.45
+stat_giraffe,1.0000,0.45,0.93
+stat_giraffe_rare,1.0000,0.45,0.93
+stat_giraffe_baby,2.0000,0.45,0.98
+stat_lion,1.0000,0.68,0.76
+stat_lion_rare,1.0000,0.68,0.76
+stat_lion_baby,2.0000,0.73,0.83
+stat_hyena,1.0000,0.64,0.68
+stat_hyena_rare,1.0000,0.64,0.68
+stat_hyena_baby,2.0000,0.70,0.75
 stat_dragon,1.0435,2.40,1.65
 stat_dragon_rare,1.0435,2.40,1.65
 stat_dragon_baby,1.0000,1.20,0.88

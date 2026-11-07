@@ -151,6 +151,22 @@ enum Species {
             "A tail longer than its body, a beak like bolt cutters, and the vocabulary of a sailor.",
             "Over the jungle canopy - yes, it may land on your shoulder.",
             "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.85f),
+    // Savanna set (0.9.15): three grazers/predators of the open savanna.
+    GIRAFFE("Giraffe", EntityType.HORSE, 2.6, 30, 0.07, Habitat.LAND, Time.ANY, 1, 3, 6,
+            List.of("savanna", "savanna_plateau", "windswept_savanna"), "apple",
+            "The tallest animal around. It browses the high leaves and watches the plains from above.",
+            "Open savanna - look up, not down.",
+            "entity.horse.ambient", "entity.horse.hurt", "entity.horse.death", 0.7f),
+    LION("Lion", EntityType.OCELOT, 1.4, 24, 0.12, Habitat.LAND, Time.ANY, 1, 3, 4,
+            List.of("savanna", "savanna_plateau"), "beef",
+            "The king of the savanna. It rests in the shade and hunts when the sun drops.",
+            "Savanna grass and acacia shade - listen for the roar.",
+            "entity.cat.ambient", "entity.cat.hurt", "entity.cat.death", 0.6f),
+    HYENA("Spotted Hyena", EntityType.WOLF, 1.0, 16, 0.13, Habitat.LAND, Time.ANY, 2, 4, 5,
+            List.of("savanna", "savanna_plateau", "windswept_savanna"), "bone",
+            "A laughing scavenger of the plains. It lives in a clan and never travels alone.",
+            "Open savanna at dusk - you hear the laugh before you see them.",
+            "entity.wolf.ambient", "entity.wolf.hurt", "entity.wolf.death", 0.9f),
     // Steam Dragon (0.8.0): the rideable companion. PARROT base = proven 3D flight (all gravity
     // off in setup(): it hovers, never falls, takes no fall damage). Coal to tame like a wolf;
     // two of one kind in love make a baby like every other animal; the lead works as always.
@@ -323,7 +339,8 @@ enum Species {
     int shy() {
         return switch (this) {
             case DEER, ZEBRA, KANGAROO, SONGBIRD, MACAW, LIZARD, MOLE, TANUKI, CRANE -> 3;
-            case BOAR, DUCK, CRAB, KOALA, MACAQUE, OSTRICH, ELEPHANT -> 2;
+            case BOAR, DUCK, CRAB, KOALA, MACAQUE, OSTRICH, ELEPHANT, GIRAFFE -> 2;
+            case HYENA -> 1;
             default -> 0;
         };
     }
@@ -391,6 +408,9 @@ enum Species {
             case ORCA -> "White Orca";
             case PIRANHA -> "Golden Piranha";
             case MACAW -> "Albino Macaw";
+            case GIRAFFE -> "White Giraffe";
+            case LION -> "White Lion";
+            case HYENA -> "Golden Hyena";
             case DRAGON -> "Gilded Dragon";   // the gilded one: every brass cell turned to gold
             case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> displayName;
@@ -429,6 +449,9 @@ enum Species {
             case ORCA -> m == Material.COD || m == Material.SALMON || m == Material.TROPICAL_FISH;
             case PIRANHA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.CHICKEN || m == Material.MUTTON;
             case MACAW -> m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS || m == Material.COCOA_BEANS;
+            case GIRAFFE -> Tag.LEAVES.isTagged(m) || m == Material.APPLE || m == Material.HAY_BLOCK;
+            case LION -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.MUTTON || m == Material.CHICKEN || m == Material.RABBIT;
+            case HYENA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.MUTTON || m == Material.CHICKEN || m == Material.ROTTEN_FLESH;
             case DRAGON -> m == Material.COAL || m == Material.CHARCOAL;   // coal: it is a furnace
             case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> false;
@@ -467,6 +490,9 @@ enum Species {
             case ORCA -> "a big fish";
             case PIRANHA -> "any raw meat";
             case MACAW -> "seeds or cocoa beans";
+            case GIRAFFE -> "leaves, apples or hay";
+            case LION -> "any raw meat";
+            case HYENA -> "meat or rotten flesh";
             case DRAGON -> "coal or charcoal";
             case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> "nothing - it is not an animal and cannot be bred";

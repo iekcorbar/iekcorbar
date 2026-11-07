@@ -47,6 +47,9 @@ final class Drops {
         def("orca_tooth", Material.PRISMARINE_SHARD, "Orca Tooth", "A conical tooth from the deep.");
         def("piranha_tooth", Material.FLINT, "Piranha Tooth", "Small, triangular and razor sharp.");
         def("brass_scrap", Material.COPPER_NUGGET, "Brass Scrap", "A bit of a dragon's plating. Steamworks smiths can use it.");
+        def("giraffe_hide", Material.LEATHER, "Giraffe Hide", "Long, patterned leather. Tanners pay well for it.");
+        def("lion_pelt", Material.RABBIT_HIDE, "Lion Pelt", "Golden fur with a dark mane. Hunters prize it.");
+        def("hyena_pelt", Material.RABBIT_HIDE, "Hyena Pelt", "Coarse spotted fur. Smells of the plains.");
 
         roll(Species.ELEPHANT, "ivory", 60, 1, 2);
         roll(Species.DEER, "antler", 50, 1, 1);
@@ -63,6 +66,9 @@ final class Drops {
         roll(Species.ORCA, "orca_tooth", 60, 1, 2);
         roll(Species.PIRANHA, "piranha_tooth", 40, 1, 1);
         roll(Species.DRAGON, "brass_scrap", 80, 1, 3);
+        roll(Species.GIRAFFE, "giraffe_hide", 70, 1, 2);
+        roll(Species.LION, "lion_pelt", 75, 1, 1);
+        roll(Species.HYENA, "hyena_pelt", 65, 1, 2);
     }
 
     private void def(String id, Material base, String name, String lore) {
