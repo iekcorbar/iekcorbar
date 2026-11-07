@@ -306,10 +306,10 @@ def build(out):
                               b(13, 0, 1, 15, 6, 3, "wood_dark"), b(1, 0, 13, 3, 6, 15, "wood_dark"),
                               b(13, 0, 13, 15, 6, 15, "wood_dark"), b(4, 8, 4, 12, 9, 12, "wood_dark")])
 
-    # parasol (2 tall)
-    pk.model("parasol", [b(7, 0, 7, 9, 24, 9, "wood"), b(7, 24, 7, 9, 26, 9, "wood_dark"),
-                         b(0, 26, 0, 16, 27, 16, "red"), b(0, 27, 0, 8, 28, 8, "red"), b(8, 27, 0, 16, 28, 8, "white"),
-                         b(0, 27, 8, 8, 28, 16, "white"), b(8, 27, 8, 16, 28, 16, "red")])
+    # parasol (2 tall, ~2x bigger) - kept within 0..32 model space
+    pk.model("parasol", [b(14, 0, 14, 18, 28, 18, "wood"), b(14, 28, 14, 18, 30, 18, "wood_dark"),
+                         b(0, 30, 0, 32, 31, 32, "red"), b(0, 31, 0, 16, 32, 16, "red"), b(16, 31, 0, 32, 32, 16, "white"),
+                         b(0, 31, 16, 16, 32, 32, "white"), b(16, 31, 16, 32, 32, 32, "red")])
 
     # first aid post (2 tall)
     pk.model("first_aid", [b(2, 0, 2, 14, 2, 14, "white"), b(3, 2, 3, 13, 30, 13, "white"),
