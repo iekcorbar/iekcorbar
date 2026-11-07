@@ -274,6 +274,10 @@ def items():
     M["kabocha"] = [box(5, 0, 5, 11, 6, 11, "kabocha"), box(4.5, 0, 6, 5, 5, 10, "kabocha_skin"), box(11, 0, 6, 11.5, 5, 10, "kabocha_skin")]
     M["bamboo_shoots"] = [box(6, 0, 6, 10, 4, 10, "bamboo_shoot"), box(7, 4, 7, 9, 5, 9, "bamboo_dark")]
     M["eggplant"] = [box(5, 0, 5, 11, 5, 11, "eggplant"), box(6, 0, 4.5, 10, 4, 5, "eggplant_light"), box(5.5, 0, 10.5, 10.5, 4, 11, "eggplant_dark")]
+    M["cannabis_seeds"] = pile("leaf", "leaf_dark", 11, 12)
+    M["cannabis_buds"] = [box(4, 0, 6, 12, 2, 10, "leaf"), box(5, 2, 7, 11, 3.5, 9, "leaf_dark"), box(6, 3.5, 7.5, 10, 4.5, 8.5, "gold")]
+    M["hemp_seeds"] = pile("straw", "straw_dark", 10, 8)
+    M["hemp_leaves"] = [box(4, 0, 4, 12, 1, 12, "leaf"), box(5, 1, 5, 11, 1.5, 11, "leaf_dark")]
     M["cabbage_leaf"] = [box(4, 0, 5, 12, 0.6, 11, "cabbage_light"), box(5, 0.6, 6, 11, 0.8, 10, "leaf")]
     M["daikon_slices"] = disc(2.2, 0, 0.8, "daikon", cx=6, cz=8) + disc(2.2, 0.8, 1.6, "daikon", cx=8, cz=8) + disc(2.2, 0, 0.8, "daikon", cx=10, cz=8)
     M["chopped_green_onion"] = pile("negi", "negi_white", 10, 6)
@@ -667,10 +671,30 @@ def sprite(crop, stage, wild=False):
                 x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
                 for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
                     put(px, x + dx, y + dy, PALETTE["eggplant"] if (dx + dy) % 2 == 0 else PALETTE["eggplant_light"])
+    elif crop == "cannabis":
+        leafy(px, rnd, h, PALETTE["leaf"], PALETTE["leaf_dark"], 5, 4)
+        if stage >= 2 or wild:
+            for _ in range(6 if stage == 3 else 3):
+                x, y = rnd.randint(3, 12), rnd.randint(max(1, h - 4), max(2, h - 1))
+                put(px, x, y, PALETTE["leaf_dark"] if rnd.random() < 0.5 else PALETTE["gold"])
+                put(px, x + 1, y, PALETTE["leaf_dark"] if rnd.random() < 0.5 else PALETTE["gold"])
+    elif crop == "hemp":
+        for i in range(3):
+            x = 4 + i * 4
+            hh = h + rnd.randint(-1, 1)
+            stem(px, x, hh, PALETTE["leaf"], 0)
+            if stage >= 1:
+                for dy in range(max(1, hh - 4), hh):
+                    put(px, x - 1, dy, PALETTE["leaf_dark"])
+                    put(px, x + 1, dy, PALETTE["leaf_dark"])
+            if stage >= 2 or wild:
+                for dy in range(max(1, hh - 2), hh + 1):
+                    put(px, x - 2, dy, PALETTE["leaf"])
+                    put(px, x + 2, dy, PALETTE["leaf"])
     return png(px)
 
 
-CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant"]  # CropType order
+CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant", "cannabis", "hemp"]  # CropType order
 
 # ------------------------------------------------------------------ sounds
 

@@ -33,6 +33,11 @@ enum KItem {
     KABOCHA("Kabocha", Kind.SEED, 3, 3.6f, Rem.NONE, 64, "Plant on farmland. Japanese pumpkin."),
     BAMBOO_SHOOTS("Bamboo Shoots", Kind.SEED, 2, 2.4f, Rem.NONE, 64, "Plant on farmland. Spring delicacy."),
     EGGPLANT("Eggplant", Kind.SEED, 2, 2.0f, Rem.NONE, 64, "Plant on farmland. Nasu dengaku!"),
+    // ---- cannabis & hemp
+    CANNABIS_SEEDS("Cannabis Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Grows into a cannabis plant."),
+    CANNABIS_BUDS("Cannabis Buds", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Harvested from a cannabis plant. Dry it for hash."),
+    HEMP_SEEDS("Hemp Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Grows into hemp."),
+    HEMP_LEAVES("Hemp Leaves", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Harvested from hemp. Craft into fiber."),
     // ---- cut on the cutting board
     CABBAGE_LEAF("Cabbage Leaf", Kind.FOOD, 1, 0.6f, Rem.NONE, 64),
     DAIKON_SLICES("Daikon Slices", Kind.FOOD, 1, 1.2f, Rem.NONE, 64),

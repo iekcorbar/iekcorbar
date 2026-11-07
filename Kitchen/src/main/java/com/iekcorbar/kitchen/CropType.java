@@ -24,7 +24,9 @@ enum CropType {
     MIZUNA(KItem.MIZUNA_SEEDS, KItem.MIZUNA, 1, 2, KItem.MIZUNA_SEEDS, 0, 1, false, -1),
     KABOCHA(KItem.KABOCHA, KItem.KABOCHA, 1, 2, null, 0, 0, false, -1),
     BAMBOO_SHOOTS(KItem.BAMBOO_SHOOTS, KItem.BAMBOO_SHOOTS, 1, 2, null, 0, 0, false, -1),
-    EGGPLANT(KItem.EGGPLANT, KItem.EGGPLANT, 2, 3, null, 0, 0, false, -1);
+    EGGPLANT(KItem.EGGPLANT, KItem.EGGPLANT, 2, 3, null, 0, 0, false, -1),
+    CANNABIS(KItem.CANNABIS_SEEDS, KItem.CANNABIS_BUDS, 2, 4, KItem.CANNABIS_SEEDS, 0, 1, false, -1),
+    HEMP(KItem.HEMP_SEEDS, KItem.HEMP_LEAVES, 3, 6, KItem.HEMP_SEEDS, 0, 1, false, -1);
 
     static final int STAGES = 4;
 
