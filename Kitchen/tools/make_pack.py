@@ -717,10 +717,56 @@ def sprite(crop, stage, wild=False):
             for _ in range(4 if stage == 3 else 2):
                 x, y = rnd.randint(5, 10), rnd.randint(max(2, h - 2), h)
                 put(px, x, y, spot_color)
+    elif crop == "shiitake":
+        # brown mushroom on a log
+        for x in range(4, 12):
+            put(px, x, 0, PALETTE["wood_dark"])
+            put(px, x, 1, PALETTE["wood_dark"])
+        if stage >= 1:
+            for x in range(5, 11):
+                for y in range(2, 5):
+                    put(px, x, y, PALETTE["brown"])
+            for _ in range(3 if stage == 3 else 1):
+                x, y = rnd.randint(5, 10), rnd.randint(2, 4)
+                put(px, x, y, PALETTE["brown"])
+    elif crop == "enoki":
+        # thin white stems in a cluster
+        for i in range(5):
+            x = 3 + i * 2 + rnd.randint(0, 1)
+            hh = h - rnd.randint(0, 2)
+            stem(px, x, hh, PALETTE["white"])
+            if stage >= 2:
+                put(px, x, hh, PALETTE["white"])
+                put(px, x + 1, hh, PALETTE["white"])
+    elif crop == "yuzu":
+        # citrus tree: green leaves with yellow fruit
+        leafy(px, rnd, h, PALETTE["leaf"], PALETTE["leaf_dark"], 5, 4)
+        if stage >= 2 or wild:
+            for _ in range(4 if stage == 3 else 2):
+                x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
+                put(px, x, y, PALETTE["gold"])
+                put(px, x + 1, y, PALETTE["gold"])
+    elif crop == "persimmon":
+        # orange fruit on a tree
+        leafy(px, rnd, h, PALETTE["leaf"], PALETTE["leaf_dark"], 5, 4)
+        if stage >= 2 or wild:
+            for _ in range(3 if stage == 3 else 1):
+                x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
+                put(px, x, y, PALETTE["kabocha"] if "kabocha" in PALETTE else PALETTE["gold"])
+                put(px, x + 1, y, PALETTE["kabocha"] if "kabocha" in PALETTE else PALETTE["gold"])
+    elif crop == "buckwheat":
+        # small white flowers on thin stems
+        for i in range(4):
+            x = 3 + i * 3
+            hh = h - rnd.randint(0, 2)
+            stem(px, x, hh, PALETTE["leaf"], 0)
+            if stage >= 2 or wild:
+                for _ in range(2):
+                    put(px, x + rnd.randint(-1, 1), hh, PALETTE["white"])
     return png(px)
 
 
-CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant", "cannabis", "hemp", "magic_mushroom"]  # CropType order
+CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant", "cannabis", "hemp", "magic_mushroom", "yuzu", "persimmon", "buckwheat"]  # CropType order
 
 # ------------------------------------------------------------------ sounds
 
