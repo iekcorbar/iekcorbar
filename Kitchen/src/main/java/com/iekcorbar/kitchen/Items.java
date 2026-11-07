@@ -21,7 +21,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
@@ -129,6 +132,27 @@ final class Items implements Listener {
     private final java.util.Map<java.util.UUID, java.util.ArrayDeque<Long>> feesten = new java.util.HashMap<>();
 
     @EventHandler(ignoreCancelled = true)
+    public void onPipeUse(PlayerInteractEvent e) {
+        if (e.getHand() != EquipmentSlot.HAND || (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK)) return;
+        KItem t = typeOf(e.getItem());
+        if (t != KItem.HASH_PIPE) return;
+        e.setCancelled(true);
+        Player p = e.getPlayer();
+        // find hash in inventory
+        ItemStack hash = null;
+        for (ItemStack i : p.getInventory().getContents()) {
+            if (i != null && typeOf(i) == KItem.HASH) { hash = i; break; }
+        }
+        if (hash == null) {
+            p.sendActionBar(Component.text("No hash to smoke.", NamedTextColor.GRAY));
+            return;
+        }
+        if (p.getGameMode() != org.bukkit.GameMode.CREATIVE) hash.setAmount(hash.getAmount() - 1);
+        applyEffects(p, KItem.HASH);
+        p.getWorld().playSound(p.getLocation(), "entity.generic.drink", 0.6f, 0.8f);
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onEat(PlayerItemConsumeEvent e) {
         KItem t = typeOf(e.getItem());
         if (t != null) applyEffects(e.getPlayer(), t);
@@ -171,6 +195,19 @@ final class Items implements Listener {
                 } else {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 600, 0));
                 }
+            }
+            case JOINT -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 400, 0));
+                p.sendActionBar(Component.text("You feel relaxed...", NamedTextColor.GREEN));
+            }
+            case HASH -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 600, 1));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 400, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 800, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 200, 0));
+                p.sendActionBar(Component.text("Strong stuff...", NamedTextColor.DARK_GREEN));
             }
             default -> { }
         }
