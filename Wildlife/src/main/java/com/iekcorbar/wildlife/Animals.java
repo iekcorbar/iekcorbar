@@ -1108,6 +1108,21 @@ final class Animals implements Listener {
             return; // name tags keep an animal
         }
         if (hand.getType() == Material.LEAD) return; // leads keep an animal
+        // catch a will-o'-wisp in a glass bottle (Zelda-style)
+        if (hand.getType() == Material.GLASS_BOTTLE && a.species.name().startsWith("WILLOWISP")) {
+            e.setCancelled(true);
+            String variant = WildItems.wispVariant(a.species);
+            ItemStack bottled = plugin.items().bottledWisp(variant);
+            if (e.getPlayer().getGameMode() != org.bukkit.GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+            var leftover = e.getPlayer().getInventory().addItem(bottled);
+            if (!leftover.isEmpty()) e.getPlayer().getWorld().dropItemNaturally(e.getPlayer().getLocation(), bottled);
+            LivingEntity ent = (LivingEntity) e.getRightClicked();
+            e.getPlayer().getWorld().playSound(ent.getLocation(), "entity.allay.ambient", 0.8f, 2.0f);
+            ent.remove();
+            animals.remove(ent.getUniqueId());
+            plugin.adv().grant(e.getPlayer(), "first_catch");
+            return;
+        }
         e.setCancelled(true);
         if (e.getHand() == EquipmentSlot.HAND) {
             // dragons answer to coal (taming) and to their owner's empty hand (sit/ride) before breeding thinks of it

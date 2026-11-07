@@ -1,0 +1,81 @@
+{
+ "credit": "Xmas",
+ "texture_size": [
+  128,
+  128
+ ],
+ "textures": {
+  "0": "xmas:xmas.png",
+  "particle": "xmas:xmas.png"
+ },
+ "elements": [
+  {
+   "from": [
+    0,
+    0,
+    0
+   ],
+   "to": [
+    16,
+    16,
+    16
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      89,
+      9,
+      95,
+      15
+     ],
+     "texture": "#0"
+    },
+    "south": {
+     "uv": [
+      89,
+      9,
+      95,
+      15
+     ],
+     "texture": "#0"
+    },
+    "east": {
+     "uv": [
+      89,
+      9,
+      95,
+      15
+     ],
+     "texture": "#0"
+    },
+    "west": {
+     "uv": [
+      89,
+      9,
+      95,
+      15
+     ],
+     "texture": "#0"
+    },
+    "up": {
+     "uv": [
+      89,
+      9,
+      95,
+      15
+     ],
+     "texture": "#0"
+    },
+    "down": {
+     "uv": [
+      97,
+      9,
+      103,
+      15
+     ],
+     "texture": "#0"
+    }
+   }
+  }
+ ]
+}

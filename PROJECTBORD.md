@@ -3,7 +3,8 @@
 Eén overzicht van wat er speelt. De agent werkt dit bij na elke afgeronde werkblok;
 jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPLOYEN.txt`.)
 
-**Peildatum: 30-10-2026 avond**
+**Peildatum: 6 nov 2026 avond — rollback naar Paper 26.2 (backup 6 nov 04:00)**
+**Reden:** 26.3 Vulkan-backend faalt op `#moj_import` (client shader-compile), pack kan niet laden; 26.3 wordt overgeslagen, wachten op 26.4.
 
 ## 🟢 Live op de server
 | Blok | Sinds | Wat |
@@ -22,6 +23,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
 ## 🟡 Wacht op JOU
+| resourcepack build40 | VPS mixer | geüpload, RPM herladen (plugin reload OK). Client-herstart + downloadbalk afwachten; daarna bevestigen of build39-artefact uit deploy/ kan. |
 | Wat | Waar | Actie |
 |---|---|---|
 | site-zip + **Shop Settings-commando's** | TE-DEPLOYEN punt 63 (nieuw: sha1 ecf1d85c) | zip uitpakken + NPM + restart; dan Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online) |

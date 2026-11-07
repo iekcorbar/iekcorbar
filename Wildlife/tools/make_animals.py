@@ -2645,6 +2645,13 @@ ITEMS = {
     "wl_lizard_tail": [((-1, -1, -6), (1, 1, 0), "lizard"), ((-0.6, -0.6, 0), (0.6, 0.6, 6), "lizard_spot")],
     "wl_field_journal": [((-5, -1, -6), (5, 1, 6), "leaf_d"), ((-4.5, 1, -5.5), (4.5, 1.3, 5.5), "fur_cream"),
                          ((-5.01, -1, -1), (5.01, 1, 1), "fur_brown")],
+    # bottled will-o'-wisps (Zelda-style: catch a wisp in a glass bottle)
+    "wl_willowisp_bottled":       [((4, 0, 4), (12, 10, 12), "wing_clear"), ((5, 10, 5), (11, 12, 11), "wing_clear"), ((5, 12, 5), (11, 13, 11), "antler"), ((5, 2, 5), (11, 8, 11), "glow_blue")],
+    "wl_willowisp_bottled_green": [((4, 0, 4), (12, 10, 12), "wing_clear"), ((5, 10, 5), (11, 12, 11), "wing_clear"), ((5, 12, 5), (11, 13, 11), "antler"), ((5, 2, 5), (11, 8, 11), "leaf")],
+    "wl_willowisp_bottled_red":   [((4, 0, 4), (12, 10, 12), "wing_clear"), ((5, 10, 5), (11, 12, 11), "wing_clear"), ((5, 12, 5), (11, 13, 11), "antler"), ((5, 2, 5), (11, 8, 11), "firefly_red")],
+    "wl_willowisp_bottled_gold":  [((4, 0, 4), (12, 10, 12), "wing_clear"), ((5, 10, 5), (11, 12, 11), "wing_clear"), ((5, 12, 5), (11, 13, 11), "antler"), ((5, 2, 5), (11, 8, 11), "gold")],
+    "wl_willowisp_bottled_white": [((4, 0, 4), (12, 10, 12), "wing_clear"), ((5, 10, 5), (11, 12, 11), "wing_clear"), ((5, 12, 5), (11, 13, 11), "antler"), ((5, 2, 5), (11, 8, 11), "white")],
+    "wl_willowisp_bottled_purple":[((4, 0, 4), (12, 10, 12), "wing_clear"), ((5, 10, 5), (11, 12, 11), "wing_clear"), ((5, 12, 5), (11, 13, 11), "antler"), ((5, 2, 5), (11, 8, 11), "morpho")],
 }
 
 
