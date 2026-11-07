@@ -216,6 +216,26 @@ final class Items implements Listener {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 0));
                 p.sendActionBar(Component.text("The world shifts...", NamedTextColor.LIGHT_PURPLE));
             }
+            case YUZU_TEA -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 0));
+                p.sendActionBar(Component.text("Refreshing!", NamedTextColor.YELLOW));
+            }
+            case PERSIMMON_WINE -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 200, 0));
+                p.sendActionBar(Component.text("Sweet and warming...", NamedTextColor.GOLD));
+            }
+            case MUSHROOM_TEA -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 600, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 160, 0));
+                p.sendActionBar(Component.text("Earthy and calming.", NamedTextColor.DARK_GREEN));
+            }
+            case BUCKWHEAT_TEA -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 200, 0));
+                p.removePotionEffect(PotionEffectType.HUNGER);
+                p.sendActionBar(Component.text("Warm and toasty.", NamedTextColor.GOLD));
+            }
             default -> { }
         }
         // Sakagura sake-pairing: if the player is drunk, food gives a bonus
@@ -335,6 +355,11 @@ final class Items implements Listener {
         shapeless("dried_cannabis", create(KItem.DRIED_CANNABIS, 1), KItem.CANNABIS_BUDS);
         shapeless("hash", create(KItem.HASH, 1), KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS);
         shapeless("joint", create(KItem.JOINT, 1), Material.PAPER, KItem.DRIED_CANNABIS);
+        // drinks
+        shapeless("yuzu_tea", create(KItem.YUZU_TEA, 1), KItem.YUZU, Material.GLASS_BOTTLE);
+        shapeless("persimmon_wine", create(KItem.PERSIMMON_WINE, 1), KItem.PERSIMMON, KItem.PERSIMMON, Material.SUGAR, Material.GLASS_BOTTLE);
+        shapeless("mushroom_tea", create(KItem.MUSHROOM_TEA, 1), KItem.SHIITAKE, Material.GLASS_BOTTLE);
+        shapeless("buckwheat_tea", create(KItem.BUCKWHEAT_TEA, 1), KItem.BUCKWHEAT, Material.GLASS_BOTTLE);
         for (Player p : Bukkit.getOnlinePlayers()) p.discoverRecipes(recipeKeys);
     }
 

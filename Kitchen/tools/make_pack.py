@@ -288,6 +288,11 @@ def items():
     M["hash_pipe"] = [box(6, 0, 6, 10, 2, 10, "clay"), box(7, 2, 7, 9, 3, 9, "wood_dark")]
     M["magic_mushroom_spores"] = pile("straw_dark", "brown", 10, 9)
     M["magic_mushroom"] = [box(5, 0, 5, 11, 2, 11, "straw"), box(6, 2, 6, 10, 3.5, 10, "cap_red" if "cap_red" in PALETTE else "chili"), box(7, 3.5, 7, 9, 4, 9, "white")]
+    # drinks
+    M["yuzu_tea"] = [box(5, 0, 5, 11, 6, 11, "porcelain"), box(6, 6, 6, 10, 6.5, 10, "gold"), box(7, 6.5, 7, 9, 7, 9, "tea_drink")]
+    M["persimmon_wine"] = [box(5, 0, 5, 11, 7, 11, "porcelain"), box(6, 7, 6, 10, 7.5, 10, "gold"), box(6, 1, 6, 10, 6, 10, "kabocha")]
+    M["mushroom_tea"] = [box(5, 0, 5, 11, 6, 11, "porcelain"), box(6, 6, 6, 10, 6.5, 10, "gold"), box(6, 1, 6, 10, 5, 10, "broth")]
+    M["buckwheat_tea"] = [box(5, 0, 5, 11, 6, 11, "porcelain"), box(6, 6, 6, 10, 6.5, 10, "gold"), box(6, 1, 6, 10, 5, 10, "straw")]
     M["cabbage_leaf"] = [box(4, 0, 5, 12, 0.6, 11, "cabbage_light"), box(5, 0.6, 6, 11, 0.8, 10, "leaf")]
     M["daikon_slices"] = disc(2.2, 0, 0.8, "daikon", cx=6, cz=8) + disc(2.2, 0.8, 1.6, "daikon", cx=8, cz=8) + disc(2.2, 0, 0.8, "daikon", cx=10, cz=8)
     M["chopped_green_onion"] = pile("negi", "negi_white", 10, 6)

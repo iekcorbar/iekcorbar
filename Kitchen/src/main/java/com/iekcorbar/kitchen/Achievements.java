@@ -24,6 +24,10 @@ final class Achievements {
         a.add("cannabis", "harvest", "green_dye", "Green Thumb", "Harvest cannabis.", "task");
         a.add("hemp", "harvest", "string", "Fiber and Thread", "Harvest hemp.", "task");
         a.add("magic_mushroom", "harvest", "red_mushroom", "Trip", "Harvest a magic mushroom.", "task");
+        a.add("yuzu", "harvest", "lime_dye", "Citrus", "Harvest yuzu.", "task");
+        a.add("persimmon", "harvest", "orange_dye", "Autumn Fruit", "Harvest persimmon.", "task");
+        a.add("buckwheat", "harvest", "wheat_seeds", "Soba", "Harvest buckwheat.", "task");
+        a.add("yuzu_tea", "yuzu", "potion", "Citrus Sip", "Make yuzu tea.", "task");
         a.add("hash", "cannabis", "coal", "Compressed", "Make hash from dried cannabis.", "task");
         a.add("joint", "hash", "paper", "Roll It Up", "Roll a joint.", "task");
         a.add("hemp_rope", "hemp", "lead", "Strong Rope", "Craft hemp rope.", "task");
