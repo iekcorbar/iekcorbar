@@ -117,7 +117,7 @@ SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "
         "tanuki": 1.3, "crane": 1.25, "koi": 1.2, "macaque": 1.25,
         "kangaroo": 1.0, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.0, "mole": 1.35,
         "rhino": 0.8, "penguin": 0.95, "orca": 0.42, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.35, "lion": 1.3, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 0.9, "glowsprite": 1.0}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 0.42 = whole length inside the limit, head and tail no longer cut off
+        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.35, "lion": 1.3, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 0.9, "glowsprite": 1.0, "willowisp": 1.0}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 0.42 = whole length inside the limit, head and tail no longer cut off
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
@@ -1599,14 +1599,14 @@ def wraith(m):
 # ------------------------------------------------------------------ sfeerwezens (0.9.x) - custom creatures, not animals
 
 def willowisp(m, glow="glow_blue", core="wraith_glow", trail="wing_clear"):
-    m.bone("body", (0, 5, 0))
-    m.box("body", -1.4, 4.0, -1.4, 1.4, 6.8, 1.4, glow)
-    m.box("body", -0.9, 4.5, -0.9, 0.9, 6.3, 0.9, core)
-    m.bone("trail", (0, 5.4, 1.2), "body")
-    m.box("trail", -0.6, 4.6, 1.2, 0.6, 6.2, 3.6, trail)
-    m.box("trail", -0.3, 4.4, 3.6, 0.3, 5.2, 5.6, trail)
-    m.sym("body", 1.6, 5.4, -0.4, 2.0, 5.8, 0.0, glow)
-    m.sym("body", 1.6, 5.4, 0.6, 2.0, 5.8, 1.0, glow)
+    m.bone("body", (0, 9, 0))
+    m.box("body", -2.8, 8.0, -2.8, 2.8, 13.6, 2.8, glow)
+    m.box("body", -1.8, 9.0, -1.8, 1.8, 12.6, 1.8, core)
+    m.bone("trail", (0, 10.8, 2.4), "body")
+    m.box("trail", -1.2, 9.2, 2.4, 1.2, 12.4, 7.2, trail)
+    m.box("trail", -0.6, 8.8, 7.2, 0.6, 10.4, 11.2, trail)
+    m.sym("body", 3.2, 10.8, -0.8, 4.0, 11.6, 0.0, glow)
+    m.sym("body", 3.2, 10.8, 1.2, 4.0, 11.6, 2.0, glow)
     p = 2.0
     m.anim("idle", p, {
         "body": {"position": wave(6, p, 0.5, 0.0, axis=1), "rotation": wave(6, p, 5.0, 0.0, axis=1)},
