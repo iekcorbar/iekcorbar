@@ -54,8 +54,16 @@ final class Brain {
             // parrots land on the player's shoulder and beelines to hives/flowers will empty the scene.
             if (a.species == Species.SONGBIRD) strip(g, m, VanillaGoal.PARROT_LAND_ON_OWNERS_SHOULDER);
             if (a.species == Species.DRAGON) {
-                // the dragon has its own mind (DragonAI: roost, take off, patrol, land, follow, carry a rider):
-                // every vanilla parrot goal goes, otherwise its random flutter fights the steering
+                g.removeAllGoals(m);
+                g.removeAllGoals(m, GoalType.TARGET);
+                return;
+            }
+            if (a.species == Species.WILLOWISP || a.species.name().startsWith("WILLOWISP_")) {
+                g.removeAllGoals(m);
+                g.removeAllGoals(m, GoalType.TARGET);
+                return;
+            }
+            if (a.species == Species.TENGU) {
                 g.removeAllGoals(m);
                 g.removeAllGoals(m, GoalType.TARGET);
                 return;

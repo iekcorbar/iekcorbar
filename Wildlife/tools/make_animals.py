@@ -1563,6 +1563,297 @@ def wraith(m):
                           "hem": {"rotation": [(0, (0, 0, 0)), (0.55, (8, 0, 0)), (0.8, (8, 0, 0))]}}, loop="hold")
 
 
+# ------------------------------------------------------------------ sfeerwezens (0.9.x) - custom creatures, not animals
+
+def willowisp(m, glow="glow_blue", core="wraith_glow", trail="wing_clear"):
+    m.bone("body", (0, 5, 0))
+    m.box("body", -1.4, 4.0, -1.4, 1.4, 6.8, 1.4, glow)
+    m.box("body", -0.9, 4.5, -0.9, 0.9, 6.3, 0.9, core)
+    m.bone("trail", (0, 5.4, 1.2), "body")
+    m.box("trail", -0.6, 4.6, 1.2, 0.6, 6.2, 3.6, trail)
+    m.box("trail", -0.3, 4.4, 3.6, 0.3, 5.2, 5.6, trail)
+    m.sym("body", 1.6, 5.4, -0.4, 2.0, 5.8, 0.0, glow)
+    m.sym("body", 1.6, 5.4, 0.6, 2.0, 5.8, 1.0, glow)
+    p = 2.0
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.5, 0.0, axis=1), "rotation": wave(6, p, 5.0, 0.0, axis=1)},
+        "trail": {"rotation": wave(6, p, 9.0, 0.5, axis=0)},
+    })
+    p = 1.6
+    m.anim("walk", p, {
+        "body": {"position": wave(6, p, 0.8, 0.0, axis=1), "rotation": wave(6, p, 7.0, 0.0, axis=1)},
+        "trail": {"rotation": wave(6, p, 12.0, 0.5, axis=0)},
+    })
+    m.anim("death", 0.5, {"body": {"position": [(0, (0, 0, 0)), (0.5, (0, -4, 0))], "rotation": [(0, (0, 0, 0)), (0.5, (0, 0, 0))]}}, loop="hold")
+
+def steamgolem(m):
+    brass, copper, iron, steam = "dragon_brass", "dragon_copper", "fur_black", "wing_clear"
+    m.bone("body", (0, 12, 0))
+    m.box("body", -4.0, 12.0, -2.6, 4.0, 22.0, 2.6, brass)
+    m.box("body", -4.6, 20.0, -3.0, 4.6, 24.0, 3.0, iron)
+    m.box("body", -3.4, 10.0, -2.0, 3.4, 12.5, 2.0, copper)
+    m.box("body", -2.6, 21.0, 2.6, -1.4, 23.0, 4.0, steam)
+    m.box("body", 1.4, 21.0, 2.6, 2.6, 23.0, 4.0, steam)
+    m.bone("h_head", (0, 23.0, 0), "body")
+    m.box("h_head", -3.0, 23.5, -2.4, 3.0, 29.0, 2.4, iron)
+    m.box("h_head", -2.4, 24.0, -3.0, 2.4, 27.5, -2.2, brass)
+    m.sym("h_head", 1.0, 26.0, -3.0, 1.6, 27.0, -2.6, "eye_red")
+    for name, sx in (("arm_l", 1), ("arm_r", -1)):
+        m.bone(name, (sx * 4.2, 20.0, 0), "body")
+        x1, x2 = (3.6, 5.0) if sx > 0 else (-5.0, -3.6)
+        m.box(name, x1, 10.0, -1.6, x2, 20.5, 1.6, brass)
+        m.box(name, x1, 9.0, -2.0, x2, 11.0, 2.0, iron)
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 2.0, 10.0, 0), "body")
+        x1, x2 = (1.2, 2.8) if sx > 0 else (-2.8, -1.2)
+        m.box(name, x1, 0.0, -1.8, x2, 10.5, 1.8, iron)
+    p = 2.4
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.3, 0.0, axis=1)},
+        "h_head": {"rotation": wave(6, p, 1.5, 0.5, axis=2)},
+        "arm_l": {"rotation": wave(6, p, 2.0, 0.0, axis=0)},
+        "arm_r": {"rotation": wave(6, p, 2.0, math.pi, axis=0)},
+    })
+    p = 1.8
+    m.anim("walk", p, {
+        "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.4, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 18.0, 0.0, axis=0)},
+        "leg_r": {"rotation": wave(4, p, 18.0, math.pi, axis=0)},
+        "arm_l": {"rotation": wave(4, p, 8.0, math.pi, axis=0)},
+        "arm_r": {"rotation": wave(4, p, 8.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.0, 0.3, axis=2)},
+    })
+    m.anim("death", 0.9, {"body": {"rotation": [(0, (0, 0, 0)), (0.6, (12, 0, 0)), (0.9, (12, 0, 0))],
+                                    "position": [(0, (0, 0, 0)), (0.6, (0, -8, 0)), (0.9, (0, -8, 0))]}}, loop="hold")
+
+
+def oni(m):
+    skin, dark, horn, eye = "firefly_red", "fur_dark", "tusk", "eye_red"
+    m.bone("body", (0, 12, 0))
+    m.box("body", -3.0, 12.0, -1.8, 3.0, 20.0, 1.8, skin)
+    m.box("body", -3.4, 19.0, -2.2, 3.4, 21.0, 2.2, dark)
+    m.bone("h_head", (0, 20.5, 0), "body")
+    m.box("h_head", -2.6, 21.0, -2.4, 2.6, 27.0, 2.0, skin)
+    m.box("h_head", -2.2, 21.5, -3.0, 2.2, 25.0, -2.2, dark)
+    m.sym("h_head", 2.0, 26.5, -1.0, 2.6, 31.0, -0.4, horn)
+    m.sym("h_head", 1.6, 26.0, -0.2, 2.2, 30.0, 0.6, horn)
+    m.sym("h_head", 1.4, 25.5, -3.0, 1.8, 29.0, -2.4, horn)
+    m.sym("h_head", 1.0, 24.0, -2.6, 1.6, 24.8, -2.4, eye)
+    for name, sx in (("arm_l", 1), ("arm_r", -1)):
+        m.bone(name, (sx * 3.6, 19.0, 0), "body")
+        x1, x2 = (3.0, 4.2) if sx > 0 else (-4.2, -3.0)
+        m.box(name, x1, 11.0, -1.4, x2, 19.5, 1.4, skin)
+        m.box(name, x1, 10.0, -1.8, x2, 12.0, 1.8, dark)
+    m.bone("club", (3.6, 10.0, -0.6), "arm_r")
+    m.box("club", 3.0, 0.0, -1.0, 4.2, 10.0, 0.2, "hoof")
+    m.box("club", 2.4, 9.0, -1.6, 4.8, 12.0, 0.8, "hoof")
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 1.6, 12.0, 0), "body")
+        x1, x2 = (1.0, 2.2) if sx > 0 else (-2.2, -1.0)
+        m.box(name, x1, 0.0, -1.6, x2, 12.5, 1.6, skin)
+        m.box(name, x1, 0.0, -2.0, x2, 2.0, 2.0, dark)
+    p = 2.0
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.25, 0.0, axis=1)},
+        "h_head": {"rotation": wave(6, p, 2.0, 0.4, axis=2)},
+        "arm_l": {"rotation": wave(6, p, 2.5, 0.0, axis=0)},
+        "arm_r": {"rotation": wave(6, p, 2.5, math.pi, axis=0)},
+    })
+    p = 1.5
+    m.anim("walk", p, {
+        "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.3, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 20.0, 0.0, axis=0)},
+        "leg_r": {"rotation": wave(4, p, 20.0, math.pi, axis=0)},
+        "arm_l": {"rotation": wave(4, p, 10.0, math.pi, axis=0)},
+        "arm_r": {"rotation": wave(4, p, 10.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)},
+        "club": {"rotation": wave(4, p, 6.0, 0.2, axis=0)},
+    })
+    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (10, 0, 0)), (0.8, (10, 0, 0))],
+                                    "position": [(0, (0, 0, 0)), (0.5, (0, -6, 0)), (0.8, (0, -6, 0))]}}, loop="hold")
+
+def kitsune(m):
+    """Fox spirit with three tails (custom creature, not an animal). ~1.1 m tall, drawn 18 px,
+    Steve (1.8 m) is the size reference. Glows faintly at night, tails sway."""
+    fur, dark, glow, sakura, eye = "fur_red", "fur_dark", "wraith_glow", "pink", "eye_red"
+    m.bone("body", (0, 7, 0))
+    # body
+    m.box("body", -1.8, 6.0, -3.5, 1.8, 9.0, 3.0, fur)
+    m.box("body", -2.0, 5.5, -4.0, 2.0, 9.5, -2.5, dark)
+    m.box("body", -1.6, 6.0, 2.5, 1.6, 8.5, 4.0, fur)
+    # head
+    m.bone("h_head", (0, 8.5, -3.8), "body")
+    m.box("h_head", -1.9, 8.5, -6.5, 1.9, 11.5, -3.8, fur)
+    m.box("h_head", -1.4, 8.0, -7.5, 1.4, 10.0, -6.2, dark)
+    # ears
+    m.sym("h_head", 1.6, 11.5, -5.5, 2.1, 14.0, -4.8, fur)
+    m.sym("h_head", 1.4, 11.0, -6.0, 1.8, 13.0, -5.5, sakura)
+    # eyes (glowing)
+    m.sym("h_head", 0.9, 9.8, -6.6, 1.3, 10.4, -6.3, glow)
+    # legs
+    for name, sx, z in (("leg_fl", 1, -2.5), ("leg_fr", -1, -2.5), ("leg_bl", 1, 2.0), ("leg_br", -1, 2.0)):
+        m.bone(name, (sx * 1.4, 6.0, z), "body")
+        x1, x2 = (1.0, 1.8) if sx > 0 else (-1.8, -1.0)
+        m.box(name, x1, 0.0, z - 0.6, x2, 6.2, z + 0.6, fur)
+        m.box(name, x1, 0.0, z - 0.8, x2, 1.2, z + 0.8, dark)
+    # three tails, fanning out
+    for i, (name, ang) in enumerate((("tail_c", 0.0), ("tail_l", -22.0), ("tail_r", 22.0))):
+        m.bone(name, (0, 7.0, 3.8), "body")
+        # rotate via animation origin; static tilt by placing boxes offset
+        off = (i - 1) * 1.6
+        m.box(name, -1.4 + off * 0.3, 5.5, 3.8, 1.4 + off * 0.3, 8.5, 9.5 + abs(off), i == 0 and fur or "fur_white")
+        m.box(name, -1.0 + off * 0.3, 5.0, 9.5 + abs(off), 1.0 + off * 0.3, 7.5, 13.0 + abs(off), "fur_white")
+        m.box(name, -0.6 + off * 0.3, 4.5, 13.0 + abs(off), 0.6 + off * 0.3, 6.0, 15.5 + abs(off), glow)
+    p = 2.2
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.2, 0.0, axis=1)},
+        "h_head": {"rotation": wave(6, p, 2.0, 0.4, axis=2)},
+        "tail_c": {"rotation": wave(6, p, 4.0, 0.0, axis=2)},
+        "tail_l": {"rotation": wave(6, p, 5.0, 0.6, axis=2)},
+        "tail_r": {"rotation": wave(6, p, 5.0, 1.2, axis=2)},
+    })
+    p = 1.4
+    m.anim("walk", p, {
+        "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.3, 0)), (p, (0, 0, 0))]},
+        "leg_fl": {"rotation": wave(4, p, 22.0, 0.0, axis=0)},
+        "leg_fr": {"rotation": wave(4, p, 22.0, math.pi, axis=0)},
+        "leg_bl": {"rotation": wave(4, p, 20.0, math.pi, axis=0)},
+        "leg_br": {"rotation": wave(4, p, 20.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)},
+        "tail_c": {"rotation": wave(4, p, 6.0, 0.0, axis=2)},
+        "tail_l": {"rotation": wave(4, p, 7.0, 0.5, axis=2)},
+        "tail_r": {"rotation": wave(4, p, 7.0, 1.1, axis=2)},
+    })
+    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.8, (12, 0, 0))],
+                                    "position": [(0, (0, 0, 0)), (0.5, (0, -5, 0)), (0.8, (0, -5, 0))]}}, loop="hold")
+
+def kappa(m):
+    shell, skin, bowl, glow = "tortoise_shell", "lizard", "wing_clear", "glow_blue"
+    m.bone("body", (0, 5, 0))
+    m.box("body", -2.6, 4.0, -2.2, 2.6, 7.5, 2.2, shell)
+    m.box("body", -2.0, 7.5, -1.8, 2.0, 9.5, 1.8, skin)
+    m.bone("h_head", (0, 9.0, -1.6), "body")
+    m.box("h_head", -1.6, 9.0, -3.6, 1.6, 11.5, -1.6, skin)
+    m.box("h_head", -1.2, 8.5, -4.2, 1.2, 10.0, -3.4, shell)
+    m.box("h_head", -1.3, 11.5, -2.6, 1.3, 12.6, -0.8, bowl)
+    m.box("h_head", -0.9, 12.0, -2.0, 0.9, 12.4, -1.2, glow)
+    m.sym("h_head", 0.7, 10.0, -3.7, 1.1, 10.6, -3.5, "eye")
+    for name, sx in (("arm_l", 1), ("arm_r", -1)):
+        m.bone(name, (sx * 2.8, 7.0, -0.6), "body")
+        x1, x2 = (2.2, 3.2) if sx > 0 else (-3.2, -2.2)
+        m.box(name, x1, 4.0, -1.2, x2, 7.2, 0.6, skin)
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 1.6, 4.0, 0), "body")
+        x1, x2 = (1.0, 2.2) if sx > 0 else (-2.2, -1.0)
+        m.box(name, x1, 0.0, -1.2, x2, 4.2, 1.2, shell)
+    p = 2.4
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.2, 0.0, axis=1)},
+        "h_head": {"rotation": wave(6, p, 2.0, 0.4, axis=2)},
+        "arm_l": {"rotation": wave(6, p, 3.0, 0.0, axis=0)},
+        "arm_r": {"rotation": wave(6, p, 3.0, math.pi, axis=0)},
+    })
+    p = 1.8
+    m.anim("walk", p, {
+        "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.25, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 16.0, 0.0, axis=0)},
+        "leg_r": {"rotation": wave(4, p, 16.0, math.pi, axis=0)},
+        "arm_l": {"rotation": wave(4, p, 6.0, math.pi, axis=0)},
+        "arm_r": {"rotation": wave(4, p, 6.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.0, 0.3, axis=2)},
+    })
+    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.8, (12, 0, 0))],
+                                    "position": [(0, (0, 0, 0)), (0.5, (0, -4, 0)), (0.8, (0, -4, 0))]}}, loop="hold")
+
+
+def tengu(m):
+    skin, dark, wing, glow = "firefly_red", "fur_dark", "wing_clear", "wraith_glow"
+    m.bone("body", (0, 10, 0))
+    m.box("body", -2.0, 9.0, -2.0, 2.0, 13.0, 1.5, skin)
+    m.box("body", -2.4, 12.5, -2.2, 2.4, 15.0, 1.8, dark)
+    m.bone("h_head", (0, 14.0, -1.0), "body")
+    m.box("h_head", -2.2, 14.0, -3.5, 2.2, 17.5, -0.5, skin)
+    m.box("h_head", -0.6, 15.0, -6.5, 0.6, 16.0, -3.5, skin)
+    m.box("h_head", -0.4, 14.8, -7.0, 0.4, 15.6, -6.5, dark)
+    m.sym("h_head", 0.9, 16.0, -3.6, 1.4, 16.6, -3.4, glow)
+    for name, sx in (("wing_l", 1), ("wing_r", -1)):
+        m.bone(name, (sx * 1.8, 13.0, 0), "body")
+        x1, x2 = (1.8, 6.5) if sx > 0 else (-6.5, -1.8)
+        m.box(name, x1, 10.0, -0.5, x2, 16.0, 0.5, wing)
+    for name, sx in (("arm_l", 1), ("arm_r", -1)):
+        m.bone(name, (sx * 2.4, 12.0, 0), "body")
+        x1, x2 = (2.0, 3.0) if sx > 0 else (-3.0, -2.0)
+        m.box(name, x1, 7.0, -1.0, x2, 12.2, 0.8, skin)
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 1.4, 9.0, 0), "body")
+        x1, x2 = (1.0, 2.0) if sx > 0 else (-2.0, -1.0)
+        m.box(name, x1, 0.0, -1.0, x2, 9.2, 0.8, dark)
+    p = 2.0
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.3, 0.0, axis=1)},
+        "h_head": {"rotation": wave(6, p, 1.5, 0.4, axis=2)},
+        "wing_l": {"rotation": wave(6, p, 8.0, 0.0, axis=0)},
+        "wing_r": {"rotation": wave(6, p, 8.0, math.pi, axis=0)},
+    })
+    p = 1.6
+    m.anim("walk", p, {
+        "body": {"position": wave(6, p, 0.4, 0.0, axis=1)},
+        "leg_l": {"rotation": wave(4, p, 18.0, 0.0, axis=0)},
+        "leg_r": {"rotation": wave(4, p, 18.0, math.pi, axis=0)},
+        "wing_l": {"rotation": wave(4, p, 12.0, 0.0, axis=0)},
+        "wing_r": {"rotation": wave(4, p, 12.0, math.pi, axis=0)},
+        "h_head": {"rotation": wave(4, p, 2.5, 0.3, axis=2)},
+    })
+    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (15, 0, 0)), (0.8, (15, 0, 0))],
+                                    "position": [(0, (0, 0, 0)), (0.5, (0, -6, 0)), (0.8, (0, -6, 0))]}}, loop="hold")
+
+
+def automaton(m):
+    brass, copper, iron, steam, glow = "dragon_brass", "dragon_copper", "fur_black", "wing_clear", "glow_yellow"
+    m.bone("body", (0, 12, 0))
+    m.box("body", -3.6, 11.0, -2.4, 3.6, 21.0, 2.4, brass)
+    m.box("body", -4.0, 19.5, -2.8, 4.0, 23.0, 2.8, iron)
+    m.box("body", -3.0, 9.5, -1.8, 3.0, 11.5, 1.8, copper)
+    m.sym("body", 2.0, 15.0, -2.6, 2.8, 16.5, -2.2, copper)
+    m.sym("body", 2.0, 13.0, -2.6, 2.8, 14.5, -2.2, copper)
+    m.box("body", -1.2, 21.5, 2.4, 1.2, 23.5, 3.8, steam)
+    m.bone("h_head", (0, 22.5, 0), "body")
+    m.box("h_head", -2.6, 22.5, -2.2, 2.6, 28.0, 2.2, iron)
+    m.box("h_head", -2.0, 23.0, -2.8, 2.0, 26.5, -2.0, brass)
+    m.sym("h_head", 0.9, 25.0, -2.9, 1.4, 25.8, -2.7, glow)
+    m.bone("key", (0, 21.0, 2.8), "body")
+    m.box("key", -0.4, 20.0, 2.8, 0.4, 26.0, 3.6, copper)
+    m.box("key", -1.2, 25.5, 2.6, 1.2, 26.5, 3.8, brass)
+    for name, sx in (("arm_l", 1), ("arm_r", -1)):
+        m.bone(name, (sx * 4.0, 19.0, 0), "body")
+        x1, x2 = (3.4, 4.6) if sx > 0 else (-4.6, -3.4)
+        m.box(name, x1, 9.0, -1.6, x2, 19.5, 1.6, brass)
+        m.box(name, x1, 8.0, -2.0, x2, 10.0, 2.0, iron)
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 2.0, 9.0, 0), "body")
+        x1, x2 = (1.2, 2.8) if sx > 0 else (-2.8, -1.2)
+        m.box(name, x1, 0.0, -1.8, x2, 9.5, 1.8, iron)
+    p = 2.6
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.15, 0.0, axis=1)},
+        "h_head": {"rotation": wave(6, p, 1.0, 0.5, axis=2)},
+        "arm_l": {"rotation": wave(6, p, 1.5, 0.0, axis=0)},
+        "arm_r": {"rotation": wave(6, p, 1.5, math.pi, axis=0)},
+        "key": {"rotation": wave(6, p, 360.0, 0.0, axis=2)},
+    })
+    p = 2.0
+    m.anim("walk", p, {
+        "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.3, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 16.0, 0.0, axis=0)},
+        "leg_r": {"rotation": wave(4, p, 16.0, math.pi, axis=0)},
+        "arm_l": {"rotation": wave(4, p, 6.0, math.pi, axis=0)},
+        "arm_r": {"rotation": wave(4, p, 6.0, 0.0, axis=0)},
+        "h_head": {"rotation": wave(4, p, 1.5, 0.3, axis=2)},
+        "key": {"rotation": wave(4, p, 360.0, 0.0, axis=2)},
+    })
+    m.anim("death", 1.0, {"body": {"rotation": [(0, (0, 0, 0)), (0.6, (10, 0, 0)), (1.0, (10, 0, 0))],
+                                    "position": [(0, (0, 0, 0)), (0.6, (0, -8, 0)), (1.0, (0, -8, 0))]}}, loop="hold")
+
 # ------------------------------------------------------------------ steam dragons (0.8.0)
 
 def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
@@ -1903,6 +2194,18 @@ EXTRA = [  # more common looks of a species (chosen at random by the plugin)
 # (make_zoo_pack.py also walks SPECIES/EXTRA). Only wl_<id> is written.
 SOLOS = [
     ("wraith", wraith, {}),
+    ("willowisp", willowisp, {}),
+    ("steamgolem", steamgolem, {}),
+    ("oni", oni, {}),
+    ("kitsune", kitsune, {}),
+    ("kappa", kappa, {}),
+    ("tengu", tengu, {}),
+    ("automaton", automaton, {}),
+    ("willowisp_green", willowisp, {"glow": "leaf", "core": "glow_yellow", "trail": "lizard"}),
+    ("willowisp_red", willowisp, {"glow": "firefly_red", "core": "eye_red", "trail": "fur_dark"}),
+    ("willowisp_gold", willowisp, {"glow": "gold", "core": "glow_yellow", "trail": "antler"}),
+    ("willowisp_white", willowisp, {"glow": "white", "core": "wing_clear", "trail": "fur_cream"}),
+    ("willowisp_purple", willowisp, {"glow": "morpho", "core": "wraith_glow", "trail": "dragon_sakura"}),
 ]
 
 # ------------------------------------------------------------------ item display models (true scale, like Steamworks)

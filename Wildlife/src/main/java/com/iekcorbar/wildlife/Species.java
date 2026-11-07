@@ -179,7 +179,70 @@ enum Species {
             List.of("dark_forest", "mushroom_fields", "swamp", "old_growth"), "soul_lantern",
             "A cold shape in a torn robe, drifting a hand above the ground. It does not hunt and does not flee - it watches, and the morning takes it away.",
             "Not found in the wild: staff place them at dark, quiet spots.",
-            "wildlife:wraith.ambient", "wildlife:wraith.hurt", "wildlife:wraith.death", 0.65f);
+            "wildlife:wraith.ambient", "wildlife:wraith.hurt", "wildlife:wraith.death", 0.65f),
+    // Sfeerwezens (0.9.x): custom creatures, not animals - no journal, no rare, no baby, no spawn egg, no statue.
+    // Steve = 1.8 m is the size reference (1 block = 1 m).
+    WILLOWISP("Will-o'-wisp", EntityType.ALLAY, 0.45, 4, 0.12, Habitat.AIR, Time.NIGHT, 1, 3, 0,
+            List.of("swamp", "mangrove", "dark_forest"), "glowstone_dust",
+            "A drifting blue light over the marsh. It lures the curious deeper and vanishes the moment you reach it.",
+            "Swamps and mangroves after dark - follow the light, if you dare.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.6f),
+    STEAMGOLEM("Steam Golem", EntityType.IRON_GOLEM, 1.0, 60, 0.04, Habitat.LAND, Time.ANY, 1, 1, 0,
+            List.of(), "copper_ingot",
+            "A brass-and-iron hulk left by the old engineers. It patrols the ruins on slow, heavy steps and vents steam when disturbed.",
+            "Deep in caves and old ruins - listen for the hiss of steam.",
+            "entity.iron_golem.step", "entity.iron_golem.hurt", "entity.iron_golem.death", 0.55f),
+    ONI("Oni", EntityType.VINDICATOR, 1.0, 30, 0.14, Habitat.LAND, Time.NIGHT, 1, 2, 0,
+            List.of(), "redstone",
+            "A red-skinned demon of the deep woods. It does not attack unprovoked, but its laugh carries far on a still night.",
+            "Dark forests at night - you hear it before you see it.",
+            "entity.vindicator.ambient", "entity.vindicator.hurt", "entity.vindicator.death", 0.75f),
+    KITSUNE("Kitsune", EntityType.WOLF, 1.1, 18, 0.15, Habitat.LAND, Time.NIGHT, 1, 1, 0,
+            List.of("forest", "taiga", "dark_forest", "cherry_grove", "bamboo", "old_growth", "grove", "flower_forest"),
+            "amethyst_shard",
+            "A fox with more than one tail, glowing faintly in the dark. It watches from the tree line and never quite lets you close.",
+            "Old forests and cherry groves after dark - count the tails.",
+            "entity.fox.ambient", "entity.wolf.hurt", "entity.wolf.death", 1.2f),
+    KAPPA("Kappa", EntityType.TURTLE, 1.0, 16, 0.06, Habitat.WATER, Time.ANY, 1, 1, 0,
+            List.of("river", "swamp", "mangrove", "beach", "ocean"), "nautilus_shell",
+            "A water spirit with a bowl of water on its head. Tip the bowl and it loses its power - and its nerve.",
+            "Rivers, swamps and mangroves - look for ripples that move against the current.",
+            "entity.turtle.ambient_land", "entity.turtle.hurt_land", "entity.turtle.death_land", 0.9f),
+    TENGU("Tengu", EntityType.PHANTOM, 1.2, 20, 0.2, Habitat.AIR, Time.NIGHT, 1, 1, 0,
+            List.of("windswept", "grove", "taiga", "snowy", "cherry_grove", "old_growth", "mountain"), "phantom_membrane",
+            "A mountain spirit with a long nose and red skin. It rides the wind above the peaks and laughs at those below.",
+            "High mountain peaks after dark - listen for the wind and the laugh.",
+            "entity.phantom.ambient", "entity.phantom.hurt", "entity.phantom.death", 1.0f),
+    AUTOMATON("Automaton", EntityType.IRON_GOLEM, 1.0, 40, 0.05, Habitat.LAND, Time.ANY, 1, 1, 0,
+            List.of(), "copper_ingot",
+            "A clockwork soldier left by the old engineers. It patrols on heavy steps, hissing steam, and never sleeps.",
+            "Deep in caves and old ruins - listen for the ticking.",
+            "block.piston.contract", "entity.iron_golem.hurt", "entity.iron_golem.death", 0.5f),
+    WILLOWISP_GREEN("Green Will-o'-wisp", EntityType.ALLAY, 0.45, 4, 0.12, Habitat.AIR, Time.NIGHT, 1, 2, 0,
+            List.of("dark_forest", "swamp", "mangrove"), "glowstone_dust",
+            "A sickly green light over the marsh. Monsters gather where it drifts.",
+            "Dark forests and swamps after dark - it draws the hungry.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.5f),
+    WILLOWISP_RED("Red Will-o'-wisp", EntityType.ALLAY, 0.45, 4, 0.14, Habitat.AIR, Time.NIGHT, 1, 2, 0,
+            List.of("dark_forest", "forest", "taiga"), "glowstone_dust",
+            "A burning red light that hunts the living. It stings when it reaches you.",
+            "Dark forests at night - it comes to you, not the other way around.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.6f),
+    WILLOWISP_GOLD("Golden Will-o'-wisp", EntityType.ALLAY, 0.45, 4, 0.1, Habitat.AIR, Time.NIGHT, 1, 1, 0,
+            List.of("plains", "meadow", "flower_forest", "sunflower_plains"), "glowstone_dust",
+            "A warm golden light over the open fields. Follow it and it leaves a gift.",
+            "Open fields and meadows at night - follow the gold.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.4f),
+    WILLOWISP_WHITE("White Will-o'-wisp", EntityType.ALLAY, 0.45, 4, 0.08, Habitat.AIR, Time.NIGHT, 1, 1, 0,
+            List.of("snowy", "ice", "frozen", "grove"), "glowstone_dust",
+            "A pale, calm light over the snow. It soothes those who stand near it.",
+            "Snowy peaks and ice at night - it heals the cold.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.3f),
+    WILLOWISP_PURPLE("Purple Will-o'-wisp", EntityType.ALLAY, 0.45, 4, 0.16, Habitat.AIR, Time.NIGHT, 1, 2, 0,
+            List.of("cherry_grove", "flower_forest", "birch_forest"), "glowstone_dust",
+            "A violet light that hums with magic. It quickens the step of those near it.",
+            "Cherry groves and flower forests at night - it lends you speed.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.7f);
 
     enum Habitat { LAND, WATER, SHORE, AIR, POND,
         /** The steam dragon: 3D flight like AIR, but spawned by the Spawner's underground pass, never on the surface. */
@@ -235,8 +298,12 @@ enum Species {
      * placements only: no journal page or advancement, no rare look, no baby, no spawn egg
      * and no craftable statue, and they never enter the wild (config + Spawner keep them off).
      */
+    /** Custom creatures (sfeerwezens): not animals - no journal, rare, baby, spawn egg, statue or breeding. */
     boolean animal() {
-        return this != WRAITH;
+        return this != WRAITH && this != WILLOWISP && this != STEAMGOLEM && this != ONI && this != KITSUNE
+            && this != KAPPA && this != TENGU && this != AUTOMATON
+            && this != WILLOWISP_GREEN && this != WILLOWISP_RED && this != WILLOWISP_GOLD
+            && this != WILLOWISP_WHITE && this != WILLOWISP_PURPLE;
     }
 
     /** Species that the Field Journal actually tracks: everything that is an animal. Keeps the
@@ -325,7 +392,8 @@ enum Species {
             case PIRANHA -> "Golden Piranha";
             case MACAW -> "Albino Macaw";
             case DRAGON -> "Gilded Dragon";   // the gilded one: every brass cell turned to gold
-            case WRAITH -> displayName;   // not an animal: there is no rare look (animal() guard)
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
+                 WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> displayName;
         };
     }
 
@@ -362,7 +430,8 @@ enum Species {
             case PIRANHA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.CHICKEN || m == Material.MUTTON;
             case MACAW -> m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS || m == Material.COCOA_BEANS;
             case DRAGON -> m == Material.COAL || m == Material.CHARCOAL;   // coal: it is a furnace
-            case WRAITH -> false;   // not an animal: nothing tempts it, breeding is out of the question
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
+                 WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> false;
         };
     }
 
@@ -399,7 +468,8 @@ enum Species {
             case PIRANHA -> "any raw meat";
             case MACAW -> "seeds or cocoa beans";
             case DRAGON -> "coal or charcoal";
-            case WRAITH -> "nothing - it is not an animal and cannot be bred";
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
+                 WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> "nothing - it is not an animal and cannot be bred";
         };
     }
 
