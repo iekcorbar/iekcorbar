@@ -92,7 +92,7 @@ final class Animals implements Listener {
     }
 
     private final WildlifePlugin plugin;
-    final NamespacedKey autoNameKey, hungerKey, speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey;
+    final NamespacedKey autoNameKey, hungerKey, speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey, trickKey;
     final Breeding breeding;
     private final Map<UUID, Animal> animals = new HashMap<>();
     private boolean warnedModels;
@@ -111,7 +111,8 @@ final class Animals implements Listener {
     birthKey = new NamespacedKey(plugin, "birth_time");
     ageKey = new NamespacedKey(plugin, "age_stage");
     hungerKey = new NamespacedKey(plugin, "hunger");
-        autoNameKey = new NamespacedKey(plugin, "auto_name");
+    autoNameKey = new NamespacedKey(plugin, "auto_name");
+    trickKey = new NamespacedKey(plugin, "trick_cooldown");
         brain = new Brain(plugin);
         breeding = new Breeding(plugin, this);
     }

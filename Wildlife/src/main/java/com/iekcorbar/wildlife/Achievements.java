@@ -113,6 +113,7 @@ final class Achievements {
         // 7. BEHAVIOR TREE (root → various behaviors)
         // ============================================================
         a.add("first_feed", "root", "wheat", "Feeding Time", "Feed any animal.", "task");
+        a.add("first_trick", "first_feed", "firework_rocket", "Show-off", "Teach an animal a trick by feeding it.", "task");
         a.add("first_pet", "first_feed", "golden_apple", "Gentle Touch", "Right-click an animal with an empty hand.", "task").hidden();
         a.add("first_kill", "root", "iron_sword", "Nature's Way", "Witness an animal die of natural causes.", "task").hidden();
         a.add("first_birth", "root", "egg", "New Life", "Witness an animal being born.", "task");

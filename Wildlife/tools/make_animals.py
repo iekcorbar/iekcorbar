@@ -391,8 +391,41 @@ class Model:
             e.pop("_style", None)
         return "data:image/png;base64," + base64.b64encode(png(px)).decode(), side
 
+    def add_tricks(self):
+        """Three trick animations played when an animal is fed: spin (360 around Y), roll (360 around X),
+        jump (hop up and down). Added before oriented() so the transform applies correctly."""
+        if "body" not in self.bones:
+            return
+        # spin: full turn around the vertical axis
+        self.anims.append({"uuid": U(), "name": "trick_spin", "loop": "once", "override": False, "length": 1.0,
+                           "snapping": 20, "selected": False, "anim_time_update": "", "blend_weight": "", "start_delay": "",
+                           "loop_delay": "", "animators": {self.bones["body"].uuid: {"name": "body", "type": "bone",
+                           "keyframes": [{"channel": "rotation", "data_points": [{"x": "0", "y": "0", "z": "0"}],
+                                          "uuid": U(), "time": 0, "color": -1, "interpolation": "linear"},
+                                         {"channel": "rotation", "data_points": [{"x": "0", "y": "360", "z": "0"}],
+                                          "uuid": U(), "time": 1.0, "color": -1, "interpolation": "linear"}]}}})
+        # roll: full turn around the forward (X) axis
+        self.anims.append({"uuid": U(), "name": "trick_roll", "loop": "once", "override": False, "length": 1.0,
+                           "snapping": 20, "selected": False, "anim_time_update": "", "blend_weight": "", "start_delay": "",
+                           "loop_delay": "", "animators": {self.bones["body"].uuid: {"name": "body", "type": "bone",
+                           "keyframes": [{"channel": "rotation", "data_points": [{"x": "0", "y": "0", "z": "0"}],
+                                          "uuid": U(), "time": 0, "color": -1, "interpolation": "linear"},
+                                         {"channel": "rotation", "data_points": [{"x": "360", "y": "0", "z": "0"}],
+                                          "uuid": U(), "time": 1.0, "color": -1, "interpolation": "linear"}]}}})
+        # jump: hop up and land
+        self.anims.append({"uuid": U(), "name": "trick_jump", "loop": "once", "override": False, "length": 0.6,
+                           "snapping": 20, "selected": False, "anim_time_update": "", "blend_weight": "", "start_delay": "",
+                           "loop_delay": "", "animators": {self.bones["body"].uuid: {"name": "body", "type": "bone",
+                           "keyframes": [{"channel": "position", "data_points": [{"x": "0", "y": "0", "z": "0"}],
+                                          "uuid": U(), "time": 0, "color": -1, "interpolation": "linear"},
+                                         {"channel": "position", "data_points": [{"x": "0", "y": "4", "z": "0"}],
+                                          "uuid": U(), "time": 0.3, "color": -1, "interpolation": "linear"},
+                                         {"channel": "position", "data_points": [{"x": "0", "y": "0", "z": "0"}],
+                                          "uuid": U(), "time": 0.6, "color": -1, "interpolation": "linear"}]}}})
+
     def bbmodel(self):
         self.chibi()
+        self.add_tricks()
         self.oriented()
         self.scaled()
         self.oriented = self.scaled = lambda: None

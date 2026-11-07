@@ -84,6 +84,18 @@ final class Breeding {
             return;
         }
         if (!a.species.isFood(hand.getType())) return;
+        // trick: play a random trick animation when fed (30s cooldown per animal)
+        long nowTrick = e.getWorld().getFullTime();
+        var pdc = e.getPersistentDataContainer();
+        long trickCooldown = pdc.getOrDefault(animals.trickKey, PersistentDataType.LONG, 0L);
+        if (nowTrick >= trickCooldown) {
+            String[] tricks = {"trick_spin", "trick_roll", "trick_jump"};
+            String trick = tricks[(int)(Math.random() * tricks.length)];
+            plugin.fmm().play(e, trick, false);
+            e.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, e.getLocation().add(0, e.getHeight() * 0.6, 0), 6, 0.3, 0.3, 0.3, 0);
+            pdc.set(animals.trickKey, PersistentDataType.LONG, nowTrick + 600); // 30s cooldown
+            plugin.adv().grant(p, "first_trick");
+        }
         if (a.baby) {
             if (!a.frozen) {   // like the vanilla animals: food speeds a baby up by a tenth of what is left
                 a.growAt -= Math.max(0, a.growAt - now) / 10;
