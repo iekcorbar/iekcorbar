@@ -117,7 +117,7 @@ SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "
         "tanuki": 1.3, "crane": 1.25, "koi": 1.2, "macaque": 1.25,
         "kangaroo": 1.0, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.0, "mole": 1.35,
         "rhino": 0.8, "penguin": 0.95, "orca": 0.42, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.35, "lion": 0.9, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 0.9}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 0.42 = whole length inside the limit, head and tail no longer cut off
+        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.35, "lion": 0.9, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 0.9, "glowsprite": 1.0}   # reduced for elephant/orca/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 0.42 = whole length inside the limit, head and tail no longer cut off
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
@@ -2193,6 +2193,31 @@ def vulture(m):
         "h_head": {"rotation": wave(4, p, 2.0, 0.3, axis=2)}})
     m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.8, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.5, (0, -5, 0)), (0.8, (0, -5, 0))]}}, loop="hold")
 
+def glowsprite(m):
+    """Tiny floating light in the deep dark (custom creature). ~0.4 m, drawn 6 px, ALLAY base."""
+    glow, core, wing = "glow_yellow", "wraith_glow", "wing_clear"
+    m.bone("body", (0, 3, 0))
+    m.box("body", -0.6, 2.6, -0.6, 0.6, 3.8, 0.6, glow)
+    m.box("body", -0.3, 2.9, -0.3, 0.3, 3.5, 0.3, core)
+    # wings
+    for name, sx in (("wing_l", 1), ("wing_r", -1)):
+        m.bone(name, (sx * 0.8, 3.2, 0), "body")
+        x1, x2 = (0.8, 2.2) if sx > 0 else (-2.2, -0.8)
+        m.box(name, x1, 2.8, -0.2, x2, 3.6, 0.2, wing)
+    p = 1.6
+    m.anim("idle", p, {
+        "body": {"position": wave(6, p, 0.4, 0.0, axis=1), "rotation": wave(6, p, 6.0, 0.0, axis=1)},
+        "wing_l": {"rotation": wave(6, p, 12.0, 0.0, axis=0)},
+        "wing_r": {"rotation": wave(6, p, 12.0, math.pi, axis=0)},
+    })
+    p = 1.2
+    m.anim("walk", p, {
+        "body": {"position": wave(6, p, 0.6, 0.0, axis=1), "rotation": wave(6, p, 8.0, 0.0, axis=1)},
+        "wing_l": {"rotation": wave(6, p, 15.0, 0.0, axis=0)},
+        "wing_r": {"rotation": wave(6, p, 15.0, math.pi, axis=0)},
+    })
+    m.anim("death", 0.4, {"body": {"position": [(0, (0, 0, 0)), (0.4, (0, -2, 0))], "rotation": [(0, (0, 0, 0)), (0.4, (0, 0, 0))]}}, loop="hold")
+
 # ------------------------------------------------------------------ steam dragons (0.8.0)
 
 def dragon(m, col="dragon_brass", plate="fur_black", memb="fur_black_d",
@@ -2554,6 +2579,7 @@ SOLOS = [
     ("willowisp_gold", willowisp, {"glow": "gold", "core": "glow_yellow", "trail": "antler"}),
     ("willowisp_white", willowisp, {"glow": "white", "core": "wing_clear", "trail": "fur_cream"}),
     ("willowisp_purple", willowisp, {"glow": "morpho", "core": "wraith_glow", "trail": "dragon_sakura"}),
+    ("glowsprite", glowsprite, {}),
 ]
 
 # ------------------------------------------------------------------ item display models (true scale, like Steamworks)

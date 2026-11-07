@@ -847,6 +847,24 @@ final class Animals implements Listener {
                     if (r.nextInt(40) == 0)
                         w.spawnParticle(Particle.ASH, e.getLocation().add(0, 0.6, 0), 1, 0.3, 0.1, 0.3, 0.0);
                 }
+                case GLOWSPRITE -> {
+                    // glow sprite: floating light in caves, vanishes in daylight/surface
+                    if (e.getLocation().getY() > 40) {
+                        for (int i = 0; i < 6; i++)
+                            w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.3, 0), 1, 0.2, 0.2, 0.2, 0.02);
+                        e.remove();
+                        continue;
+                    }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.2, 0), 1, 0.1, 0.1, 0.1, 0.02);
+                    if (r.nextInt(3) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.2, 0), 1, 0.05, 0.05, 0.05, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(255, 240, 120), 1.2f));
+                    Vector v = e.getVelocity();
+                    e.setVelocity(v.setY(Math.max(-0.03, Math.min(0.04, v.getY() + (r.nextDouble() - 0.5) * 0.04))));
+                    if (r.nextInt(60) == 0)
+                        w.playSound(e.getLocation(), "entity.allay.ambient", 0.4f, 1.8f);
+                }
                 case CRAB -> {
                     // waves its big claw at a player who comes close, turned to face them
                     Player close = nearestPlayer(e, 6);

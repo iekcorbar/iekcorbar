@@ -245,6 +245,11 @@ enum Species {
             "A red-skinned demon of the deep woods. It does not attack unprovoked, but its laugh carries far on a still night.",
             "Dark forests at night - you hear it before you see it.",
             "entity.vindicator.ambient", "entity.vindicator.hurt", "entity.vindicator.death", 0.75f),
+    GLOWSPRITE("Glow Sprite", EntityType.ALLAY, 0.4, 3, 0.1, Habitat.CAVE, Time.ANY, 1, 3, 0,
+            List.of(), "glowstone",
+            "A tiny floating light in the deep dark. It drifts through caverns and vanishes in the sun.",
+            "Deep caves - follow the light.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.8f),
     KITSUNE("Kitsune", EntityType.WOLF, 1.1, 18, 0.15, Habitat.LAND, Time.NIGHT, 1, 1, 0,
             List.of("forest", "taiga", "dark_forest", "cherry_grove", "bamboo", "old_growth", "grove", "flower_forest"),
             "amethyst_shard",
@@ -349,7 +354,7 @@ enum Species {
     /** Custom creatures (sfeerwezens): not animals - no journal, rare, baby, spawn egg, statue or breeding. */
     boolean animal() {
         return this != WRAITH && this != WILLOWISP && this != STEAMGOLEM && this != ONI && this != KITSUNE
-            && this != KAPPA && this != TENGU && this != AUTOMATON
+            && this != KAPPA && this != TENGU && this != AUTOMATON && this != GLOWSPRITE
             && this != WILLOWISP_GREEN && this != WILLOWISP_RED && this != WILLOWISP_GOLD
             && this != WILLOWISP_WHITE && this != WILLOWISP_PURPLE;
     }
@@ -450,7 +455,7 @@ enum Species {
             case MEERKAT -> "Golden Meerkat";
             case VULTURE -> "White Vulture";
             case DRAGON -> "Gilded Dragon";   // the gilded one: every brass cell turned to gold
-            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON, GLOWSPRITE,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> displayName;
         };
     }
@@ -497,7 +502,7 @@ enum Species {
             case MEERKAT -> m == Material.SPIDER_EYE || m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS;
             case VULTURE -> m == Material.ROTTEN_FLESH || m == Material.BEEF || m == Material.MUTTON || m == Material.CHICKEN;
             case DRAGON -> m == Material.COAL || m == Material.CHARCOAL;   // coal: it is a furnace
-            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON, GLOWSPRITE,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> false;
         };
     }
@@ -544,7 +549,7 @@ enum Species {
             case MEERKAT -> "spider eyes or seeds";
             case VULTURE -> "rotten flesh or raw meat";
             case DRAGON -> "coal or charcoal";
-            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON,
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON, GLOWSPRITE,
                  WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> "nothing - it is not an animal and cannot be bred";
         };
     }

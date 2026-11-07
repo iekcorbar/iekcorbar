@@ -58,6 +58,11 @@ final class Brain {
                 g.removeAllGoals(m, GoalType.TARGET);
                 return;
             }
+            if (a.species == Species.GLOWSPRITE) {
+                g.removeAllGoals(m);
+                g.removeAllGoals(m, GoalType.TARGET);
+                return;
+            }
             if (a.species == Species.WILLOWISP || a.species.name().startsWith("WILLOWISP_")) {
                 g.removeAllGoals(m);
                 g.removeAllGoals(m, GoalType.TARGET);
