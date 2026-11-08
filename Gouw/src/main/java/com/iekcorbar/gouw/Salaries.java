@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Daily pay from the town bank for residents that the mayor assigned a taak (job) to.
+ * Daily pay from the town bank for residents that the mayor assigned a job to.
  * Runs hourly; pays once per game-day after the configured salary-hour. Salary per job comes from
  * the Gouw config ("salaries: <job>: <amount>", fallback default-salary). A gouw with an empty or
  * too-small bank is skipped (one console line), so towns must fund their own payroll.

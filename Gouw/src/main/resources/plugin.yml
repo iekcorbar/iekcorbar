@@ -12,7 +12,7 @@ commands:
   gouw:
     description: Claim and manage your gouw (town).
     aliases: [g, claim]
-    usage: /gouw <menu|claim|autoclaim <r>|buy|unclaim [all]|invite|kick|promote|demote|job (taak)|jobs|bank|deposit|withdraw|members|rename|info|list|near|border|leave|admin ...>
+    usage: /gouw <menu|claim|autoclaim <r>|buy|unclaim [all]|invite|kick|promote|demote|job|jobs|bank|deposit|withdraw|members|rename|info|list|near|border|leave|admin ...>
 
 permissions:
   gouw.claim:

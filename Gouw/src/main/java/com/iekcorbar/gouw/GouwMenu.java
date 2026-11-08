@@ -187,12 +187,12 @@ final class GouwMenu implements Listener {
             if (slot == 17) slot = 19;
             if (slot > 43) break;
             UUID who = r.getKey();
-            String taak = l.jobs.get(who);
+            String job = l.jobs.get(who);
             ItemStack it = head(who);
             ItemMeta m = it.getItemMeta();
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text(r.getValue() == Land.Rank.ASSISTANT ? "officer" : "resident", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
-            lore.add(Component.text("job: " + (taak == null ? "none" : taak), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("job: " + (job == null ? "none" : job), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
             lore.add(Component.text("Click: " + (l.isMayor(h.viewer.getUniqueId()) ? (r.getValue() == Land.Rank.ASSISTANT ? "demote" : "promote to officer") : "no rights")
                     + " - shift: remove", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
             m.lore(lore);

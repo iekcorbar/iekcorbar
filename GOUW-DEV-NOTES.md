@@ -149,9 +149,10 @@ Ontwerp zoals afgesproken in deze sessie:
   `deploy/Gouw-0.4.0.jar`.
 - **Taal (gebruiker koos: ALLES ENGELS):** alle player-facing strings consequent Engels gemaakt —
   burgemeester→**mayor**, adjunct→**officer**, inwoner→**resident**, taak→**job**, kas→**bank**.
-  `taak` blijft wél een **commando-alias** (`/gouw taak` = `/gouw job`) zodat NL-typisten en
-  eventuele quest-commandos blijven werken. 0.4.0 is nooit gedeployd geweest → jar blijft 0.4.0, geen
-  versie-gehop.
+  Opvolgingzelfde dag: ook de **`taak`-commando-alias verwijderd** (commit 36af0287) — alleen
+  `/gouw job`. Grep over de repo gevonden: geen quests/scripts die `/gouw taak` gebruiken (alleen
+  `/gouw admin buychunks` via NPC/quest, en dat commando bestaat nog). 0.4.0 is nooit gedeployd →
+  jar blijft 0.4.0.
 - **Open: in-game testen (server, gebruiker)**, dan pas feel/price-tuning:
   1. jar wisselen + herstart; claims.json wordt automatisch uitgebreid (oude trouwe leden → resident).
   2. Test: claim als burgemeester, invite → resident kan NIET claimen, adjunct kan Wél; promote/demote;

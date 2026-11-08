@@ -141,12 +141,12 @@ final class GouwCommand implements TabExecutor {
                 if (l.ranks.isEmpty()) { msg(p, "No members yet - /gouw invite <player>", NamedTextColor.GRAY); return true; }
                 msg(p, "Residents of " + l.name + " (mayor: " + nameOf(l.owner) + "):", NamedTextColor.GOLD);
                 for (Map.Entry<UUID, Land.Rank> r : l.ranks.entrySet()) {
-                    String taak = l.jobs.get(r.getKey());
+                    String job = l.jobs.get(r.getKey());
                     msg(p, " - " + nameOf(r.getKey()) + " [" + (r.getValue() == Land.Rank.ASSISTANT ? "officer" : "resident") + "]"
-                            + (taak == null ? "" : " job: " + taak), NamedTextColor.GRAY);
+                            + (job == null ? "" : " job: " + job), NamedTextColor.GRAY);
                 }
             }
-            case "taak", "job" -> {
+            case "job" -> {
                 Land l = needTown(p);
                 if (l == null) return true;
                 if (!l.isMayor(p.getUniqueId())) { msg(p, "Only the mayor assigns jobs.", NamedTextColor.RED); return true; }
@@ -341,7 +341,7 @@ final class GouwCommand implements TabExecutor {
                 {"unclaim | unclaim all", "release a chunk or your whole gouw"},
                 {"invite <p> / kick <p>", "add or remove residents (was: trust/untrust)"},
                 {"promote <p> / demote <p>", "make a resident officer (mayor only)"},
-                {"job <p> <job|none> (alias: taak)", "assign a Jobs Reborn job - daily pay from the bank"},
+                {"job <p> <job|none>", "assign a Jobs Reborn job - daily pay from the bank"},
                 {"jobs / bank / deposit <a> / withdraw <a>", "the town's money"},
                 {"members / info / list / near [r]", "who and what is around you"},
                 {"rename <name>", "name your gouw (mayor)"},
@@ -370,16 +370,16 @@ final class GouwCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "buy", "unclaim", "invite", "kick", "promote", "demote", "taak", "job", "jobs", "bank", "deposit", "withdraw", "members", "rename", "info", "list", "near", "border", "leave", "admin"})
+            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "buy", "unclaim", "invite", "kick", "promote", "demote", "job", "jobs", "bank", "deposit", "withdraw", "members", "rename", "info", "list", "near", "border", "leave", "admin"})
                 if (v.startsWith(last)) out.add(v);
-        } else if (a.length == 2 && List.of("invite", "kick", "promote", "demote", "taak", "job").contains(a[0].toLowerCase(Locale.ROOT))) {
+        } else if (a.length == 2 && List.of("invite", "kick", "promote", "demote", "job").contains(a[0].toLowerCase(Locale.ROOT))) {
             Land l = s instanceof Player pl ? store.homeOf(pl.getUniqueId()) : null;
             if (l != null) for (UUID u : l.ranks.keySet()) {
                 String n = Bukkit.getOfflinePlayer(u).getName();
                 if (n != null && n.toLowerCase(Locale.ROOT).startsWith(last)) out.add(n);
             }
             else for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
-        } else if (a.length == 3 && List.of("taak", "job").contains(a[0].toLowerCase(Locale.ROOT))) {
+        } else if (a.length == 3 && List.of("job").contains(a[0].toLowerCase(Locale.ROOT))) {
             for (String j : plugin.jobs().all()) if (j.toLowerCase(Locale.ROOT).startsWith(last)) out.add(j);
             if ("none".startsWith(last)) out.add("none");
         } else if (a.length == 2 && a[0].equalsIgnoreCase("unclaim")) {

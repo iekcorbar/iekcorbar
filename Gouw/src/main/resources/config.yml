@@ -29,7 +29,7 @@ price-per-chunk: 250
 # Most chunks ONE gouw can buy on top of the burgemeester's rank limit.
 town-buy-max: 100
 
-# Daily taak salaries: residents assigned via /gouw taak are paid from the TOWN BANK.
+# Daily job salaries: residents assigned via /gouw job are paid from the TOWN BANK.
 salary-enabled: true
 # Pays the first hour after this server-local hour, once per day (stored in meta.yml, reboot-safe).
 salary-hour: 7
