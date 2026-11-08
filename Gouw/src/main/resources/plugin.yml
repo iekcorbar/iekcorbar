@@ -1,5 +1,5 @@
 name: Gouw
-version: '0.3.0'
+version: '0.3.1'
 main: com.iekcorbar.gouw.GouwPlugin
 api-version: '26.2'
 description: Chunk land claims - the in-house successor to Lands, and it reads old Lands claims on first start.

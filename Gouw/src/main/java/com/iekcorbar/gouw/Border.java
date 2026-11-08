@@ -5,13 +5,18 @@ import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.World;
 
-/** Gold dust outlines: one chunk when you walk into a gouw, the whole gouw for /gouw border. */
+/** Gold dust outlines: one chunk when you walk into a gouw, the whole gouw for /gouw border.
+ *  Tuning notes (2026-11): DUST at size ~1 looked tiny/pale on bright terrain —
+ *  keep size >= 2.5 and a saturated amber so the line stays visible at distance. */
 final class Border {
     private Border() {
     }
 
+    private static final Color CHUNK_GOLD = Color.fromRGB(255, 158, 30);
+    private static final Color BORDER_GOLD = Color.fromRGB(255, 178, 45);
+
     static void chunk(World w, int cx, int cz) {
-        Particle.DustOptions dust = new Particle.DustOptions(Color.fromRGB(225, 180, 90), 1.1f);
+        Particle.DustOptions dust = new Particle.DustOptions(CHUNK_GOLD, 2.6f);
         int x0 = cx << 4, z0 = cz << 4;
         for (int i = 0; i <= 16; i += 2) {
             at(w, x0 + i, z0, dust);
@@ -25,7 +30,7 @@ final class Border {
     static void draw(Land l) {
         World w = Bukkit.getWorld(l.world);
         if (w == null) return;
-        Particle.DustOptions gold = new Particle.DustOptions(Color.fromRGB(255, 210, 110), 1.2f);
+        Particle.DustOptions gold = new Particle.DustOptions(BORDER_GOLD, 3.0f);
         int drawn = 0;
         for (long k : l.chunks) {
             int cx = Land.kx(k), cz = Land.kz(k);

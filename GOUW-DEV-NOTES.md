@@ -1,7 +1,7 @@
 # Gouw — geheugen/voortgang (houd dit file bij TIJDENS het werk)
 
-Laatst bijgewerkt: 2026-10-25 20:35 (sessie 2 — vorige sessie liep vast; alles hieronder is gedaan
-behalve het in-game-gedeelte).
+Laatst bijgewerkt: 2026-11-08 (sessie 4 — zie "Sessie 2026-11-08" onderaan).
+
 
 ## Wat is Gouw
 In-house opvolger van de (betaalde) **Lands** plugin: chunk-land claims.
@@ -104,3 +104,22 @@ beschermen zelf stond uit. Fix: handler gesplitst in onBucketFill/onBucketEmpty,
 - Bypass = per-speler toggle-set (geen permissie-check overal).
 - Trust-flow: chat-naam → UUID (zoals Relics gift box); async-chat + main-thread scheduler.
 - API-valken: SkullMeta is setOwningPlayer/getOwningPlayer (GEEN ...OfflinePlayer-varianten).
+
+## Sessie 2026-11-08 (deze machine: Linux, ~/projecten/iekcorbar-final)
+- NOTITIES LIEPEN ACHTER: wat hierboven staat stopt bij 0.2.1 (26 okt). Daarna, alleen uit de
+  git-log: 0.3.0 = chunk-limiet per rank (`gouw.chunks.<n>`, c1312125) en buychunks/bonus per
+  speler + "Land Surveyor"-quest (061d3031). Zie die commits voor details; aanvullen bij next werk.
+- **Bug-fix 0.3.1: border-deeltjes te klein/licht** (gedrag: wel zichtbaar maar flets/goudstof-dopje).
+  Oorzaak in Border.java: `DustOptions` met size 1.1f/1.2f en lichte goudtint (225,180,90 /
+  255,210,110) — op licht terrein nauwelijks te zien. Fix: verzadigd amber (255,158,30 chunk-omlijning,
+  255,178,45 volledige border) + size 2.6f/3.0f. DeeltjesAANTALlen/timing unchanged (spacing 2,
+  cap 160 chunks, 5 pulses via command+menu).
+- Bouwen op deze machine: `/home/baaye/tools/apache-maven-3.9.9/bin/mvn -q package` in `Gouw/`
+  (JDK 25.0.5; de Windows-pad-notities hierboven zijn niet meer actueel). Waarschuwingen over
+  jansi/Unsafe zijn Maven-eigen ruis op JDK 25, niet de build.
+- Artefact: `Gouw/target/Gouw-0.3.1.jar` → gekopieerd naar `deploy/Gouw-0.3.1.jar` (deploy/ is
+  git-ignored, jars worden daar niet getrackt).
+- **Open: in-game testen (gebruiker, server):** Gouw-0.3.1.jar → plugins/, herstart, en loop een
+  gouw-omlijning na (`/gouw border` + inlopen). Wordt het te grof/klein? size in Border.java
+  CHUNK_GOLD/BORDER_GOLD constanten bijstellen (2.0 = subtiel, 3.5 = grof).
+
