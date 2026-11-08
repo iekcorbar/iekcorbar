@@ -395,7 +395,7 @@ final class Decor implements Listener {
         Quaternionf q = new Quaternionf();
         // an item display shows the model turned 180 degrees about Y (north face towards the south), so every prop gets
         // a half turn on top of its facing: the model's front (north, -Z) then really points the way the prop faces
-        q.rotateY((float) Math.toRadians(r.def.connect && !r.def.oriented ? 180 : yaw(r.facing)));
+        q.rotateY((float) Math.toRadians(r.def.connect && !r.def.oriented ? 180 : yaw(r.facing) + 180));
         Vector3f up = new Vector3f(0, (ts - 1) * 0.5f, 0);
         if (r.wall) up.add(new Vector3f(r.facing.getDirection().toVector3f()).mul(-0.0f));
         return new Transformation(up, q, new Vector3f(s, s, s), new Quaternionf());

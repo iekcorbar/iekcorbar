@@ -9,7 +9,7 @@ export const WHATS_NEW = [
     tag: 'Wildlife',
     link: { href: '/wildlife', label: 'Wildlife guide' },
     items: [
-      'Five new Will-o\\'wisps now drift through the night: green (draws monsters), red (hunts you), gold (leaves a gift), white (heals) and purple (speed and jump).',
+      'Five new Will-o\'wisps now drift through the night: green (draws monsters), red (hunts you), gold (leaves a gift), white (heals) and purple (speed and jump).',
       'A Kappa waits in rivers and swamps, tugging at swimmers.',
       'A Tengu rides the wind above the mountain peaks and lifts those below.',
       'A clockwork Automaton patrols the caves on heavy, ticking steps.',

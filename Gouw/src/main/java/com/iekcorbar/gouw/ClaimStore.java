@@ -51,6 +51,23 @@ final class ClaimStore {
                 }
                 if (o.has("trusted"))
                     for (JsonElement t : o.getAsJsonArray("trusted")) l.trusted.add(UUID.fromString(t.getAsString()));
+                if (o.has("banned"))
+                    for (JsonElement t : o.getAsJsonArray("banned")) l.banned.add(UUID.fromString(t.getAsString()));
+                if (o.has("rentals")) {
+                    JsonObject ro = o.getAsJsonObject("rentals");
+                    for (Map.Entry<String, JsonElement> ren : ro.entrySet()) {
+                        try { l.rentals.put(UUID.fromString(ren.getKey()), ren.getValue().getAsLong()); } catch (Exception ignored) { }
+                    }
+                }
+                if (o.has("welcome")) l.welcome = o.get("welcome").getAsString();
+                if (o.has("home") && o.get("home").isJsonObject()) {
+                    JsonObject h = o.getAsJsonObject("home");
+                    l.homeWorld = h.get("world").getAsString();
+                    l.homeX = h.get("x").getAsInt();
+                    l.homeY = h.get("y").getAsInt();
+                    l.homeZ = h.get("z").getAsInt();
+                    l.hasHome = true;
+                }
                 if (o.has("flags")) {
                     l.memberFlags.clear();
                     for (JsonElement f : o.getAsJsonArray("flags")) l.memberFlags.add(Land.Flag.valueOf(f.getAsString()));
@@ -85,7 +102,23 @@ final class ClaimStore {
                 ft = false;
                 sb.append('"').append(u).append('"');
             }
-            sb.append("], \"flags\": [");
+            sb.append("], \"banned\": [");
+            boolean fb = true;
+            for (UUID u : l.banned) {
+                if (!fb) sb.append(", ");
+                fb = false;
+                sb.append('"').append(u).append('"');
+            }
+            sb.append("], \"rentals\": {");
+            boolean fr = true;
+            for (Map.Entry<UUID, Long> e : l.rentals.entrySet()) {
+                if (!fr) sb.append(", ");
+                fr = false;
+                sb.append('"').append(e.getKey()).append("\": ").append(e.getValue());
+            }
+            sb.append("}, \"welcome\": \"").append(esc(l.welcome)).append("\"");
+            if (l.hasHome) sb.append(", \"home\": {\"world\": \"").append(esc(l.homeWorld)).append("\", \"x\": ").append(l.homeX).append(", \"y\": ").append(l.homeY).append(", \"z\": ").append(l.homeZ).append("}");
+            sb.append(", \"flags\": [");
             boolean ff = true;
             for (Land.Flag f : Land.Flag.values()) {
                 if (!l.memberFlags.contains(f)) continue;
@@ -212,8 +245,85 @@ final class ClaimStore {
 
     boolean untrust(Land l, UUID who) {
         if (!l.trusted.remove(who)) return false;
+        l.rentals.remove(who);
         save();
         return true;
+    }
+
+    boolean ban(Land l, UUID who) {
+        if (who.equals(l.owner)) return false;
+        l.trusted.remove(who);
+        l.rentals.remove(who);
+        if (!l.banned.add(who)) return false;
+        save();
+        return true;
+    }
+
+    boolean unban(Land l, UUID who) {
+        if (!l.banned.remove(who)) return false;
+        save();
+        return true;
+    }
+
+    void setWelcome(Land l, String text) {
+        l.welcome = text;
+        save();
+    }
+
+    void setHome(Land l, org.bukkit.Location loc) {
+        l.homeWorld = loc.getWorld().getName();
+        l.homeX = loc.getBlockX();
+        l.homeY = loc.getBlockY();
+        l.homeZ = loc.getBlockZ();
+        l.hasHome = true;
+        save();
+    }
+
+    /** Transfer ownership of the whole gouw to another player. Returns null on success. */
+    String transfer(Land l, UUID newOwner, String newName) {
+        if (byOwner.containsKey(newOwner)) return "that player already owns a gouw";
+        byOwner.remove(l.owner);
+        l.owner = newOwner;
+        l.name = newName;
+        byOwner.put(newOwner, l);
+        l.trusted.remove(newOwner);
+        l.banned.remove(newOwner);
+        save();
+        return null;
+    }
+
+    /** Rent: grant trusted access for `days` days in exchange for a price (charged by caller). */
+    void rent(Land l, UUID who, int days) {
+        long until = System.currentTimeMillis() + (long) days * 24L * 60L * 60L * 1000L;
+        l.rentals.put(who, until);
+        l.trusted.add(who);
+        save();
+    }
+
+    /** Remove expired rentals. Returns number removed. */
+    int expireRentals() {
+        long now = System.currentTimeMillis();
+        int n = 0;
+        for (Land l : byOwner.values()) {
+            java.util.Iterator<Map.Entry<UUID, Long>> it = l.rentals.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<UUID, Long> e = it.next();
+                if (e.getValue() <= now) {
+                    it.remove();
+                    l.trusted.remove(e.getKey());
+                    n++;
+                }
+            }
+        }
+        if (n > 0) save();
+        return n;
+    }
+
+    /** Sorted list of all gouwen by chunk count (desc). */
+    java.util.List<Land> top() {
+        java.util.List<Land> out = new java.util.ArrayList<>(byOwner.values());
+        out.sort((a, b) -> Integer.compare(b.chunks.size(), a.chunks.size()));
+        return out;
     }
 
     /** Used by the importer and by claim(): merge into an existing owner's gouw. */

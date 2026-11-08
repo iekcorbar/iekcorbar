@@ -99,6 +99,10 @@ final class GouwCommand implements TabExecutor {
                 if (l == null || l.trusted.isEmpty()) { msg(p, "You trust nobody yet - /gouw trust <player>", NamedTextColor.GRAY); return true; }
                 msg(p, "Trusted in " + l.name + ":", NamedTextColor.GOLD);
                 for (UUID u : l.trusted) msg(p, " - " + nameOf(u), NamedTextColor.GRAY);
+                if (!l.banned.isEmpty()) {
+                    msg(p, "Banned:", NamedTextColor.RED);
+                    for (UUID u : l.banned) msg(p, " - " + nameOf(u), NamedTextColor.GRAY);
+                }
             }
             case "rename" -> {
                 Land l = store.landOf(p.getUniqueId());
@@ -114,6 +118,7 @@ final class GouwCommand implements TabExecutor {
                 Land l = here;
                 msg(p, l.name + " - gouw of " + nameOf(l.owner) + " in " + l.world, NamedTextColor.GOLD);
                 msg(p, " " + l.chunks.size() + " chunk(s), " + l.trusted.size() + " trusted - you are " + (l.owner.equals(p.getUniqueId()) ? "the owner" : l.trusted.contains(p.getUniqueId()) ? "a trusted member" : "a stranger") + ".", NamedTextColor.GRAY);
+                if (l.hasHome) msg(p, " Home set at " + l.homeX + ", " + l.homeY + ", " + l.homeZ + ".", NamedTextColor.DARK_GRAY);
                 if (l.owner.equals(p.getUniqueId())) {
                     int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks(p);
                     if (max != Integer.MAX_VALUE) msg(p, " Space left: " + (max - l.chunks.size()) + " chunk(s) (limit " + max + ").", NamedTextColor.DARK_GRAY);
@@ -147,6 +152,140 @@ final class GouwCommand implements TabExecutor {
                 if (here == null || here.owner.equals(p.getUniqueId())) { msg(p, "Nothing to leave here.", NamedTextColor.GRAY); return true; }
                 if (store.untrust(here, p.getUniqueId())) msg(p, "You left the gouw of " + here.name + ".", NamedTextColor.GOLD);
                 else msg(p, "You were not a member there.", NamedTextColor.GRAY);
+            }
+            case "ban" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null) { msg(p, "You have no gouw.", NamedTextColor.GRAY); return true; }
+                if (a.length < 2) { msg(p, "/" + label + " ban <player>", NamedTextColor.RED); return true; }
+                UUID who = uuidOf(a[1]);
+                if (who == null) { msg(p, "Player '" + a[1] + "' is not known.", NamedTextColor.RED); return true; }
+                if (who.equals(p.getUniqueId())) { msg(p, "You cannot ban yourself.", NamedTextColor.RED); return true; }
+                if (store.ban(l, who)) msg(p, a[1] + " is now banned from your gouw.", NamedTextColor.GOLD);
+                else msg(p, a[1] + " was already banned.", NamedTextColor.GRAY);
+            }
+            case "unban" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null) { msg(p, "You have no gouw.", NamedTextColor.GRAY); return true; }
+                if (a.length < 2) { msg(p, "/" + label + " unban <player>", NamedTextColor.RED); return true; }
+                UUID who = uuidOf(a[1]);
+                if (who == null) { msg(p, "Player '" + a[1] + "' is not known.", NamedTextColor.RED); return true; }
+                if (store.unban(l, who)) msg(p, a[1] + " is no longer banned.", NamedTextColor.GREEN);
+                else msg(p, a[1] + " was not banned.", NamedTextColor.GRAY);
+            }
+            case "welcome" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null) { msg(p, "Claim a chunk first.", NamedTextColor.GRAY); return true; }
+                if (a.length < 2) { msg(p, "/" + label + " welcome <text> (or 'clear')", NamedTextColor.RED); return true; }
+                if (a[1].equalsIgnoreCase("clear")) { store.setWelcome(l, ""); msg(p, "Welcome message cleared.", NamedTextColor.GREEN); }
+                else { String t = String.join(" ", List.of(a).subList(1, a.length)); store.setWelcome(l, t); msg(p, "Welcome message set.", NamedTextColor.GREEN); }
+            }
+            case "sethome" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null || !l.has(p.getLocation().getBlockX() >> 4, p.getLocation().getBlockZ() >> 4) || !l.world.equals(p.getWorld().getName())) {
+                    msg(p, "Stand inside your own gouw to set a home.", NamedTextColor.RED); return true;
+                }
+                store.setHome(l, p.getLocation());
+                msg(p, "Home set inside your gouw.", NamedTextColor.GREEN);
+            }
+            case "home" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null || !l.hasHome) { msg(p, "You have no gouw home - use /" + label + " sethome.", NamedTextColor.GRAY); return true; }
+                World w2 = Bukkit.getWorld(l.homeWorld);
+                if (w2 == null) { msg(p, "Your gouw's world is not loaded.", NamedTextColor.RED); return true; }
+                p.teleport(new Location(w2, l.homeX + 0.5, l.homeY, l.homeZ + 0.5));
+                msg(p, "Teleported to your gouw home.", NamedTextColor.GREEN);
+            }
+            case "chat", "c" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null) l = store.land(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
+                if (l == null) { msg(p, "You are not in a gouw.", NamedTextColor.GRAY); return true; }
+                if (!l.isMember(p.getUniqueId()) && !p.hasPermission("gouw.admin")) { msg(p, "You are not a member of this gouw.", NamedTextColor.RED); return true; }
+                if (a.length < 2) { msg(p, "/" + label + " chat <message>", NamedTextColor.RED); return true; }
+                String m = String.join(" ", List.of(a).subList(1, a.length));
+                Component comp = Component.text("[" + l.name + "] " + p.getName() + ": " + m, NamedTextColor.AQUA);
+                for (Player on : Bukkit.getOnlinePlayers()) {
+                    if (l.isMember(on.getUniqueId()) || on.getUniqueId().equals(l.owner) || on.hasPermission("gouw.admin")) on.sendMessage(comp);
+                }
+            }
+            case "transfer" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null) { msg(p, "You have no gouw to transfer.", NamedTextColor.GRAY); return true; }
+                if (a.length < 2) { msg(p, "/" + label + " transfer <player>", NamedTextColor.RED); return true; }
+                UUID who = uuidOf(a[1]);
+                if (who == null) { msg(p, "Player '" + a[1] + "' is not known.", NamedTextColor.RED); return true; }
+                if (who.equals(p.getUniqueId())) { msg(p, "That is already yours.", NamedTextColor.GRAY); return true; }
+                if (store.landOf(who) != null) { msg(p, a[1] + " already owns a gouw.", NamedTextColor.RED); return true; }
+                String err = store.transfer(l, who, a[1] + "'s gouw");
+                if (err != null) msg(p, err, NamedTextColor.RED);
+                else { msg(p, "Gouw transferred to " + a[1] + ".", NamedTextColor.GREEN); Player onl = Bukkit.getPlayer(who); if (onl != null) msg(onl, "You now own the gouw '" + l.name + "'.", NamedTextColor.GOLD); }
+            }
+            case "sell" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null) { msg(p, "You have no gouw to sell.", NamedTextColor.GRAY); return true; }
+                if (a.length < 3) { msg(p, "/" + label + " sell <buyer> <price>", NamedTextColor.RED); return true; }
+                UUID buyer = uuidOf(a[1]);
+                if (buyer == null) { msg(p, "Buyer '" + a[1] + "' is not known.", NamedTextColor.RED); return true; }
+                if (buyer.equals(p.getUniqueId())) { msg(p, "You cannot sell to yourself.", NamedTextColor.RED); return true; }
+                int price;
+                try { price = Integer.parseInt(a[2]); } catch (NumberFormatException ex) { msg(p, "Price must be a number.", NamedTextColor.RED); return true; }
+                if (price < 0) { msg(p, "Price must be >= 0.", NamedTextColor.RED); return true; }
+                Player buyerP = Bukkit.getPlayer(buyer);
+                if (buyerP == null) { msg(p, "Buyer must be online to complete the sale.", NamedTextColor.RED); return true; }
+                if (store.landOf(buyer) != null) { msg(p, buyerP.getName() + " already owns a gouw.", NamedTextColor.RED); return true; }
+                try {
+                    Class<?> eco = Class.forName("net.milkbowl.vault.economy.Economy");
+                    var rsp = Bukkit.getServicesManager().getRegistration(eco);
+                    if (rsp == null) { msg(p, "No economy plugin available.", NamedTextColor.RED); return true; }
+                    Object e = rsp.getProvider();
+                    if (!(boolean) eco.getMethod("has", org.bukkit.OfflinePlayer.class, double.class).invoke(e, buyerP, (double) price)) {
+                        msg(p, buyerP.getName() + " cannot afford " + price + ".", NamedTextColor.RED); return true;
+                    }
+                    Object r = eco.getMethod("withdrawPlayer", org.bukkit.OfflinePlayer.class, double.class).invoke(e, buyerP, (double) price);
+                    if (!(boolean) r.getClass().getMethod("transactionSuccess").invoke(r)) { msg(p, "Payment failed.", NamedTextColor.RED); return true; }
+                    if (price > 0) eco.getMethod("depositPlayer", org.bukkit.OfflinePlayer.class, double.class).invoke(e, p, (double) price);
+                } catch (ReflectiveOperationException ex) { msg(p, "Economy error: " + ex.getMessage(), NamedTextColor.RED); return true; }
+                String err2 = store.transfer(l, buyer, buyerP.getName() + "'s gouw");
+                if (err2 != null) { msg(p, err2, NamedTextColor.RED); return true; }
+                msg(p, "Gouw sold to " + buyerP.getName() + " for " + price + ".", NamedTextColor.GREEN);
+                msg(buyerP, "You bought the gouw '" + l.name + "' for " + price + ".", NamedTextColor.GOLD);
+            }
+            case "rent" -> {
+                Land l = store.landOf(p.getUniqueId());
+                if (l == null) { msg(p, "You have no gouw to rent out.", NamedTextColor.GRAY); return true; }
+                if (a.length < 4) { msg(p, "/" + label + " rent <player> <days> <price>", NamedTextColor.RED); return true; }
+                UUID who = uuidOf(a[1]);
+                if (who == null) { msg(p, "Player '" + a[1] + "' is not known.", NamedTextColor.RED); return true; }
+                int days, price;
+                try { days = Integer.parseInt(a[2]); price = Integer.parseInt(a[3]); } catch (NumberFormatException ex) { msg(p, "Numbers please.", NamedTextColor.RED); return true; }
+                if (days <= 0 || price < 0) { msg(p, "Days must be > 0, price >= 0.", NamedTextColor.RED); return true; }
+                Player renter = Bukkit.getPlayer(who);
+                if (price > 0 && renter != null) {
+                    try {
+                        Class<?> eco = Class.forName("net.milkbowl.vault.economy.Economy");
+                        var rsp = Bukkit.getServicesManager().getRegistration(eco);
+                        if (rsp != null) {
+                            Object e = rsp.getProvider();
+                            if (!(boolean) eco.getMethod("has", org.bukkit.OfflinePlayer.class, double.class).invoke(e, renter, (double) price)) {
+                                msg(p, renter.getName() + " cannot afford " + price + ".", NamedTextColor.RED); return true;
+                            }
+                            Object r = eco.getMethod("withdrawPlayer", org.bukkit.OfflinePlayer.class, double.class).invoke(e, renter, (double) price);
+                            if (!(boolean) r.getClass().getMethod("transactionSuccess").invoke(r)) { msg(p, "Payment failed.", NamedTextColor.RED); return true; }
+                            if (price > 0) eco.getMethod("depositPlayer", org.bukkit.OfflinePlayer.class, double.class).invoke(e, p, (double) price);
+                        }
+                    } catch (ReflectiveOperationException ex) { msg(p, "Economy error: " + ex.getMessage(), NamedTextColor.RED); return true; }
+                }
+                store.rent(l, who, days);
+                msg(p, a[1] + " may now use your gouw for " + days + " day(s).", NamedTextColor.GREEN);
+                if (renter != null) msg(renter, "You rented access to " + l.name + " for " + days + " day(s).", NamedTextColor.GOLD);
+            }
+            case "top" -> {
+                msg(p, "Top gouwen by chunks claimed:", NamedTextColor.GOLD);
+                int i = 1;
+                for (Land o : store.top()) {
+                    if (i > 10) break;
+                    msg(p, " " + i + ". " + o.name + " - " + o.chunks.size() + " chunks (" + nameOf(o.owner) + ")", NamedTextColor.GRAY);
+                    i++;
+                }
             }
             case "menu" -> plugin.menu().open(p);
             default -> help(s, p.hasPermission("gouw.admin"));
@@ -239,13 +378,21 @@ final class GouwCommand implements TabExecutor {
                 {"autoclaim [r]", "claim a square of chunks around you (r in chunks, default 2)"},
                 {"unclaim | unclaim all", "release a chunk or your whole gouw"},
                 {"trust <player> / untrust <player>", "share your gouw with friends"},
-                {"members", "who you trust"},
+                {"members", "who you trust (and banned)"},
                 {"rename <name>", "name your gouw"},
                 {"info / list / near [r]", "what is around you"},
                 {"border", "see your gouw's outline"},
                 {"leave", "step out of a gouw you were trusted in"},
+                {"ban <player> / unban <player>", "ban or unban a player"},
+                {"welcome <text>", "set a welcome message (or 'clear')"},
+                {"sethome / home", "set & teleport to your gouw home"},
+                {"chat <msg> (or c)", "talk to your gouw members"},
+                {"transfer <player>", "give your gouw to someone"},
+                {"sell <buyer> <price>", "sell your gouw for money"},
+                {"rent <player> <days> <price>", "rent access to your gouw"},
+                {"top", "gouwen with the most chunks"},
         }) msg(s, " /gouw " + h[0] + " - " + h[1], NamedTextColor.GRAY);
-        if (staff) msg(s, " staff: /gouw admin delete|import|reload|bypass", NamedTextColor.DARK_GRAY);
+        if (staff) msg(s, " staff: /gouw admin delete|import|reload|bypass|addchunks|buychunks", NamedTextColor.DARK_GRAY);
     }
 
     /** Online player first, then the profile cache (must have joined at least once). */
@@ -267,9 +414,9 @@ final class GouwCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "unclaim", "trust", "untrust", "members", "rename", "info", "list", "near", "border", "leave", "admin"})
+            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "unclaim", "trust", "untrust", "members", "rename", "info", "list", "near", "border", "leave", "ban", "unban", "welcome", "sethome", "home", "chat", "c", "transfer", "sell", "rent", "top", "admin"})
                 if (v.startsWith(last)) out.add(v);
-        } else if (a.length == 2 && (a[0].equalsIgnoreCase("trust") || a[0].equalsIgnoreCase("untrust"))) {
+        } else if (a.length == 2 && (a[0].equalsIgnoreCase("trust") || a[0].equalsIgnoreCase("untrust") || a[0].equalsIgnoreCase("ban") || a[0].equalsIgnoreCase("unban") || a[0].equalsIgnoreCase("transfer") || a[0].equalsIgnoreCase("sell") || a[0].equalsIgnoreCase("rent"))) {
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
         } else if (a.length == 2 && a[0].equalsIgnoreCase("unclaim")) {
             if ("all".startsWith(last)) out.add("all");

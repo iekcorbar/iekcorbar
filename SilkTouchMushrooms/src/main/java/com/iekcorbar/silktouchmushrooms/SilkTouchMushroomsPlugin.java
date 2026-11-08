@@ -10,8 +10,14 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Lets red/brown mushrooms be picked up with Silk Touch (vanilla drops them as items). */
+import java.util.Set;
+
+/** Lets mushrooms (small and big) be picked up as blocks with Silk Touch. */
 public class SilkTouchMushroomsPlugin extends JavaPlugin implements Listener {
+    private static final Set<Material> MUSHROOMS = Set.of(
+            Material.RED_MUSHROOM, Material.BROWN_MUSHROOM,
+            Material.RED_MUSHROOM_BLOCK, Material.BROWN_MUSHROOM_BLOCK, Material.MUSHROOM_STEM);
+
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
@@ -21,7 +27,7 @@ public class SilkTouchMushroomsPlugin extends JavaPlugin implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent e) {
         Block b = e.getBlock();
-        if (b.getType() != Material.RED_MUSHROOM && b.getType() != Material.BROWN_MUSHROOM) return;
+        if (!MUSHROOMS.contains(b.getType())) return;
         ItemStack tool = e.getPlayer().getInventory().getItemInMainHand();
         if (tool == null || !tool.containsEnchantment(Enchantment.SILK_TOUCH)) return;
         // cancel default drop and drop the block itself

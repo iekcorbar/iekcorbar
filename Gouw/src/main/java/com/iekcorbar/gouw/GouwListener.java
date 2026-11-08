@@ -147,7 +147,6 @@ final class GouwListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
-        if (!plugin.enterMessages()) return;
         var from = e.getFrom();
         var to = e.getTo();
         if (from.getBlockX() >> 4 == to.getBlockX() >> 4 && from.getBlockZ() >> 4 == to.getBlockZ() >> 4) return;
@@ -155,11 +154,19 @@ final class GouwListener implements Listener {
         World w = to.getWorld();
         Land before = store.land(w, from.getBlockX(), from.getBlockZ());
         Land now = store.land(w, to.getBlockX(), to.getBlockZ());
+        // banned players may not enter
+        if (now != null && now.isBanned(p.getUniqueId()) && !p.hasPermission("gouw.admin")) {
+            e.setTo(from.clone());
+            p.sendActionBar(Component.text("You are banned from " + now.name + ".", NamedTextColor.RED));
+            return;
+        }
         if (before == now) return;
+        if (!plugin.enterMessages()) return;
         if (now != null) {
-            boolean member = now.isMember(p.getUniqueId());
+            boolean member = now.isMember(p.getUniqueId()) || now.isRented(p.getUniqueId());
             p.sendActionBar(Component.text("You enter the gouw of " + now.name + (member ? " (you are a member)." : "."),
                     member ? NamedTextColor.GREEN : NamedTextColor.GOLD));
+            if (!now.welcome.isEmpty()) p.sendMessage(Component.text(now.welcome, NamedTextColor.AQUA));
             Border.chunk(w, to.getBlockX() >> 4, to.getBlockZ() >> 4);
         } else if (before != null) {
             p.sendActionBar(Component.text("Out in the open again.", NamedTextColor.YELLOW));

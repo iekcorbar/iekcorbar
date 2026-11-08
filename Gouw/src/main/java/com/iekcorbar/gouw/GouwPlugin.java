@@ -59,6 +59,8 @@ public final class GouwPlugin extends JavaPlugin {
     private void expireTick() {
         int n = expiry.check();
         if (n > 0) getLogger().info("Expire check released " + n + " gouw(s) of inactive owners.");
+        int r = store.expireRentals();
+        if (r > 0) getLogger().info("Expired " + r + " rental(s).");
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.iekcorbar.gouw;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,7 +22,13 @@ final class Land {
     final String world;
     final Set<Long> chunks = new LinkedHashSet<>();
     final Set<UUID> trusted = new LinkedHashSet<>();
+    final Set<UUID> banned = new LinkedHashSet<>();
+    final Map<UUID, Long> rentals = new HashMap<>(); // player -> expiry epoch millis
     final Set<Flag> memberFlags = EnumSet.allOf(Flag.class);
+    String welcome = ""; // custom message shown on enter
+    String homeWorld = null;
+    int homeX = 0, homeY = 0, homeZ = 0;
+    boolean hasHome = false;
 
     Land(String name, UUID owner, String world) {
         this.name = name;
@@ -48,7 +56,20 @@ final class Land {
         return owner.equals(who) || trusted.contains(who);
     }
 
+    boolean isBanned(UUID who) {
+        return banned.contains(who);
+    }
+
+    boolean isRented(UUID who) {
+        Long until = rentals.get(who);
+        return until != null && until > System.currentTimeMillis();
+    }
+
     boolean may(UUID who, Flag f) {
-        return owner.equals(who) || (trusted.contains(who) && memberFlags.contains(f));
+        if (owner.equals(who)) return true;
+        if (banned.contains(who)) return false;
+        if (trusted.contains(who)) return memberFlags.contains(f);
+        if (isRented(who)) return memberFlags.contains(f);
+        return false;
     }
 }
