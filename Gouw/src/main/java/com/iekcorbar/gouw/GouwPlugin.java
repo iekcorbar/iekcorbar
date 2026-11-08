@@ -26,6 +26,7 @@ public final class GouwPlugin extends JavaPlugin {
     private GouwListener listener;
     private GouwMenu menu;
     private Expiry expiry;
+    private Adv adv;
     private final Set<UUID> bypassing = new HashSet<>();
     /** Extra chunks a player bought (contract NPC), on top of the rank limit. Saved in bonus.yml. */
     private final java.util.Map<UUID, Integer> bonus = new java.util.HashMap<>();
@@ -50,6 +51,8 @@ public final class GouwPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(listener, this);
         menu = new GouwMenu(this);
         getServer().getPluginManager().registerEvents(menu, this);
+        adv = Achievements.create(this);
+        adv.start();
         getServer().getScheduler().runTaskTimer(this, this::expireTick, 20L * 60, 20L * 3600);
         GouwCommand cmd = new GouwCommand(this);
         PluginCommand pc = getCommand("gouw");
@@ -62,6 +65,8 @@ public final class GouwPlugin extends JavaPlugin {
     private void expireTick() {
         int n = expiry.check();
         if (n > 0) getLogger().info("Expire check released " + n + " gouw(s) of inactive owners.");
+        int r = store.expireRentals();
+        if (r > 0) getLogger().info("Expired " + r + " rental(s).");
     }
 
     @Override
@@ -90,6 +95,10 @@ public final class GouwPlugin extends JavaPlugin {
 
     public Expiry expiry() {
         return expiry;
+    }
+
+    public Adv adv() {
+        return adv;
     }
 
     public int getMaxChunks() {

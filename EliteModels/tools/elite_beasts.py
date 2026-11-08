@@ -299,3 +299,118 @@ def cog_endermite(m):
     m.anim("walk", 0.4, {"body": {"rotation": mk.wave(8, 0.4, 12, 0, axis=1)}})
     m.anim("attack", 0.4, {"h_head": {"rotation": [(0, (0, 0, 0)), (0.15, (-25, 0, 0)), (0.4, (0, 0, 0))]}}, loop="once")
     m.anim("death", 0.5, {"root": {"rotation": [(0, (0, 0, 0)), (0.4, (0, 0, 180))], "position": [(0, (0, 0, 0)), (0.4, (0, 3, 0))]}}, loop="hold")
+
+
+@mob("em_spirit_fox")
+def spirit_fox(m):
+    """Spirit fox: slim body, long pointed snout, large ears, bushy tail, sakura-orange fur with a blue spirit glow."""
+    root_body(m, 5)
+    # slim body
+    m.box("body", -1.8, 3, -4, 1.8, 8, 4, "fur_brown")
+    m.box("body", -2.0, 6.6, -3.4, 2.0, 7.6, 3.4, "cloth_pink")                       # sakura collar
+    m.box("body", -2.2, 5.8, -3.0, 2.2, 6.8, 3.0, "brass")                            # brass band
+    # bushy tail (curved up)
+    m.bone("tail", (0, 5, 4), "body")
+    m.box("tail", -1.8, 2, 4, 1.8, 6, 9, "fur_white")                                  # tail base
+    m.box("tail", -2.2, 3, 7, 2.2, 7, 12, "fur_white_l")                               # tail mid (bushy)
+    m.box("tail", -1.6, 4.5, 10.5, 1.6, 7, 13.5, "fur_white")                         # tail tip
+    m.box("tail", -1.0, 5.5, 12.5, 1.0, 7.5, 14, "glow_orange")                       # spirit tip
+    # head
+    m.bone("h_head", (0, 6.5, -4), "body")
+    m.box("h_head", -1.8, 4.5, -8, 1.8, 8.5, -3.6, "fur_brown")
+    m.box("h_head", -1.2, 4.8, -10.6, 1.2, 7.2, -8, "fur_brown_l")                    # long pointed snout
+    m.box("h_head", -0.5, 5.0, -11.0, 0.5, 6.4, -10.6, "black")                       # nose
+    # large pointed ears
+    for x in (-1.8, 1.8):
+        m.box("h_head", x - 1.0, 8.5, -6.8, x + 1.0, 14.5, -5.6, "fur_brown_d")
+        m.box("h_head", x - 0.6, 9.2, -7.0, x + 0.6, 13.5, -6.6, "cloth_pink")        # inner ear
+    # spirit eyes (glowing blue)
+    m.box("h_head", -1.6, 6.6, -8.4, -0.4, 7.6, -8.0, "glass_blue")
+    m.box("h_head", 0.4, 6.6, -8.4, 1.6, 7.6, -8.0, "glass_blue")
+    m.box("h_head", -1.4, 6.8, -8.6, -0.6, 7.4, -8.2, "glow_orange")
+    m.box("h_head", 0.6, 6.8, -8.6, 1.4, 7.4, -8.2, "glow_orange")
+    # legs
+    quad_legs(m, 1.3, -3, 3, 4, 3, 0.8, 1.0, "fur_brown", "steel")
+    quad_anims(m, 0.55, 34, -28)
+
+
+@mob("em_frost_beast")
+def frost_beast(m):
+    """Frost beast: ice-plated quadruped with crystalline horns, frosty fur and glowing blue eyes."""
+    root_body(m, 14)
+    m.box("body", -6, 10, -9, 6, 22, 9, "frost")
+    # ice plates on the back
+    for z in (-5, -1, 3, 7):
+        m.box("body", -6.6, 20, z - 0.6, 6.6, 23, z + 0.6, "glass_blue")
+    m.box("body", -2.4, 22.6, -3, 2.4, 29, 5, "frost")                                # icy mane
+    m.box("body", -2.8, 24, -3.4, 2.8, 25.2, 5.4, "glass_blue")
+    m.bone("tail", (0, 18, 9), "body")
+    m.box("tail", -1.2, 15, 9, 1.2, 19, 17, "frost")
+    m.box("tail", -1.6, 16, 13, 1.6, 18.4, 16.5, "glass_blue")
+    m.bone("h_head", (0, 20, -9), "body")
+    m.box("h_head", -4, 16, -17, 4, 26, -8, "frost")
+    m.box("h_head", -3, 15, -20, 3, 20, -17, "frost")                                  # snout
+    for x in (-3.0, 3.0):
+        m.box("h_head", x - 0.6, 26, -15, x + 0.6, 34, -14, "glass_blue")              # ice horns
+        m.box("h_head", x - 0.4, 27, -15.4, x + 0.4, 33, -14.6, "frost")
+        m.box("h_head", x - 0.7, 20, -17.4, x + 0.7, 22, -16.8, "glow_orange" if False else "glass_blue")
+    m.box("h_head", -2.6, 20, -18.4, -0.6, 22.4, -17.6, "glass_blue")                  # glowing eyes
+    m.box("h_head", 0.6, 20, -18.4, 2.6, 22.4, -17.6, "glass_blue")
+    m.box("h_head", -2.2, 20.4, -18.6, -1.0, 22.0, -18.2, "white")
+    m.box("h_head", 1.0, 20.4, -18.6, 2.2, 22.0, -18.2, "white")
+    quad_legs(m, 3.6, -6, 6, 12, 6, 3, 3.2, "frost", "glass_blue")
+    quad_anims(m, 0.9, 24, -30)
+
+
+@mob("em_spring_hare")
+def spring_hare(m):
+    """Spring hare: lighter fur, flower crown, brass ears and a winding key, hopping animation."""
+    root_body(m, 4)
+    m.box("body", -2.4, 2, -3.5, 2.4, 7, 3.5, "rabbit_fur")
+    m.box("body", -2.6, 5.4, -3, 2.6, 6, 3, "cloth_green")
+    m.box("body", -0.3, 7, 0, 0.3, 10, 0.6, "brass")
+    m.box("body", -1.8, 9.6, -0.2, 1.8, 10.6, 0.8, "brass")
+    # flower crown
+    for x in (-1.6, 0, 1.6):
+        m.box("body", x - 0.6, 7.6, -0.6, x + 0.6, 8.6, 0.6, "cloth_pink")
+    m.bone("tail", (0, 4, 3.5), "body")
+    m.box("tail", -1.2, 3, 3.5, 1.2, 5.4, 5.6, "fur_white")
+    m.bone("h_head", (0, 5, -3.5), "body")
+    m.box("h_head", -2, 3, -7, 2, 7.4, -3, "rabbit_fur")
+    m.box("h_head", -0.6, 3.4, -7.4, 0.6, 4.6, -7, "pig_pink")
+    for x in (-1.2, 1.2):
+        m.box("h_head", x - 0.5, 7.4, -5.6, x + 0.5, 15.5, -4.6, "brass")
+        m.box("h_head", x - 0.3, 8, -5.8, x + 0.3, 14.5, -5.6, "copper")
+    m.box("h_head", -1.8, 5.4, -7.2, -0.8, 6.4, -7.0, "glow_orange")
+    m.box("h_head", 0.8, 5.4, -7.2, 1.8, 6.4, -7.0, "glow_orange")
+    quad_legs(m, 1.6, -2, 2.6, 3.2, 2, 1, 1.4, "rabbit_fur", "steel")
+    quad_anims(m, 0.5, 40, -25)
+
+
+@mob("em_harvest_ravager")
+def harvest_ravager(m):
+    """Harvest ravager: autumn-plated beast with leaf-crown, pumpkin-orange accents and a hay bale back."""
+    root_body(m, 20)
+    m.box("body", -8, 14, -10, 8, 30, 12, "fur_dark")
+    m.box("body", -8.5, 26, -10, 8.5, 30.6, 12, "wood")                               # back plate (wood)
+    for z in (-6, 0, 6):
+        m.box("body", -8.7, 25, z - 0.4, 8.7, 31, z + 0.4, "cloth_pink")              # leaf bands
+    m.box("body", -5, 30.6, -4, 5, 40, 8, "cloth")                                     # hay bale
+    m.box("body", -5.2, 34, -4.2, 5.2, 35, 8.2, "brass")
+    m.box("body", -1.6, 40, 0, 1.6, 47, 3.2, "steel")
+    m.box("body", -2.2, 47, -0.6, 2.2, 48.4, 3.8, "soot")
+    # leaf crown on back
+    for x in (-4, -2, 0, 2, 4):
+        m.box("body", x - 0.6, 40, -1, x + 0.6, 42, 0.4, "cloth_green")
+    m.bone("tail", (0, 24, 12), "body")
+    m.box("tail", -1, 22, 12, 1, 25, 18, "fur_dark")
+    m.bone("h_head", (0, 28, -10), "body")
+    m.box("h_head", -5, 22, -20, 5, 34, -9, "wood")
+    m.box("h_head", -4, 18, -24, 4, 25, -14, "fur_dark")                                # jaw
+    for x in (-3, -1, 1, 3):
+        m.box("h_head", x - 0.4, 24.4, -23.6, x + 0.4, 27, -23, "tusk")
+    # glowing orange eyes
+    m.box("h_head", -2.6, 24, -19.4, -0.6, 26, -19, "glow_orange")
+    m.box("h_head", 0.6, 24, -19.4, 2.6, 26, -19, "glow_orange")
+    quad_legs(m, 4.6, -10, 10, 13, 8, 5, 5.2, "fur_dark", "wood")
+    quad_anims(m, 1.1, 20, -30)

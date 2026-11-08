@@ -74,6 +74,22 @@ final class ClaimStore {
                 } else {
                     l.memberFlags.addAll(Land.DEFAULT_FLAGS);
                 }
+                if (o.has("banned"))
+                    for (JsonElement t : o.getAsJsonArray("banned")) l.banned.add(UUID.fromString(t.getAsString()));
+                if (o.has("rentals")) {
+                    JsonObject ro = o.getAsJsonObject("rentals");
+                    for (Map.Entry<String, JsonElement> ren : ro.entrySet())
+                        try { l.rentals.put(UUID.fromString(ren.getKey()), ren.getValue().getAsLong()); } catch (Exception ignored) { }
+                }
+                if (o.has("welcome")) l.welcome = o.get("welcome").getAsString();
+                if (o.has("home") && o.get("home").isJsonObject()) {
+                    JsonObject h = o.getAsJsonObject("home");
+                    l.homeWorld = h.get("world").getAsString();
+                    l.homeX = h.get("x").getAsInt();
+                    l.homeY = h.get("y").getAsInt();
+                    l.homeZ = h.get("z").getAsInt();
+                    l.hasHome = true;
+                }
                 byOwner.put(l.owner, l);
             }
             return true;
@@ -137,7 +153,23 @@ final class ClaimStore {
                 ff = false;
                 sb.append('"').append(f.name()).append('"');
             }
-            sb.append("]}");
+            sb.append("], \"banned\": [");
+            boolean fb = true;
+            for (UUID u : l.banned) {
+                if (!fb) sb.append(", ");
+                fb = false;
+                sb.append('"').append(u).append('"');
+            }
+            sb.append("], \"rentals\": {");
+            boolean fr2 = true;
+            for (Map.Entry<UUID, Long> e : l.rentals.entrySet()) {
+                if (!fr2) sb.append(", ");
+                fr2 = false;
+                sb.append('"').append(e.getKey()).append("\": ").append(e.getValue());
+            }
+            sb.append("}, \"welcome\": \"").append(esc(l.welcome)).append("\"");
+            if (l.hasHome) sb.append(", \"home\": {\"world\": \"").append(esc(l.homeWorld)).append("\", \"x\": ").append(l.homeX).append(", \"y\": ").append(l.homeY).append(", \"z\": ").append(l.homeZ).append("}");
+            sb.append("}");
         }
         sb.append("\n  ]\n}\n");
         try {
@@ -284,6 +316,77 @@ final class ClaimStore {
     void rename(Land l, String name) {
         l.name = name;
         save();
+    }
+
+    boolean ban(Land l, UUID who) {
+        if (who.equals(l.owner)) return false;
+        l.ranks.remove(who);
+        l.perms.remove(who);
+        if (!l.banned.add(who)) return false;
+        save();
+        return true;
+    }
+
+    boolean unban(Land l, UUID who) {
+        if (!l.banned.remove(who)) return false;
+        save();
+        return true;
+    }
+
+    void setWelcome(Land l, String text) {
+        l.welcome = text;
+        save();
+    }
+
+    void setHome(Land l, org.bukkit.Location loc) {
+        l.homeWorld = loc.getWorld().getName();
+        l.homeX = loc.getBlockX();
+        l.homeY = loc.getBlockY();
+        l.homeZ = loc.getBlockZ();
+        l.hasHome = true;
+        save();
+    }
+
+    String transfer(Land l, UUID newOwner) {
+        if (byOwner.containsKey(newOwner)) return "that player already owns a gouw";
+        byOwner.remove(l.owner);
+        l.owner = newOwner;
+        l.ranks.remove(newOwner);
+        l.perms.remove(newOwner);
+        l.banned.remove(newOwner);
+        byOwner.put(newOwner, l);
+        save();
+        return null;
+    }
+
+    void rent(Land l, UUID who, int days) {
+        long until = System.currentTimeMillis() + (long) days * 24L * 60L * 60L * 1000L;
+        l.rentals.put(who, until);
+        if (!l.ranks.containsKey(who)) l.ranks.put(who, Land.Rank.RESIDENT);
+        save();
+    }
+
+    int expireRentals() {
+        long now = System.currentTimeMillis();
+        int n = 0;
+        for (Land l : byOwner.values()) {
+            java.util.Iterator<Map.Entry<UUID, Long>> it = l.rentals.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<UUID, Long> e = it.next();
+                if (e.getValue() <= now) {
+                    it.remove();
+                    n++;
+                }
+            }
+        }
+        if (n > 0) save();
+        return n;
+    }
+
+    java.util.List<Land> top() {
+        java.util.List<Land> out = new java.util.ArrayList<>(byOwner.values());
+        out.sort((a, b) -> Integer.compare(b.chunks.size(), a.chunks.size()));
+        return out;
     }
 
     boolean toggleFlag(Land l, Land.Flag f) {

@@ -407,3 +407,75 @@ def brass_enderman(m):
     m.anim("attack", 0.7, {"arm_l": {"rotation": [(0, (0, 0, 0)), (0.2, (-120, 0, -10)), (0.45, (30, 0, 0)), (0.7, (0, 0, 0))]},
                            "arm_r": {"rotation": [(0, (0, 0, 0)), (0.2, (-120, 0, 10)), (0.45, (30, 0, 0)), (0.7, (0, 0, 0))]}}, loop="once")
     m.anim("death", 0.9, {"root": {"rotation": [(0, (0, 0, 0)), (0.7, (90, 0, 0))], "position": [(0, (0, 0, 0)), (0.7, (0, 0, 4))]}}, loop="hold")
+
+
+@mob("em_clockwork_oni", 1.5)
+def clockwork_oni(m):
+    """Mechanical oni: iron demon with brass horns, steam vents, glowing red eyes and a boiler back."""
+    skeleton(m, "iron", "vest", "pants", boots="leather_dark")
+    # horns
+    for x in (-3.0, 3.0):
+        m.box("h_head", x - 1.2, 46, -3, x + 1.2, 52, 0, "brass")
+        m.box("h_head", x - 0.8, 52, -2.6, x + 0.8, 56, -0.4, "brass")
+        m.box("h_head", x - 0.6, 56, -2.2, x + 0.6, 58, -1.0, "steel")
+    # oni face mask
+    m.box("h_head", -4.2, 36, -4.8, 4.2, 40, -4.4, "iron_d")
+    m.box("h_head", -3.0, 40.2, -4.7, -0.6, 42.0, -4.4, "red_eye")                  # glowing eyes
+    m.box("h_head", 0.6, 40.2, -4.7, 3.0, 42.0, -4.4, "red_eye")
+    m.box("h_head", -1.6, 37.0, -4.9, 1.6, 38.4, -4.6, "soot")                       # mouth slit
+    # tusks
+    for x in (-2.4, 2.4):
+        m.box("h_head", x - 0.5, 36, -5.6, x + 0.5, 39.5, -4.8, "bone")
+    # steam vents on shoulders
+    for x in (-7.5, 7.5):
+        m.box("body", x - 1.4, 30, -1.4, x + 1.4, 33, 1.4, "steel")
+        m.box("body", x - 0.6, 33, -0.6, x + 0.6, 37, 0.6, "soot")
+    # boiler on back
+    boiler(m, "body")
+    # gear on chest
+    gear(m, "body", 0, 28, -5.6, 2.4, "brass")
+    # pipes
+    pipe(m, "body", -4, 22, -5.8, -7.5, 30, -1.4, "copper")
+    pipe(m, "body", 4, 22, -5.8, 7.5, 30, -1.4, "copper")
+    # rivets
+    for y in (24, 28, 32):
+        m.box("body", -9.2, y, -5.7, 9.2, y + 0.4, -5.5, "brass")
+    # arms: iron plates
+    for side, x in (("arm_l", 6), ("arm_r", -6)):
+        m.box(side, min(x - 2, x + 2), 10, -2.2, max(x - 2, x + 2), 22, 2.2, "iron_d")
+        m.box(side, min(x - 2.6, x + 2.6), 14, -2.6, max(x - 2.6, x + 2.6), 20, 2.6, "brass")
+    # legs
+    for side, x in (("leg_l", 2), ("leg_r", -2)):
+        m.box(side, x - 2.4, 0, -2.6, x + 2.4, 14, 2.6, "iron_d")
+        m.box(side, x - 2.6, 7, -2.8, x + 2.6, 8, 2.8, "brass")
+    humanoid_anims(m, arms_forward=0, walk_amp=24, arm_amp=16, attack="slam", period=0.9)
+
+
+@mob("em_summer_diver")
+def summer_diver(m):
+    """Summer diver: bright brass helmet, coral tank, lighter skin, warm-ocean palette."""
+    skeleton(m, "drown_skin", "prismarine", "prismarine_d", boots="steel")
+    face(m, eye="sea_lantern", mouth="soot", glow=False)
+    m.box("h_head", -5.2, 23.4, -5.2, 5.2, 33.4, 5.2, "brass")                      # helmet
+    m.box("h_head", -5.4, 27.6, -5.4, 5.4, 28.8, 5.4, "brass_l")                    # seam
+    m.box("h_head", -3.0, 25.4, -5.5, 3.0, 31.2, -5.2, "brass")                     # window frame
+    m.box("h_head", -2.4, 26.0, -5.7, 2.4, 30.6, -5.5, "glass_blue")
+    for x, y in ((-4.4, 24.4), (4.4, 24.4), (-4.4, 32.4), (4.4, 32.4)):
+        m.box("h_head", x - 0.4, y - 0.4, -5.5, x + 0.4, y + 0.4, -5.3, "copper")   # rivets
+    m.box("h_head", 4.8, 27, -1, 6.2, 29, 1, "iron")                                # hose socket
+    m.box("body", -3.6, 13, 2.2, 3.6, 24, 6.4, "copper")                            # air tank
+    for y in (15, 20):
+        m.box("body", -3.8, y, 2.1, 3.8, y + 1, 6.5, "brass")
+    m.box("body", -4.6, 22, -2.2, 4.6, 24.5, 2.2, "brass_d")                        # collar
+    m.box("arm_l", 3.6, 21, -2.5, 8.4, 24, 2.5, "steel")                            # pauldrons
+    m.box("arm_r", -8.4, 21, -2.5, -3.6, 24, 2.5, "steel")
+    for b, x in (("leg_l", 2), ("leg_r", -2)):
+        m.box(b, x - 2.5, 0, -2.8, x + 2.5, 2.4, 2.4, "steel_d")                    # lead boots
+    m.box("arm_r", -7.5, 9.5, -9.5, -4.5, 12.5, -2, "steel")                        # trident shaft
+    m.box("arm_r", -6.6, 10.4, -16, -5.4, 11.6, -9.5, "brass")
+    for x in (-7.2, -6.0, -4.8):
+        m.box("arm_r", x - 0.3, 9.8, -19, x + 0.3, 12.2, -16, "iron")
+    # coral accents
+    m.box("body", -2.0, 16, -2.4, 2.0, 18, -2.0, "cloth_pink")
+    m.box("arm_l", 4.0, 18, -2.0, 6.0, 20, -1.6, "cloth_pink")
+    humanoid_anims(m, arms_forward=60, walk_amp=22, arm_amp=12, attack="swing", period=1.0)

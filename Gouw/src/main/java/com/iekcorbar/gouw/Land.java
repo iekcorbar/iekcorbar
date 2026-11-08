@@ -45,6 +45,14 @@ final class Land {
     /** defaults handed to every new resident (toggled on the DEFAULTS menu page) */
     final Set<Flag> memberFlags = EnumSet.copyOf(DEFAULT_FLAGS);
 
+    /** extra fields for new features */
+    final Set<UUID> banned = new java.util.LinkedHashSet<>();
+    final Map<UUID, Long> rentals = new java.util.HashMap<>();
+    String welcome = "";
+    boolean hasHome = false;
+    String homeWorld = null;
+    int homeX, homeY, homeZ;
+
     Land(String name, UUID owner, String world) {
         this.name = name;
         this.owner = owner;
@@ -92,7 +100,16 @@ final class Land {
     }
 
     boolean may(UUID who, Flag f) {
+        if (banned.contains(who)) return false;
         if (owner.equals(who) || ranks.get(who) == Rank.ASSISTANT) return true;
+        if (rentals.containsKey(who) && rentals.get(who) > System.currentTimeMillis()) return rights(who).contains(f) || true;
         return ranks.containsKey(who) && rights(who).contains(f);
+    }
+
+    boolean isBanned(UUID who) { return banned.contains(who); }
+
+    boolean isRented(UUID who) {
+        Long until = rentals.get(who);
+        return until != null && until > System.currentTimeMillis();
     }
 }
