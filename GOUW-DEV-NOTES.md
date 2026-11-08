@@ -117,9 +117,43 @@ beschermen zelf stond uit. Fix: handler gesplitst in onBucketFill/onBucketEmpty,
 - Bouwen op deze machine: `/home/baaye/tools/apache-maven-3.9.9/bin/mvn -q package` in `Gouw/`
   (JDK 25.0.5; de Windows-pad-notities hierboven zijn niet meer actueel). Waarschuwingen over
   jansi/Unsafe zijn Maven-eigen ruis op JDK 25, niet de build.
-- Artefact: `Gouw/target/Gouw-0.3.1.jar` → gekopieerd naar `deploy/Gouw-0.3.1.jar` (deploy/ is
-  git-ignored, jars worden daar niet getrackt).
-- **Open: in-game testen (gebruiker, server):** Gouw-0.3.1.jar → plugins/, herstart, en loop een
-  gouw-omlijning na (`/gouw border` + inlopen). Wordt het te grof/klein? size in Border.java
-  CHUNK_GOLD/BORDER_GOLD constanten bijstellen (2.0 = subtiel, 3.5 = grof).
+- Artefact: jar → gekopieerd naar `deploy/` (deploy/ is git-ignored, jars worden daar niet getrackt).
+
+## 0.4.0 "Dorpen" — stadssysteem (gebruiker: "towny-achtig, wel factie geen allies/enemies")
+Ontwerp zoals afgesproken in deze sessie:
+- **Rangen**: eigenaar = burgemeester (nooit in `ranks`), leden = ASSISTANT of RESIDENT.
+  Adjunct mag beheren (claimen/unclaimen/uitnodigen/kicken/deposit/buy/withdraw), resident alleen
+  wonen+vlaggen. Promote/demote ALLEEN burgemeester. Wel factie, GEEN alliantie/oorlog.
+- **Claimen**: leden claimen INTO de gouw van hun burgemeester (`homeOf`); residents krijgen een
+  foutmelding ("vraag je burgemeester of word adjunct"). invites worden geweigerd als de doel nog
+  een eigen gouw heeft (1 gouw-per-speler-invariant blijft).
+- **Stadskas**: `bank` per land in claims.json. deposit = elk lid (eigen geld via Vault),
+  withdraw = burgemeester/adjunct. Koop-/withdrawnoemen via KAS-pagina (10/50/250, chunks 1/5/10).
+- ** Meer claims KOPEN in de plugin zelf**: `/gouw buy [n]` + buttons; prijs `price-per-chunk` (250),
+  per-gouw-plafond `town-buy-max` (100), betaald uit de KAS. Limiet = rank-limit burgemeester
+  (offline → config default + bonus) + `purchased`. Persoonlijke bonus (contract NPC) blijft.
+- **Taken/jobs = echte JobsReborn-jobs**: `JobsReader` leest `plugins/Jobs/config.yml` (section `jobs:`)
+  — geen API/compile-dep, geen DB; `/gouw jobs` + JOBS-menu-pagina tonen namen + salaris.
+  `Salaries` keurt per lid met taak elke `salary-hour` (default 7u) één keer per dag uit uit de
+  KAS (`salaries:` overrides, `default-salary: 50`, `salary-enabled`). Eén keer per DAG ook na
+  reboot: `meta.yml` last-salary-day. Te lege kas = overslaan + console regel. Staff:
+  `/gouw admin payroll` forceren.
+- **Data claims.json**: nieuwe velden `ranks`/`jobs`/`bank`/`purchased`; `trusted` wordt nog
+  GESCHREVEN (afgeleid) en nog GELEZEN (migration) — SiteSync GouwClaims hoeft er niet op verandert.
+  Oude files laden dus naadloos.
+- **Menu**: 27-slot hoofd (LAND/claim/auto/unclaim/border/BUY/flags/invite/MEMBERS/KAS/JOBS) +
+  LEDEN 54-slot (heads 10-16 + 19-43, klik promote/demote, shift kick, 45 invite, 49 back),
+  KAS, JOBS (54), FLAGS nu met mayManage-check.
+- Economie via `EconomyRef` (Vault reflectie; oude inline withdraw in GouwCommand vervangen).
+- Versie 0.4.0 (pom + plugin.yml; softdepend Jobs+Vault). `mvn -q package` groen;
+  `deploy/Gouw-0.4.0.jar`.
+- **Open: in-game testen (server, gebruiker)**, dan pas feel/price-tuning:
+  1. jar wisselen + herstart; claims.json wordt automatisch uitgebreid (oude trouwe leden → resident).
+  2. Test: claim als burgemeester, invite → resident kan NIET claimen, adjunct kan Wél; promote/demote;
+     kas volstorten, buy chunks (prijs/plafond), taak Assigneren (checkt Jobs-lijst), payroll een keer
+     force via `/gouw admin payroll` en kijken of Vault-deposit + kas-krimping kloppen.
+  3. Salarijs-per-job invullen in config `salaries:` (names = lowercase jobs-id's uit de live config).
+- Eventueel later: wiki-pagina's docs/wiki-gouw uitbreiden met dorpen; SiteSync-sitekaart met
+  burgemeester per gouw; town level (verhoogd rank-limit per inwoners-aantal)?
+
 

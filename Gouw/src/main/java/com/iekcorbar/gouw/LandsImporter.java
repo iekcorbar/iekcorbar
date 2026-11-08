@@ -108,7 +108,7 @@ final class LandsImporter {
                     for (int[] xy : chunksByLand.getOrDefault(ulid, List.of())) {
                         if (store.addChunk(l, xy[0], xy[1])) chunkCount++;
                     }
-                    l.trusted.addAll(trusted);
+                    for (UUID t : trusted) l.ranks.putIfAbsent(t, Land.Rank.RESIDENT);
                     lands++;
                 }
             }

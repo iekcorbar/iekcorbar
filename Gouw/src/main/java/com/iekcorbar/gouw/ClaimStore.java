@@ -18,14 +18,16 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * All gouwen in memory, saved as plain readable JSON (plugins/Gouw/claims.json): a few hundred lines of
- * name + owner + world + chunk list + trusted + member flags. Simple on purpose - the day Gouw itself is
- * replaced, the next plugin reads this file with the same ease Gouw reads Lands' database.
+ * All gouwen in memory, saved as plain readable JSON (plugins/Gouw/claims.json). Since 0.4 a gouw also
+ * carries town data: ranks (assistant/resident), a taak per member, the town bank and bought chunks.
+ * The old "trusted" array is still written (derived from ranks) so SiteSync's GouwClaims keeps reading
+ * the file the same way. Simple on purpose - the day Gouw itself is replaced, the next plugin reads this
+ * file with the same ease Gouw reads Lands' database.
  */
 final class ClaimStore {
     private final GouwPlugin plugin;
     private final File file;
-    /** one gouw per owner (like the old server's usage: everyone had exactly one) */
+    /** one gouw per burgemeester (everyone had exactly one, like the old server's usage) */
     private final Map<UUID, Land> byOwner = new HashMap<>();
     /** world + chunk key -> land */
     private final Map<String, Land> index = new HashMap<>();
@@ -49,8 +51,18 @@ final class ClaimStore {
                     JsonArray xy = c.getAsJsonArray();
                     addChunk(l, xy.get(0).getAsInt(), xy.get(1).getAsInt());
                 }
+                // old format: trusted array (everyone RESIDENT)
                 if (o.has("trusted"))
-                    for (JsonElement t : o.getAsJsonArray("trusted")) l.trusted.add(UUID.fromString(t.getAsString()));
+                    for (JsonElement t : o.getAsJsonArray("trusted")) l.ranks.put(UUID.fromString(t.getAsString()), Land.Rank.RESIDENT);
+                // new format: ranks object (wins over the plain trusted list)
+                if (o.has("ranks"))
+                    for (Map.Entry<String, JsonElement> r : o.getAsJsonObject("ranks").entrySet())
+                        l.ranks.put(UUID.fromString(r.getKey()), Land.Rank.valueOf(r.getValue().getAsString()));
+                if (o.has("jobs"))
+                    for (Map.Entry<String, JsonElement> j : o.getAsJsonObject("jobs").entrySet())
+                        l.jobs.put(UUID.fromString(j.getKey()), j.getValue().getAsString());
+                if (o.has("bank")) l.bank = o.get("bank").getAsDouble();
+                if (o.has("purchased")) l.purchased = o.get("purchased").getAsInt();
                 if (o.has("flags")) {
                     l.memberFlags.clear();
                     for (JsonElement f : o.getAsJsonArray("flags")) l.memberFlags.add(Land.Flag.valueOf(f.getAsString()));
@@ -71,21 +83,39 @@ final class ClaimStore {
             if (!first) sb.append(",\n");
             first = false;
             sb.append("    {\"name\": \"").append(esc(l.name)).append("\", \"owner\": \"").append(l.owner)
-                    .append("\", \"world\": \"").append(esc(l.world)).append("\", \"chunks\": [");
+                    .append("\", \"world\": \"").append(esc(l.world))
+                    .append("\", \"bank\": ").append(round2(l.bank))
+                    .append(", \"purchased\": ").append(l.purchased)
+                    .append(", \"chunks\": [");
             boolean fc = true;
             for (long k : l.chunks) {
                 if (!fc) sb.append(", ");
                 fc = false;
                 sb.append('[').append(Land.kx(k)).append(", ").append(Land.kz(k)).append(']');
             }
+            // trusted stays for old readers (SiteSync GouwClaims)
             sb.append("], \"trusted\": [");
             boolean ft = true;
-            for (UUID u : l.trusted) {
+            for (UUID u : l.ranks.keySet()) {
                 if (!ft) sb.append(", ");
                 ft = false;
                 sb.append('"').append(u).append('"');
             }
-            sb.append("], \"flags\": [");
+            sb.append("], \"ranks\": {");
+            boolean fr = true;
+            for (Map.Entry<UUID, Land.Rank> r : l.ranks.entrySet()) {
+                if (!fr) sb.append(", ");
+                fr = false;
+                sb.append('"').append(r.getKey()).append("\": \"").append(r.getValue().name()).append('"');
+            }
+            sb.append("}, \"jobs\": {");
+            boolean fj = true;
+            for (Map.Entry<UUID, String> j : l.jobs.entrySet()) {
+                if (!fj) sb.append(", ");
+                fj = false;
+                sb.append('"').append(j.getKey()).append("\": \"").append(esc(j.getValue())).append('"');
+            }
+            sb.append("}, \"flags\": [");
             boolean ff = true;
             for (Land.Flag f : Land.Flag.values()) {
                 if (!l.memberFlags.contains(f)) continue;
@@ -102,6 +132,10 @@ final class ClaimStore {
         } catch (Exception ex) {
             plugin.getLogger().severe("Could not save claims.json: " + ex.getMessage());
         }
+    }
+
+    private static double round2(double d) {
+        return Math.round(d * 100) / 100.0;
     }
 
     private static String esc(String s) {
@@ -126,8 +160,22 @@ final class ClaimStore {
         return land(w.getName(), blockX >> 4, blockZ >> 4);
     }
 
+    /** The gouw this player is burgemeester of. */
     Land landOf(UUID owner) {
         return byOwner.get(owner);
+    }
+
+    /** The town this player is a plain member of (not their own). */
+    Land membership(UUID who) {
+        for (Land l : byOwner.values())
+            if (l.ranks.containsKey(who)) return l;
+        return null;
+    }
+
+    /** Own gouw first, then the town they are a member of. */
+    Land homeOf(UUID who) {
+        Land own = landOf(who);
+        return own != null ? own : membership(who);
     }
 
     /** True when this player may `flag` here: no gouw, bypassing, owner, or member with that flag on. */
@@ -135,6 +183,13 @@ final class ClaimStore {
         if (plugin.isBypassing(p.getUniqueId())) return true;
         Land l = land(w, blockX, blockZ);
         return l == null || l.may(p.getUniqueId(), flag);
+    }
+
+    /** Chunk ceiling of a gouw: burgemeester rank limit + personal bonus + what the town bought. */
+    int limitOf(Land l) {
+        Player mayor = org.bukkit.Bukkit.getPlayer(l.owner);
+        int base = mayor != null ? plugin.getRankChunks(mayor) : plugin.getConfig().getInt("max-chunks", 16);
+        return base + plugin.bonusOf(l.owner) + l.purchased;
     }
 
     /** Distinct other gouwen within r chunks (Chebyshev) of this chunk. */
@@ -152,21 +207,31 @@ final class ClaimStore {
         return out;
     }
 
-    // ------------------------------------------------------------ mutations
+    // ------------------------------------------------------------ town mutations
 
     /** @return null on success, otherwise the reason it could not claim. */
     String claim(Player p, World w, int cx, int cz) {
         if (land(w.getName(), cx, cz) != null) return "this chunk is already claimed";
         if (!p.hasPermission("gouw.claim")) return "you are not allowed to claim";
         Land l = byOwner.get(p.getUniqueId());
+        boolean own = l != null;
         if (l == null) {
-            l = new Land(p.getName(), p.getUniqueId(), w.getName());
-            byOwner.put(l.owner, l);
+            Land town = membership(p.getUniqueId());
+            if (town != null) {
+                // members claim INTO the town: only burgemeester and adjunct may
+                if (town.rank(p.getUniqueId()) != Land.Rank.ASSISTANT)
+                    return "as a resident you do not claim - ask your burgemeester (or become adjunct)";
+                if (!town.world.equals(w.getName())) return town.name + " lies in " + town.world;
+                l = town;
+            } else {
+                l = new Land(p.getName(), p.getUniqueId(), w.getName());
+                byOwner.put(l.owner, l);
+            }
         } else if (!l.world.equals(w.getName())) {
             return "your gouw lies in " + l.world;
         }
-        int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : plugin.getMaxChunks(p);
-        if (l.chunks.size() >= max) return "you are at your limit of " + max + " chunks";
+        int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : limitOf(l);
+        if (l.chunks.size() >= max) return "the gouw is at its limit of " + max + " chunks (/gouw buy to raise it)";
         addChunk(l, cx, cz);
         save();
         return null;
@@ -175,7 +240,8 @@ final class ClaimStore {
     String unclaim(Player p, World w, int cx, int cz) {
         Land l = land(w.getName(), cx, cz);
         if (l == null) return "nothing claimed here";
-        if (!l.owner.equals(p.getUniqueId()) && !p.hasPermission("gouw.admin")) return "this is " + l.name + "'s gouw";
+        if (!l.mayManage(p.getUniqueId()) && !p.hasPermission("gouw.admin"))
+            return "only the burgemeester and adjunct release chunks here";
         l.chunks.remove(Land.key(cx, cz));
         index.remove(w.getName() + "|" + Land.key(cx, cz));
         if (l.chunks.isEmpty()) byOwner.remove(l.owner);
@@ -204,16 +270,78 @@ final class ClaimStore {
         return false;
     }
 
-    boolean trust(Land l, UUID who) {
-        if (who.equals(l.owner) || !l.trusted.add(who)) return false;
+    /** Invite (= the old trust): immediately resident. Fails if they already run their own gouw. */
+    String invite(Land l, UUID who) {
+        if (who.equals(l.owner)) return "that is you";
+        if (landOf(who) != null) return "they still own a gouw themselves - they must /gouw unclaim all first";
+        if (membership(who) != null) return "they are already a member of another town";
+        if (l.ranks.putIfAbsent(who, Land.Rank.RESIDENT) != null) return "already a member";
         save();
-        return true;
+        return null;
     }
 
-    boolean untrust(Land l, UUID who) {
-        if (!l.trusted.remove(who)) return false;
+    String kick(Land l, UUID who) {
+        if (l.ranks.remove(who) == null) return "not a member";
+        l.jobs.remove(who);
         save();
-        return true;
+        return null;
+    }
+
+    String promote(Land l, UUID who) {
+        if (l.ranks.get(who) != Land.Rank.RESIDENT) return "only residents can be promoted";
+        l.ranks.put(who, Land.Rank.ASSISTANT);
+        save();
+        return null;
+    }
+
+    String demote(Land l, UUID who) {
+        if (l.ranks.get(who) != Land.Rank.ASSISTANT) return "only adjuncts can be demoted";
+        l.ranks.put(who, Land.Rank.RESIDENT);
+        save();
+        return null;
+    }
+
+    String assignTaak(Land l, UUID who, String job) {
+        if (!l.ranks.containsKey(who)) return "not a member of this gouw";
+        if (job == null || job.isEmpty() || job.equalsIgnoreCase("none")) l.jobs.remove(who);
+        else l.jobs.put(who, job);
+        save();
+        return null;
+    }
+
+    // ------------------------------------------------------------ bank & purchases
+
+    String deposit(Player actor, Land l, double amount) {
+        if (amount <= 0) return "amount must be above 0";
+        if (!EconomyRef.withdraw(actor, amount)) return "not enough money in your own wallet";
+        l.bank += amount;
+        save();
+        return null;
+    }
+
+    String withdraw(Player actor, Land l, double amount) {
+        if (amount <= 0) return "amount must be above 0";
+        if (!l.mayManage(actor.getUniqueId())) return "only burgemeester and adjunct withdraw from the bank";
+        if (l.bank < amount) return "the bank holds only " + round2(l.bank);
+        if (!EconomyRef.deposit(actor, amount)) return "Vault could not pay out";
+        l.bank -= amount;
+        save();
+        return null;
+    }
+
+    /** Buy chunk quota for the town; paid from the town bank. @return null on success. */
+    String buyChunks(Player actor, Land l, int n) {
+        if (n <= 0) return "number of chunks must be above 0";
+        if (!l.mayManage(actor.getUniqueId())) return "only the burgemeester and adjunct buy chunks";
+        int price = plugin.getConfig().getInt("price-per-chunk", 250);
+        int cap = plugin.getConfig().getInt("town-buy-max", 100);
+        if (l.purchased + n > cap) return "this town bought the maximum of " + cap + " extra chunks";
+        double cost = (double) price * n;
+        if (l.bank < cost) return "the bank holds " + round2(l.bank) + " but " + n + " chunk(s) cost " + price * n;
+        l.bank -= cost;
+        l.purchased += n;
+        save();
+        return null;
     }
 
     /** Used by the importer and by claim(): merge into an existing owner's gouw. */

@@ -1,30 +1,29 @@
 name: Gouw
-version: '0.3.1'
+version: '0.4.0'
 main: com.iekcorbar.gouw.GouwPlugin
 api-version: '26.2'
-description: Chunk land claims - the in-house successor to Lands, and it reads old Lands claims on first start.
+description: Chunk land claims & towns - the in-house successor to Lands; ranks, town bank, taken and bought chunks.
 author: iekcorbar
-softdepend: [AfkCinema, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
+softdepend: [AfkCinema, Hihou, IekcorbarSiteSync, IekQuests, Jobs, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Vault, Wildlife, Zukan]
 libraries:
   - org.xerial:sqlite-jdbc:3.46.1.0
 
 commands:
   gouw:
-    description: Claim and manage your gouw (land).
+    description: Claim and manage your gouw (town).
     aliases: [g, claim]
-    usage: /gouw <claim|autoclaim <r>|unclaim [all]|trust|untrust|members|info|list|near|border|leave|admin ...>
+    usage: /gouw <menu|claim|autoclaim <r>|buy|unclaim [all]|invite|kick|promote|demote|taak|jobs|bank|deposit|withdraw|members|rename|info|list|near|border|leave|admin ...>
 
 permissions:
   gouw.claim:
-    description: Claim chunks for yourself
+    description: Claim chunks (burgemeester or adjunct of the gouw)
     default: true
   gouw.chunks.*:
     description: 'Chunk limit per rank: grant gouw.chunks.<number> (highest wins, never below config max-chunks)'
     default: false
   gouw.admin:
-    description: Unlimited chunks, delete lands, import, reload
+    description: Unlimited chunks, delete lands, import, reload, payroll
     default: op
   gouw.bypass:
     description: Walk through and build in any gouw (toggle with /gouw admin bypass)
     default: op
-

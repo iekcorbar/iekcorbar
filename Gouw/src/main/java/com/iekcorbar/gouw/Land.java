@@ -1,25 +1,40 @@
 package com.iekcorbar.gouw;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 /**
- * A gouw: one player's claimed area. The claim unit is a chunk (x, z) - exactly what Lands used, so
- * importing a Lands database is a straight copy. Members live in trusted; since 0.2 they can be limited
- * per flag (memberFlags): build, open, hit mobs, attack players. Default is everything - so an imported
- * or plain gouw behaves like v0.1 and like the old Lands setup the server used.
+ * A gouw: a claimed area, since 0.4 run like a small town. The owner is the burgemeester; trusted
+ * players are members with a Rank (ASSISTANT may manage, RESIDENT just lives there). A burgemeester
+ * can hand out a taak (a Jobs Reborn job name) per member, paid daily from the town bank. The chunk
+ * limit is rank-based and grows when the town buys extra chunks (ClaimStore.buyChunks).
+ *
+ * Old behaviour stays: members get the gouw-wide memberFlags (build/open/mobs/pvp) and the owner may
+ * always do everything. Data is one JSON file (claims.json) - see ClaimStore.
  */
 final class Land {
-    /** What a trusted member may do inside the gouw. The owner may always do everything. */
+    /** What a member may do inside the gouw. The owner may always do everything. */
     enum Flag { BUILD, ACCESS, MOB, PVP }
+
+    /** Member roles. The owner is the burgemeester and never appears in ranks. */
+    enum Rank { ASSISTANT, RESIDENT }
 
     String name;
     UUID owner;
     final String world;
     final Set<Long> chunks = new LinkedHashSet<>();
-    final Set<UUID> trusted = new LinkedHashSet<>();
+    /** members (was: the trusted set) with their role */
+    final Map<UUID, Rank> ranks = new HashMap<>();
+    /** uuid -> taak (Jobs Reborn job name), only meaningful for members */
+    final Map<UUID, String> jobs = new HashMap<>();
+    /** town bank - money put in via deposit, spent on chunk purchases and taak salaries */
+    double bank;
+    /** chunks the town bought on top of the burgemeester's rank limit */
+    int purchased;
     final Set<Flag> memberFlags = EnumSet.allOf(Flag.class);
 
     Land(String name, UUID owner, String world) {
@@ -44,11 +59,26 @@ final class Land {
         return chunks.contains(key(cx, cz));
     }
 
+    /** The owner (burgemeester) plus every member. */
     boolean isMember(UUID who) {
-        return owner.equals(who) || trusted.contains(who);
+        return owner.equals(who) || ranks.containsKey(who);
+    }
+
+    /** null for strangers; burgemeester is returned as Rank.ASSISTANT-equivalent via isMayor. */
+    Rank rank(UUID who) {
+        return ranks.get(who);
+    }
+
+    boolean isMayor(UUID who) {
+        return owner.equals(who);
+    }
+
+    /** Burgemeester and assistants manage; residents only use their flags. */
+    boolean mayManage(UUID who) {
+        return owner.equals(who) || ranks.get(who) == Rank.ASSISTANT;
     }
 
     boolean may(UUID who, Flag f) {
-        return owner.equals(who) || (trusted.contains(who) && memberFlags.contains(f));
+        return owner.equals(who) || (ranks.containsKey(who) && memberFlags.contains(f));
     }
 }

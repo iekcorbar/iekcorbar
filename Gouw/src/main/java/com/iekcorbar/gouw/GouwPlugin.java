@@ -15,14 +15,18 @@ import java.util.UUID;
  * (owner, members, chunks - see LandsImporter), so the old gouwen stay exactly where players left them.
  * After that Gouw keeps its own little readable JSON and guards the chunks with GouwListener.
  *
- * One gouw per player, trusted members may build; the flag set is deliberately small (build/interact/
- * fight in, entry messages) - no nations, no wars, no upkeep. That is what the server actually used.
+ * One gouw per burgemeester; members are ranked (adjunct/resident), can hold a taak from the live
+ * Jobs Reborn list (daily pay from the town bank) and the town buys extra chunk quota itself.
+ * The flag set stays deliberately small (build/interact/fight in, entry messages) -
+ * no nations, no wars, no allies/enemies. That is what the server actually uses.
  */
 public final class GouwPlugin extends JavaPlugin {
     private ClaimStore store;
     private GouwListener listener;
     private GouwMenu menu;
     private Expiry expiry;
+    private JobsReader jobs;
+    private Salaries salaries;
     private final Set<UUID> bypassing = new HashSet<>();
     /** Extra chunks a player bought (contract NPC), on top of the rank limit. Saved in bonus.yml. */
     private final java.util.Map<UUID, Integer> bonus = new java.util.HashMap<>();
@@ -42,17 +46,21 @@ public final class GouwPlugin extends JavaPlugin {
                 try { bonus.put(UUID.fromString(k), y.getInt(k)); } catch (IllegalArgumentException ignored) { }
             }
         }
+        jobs = new JobsReader(this);
+        jobs.reload();
         expiry = new Expiry(this);
         listener = new GouwListener(this);
         getServer().getPluginManager().registerEvents(listener, this);
         menu = new GouwMenu(this);
         getServer().getPluginManager().registerEvents(menu, this);
         getServer().getScheduler().runTaskTimer(this, this::expireTick, 20L * 60, 20L * 3600);
+        salaries = new Salaries(this);
+        getServer().getScheduler().runTaskTimer(this, () -> salaries.tick(), 20L * 30, 20L * 3600);
         GouwCommand cmd = new GouwCommand(this);
         PluginCommand pc = getCommand("gouw");
         pc.setExecutor(cmd);
         pc.setTabCompleter(cmd);
-        getLogger().info("Gouw enabled - " + store.all().size() + " gouwen, " + store.totalChunks() + " chunks claimed.");
+        getLogger().info("Gouw enabled - " + store.all().size() + " gouwen, " + store.totalChunks() + " chunks claimed, " + jobs.all().size() + " jobs known.");
     }
 
     /** Hourly housekeeping; check() no-ops while expire-inactive-days is 0, so a reload can turn it on. */
@@ -89,16 +97,24 @@ public final class GouwPlugin extends JavaPlugin {
         return expiry;
     }
 
+    public JobsReader jobs() {
+        return jobs;
+    }
+
+    public Salaries salaries() {
+        return salaries;
+    }
+
     public int getMaxChunks() {
         return Math.max(1, getConfig().getInt("max-chunks", 16));
     }
 
     /**
-     * Chunk limit for one player: the highest of the config value and any
-     * gouw.chunks.<n> permission node they hold (a rank group in the permission
+     * Chunk limit from rank alone: the highest of the config value and any
+     * gouw.chunks.<n> permission node the player holds (a rank group in the permission
      * plugin grants e.g. gouw.chunks.55). No dependency on a specific permission plugin.
      */
-    public int getMaxChunks(org.bukkit.entity.Player p) {
+    public int getRankChunks(org.bukkit.entity.Player p) {
         int max = getMaxChunks();
         for (org.bukkit.permissions.PermissionAttachmentInfo i : p.getEffectivePermissions()) {
             if (!i.getValue()) continue;
@@ -106,7 +122,12 @@ public final class GouwPlugin extends JavaPlugin {
             if (!n.startsWith("gouw.chunks.")) continue;
             try { max = Math.max(max, Integer.parseInt(n.substring(12))); } catch (NumberFormatException ignored) { }
         }
-        return max + bonusOf(p.getUniqueId());
+        return max;
+    }
+
+    /** Full personal ceiling (rank + contract bonus) for display; the town ceiling is store.limitOf(land). */
+    public int getMaxChunks(org.bukkit.entity.Player p) {
+        return getRankChunks(p) + bonusOf(p.getUniqueId());
     }
 
     public boolean enterMessages() {
