@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Daily pay from the town bank for residents that the burgemeester assigned a taak (job) to.
+ * Daily pay from the town bank for residents that the mayor assigned a taak (job) to.
  * Runs hourly; pays once per game-day after the configured salary-hour. Salary per job comes from
  * the Gouw config ("salaries: <job>: <amount>", fallback default-salary). A gouw with an empty or
  * too-small bank is skipped (one console line), so towns must fund their own payroll.
@@ -61,7 +61,7 @@ final class Salaries {
                 if (l.bank < amount) {
                     skipped++;
                     plugin.getLogger().info("Gouw " + l.name + ": bank " + String.format("%.2f", l.bank)
-                            + " cannot pay taak salary " + String.format("%.2f", amount) + " (" + nameOf(jobEntry.getKey()) + ")");
+                            + " cannot pay job salary " + String.format("%.2f", amount) + " (" + nameOf(jobEntry.getKey()) + ")");
                     continue;
                 }
                 OfflinePlayer op = Bukkit.getOfflinePlayer(jobEntry.getKey());
@@ -69,7 +69,7 @@ final class Salaries {
                     l.bank -= amount;
                     paid++;
                 } else {
-                    plugin.getLogger().warning("Vault deposit failed for " + op.getName() + " (taak salary)");
+                    plugin.getLogger().warning("Vault deposit failed for " + op.getName() + " (job salary)");
                 }
             }
         }

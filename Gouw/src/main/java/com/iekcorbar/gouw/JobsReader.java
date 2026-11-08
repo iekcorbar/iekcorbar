@@ -25,7 +25,7 @@ final class JobsReader {
         jobs = new ArrayList<>();
         File f = new File(plugin.getConfig().getString("jobs-config", "plugins/Jobs/config.yml"));
         if (!f.isFile()) {
-            plugin.getLogger().warning("No Jobs config at " + f.getPath() + " - taak list will use Gouw config salaries only.");
+            plugin.getLogger().warning("No Jobs config at " + f.getPath() + " - job list will use Gouw config salaries only.");
             return jobs;
         }
         try {

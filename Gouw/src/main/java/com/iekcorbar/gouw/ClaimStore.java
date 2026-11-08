@@ -19,7 +19,7 @@ import java.util.UUID;
 
 /**
  * All gouwen in memory, saved as plain readable JSON (plugins/Gouw/claims.json). Since 0.4 a gouw also
- * carries town data: ranks (assistant/resident), a taak per member, the town bank and bought chunks.
+ * carries town data: ranks (assistant/resident), a job per member, the town bank and bought chunks.
  * The old "trusted" array is still written (derived from ranks) so SiteSync's GouwClaims keeps reading
  * the file the same way. Simple on purpose - the day Gouw itself is replaced, the next plugin reads this
  * file with the same ease Gouw reads Lands' database.
@@ -27,7 +27,7 @@ import java.util.UUID;
 final class ClaimStore {
     private final GouwPlugin plugin;
     private final File file;
-    /** one gouw per burgemeester (everyone had exactly one, like the old server's usage) */
+    /** one gouw per mayor (everyone had exactly one, like the old server's usage) */
     private final Map<UUID, Land> byOwner = new HashMap<>();
     /** world + chunk key -> land */
     private final Map<String, Land> index = new HashMap<>();
@@ -160,7 +160,7 @@ final class ClaimStore {
         return land(w.getName(), blockX >> 4, blockZ >> 4);
     }
 
-    /** The gouw this player is burgemeester of. */
+    /** The gouw this player is mayor of. */
     Land landOf(UUID owner) {
         return byOwner.get(owner);
     }
@@ -185,7 +185,7 @@ final class ClaimStore {
         return l == null || l.may(p.getUniqueId(), flag);
     }
 
-    /** Chunk ceiling of a gouw: burgemeester rank limit + personal bonus + what the town bought. */
+    /** Chunk ceiling of a gouw: mayor rank limit + personal bonus + what the town bought. */
     int limitOf(Land l) {
         Player mayor = org.bukkit.Bukkit.getPlayer(l.owner);
         int base = mayor != null ? plugin.getRankChunks(mayor) : plugin.getConfig().getInt("max-chunks", 16);
@@ -218,9 +218,9 @@ final class ClaimStore {
         if (l == null) {
             Land town = membership(p.getUniqueId());
             if (town != null) {
-                // members claim INTO the town: only burgemeester and adjunct may
+                // members claim INTO the town: only mayor and officer may
                 if (town.rank(p.getUniqueId()) != Land.Rank.ASSISTANT)
-                    return "as a resident you do not claim - ask your burgemeester (or become adjunct)";
+                    return "as a resident you do not claim - ask your mayor (or become officer)";
                 if (!town.world.equals(w.getName())) return town.name + " lies in " + town.world;
                 l = town;
             } else {
@@ -241,7 +241,7 @@ final class ClaimStore {
         Land l = land(w.getName(), cx, cz);
         if (l == null) return "nothing claimed here";
         if (!l.mayManage(p.getUniqueId()) && !p.hasPermission("gouw.admin"))
-            return "only the burgemeester and adjunct release chunks here";
+            return "only the mayor and officer release chunks here";
         l.chunks.remove(Land.key(cx, cz));
         index.remove(w.getName() + "|" + Land.key(cx, cz));
         if (l.chunks.isEmpty()) byOwner.remove(l.owner);
@@ -295,13 +295,13 @@ final class ClaimStore {
     }
 
     String demote(Land l, UUID who) {
-        if (l.ranks.get(who) != Land.Rank.ASSISTANT) return "only adjuncts can be demoted";
+        if (l.ranks.get(who) != Land.Rank.ASSISTANT) return "only officers can be demoted";
         l.ranks.put(who, Land.Rank.RESIDENT);
         save();
         return null;
     }
 
-    String assignTaak(Land l, UUID who, String job) {
+    String assignJob(Land l, UUID who, String job) {
         if (!l.ranks.containsKey(who)) return "not a member of this gouw";
         if (job == null || job.isEmpty() || job.equalsIgnoreCase("none")) l.jobs.remove(who);
         else l.jobs.put(who, job);
@@ -321,7 +321,7 @@ final class ClaimStore {
 
     String withdraw(Player actor, Land l, double amount) {
         if (amount <= 0) return "amount must be above 0";
-        if (!l.mayManage(actor.getUniqueId())) return "only burgemeester and adjunct withdraw from the bank";
+        if (!l.mayManage(actor.getUniqueId())) return "only mayor and officer withdraw from the bank";
         if (l.bank < amount) return "the bank holds only " + round2(l.bank);
         if (!EconomyRef.deposit(actor, amount)) return "Vault could not pay out";
         l.bank -= amount;
@@ -332,7 +332,7 @@ final class ClaimStore {
     /** Buy chunk quota for the town; paid from the town bank. @return null on success. */
     String buyChunks(Player actor, Land l, int n) {
         if (n <= 0) return "number of chunks must be above 0";
-        if (!l.mayManage(actor.getUniqueId())) return "only the burgemeester and adjunct buy chunks";
+        if (!l.mayManage(actor.getUniqueId())) return "only the mayor and officer buy chunks";
         int price = plugin.getConfig().getInt("price-per-chunk", 250);
         int cap = plugin.getConfig().getInt("town-buy-max", 100);
         if (l.purchased + n > cap) return "this town bought the maximum of " + cap + " extra chunks";

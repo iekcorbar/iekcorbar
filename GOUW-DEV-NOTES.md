@@ -147,6 +147,11 @@ Ontwerp zoals afgesproken in deze sessie:
 - Economie via `EconomyRef` (Vault reflectie; oude inline withdraw in GouwCommand vervangen).
 - Versie 0.4.0 (pom + plugin.yml; softdepend Jobs+Vault). `mvn -q package` groen;
   `deploy/Gouw-0.4.0.jar`.
+- **Taal (gebruiker koos: ALLES ENGELS):** alle player-facing strings consequent Engels gemaakt —
+  burgemeester→**mayor**, adjunct→**officer**, inwoner→**resident**, taak→**job**, kas→**bank**.
+  `taak` blijft wél een **commando-alias** (`/gouw taak` = `/gouw job`) zodat NL-typisten en
+  eventuele quest-commandos blijven werken. 0.4.0 is nooit gedeployd geweest → jar blijft 0.4.0, geen
+  versie-gehop.
 - **Open: in-game testen (server, gebruiker)**, dan pas feel/price-tuning:
   1. jar wisselen + herstart; claims.json wordt automatisch uitgebreid (oude trouwe leden → resident).
   2. Test: claim als burgemeester, invite → resident kan NIET claimen, adjunct kan Wél; promote/demote;

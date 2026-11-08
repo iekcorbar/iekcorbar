@@ -83,9 +83,9 @@ final class GouwMenu implements Listener {
         return switch (page) {
             case ADMIN -> "Gouw - staff";
             case FLAGS -> "Gouw - what may members do?";
-            case MEMBERS -> "Gouw - inwoners van " + (l == null ? "" : l.name);
-            case BANK -> "Gouw - bank van " + (l == null ? "" : l.name);
-            case JOBS -> "Gouw - taken (Jobs Reborn)";
+            case MEMBERS -> "Gouw - residents van " + (l == null ? "" : l.name);
+            case BANK -> "Gouw - bank of " + (l == null ? "" : l.name);
+            case JOBS -> "Gouw - jobs (town payroll)";
             default -> "Gouw - " + (l != null ? l.name : viewerName);
         };
     }
@@ -122,14 +122,14 @@ final class GouwMenu implements Listener {
         panes(inv);
         Land l = store.homeOf(p.getUniqueId());
         int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : (l != null ? store.limitOf(l) : plugin.getMaxChunks(p));
-        String role = l == null ? "-" : l.isMayor(p.getUniqueId()) ? "burgemeester" : switch (l.rank(p.getUniqueId())) {
-            case ASSISTANT -> "adjunct"; case RESIDENT -> "resident"; case null, default -> "-"; };
+        String role = l == null ? "-" : l.isMayor(p.getUniqueId()) ? "mayor" : switch (l.rank(p.getUniqueId())) {
+            case ASSISTANT -> "officer"; case RESIDENT -> "resident"; case null, default -> "-"; };
         inv.setItem(LAND, icon(l == null ? Material.OAK_SIGN : Material.GOLD_NUGGET, "Your gouw", NamedTextColor.GOLD,
                 l == null ? "Claim your first chunk below." : "Chunks: " + l.chunks.size() + (max == Integer.MAX_VALUE ? "" : " / " + max),
                 l == null ? "-" : "World: " + l.world,
                 l == null ? "-" : "Inwoners: " + l.ranks.size() + " - you are " + role,
                 l == null ? "-" : "Bank: " + GouwCommand.money(l.bank)));
-        inv.setItem(CLAIM, icon(Material.GRASS_BLOCK, "Claim this chunk", NamedTextColor.GREEN, "Burgemeester and adjunct only"));
+        inv.setItem(CLAIM, icon(Material.GRASS_BLOCK, "Claim this chunk", NamedTextColor.GREEN, "Burgemeester and officer only"));
         inv.setItem(AUTO, icon(Material.SAND, "Autoclaim around you", NamedTextColor.YELLOW, "Claims a 5x5 square, up to the gouw limit"));
         inv.setItem(UNCLAIM, icon(Material.BUCKET, "Unclaim this chunk", NamedTextColor.RED, "Shift-click: release your whole gouw"));
         inv.setItem(BORDER, icon(Material.COMPASS, "Show my border", NamedTextColor.AQUA, "Gold particles trace the gouw"));
@@ -142,8 +142,8 @@ final class GouwMenu implements Listener {
         inv.setItem(MEMBERS, icon(Material.PLAYER_HEAD, "Inwoners", NamedTextColor.GOLD, "Click heads to promote/demote or kick."));
         inv.setItem(KAS, icon(Material.GOLD_BLOCK, "Town bank", NamedTextColor.YELLOW,
                 l == null ? "Claim first." : "Balance: " + GouwCommand.money(l.bank), "Deposits, withdrawals, buying chunks"));
-        inv.setItem(JOBS, icon(Material.BOOK, "Taken / jobs", NamedTextColor.AQUA,
-                "Live list from Jobs Reborn", "Assign: /gouw taak <player> <job>"));
+        inv.setItem(JOBS, icon(Material.BOOK, "Town jobs", NamedTextColor.AQUA,
+                "Live list from Jobs Reborn", "Assign: /gouw job <player> <job>"));
         if (p.hasPermission("gouw.admin"))
             inv.setItem(ADMIN, icon(Material.COMMAND_BLOCK, "Staff page", NamedTextColor.LIGHT_PURPLE, "All gouwen, bypass, expire check"));
     }
@@ -180,8 +180,8 @@ final class GouwMenu implements Listener {
             h.viewer.sendActionBar(Component.text("Claim a chunk first.", NamedTextColor.RED));
             return;
         }
-        h.inv.setItem(4, icon(Material.PLAYER_HEAD, "Burgemeester: " + nameOf(l.owner), NamedTextColor.GOLD,
-                l.ranks.size() + " inwoner(s)"));
+        h.inv.setItem(4, icon(Material.PLAYER_HEAD, "Mayor: " + nameOf(l.owner), NamedTextColor.GOLD,
+                l.ranks.size() + " resident(s)"));
         int slot = 10;
         for (Map.Entry<UUID, Land.Rank> r : l.ranks.entrySet()) {
             if (slot == 17) slot = 19;
@@ -191,9 +191,9 @@ final class GouwMenu implements Listener {
             ItemStack it = head(who);
             ItemMeta m = it.getItemMeta();
             List<Component> lore = new ArrayList<>();
-            lore.add(Component.text(r.getValue() == Land.Rank.ASSISTANT ? "adjunct" : "resident", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
-            lore.add(Component.text("taak: " + (taak == null ? "none" : taak), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-            lore.add(Component.text("Click: " + (l.isMayor(h.viewer.getUniqueId()) ? (r.getValue() == Land.Rank.ASSISTANT ? "demote" : "promote to adjunct") : "no rights")
+            lore.add(Component.text(r.getValue() == Land.Rank.ASSISTANT ? "officer" : "resident", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("job: " + (taak == null ? "none" : taak), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("Click: " + (l.isMayor(h.viewer.getUniqueId()) ? (r.getValue() == Land.Rank.ASSISTANT ? "demote" : "promote to officer") : "no rights")
                     + " - shift: remove", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
             m.lore(lore);
             it.setItemMeta(m);
@@ -219,10 +219,10 @@ final class GouwMenu implements Listener {
         boolean manage = l.mayManage(h.viewer.getUniqueId());
         for (int i = 0; i < BANK_WITHDRAW.length; i++)
             h.inv.setItem(WDR_FROM + i, icon(manage ? Material.GOLD_INGOT : Material.BARRIER, "Withdraw " + GouwCommand.money(BANK_WITHDRAW[i]),
-                    manage ? NamedTextColor.YELLOW : NamedTextColor.RED, manage ? "To your own wallet" : "Burgemeester and adjunct only"));
+                    manage ? NamedTextColor.YELLOW : NamedTextColor.RED, manage ? "To your own wallet" : "Burgemeester and officer only"));
         for (int i = 0; i < CHUNK_BUY.length; i++)
             h.inv.setItem(BUYN_FROM + i, icon(Material.GRASS_BLOCK, "Buy " + CHUNK_BUY[i] + " chunk" + (CHUNK_BUY[i] > 1 ? "s" : ""),
-                    manage ? NamedTextColor.GREEN : NamedTextColor.RED, manage ? "Costs " + GouwCommand.money((double) price * CHUNK_BUY[i]) + " from the bank" : "Burgemeester and adjunct only"));
+                    manage ? NamedTextColor.GREEN : NamedTextColor.RED, manage ? "Costs " + GouwCommand.money((double) price * CHUNK_BUY[i]) + " from the bank" : "Burgemeester and officer only"));
         h.inv.setItem(BACK, icon(Material.ARROW, "Back", NamedTextColor.YELLOW));
     }
 
@@ -231,7 +231,7 @@ final class GouwMenu implements Listener {
         List<String> jobs = plugin.jobs().all();
         double dflt = plugin.getConfig().getDouble("default-salary", 50);
         h.inv.setItem(4, icon(Material.BOOK, jobs.size() + " jobs (Jobs Reborn)", NamedTextColor.GOLD,
-                "Assign: /gouw taak <player> <job>", "Residents are paid daily from the town bank."));
+                "Assign: /gouw job <player> <job>", "Residents are paid daily from the town bank."));
         int slot = 10;
         for (String j : jobs) {
             if (slot == 17) slot = 19;
@@ -311,7 +311,7 @@ final class GouwMenu implements Listener {
                     case UNCLAIM -> {
                         if (mine == null) act(h, "you have no gouw", null);
                         else if (e.isShiftClick()) {
-                            if (!mine.isMayor(p.getUniqueId())) act(h, "only the burgemeester releases the whole gouw", null);
+                            if (!mine.isMayor(p.getUniqueId())) act(h, "only the mayor releases the whole gouw", null);
                             else {
                                 store.unclaimAll(mine);
                                 act(h, null, "Your whole gouw is released.");
@@ -349,13 +349,13 @@ final class GouwMenu implements Listener {
                     OfflinePlayer op = skullOwner(e.getCurrentItem());
                     if (op == null || op.getUniqueId().equals(mine.owner)) return;
                     if (e.isShiftClick()) {
-                        if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("Only burgemeester and adjunct remove members.", NamedTextColor.RED));
+                        if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("Only mayor and officer remove members.", NamedTextColor.RED));
                         else {
                             String err = store.kick(mine, op.getUniqueId());
                             p.sendActionBar(Component.text(err == null ? op.getName() + " is removed." : err, err == null ? NamedTextColor.GOLD : NamedTextColor.RED));
                         }
                     } else {
-                        if (!mine.isMayor(p.getUniqueId())) p.sendActionBar(Component.text("Only the burgemeester promotes and demotes.", NamedTextColor.RED));
+                        if (!mine.isMayor(p.getUniqueId())) p.sendActionBar(Component.text("Only the mayor promotes and demotes.", NamedTextColor.RED));
                         else {
                             String err = mine.rank(op.getUniqueId()) == Land.Rank.ASSISTANT
                                     ? store.demote(mine, op.getUniqueId()) : store.promote(mine, op.getUniqueId());
@@ -392,7 +392,7 @@ final class GouwMenu implements Listener {
                     return;
                 }
                 if (mine == null || !mine.mayManage(p.getUniqueId())) {
-                    p.sendActionBar(Component.text("Only the burgemeester and adjunct change rights.", NamedTextColor.RED));
+                    p.sendActionBar(Component.text("Only the mayor and officer change rights.", NamedTextColor.RED));
                     return;
                 }
                 int idx = (slot - 11) / 2;
@@ -449,7 +449,7 @@ final class GouwMenu implements Listener {
             return;
         }
         if (!mine.mayManage(p.getUniqueId())) {
-            act(h, "only the burgemeester and adjunct invite", null);
+            act(h, "only the mayor and officer invite", null);
             return;
         }
         pendingTrust.put(p.getUniqueId(), mine);

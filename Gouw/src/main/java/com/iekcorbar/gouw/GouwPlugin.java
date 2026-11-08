@@ -15,7 +15,7 @@ import java.util.UUID;
  * (owner, members, chunks - see LandsImporter), so the old gouwen stay exactly where players left them.
  * After that Gouw keeps its own little readable JSON and guards the chunks with GouwListener.
  *
- * One gouw per burgemeester; members are ranked (adjunct/resident), can hold a taak from the live
+ * One gouw per mayor; members are ranked (officer/resident), can hold a job from the live
  * Jobs Reborn list (daily pay from the town bank) and the town buys extra chunk quota itself.
  * The flag set stays deliberately small (build/interact/fight in, entry messages) -
  * no nations, no wars, no allies/enemies. That is what the server actually uses.

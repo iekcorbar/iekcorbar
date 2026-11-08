@@ -8,9 +8,9 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * A gouw: a claimed area, since 0.4 run like a small town. The owner is the burgemeester; trusted
- * players are members with a Rank (ASSISTANT may manage, RESIDENT just lives there). A burgemeester
- * can hand out a taak (a Jobs Reborn job name) per member, paid daily from the town bank. The chunk
+ * A gouw: a claimed area, since 0.4 run like a small town. The owner is the mayor; trusted
+ * players are members with a Rank (ASSISTANT may manage, RESIDENT just lives there). A mayor
+ * can hand out a job (a Jobs Reborn job name) per member, paid daily from the town bank. The chunk
  * limit is rank-based and grows when the town buys extra chunks (ClaimStore.buyChunks).
  *
  * Old behaviour stays: members get the gouw-wide memberFlags (build/open/mobs/pvp) and the owner may
@@ -20,7 +20,7 @@ final class Land {
     /** What a member may do inside the gouw. The owner may always do everything. */
     enum Flag { BUILD, ACCESS, MOB, PVP }
 
-    /** Member roles. The owner is the burgemeester and never appears in ranks. */
+    /** Member roles. The owner is the mayor and never appears in ranks. */
     enum Rank { ASSISTANT, RESIDENT }
 
     String name;
@@ -29,11 +29,11 @@ final class Land {
     final Set<Long> chunks = new LinkedHashSet<>();
     /** members (was: the trusted set) with their role */
     final Map<UUID, Rank> ranks = new HashMap<>();
-    /** uuid -> taak (Jobs Reborn job name), only meaningful for members */
+    /** uuid -> job (Jobs Reborn job name), only meaningful for members */
     final Map<UUID, String> jobs = new HashMap<>();
-    /** town bank - money put in via deposit, spent on chunk purchases and taak salaries */
+    /** town bank - money put in via deposit, spent on chunk purchases and job salaries */
     double bank;
-    /** chunks the town bought on top of the burgemeester's rank limit */
+    /** chunks the town bought on top of the mayor's rank limit */
     int purchased;
     final Set<Flag> memberFlags = EnumSet.allOf(Flag.class);
 
@@ -59,12 +59,12 @@ final class Land {
         return chunks.contains(key(cx, cz));
     }
 
-    /** The owner (burgemeester) plus every member. */
+    /** The owner (mayor) plus every member. */
     boolean isMember(UUID who) {
         return owner.equals(who) || ranks.containsKey(who);
     }
 
-    /** null for strangers; burgemeester is returned as Rank.ASSISTANT-equivalent via isMayor. */
+    /** null for strangers; mayor is returned as Rank.ASSISTANT-equivalent via isMayor. */
     Rank rank(UUID who) {
         return ranks.get(who);
     }
