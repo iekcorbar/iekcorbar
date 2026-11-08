@@ -172,7 +172,14 @@ Ontwerp zoals afgesproken in deze sessie:
      per-resident rights pagina: toggles, promote/demote, shift-remove; kas: resident deposit én
      withdraw; buy chunks (prijs 250, plafond 100); piston/explosie-gedrag unveranderd checken.
   3. Delen defaults-per-gouw: "New-resident rights"-pagina werkt per gouw apart (niet globaal).
-- Eventueel later: wiki-pagina's docs/wiki-gouw uitbreiden met dorpen + rechten; SiteSync-sitekaart
-  met mayor per gouw; town level (verhoogd rank-limit per inwoners-aantal)?
+- **Wiki (2026-11-08, Engels):** docs/wiki-gouw/ herschreven voor 0.4.0 —
+  00-intro (towns erbij), 01-gouw (bescherming + nieuwe vlaggen + buy), 02-towns **NIEUW**
+  (mayor/officer/resident, 6 rechten-tabel, bank, "Gouw never pays salaries" expliciet gemaakt),
+  03-commands (commando-overzicht; trust/untrust → invite/kick). Oude 02-commands.md verwijderd.
+  `python3 -I scripts/build-wiki-seed.py gouw` → src/lib/wiki-seeds/gouw.json (8 pagina's;
+  towns splitst automatisch in hub + 4 subpagina's met backlinks). **Live site:** staff-knop
+  "Import Gouw pages" (na site-deploy van de nieuwe zip) — de oude 'Lands'-pagina in MySQL overschrijven.
+- Eventueel later: SiteSync-sitekaart met mayor per gouw; town level (verhoogd rank-limit per
+  inwoners-aantal)?
 
 
