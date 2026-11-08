@@ -56,7 +56,12 @@ EGG = {"deer": ("deer", "antler"), "bear": ("fur_brown", "fur_light"), "boar": (
        "koala": ("elephant", "fur_cream"), "mole": ("elephant", "pink"), "rhino": ("elephant", "tusk"),
        "penguin": ("black", "web"), "orca": ("black", "white"), "piranha": ("scales", "firefly_red"),
        "macaw": ("cardinal", "jay"),
-       "wraith": ("wraith_robe", "wraith_glow"), "dragon": ("dragon_brass", "dragon_copper")}
+       "wraith": ("wraith_robe", "wraith_glow"), "dragon": ("dragon_brass", "dragon_copper"),
+        "giraffe": ("fur_light", "fur_brown"), "lion": ("fur_gold", "fur_brown"),
+        "hyena": ("fur_brown", "fur_dark"), "arcticfox": ("fur_white", "fur_dark"),
+        "snowyowl": ("fur_white", "fur_dark"), "reindeer": ("fur_brown", "antler"),
+        "fennec": ("fur_cream", "fur_brown"), "meerkat": ("fur_brown", "fur_dark"),
+        "vulture": ("fur_dark", "fur_black")}
 
 ALL = dict(PALETTE)
 for _n in sorted(_statue_colours()):
