@@ -9,19 +9,26 @@ import java.util.UUID;
 
 /**
  * A gouw: a claimed area, since 0.4 run like a small town. The owner is the mayor; trusted
- * players are members with a Rank (ASSISTANT may manage, RESIDENT just lives there). A mayor
- * can hand out a job (a Jobs Reborn job name) per member, paid daily from the town bank. The chunk
- * limit is rank-based and grows when the town buys extra chunks (ClaimStore.buyChunks).
- *
- * Old behaviour stays: members get the gouw-wide memberFlags (build/open/mobs/pvp) and the owner may
- * always do everything. Data is one JSON file (claims.json) - see ClaimStore.
+ * players are members with a Rank (ASSISTANT manages the town, RESIDENT lives there within the
+ * permissions handed out per resident - see perms/memberFlags). The town bank is filled by the
+ * residents' own deposits (job earnings come from JobsReborn/onboarding, never from Gouw) and
+ * pays for chunk purchases. The chunk limit is rank-based and grows when the town buys
+ * (ClaimStore.buyChunks).
  */
 final class Land {
-    /** What a member may do inside the gouw. The owner may always do everything. */
-    enum Flag { BUILD, ACCESS, MOB, PVP }
+    /**
+     * What a member may do inside the gouw. The owner and officers may always do everything;
+     * each resident can be granted a personal set (with {@link #memberFlags} as the default
+     * for everyone who has no personal set yet).
+     * CONTAINERS = chests/ect. containers, INTERACT = doors/beds/buttons, CLAIM = add chunks to town.
+     */
+    enum Flag { BUILD, CONTAINERS, INTERACT, MOB, PVP, CLAIM }
 
     /** Member roles. The owner is the mayor and never appears in ranks. */
     enum Rank { ASSISTANT, RESIDENT }
+
+    /** Default rights for residents without a personal set - BUILD/CONTAINERS/INTERACT/MOB/PVP on, CLAIM off. */
+    static final Set<Flag> DEFAULT_FLAGS = EnumSet.of(Flag.BUILD, Flag.CONTAINERS, Flag.INTERACT, Flag.MOB, Flag.PVP);
 
     String name;
     UUID owner;
@@ -29,13 +36,14 @@ final class Land {
     final Set<Long> chunks = new LinkedHashSet<>();
     /** members (was: the trusted set) with their role */
     final Map<UUID, Rank> ranks = new HashMap<>();
-    /** uuid -> job (Jobs Reborn job name), only meaningful for members */
-    final Map<UUID, String> jobs = new HashMap<>();
-    /** town bank - money put in via deposit, spent on chunk purchases and job salaries */
+    /** personal rights per resident; absent = follow memberFlags */
+    final Map<UUID, EnumSet<Flag>> perms = new HashMap<>();
+    /** town bank - money put in via deposit, spent on chunk purchases */
     double bank;
     /** chunks the town bought on top of the mayor's rank limit */
     int purchased;
-    final Set<Flag> memberFlags = EnumSet.allOf(Flag.class);
+    /** defaults handed to every new resident (toggled on the DEFAULTS menu page) */
+    final Set<Flag> memberFlags = EnumSet.copyOf(DEFAULT_FLAGS);
 
     Land(String name, UUID owner, String world) {
         this.name = name;
@@ -64,7 +72,6 @@ final class Land {
         return owner.equals(who) || ranks.containsKey(who);
     }
 
-    /** null for strangers; mayor is returned as Rank.ASSISTANT-equivalent via isMayor. */
     Rank rank(UUID who) {
         return ranks.get(who);
     }
@@ -73,12 +80,19 @@ final class Land {
         return owner.equals(who);
     }
 
-    /** Burgemeester and assistants manage; residents only use their flags. */
+    /** Mayor and officers manage (invite, kick, buy, flags, unclaim, ...). */
     boolean mayManage(UUID who) {
         return owner.equals(who) || ranks.get(who) == Rank.ASSISTANT;
     }
 
+    /** Effective rights of one player: mayor/officer = everything; resident = personal set or defaults. */
+    Set<Flag> rights(UUID who) {
+        EnumSet<Flag> personal = perms.get(who);
+        return personal != null ? personal : memberFlags;
+    }
+
     boolean may(UUID who, Flag f) {
-        return owner.equals(who) || (ranks.containsKey(who) && memberFlags.contains(f));
+        if (owner.equals(who) || ranks.get(who) == Rank.ASSISTANT) return true;
+        return ranks.containsKey(who) && rights(who).contains(f);
     }
 }

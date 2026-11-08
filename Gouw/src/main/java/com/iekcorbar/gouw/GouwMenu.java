@@ -18,17 +18,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The gouw chest menu (/gouw or /gouw menu). Since 0.4 it is town-shaped: MAIN (claim/autoclaim/
- * border/invite), LEDEN (member heads: click promotes/demotes, shift-click kicks), KAS (deposit,
- * withdraw, buy chunks for the town), JOBS (the live Jobs Reborn list with salaries) and the old
- * FLAGS page - plus the staff page. Members are added by name in chat - the same lock-flow players
- * know from the gift box - and stored as UUIDs.
+ * The gouw chest menu (/gouw or /gouw menu). Town-shaped since 0.4: MAIN (claim/autoclaim/border/
+ * buy/invite), DEFAULTS (rights every new resident starts with), LEDEN (member heads - click opens
+ * that member's page: per-resident rights toggles, promote/demote, kick), BANK (deposit, withdraw,
+ * buy chunk quota) and the staff page. Members are added by name in chat - the same lock-flow
+ * players know from the gift box - and stored as UUIDs.
  */
 final class GouwMenu implements Listener {
     private final GouwPlugin plugin;
@@ -43,26 +45,37 @@ final class GouwMenu implements Listener {
 
     // ------------------------------------------------------------ layout
 
-    private static final int LAND = 4, CLAIM = 10, AUTO = 11, UNCLAIM = 12, BORDER = 13, BUY = 14, FLAGS = 15, TRUST = 16,
-            MEMBERS = 17, KAS = 18, JOBS = 19, BACK = 22, ADMIN = 26;
+    private static final int LAND = 4, CLAIM = 10, AUTO = 11, UNCLAIM = 12, BORDER = 13, BUY = 14,
+            DEFAULTS = 15, TRUST = 16, MEMBERS = 17, KAS = 18, BACK = 22, ADMIN = 26;
     private static final int DEP_FROM = 10, DEP_TO = 12, WDR_FROM = 14, WDR_TO = 16, BUYN_FROM = 19, BUYN_TO = 21;
     private static final int A_BYPASS = 10, A_EXPIRE = 12;
-    private static final Material[] FLAG_ICON = {Material.GRASS_BLOCK, Material.CHEST, Material.BONE, Material.IRON_SWORD};
-    private static final String[] FLAG_LABEL = {"Members may build", "Members may open chests & doors", "Members may hit mobs", "Members may attack players"};
-    private static final String[] FLAG_NAME = {"Build", "Open", "Mobs", "Players"};
+    /** flag toggles live on odd slots 11..21 (six of them) on the DEFAULTS and MEMBER pages. */
+    private static final int[] FLAG_SLOTS = {11, 13, 15, 17, 19, 21};
+    private static final Material[] FLAG_ICON = {Material.GRASS_BLOCK, Material.CHEST, Material.OAK_DOOR, Material.BONE, Material.IRON_SWORD, Material.OAK_SIGN};
+    private static final String[] FLAG_LABEL = {
+            "Build - break & place", "Containers - chests & barrels", "Interact - doors, beds, buttons",
+            "Mobs - hit animals & mobs", "PvP - attack players", "Claim - add chunks to the town"};
+    private static final String[] FLAG_NAME = {"Build", "Containers", "Interact", "Mobs", "PvP", "Claim"};
     private static final double[] BANK_DEPOSIT = {10, 50, 250};
     private static final double[] BANK_WITHDRAW = {10, 50, 250};
     private static final int[] CHUNK_BUY = {1, 5, 10};
 
-    private enum Page {MAIN, ADMIN, FLAGS, MEMBERS, BANK, JOBS}
+    private enum Page {MAIN, ADMIN, DEFAULTS, MEMBERS, MEMBER, BANK}
 
     private static final class Holder implements InventoryHolder {
         final Player viewer;
         final Page page;
+        /** the resident whose rights page is open (Page.MEMBER only) */
+        final UUID target;
 
         Holder(Player viewer, Page page) {
+            this(viewer, page, null);
+        }
+
+        Holder(Player viewer, Page page, UUID target) {
             this.viewer = viewer;
             this.page = page;
+            this.target = target;
         }
 
         Inventory inv;
@@ -76,27 +89,24 @@ final class GouwMenu implements Listener {
     // ------------------------------------------------------------ open & draw
 
     void open(Player p) {
-        show(p, Page.MAIN);
+        show(p, Page.MAIN, null);
     }
 
-    private String title(Page page, Land l) {
+    private String title(Page page, Land l, UUID target) {
         return switch (page) {
             case ADMIN -> "Gouw - staff";
-            case FLAGS -> "Gouw - what may members do?";
-            case MEMBERS -> "Gouw - residents van " + (l == null ? "" : l.name);
+            case DEFAULTS -> "Gouw - rights for new residents";
+            case MEMBERS -> "Gouw - residents of " + (l == null ? "" : l.name);
             case BANK -> "Gouw - bank of " + (l == null ? "" : l.name);
-            case JOBS -> "Gouw - jobs (town payroll)";
-            default -> "Gouw - " + (l != null ? l.name : viewerName);
+            case MEMBER -> "Gouw - rights of " + nameOf(target);
+            default -> "Gouw - " + (l != null ? l.name : "your town");
         };
     }
 
-    private String viewerName = "";
-
-    private void show(Player p, Page page) {
-        viewerName = p.getName();
-        Holder h = new Holder(p, page);
-        int size = (page == Page.MEMBERS || page == Page.JOBS) ? 54 : 27;
-        h.inv = Bukkit.createInventory(h, size, Component.text(title(page, store.homeOf(p.getUniqueId()))));
+    private void show(Player p, Page page, UUID target) {
+        Holder h = new Holder(p, page, target);
+        int size = page == Page.MEMBERS ? 54 : 27;
+        h.inv = Bukkit.createInventory(h, size, Component.text(title(page, store.homeOf(p.getUniqueId()), target)));
         draw(h);
         p.openInventory(h.inv);
     }
@@ -104,12 +114,24 @@ final class GouwMenu implements Listener {
     private void draw(Holder h) {
         switch (h.page) {
             case ADMIN -> drawAdmin(h);
-            case FLAGS -> drawFlags(h);
+            case DEFAULTS -> {
+                Land dl = store.homeOf(h.viewer.getUniqueId());
+                if (dl == null) { h.viewer.closeInventory(); return; }
+                drawFlags(h, dl.memberFlags);
+            }
+            case MEMBER -> drawFlags(h, rightsOf(h));
             case MEMBERS -> drawMembers(h);
             case BANK -> drawBank(h);
-            case JOBS -> drawJobs(h);
             default -> drawMain(h);
         }
+    }
+
+    /** Effective rights shown on the member page: personal set, or the defaults it follows. */
+    private Set<Land.Flag> rightsOf(Holder h) {
+        Land l = store.homeOf(h.viewer.getUniqueId());
+        if (l == null) return Set.of();
+        EnumSet<Land.Flag> personal = l.perms.get(h.target);
+        return personal != null ? personal : l.memberFlags;
     }
 
     private void panes(Inventory inv) {
@@ -127,45 +149,56 @@ final class GouwMenu implements Listener {
         inv.setItem(LAND, icon(l == null ? Material.OAK_SIGN : Material.GOLD_NUGGET, "Your gouw", NamedTextColor.GOLD,
                 l == null ? "Claim your first chunk below." : "Chunks: " + l.chunks.size() + (max == Integer.MAX_VALUE ? "" : " / " + max),
                 l == null ? "-" : "World: " + l.world,
-                l == null ? "-" : "Inwoners: " + l.ranks.size() + " - you are " + role,
+                l == null ? "-" : "Residents: " + l.ranks.size() + " - you are " + role,
                 l == null ? "-" : "Bank: " + GouwCommand.money(l.bank)));
-        inv.setItem(CLAIM, icon(Material.GRASS_BLOCK, "Claim this chunk", NamedTextColor.GREEN, "Burgemeester and officer only"));
+        inv.setItem(CLAIM, icon(Material.GRASS_BLOCK, "Claim this chunk", NamedTextColor.GREEN, "Mayor and officers, or residents with the CLAIM right"));
         inv.setItem(AUTO, icon(Material.SAND, "Autoclaim around you", NamedTextColor.YELLOW, "Claims a 5x5 square, up to the gouw limit"));
         inv.setItem(UNCLAIM, icon(Material.BUCKET, "Unclaim this chunk", NamedTextColor.RED, "Shift-click: release your whole gouw"));
         inv.setItem(BORDER, icon(Material.COMPASS, "Show my border", NamedTextColor.AQUA, "Gold particles trace the gouw"));
-        inv.setItem(BUY, icon(Material.EMERALD, "Buy chunks", NamedTextColor.GREEN, "+1 chunk from the town bank", "More options on the KAS page"));
-        inv.setItem(FLAGS, icon(Material.LEATHER_BOOTS, "Member rights", NamedTextColor.LIGHT_PURPLE,
-                l == null ? "Claim first, then set rights." : "Now: build " + on(l, Land.Flag.BUILD) + ", open " + on(l, Land.Flag.ACCESS)
-                        + ", mobs " + on(l, Land.Flag.MOB) + ", players " + on(l, Land.Flag.PVP)));
+        inv.setItem(BUY, icon(Material.EMERALD, "Buy chunks", NamedTextColor.GREEN, "+1 chunk from the town bank", "More options on the BANK page"));
+        inv.setItem(DEFAULTS, icon(Material.LEATHER_BOOTS, "New-resident rights", NamedTextColor.LIGHT_PURPLE,
+                l == null ? "Claim first." : "Defaults: build " + flagOn(l.memberFlags, Land.Flag.BUILD) + ", chests " + flagOn(l.memberFlags, Land.Flag.CONTAINERS)
+                        + ", doors " + flagOn(l.memberFlags, Land.Flag.INTERACT) + ", mobs " + flagOn(l.memberFlags, Land.Flag.MOB)
+                        + ", pvp " + flagOn(l.memberFlags, Land.Flag.PVP) + ", claim " + flagOn(l.memberFlags, Land.Flag.CLAIM)));
         inv.setItem(TRUST, icon(Material.OAK_SIGN, "Invite someone", NamedTextColor.GREEN,
                 l == null ? "Claim first." : "Closes the menu: type their name in chat."));
-        inv.setItem(MEMBERS, icon(Material.PLAYER_HEAD, "Inwoners", NamedTextColor.GOLD, "Click heads to promote/demote or kick."));
+        inv.setItem(MEMBERS, icon(Material.PLAYER_HEAD, "Residents", NamedTextColor.GOLD, "Click a head: rights, promote or remove."));
         inv.setItem(KAS, icon(Material.GOLD_BLOCK, "Town bank", NamedTextColor.YELLOW,
                 l == null ? "Claim first." : "Balance: " + GouwCommand.money(l.bank), "Deposits, withdrawals, buying chunks"));
-        inv.setItem(JOBS, icon(Material.BOOK, "Town jobs", NamedTextColor.AQUA,
-                "Live list from Jobs Reborn", "Assign: /gouw job <player> <job>"));
         if (p.hasPermission("gouw.admin"))
             inv.setItem(ADMIN, icon(Material.COMMAND_BLOCK, "Staff page", NamedTextColor.LIGHT_PURPLE, "All gouwen, bypass, expire check"));
     }
 
-    private static String on(Land l, Land.Flag f) {
-        return l.memberFlags.contains(f) ? "on" : "off";
+    private static String flagOn(Set<Land.Flag> set, Land.Flag f) {
+        return set.contains(f) ? "on" : "off";
     }
 
-    private void drawFlags(Holder h) {
-        Land l = store.homeOf(h.viewer.getUniqueId());
-        panes(h.inv);
-        if (l == null) {
-            h.viewer.sendActionBar(Component.text("Claim a chunk first.", NamedTextColor.RED));
-            return;
+    /** Shared renderer for the DEFAULTS page (memberFlags) and the MEMBER rights page. */
+    private void drawFlags(Holder h, Set<Land.Flag> current) {
+        Inventory inv = h.inv;
+        panes(inv);
+        if (h.page == Page.MEMBER) {
+            inv.setItem(4, head(h.target));
+            Land l = store.homeOf(h.viewer.getUniqueId());
+            boolean mayor = l != null && l.isMayor(h.viewer.getUniqueId());
+            if (l != null && mayor)
+                inv.setItem(24, icon(Material.GOLDEN_HELMET,
+                        l.rank(h.target) == Land.Rank.ASSISTANT ? "Demote to resident" : "Promote to officer",
+                        NamedTextColor.GOLD, "Officer manages; resident gets the rights below"));
+            if (l != null && l.mayManage(h.viewer.getUniqueId()))
+                inv.setItem(25, icon(Material.LAVA_BUCKET, "Remove from town", NamedTextColor.RED, "This kicks the resident"));
+        } else if (h.page == Page.DEFAULTS) {
+            inv.setItem(4, icon(Material.OAK_SIGN, "Rights for NEW residents", NamedTextColor.GOLD,
+                    "Everyone already in town has their own page under RESIDENTS."));
         }
-        for (int i = 0; i < Land.Flag.values().length; i++) {
-            Land.Flag f = Land.Flag.values()[i];
-            boolean on = l.memberFlags.contains(f);
-            h.inv.setItem(11 + i * 2, icon(on ? FLAG_ICON[i] : Material.BARRIER, FLAG_LABEL[i],
+        Land.Flag[] flags = Land.Flag.values();
+        for (int i = 0; i < flags.length && i < FLAG_SLOTS.length; i++) {
+            Land.Flag f = flags[i];
+            boolean on = current.contains(f);
+            inv.setItem(FLAG_SLOTS[i], icon(on ? FLAG_ICON[i] : Material.BARRIER, FLAG_LABEL[i],
                     on ? NamedTextColor.GREEN : NamedTextColor.RED, FLAG_NAME[i] + ": " + (on ? "yes" : "no") + " - click to toggle"));
         }
-        h.inv.setItem(BACK, icon(Material.ARROW, "Back", NamedTextColor.YELLOW));
+        inv.setItem(BACK, icon(Material.ARROW, "Back", NamedTextColor.YELLOW));
     }
 
     /** 54-slot page: row 2 (10-16) and rows 3-5 (19-43) are member heads, 45 invite, 49 back. */
@@ -187,13 +220,11 @@ final class GouwMenu implements Listener {
             if (slot == 17) slot = 19;
             if (slot > 43) break;
             UUID who = r.getKey();
-            String job = l.jobs.get(who);
             ItemStack it = head(who);
             ItemMeta m = it.getItemMeta();
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text(r.getValue() == Land.Rank.ASSISTANT ? "officer" : "resident", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
-            lore.add(Component.text("job: " + (job == null ? "none" : job), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-            lore.add(Component.text("Click: " + (l.isMayor(h.viewer.getUniqueId()) ? (r.getValue() == Land.Rank.ASSISTANT ? "demote" : "promote to officer") : "no rights")
+            lore.add(Component.text("Click: rights page" + (r.getValue() == Land.Rank.ASSISTANT ? "" : " (+promote as mayor)")
                     + " - shift: remove", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
             m.lore(lore);
             it.setItemMeta(m);
@@ -218,28 +249,12 @@ final class GouwMenu implements Listener {
             h.inv.setItem(DEP_FROM + i, icon(Material.GOLD_NUGGET, "Deposit " + GouwCommand.money(BANK_DEPOSIT[i]), NamedTextColor.GREEN, "From your own wallet"));
         boolean manage = l.mayManage(h.viewer.getUniqueId());
         for (int i = 0; i < BANK_WITHDRAW.length; i++)
-            h.inv.setItem(WDR_FROM + i, icon(manage ? Material.GOLD_INGOT : Material.BARRIER, "Withdraw " + GouwCommand.money(BANK_WITHDRAW[i]),
-                    manage ? NamedTextColor.YELLOW : NamedTextColor.RED, manage ? "To your own wallet" : "Burgemeester and officer only"));
+            h.inv.setItem(WDR_FROM + i, icon(Material.GOLD_INGOT, "Withdraw " + GouwCommand.money(BANK_WITHDRAW[i]),
+                    NamedTextColor.YELLOW, "To your own wallet - every resident may"));
         for (int i = 0; i < CHUNK_BUY.length; i++)
             h.inv.setItem(BUYN_FROM + i, icon(Material.GRASS_BLOCK, "Buy " + CHUNK_BUY[i] + " chunk" + (CHUNK_BUY[i] > 1 ? "s" : ""),
-                    manage ? NamedTextColor.GREEN : NamedTextColor.RED, manage ? "Costs " + GouwCommand.money((double) price * CHUNK_BUY[i]) + " from the bank" : "Burgemeester and officer only"));
+                    manage ? NamedTextColor.GREEN : NamedTextColor.RED, manage ? "Costs " + GouwCommand.money((double) price * CHUNK_BUY[i]) + " from the bank" : "Mayor and officers only"));
         h.inv.setItem(BACK, icon(Material.ARROW, "Back", NamedTextColor.YELLOW));
-    }
-
-    private void drawJobs(Holder h) {
-        panes(h.inv);
-        List<String> jobs = plugin.jobs().all();
-        double dflt = plugin.getConfig().getDouble("default-salary", 50);
-        h.inv.setItem(4, icon(Material.BOOK, jobs.size() + " jobs (Jobs Reborn)", NamedTextColor.GOLD,
-                "Assign: /gouw job <player> <job>", "Residents are paid daily from the town bank."));
-        int slot = 10;
-        for (String j : jobs) {
-            if (slot == 17) slot = 19;
-            if (slot > 43) break;
-            double sal = plugin.getConfig().getDouble("salaries." + j.toLowerCase(java.util.Locale.ROOT), dflt);
-            h.inv.setItem(slot++, icon(Material.PAPER, j, NamedTextColor.AQUA, "Salary: " + GouwCommand.money(sal) + "/day"));
-        }
-        h.inv.setItem(49, icon(Material.ARROW, "Back", NamedTextColor.YELLOW));
     }
 
     private void drawAdmin(Holder h) {
@@ -329,44 +344,96 @@ final class GouwMenu implements Listener {
                         if (mine == null) act(h, "claim a chunk first", null);
                         else act(h, store.buyChunks(p, mine, 1), "+1 chunk for the gouw!");
                     }
-                    case FLAGS -> {
+                    case DEFAULTS -> {
                         if (mine == null) act(h, "claim a chunk first", null);
-                        else show(p, Page.FLAGS);
+                        else if (!mine.mayManage(p.getUniqueId())) act(h, "only mayor and officers set rights", null);
+                        else show(p, Page.DEFAULTS, null);
                     }
                     case TRUST -> inviteFlow(h, mine);
-                    case MEMBERS -> show(p, Page.MEMBERS);
-                    case KAS -> show(p, Page.BANK);
-                    case JOBS -> show(p, Page.JOBS);
+                    case MEMBERS -> show(p, Page.MEMBERS, null);
+                    case KAS -> show(p, Page.BANK, null);
                     case ADMIN -> {
-                        if (p.hasPermission("gouw.admin")) show(p, Page.ADMIN);
+                        if (p.hasPermission("gouw.admin")) show(p, Page.ADMIN, null);
                     }
                 }
             }
             case MEMBERS -> {
-                if (slot == 49) show(p, Page.MAIN);
+                if (slot == 49) show(p, Page.MAIN, null);
                 else if (slot == 45) inviteFlow(h, mine);
                 else if (mine != null && isMemberHeadSlot(slot) && e.getCurrentItem() != null && e.getCurrentItem().getType() == Material.PLAYER_HEAD) {
                     OfflinePlayer op = skullOwner(e.getCurrentItem());
                     if (op == null || op.getUniqueId().equals(mine.owner)) return;
                     if (e.isShiftClick()) {
-                        if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("Only mayor and officer remove members.", NamedTextColor.RED));
+                        if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("Only mayor and officers remove residents.", NamedTextColor.RED));
                         else {
                             String err = store.kick(mine, op.getUniqueId());
                             p.sendActionBar(Component.text(err == null ? op.getName() + " is removed." : err, err == null ? NamedTextColor.GOLD : NamedTextColor.RED));
                         }
+                        drawMembers(h);
                     } else {
-                        if (!mine.isMayor(p.getUniqueId())) p.sendActionBar(Component.text("Only the mayor promotes and demotes.", NamedTextColor.RED));
-                        else {
-                            String err = mine.rank(op.getUniqueId()) == Land.Rank.ASSISTANT
-                                    ? store.demote(mine, op.getUniqueId()) : store.promote(mine, op.getUniqueId());
-                            p.sendActionBar(Component.text(err == null ? op.getName() + "'s role changed." : err, err == null ? NamedTextColor.GREEN : NamedTextColor.RED));
-                        }
+                        if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("Only mayor and officers open the rights pages.", NamedTextColor.RED));
+                        else show(p, Page.MEMBER, op.getUniqueId());
                     }
-                    drawMembers(h);
+                }
+            }
+            case MEMBER -> {
+                if (mine == null || h.target == null || !mine.ranks.containsKey(h.target)) {
+                    // member left/kicked while the page was open
+                    show(p, Page.MEMBERS, null);
+                    return;
+                }
+                if (slot == BACK) {
+                    show(p, Page.MEMBERS, null);
+                } else if (slot == 24) {
+                    if (!mine.isMayor(p.getUniqueId())) p.sendActionBar(Component.text("Only the mayor promotes and demotes.", NamedTextColor.RED));
+                    else {
+                        String err = mine.rank(h.target) == Land.Rank.ASSISTANT
+                                ? store.demote(mine, h.target) : store.promote(mine, h.target);
+                        p.sendActionBar(Component.text(err == null ? "Role changed." : err, err == null ? NamedTextColor.GREEN : NamedTextColor.RED));
+                        show(p, Page.MEMBER, h.target);
+                        return;
+                    }
+                } else if (slot == 25) {
+                    if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("No rights.", NamedTextColor.RED));
+                    else {
+                        store.kick(mine, h.target);
+                        p.sendActionBar(Component.text(nameOf(h.target) + " removed.", NamedTextColor.GOLD));
+                        show(p, Page.MEMBERS, null);
+                        return;
+                    }
+                } else {
+                    int idx = flagSlotIndex(slot);
+                    if (idx >= 0) {
+                        if (!mine.mayManage(p.getUniqueId())) {
+                            p.sendActionBar(Component.text("Only mayor and officers change rights.", NamedTextColor.RED));
+                        } else {
+                            boolean nowOn = store.togglePerm(mine, h.target, Land.Flag.values()[idx]);
+                            p.playSound(p.getLocation(), "minecraft:ui.button.click", 0.5f, nowOn ? 1.6f : 0.7f);
+                        }
+                        drawFlags(h, rightsOf(h));
+                        return;
+                    }
+                }
+                drawFlags(h, rightsOf(h));
+            }
+            case DEFAULTS -> {
+                if (slot == BACK) {
+                    show(p, Page.MAIN, null);
+                    return;
+                }
+                if (mine == null || !mine.mayManage(p.getUniqueId())) {
+                    p.sendActionBar(Component.text("Only the mayor and officers change rights.", NamedTextColor.RED));
+                    return;
+                }
+                int idx = flagSlotIndex(slot);
+                if (idx >= 0) {
+                    boolean nowOn = store.toggleFlag(mine, Land.Flag.values()[idx]);
+                    p.playSound(p.getLocation(), "minecraft:ui.button.click", 0.5f, nowOn ? 1.6f : 0.7f);
+                    drawFlags(h, mine.memberFlags);
                 }
             }
             case BANK -> {
-                if (slot == BACK) show(p, Page.MAIN);
+                if (slot == BACK) show(p, Page.MAIN, null);
                 else if (mine == null) return;
                 else if (slot >= DEP_FROM && slot <= DEP_TO && slot < DEP_FROM + BANK_DEPOSIT.length) {
                     String err = store.deposit(p, mine, BANK_DEPOSIT[slot - DEP_FROM]);
@@ -382,30 +449,10 @@ final class GouwMenu implements Listener {
                     drawBank(h);
                 }
             }
-            case JOBS -> {
-                if (slot == 49) show(p, Page.MAIN);
-                else if (slot == 4) show(p, Page.BANK);
-            }
-            case FLAGS -> {
-                if (slot == BACK) {
-                    show(p, Page.MAIN);
-                    return;
-                }
-                if (mine == null || !mine.mayManage(p.getUniqueId())) {
-                    p.sendActionBar(Component.text("Only the mayor and officer change rights.", NamedTextColor.RED));
-                    return;
-                }
-                int idx = (slot - 11) / 2;
-                if (idx >= 0 && idx < Land.Flag.values().length && slot % 2 == 1) {
-                    boolean nowOn = store.toggleFlag(mine, Land.Flag.values()[idx]);
-                    p.playSound(p.getLocation(), "minecraft:ui.button.click", 0.5f, nowOn ? 1.6f : 0.7f);
-                    drawFlags(h);
-                }
-            }
             case ADMIN -> {
                 if (!p.hasPermission("gouw.admin")) return;
                 if (slot == BACK) {
-                    show(p, Page.MAIN);
+                    show(p, Page.MAIN, null);
                 } else if (slot == A_BYPASS) {
                     plugin.setBypassing(p.getUniqueId(), !plugin.isBypassing(p.getUniqueId()));
                     p.sendActionBar(Component.text("Bypass " + (plugin.isBypassing(p.getUniqueId()) ? "ON - build anywhere." : "off."),
@@ -442,6 +489,12 @@ final class GouwMenu implements Listener {
         p.playSound(p.getLocation(), "minecraft:ui.button.click", 0.4f, 1.4f);
     }
 
+    /** Which flag index a toggle slot maps to, or -1. */
+    private static int flagSlotIndex(int slot) {
+        for (int i = 0; i < FLAG_SLOTS.length; i++) if (FLAG_SLOTS[i] == slot) return i;
+        return -1;
+    }
+
     private void inviteFlow(Holder h, Land mine) {
         Player p = h.viewer;
         if (mine == null) {
@@ -449,7 +502,7 @@ final class GouwMenu implements Listener {
             return;
         }
         if (!mine.mayManage(p.getUniqueId())) {
-            act(h, "only the mayor and officer invite", null);
+            act(h, "only the mayor and officers invite", null);
             return;
         }
         pendingTrust.put(p.getUniqueId(), mine);

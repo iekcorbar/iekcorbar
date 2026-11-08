@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,8 @@ import java.util.UUID;
 
 /**
  * All gouwen in memory, saved as plain readable JSON (plugins/Gouw/claims.json). Since 0.4 a gouw also
- * carries town data: ranks (assistant/resident), a job per member, the town bank and bought chunks.
+ * carries town data: ranks (assistant/resident), the town bank and bought chunks. Every resident
+ * may deposit and withdraw from the bank; buying chunks and releasing land stay mayor/officer work.
  * The old "trusted" array is still written (derived from ranks) so SiteSync's GouwClaims keeps reading
  * the file the same way. Simple on purpose - the day Gouw itself is replaced, the next plugin reads this
  * file with the same ease Gouw reads Lands' database.
@@ -58,14 +60,19 @@ final class ClaimStore {
                 if (o.has("ranks"))
                     for (Map.Entry<String, JsonElement> r : o.getAsJsonObject("ranks").entrySet())
                         l.ranks.put(UUID.fromString(r.getKey()), Land.Rank.valueOf(r.getValue().getAsString()));
-                if (o.has("jobs"))
-                    for (Map.Entry<String, JsonElement> j : o.getAsJsonObject("jobs").entrySet())
-                        l.jobs.put(UUID.fromString(j.getKey()), j.getValue().getAsString());
+                if (o.has("perms"))
+                    for (Map.Entry<String, JsonElement> pe : o.getAsJsonObject("perms").entrySet()) {
+                        EnumSet<Land.Flag> set = EnumSet.noneOf(Land.Flag.class);
+                        for (JsonElement f : pe.getValue().getAsJsonArray()) parseFlag(f.getAsString(), set);
+                        l.perms.put(UUID.fromString(pe.getKey()), set);
+                    }
                 if (o.has("bank")) l.bank = o.get("bank").getAsDouble();
                 if (o.has("purchased")) l.purchased = o.get("purchased").getAsInt();
                 if (o.has("flags")) {
                     l.memberFlags.clear();
-                    for (JsonElement f : o.getAsJsonArray("flags")) l.memberFlags.add(Land.Flag.valueOf(f.getAsString()));
+                    for (JsonElement f : o.getAsJsonArray("flags")) parseFlag(f.getAsString(), l.memberFlags);
+                } else {
+                    l.memberFlags.addAll(Land.DEFAULT_FLAGS);
                 }
                 byOwner.put(l.owner, l);
             }
@@ -108,12 +115,19 @@ final class ClaimStore {
                 fr = false;
                 sb.append('"').append(r.getKey()).append("\": \"").append(r.getValue().name()).append('"');
             }
-            sb.append("}, \"jobs\": {");
-            boolean fj = true;
-            for (Map.Entry<UUID, String> j : l.jobs.entrySet()) {
-                if (!fj) sb.append(", ");
-                fj = false;
-                sb.append('"').append(j.getKey()).append("\": \"").append(esc(j.getValue())).append('"');
+            sb.append("}, \"perms\": {");
+            boolean fp = true;
+            for (Map.Entry<UUID, EnumSet<Land.Flag>> pe : l.perms.entrySet()) {
+                if (!fp) sb.append(", ");
+                fp = false;
+                sb.append('"').append(pe.getKey()).append("\": [");
+                boolean fz = true;
+                for (Land.Flag f : pe.getValue()) {
+                    if (!fz) sb.append(", ");
+                    fz = false;
+                    sb.append('"').append(f.name()).append('"');
+                }
+                sb.append("]");
             }
             sb.append("}, \"flags\": [");
             boolean ff = true;
@@ -136,6 +150,18 @@ final class ClaimStore {
 
     private static double round2(double d) {
         return Math.round(d * 100) / 100.0;
+    }
+
+    /** New flag names plus the legacy single ACCESS flag (0.2/0.3 files) which splits into CONTAINERS+INTERACT. */
+    private static void parseFlag(String name, java.util.Collection<Land.Flag> into) {
+        if (name.equals("ACCESS")) {
+            into.add(Land.Flag.CONTAINERS);
+            into.add(Land.Flag.INTERACT);
+            return;
+        }
+        try {
+            into.add(Land.Flag.valueOf(name));
+        } catch (IllegalArgumentException ignored) { }
     }
 
     private static String esc(String s) {
@@ -218,9 +244,9 @@ final class ClaimStore {
         if (l == null) {
             Land town = membership(p.getUniqueId());
             if (town != null) {
-                // members claim INTO the town: only mayor and officer may
-                if (town.rank(p.getUniqueId()) != Land.Rank.ASSISTANT)
-                    return "as a resident you do not claim - ask your mayor (or become officer)";
+                // members claim INTO the town: officers always, residents only with the CLAIM right
+                if (!town.may(p.getUniqueId(), Land.Flag.CLAIM))
+                    return "residents need the CLAIM right - ask the mayor or an officer (LEDEN menu)";
                 if (!town.world.equals(w.getName())) return town.name + " lies in " + town.world;
                 l = town;
             } else {
@@ -270,6 +296,20 @@ final class ClaimStore {
         return false;
     }
 
+    /** Toggle one right for ONE resident; the first toggle materialises the current defaults. */
+    boolean togglePerm(Land l, UUID who, Land.Flag f) {
+        EnumSet<Land.Flag> set = l.perms.get(who);
+        if (set == null) {
+            set = l.memberFlags.isEmpty() ? EnumSet.noneOf(Land.Flag.class) : EnumSet.copyOf(l.memberFlags);
+        }
+        boolean nowOn;
+        if (set.remove(f)) nowOn = false;
+        else { set.add(f); nowOn = true; }
+        l.perms.put(who, set);
+        save();
+        return nowOn;
+    }
+
     /** Invite (= the old trust): immediately resident. Fails if they already run their own gouw. */
     String invite(Land l, UUID who) {
         if (who.equals(l.owner)) return "that is you";
@@ -282,7 +322,7 @@ final class ClaimStore {
 
     String kick(Land l, UUID who) {
         if (l.ranks.remove(who) == null) return "not a member";
-        l.jobs.remove(who);
+        l.perms.remove(who);
         save();
         return null;
     }
@@ -301,14 +341,6 @@ final class ClaimStore {
         return null;
     }
 
-    String assignJob(Land l, UUID who, String job) {
-        if (!l.ranks.containsKey(who)) return "not a member of this gouw";
-        if (job == null || job.isEmpty() || job.equalsIgnoreCase("none")) l.jobs.remove(who);
-        else l.jobs.put(who, job);
-        save();
-        return null;
-    }
-
     // ------------------------------------------------------------ bank & purchases
 
     String deposit(Player actor, Land l, double amount) {
@@ -321,7 +353,7 @@ final class ClaimStore {
 
     String withdraw(Player actor, Land l, double amount) {
         if (amount <= 0) return "amount must be above 0";
-        if (!l.mayManage(actor.getUniqueId())) return "only mayor and officer withdraw from the bank";
+        if (!l.isMember(actor.getUniqueId())) return "only residents of this town touch the bank";
         if (l.bank < amount) return "the bank holds only " + round2(l.bank);
         if (!EconomyRef.deposit(actor, amount)) return "Vault could not pay out";
         l.bank -= amount;

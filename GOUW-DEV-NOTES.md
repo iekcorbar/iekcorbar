@@ -121,45 +121,58 @@ beschermen zelf stond uit. Fix: handler gesplitst in onBucketFill/onBucketEmpty,
 
 ## 0.4.0 "Dorpen" — stadssysteem (gebruiker: "towny-achtig, wel factie geen allies/enemies")
 Ontwerp zoals afgesproken in deze sessie:
-- **Rangen**: eigenaar = burgemeester (nooit in `ranks`), leden = ASSISTANT of RESIDENT.
-  Adjunct mag beheren (claimen/unclaimen/uitnodigen/kicken/deposit/buy/withdraw), resident alleen
-  wonen+vlaggen. Promote/demote ALLEEN burgemeester. Wel factie, GEEN alliantie/oorlog.
-- **Claimen**: leden claimen INTO de gouw van hun burgemeester (`homeOf`); residents krijgen een
-  foutmelding ("vraag je burgemeester of word adjunct"). invites worden geweigerd als de doel nog
-  een eigen gouw heeft (1 gouw-per-speler-invariant blijft).
-- **Stadskas**: `bank` per land in claims.json. deposit = elk lid (eigen geld via Vault),
-  withdraw = burgemeester/adjunct. Koop-/withdrawnoemen via KAS-pagina (10/50/250, chunks 1/5/10).
-- ** Meer claims KOPEN in de plugin zelf**: `/gouw buy [n]` + buttons; prijs `price-per-chunk` (250),
-  per-gouw-plafond `town-buy-max` (100), betaald uit de KAS. Limiet = rank-limit burgemeester
+- **Rangen**: eigenaar = mayor (nooit in `ranks`), leden = ASSISTANT (officer) of RESIDENT.
+  Officer mag beheren (claimen/unclaimen/uitnodigen/kicken/rechten/koop), resident heeft alleen zijn
+  per-lid rechten. Promote/demote ALLEEN mayor. Wel factie, GEEN alliantie/oorlog.
+- **Rechten-systeem per resident (gebruiker: "wat uitgebreider")**: `Land.Flag` is nu
+  **BUILD / CONTAINERS (kisten) / INTERACT (deuren, bedden, knoppen) / MOB / PVP / CLAIM**.
+  Oude globale `ACCESS`-vlag splitst bij load naar CONTAINERS+INTERACT (legacy parsing).
+  Elk resident heeft `perms: uuid -> EnumSet<Flag>`; **afwezig = volgt de defaults** (`memberFlags`,
+  instelbaar per gouw via menu-pagina "New-resident rights"; default: alles behalve CLAIM aan).
+  Eenmaal expliciet aangepast (`togglePerm` materialiseert bij eerste klik) volgt die resident de
+  eigen set. `may()` = mayor/officer altijd true, resident via rights. CLAIM is de enige vlag die
+  claimen INTO de town toestaat (`ClaimStore.claim` checkt `may(CLAIM)`); unclaim/buy blijven
+  mayor+officer. Listener: onInteract kiest CONTAINERS vs INTERACT via `accessFlag()`.
+- **Claimen**: leden claimen INTO de gouw van hun mayor (`homeOf`); residents zonder CLAIM-recht
+  krijgen een foutmelding. invites worden geweigerd als de doel nog een eigen gouw heeft
+  (1 gouw-per-speler-invariant blijft).
+- **Stadskas**: `bank` per land in claims.json. **deposit EN withdraw voor élke resident**
+  (gebruiker 08-11: "citizens kunnen ook deposit en withdrawl"; kopen/unclaimen blijft
+  mayor+officer). Koop-/withdrawnoemen via BANK-pagina (10/50/250, chunks 1/5/10).
+  Inwoners vullen de kas uit hun JOB-VERDIENSTEN — die uitbetaling loopt via
+  JobsReborn/onboarding/quests, **nooit via Gouw**.
+- **Meer claims KOPEN in de plugin zelf**: `/gouw buy [n]` + buttons; prijs `price-per-chunk` (250),
+  per-gouw-plafond `town-buy-max` (100), betaald uit de KAS. Limiet = rank-limit mayor
   (offline → config default + bonus) + `purchased`. Persoonlijke bonus (contract NPC) blijft.
-- **Taken/jobs = echte JobsReborn-jobs**: `JobsReader` leest `plugins/Jobs/config.yml` (section `jobs:`)
-  — geen API/compile-dep, geen DB; `/gouw jobs` + JOBS-menu-pagina tonen namen + salaris.
-  `Salaries` keurt per lid met taak elke `salary-hour` (default 7u) één keer per dag uit uit de
-  KAS (`salaries:` overrides, `default-salary: 50`, `salary-enabled`). Eén keer per DAG ook na
-  reboot: `meta.yml` last-salary-day. Te lege kas = overslaan + console regel. Staff:
-  `/gouw admin payroll` forceren.
-- **Data claims.json**: nieuwe velden `ranks`/`jobs`/`bank`/`purchased`; `trusted` wordt nog
+- **KORRECTIE — misverstand over jobs (gebruiker 08-11):** spelers kiezen hun job al tijdens
+  onboarding/tutorials via quests (JobsRank 1–5, NPC-flow) en JobsReborn betaalt daarvoor.
+  **Gouw wijst GEEN jobs toe en betaalt GEEN salarissen.** De eerdere `/gouw job`-assignering,
+  `Salaries`, `JobsReader` (config-lezen), JOBS-menu-pagina, `payroll` en alle `salary*/jobs-config`
+  config-sleutels zijn daarom **weer verwijderd** vóór deploy. Mocht er ooit een kas-spek van jobs
+  komen (bijv. % afdracht per job-uitbetaling naar de stadskas), dan hoort dat bij de
+  JobsReborn/quest-kant, niet in deze plugin.
+- **Data claims.json**: nieuwe velden `ranks`/`perms`/`bank`/`purchased`; `trusted` wordt nog
   GESCHREVEN (afgeleid) en nog GELEZEN (migration) — SiteSync GouwClaims hoeft er niet op verandert.
-  Oude files laden dus naadloos.
-- **Menu**: 27-slot hoofd (LAND/claim/auto/unclaim/border/BUY/flags/invite/MEMBERS/KAS/JOBS) +
-  LEDEN 54-slot (heads 10-16 + 19-43, klik promote/demote, shift kick, 45 invite, 49 back),
-  KAS, JOBS (54), FLAGS nu met mayManage-check.
+  Oude files laden naadloos (legacy `flags: [...ACCESS...]` → split; leden zonder `perms` erven
+  de defaults).
+- **Menu**: 27-slot hoofd (LAND/claim/auto/unclaim/border/BUY/DEFAULTS-rechten/invite/RESIDENTS/BANK)
+  + RESIDENTS 54-slot (heads 10-16 + 19-43; klik = Rechten-pagina, shift = remove, 45 invite, 49 back)
+  + MEMBER 27-slot (hoofd 4, zes vlag-toggles op slots 11/13/15/17/19/21, promote/demote 24 (mayor),
+  remove 25, back 22) + BANK + ADMIN. DEFAULTS-pagina (nieuwe-resident-standaarden) met mayManage-check.
 - Economie via `EconomyRef` (Vault reflectie; oude inline withdraw in GouwCommand vervangen).
-- Versie 0.4.0 (pom + plugin.yml; softdepend Jobs+Vault). `mvn -q package` groen;
-  `deploy/Gouw-0.4.0.jar`.
-- **Taal (gebruiker koos: ALLES ENGELS):** alle player-facing strings consequent Engels gemaakt —
-  burgemeester→**mayor**, adjunct→**officer**, inwoner→**resident**, taak→**job**, kas→**bank**.
-  Opvolgingzelfde dag: ook de **`taak`-commando-alias verwijderd** (commit 36af0287) — alleen
-  `/gouw job`. Grep over de repo gevonden: geen quests/scripts die `/gouw taak` gebruiken (alleen
-  `/gouw admin buychunks` via NPC/quest, en dat commando bestaat nog). 0.4.0 is nooit gedeployd →
-  jar blijft 0.4.0.
+- Versie 0.4.0 (pom + plugin.yml; softdepend Vault, **Jobs niet meer** — Gouw raakt JobsReborn niet
+  meer). `mvn -q package` groen; `deploy/Gouw-0.4.0.jar`.
+- **Taal (gebruiker koos: ALLES ENGELS):** alle player-facing strings consequent Engels —
+  burgemeester→**mayor**, adjunct→**officer**, inwoner→**resident**, kas→**bank**. Term "taak/job"
+  bestond al niet lang en is met de job-correctie helemaal verdwenen.
 - **Open: in-game testen (server, gebruiker)**, dan pas feel/price-tuning:
-  1. jar wisselen + herstart; claims.json wordt automatisch uitgebreid (oude trouwe leden → resident).
-  2. Test: claim als burgemeester, invite → resident kan NIET claimen, adjunct kan Wél; promote/demote;
-     kas volstorten, buy chunks (prijs/plafond), taak Assigneren (checkt Jobs-lijst), payroll een keer
-     force via `/gouw admin payroll` en kijken of Vault-deposit + kas-krimping kloppen.
-  3. Salarijs-per-job invullen in config `salaries:` (names = lowercase jobs-id's uit de live config).
-- Eventueel later: wiki-pagina's docs/wiki-gouw uitbreiden met dorpen; SiteSync-sitekaart met
-  burgemeester per gouw; town level (verhoogd rank-limit per inwoners-aantal)?
+  1. jar wisselen + herstart; claims.json upgradeert automatisch (trusted → residents met defaults,
+     oude ACCESS-vlag splitst netjes).
+  2. Test: claim als mayor; invite → resident mag NIET claimen (geen CLAIM), officer Wél;
+     per-resident rights pagina: toggles, promote/demote, shift-remove; kas: resident deposit én
+     withdraw; buy chunks (prijs 250, plafond 100); piston/explosie-gedrag unveranderd checken.
+  3. Delen defaults-per-gouw: "New-resident rights"-pagina werkt per gouw apart (niet globaal).
+- Eventueel later: wiki-pagina's docs/wiki-gouw uitbreiden met dorpen + rechten; SiteSync-sitekaart
+  met mayor per gouw; town level (verhoogd rank-limit per inwoners-aantal)?
 
 

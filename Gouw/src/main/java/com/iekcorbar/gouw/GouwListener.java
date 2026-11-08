@@ -3,6 +3,7 @@ package com.iekcorbar.gouw;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -28,8 +29,10 @@ import org.bukkit.inventory.InventoryHolder;
 import java.util.List;
 
 /**
- * What a gouw actually protects, per flag: BUILD (break / place / bucket), ACCESS (chests, doors, buttons),
- * MOB (hitting mobs and other things inside), PVP (hitting players). Explosions never take claimed blocks
+ * What a gouw actually protects, per flag: BUILD (break / place / bucket), CONTAINERS (chests and
+ * similar storage), INTERACT (doors, beds, buttons, note blocks...), MOB (hitting mobs and other
+ * things inside), PVP (hitting players). CLAIM (a resident right) is enforced in ClaimStore.claim,
+ * not here. Explosions never take claimed blocks
  * and pistons may not drag blocks across a border. Strangers walking in or out get an action bar and a
  * pulse of gold dust along the chunk line.
  *
@@ -81,12 +84,19 @@ final class GouwListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onInteract(PlayerInteractEvent e) {
         Block b = e.getClickedBlock();
-        if (b == null || store.may(e.getPlayer(), b.getWorld(), b.getX(), b.getZ(), Land.Flag.ACCESS)) return;
+        if (b == null || store.may(e.getPlayer(), b.getWorld(), b.getX(), b.getZ(), accessFlag(b))) return;
         if ((e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) && interactive(b)) {
             e.setUseInteractedBlock(Event.Result.DENY);
             e.setUseItemInHand(Event.Result.DENY);
             e.getPlayer().sendActionBar(Component.text("This is " + ownerName(b) + "'s gouw - ask " + ownerName(b) + " to trust you.", NamedTextColor.RED));
         }
+    }
+
+    /** Chests and similar storage need CONTAINERS; everything interactive needs INTERACT. */
+    private static Land.Flag accessFlag(Block b) {
+        BlockState s = b.getState();
+        if (s instanceof InventoryHolder || b.getType() == Material.ENDER_CHEST) return Land.Flag.CONTAINERS;
+        return Land.Flag.INTERACT;
     }
 
     private static boolean interactive(Block b) {

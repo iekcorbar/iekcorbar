@@ -1,6 +1,6 @@
 # Gouw - chunk land claims & towns, successor of the Lands plugin.
 
-# How many chunks one burgemeester may claim (without bonus/purchases). Staff with gouw.admin: unlimited.
+# How many chunks one mayor may claim (without bonus/purchases). Staff with gouw.admin: unlimited.
 max-chunks: 16
 # Ranks can raise this: give a group the permission gouw.chunks.<number> (e.g. gouw.chunks.55); the highest wins.
 
@@ -24,22 +24,11 @@ bonus-max: 100
 
 # ---- Town (0.4) ----
 
-# What one extra chunk costs when the town buys it (/gouw buy, /gouw menu KAS page). Paid from the bank.
+# What one extra chunk costs when the town buys it (/gouw buy, /gouw menu BANK page). Paid from the bank.
 price-per-chunk: 250
-# Most chunks ONE gouw can buy on top of the burgemeester's rank limit.
+# Most chunks ONE gouw can buy on top of the mayor's rank limit.
 town-buy-max: 100
 
-# Daily job salaries: residents assigned via /gouw job are paid from the TOWN BANK.
-salary-enabled: true
-# Pays the first hour after this server-local hour, once per day (stored in meta.yml, reboot-safe).
-salary-hour: 7
-# Amount for jobs not listed below.
-default-salary: 50
-# Per-job overrides, key = Jobs Reborn job name (lowercase). Examples:
-salaries:
-  # miner: 80
-  # woodcutter: 70
-  # farmer: 60
-
-# The live Jobs Reborn config Gouw reads the job names from (file read only, no API dependency).
-jobs-config: plugins/Jobs/config.yml
+# Rights every NEW resident starts with (edit per resident in the menu: Residents -> click a head).
+# BUILD/CONTAINERS/INTERACT/MOB/PVP on, CLAIM off. Change via /gouw menu -> "New-resident rights";
+# the current defaults are stored per gouw in claims.json, not in this file.

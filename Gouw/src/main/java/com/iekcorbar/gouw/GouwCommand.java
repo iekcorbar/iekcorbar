@@ -12,6 +12,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -19,8 +20,10 @@ import java.util.UUID;
 
 /**
  * /gouw - claim and manage your gouw. Aliases /g and /claim (players knew /claim from the old plugin).
- * Since 0.4 also the town side: ranks (mayor/officer/resident), taken from the live Jobs list,
- * the town bank (deposit/withdraw) and /gouw buy to raise the chunk limit from the bank.
+ * Since 0.4 also the town side: ranks (mayor/officer/resident), per-resident rights (build/chests/
+ * interact/mobs/pvp/claim), the town bank (every resident deposits and withdraws; deposits come
+ * from their job earnings, which are paid by JobsReborn - Gouw never assigns or pays jobs) and
+ * /gouw buy to raise the chunk limit from the bank.
  * Everything writes through ClaimStore (which saves claims.json).
  */
 final class GouwCommand implements TabExecutor {
@@ -141,49 +144,17 @@ final class GouwCommand implements TabExecutor {
                 if (l.ranks.isEmpty()) { msg(p, "No members yet - /gouw invite <player>", NamedTextColor.GRAY); return true; }
                 msg(p, "Residents of " + l.name + " (mayor: " + nameOf(l.owner) + "):", NamedTextColor.GOLD);
                 for (Map.Entry<UUID, Land.Rank> r : l.ranks.entrySet()) {
-                    String job = l.jobs.get(r.getKey());
-                    msg(p, " - " + nameOf(r.getKey()) + " [" + (r.getValue() == Land.Rank.ASSISTANT ? "officer" : "resident") + "]"
-                            + (job == null ? "" : " job: " + job), NamedTextColor.GRAY);
-                }
-            }
-            case "job" -> {
-                Land l = needTown(p);
-                if (l == null) return true;
-                if (!l.isMayor(p.getUniqueId())) { msg(p, "Only the mayor assigns jobs.", NamedTextColor.RED); return true; }
-                if (a.length < 2) { msg(p, "/" + label + " job <player> <job|none>", NamedTextColor.RED); return true; }
-                UUID who = uuidOf(a[1]);
-                String job = a.length > 2 ? a[2] : (a.length == 2 ? "none" : null);
-                if (who == null) { msg(p, "Player '" + a[1] + "' is not known.", NamedTextColor.RED); return true; }
-                boolean salaryConfigured = plugin.getConfig().getDouble("salaries." + job.toLowerCase(Locale.ROOT), -1) >= 0;
-                if (!job.equalsIgnoreCase("none") && !plugin.jobs().known(job) && !salaryConfigured) {
-                    msg(p, "No such job '" + job + "'. /gouw jobs lists what Jobs Reborn knows.", NamedTextColor.RED);
-                    return true;
-                }
-                String err = store.assignJob(l, who, job);
-                if (err != null) msg(p, "Cannot assign: " + err + ".", NamedTextColor.RED);
-                else {
-                    msg(p, (nameOf(who)) + (job.equalsIgnoreCase("none") ? " has no job anymore." : " now works as " + job + " for " + l.name + "."), NamedTextColor.GREEN);
-                    OfflinePlayer op = Bukkit.getOfflinePlayer(who);
-                    if (op.isOnline()) op.getPlayer().sendMessage(Component.text("The mayor of " + l.name + " assigned you the job '" + job + "' (paid daily from the town bank).", NamedTextColor.GOLD));
-                }
-            }
-            case "jobs" -> {
-                List<String> jobs = plugin.jobs().all();
-                if (jobs.isEmpty()) msg(p, "No Jobs Reborn config found - the job list is empty (Gouw's own salaries keys still work).", NamedTextColor.GRAY);
-                else {
-                    msg(p, "Jobs the server knows (from Jobs Reborn):", NamedTextColor.GOLD);
-                    double dflt = plugin.getConfig().getDouble("default-salary", 50);
-                    int i = 0;
-                    for (String j : jobs) {
-                        msg(p, " " + j + " - salary " + money(plugin.getConfig().getDouble("salaries." + j.toLowerCase(Locale.ROOT), dflt)), NamedTextColor.GRAY);
-                        if (++i >= 30) { msg(p, "... (" + (jobs.size() - i) + " more, see /gouw menu jobs page)", NamedTextColor.DARK_GRAY); break; }
-                    }
+                    EnumSet<Land.Flag> personal = l.perms.get(r.getKey());
+                    String rights;
+                    if (r.getValue() == Land.Rank.ASSISTANT) rights = "all";
+                    else rights = (personal == null ? "defaults" : personal.stream().map(f -> f.name()).sorted().toList().toString());
+                    msg(p, " - " + nameOf(r.getKey()) + " [" + (r.getValue() == Land.Rank.ASSISTANT ? "officer" : "resident") + "] rights: " + rights, NamedTextColor.GRAY);
                 }
             }
             case "bank" -> {
                 Land l = needTown(p);
                 if (l == null) return true;
-                msg(p, l.name + " bank: " + money(l.bank) + " (deposits welcome; mayor & officer spend).", NamedTextColor.GOLD);
+                msg(p, l.name + " bank: " + money(l.bank) + " (every resident deposits and withdraws; mayor & officer buy chunks).", NamedTextColor.GOLD);
                 msg(p, "Chunks: " + l.chunks.size() + " / " + store.limitOf(l) + " - /gouw buy <n> raises the limit from the bank (" + plugin.getConfig().getInt("price-per-chunk", 250) + " each).", NamedTextColor.GRAY);
             }
             case "deposit" -> {
@@ -286,13 +257,8 @@ final class GouwCommand implements TabExecutor {
             }
             case "reload" -> {
                 plugin.reloadConfig();
-                int jobs = plugin.jobs().reload().size();
                 store.save();
-                msg(s, "Config + jobs list (" + jobs + ") reloaded, claims saved.", NamedTextColor.GREEN);
-            }
-            case "payroll" -> {
-                int n = plugin.salaries().forceRun();
-                msg(s, "Forced job payroll run: " + n + " member(s) paid from town banks.", NamedTextColor.GREEN);
+                msg(s, "Config reloaded, claims saved.", NamedTextColor.GREEN);
             }
             case "bypass" -> {
                 if (!(s instanceof Player p)) { msg(s, "Players only.", NamedTextColor.RED); return true; }
@@ -326,7 +292,7 @@ final class GouwCommand implements TabExecutor {
                 msg(t, "+" + n + " personal bonus chunks! You now have " + (have + n) + " extra.", NamedTextColor.GOLD);
                 msg(s, "Gave " + t.getName() + " +" + n + " bonus chunks (personal bonus " + (have + n) + ").", NamedTextColor.GREEN);
             }
-            default -> msg(s, "/gouw admin <delete <name>|import [force]|reload|payroll|bypass [on|off]|addchunks <p> <n>|buychunks <p> <n> <cost>>", NamedTextColor.RED);
+            default -> msg(s, "/gouw admin <delete <name>|import [force]|reload|bypass [on|off]|addchunks <p> <n>|buychunks <p> <n> <cost>>", NamedTextColor.RED);
         }
         return true;
     }
@@ -341,14 +307,14 @@ final class GouwCommand implements TabExecutor {
                 {"unclaim | unclaim all", "release a chunk or your whole gouw"},
                 {"invite <p> / kick <p>", "add or remove residents (was: trust/untrust)"},
                 {"promote <p> / demote <p>", "make a resident officer (mayor only)"},
-                {"job <p> <job|none>", "assign a Jobs Reborn job - daily pay from the bank"},
-                {"jobs / bank / deposit <a> / withdraw <a>", "the town's money"},
+                {"bank / deposit <a> / withdraw <a>", "the town's money"},
                 {"members / info / list / near [r]", "who and what is around you"},
+                {"menu rights", "per-resident rights (Build/Containers/Interact/Mobs/PvP/Claim) via the Residents page"},
                 {"rename <name>", "name your gouw (mayor)"},
                 {"border", "see the gouw's outline"},
                 {"leave", "step out of a gouw you are a member of"},
         }) msg(s, " /gouw " + h[0] + " - " + h[1], NamedTextColor.GRAY);
-        if (staff) msg(s, " staff: /gouw admin delete|import|reload|payroll|bypass", NamedTextColor.DARK_GRAY);
+        if (staff) msg(s, " staff: /gouw admin delete|import|reload|bypass", NamedTextColor.DARK_GRAY);
     }
 
     /** Online player first, then the profile cache (must have joined at least once). */
@@ -370,22 +336,19 @@ final class GouwCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "buy", "unclaim", "invite", "kick", "promote", "demote", "job", "jobs", "bank", "deposit", "withdraw", "members", "rename", "info", "list", "near", "border", "leave", "admin"})
+            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "buy", "unclaim", "invite", "kick", "promote", "demote", "bank", "deposit", "withdraw", "members", "rename", "info", "list", "near", "border", "leave", "admin"})
                 if (v.startsWith(last)) out.add(v);
-        } else if (a.length == 2 && List.of("invite", "kick", "promote", "demote", "job").contains(a[0].toLowerCase(Locale.ROOT))) {
+        } else if (a.length == 2 && List.of("invite", "kick", "promote", "demote").contains(a[0].toLowerCase(Locale.ROOT))) {
             Land l = s instanceof Player pl ? store.homeOf(pl.getUniqueId()) : null;
             if (l != null) for (UUID u : l.ranks.keySet()) {
                 String n = Bukkit.getOfflinePlayer(u).getName();
                 if (n != null && n.toLowerCase(Locale.ROOT).startsWith(last)) out.add(n);
             }
             else for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
-        } else if (a.length == 3 && List.of("job").contains(a[0].toLowerCase(Locale.ROOT))) {
-            for (String j : plugin.jobs().all()) if (j.toLowerCase(Locale.ROOT).startsWith(last)) out.add(j);
-            if ("none".startsWith(last)) out.add("none");
         } else if (a.length == 2 && a[0].equalsIgnoreCase("unclaim")) {
             if ("all".startsWith(last)) out.add("all");
         } else if (a.length == 2 && a[0].equalsIgnoreCase("admin")) {
-            for (String v : new String[]{"delete", "import", "reload", "payroll", "bypass", "addchunks", "buychunks"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"delete", "import", "reload", "bypass", "addchunks", "buychunks"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 3 && a[0].equalsIgnoreCase("admin") && a[1].equalsIgnoreCase("import")) {
             if ("force".startsWith(last)) out.add("force");
         } else if (a.length == 3 && a[0].equalsIgnoreCase("admin") && a[1].equalsIgnoreCase("delete")) {
