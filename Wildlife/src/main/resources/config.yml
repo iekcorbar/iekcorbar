@@ -42,7 +42,6 @@ species:
   dragonfly: {enabled: true, weight: 5}
   elephant: {enabled: true, weight: 3}
   zebra: {enabled: true, weight: 7}
-  dragon: {enabled: true, weight: 3}   # CAVE species: only the underground pass places it (cave-chance)
   tanuki: {enabled: true, weight: 4}
   crane: {enabled: true, weight: 2}
   koi: {enabled: true, weight: 6}
@@ -57,9 +56,31 @@ species:
   orca: {enabled: true, weight: 1}
   piranha: {enabled: true, weight: 6}
   macaw: {enabled: true, weight: 4}
-  # sfeer-wezen (0.7.0): geen dier en dus nooit in het wild - alleen te plaatsen met
-  # /wildlife spawn wraith (het commando negeert deze sectie; de spawner holds itself extra in)
-  wraith: {enabled: false, weight: 0}
+  giraffe: {enabled: true, weight: 6}
+  lion: {enabled: true, weight: 4}
+  hyena: {enabled: true, weight: 5}
+  arcticfox: {enabled: true, weight: 5}
+  snowyowl: {enabled: true, weight: 4}
+  reindeer: {enabled: true, weight: 6}
+  fennec: {enabled: true, weight: 5}
+  meerkat: {enabled: true, weight: 6}
+  vulture: {enabled: true, weight: 4}
+  dragon: {enabled: false, weight: 0}   # disabled per server owner request
+  wraith: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  willowisp: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  steamgolem: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  oni: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  glowsprite: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  kitsune: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  kappa: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  tengu: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  automaton: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  willowisp_green: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  willowisp_red: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  willowisp_gold: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  willowisp_white: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+  willowisp_purple: {enabled: false, weight: 0}   # sfeer-wezen: geen dier, nooit in het wild
+
 
 # the steam dragon (0.8.0): tamed with coal, ridden by its owner
 dragon:
