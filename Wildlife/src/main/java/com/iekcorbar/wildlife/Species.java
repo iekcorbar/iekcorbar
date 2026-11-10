@@ -194,7 +194,7 @@ enum Species {
             "A small sentinel that stands on its hind legs to watch for danger. Always in a group.",
             "Deserts and badlands by day - look for the sentinels on the rocks.",
             "entity.rabbit.ambient", "entity.rabbit.hurt", "entity.rabbit.death", 1.2f),
-    VULTURE("Vulture", EntityType.PARROT, 1.1, 10, 0.15, Habitat.AIR, Time.DAY, 1, 3, 4,
+    VULTURE("Vulture", EntityType.PARROT, 1.35, 10, 0.15, Habitat.AIR, Time.DAY, 1, 3, 4,
             List.of("desert", "badlands", "savanna", "plains"), "feather",
             "A broad-winged scavenger of the open sky. It circles high and lands where something has fallen.",
             "Deserts and open plains by day - look up for the circling shadow.",
