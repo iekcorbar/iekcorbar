@@ -24,7 +24,10 @@ RES = 128
 # clean - same source -> same files, always (same trick as Steamworks/tools/make_models.py)
 import itertools as _it
 _c = _it.count()
-U = lambda: str(uuid.uuid5(uuid.NAMESPACE_URL, "iekcorbar-wildlife-%d" % next(_c)))
+_MODEL = "model"
+# uuid per model+index (NOT one global counter across all models): editing one species used to
+# reshuffle the uuids of every model built after it - 47 files of pure noise in git (10-11).
+U = lambda: str(uuid.uuid5(uuid.NAMESPACE_URL, "iekcorbar-wildlife-%s-%d" % (_MODEL, next(_c))))
 
 BASE = {
     "deer": (150, 98, 60), "deer_white": (236, 230, 220), "fur_brown": (112, 76, 48), "fur_dark": (70, 48, 32),
@@ -219,6 +222,9 @@ def _pack(sizes):
 
 class Model:
     def __init__(self, name, recolor=None):
+        global _c, _MODEL
+        _c = _it.count()          # every model numbers its uuids from zero, seeded by its own name
+        _MODEL = name
         self.name = name
         self.recolor = recolor or {}
         self.roots, self.bones, self.elements = [], {}, []
@@ -489,6 +495,66 @@ def gait(m, period, amp, head=3, tail=10, style="walk", bob=0.15, extra=None):
     if extra:
         t.update(extra)
     m.anim("walk", period, t)
+
+
+DOWNLOADS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads")
+
+# Species whose model comes from a CC0 download (mesh2model.py output in tools/downloads/) instead
+# of the hand-built boxes. Colours are quantised onto our wildlife palette, so the atlas, the
+# rare/baby variants, statues and the audit all keep working untouched. Params below tune the gait.
+MESH = {
+    "deer": dict(rig="quad", period=0.95, amp=27),
+    "zebra": dict(rig="quad", period=1.0, amp=28),
+    "boar": dict(rig="quad", period=0.8, amp=24),
+    "lion": dict(rig="quad", period=0.9, amp=26),
+    "giraffe": dict(rig="quad", period=1.25, amp=20),
+    "macaque": dict(rig="quad", period=0.8, amp=24),
+    "elephant": dict(rig="quad", period=1.4, amp=16, style="pace", head=2.0, tail=7),
+    "crab": dict(rig="quad", period=0.5, amp=14, head=2.0),
+    "penguin": dict(rig="bird", period=0.7, amp=13),
+    "macaw": dict(rig="bird", period=0.55, amp=55),
+    "orca": dict(rig="fish", period=0.9, amp=13, fluke=True),
+    "koi": dict(rig="fish", period=0.5, amp=18),
+    "piranha": dict(rig="fish", period=0.42, amp=20),
+}
+
+
+def mesh_build(m, sid, rig="quad", period=0.95, amp=26, head=3.0, tail=8.0, bob=0.15, style="walk", fluke=False):
+    """Animal from tools/downloads/mesh_<sid>.json (CC0 mesh voxellised by mesh2model.py).
+    Boxes are authored front=-Z like every hand-built species, so oriented() keeps working."""
+    d = json.load(open(os.path.join(DOWNLOADS, "mesh_%s.json" % sid), encoding="utf-8"))
+    for name, org in d["bones"].items():
+        m.bone(name, tuple(org), None if name == "body" else "body")
+    for b in d["boxes"]:
+        m.box(b["bone"], b["from"][0], b["from"][1], b["from"][2], b["to"][0], b["to"][1], b["to"][2], b["color"])
+    if rig == "quad":
+        gait(m, period, amp, head=head, tail=tail, style=style, bob=bob)
+        q = 2.8
+        m.anim("idle", q, {"body": {"position": [(0, (0, 0, 0)), (q / 2, (0, 0.12, 0)), (q, (0, 0, 0))]},
+                           "h_head": {"rotation": [(0, (0, 0, 0)), (q / 2, (0, 5, 0)), (q, (0, 0, 0))]}})
+        death(m, drop=1.5)
+    elif rig == "bird":
+        p = period
+        t = {"wing_l": {"rotation": wave(4, p, amp, 0, axis=2)}, "wing_r": {"rotation": wave(4, p, -amp, 0, axis=2)},
+             "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.25, 0)), (p, (0, 0, 0))]}}
+        for ln in ("leg_l", "leg_r"):
+            t[ln] = {"rotation": wave(6, p, amp * 0.35, math.pi if ln == "leg_r" else 0.0)}
+        m.anim("walk", p, t)
+        m.anim("idle", 2.2, {"body": {"position": [(0, (0, 0, 0)), (1.1, (0, 0.1, 0)), (2.2, (0, 0, 0))]},
+                             "h_head": {"rotation": [(0, (0, 0, 0)), (1.1, (0, 8, 0)), (2.2, (0, 0, 0))]}})
+        death(m, drop=1.5)
+    elif rig == "fish":
+        swim(m, period=period, amp=amp, fluke=fluke)
+
+
+def species_builder(sid, fn):
+    """Downloaded mesh wins when present; the hand-built function stays the fallback."""
+    if sid not in MESH or not os.path.exists(os.path.join(DOWNLOADS, "mesh_%s.json" % sid)):
+        return fn
+
+    def build(m, **kw):
+        mesh_build(m, sid, **MESH[sid])
+    return build
 
 
 def hop_walk(m, period=0.45, hop=0.5, fold=80):
@@ -2191,41 +2257,53 @@ def meerkat(m):
 
 
 def vulture(m):
-    fur, dark, eye, beak = "fur_dark", "fur_black", "eye", "beak"
-    m.bone("body", (0, 9, 0))
-    m.box("body", -2.4, 8.0, -3.0, 2.4, 11.0, 2.5, fur)
-    m.box("body", -2.0, 7.5, -2.5, 2.0, 10.5, 2.0, dark)
-    m.bone("h_head", (0, 10.5, -2.5), "body")
-    m.box("h_head", -1.6, 10.5, -4.5, 1.6, 13.0, -2.5, fur)
-    m.box("h_head", -1.2, 10.0, -4.8, 1.2, 12.5, -4.0, dark)
-    # bald head
-    m.box("h_head", -1.0, 12.5, -4.2, 1.0, 13.5, -3.5, "pink")
-    m.sym("h_head", 0.8, 11.2, -4.6, 1.2, 11.9, -4.4, eye)
-    m.box("h_head", -0.4, 10.5, -4.9, 0.4, 11.2, -4.6, beak)
-    # wings (broad)
-    for name, sx in (("wing_l", 1), ("wing_r", -1)):
-        m.bone(name, (sx * 2.0, 9.5, 0), "body")
-        x1, x2 = (2.0, 7.0) if sx > 0 else (-7.0, -2.0)
-        m.box(name, x1, 7.5, -0.5, x2, 11.5, 0.5, fur)
-        m.box(name, x1 + 0.5, 7.0, -0.3, x2 - 0.5, 8.0, 0.3, dark)
-    # legs
-    for name, sx in (("leg_l", 1), ("leg_r", -1)):
-        m.bone(name, (sx * 1.0, 8.0, 0), "body")
-        x1, x2 = (0.7, 1.3) if sx > 0 else (-1.3, -0.7)
-        m.box(name, x1, 0.0, -0.5, x2, 8.2, 0.5, dark)
-    # tail (short)
-    m.bone("tail", (0, 9.0, 2.3), "body")
-    m.box("tail", -0.6, 8.0, 2.3, 0.6, 10.0, 3.5, fur)
-    p = 2.4
-    m.anim("idle", p, {"body": {"position": wave(6, p, 0.15, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 1.5, 0.4, axis=2)},
-        "wing_l": {"rotation": wave(6, p, 5.0, 0.0, axis=0)}, "wing_r": {"rotation": wave(6, p, 5.0, math.pi, axis=0)}})
-    p = 1.8
-    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.2, 0)), (p, (0, 0, 0))]},
-        "leg_l": {"rotation": wave(4, p, 16.0, 0.0, axis=0)}, "leg_r": {"rotation": wave(4, p, 16.0, math.pi, axis=0)},
-        "wing_l": {"rotation": wave(4, p, 8.0, 0.0, axis=0)}, "wing_r": {"rotation": wave(4, p, 8.0, math.pi, axis=0)},
-        "h_head": {"rotation": wave(4, p, 2.0, 0.3, axis=2)}})
-    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.8, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.5, (0, -5, 0)), (0.8, (0, -5, 0))]}}, loop="hold")
+    """Hunched scavenger in the style of the owner's reference model: big forward-leaning brown
+    body, long folded wings drooping down the back, thick grey neck with a white ruff, oversized
+    pink head with huge white eyes, and a long thick dark beak that hooks down past the face.
+    Front = -Z (oriented() turns it to FMM's -X). Drawn ~15.5 px tall; SIZE x1.4 then entity
+    scale 1.35 lands it at ~1.8-1.9 blocks."""
+    fur, dark, black, gray, web = "fur_brown", "fur_dark", "fur_black", "duck_gray", "web"
+    m.bone("body", (0, 8.0, 0.3))
+    m.box("body", -2.7, 5.2, -2.6, 2.7, 10.8, 3.2, fur)                 # big forward egg
+    m.box("body", -2.3, 5.4, -3.2, 2.3, 8.6, -2.4, dark)                # dark chest below the ruff
+    m.box("body", -2.4, 5.4, 2.4, 2.4, 8.2, 3.3, dark)                  # dark rear
 
+    m.bone("h_head", (0, 11.0, -3.2), "body")
+    m.box("h_head", -1.5, 9.0, -4.8, 1.5, 12.2, -2.2, gray)             # thick grey neck
+    m.box("h_head", -1.8, 8.8, -5.2, 1.8, 11.4, -4.4, "white")          # fluffy white ruff in front
+    m.box("h_head", -1.7, 11.8, -5.0, 1.7, 15.2, -2.6, "pink")          # oversized pink head
+    m.box("h_head", -1.7, 13.8, -4.8, 1.7, 15.3, -2.4, fur)              # dark brown crown
+    m.sym("h_head", 1.55, 12.6, -4.6, 1.72, 14.3, -3.4, "white")        # huge white eyes
+    m.sym("h_head", 1.68, 13.0, -4.4, 1.8, 13.9, -3.6, black)           # black pupils
+    m.box("h_head", -0.75, 12.4, -7.4, 0.75, 14.0, -4.7, dark)          # beak root (thick)
+    m.box("h_head", -0.6, 11.1, -7.2, 0.6, 12.9, -6.2, black)           # beak mid, angling down
+    m.box("h_head", -0.5, 10.1, -6.9, 0.5, 11.3, -6.0, black)           # hooked tip
+
+    for name, sx in (("wing_l", 1), ("wing_r", -1)):                    # folded wings drooping to the back
+        m.bone(name, (sx * 2.2, 9.8, 0.4), "body")
+        x1, x2 = (1.7, 3.0) if sx > 0 else (-3.0, -1.7)
+        t1, t2 = (1.4, 2.8) if sx > 0 else (-2.8, -1.4)
+        m.box(name, x1, 4.8, -1.8, x2, 10.6, 3.4, dark)                 # main wing plate
+        m.box(name, t1, 3.2, 0.8, t2, 5.6, 3.8, fur)                    # feather tips hanging low
+
+    m.bone("tail", (0, 5.6, 3.0), "body")
+    m.box("tail", -1.0, 4.4, 3.0, 1.0, 6.2, 4.4, black)
+
+    for name, sx in (("leg_l", 1), ("leg_r", -1)):
+        m.bone(name, (sx * 0.95, 5.6, 0.2), "body")
+        x1, x2 = (0.55, 1.15) if sx > 0 else (-1.15, -0.55)
+        f1, f2 = (0.45, 1.5) if sx > 0 else (-1.5, -0.45)
+        m.box(name, x1, 1.2, -0.25, x2, 5.8, 0.55, web)                 # short orange legs
+        m.box(name, f1, 0.0, -1.6, f2, 0.75, 0.55, web)                 # wide flat toes facing forward
+    p = 2.4
+    m.anim("idle", p, {"body": {"position": wave(6, p, 0.15, 0.0, axis=1)}, "h_head": {"rotation": wave(6, p, 2.2, 0.4, axis=2)},
+        "wing_l": {"rotation": wave(6, p, 1.2, 0.0, axis=0)}, "wing_r": {"rotation": wave(6, p, 1.2, math.pi, axis=0)}})
+    p = 1.8
+    m.anim("walk", p, {"body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.25, 0)), (p, (0, 0, 0))]},
+        "leg_l": {"rotation": wave(4, p, 18.0, 0.0, axis=0)}, "leg_r": {"rotation": wave(4, p, 18.0, math.pi, axis=0)},
+        "wing_l": {"rotation": wave(4, p, 3.0, 0.0, axis=0)}, "wing_r": {"rotation": wave(4, p, 3.0, math.pi, axis=0)},
+        "h_head": {"rotation": wave(4, p, 3.0, 0.3, axis=2)}})
+    m.anim("death", 0.8, {"body": {"rotation": [(0, (0, 0, 0)), (0.5, (12, 0, 0)), (0.8, (12, 0, 0))], "position": [(0, (0, 0, 0)), (0.5, (0, -5, 0)), (0.8, (0, -5, 0))]}}, loop="hold")
 def glowsprite(m):
     """Tiny floating light in the deep dark (custom creature). ~0.4 m, drawn 6 px, ALLAY base."""
     glow, core, wing = "glow_yellow", "wraith_glow", "wing_clear"
@@ -2667,6 +2745,7 @@ def main():
         n += 1
 
     for sid, build, kw, rare, rare_kw in SPECIES:
+        build = species_builder(sid, build)
         m = Model("wl_" + sid)
         build(m, **kw)
         save(m)
@@ -2678,6 +2757,7 @@ def main():
             build(b, **({**kw, **rare_kw} if rc else kw))
             save(b)
     for name, build, kw in EXTRA:
+        build = species_builder(name, build)
         m = Model("wl_" + name)
         build(m, **kw)
         save(m)
