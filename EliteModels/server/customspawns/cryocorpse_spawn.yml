@@ -1,0 +1,20 @@
+validBiomesV2: []
+isEnabled: true
+validWorlds: []
+validWorldEnvironments:
+- NORMAL
+- CUSTOM
+validBiomes:
+- WINDSWEPT_HILLS
+- WINDSWEPT_GRAVELLY_HILLS
+- SNOWY_PLAINS
+- ICE_SPIKES
+- SNOWY_TAIGA
+- SNOWY_BEACH
+- GROVE
+- SNOWY_SLOPES
+- JAGGED_PEAKS
+- FROZEN_PEAKS
+- FROZEN_RIVER
+isSurfaceSpawn: true
+canSpawnInLight: true

@@ -1,0 +1,18 @@
+eventStartCommands: []
+eventEndCommands: []
+breakableMaterials: []
+isEnabled: true
+eventType: TIMED
+bossFilenames:
+- shrunken_head.yml
+- shrunken_head_1.yml
+- shrunken_head_2.yml
+- shrunken_head_3.yml
+- shrunken_head_4.yml
+- shrunken_head_5.yml
+- shrunken_head_6.yml
+localCooldown: 120.0
+globalCooldown: 25.0
+weight: 100.0
+eventDuration: 10.0
+spawnType: nighttime_surface_spawn.yml

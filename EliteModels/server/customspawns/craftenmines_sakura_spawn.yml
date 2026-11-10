@@ -1,0 +1,14 @@
+validBiomesV2: []
+isEnabled: true
+validWorlds: []
+validWorldEnvironments:
+- NORMAL
+- CUSTOM
+validBiomes:
+- CHERRY_GROVE
+- FOREST
+- FLOWER_FOREST
+- BIRCH_FOREST
+- OLD_GROWTH_BIRCH_FOREST
+isSurfaceSpawn: true
+canSpawnInLight: true

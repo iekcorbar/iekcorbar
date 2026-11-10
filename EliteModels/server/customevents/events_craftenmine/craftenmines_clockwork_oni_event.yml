@@ -1,0 +1,12 @@
+eventStartCommands: []
+eventEndCommands: []
+breakableMaterials: []
+isEnabled: true
+eventType: TIMED
+bossFilenames:
+- craftenmines_clockwork_oni.yml
+localCooldown: 420.0
+globalCooldown: 30.0
+weight: 40.0
+eventDuration: 45.0
+spawnType: craftenmines_steampunk_spawn.yml
