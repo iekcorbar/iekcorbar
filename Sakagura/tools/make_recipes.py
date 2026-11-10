@@ -39,7 +39,7 @@ OWN = [
     ("berry_wine", ["Sour Berry Wine", "Berry Wine", "Forest Berry Wine"], "6a2a7a", 4, 10, ["<gray>Blueberries and strawberries"], ["REGENERATION/0/20-30"],
      [{"type": "cook", "time": 5, "ingredients": ["sakagura:blueberry/4", "sakagura:strawberry/4", "Sugar/2"]}, {"type": "age", "years": 2, "wood": "birch"}]),
     ("apple_liquor", ["Weak Apple Liquor", "Apple Liquor", "Fine Apple Liquor"], "e8b04a", 5, 25, ["<gray>Needed for a good sangria"], [],
-     [{"type": "cook", "time": 5, "ingredients": ["Apple/6", "Sugar/2"]}, {"type": "distill", "runs": 2}]),
+     [{"type": "cook", "time": 5, "ingredients": ["sakagura:apple/6", "Sugar/2"]}, {"type": "distill", "runs": 2}]),
     # staff drinks, promoted 27-10 from the hand-edited server config into the generator so they
     # survive every rebuild. Two repairs on the way in: zombiezestzinger's colour "00800" was a
     # five-digit typo (the parser reads it as neither hex nor a name and silently falls back to
@@ -68,7 +68,7 @@ OWN = [
      [{"type": "cook", "time": 6, "ingredients": ["Pumpkin/4", "Sugar/2", "Gunpowder/1"]}, {"type": "age", "years": 1, "wood": "oak"}]),
     ("widows_kiss", ["Crawler Cider", "Spider Sour", "Widow's Kiss"], "4a1e5c", 7, 16,
      ["<light_purple>The spider that does not bite"], ["INVISIBILITY/0/15-30", "SATURATION/0/2"],
-     [{"type": "cook", "time": 5, "ingredients": ["Spider Eye/3", "Apple/3", "Sugar/2"]}, {"type": "age", "years": 2, "wood": "cherry"}]),
+     [{"type": "cook", "time": 5, "ingredients": ["Spider Eye/3", "sakagura:apple/3", "Sugar/2"]}, {"type": "age", "years": 2, "wood": "cherry"}]),
     ("sculk_swill", ["Graveyard Dregs", "Midnight Vine", "Sculk Swill"], "0d1f2b", 9, 5,
      ["<dark_aqua>Lighter than a gravestone"], ["SLOW_FALLING/0/60-120"],
      [{"type": "cook", "time": 4, "ingredients": ["Sculk Sensor/1", "sakagura:blueberry/4"]}, {"type": "age", "years": 3, "wood": "any"}]),
@@ -110,7 +110,7 @@ OWN = [
      [{"type": "mix", "time": 2, "ingredients": ["Ink Sac/1", "sakagura:mikan/3", "Sugar/2"]}]),
     ("molten_face", ["Pale Sweat", "Ghost Pepper Cider", "Molten Face"], "ff4500", 7, 12,
      ["<gold>Apple cider. Probably not chili."], ["FIRE_RESISTANCE/0/120-240", "NAUSEA/0/2-6"],
-     [{"type": "cook", "time": 5, "ingredients": ["kitchen:chili/3", "Apple/4", "Sugar/3"]}, {"type": "distill", "runs": 1}]),
+     [{"type": "cook", "time": 5, "ingredients": ["kitchen:chili/3", "sakagura:apple/4", "Sugar/3"]}, {"type": "distill", "runs": 1}]),
     ("blightcap_bock", ["Toadspill", "Mushroom Bock", "Blightcap Bock"], "9b7653", 5, 9,
      ["<gray>Two mushrooms walk into a barrel..."], ["NIGHT_VISION/0/90-240", "NAUSEA/0/3-9"],
      [{"type": "cook", "time": 6, "ingredients": ["Brown Mushroom/3", "Red Mushroom/2", "Honey Bottle/2"]}, {"type": "age", "years": 2, "wood": "oak"}]),
@@ -241,8 +241,16 @@ OWN = [
 ]
 
 
+# Since 10-11 the Sakagura apple is a real APPLE item carrying our PDC id, and vanilla leaves no
+# longer drop plain apples - every apple in a recipe must explicitly ask for "sakagura:apple".
+# The site snapshot below still says bare "Apple" (it is a historical export), so map it here on
+# the way out, or a regeneration silently reverts the five site drinks (ap_mead/cidre/gin/
+# apple_juice/red_sangria) to the unobtainable vanilla fruit.
+APPLE_RENAME = {"Apple": "sakagura:apple"}
+
+
 def ing(s):
-    return f"{s['name']}/{s['count']}"
+    return f"{APPLE_RENAME.get(s['name'], s['name'])}/{s['count']}"
 
 
 def site_steps(steps):

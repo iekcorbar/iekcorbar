@@ -53,7 +53,7 @@ enum Fruit {
     SUDACHI("Sudachi", "sudachi", "sudachi_seeds", 2, 3, true, 22, List.of("jungle", "bamboo")),
     SHISO("Shiso Leaves", "shiso", null, 2, 4, true, 14, List.of("forest", "jungle")),
     WASABI("Wasabi Roots", "wasabi", null, 1, 2, false, 20, List.of("swamp", "river")),
-    DAICON("Daikon", "daikon", null, 1, 2, false, 22, List.of("plains", "flower_forest")),
+    DAIKON("Daikon", "daikon", null, 1, 2, false, 22, List.of("plains", "flower_forest")),
     CHILI("Chili Peppers", "chili", "chili_seeds", 2, 4, true, 16, List.of("jungle", "savanna")),
     MANGO("Mangoes", "mango", "mango_pit", 1, 3, true, 26, List.of("jungle")),
     PAPAYA("Papayas", "papaya", "papaya_seeds", 1, 2, true, 24, List.of("jungle")),

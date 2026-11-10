@@ -19,6 +19,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -58,7 +59,10 @@ final class Goods implements Listener {
     // ------------------------------------------------------------ garden items
 
     ItemStack item(String id, int amount) {
-        ItemStack it = new ItemStack(Material.PAPER, Math.max(1, amount));
+        // Sakagura apples are real vanilla apples under the hood, so they keep every vanilla
+        // behaviour (golden apples, brewing, food) while still carrying our model and PDC id.
+        Material base = "apple".equals(id) ? Material.APPLE : Material.PAPER;
+        ItemStack it = new ItemStack(base, Math.max(1, amount));
         ItemMeta m = it.getItemMeta();
         Fruit f = Fruit.byId(id);
         Fruit planted = Fruit.byPlantItem(id);
@@ -271,11 +275,31 @@ final class Goods implements Listener {
         e.getPlayer().discoverRecipes(recipeKeys);
     }
 
+    // Disable vanilla apples from oak/dark-oak leaf drops so only Sakagura apples remain.
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void onLeafDrop(BlockDropItemEvent e) {
+        org.bukkit.block.Block b = e.getBlock();
+        org.bukkit.Material t = b.getType();
+        if (t != org.bukkit.Material.OAK_LEAVES && t != org.bukkit.Material.DARK_OAK_LEAVES) return;
+        e.getItems().removeIf(di -> {
+            org.bukkit.inventory.ItemStack it = di.getItemStack();
+            if (it.getType() != org.bukkit.Material.APPLE) return false;
+            // keep our own tagged apples (they never drop from leaves, but be safe)
+            if (it.hasItemMeta() && it.getItemMeta().getPersistentDataContainer().has(itemKey, org.bukkit.persistence.PersistentDataType.STRING)) return false;
+            return true;
+        });
+    }
+
     /** Our paper items only count in our own recipes. */
     @EventHandler(priority = EventPriority.HIGH)
     public void onCraft(PrepareItemCraftEvent e) {
         org.bukkit.inventory.Recipe r = e.getRecipe();
         if (r instanceof org.bukkit.Keyed k && k.getKey().getNamespace().equals(plugin.namespace())) return;
-        for (ItemStack i : e.getInventory().getMatrix()) if (idOf(i) != null || brewOf(i) != null) e.getInventory().setResult(null);
+        for (ItemStack i : e.getInventory().getMatrix()) {
+            String id = idOf(i);
+            // apples are allowed in vanilla recipes (golden apples etc.) even though they carry our PDC
+            if (id != null && "apple".equals(id)) continue;
+            if (id != null || brewOf(i) != null) e.getInventory().setResult(null);
+        }
     }
 }

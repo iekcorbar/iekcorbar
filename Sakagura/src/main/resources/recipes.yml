@@ -23,7 +23,7 @@ recipes:
     lore: ["+Is there any Apple in this?", "++Refreshing taste of Apple", "+++Sweetest hint of Apple"]
     effects: ["WATER_BREATHING/1-2/150"]
     steps:
-      - {type: cook, time: 4, ingredients: ["Sugar Cane/6", "Apple/2"]}
+      - {type: cook, time: 4, ingredients: ["Sugar Cane/6", "sakagura:apple/2"]}
       - {type: age, years: 4, wood: "oak"}
   beer:
     names: ["Skunky Beer", "Beer", "Fine Beer"]
@@ -43,7 +43,7 @@ recipes:
     lore: []
     effects: []
     steps:
-      - {type: cook, time: 7, ingredients: ["Apple/14"]}
+      - {type: cook, time: 7, ingredients: ["sakagura:apple/14"]}
       - {type: age, years: 3, wood: "any"}
   darkbeer:
     names: ["Skunky Darkbeer", "Darkbeer", "Fine Darkbeer"]
@@ -83,7 +83,7 @@ recipes:
     lore: ["++With the", "++taste of juniper", "+++Perfectly finished off", "+++with juniper"]
     effects: []
     steps:
-      - {type: cook, time: 6, ingredients: ["Wheat/9", "Blue Orchid/6", "Apple/1"]}
+      - {type: cook, time: 6, ingredients: ["Wheat/9", "Blue Orchid/6", "sakagura:apple/1"]}
       - {type: distill, runs: 2}
   hot_choc:
     names: ["Hot Chocolate"]
@@ -174,7 +174,7 @@ recipes:
     lore: []
     effects: []
     steps:
-      - {type: cook, time: 6, ingredients: ["Apple/9", "Sugar/6"]}
+      - {type: cook, time: 6, ingredients: ["sakagura:apple/9", "Sugar/6"]}
   red_sangria:
     names: ["Red Sangria"]
     color: "4a0408"
@@ -183,7 +183,7 @@ recipes:
     lore: []
     effects: []
     steps:
-      - {type: mix, time: 4, ingredients: ["Red Wine/1", "Apple Liquor/1", "Brandy/1", "Sugar/6", "Apple/1"]}
+      - {type: mix, time: 4, ingredients: ["Red Wine/1", "Apple Liquor/1", "Brandy/1", "Sugar/6", "sakagura:apple/1"]}
       - {type: age, years: 1, wood: "copper"}
   french_75:
     names: ["French 75"]
@@ -323,7 +323,7 @@ recipes:
     lore: ["<gray>Needed for a good sangria"]
     effects: []
     steps:
-      - {type: cook, time: 5, ingredients: ["Apple/6", "Sugar/2"]}
+      - {type: cook, time: 5, ingredients: ["sakagura:apple/6", "Sugar/2"]}
       - {type: distill, runs: 2}
   bloody_mary:
     names: ["Poor Bloody Mary", "Bloody Mary", "Strong Bloody Mary"]
@@ -390,7 +390,7 @@ recipes:
     lore: ["<light_purple>The spider that does not bite"]
     effects: ["INVISIBILITY/0/15-30", "SATURATION/0/2"]
     steps:
-      - {type: cook, time: 5, ingredients: ["Spider Eye/3", "Apple/3", "Sugar/2"]}
+      - {type: cook, time: 5, ingredients: ["Spider Eye/3", "sakagura:apple/3", "Sugar/2"]}
       - {type: age, years: 2, wood: "cherry"}
   sculk_swill:
     names: ["Graveyard Dregs", "Midnight Vine", "Sculk Swill"]
@@ -506,7 +506,7 @@ recipes:
     lore: ["<gold>Apple cider. Probably not chili."]
     effects: ["FIRE_RESISTANCE/0/120-240", "NAUSEA/0/2-6"]
     steps:
-      - {type: cook, time: 5, ingredients: ["kitchen:chili/3", "Apple/4", "Sugar/3"]}
+      - {type: cook, time: 5, ingredients: ["kitchen:chili/3", "sakagura:apple/4", "Sugar/3"]}
       - {type: distill, runs: 1}
   blightcap_bock:
     names: ["Toadspill", "Mushroom Bock", "Blightcap Bock"]

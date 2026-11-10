@@ -1,0 +1,47 @@
+{
+ "cauldron.add": {
+  "sounds": [
+   "sakagura:cauldron/add_1",
+   "sakagura:cauldron/add_2",
+   "sakagura:cauldron/add_3"
+  ],
+  "subtitle": "subtitles.sakagura.cauldron.add"
+ },
+ "cauldron.bubble": {
+  "sounds": [
+   "sakagura:cauldron/bubble_1",
+   "sakagura:cauldron/bubble_2",
+   "sakagura:cauldron/bubble_3"
+  ],
+  "subtitle": "subtitles.sakagura.cauldron.bubble"
+ },
+ "distill.drip": {
+  "sounds": [
+   "sakagura:distill/drip_1",
+   "sakagura:distill/drip_2"
+  ],
+  "subtitle": "subtitles.sakagura.distill.drip"
+ },
+ "cask.open": {
+  "sounds": [
+   "sakagura:cask/open_1",
+   "sakagura:cask/open_2"
+  ],
+  "subtitle": "subtitles.sakagura.cask.open"
+ },
+ "drunk.hiccup": {
+  "sounds": [
+   "sakagura:drunk/hiccup_1",
+   "sakagura:drunk/hiccup_2",
+   "sakagura:drunk/hiccup_3"
+  ],
+  "subtitle": "subtitles.sakagura.drunk.hiccup"
+ },
+ "drunk.puke": {
+  "sounds": [
+   "sakagura:drunk/puke_1",
+   "sakagura:drunk/puke_2"
+  ],
+  "subtitle": "subtitles.sakagura.drunk.puke"
+ }
+}
