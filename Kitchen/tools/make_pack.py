@@ -782,7 +782,24 @@ def add_sounds(root, namespace):
     if not os.path.isdir(src):
         print("note: no sounds in", src, "- run sounds/make_sounds.py first (pack built without sounds)")
         return
-    shutil.copytree(src, os.path.join(root, "assets", namespace), dirs_exist_ok=True)
+    dst = os.path.join(root, "assets", namespace)
+    djson = os.path.join(dst, "sounds.json")
+    keep = {}
+    if os.path.exists(djson):
+        try:
+            keep = json.load(open(djson, encoding="utf-8"))
+        except Exception:
+            keep = {}
+    shutil.copytree(src, dst, dirs_exist_ok=True)
+    # Hand-added events (e.g. quest voices steamworks:milo.lineNN, which live only in the
+    # exploded pack's sounds.json) must survive rebuilds: generated events win, extras stay.
+    if keep and os.path.exists(djson):
+        cur = json.load(open(djson, encoding="utf-8"))
+        extra = {k: v for k, v in keep.items() if k not in cur}
+        if extra:
+            cur.update(extra)
+            with open(djson, "w", encoding="utf-8") as f:
+                json.dump(cur, f, indent=1)
 
 # ------------------------------------------------------------------ main
 

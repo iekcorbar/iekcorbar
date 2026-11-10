@@ -1,7 +1,7 @@
 name: Xmas
 version: '${project.version}'
 main: com.iekcorbar.xmas.XmasPlugin
-api-version: '26.1'
+api-version: '26.2'
 description: Kerst building blocks
 commands:
   xmas:

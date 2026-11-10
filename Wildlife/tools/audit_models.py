@@ -3,6 +3,8 @@
 import json, os, sys, glob
 
 MODELS_DIR = os.path.join(os.path.dirname(__file__), "..", "fmm-models", "wildlife")
+STATIC_MODELS = []  # models with no animation tracks at all (item/prop looks) - fine, listed for review
+
 
 def audit_model(path):
     issues = []
@@ -32,15 +34,21 @@ def audit_model(path):
                 all_bones.add(n["uuid"])
     collect_bones(data.get("outliner", []))
 
-    # Check animations
+    # Required animations for animals. Static prop/item models (crab claw, lizard tail drop,
+    # bottled wisps, field journal) legitimately have no animations at all - Blockbench exports
+    # them with an empty animation list. Only require idle/walk/death when the model HAS
+    # animations (so a real animal that lost one clip still fails), and report pure-static
+    # models as a summary instead of issues.
     anims = data.get("animations", [])
+    if isinstance(anims, dict):
+        anims = [dict(v, name=k) for k, v in anims.items()]
     anim_names = [a.get("name", "") for a in anims]
-
-    # Required animations for animals
-    required = ["idle", "walk", "death"]
-    for req in required:
-        if req not in anim_names:
-            issues.append(f"missing animation '{req}'")
+    if anims:
+        for req in ["idle", "walk", "death"]:
+            if req not in anim_names:
+                issues.append(f"missing animation '{req}'")
+    else:
+        STATIC_MODELS.append(name)  # static look (crab claw, bottled wisps, ...) - not an issue
 
     for anim in anims:
         aname = anim.get("name", "?")
@@ -53,8 +61,6 @@ def audit_model(path):
         for bone_uuid, channels in anim.get("animators", {}).items():
             if bone_uuid not in all_bones and bone_uuid != "00000000-0000-0000-0000-000000000000":
                 issues.append(f"animation '{aname}': keyframe on unknown bone {bone_uuid[:8]}")
-            for channel, keyframes in channels.items() if isinstance(channels, dict) else []:
-                pass
             # Check keyframe timing
             if isinstance(channels, dict):
                 for channel_name, kf_list in channels.items():
@@ -69,12 +75,17 @@ def audit_model(path):
                         if time < 0:
                             issues.append(f"animation '{aname}': negative keyframe time {time}")
 
-    # Check element bounds
+    # Check element bounds. make_animals._fit: the Blockbench export shifts x/z by +8 (P = c + 8),
+    # so the vanilla item-model limit (-16..32 in exported space) means -24..24 in raw bbmodel
+    # coordinates on x/z, while y keeps the direct -16..32 window. Checking the raw -16..32 on x/z
+    # was the pre-2026-11-01 convention and flagged 283 working models (bear fur tips, dragon
+    # wing ends, ...).
     for el in elements:
         from_v = el.get("from", [0, 0, 0])
         to_v = el.get("to", [0, 0, 0])
         for i in range(3):
-            if from_v[i] < -16 or from_v[i] > 32 or to_v[i] < -16 or to_v[i] > 32:
+            lim_lo, lim_hi = (-16.0, 32.0) if i == 1 else (-24.0, 24.0)
+            if from_v[i] < lim_lo or from_v[i] > lim_hi or to_v[i] < lim_lo or to_v[i] > lim_hi:
                 issues.append(f"element '{el.get('name', '?')}' out of bounds on axis {i}: from={from_v[i]} to={to_v[i]}")
                 break
 
@@ -117,10 +128,14 @@ def main():
 
     print()
     print(f"Summary: {len(models)} models, {models_with_issues} with issues, {total_issues} total issues")
+    print(f"Static looks (no animation tracks - props/items, OK): {len(STATIC_MODELS)}")
+    if STATIC_MODELS:
+        print("  " + ", ".join(m.replace(".bbmodel", "") for m in STATIC_MODELS))
     print()
     print("Issue categories:")
     for cat, count in sorted(issue_summary.items(), key=lambda x: -x[1]):
         print(f"  {count:4d}  {cat}")
+    sys.exit(1 if total_issues else 0)
 
 if __name__ == "__main__":
     main()
