@@ -60,6 +60,12 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | **Wildlife-modelronde (model voor model)** | 11-11 | Eigenaar wil elk dier apart herzien vóór de bouw + "zo realistisch mogelijk, lopen/vliegen opzij" oplossen. Valk herbouwd naar zijn Sketchfab-referentie (preview goedgekeurd). uuid-churn maker opgelost (per model genummerd). Route gekozen: **CC0-download-origines omzetten naar bbmodel** (research in gang gezet); oriëntatie-onderzoek FMM 2.15.0 loopt. 203 modellen + Zoo-pack + BUILD=53 staan on-gecommit in de werkboom tot alles goedgekeurd is. |
 
 ## ⚪ Wachtrij
+- **Orca-herstelronde (eigenaar 10-11 laat):** orca's (adult/rare/baby) te klein en de **rugvin
+  ontbreekt** — opnieuw voxelliseren met fijner raster + grotere hoogte (en/of vin handmatig
+  nabouwen in mesh_orca.json want de smalle vin verdwijnt in de voxelmerge), SIZE/scale meenemen,
+  Herbouw Wildlife + FMM-model copieren. Veldjournaal-update "etc." (eigenaar): journal is dynamisch
+  uit Species/Facts — navragen wat hij concreet mist (nieuwe diernamen/kleuren? zoo-fermellingen?)
+  en of site/beeldjes ook mee moeten.
 - **Pluginstrategie eigen beheer** → docs/plugin-strategie.md (30-10): routekaart
   BQ→IekQuests af, next: IekShops (vervangt MMOItems-stations), IekElites
   (vervangt EliteMobs+MMOBridge-koppeling, bevat custom elite-config), TechCore→
