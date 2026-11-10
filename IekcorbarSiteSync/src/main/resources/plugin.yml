@@ -10,7 +10,7 @@ main: com.iekcorbar.sitesync.IekcorbarSiteSync
 api-version: '26.2'
 description: Bridge plugin between Minecraft Server, Iekcorbar Website and MySQL
 author: Iekcorbar
-softdepend: [WorldGuard, Vault, Jobs, Lands, PlaceholderAPI, Votifier, AfkCinema, Gouw, Hihou, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
+softdepend: [WorldGuard, Vault, Jobs, Lands, PlaceholderAPI, Votifier, AfkCinema, Gouw, Hihou, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 # Load before FreeMinecraftModels so our prop placement listener runs before
 # FMM's own (both LOWEST) - see PropPlacementManager.
 # No EliteMobs in softdepend: EliteMobs needs FMM, so softdepend EliteMobs + loadbefore FMM made a load cycle (MythicLib warned about it).

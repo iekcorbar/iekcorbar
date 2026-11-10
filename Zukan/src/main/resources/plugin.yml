@@ -4,7 +4,7 @@ main: com.iekcorbar.zukan.ZukanPlugin
 api-version: '26.2'
 description: Recipe and item browser - find any item, how to make it, what it is used for. Knows every recipe of our plugins.
 author: iekcorbar
-softdepend: [AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife]
+softdepend: [AfkCinema, Gouw, Hihou, IekcorbarSiteSync, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife]
 
 commands:
   zukan:

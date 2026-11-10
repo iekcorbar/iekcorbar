@@ -4,7 +4,7 @@ main: com.iekcorbar.additions.AdditionsPlugin
 api-version: '26.2'
 # Atmosphere add-on of Steamworks: the Steam Clock and brass details. Loads after Steamworks when
 # both are present; works fine on its own too (softdepend is only about load order and the shared look).
-softdepend: [FreeMinecraftModels, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksPower, Wildlife, Zukan]
+softdepend: [FreeMinecraftModels, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksPower, Wildlife, Zukan]
 description: Steam Clock and brass details for the steampunk/Japanese atmosphere of Iekcorbar.
 author: iekcorbar
 

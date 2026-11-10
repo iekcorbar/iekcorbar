@@ -4,7 +4,7 @@ main: com.iekcorbar.sakagura.Sakagura
 api-version: '26.2'
 description: Brewing and a fruit garden - cauldron, distilling, sake casks, quality, drunkenness.
 author: iekcorbar
-softdepend: [WorldEdit, WorldGuard, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
+softdepend: [WorldEdit, WorldGuard, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, Kitchen, Kura, Relics, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 
 commands:
   brew:
