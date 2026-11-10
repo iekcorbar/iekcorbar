@@ -52,6 +52,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Blok | Status |
 |---|---|
 | **IekQuests 0.5.4 + Igor conversatie-quest** | 30-10 18:05 | stage-dialoog in chat + paneel sluit voor leespauze; Igor: 4 verduidelijkte stages + receptuur in de praat |
+| **Checkronde 10-11: Sakagura 0.7.13 + Wildlife 0.9.25 + pack build52** | 10-11 18:45 | Alles geverifieerd: beide plugins compileren clean, RecipeTest ALL PASSED, pack-audit groen (0 problemen). Drie verborgen fouten hersteld: (1) make_recipes.py draaide 5 appel-drinkjes bij herbouw terug naar onhaalbare vanilla `Apple` - nu gemapt op `sakagura:apple`; (2) deploy/Wildlife-0.9.25.jar was vóór de laatste statues.csv-herbouw gebouwd (vernieuwd); (3) laatste commit compileerde niet (`.global()`-aanroepen zonder methode) - stub nu óók in propkit/Adv.java zodat `sync.py` Wildlife niet meer kapotmaakt. Open: wat moet `global()` echt doen? Zie TE-DEPLOYEN (Sakagura-regel: server-recipes.yml MOET vervangen). |
 
 ## ⚪ Wachtrij
 - **Pluginstrategie eigen beheer** → docs/plugin-strategie.md (30-10): routekaart

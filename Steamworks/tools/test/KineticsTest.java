@@ -54,6 +54,14 @@ public class KineticsTest {
         System.out.printf("%s %s%n", got ? "OK  " : "FAIL", what);
     }
 
+    /** In-game the scheduler calls processDirty() every tick; since the 0.3.30 dirty-batching small
+     *  batches (1-2 nodes) are deliberately deferred two rounds. Three calls = always rebuilt. */
+    static void settle(Kinetics k) {
+        k.processDirty();
+        k.processDirty();
+        k.processDirty();
+    }
+
     public static void main(String[] args) {
         cfg = new Settings(YamlConfiguration.loadConfiguration(new File(args[0])));
 
@@ -62,7 +70,7 @@ public class KineticsTest {
         KNode shaft = put(k, 0, 0, 0, PartType.SHAFT, Axis.Y);
         KNode crank = put(k, 0, 1, 0, PartType.HAND_CRANK, Axis.Y, BlockFace.UP);
         k.crank(crank, 1);
-        k.processDirty();
+        settle(k);
         check("crank speed", crank.speed(), 16);
         check("shaft under crank", shaft.speed(), 16);
         check("crank network capacity 8x16", shaft.network.capacity, 128);
@@ -77,7 +85,7 @@ public class KineticsTest {
         KNode up = put(k, 0, 1, 0, PartType.SHAFT, Axis.Y);
         KNode south = put(k, 0, 0, 1, PartType.SHAFT, Axis.Z); // not a port: must stay unconnected
         k.crank(c2, 1);
-        k.processDirty();
+        settle(k);
         check("crank facing down turns -Y side: speed about +Y", c2.speed(), 16);
         check("input shaft", in.speed(), 16);
         check("gearbox east output (Create: +s)", east.speed(), 16);
@@ -93,7 +101,7 @@ public class KineticsTest {
         KNode big = put(k, 1, 0, 1, PartType.LARGE_COGWHEEL, Axis.Y);
         KNode cOther = put(k, 0, 0, 1, PartType.COGWHEEL, Axis.X); // other axis: no mesh
         k.crank(cr, 1);
-        k.processDirty();
+        settle(k);
         check("cog A", a.speed(), 16);
         check("cog B beside A", b.speed(), -16);
         check("large cog diagonal to A", big.speed(), -8);
@@ -107,7 +115,7 @@ public class KineticsTest {
         KNode l2 = put(k, 1, 1, 0, PartType.LARGE_COGWHEEL, Axis.X);
         KNode l3 = put(k, -1, 1, 0, PartType.LARGE_COGWHEEL, Axis.X);
         k.crank(c4, 1);
-        k.processDirty();
+        settle(k);
         check("large-large (+1,+1): same sign", l2.speed(), 16);
         check("large-large (-1,+1): flipped", l3.speed(), -16);
 
@@ -119,12 +127,12 @@ public class KineticsTest {
         KNode m1 = put(k, 0, 1, 0, PartType.MILLSTONE, Axis.Y);
         KNode m2 = put(k, 1, 1, 0, PartType.MILLSTONE, Axis.Y);
         k.crank(c5, 1);
-        k.processDirty();
+        settle(k);
         check("2 millstones load", m1.network.load, 128);
         check("2 millstones running", !m1.network.jammed && Math.abs(m2.speed()) == 16);
         put(k, 2, 0, 0, PartType.COGWHEEL, Axis.Y);
         KNode m3 = put(k, 2, 1, 0, PartType.MILLSTONE, Axis.Y);
-        k.processDirty();
+        settle(k);
         check("3 millstones overstressed", m3.network.jammed && m3.network.reason.startsWith("Overstressed"));
         check("jammed = speed 0", m1.speed(), 0);
 
@@ -135,10 +143,10 @@ public class KineticsTest {
         KNode cb = put(k, 0, -1, 0, PartType.HAND_CRANK, Axis.Y, BlockFace.DOWN);
         k.crank(ca, 1);
         k.crank(cb, -1);
-        k.processDirty();
+        settle(k);
         check("opposed sources jam", ca.network.jammed && ca.network.reason.contains("against"));
         k.crank(cb, 1);
-        k.processDirty();
+        settle(k);
         check("same direction: runs", !ca.network.jammed && ca.speed() == 16);
         check("same direction: capacity adds up", ca.network.capacity, 256);
 
@@ -153,7 +161,7 @@ public class KineticsTest {
             put(k, s + 1, 2 * s + 2, s + 1, PartType.LARGE_COGWHEEL, Axis.Y);
         }
         k.crank(c7, 1);
-        k.processDirty();
+        settle(k);
         check("stage speeds: first small x2", smalls.get(0).speed(), -32);
         check("something snapped from overspeed", !popped.isEmpty());
         check("the snapped part is the 4th small cog (256 RPM)", !popped.isEmpty() && popped.get(0) == smalls.get(3));
@@ -167,14 +175,14 @@ public class KineticsTest {
         KNode past = put(k, -1, 0, 0, PartType.SHAFT, Axis.X);
         KNode side = put(k, 0, 0, 1, PartType.SHAFT, Axis.Z); // not on the hammer's axis: unconnected
         k.crank(c8, 1);
-        k.processDirty();
+        settle(k);
         check("hammer turns with the crank", Math.abs(h1.speed()), 16);
         check("hammer load 8x16 = crank capacity", h1.network.load, 128);
         check("one crank drives one hammer", !h1.network.jammed);
         check("shaft behind the hammer turns too", Math.abs(past.speed()), 16);
         check("hammer side without port not connected", side.network != h1.network);
         put(k, -2, 0, 0, PartType.STEAM_HAMMER, Axis.X);
-        k.processDirty();
+        settle(k);
         check("second hammer on one crank overstresses", h1.network.jammed && h1.network.reason.startsWith("Overstressed"));
 
         // 9. clutch: passes rotation, a signal splits the line
@@ -184,15 +192,15 @@ public class KineticsTest {
         KNode clutch = put(k, 0, 1, 0, PartType.CLUTCH, Axis.Y);
         KNode beyond = put(k, 0, 2, 0, PartType.SHAFT, Axis.Y);
         k.crank(c9, 1);
-        k.processDirty();
+        settle(k);
         check("clutch off: far side turns", beyond.speed(), 16);
         k.setPowered(clutch, true);
-        k.processDirty();
+        settle(k);
         check("clutch on: far side stops", beyond.speed(), 0);
         check("clutch on: far side is its own network", beyond.network != c9.network);
         check("clutch on: source side still turns", c9.speed(), 16);
         k.setPowered(clutch, false);
-        k.processDirty();
+        settle(k);
         check("clutch off again: far side turns", beyond.speed(), 16);
 
         // 10. gearshift: a signal reverses the far (negative) side
@@ -202,10 +210,10 @@ public class KineticsTest {
         KNode gs = put(k, 0, 0, 0, PartType.GEARSHIFT, Axis.Y);
         KNode bottom = put(k, 0, -1, 0, PartType.SHAFT, Axis.Y);
         k.crank(c10, 1);
-        k.processDirty();
+        settle(k);
         check("gearshift off: same direction", bottom.speed(), 16);
         k.setPowered(gs, true);
-        k.processDirty();
+        settle(k);
         check("gearshift on: far side reversed", bottom.speed(), -16);
         check("gearshift on: near side unchanged", top.speed(), 16);
         check("gearshift on: not jammed", !gs.network.jammed);
@@ -217,7 +225,7 @@ public class KineticsTest {
         KNode fan = put(k, 0, 0, 0, PartType.BELLOWS_FAN, Axis.X, BlockFace.EAST); // blows east, back = west
         KNode front = put(k, 1, 0, 0, PartType.SHAFT, Axis.X); // in front: no port
         k.crank(c11, 1);
-        k.processDirty();
+        settle(k);
         check("fan turns from behind", Math.abs(fan.speed()), 16);
         check("fan load 4x16", fan.network.load, 64);
         check("shaft in front of the fan not connected", front.network != fan.network);
@@ -229,7 +237,7 @@ public class KineticsTest {
         KNode mixer = put(k, 0, 1, 0, PartType.MIXER, Axis.Y);
         KNode kettle = put(k, 0, 0, 0, PartType.KETTLE, Axis.Y);
         k.crank(c12, 1);
-        k.processDirty();
+        settle(k);
         check("mixer turns from above", Math.abs(mixer.speed()), 16);
         check("mixer load 4x16", mixer.network.load, 64);
         check("kettle not part of the network", kettle.network != mixer.network && kettle.speed() == 0);
@@ -241,7 +249,7 @@ public class KineticsTest {
         KNode pj = put(k, 0, 0, 0, PartType.PUMPJACK, Axis.X);
         KNode pipe = put(k, -1, 0, 0, PartType.PIPE, Axis.Y);
         k.crank(c13, 1);
-        k.processDirty();
+        settle(k);
         check("pumpjack turns", Math.abs(pj.speed()), 16);
         check("pumpjack load 8x16", pj.network.load, 128);
         check("pipe not in the kinetic network", pipe.network != pj.network);
@@ -255,7 +263,7 @@ public class KineticsTest {
         KNode b2 = put(k, 2, 0, 0, PartType.BELT, Axis.Z, BlockFace.EAST);
         KNode cross = put(k, 0, 0, -1, PartType.BELT, Axis.X, BlockFace.NORTH); // other axis: not part of the line
         k.crank(c14, 1);
-        k.processDirty();
+        settle(k);
         check("belt piece with the shaft", Math.abs(b0.speed()), 16);
         check("belt line runs together", b2.speed() == b0.speed() && b1.speed() == b0.speed());
         check("crossing belt not in the line", cross.network != b0.network);
@@ -269,14 +277,14 @@ public class KineticsTest {
         s1.chain = new int[]{6, 2, 0};
         s2.chain = new int[]{-6, -2, 0};
         k.crank(c15, 1);
-        k.processDirty();
+        settle(k);
         check("chained sprocket turns the same", s2.speed(), s1.speed());
         check("shaft behind the far sprocket turns", Math.abs(out.speed()), 16);
         s1.chain = null;
         s2.chain = null;
         k.relink(s1);
         k.relink(s2);
-        k.processDirty();
+        settle(k);
         check("unchained: far side stops", out.speed(), 0);
 
         // 16. windmill and steam engine as sources (generated set by PowerPlants), crushing wheel pair
@@ -284,20 +292,20 @@ public class KineticsTest {
         KNode wm = put(k, 0, 0, 0, PartType.WINDMILL, Axis.Z, BlockFace.SOUTH); // sails south, shaft north
         KNode wShaft = put(k, 0, 0, -1, PartType.SHAFT, Axis.Z);
         k.setGenerated(wm, 8);
-        k.processDirty();
+        settle(k);
         check("windmill drives the shaft behind it", Math.abs(wShaft.speed()), 8);
         check("windmill capacity 64 x 8", wm.network.capacity, 512);
 
         KNode eng = put(k, 5, 0, 0, PartType.STEAM_ENGINE, Axis.X);
         KNode cw1 = put(k, 6, 0, 0, PartType.SHAFT, Axis.X);
         k.setGenerated(eng, 24);
-        k.processDirty();
+        settle(k);
         check("engine output", Math.abs(cw1.speed()), 24);
         check("engine capacity 64 x 24", eng.network.capacity, 1536);
 
         KNode w1 = put(k, 7, 0, 0, PartType.CRUSHING_WHEEL, Axis.X);
         KNode w2 = put(k, 7, 0, 1, PartType.CRUSHING_WHEEL, Axis.X);
-        k.processDirty();
+        settle(k);
         check("crushing pair turns against each other", w1.speed() == -w2.speed() && w1.speed() != 0);
         check("crushing wheels load 8 x 24 each", eng.network.load, 2 * 8 * 24);
 
