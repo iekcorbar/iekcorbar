@@ -59,6 +59,10 @@ final class Goods implements Listener {
     // ------------------------------------------------------------ garden items
 
     ItemStack item(String id, int amount) {
+        // Shared crops (11-11): nine fruits also grow in Kitchen's fields; they drop ONE canonical
+        // item - Kitchen's - so the server never shows two daikons. Without Kitchen we make our own.
+        ItemStack shared = KitchenShared.get(id, amount);
+        if (shared != null) return shared;
         // Sakagura apples are real vanilla apples under the hood, so they keep every vanilla
         // behaviour (golden apples, brewing, food) while still carrying our model and PDC id.
         Material base = "apple".equals(id) ? Material.APPLE : Material.PAPER;
@@ -111,7 +115,8 @@ final class Goods implements Listener {
 
         PdcChoice(ItemStack sample) {
             this.sample = sample;
-            this.id = idOf(sample);
+            String own = idOf(sample);
+            this.id = own != null ? own : KitchenShared.idOf(sample);     // shared crops carry the kitchen key
         }
 
         @Override
@@ -126,7 +131,9 @@ final class Goods implements Listener {
 
         @Override
         public boolean test(ItemStack it) {
-            return it != null && !it.isEmpty() && id != null && id.equals(idOf(it));
+            if (it == null || it.isEmpty() || id == null) return false;
+            // Ours OR the canonical Kitchen twin of the same crop (shared crops drop kitchen items now).
+            return id.equals(idOf(it)) || id.equals(KitchenShared.idOf(it));
         }
     }
 

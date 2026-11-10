@@ -270,6 +270,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                     } else if (wood != null) match = goods.caskWood(st) == wood;
                     else {
                         String id = goods.idOf(st);
+                        if (id == null) id = KitchenShared.sidOf(st);   // shared crops arrive as Kitchen items (11-11)
                         match = id != null && f != null && (id.equals(f.produce) || id.equals(f.plantItem()));
                     }
                     if (!match) continue;

@@ -175,6 +175,18 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
     }
 
     Items items() { return items; }
+
+    /**
+     * Bridge for other plugins (11-11): hand out a canonical Kitchen item by its id.
+     * Nine crops (chili, daikon, ginger, persimmon, rice, shiso, tomato, wasabi, yuzu) grow in
+     * BOTH Kitchen's fields and Sakagura's garden; they drop this one identity per crop, so the
+     * server never holds two daikons again. Returns null for an unknown id or before enable.
+     */
+    public ItemStack sharedItem(String kitchenId, int amount) {
+        if (items == null || kitchenId == null) return null;
+        KItem t = KItem.byId(kitchenId);
+        return t == null ? null : items.create(t, amount);
+    }
     KitchenDecor kitchenDecor() { return kitchenDecor; }
     Crops crops() { return crops; }
     Props props() { return props; }
