@@ -49,6 +49,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 | Kerstdorp-delen klaar | deploy/kerst-town-schems/ (3 .schem) | in de server-WorldEdit-map droppen, dan net als de trailer: //schem load kerstdorp-01 + //paste -a (01=kerstboom, 02=rood huisje, 03=lantaarn/toren) |
 
 ## 🔵 In uitvoering (agent) → afgerond, wacht op deploy
+| **VOLLEDIGE DEPLOY-BATCH "26.2-golf + najaarsfeatures" KLAAR** | 10-11 avond | Alles staat in `deploy/` én de lijst is herschreven als runbook (STAP 0-5): 16 jarren (elk met sha1), pack build52, FMM-model-copies, Sakagura-recipes-swap, site-zip, Engelse Discord- en staff-teksten. Eén server-herstart voor de jars; pack alleen RPM-herladen + client-herstart. Niets uitgeleverd. |
 | Blok | Status |
 |---|---|
 | **IekQuests 0.5.4 + Igor conversatie-quest** | 30-10 18:05 | stage-dialoog in chat + paneel sluit voor leespauze; Igor: 4 verduidelijkte stages + receptuur in de praat |
