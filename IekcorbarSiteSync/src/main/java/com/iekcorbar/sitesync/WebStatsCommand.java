@@ -196,7 +196,8 @@ public class WebStatsCommand implements CommandExecutor {
                     return root.getAsJsonObject().getAsJsonObject("statistics");
                 }
             } catch (Exception ignored) {}
-            return null;
+            // keep looking in the other worlds' stats folders - this used to `return null`
+            // right here, so one unreadable file in the first world ended the whole search
         }
         return null;
     }

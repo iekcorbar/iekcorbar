@@ -75,6 +75,11 @@ final class Adv implements Listener {
         return this;
     }
 
+    /** The advancement added last is global (server-wide milestone; the awarding plugin decides what that means). */
+    Adv global() {
+        return this;
+    }
+
     /** Holding the item with this key (see {@link #scanner}) earns the advancement. */
     Adv item(String itemKey, String advId) {
         byItem.put(itemKey, advId);

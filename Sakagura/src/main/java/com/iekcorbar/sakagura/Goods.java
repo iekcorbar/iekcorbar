@@ -99,6 +99,37 @@ final class Goods implements Listener {
         return it.getItemMeta().getPersistentDataContainer().get(itemKey, PersistentDataType.STRING);
     }
 
+    /**
+     * Recipe ingredient matching on our PDC id alone. exactChoice compares the WHOLE item
+     * including the spoilage stamp - a 5-minute bucket - so a fruit harvested after startup
+     * never equals the prototype taken at registration, which silently broke every
+     * fruit->seed and fruit->sapling recipe within minutes of each restart (review 10-11).
+     */
+    private final class PdcChoice implements org.bukkit.inventory.RecipeChoice {
+        private final ItemStack sample;
+        private final String id;
+
+        PdcChoice(ItemStack sample) {
+            this.sample = sample;
+            this.id = idOf(sample);
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return sample;
+        }
+
+        @Override
+        public org.bukkit.inventory.RecipeChoice clone() {
+            return new PdcChoice(sample.clone());
+        }
+
+        @Override
+        public boolean test(ItemStack it) {
+            return it != null && !it.isEmpty() && id != null && id.equals(idOf(it));
+        }
+    }
+
     // ------------------------------------------------------------ casks
 
     ItemStack cask(Woods w, int amount) {
@@ -249,7 +280,7 @@ final class Goods implements Listener {
             if (f.seed == null) continue;
             NamespacedKey k = new NamespacedKey(plugin, f.seed);
             ShapelessRecipe r = new ShapelessRecipe(k, item(f.seed, 2));
-            r.addIngredient(org.bukkit.inventory.RecipeChoice.exactChoice(item(f.produce, 1)));
+            r.addIngredient(new PdcChoice(item(f.produce, 1)));
             Bukkit.addRecipe(r);
             recipeKeys.add(k);
         }
@@ -257,7 +288,7 @@ final class Goods implements Listener {
         for (Tree t : Tree.values()) {
             NamespacedKey k = new NamespacedKey(plugin, t.sapling());
             ShapelessRecipe r = new ShapelessRecipe(k, item(t.sapling(), 1));
-            if (t.fruit() != null) r.addIngredient(org.bukkit.inventory.RecipeChoice.exactChoice(item(t.fruitId, 1)));
+            if (t.fruit() != null) r.addIngredient(new PdcChoice(item(t.fruitId, 1)));
             else {
                 r.addIngredient(Material.RED_MUSHROOM);
                 r.addIngredient(Material.RED_MUSHROOM);

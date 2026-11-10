@@ -10,6 +10,10 @@
          and sieve funnel. Joins the rotation network through Steamworks' public CustomPart API. -->
     <version>0.2.0</version>
     <packaging>jar</packaging>
+    <!-- STILSTANDENDE MODULE (10-11): de power-machines zijn sinds Steamworks 0.3.34 ingebouwd
+         in de core (com.iekcorbar.power.*). Draait deze addon-jar naast Steamworks, dan botsen
+         ze: beide declareren /swpower, ExtParts.register() weigert ("already registered") en
+         machines krijgen dubbele recepten. NIET MEER DEPLOYEN. -->
 
     <name>SteamworksPower</name>
 
@@ -17,7 +21,7 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.api.version>26.3.build.230-stable</paper.api.version>
+        <paper.api.version>26.2.build.135-stable</paper.api.version>
         <!-- keep in step with Steamworks/pom.xml (see the dependency note below) -->
         <steamworks.version>0.3.41</steamworks.version>
     </properties>

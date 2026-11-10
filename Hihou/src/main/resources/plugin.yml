@@ -9,7 +9,7 @@ softdepend: [AfkCinema, Gouw, IekcorbarSiteSync, Kitchen, Kura, Relics, Sakagura
 commands:
   hihou:
     description: Hihou chests and keys
-    usage: /hihou <give|key|edit|remove|map|event|game|bw|help>
+    usage: /hihou <give|key|edit|remove|map|event|game|bw|reload|help>
     aliases: [ih]
 
 permissions:

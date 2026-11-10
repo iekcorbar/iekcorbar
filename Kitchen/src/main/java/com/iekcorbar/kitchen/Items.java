@@ -40,6 +40,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -256,9 +257,38 @@ final class Items implements Listener {
     // ------------------------------------------------------------ recipes
 
     private RecipeChoice of(KItem... types) {
-        List<ItemStack> list = new ArrayList<>();
-        for (KItem t : types) list.add(create(t, 1));
-        return RecipeChoice.exactChoice(list);
+        // NOT RecipeChoice.exactChoice: create() stamps the spoilage timer and the bucket rolls
+        // every 5 minutes, so prototypes registered at startup stopped matching picked-up food
+        // within minutes (same trap as the Sakagura seed recipes, review 10-11). Match on our
+        // PDC id only.
+        return new KChoice(types);
+    }
+
+    /** Any one of our items, recognised by the kitchen:item PDC id (display name and spoilage
+     *  bucket are deliberately ignored - only identity matters for a recipe slot). */
+    private final class KChoice implements org.bukkit.inventory.RecipeChoice {
+        private final Map<String, ItemStack> samples = new LinkedHashMap<>();
+
+        KChoice(KItem... types) {
+            for (KItem t : types) samples.put(t.id(), create(t, 1));
+        }
+
+        @Override
+        public ItemStack getItemStack() {
+            return samples.values().iterator().next();
+        }
+
+        @Override
+        public KChoice clone() {
+            return new KChoice(samples.keySet().stream().map(KItem::byId).toArray(KItem[]::new));
+        }
+
+        @Override
+        public boolean test(ItemStack it) {
+            if (it == null || it.isEmpty() || !it.hasItemMeta()) return false;
+            String id = it.getItemMeta().getPersistentDataContainer().get(itemKey, PersistentDataType.STRING);
+            return id != null && samples.containsKey(id);
+        }
     }
 
     private NamespacedKey key(String id) {

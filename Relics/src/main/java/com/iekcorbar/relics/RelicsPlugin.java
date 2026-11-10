@@ -203,7 +203,15 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     /** An item spec from the config: "relics:&lt;relic or treat id&gt; [amount]" or "&lt;MATERIAL&gt; [amount]". */
     org.bukkit.inventory.ItemStack reward(String spec) {
         String[] p = spec.trim().split("\\s+");
-        int n = p.length > 1 ? Integer.parseInt(p[1]) : 1;
+        int n = 1;
+        if (p.length > 1)
+            // config is hand-edited: one typo'd amount used to throw right out of the middle of
+            // an advent-calendar/interaction handler (audit 10-11) - warn and skip instead
+            try { n = Math.max(1, Integer.parseInt(p[1])); }
+            catch (NumberFormatException bad) {
+                getLogger().warning("Bad reward amount in config: '" + spec + "' - skipped");
+                return null;
+            }
         String id = p[0].toLowerCase(Locale.ROOT);
         if (id.startsWith("relics:")) {
             RelicType r = RelicType.byId(id.substring(7));
@@ -725,7 +733,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"menu", "guide", "list", "give", "giveall", "random", "crate", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "secret"}) if (v.startsWith(last)) out.add(v);
+            for (String v : new String[]{"menu", "guide", "list", "give", "giveall", "random", "crate", "disc", "remove", "protect", "where", "info", "board", "music", "gift", "token", "secret"}) if (v.startsWith(last)) out.add(v);
         } else if (a.length == 2 && a[0].equalsIgnoreCase("crate")) {
             for (Player p : Bukkit.getOnlinePlayers()) if (p.getName().toLowerCase(Locale.ROOT).startsWith(last)) out.add(p.getName());
         } else if (a.length == 3 && a[0].equalsIgnoreCase("crate")) {

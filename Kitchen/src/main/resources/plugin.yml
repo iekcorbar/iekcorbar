@@ -9,7 +9,7 @@ softdepend: [WorldEdit, WorldGuard, AfkCinema, Gouw, Hihou, IekcorbarSiteSync, K
 commands:
   kitchen:
     description: Kitchen commands
-    usage: /kitchen <help|give|take|list|reload>
+    usage: /kitchen <help|give|take|giveall|list|info|reload|comp start|stop|status|submit|leaderboard|area>
     aliases: [kt]
 
 permissions:

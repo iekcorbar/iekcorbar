@@ -89,7 +89,6 @@ final class Treats implements Listener {
         it.setItemMeta(m);
         it.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics", t.id()));
         it.setData(DataComponentTypes.MAX_STACK_SIZE, t.drink ? 16 : 64);
-        it.setData(DataComponentTypes.ITEM_MODEL, Key.key("relics", t.id()));
         if (t == Treat.SPARKLER) return it; // not food
         it.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(t.nutrition).saturation(t.saturation).canAlwaysEat(t.drink).build());
         it.setData(DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(t.drink ? 1.6f : 1.2f)

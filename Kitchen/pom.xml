@@ -8,7 +8,7 @@
     <artifactId>Kitchen</artifactId>
     <!-- Japanese/steampunk farming + cooking (crops, cutting board, cooking pot, animated meals).
          Behaviour inspired by the MIT-licensed Farmers Delight mod; own items, models and textures. -->
-    <version>0.3.26</version>
+    <version>0.3.27</version>
     <packaging>jar</packaging>
 
     <name>Kitchen</name>
@@ -17,7 +17,7 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.api.version>26.3.build.230-stable</paper.api.version>
+        <paper.api.version>26.2.build.135-stable</paper.api.version>
     </properties>
 
     <repositories>

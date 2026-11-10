@@ -89,8 +89,11 @@ final class Spoilage {
         int mins = spoilMinutes(t);
         if (mins < 0) return; // never spoils
         long spoilAt = System.currentTimeMillis() + (long) mins * 60 * 1000;
-        item.getItemMeta().getPersistentDataContainer().set(key, PersistentDataType.LONG, spoilAt);
-        item.setItemMeta(item.getItemMeta());
+        org.bukkit.inventory.meta.ItemMeta m = item.getItemMeta();
+        m.getPersistentDataContainer().set(key, PersistentDataType.LONG, spoilAt);
+        item.setItemMeta(m); // ONE meta object in and back out: item.getItemMeta() hands out a fresh
+                             // copy every call, so mutating one and setting another silently lost
+                             // the stamp and nothing ever spoiled (fixed 10-11).
     }
 
     /** Checks if an item has spoiled. */

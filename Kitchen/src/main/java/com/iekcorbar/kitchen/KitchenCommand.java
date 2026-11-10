@@ -153,6 +153,24 @@ final class KitchenCommand implements TabExecutor {
                         }
                         if (lb.isEmpty()) s.sendMessage(Component.text("No entries yet.", NamedTextColor.GRAY));
                     }
+                    case "area" -> {
+                        // Advertised since day one, but the handler itself was never written
+                        // (10-11): the WorldEdit/WorldGuard integration had no caller at all.
+                        if (!admin) return noPerm(s);
+                        if (!(s instanceof Player p)) { s.sendMessage(Component.text("Select the area with WorldEdit as a player first.", NamedTextColor.RED)); return true; }
+                        if (a.length < 3) { s.sendMessage(Component.text("Use: /" + label + " comp area <region-name> (with a WorldEdit selection)", NamedTextColor.RED)); return true; }
+                        if (plugin.worldEdit() == null || !plugin.worldEdit().worldEditAvailable() || !plugin.worldEdit().worldGuardAvailable()) {
+                            s.sendMessage(Component.text("WorldEdit + WorldGuard are needed for competition areas.", NamedTextColor.RED));
+                            return true;
+                        }
+                        String name = a[2];
+                        if (plugin.worldEdit().createRegion(p, name, true)) {
+                            plugin.competition().setRegion(name);
+                            s.sendMessage(Component.text("Competition area '" + name + "' created from your selection.", NamedTextColor.GREEN));
+                        } else {
+                            s.sendMessage(Component.text("Could not create the region - do you have a valid WorldEdit selection?", NamedTextColor.RED));
+                        }
+                    }
                     default -> s.sendMessage(Component.text("Unknown subcommand. Use: start, stop, status, submit, leaderboard, area", NamedTextColor.RED));
                 }
             }

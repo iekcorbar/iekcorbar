@@ -49,11 +49,14 @@ final class GouwCommand implements TabExecutor {
 
         switch (s0) {
             case "claim" -> {
+                // gouw.claim is declared in plugin.yml for exactly this gate - it was never read
+                if (!p.hasPermission("gouw.claim")) { msg(p, "No permission.", NamedTextColor.RED); return true; }
                 String err = store.claim(p, w, cx, cz);
                 if (err != null) msg(p, "Cannot claim: " + err + ".", NamedTextColor.RED);
                 else msg(p, "Chunk " + cx + "," + cz + " claimed - your gouw now has " + store.landOf(p.getUniqueId()).chunks.size() + " chunks.", NamedTextColor.GREEN);
             }
             case "autoclaim" -> {
+                if (!p.hasPermission("gouw.claim")) { msg(p, "No permission.", NamedTextColor.RED); return true; }
                 int r = 2;
                 if (a.length > 1) try { r = Math.max(0, Math.min(8, Integer.parseInt(a[1]))); } catch (NumberFormatException ignored) { }
                 int got = 0;

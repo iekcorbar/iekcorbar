@@ -178,6 +178,10 @@ final class Crops implements Listener {
     void loadChunk(Chunk c) {
         int[] arr = c.getPersistentDataContainer().get(posKey, PersistentDataType.INTEGER_ARRAY);
         if (arr == null || arr.length == 0) return;
+        Map<Integer, Entry> existing = crops.get(c.getWorld().getUID()) == null ? null : crops.get(c.getWorld().getUID()).get(c.getChunkKey());
+        if (existing != null && !existing.isEmpty()) return; // already loaded (chunk event + startup scan
+                                                              // can race in the same tick; replacing the map
+                                                              // here orphaned the first spawn of displays)
         Map<Integer, Entry> map = new HashMap<>();
         boolean converted = false;
         for (int e : arr) {

@@ -49,8 +49,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- The live server's actual version Ã¢â‚¬â€ default builds (what actually
              gets shipped) always compile against this. 26.2 since
-             2026-09-27 (was 26.1.2.build.74-stable). -->
-        <paper.api.version>26.3.build.230-stable</paper.api.version>
+             2026-09-27 (was 26.2.build.135-stable). -->
+        <paper.api.version>26.2.build.135-stable</paper.api.version>
     </properties>
 
     <repositories>
@@ -82,7 +82,7 @@
              user 2026-08-13 Ã¢â‚¬â€ this project had been targeting the old
              1.20.4 API, a real mismatch, see CLAUDE.md). Pinned to the
              latest 26.1.2-series stable build published on PaperMC's repo
-             at the time of this change (26.1.2.build.74-stable) rather than
+             at the time of this change (26.2.build.135-stable) rather than
              the newer 26.2.x series, to match the live server's version
              exactly instead of assuming it's been updated further.
 
@@ -177,7 +177,7 @@
         <profile>
             <id>paper-26.1</id>
             <properties>
-                <paper.api.version>26.1.2.build.74-stable</paper.api.version>
+                <paper.api.version>26.2.build.135-stable</paper.api.version>
             </properties>
         </profile>
     </profiles>

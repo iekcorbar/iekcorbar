@@ -75,7 +75,7 @@ final class Adv implements Listener {
         return this;
     }
 
-    /** The advancement added last is global (awarded to every player). */
+    /** The advancement added last is global (server-wide milestone; the awarding plugin decides what that means). */
     Adv global() {
         return this;
     }

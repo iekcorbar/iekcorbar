@@ -16,7 +16,7 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.api.version>26.3.build.230-stable</paper.api.version>
+        <paper.api.version>26.2.build.135-stable</paper.api.version>
     </properties>
 
     <repositories>

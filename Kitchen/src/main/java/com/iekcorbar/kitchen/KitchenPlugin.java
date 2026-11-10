@@ -96,7 +96,9 @@ public final class KitchenPlugin extends JavaPlugin implements Listener {
                 for (Entity e : w.getEntities()) {
                     var pdc = e.getPersistentDataContainer();
                     if (pdc.has(new org.bukkit.NamespacedKey(this, "display"), PersistentDataType.BYTE)
-                            || pdc.has(new org.bukkit.NamespacedKey(this, "meal"), PersistentDataType.BYTE)) e.remove();
+                            || pdc.has(new org.bukkit.NamespacedKey(this, "meal"), PersistentDataType.BYTE)
+                            || pdc.has(new org.bukkit.NamespacedKey(this, "crop_display"), PersistentDataType.BYTE)
+                            || pdc.has(new org.bukkit.NamespacedKey(this, "decor_display"), PersistentDataType.BYTE)) e.remove();
                 }
                 for (Chunk c : w.getLoadedChunks()) {
                     crops.loadChunk(c);

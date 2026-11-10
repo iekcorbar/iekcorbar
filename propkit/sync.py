@@ -16,6 +16,7 @@ ADV = {
     "Steamworks": "com.iekcorbar.steamworks", "Kitchen": "com.iekcorbar.kitchen", "Wildlife": "com.iekcorbar.wildlife",
     "Relics": "com.iekcorbar.relics", "Sakagura": "com.iekcorbar.sakagura", "Kura": "com.iekcorbar.kura",
     "Zukan": "com.iekcorbar.zukan", "Satchel": "com.iekcorbar.satchel", "SteamworksAdditions": "com.iekcorbar.additions",
+    "Hunt": "com.iekcorbar.hunt",
 }
 for plugin, pkg in ADV.items():
     out = os.path.join(here, "..", plugin, "src", "main", "java", *pkg.split("."))

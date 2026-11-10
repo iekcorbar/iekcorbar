@@ -99,13 +99,45 @@ final class Decor implements Listener {
         guardAround(e.getBlock());
     }
 
-    private void guardAround(Block centre) {
+    // Non-player changes shape-update reserved blocks too (audit 10-11): tree growth next to an
+    // ore/decor note corrupted it until the next player action; pistons pushed blocks that then
+    // re-derived the note's instrument. Same remember-and-restore trick as place/break.
+    @EventHandler(ignoreCancelled = true)
+    public void guardGrow(org.bukkit.event.block.BlockGrowEvent e) {
+        Block o = e.getBlock();
         java.util.Map<Block, BlockData> saved = new java.util.HashMap<>();
+        for (int dx = -2; dx <= 2; dx++)
+            for (int dz = -2; dz <= 2; dz++)
+                for (int dy = -1; dy <= 8; dy++)
+                    collect(o.getRelative(dx, dy, dz), saved);
+        restore(saved);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void guardPistonExtend(org.bukkit.event.block.BlockPistonExtendEvent e) {
+        java.util.Map<Block, BlockData> saved = new java.util.HashMap<>();
+        collect(e.getBlock().getRelative(e.getDirection()), saved);
+        for (Block b : e.getBlocks()) { collect(b, saved); collect(b.getRelative(e.getDirection()), saved); }
+        restore(saved);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void guardPistonRetract(org.bukkit.event.block.BlockPistonRetractEvent e) {
+        java.util.Map<Block, BlockData> saved = new java.util.HashMap<>();
+        collect(e.getBlock().getRelative(e.getDirection()), saved);
+        for (Block b : e.getBlocks()) collect(b, saved);
+        restore(saved);
+    }
+
+    private void collect(Block centre, java.util.Map<Block, BlockData> into) {
         for (org.bukkit.block.BlockFace f : new org.bukkit.block.BlockFace[]{org.bukkit.block.BlockFace.UP, org.bukkit.block.BlockFace.DOWN,
                 org.bukkit.block.BlockFace.NORTH, org.bukkit.block.BlockFace.EAST, org.bukkit.block.BlockFace.SOUTH, org.bukkit.block.BlockFace.WEST}) {
             Block n = centre.getRelative(f);
-            if (n.getType() == Material.NOTE_BLOCK && key(n.getBlockData()) >= 0) saved.put(n, n.getBlockData());
+            if (n.getType() == Material.NOTE_BLOCK && key(n.getBlockData()) >= 0) into.putIfAbsent(n, n.getBlockData());
         }
+    }
+
+    private void restore(java.util.Map<Block, BlockData> saved) {
         if (saved.isEmpty()) return;
         org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> {
             for (var en : saved.entrySet()) {
@@ -113,6 +145,12 @@ final class Decor implements Listener {
                 if (n.getType() == Material.NOTE_BLOCK && !n.getBlockData().equals(en.getValue())) n.setBlockData(en.getValue(), false);
             }
         });
+    }
+
+    private void guardAround(Block centre) {
+        java.util.Map<Block, BlockData> saved = new java.util.HashMap<>();
+        collect(centre, saved);
+        restore(saved);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)

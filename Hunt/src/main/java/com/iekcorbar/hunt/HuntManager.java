@@ -22,8 +22,8 @@ public class HuntManager implements Listener {
     static {
         MILESTONES.put("wildlife", new int[]{25, 45, 54});
         MILESTONES.put("kitchen", new int[]{25, 50});
-        MILESTONES.put("relics", new int[]{25, 50});
-        MILESTONES.put("zoo", new int[]{10});
+        MILESTONES.put("relics", new int[]{25, 33});   // 50 was unreachable: the relics tab has
+        MILESTONES.put("zoo", new int[]{10});          // exactly 33 advancements (audit 10-11)
         MILESTONES.put("sakagura", new int[]{25});
         MILESTONES.put("steamworks", new int[]{25});
     }
@@ -45,8 +45,15 @@ public class HuntManager implements Listener {
     public void onAdvancement(PlayerAdvancementDoneEvent e) {
         Player p = e.getPlayer();
         Advancement adv = e.getAdvancement();
-        String ns = adv.getKey().getNamespace();
-        String cat = categoryOf(ns);
+        // Tabs are registered as <plugin-ns>/<tab>/<id> - the TAB is the category: zoo lives in
+        // the wildlife jar (namespace 'wildlife' would count zoo as wildlife) and the additions
+        // tab in the steamworksadditions jar (audit 10-11: zoo milestones could never fire).
+        String advKey = adv.getKey().getKey();
+        int s = advKey.indexOf('/');
+        if (s < 0) return;                       // not one of our tabbed advancements at all
+        if (advKey.substring(s + 1).equals("root")) // the tab root is scaffolding, granted on the
+            return;                              // way to the first real one - never count it
+        String cat = categoryOf(advKey.substring(0, s));
         if (cat == null) return;
 
         NamespacedKey key = new NamespacedKey(plugin, "hunt_" + cat);
@@ -65,14 +72,14 @@ public class HuntManager implements Listener {
         }
     }
 
-    private String categoryOf(String ns) {
-        return switch (ns) {
+    private String categoryOf(String tab) {
+        return switch (tab) {
             case "wildlife" -> "wildlife";
             case "kitchen" -> "kitchen";
             case "relics" -> "relics";
             case "zoo" -> "zoo";
             case "sakagura" -> "sakagura";
-            case "steamworks", "steamworksadditions" -> "steamworks";
+            case "steamworks", "additions" -> "steamworks";
             default -> null;
         };
     }

@@ -393,8 +393,8 @@ final class Trains implements Listener {
             Player driver = driver(t);
             boolean steam = false;
             if (driver != null && t.auto) {
-                var in = driver.getCurrentInput();
-                if (in.isForward() || in.isBackward()) {
+                var in = driver.getCurrentInput(); // null for fake players / inputless clients -
+                if (in != null && (in.isForward() || in.isBackward())) {  // dereferencing it here
                     t.auto = false; // the driver takes over
                     driver.sendActionBar(Component.text("Autopilot off", NamedTextColor.YELLOW));
                 }
@@ -402,9 +402,9 @@ final class Trains implements Listener {
             if (t.auto) {
                 steam = autopilot(t, cfg);
                 if (driver != null && tick % 10 == 0) driver.sendActionBar(dashboard(t).append(Component.text("  |  autopilot", NamedTextColor.AQUA)));
-            } else if (driver != null) {
-                var in = driver.getCurrentInput();
-                if (in.isForward()) {
+            } else if (driver != null && driver.getCurrentInput() != null) { // same null-guard: one NPE
+                var in = driver.getCurrentInput();                            // here froze EVERY train
+                if (in.isForward()) {                                           // until a restart (audit 10-11)
                     if (t.speed < 0) t.speed = Math.min(0, t.speed + cfg.trainBrake);
                     else if (t.fuel > 0) {
                         t.speed = Math.min(cfg.trainMaxSpeed, t.speed + cfg.trainAccel);

@@ -7,3 +7,8 @@ commands:
   xmas:
     description: Xmas commands
     usage: /xmas give <block>
+    permission: xmas.admin
+permissions:
+  xmas.admin:
+    description: Give the xmas test blocks
+    default: op
