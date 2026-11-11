@@ -240,8 +240,14 @@ def greedy_boxes(acc, dim):
 RULES = {                                   # generic quad defaults: slim lower boxes are legs,
     "leg_cy": 0.46, "leg_top": 0.62,        #   front/back split at z=0, left/right at x=0
     "leg_w": 0.34, "leg_d": 0.42,           #   (w/d are fractions of the body's own span)
-    "head_z": 0.24, "head_y": 0.52,         # head zone: front 24% of the length, above 52% height
-    "head_w": 0.60, "tail_z": 0.80,         # tail zone: last 20% of length, narrow, short, ON THE
+    "leg_cz": 0.0,                          #   leg centres this far from mid-body (fraction of Lz);
+    "leg_onside": False,                    #   and reject leg boxes that cross the centre line -
+                                            #   both only for NARROW meshes (zebra): its flank bands
+                                            #   are as slim as legs; verified species keep their rig
+    "head_z": 0.24, "head_y": 0.52,         # head zone: front 24% of the length, above 52% height,
+    "head_w": 0.60, "head_lo": 0.0,         #   head_lo: a head never reaches the ground (zebra uses it
+                                            #   as fall-through guard for rejected belly bands)
+    "tail_z": 0.80,                         # tail zone: last 20% of length, narrow, short, ON THE
     "tail_w": 0.24, "tail_d": 0.35,         #   centre line and springing from above the belly
     "leg_cy_bird": 0.34, "wing_x": 0.55,    # bird: feet under 34% (slim boxes only), wings beyond
     "leg_w_bird": 0.50, "leg_d_bird": 0.50, #   55% of half-width, head a NARROW front-top cluster,
@@ -252,12 +258,17 @@ RULES = {                                   # generic quad defaults: slim lower 
 
 SPECIES_RULES = {
     # 11-11 previews (pose3d) drove every one of these numbers.
+    "zebra":     {"leg_cz": 0.16, "leg_onside": True, "head_lo": 0.08},   # narrow mesh (Wx 10.35):
+                                                                          # flank/belly bands are leg-slim
+                                                                          # (11-12 loupe: hip pivot sat
+                                                                          # mid-body and a chest band swung
+                                                                          # with the front-right leg)
     "elephant":  {"leg_d": 0.30, "head_z": 0.30, "head_y": 0.35},   # pillar legs stay short boxes;
                                                                     # head+tusks+trunk in front, low
     "giraffe":   {"leg_cy": 0.52, "leg_top": 0.74, "leg_d": 0.50,
                   "head_y": 0.50},                                   # legs are half the animal
     "boar":      {"tail_z": 0.95},                       # the mesh has no tail: rump stays body
-    "macaque":   {"leg_cy": 0.50, "leg_top": 0.70, "head_y": 0.45}, # arms and legs alike, head low
+    "macaque":   {"leg_cy": 0.50, "leg_top": 0.70, "head_y": 0.45},  # arms and legs alike, head low
     "crab":      {"leg_cy": 0.55, "leg_top": 0.85, "leg_w": 0.45, "leg_d": 0.60,
                   "head_z": 0.26, "head_y": 0.40, "tail_z": 0.98},  # legs under the shell, claws up
     "penguin":   {"leg_cy_bird": 0.24, "head_y_bird": 0.52},        # webbed feet only below the body,
@@ -291,9 +302,12 @@ def rig_boxes(boxes, rig, H, rules):
         if rig == "quad":
             slim = w <= rules["leg_w"] * Wx and d <= rules["leg_d"] * Lz
             low = cy < rules["leg_cy"] * H or (y0 < rules["leg_cy"] * H and y1 < rules["leg_top"] * H)
-            if slim and low:
+            onside = (not rules["leg_onside"]) or not (x0 < -1e-6 < x1)   # centre-crossing band: belly, not limb
+            far = abs(cz) >= rules["leg_cz"] * Lz    # legs live under the chest or the rump
+            if slim and low and onside and far:
                 bone = ("leg_f" if cz < 0 else "leg_b") + ("l" if cx > 0 else "r")
-            elif rel_z < rules["head_z"] and cy > rules["head_y"] * H and w <= rules["head_w"] * Wx:
+            elif (rel_z < rules["head_z"] and cy > rules["head_y"] * H and w <= rules["head_w"] * Wx
+                  and (rules["head_lo"] <= 0 or y0 > rules["head_lo"] * H)):   # head_lo: no ground box is a head
                 bone = "h_head"
             elif (rel_z > rules["tail_z"] and w < rules["tail_w"] * Wx and d < rules["tail_d"] * Lz
                   and abs(cx) < 0.30 * Wx and y0 > 0.35 * H):   # tail: centre-line box springing from
@@ -305,14 +319,15 @@ def rig_boxes(boxes, rig, H, rules):
             elif abs(rel_x) > rules["wing_x"] and cy > rules["leg_cy_bird"] * H:
                 bone = "wing_l" if cx > 0 else "wing_r"
             elif (rel_z < rules["head_z_bird"] and cy > rules["head_y_bird"] * H
-                  and w <= rules["head_w_bird"] * Wx):      # a front column as wide as the body is chest
-                bone = "h_head"
+                  and w <= rules["head_w_bird"] * Wx
+                  and (rules["head_lo"] <= 0 or y0 > rules["head_lo"] * H)):   # a front column reaching
+                bone = "h_head"                                                 # the floor is chest
             elif rel_z > rules["tail_z_bird"] and w < rules["tail_w_bird"] * Wx:
                 bone = "tail"
         elif rig == "fish":
             if rel_z > rules["tail_z_fish"] and d < rules["tail_d_fish"] * Lz:
                 bone = "tail"                                # long merged slabs are the back, not the fluke
-            elif rel_z < rules["head_z_fish"] and cy > rules["head_y_fish"] * H:
+            elif rel_z < rules["head_z_fish"] and cy > rules["head_y_fish"] * H and y0 > rules["head_lo"] * H:
                 bone = "h_head"
         out.setdefault(bone, []).append(b)
     return out
