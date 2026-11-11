@@ -72,7 +72,7 @@ final class Animals implements Listener {
         int ageStage = 0; // 0=baby, 1=adult, 2=senior
         long busyUntil, tailBack, rideUntil, awakeAt, panicUntil, fleeUntil;
         /** Babies: world time they grow up, and how long was left when a golden dandelion froze them. Adults: love mode (plugin tick) and next breeding (world time). */
-        long growAt, frozenLeft, loveUntil, breedAfter, lastFed, birthTime;
+        long growAt, frozenLeft, loveUntil, breedAfter, lastFed, birthTime, stuckSince;
         org.bukkit.Location threat;
 
         Animal(LivingEntity entity, Species species, boolean rare, String model, boolean baby) {
@@ -186,10 +186,12 @@ final class Animals implements Listener {
             m.setAI(true); // ensure pathfinding is active (some base mobs spawn with AI off)
         }
         // Suppress vanilla base-mob behaviors that fight the FMM model:
-        // 1. Horses (DEER, ZEBRA) jump over obstacles on their own, which makes the model look like
-        //    it is "springing but not walking". Disable jumping entirely.
+        // 1. Horses (DEER, ZEBRA, GIRAFFE, REINDEER) used to be set to jump strength 0 so they would never
+        //    spring in place of walking - but the vanilla horse pathfinder refuses jump-nodes without it, and
+        //    every 1-block kerb, log or slope then froze the animal permanently (owner 11-12: "dieren stonden
+        //    stil"). 0.35 is enough to step over single-block obstacles, far too small to leap fences.
         if (e instanceof org.bukkit.entity.Horse h) {
-            h.setJumpStrength(0.0); // no jumping at all - it walks around obstacles instead
+            h.setJumpStrength(0.35);
             h.setDomestication(h.getMaxDomestication()); // fully tamed: no rearing animation
         }
         // 2. Chickens (DUCK, CRANE, OSTRICH, PENGUIN) flap their wings when falling, which can
@@ -505,6 +507,22 @@ final class Animals implements Listener {
                         Location water = waterNear(e, 5);
                         if (water != null) startFishing(a, water, tick);
                     }
+                }
+                case ORCA -> {
+                    // A dolphin base with a 2.27x body gets stuck in tight or shallow ponds: its vanilla
+                    // swim-pathfinding jams on bottom and banks and the orca just hangs there (owner 11-12).
+                    // If it waters around without advancing for a while, aim it at a genuinely open spot.
+                    if (e instanceof Mob m && e.isInWater()) {
+                        boolean idle = e.getVelocity().getX() * e.getVelocity().getX()
+                                     + e.getVelocity().getZ() * e.getVelocity().getZ() < 0.002;
+                        if (!idle) a.stuckSince = 0;
+                        else if (a.stuckSince == 0) a.stuckSince = tick;
+                        else if (tick - a.stuckSince > 120) {              // 6 s of standing in the water
+                            Location away = openWater(e.getLocation(), 10, r);
+                            if (away != null) m.getPathfinder().moveTo(away, 1.0);
+                            a.stuckSince = tick - 60;                      // try again in 3 s
+                        }
+                    } else a.stuckSince = 0;
                 }
                 case KOALA -> {
                     // koalas nap in the sun and wake on their own (or when something happens)
@@ -980,8 +998,29 @@ final class Animals implements Listener {
     }
 
     /** The nearest water block within {@code radius} of the animal (its bank included), or null. */
-    private static Location waterNear(LivingEntity e, int radius) {
-        Location c = e.getLocation();
+    /** A random mid-water spot in a column at least 3 deep, within range of {@code here}: a goal a
+     *  scaled-up dolphin can actually swim to. Null when no loaded chunk around here has open water. */
+    private static Location openWater(Location here, int range, ThreadLocalRandom r) {
+        World w = here.getWorld();
+        for (int i = 0; i < 12; i++) {
+            double ang = r.nextDouble() * Math.PI * 2, d = 2 + r.nextDouble() * (range - 2);
+            int x = here.getBlockX() + (int) (Math.cos(ang) * d);
+            int z = here.getBlockZ() + (int) (Math.sin(ang) * d);
+            if (!w.isChunkLoaded(x >> 4, z >> 4)) continue;
+            int top = here.getBlockY();
+            while (top < here.getBlockY() + 8 && w.getBlockAt(x, top, z).getType() == Material.WATER) top++;
+            int surface = top - 1;
+            if (surface > here.getBlockY() + 6) continue;               // dry spot above: not our kind of water
+            Block s = w.getBlockAt(x, surface, z);
+            if (s.getType() != Material.WATER || !s.getRelative(0, 1, 0).getType().isAir()) continue;
+            if (w.getBlockAt(x, surface - 1, z).getType() != Material.WATER
+                    || w.getBlockAt(x, surface - 2, z).getType() != Material.WATER) continue;   // needs 3 deep
+            return new Location(w, x + 0.5, surface - 0.5, z + 0.5);
+        }
+        return null;
+    }
+
+    private static Location waterNear(LivingEntity e, int radius) {        Location c = e.getLocation();
         World w = c.getWorld();
         int bx = c.getBlockX(), by = c.getBlockY(), bz = c.getBlockZ();
         for (int dx = -radius; dx <= radius; dx++) {
