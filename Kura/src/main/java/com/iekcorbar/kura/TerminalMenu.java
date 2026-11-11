@@ -141,7 +141,7 @@ final class TerminalMenu implements InventoryHolder {
         if (!search.isEmpty()) inv.setItem(CLEAR_SEARCH, Menus.button(Material.BARRIER, "Clear search"));
         if (network == null) {
             inv.setItem(INFO, Menus.button(Material.REDSTONE_TORCH, "Not connected",
-                    "Place the terminal against an Inventory Connector,", "a trim, a cable or a chest."));
+                    "Place an Inventory Cable beside a chest,", "then the terminal against that cable."));
         } else {
             int free = network.freeSlots(), all = network.slots();
             inv.setItem(INFO, Menus.button(Material.BOOK, "Network",

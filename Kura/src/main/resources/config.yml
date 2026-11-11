@@ -15,6 +15,10 @@ network:
 parts:
   # Left-clicks needed to break a part (they sit on a barrier block). Creative breaks at once.
   break-hits: 3
+  # How long the count keeps running: 60 ticks = 3 seconds between hits.
+  # Every part ALSO comes off in one click: sneak + right-click it with an empty hand (barrel-based
+  # parts like the Interface and Open Crate are real blocks and break the vanilla way).
+  break-window-ticks: 60
 
 inventory-hopper:
   interval-ticks: 10

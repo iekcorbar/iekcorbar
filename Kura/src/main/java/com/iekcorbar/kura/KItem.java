@@ -7,13 +7,13 @@ import java.util.Locale;
  * drawn in tools/make_pack.py) and the id in the item's data ({@code kura:item}).
  */
 enum KItem {
-    INVENTORY_CONNECTOR("Inventory Connector", 64, "Joins every chest and barrel touching it", "(and touching those) into one network."),
-    STORAGE_TERMINAL("Storage Terminal", 64, "Shows every item in the network.", "Place it against a connector, trim, cable or chest.", "Double-click an item to pin it as favourite."),
+    INVENTORY_CONNECTOR("Inventory Connector", 64, true, "Was the heart of a network.", "An Inventory Cable does this now: it joins", "every container it touches."),
+    STORAGE_TERMINAL("Storage Terminal", 64, "Shows every item in the network.", "Place it against a cable or a chest.", "Double-click an item to pin it as favourite."),
     CRAFTING_TERMINAL("Crafting Terminal", 64, "A Storage Terminal with a crafting grid", "that refills itself from the network."),
-    INVENTORY_TRIM("Inventory Trim", 64, "Joins chests like a chest would, without storing anything.", "Can be painted."),
-    INVENTORY_CABLE("Inventory Cable", 64, "Carries the network over distance.", "Use Cable Connectors to attach chests."),
-    FRAMED_CABLE("Framed Inventory Cable", 64, "A full-block cable. Can be painted."),
-    CABLE_CONNECTOR("Cable Connector", 64, "Attaches the container it faces", "(and everything touching it) to a cable."),
+    INVENTORY_TRIM("Inventory Trim", 64, true, "Joined chests without storing anything.", "An Inventory Cable does this now.", "Can still be painted."),
+    INVENTORY_CABLE("Inventory Cable", 64, "Carries the network.", "Touches a chest, barrel or shulker box,", "and that container is in the network."),
+    FRAMED_CABLE("Framed Inventory Cable", 64, "A cable that fills the whole block.", "Can be painted."),
+    CABLE_CONNECTOR("Cable Connector", 64, true, "Attached a cable to one container.", "An Inventory Cable joins containers", "by itself now."),
     INVENTORY_HOPPER("Inventory Hopper", 64, "Moves items from behind to the front,", "to or from a whole network. Right-click: filter."),
     LEVEL_EMITTER("Level Emitter", 64, "Gives a redstone signal when the network", "holds more (or less) of an item. Right-click: set up."),
     INVENTORY_INTERFACE("Inventory Interface", 64, "A barrel that feeds the network (import)", "or is kept stocked from it (export,", "N stacks per item - set in its GUI).", "Hoppers, belts and arms can use it."),
@@ -29,12 +29,23 @@ enum KItem {
 
     final String displayName;
     final int maxStack;
+    final boolean legacy;
     final String[] lore;
 
     KItem(String displayName, int maxStack, String... lore) {
+        this(displayName, maxStack, false, lore);
+    }
+
+    KItem(String displayName, int maxStack, boolean legacy, String... lore) {
         this.displayName = displayName;
         this.maxStack = maxStack;
+        this.legacy = legacy;
         this.lore = lore;
+    }
+
+    /** Dropped from crafting and the guides by the 0.1.11 simplification (cables do it all). */
+    boolean legacy() {
+        return legacy;
     }
 
     String id() {

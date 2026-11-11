@@ -35,4 +35,4 @@ Right-click a hopper, emitter or interface with it to open its settings.
 
 ### Paint Kit
 
-Right-click any full block to pick its look, then right-click an Inventory Trim or Framed Cable to give it that look. Sneak + right-click to clear it. The kit wears out after 64 uses.
+Right-click any full block to pick its look, then right-click a Framed Cable (or an old Inventory Trim) to give it that look. Sneak + right-click to clear it. The kit wears out after 64 uses.

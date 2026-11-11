@@ -8,7 +8,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Tag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
@@ -164,18 +163,15 @@ final class Items {
 
     void registerRecipes() {
         unregisterRecipes();
-        shaped(KItem.INVENTORY_CONNECTOR, 1, new String[]{" R ", "CHC", " R "}, Map.of('R', Material.REDSTONE, 'C', Material.COPPER_INGOT, 'H', Material.CHEST));
+        // 0.1.11 "cables are enough": the Inventory Connector, Inventory Trim and Cable Connector lost
+        // their recipes - a cable now joins whatever it touches, so one part does what those three did.
+        // The items themselves stay in the plugin: parts already placed on the server still load, look
+        // right and carry the network (see PartType.wire()).
         shaped(KItem.STORAGE_TERMINAL, 1, new String[]{"CGC", "RQR", "CCC"},
                 Map.of('C', Material.COPPER_INGOT, 'G', Material.GLASS_PANE, 'R', Material.REDSTONE, 'Q', Material.COMPARATOR));
         shapeless(KItem.CRAFTING_TERMINAL, 1, KItem.STORAGE_TERMINAL, Material.CRAFTING_TABLE, Material.GOLD_INGOT);
-        ShapedRecipe trim = new ShapedRecipe(key("trim"), create(KItem.INVENTORY_TRIM, 4));
-        trim.shape("SPS", "P P", "SPS");
-        trim.setIngredient('S', Material.STICK);
-        trim.setIngredient('P', new RecipeChoice.MaterialChoice(Tag.PLANKS));
-        add(trim);
         shaped(KItem.INVENTORY_CABLE, 6, new String[]{"CRC"}, Map.of('C', Material.COPPER_INGOT, 'R', Material.REDSTONE));
         shapeless(KItem.FRAMED_CABLE, 1, KItem.INVENTORY_CABLE, Material.STICK, Material.STICK);
-        shapeless(KItem.CABLE_CONNECTOR, 1, KItem.INVENTORY_CABLE, Material.COPPER_INGOT, Material.REDSTONE);
         shapeless(KItem.INVENTORY_HOPPER, 1, Material.HOPPER, Material.COPPER_INGOT, Material.REDSTONE);
         shapeless(KItem.LEVEL_EMITTER, 1, Material.COMPARATOR, Material.REDSTONE_TORCH, Material.COPPER_INGOT);
         shapeless(KItem.INVENTORY_INTERFACE, 1, Material.BARREL, Material.COPPER_INGOT, Material.COPPER_INGOT, Material.REDSTONE);

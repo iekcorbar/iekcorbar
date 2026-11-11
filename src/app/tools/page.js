@@ -76,8 +76,8 @@ export default function ToolsPage() {
           chests into one network, so a single terminal shows everything you own, with search and sorting.
         </p>
         <div className="grid sm:grid-cols-2 gap-4">
-          <Card title="Connect" stat="Inventory Connector">
-            <p>Put an Inventory Connector in the middle of your storage room. Every chest touching it joins, and so does everything touching those chests.</p>
+          <Card title="Connect" stat="Inventory Cable">
+            <p>One rule: a cable joins whatever it touches. Run an Inventory Cable beside your chests and every container it reaches is in the network - including the ones touching those.</p>
           </Card>
           <Card title="Find and fetch" stat="Storage Terminal">
             <p>Open a terminal, search for an item and take it out. Click items in to put them back.</p>

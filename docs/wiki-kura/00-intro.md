@@ -10,7 +10,7 @@ Every long-time player knows the problem: ten chests, three barrels and no idea 
 
 ### What you will do
 
-* **Connect.** Put an Inventory Connector in the middle of your storage room. Every chest touching it joins, and so does everything touching those chests.
+* **Connect.** Run an Inventory Cable beside your chests. A cable joins whatever it touches, and so does every container touching those - that is the whole rule.
 * **Find and fetch.** Open a Storage Terminal, search for an item and take it out. Put things back by clicking them in.
 * **Craft from storage.** The Crafting Terminal uses what is in your network and refills its grid after each craft.
 * **Reach it from anywhere.** Wireless terminals open your network from across the base, or even from another world with the advanced version.
@@ -29,5 +29,5 @@ Every long-time player knows the problem: ten chests, three barrels and no idea 
 ### Start here
 
 1. Read [Kura Storage](/wiki?page=kura) for the one-minute explanation.
-2. Look at [Parts](/wiki?page=kura-parts) and craft your first connector and terminal.
+2. Look at [Parts](/wiki?page=kura-parts) and craft your first cable and terminal.
 3. Come back to [Automation](/wiki?page=kura-automation) when the storage room is working.

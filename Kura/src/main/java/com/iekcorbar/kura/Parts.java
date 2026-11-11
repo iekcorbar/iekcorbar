@@ -60,7 +60,7 @@ final class Parts implements Listener {
     private final NamespacedKey dataKey, displayTag;
     private final Map<UUID, Map<Long, Part>> parts = new HashMap<>();
     private final Map<UUID, Set<Long>> dirty = new HashMap<>();
-    private int breakHits, hopperInterval, hopperBatch, interfaceInterval, cabinetCapacity;
+    private int breakHits, breakWindow, hopperInterval, hopperBatch, interfaceInterval, cabinetCapacity;
 
     Parts(KuraPlugin plugin) {
         this.plugin = plugin;
@@ -71,6 +71,7 @@ final class Parts implements Listener {
 
     void load() {
         breakHits = Math.max(1, plugin.getConfig().getInt("parts.break-hits", 3));
+        breakWindow = Math.max(20, plugin.getConfig().getInt("parts.break-window-ticks", 60));
         hopperInterval = Math.max(1, plugin.getConfig().getInt("inventory-hopper.interval-ticks", 10));
         hopperBatch = Math.max(1, plugin.getConfig().getInt("inventory-hopper.items-per-transfer", 8));
         interfaceInterval = Math.max(1, plugin.getConfig().getInt("inventory-interface.interval-ticks", 20));
@@ -279,19 +280,23 @@ final class Parts implements Listener {
         for (int i = 0; i < 6; i++) {
             BlockFace f = Networks.FACES[i];
             if (f == skip) continue;
-            Part n = at(p.block().getRelative(f));
-            if (n == null) continue;
-            boolean joins = switch (n.type.kind) {
-                case CABLE, CONNECTOR, DEVICE -> n.type != PartType.OPEN_CRATE;
-                case CABLE_CONNECTOR -> n.facing != f.getOppositeFace();
-                default -> false;
-            };
+            Block n = p.block().getRelative(f);
+            Part q = at(n);
+            boolean joins;
+            if (q != null) {
+                joins = q.type.kind != PartType.Kind.DEVICE || q.type != PartType.OPEN_CRATE;
+            } else {
+                // 0.1.11: the arm also points at a bare chest or barrel - that is the whole
+                // rule now, and the model should say so out loud.
+                joins = plugin.networks().isStorage(n);
+            }
             if (joins) mask |= 1 << i;
         }
         return mask;
     }
 
-    private void refreshAround(Block b) {
+    /** Redraw the cables around a block that started or stopped being part of a network. */
+    void refreshAround(Block b) {
         for (BlockFace f : Networks.FACES) {
             Part n = at(b.getRelative(f));
             if (n != null && (n.type == PartType.CABLE || n.type == PartType.CABLE_CONNECTOR) && n.paint == null) draw(n);
@@ -320,6 +325,17 @@ final class Parts implements Listener {
         ItemStack hand = e.getItem();
         KItem held = plugin.items().typeOf(hand);
         if (part != null) {
+            // 0.1.11: parts sit on a barrier, which vanilla cannot mine, so survival players used to
+            // see no break progress at all on a framed cable and gave up. Punching still works (hit()
+            // below), but any part on a barrier now also comes off with an empty hand + shift - one
+            // click, every game mode, no client mining packets needed. Barrels (Interface, Open Crate)
+            // and the emitter's powered redstone block are real blocks and break the vanilla way.
+            if (p.isSneaking() && (hand == null || hand.isEmpty()) && part.block().getType() == Material.BARRIER) {
+                e.setCancelled(true);
+                if (!plugin.canBreak(p, part.block())) return;   // claims and protection plugins still say no
+                breakPart(part, p.getGameMode() != GameMode.CREATIVE);
+                return;
+            }
             if (use(part, p, hand, held)) {
                 e.setCancelled(true);
                 return;
@@ -401,10 +417,14 @@ final class Parts implements Listener {
 
     private void hit(Part part, Player p) {
         if (p.getGameMode() != GameMode.CREATIVE) {
-            if (plugin.tick - part.lastHit > 20) part.hits = 0;
+            if (plugin.tick - part.lastHit > breakWindow) part.hits = 0;
             part.lastHit = plugin.tick;
             if (++part.hits < breakHits) {
                 part.world.playSound(part.center(), Sound.BLOCK_COPPER_HIT, 0.7f, 0.9f);
+                // the barrier never shows crack progress: say what the hits are doing, and how to
+                // skip them (wires come off with an empty hand + shift in one click)
+                p.sendActionBar(Component.text(part.type.item.displayName + ": " + part.hits + "/" + breakHits
+                        + " hits - or sneak + right-click with an empty hand", NamedTextColor.GRAY));
                 return;
             }
         }
@@ -588,12 +608,13 @@ final class Parts implements Listener {
         return p.type == PartType.INVENTORY_HOPPER || p.type == PartType.LEVEL_EMITTER || p.type == PartType.INTERFACE;
     }
 
-    /** Right-click on a connector/trim/cable: what network is this? */
+    /** Right-click on a cable or container part: what network is this? */
     private void info(Part part, Player p) {
         Network n = plugin.networks().at(part.block(), null);
-        if (n == null) {
-            p.sendActionBar(Component.text(part.type.kind == PartType.Kind.CONNECTOR ? "No storage touching this connector yet."
-                    : "Not connected to an Inventory Connector.", NamedTextColor.GRAY));
+        if (n == null || n.stores.isEmpty()) {
+            // 0.1.11: a bare cable IS a network already, so say what is missing instead of counting to zero
+            p.sendActionBar(Component.text("Nothing joined yet - touch a chest, barrel or shulker box with the cable.",
+                    NamedTextColor.GRAY));
             return;
         }
         p.sendActionBar(Component.text("Network: " + n.stores.size() + " inventories, " + n.freeSlots() + "/" + n.slots() + " slots free"

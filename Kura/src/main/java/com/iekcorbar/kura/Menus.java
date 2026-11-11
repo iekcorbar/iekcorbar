@@ -606,7 +606,7 @@ final class Menus implements Listener {
             default -> null;
         };
         if (kind == null) {
-            p.sendActionBar(Component.text("Cable Connectors attach the container they face. Nothing to set.", NamedTextColor.GRAY));
+            p.sendActionBar(Component.text("A cable joins whatever it touches - nothing to set here.", NamedTextColor.GRAY));
             return;
         }
         Config c = new Config(kind, part, part.block(), part.type.item.displayName);

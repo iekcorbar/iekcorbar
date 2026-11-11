@@ -8,7 +8,7 @@
     <artifactId>Kura</artifactId>
     <!-- Kura: storage network (terminals, cables, filters, wireless access).
          Behaviour inspired by the MIT-licensed Toms Simple Storage mod; own code, models and textures. -->
-    <version>0.1.10</version>
+    <version>0.1.11</version>
     <packaging>jar</packaging>
 
     <name>Kura</name>

@@ -4,7 +4,7 @@ Guida per lo staff: componenti, impostazioni, collaborazione e risoluzione dei p
 
 ## 1. Che cos'è Kura
 
-Kura è la nostra rete di magazzino: un Inventory Connector unisce bauli, barili e shulker box in un'unica rete. Un Storage Terminal mostra poi tutto con ricerca e ordinamento, un Crafting Terminal fabbrica direttamente dal magazzino e i terminali wireless aprono la rete a distanza. Funziona tutto nel gioco normale, senza mod.
+Kura è la nostra rete di magazzino: un Inventory Cable unisce bauli, barili e shulker box in un'unica rete. Un Storage Terminal mostra poi tutto con ricerca e ordinamento, un Crafting Terminal fabbrica direttamente dal magazzino e i terminali wireless aprono la rete a distanza. Funziona tutto nel gioco normale, senza mod.
 
 ### Comandi e permessi
 
@@ -22,7 +22,7 @@ Kura è la nostra rete di magazzino: un Inventory Connector unisce bauli, barili
 
 ## 2. Come funziona la rete
 
-Una rete parte da un Inventory Connector. Tutti i blocchi di magazzino che lo toccano ne fanno parte, e così tutto ciò che tocca quelli. Colma i vuoti con l'Inventory Trim; copri le distanze con l'Inventory Cable e un Cable Connector per ogni baule. La rete viene ricostruita solo quando qualcosa cambia (piazzare, rompere, esplosione, caricamento chunk); nessun timer scansiona il mondo.
+Dal 0.1.11 vale una sola regola: **un cavo unisce ciò che tocca**. Ogni baule, barile o shulker box a contatto con un cavo entra nella rete, e così i contenitori che toccano quelli; un cavo qualsiasi è già una rete (non serve più un blocco centrale). Inventory Connector, Inventory Trim e Cable Connector non si creano più ma restano funzionanti come cavi, quindi le reti già costruite sul server reggono. La rete viene ricostruita solo quando qualcosa cambia (piazzare, rompere, esplosione, caricamento chunk); nessun timer scansiona il mondo.
 
 | Componente | Ruolo |
 |---|---|
@@ -44,6 +44,7 @@ Nota: fornaci, tramogge, banchi di pozioni e botti di Sakagura non contano mai c
 | excluded-container-keys | sakagura:cask | Contenitori che non sono mai magazzino. |
 | network.max-blocks | 4096 | Dimensione massima della rete. |
 | parts.break-hits | 3 | Colpi per rompere un componente (1 in creativa). |
+| parts.break-window-ticks | 60 | Ticks in cui i colpi contano (3 s); ogni componente si toglie anche con shift + clic destro a mano vuota. |
 | inventory-hopper.items-per-transfer | 8 | Oggetti per trasferimento. |
 | wireless.range / advanced-range | 16 / 64 | Portata del terminale wireless. |
 | wireless.max-loaded-chunks | 25 | Chunk che una rete remota tiene caricati. |

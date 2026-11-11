@@ -6,105 +6,35 @@
    "title": "Introduction",
    "category": "Kura Storage",
    "parent": null,
-   "content": "## Welcome to Kura\n\nEvery long-time player knows the problem: ten chests, three barrels and no idea where the iron went. Kura (Japanese for \"storehouse\") fixes that. It joins your chests into one network, so a single terminal shows everything you own, with search and sorting. No mods needed, it all works in the normal game.\n\n### What you will do\n\n* **Connect.** Put an Inventory Connector in the middle of your storage room. Every chest touching it joins, and so does everything touching those chests.\n* **Find and fetch.** Open a Storage Terminal, search for an item and take it out. Put things back by clicking them in.\n* **Craft from storage.** The Crafting Terminal uses what is in your network and refills its grid after each craft.\n* **Reach it from anywhere.** Wireless terminals open your network from across the base, or even from another world with the advanced version.\n* **Automate.** Hoppers, filters and level emitters keep machines supplied. They also work with Steamworks belts and arms.\n\n### How the pages are organised\n\n**Parts** explains every block you can place, **Tools** the items you carry (filters, configurator, wireless terminals, Paint Kit). **Recipes** shows how to craft them and **Automation** covers hoppers and redstone. Every part and tool has its own page.\n\n### Good to know first\n\n* Sake casks from Sakagura are never used as storage, so your drinks keep ageing.\n* Furnaces, hoppers and brewing stands are not storage either.\n* Kura talks to **/zukan**: from a Crafting Terminal you can look up a recipe and fill the grid from your network.\n\n### Start here\n\n1. Read [Kura Storage](/wiki?page=kura) for the one-minute explanation.\n2. Look at [Parts](/wiki?page=kura-parts) and craft your first connector and terminal.\n3. Come back to [Automation](/wiki?page=kura-automation) when the storage room is working.\n"
+   "content": "## Welcome to Kura\n\nEvery long-time player knows the problem: ten chests, three barrels and no idea where the iron went. Kura (Japanese for \"storehouse\") fixes that. It joins your chests into one network, so a single terminal shows everything you own, with search and sorting. No mods needed, it all works in the normal game.\n\n### What you will do\n\n* **Connect.** Run an Inventory Cable beside your chests. A cable joins whatever it touches, and so does every container touching those - that is the whole rule.\n* **Find and fetch.** Open a Storage Terminal, search for an item and take it out. Put things back by clicking them in.\n* **Craft from storage.** The Crafting Terminal uses what is in your network and refills its grid after each craft.\n* **Reach it from anywhere.** Wireless terminals open your network from across the base, or even from another world with the advanced version.\n* **Automate.** Hoppers, filters and level emitters keep machines supplied. They also work with Steamworks belts and arms.\n\n### How the pages are organised\n\n**Parts** explains every block you can place, **Tools** the items you carry (filters, configurator, wireless terminals, Paint Kit). **Recipes** shows how to craft them and **Automation** covers hoppers and redstone. Every part and tool has its own page.\n\n### Good to know first\n\n* Sake casks from Sakagura are never used as storage, so your drinks keep ageing.\n* Furnaces, hoppers and brewing stands are not storage either.\n* Kura talks to **/zukan**: from a Crafting Terminal you can look up a recipe and fill the grid from your network.\n\n### Start here\n\n1. Read [Kura Storage](/wiki?page=kura) for the one-minute explanation.\n2. Look at [Parts](/wiki?page=kura-parts) and craft your first cable and terminal.\n3. Come back to [Automation](/wiki?page=kura-automation) when the storage room is working.\n"
   },
   {
    "slug": "kura",
    "title": "Kura Storage",
    "category": "Kura Storage",
    "parent": null,
-   "content": "## Kura - one terminal for all your chests\n\nKura joins your chests into one storage network. A **Storage Terminal** then shows every item in every connected chest on one screen, with search and sorting. Take things out, put things in, craft straight from storage, and reach it from across your base with a wireless terminal. You only need the normal game - no mods.\n\n### How it works in one minute\n\n1. **Place an Inventory Connector** and put chests, barrels or shulker boxes against it. Chests touching those chests join too.\n2. **Place a Storage Terminal** against the connector (or against any chest in the network).\n3. **Right-click the terminal.** Every item in the network is listed with its total amount.\n4. **Click** an item to take a stack, **right-click** for half, **shift-click** to send it to your inventory. Click with an item on your cursor (or shift-click in your own inventory) to store it.\n\nGaps between chests? Fill them with **Inventory Trim**. Chests far away? Run **Inventory Cable** from the connector and put a **Cable Connector** on each chest.\n\n### Pages\n\n* [Parts](/wiki?page=kura-parts) - connector, terminals, trims, cables, hopper, emitter, interface, crate, cabinet\n* [Tools](/wiki?page=kura-tools) - filters, Inventory Configurator, wireless terminals, Paint Kit\n* [Recipes](/wiki?page=kura-recipes) - how to craft every part\n* [Automation](/wiki?page=kura-automation) - hoppers, Steamworks belts and arms, redstone\n\n### Search tips\n\n| Type | Finds |\n|---|---|\n| iron | items with \"iron\" in the name |\n| #logs | every item in a group (tag), e.g. all logs |\n| @kitchen | every item of one plugin (kitchen, steamworks, sakagura...) |\n\nType **/kura** in game for a short help and a link back here.\n"
+   "content": "## Kura - one terminal for all your chests\n\nKura joins your chests into one storage network. A **Storage Terminal** then shows every item in every connected chest on one screen, with search and sorting. Take things out, put things in, craft straight from storage, and reach it from across your base with a wireless terminal. You only need the normal game - no mods.\n\n### How it works in one minute\n\nThere is **one rule: a cable joins whatever it touches.**\n\n1. **Run an Inventory Cable** along your chests, barrels or shulker boxes. Every container a cable touches joins the network - and so does every container touching those.\n2. **Place a Storage Terminal** against the cable (or against any chest in the network).\n3. **Right-click the terminal.** Every item in the network is listed with its total amount.\n4. **Click** an item to take a stack, **right-click** for half, **shift-click** to send it to your inventory. Click with an item on your cursor (or shift-click in your own inventory) to store it.\n\nThat is the whole system: no heart block to plan around, nothing to aim. Cables carry the network as far as you need them. Want them out of sight? The **Framed Inventory Cable** is a full-block cable that can be painted to look like the wall it runs through.\n\n### Pages\n\n* [Parts](/wiki?page=kura-parts) - cables, terminals, hopper, emitter, interface, crate, cabinet\n* [Tools](/wiki?page=kura-tools) - filters, Inventory Configurator, wireless terminals, Paint Kit\n* [Recipes](/wiki?page=kura-recipes) - how to craft every part\n* [Automation](/wiki?page=kura-automation) - hoppers, Steamworks belts and arms, redstone\n\n### Search tips\n\n| Type | Finds |\n|---|---|\n| iron | items with \"iron\" in the name |\n| #logs | every item in a group (tag), e.g. all logs |\n| @kitchen | every item of one plugin (kitchen, steamworks, sakagura...) |\n\nType **/kura** in game for a short help and a link back here.\n"
   },
   {
    "slug": "kura-parts",
    "title": "Parts",
    "category": "Kura Storage",
    "parent": null,
-   "content": "## Parts\n\nMost parts are placed like blocks and broken with **three hits** (one in creative). To place a part against a chest, **sneak** while placing - otherwise the chest just opens.\n\n* [Inventory Connector](/wiki?page=kura-parts-inventory-connector) - The heart of a network.\n* [Storage Terminal](/wiki?page=kura-parts-storage-terminal) - Shows and handles every item in the network.\n* [Crafting Terminal](/wiki?page=kura-parts-crafting-terminal) - A Storage Terminal with a 3x3 crafting grid.\n* [Inventory Trim](/wiki?page=kura-parts-inventory-trim) - Joins containers like a chest would, but stores nothing.\n* [Inventory Cable](/wiki?page=kura-parts-inventory-cable) - Carries the network over distance.\n* [Framed Inventory Cable](/wiki?page=kura-parts-framed-inventory-cable) - A full-block cable that can be painted to hide in a wall.\n* [Cable Connector](/wiki?page=kura-parts-cable-connector) - Goes at the end of a cable, facing a container.\n* [Inventory Hopper](/wiki?page=kura-parts-inventory-hopper) - Moves items from the block behind it to the block in front, 8 at a time.\n* [Level Emitter](/wiki?page=kura-parts-level-emitter) - Gives a redstone signal when the network holds more (or less) than a set amount of one item.\n* [Inventory Interface](/wiki?page=kura-parts-inventory-interface) - A barrel.\n* [Open Crate](/wiki?page=kura-parts-open-crate) - A barrel that drops everything put into it on the ground in front.\n* [Filing Cabinet](/wiki?page=kura-parts-filing-cabinet) - Holds up to 256 items of **one kind** in all variants - perfect for enchanted books, potions or maps.\n\n### Good to know\n\n* Furnaces, hoppers and brewing stands are never used as storage, and neither are Sakagura sake casks (your drinks keep ageing).\n* Right-click a connector, trim or cable to see how big its network is - its blocks light up for a few seconds.\n* A very big network (over 4096 blocks) stops growing; the terminal tells you when that happens.\n"
+   "content": "## Parts\n\nMost parts are placed like blocks. **Taking one off:** sneak + right-click it with an **empty hand** (one click, any game mode), or punch it three times (one in creative). The Interface and Open Crate are real barrels and break like any barrel. To place a part against a chest, **sneak** while placing - otherwise the chest just opens.\n\n| Part | What it does |\n|---|---|\n| **Inventory Cable** | The network. Touches a chest, barrel or shulker box and that container is in; touches another cable and the two become one network. Any cable makes a network on its own - there is no \"heart\" block to plan around. |\n| **Framed Inventory Cable** | The same cable that fills the whole block, so it can run through a wall. Can be painted to look like any solid block. |\n| **Storage Terminal** | Shows and handles every item in the network. Place it against a cable or against any chest of the network. On a lone chest (no cable anywhere) it shows just that chest. |\n| **Crafting Terminal** | A Storage Terminal with a 3x3 crafting grid. After each craft the grid **refills itself** from the network, so you can keep clicking. **Shift-click** the result to craft a whole stack. |\n| **Inventory Hopper** | Moves items from the block behind it to the block in front, 8 at a time. Either side can be a whole network, a chest, or an Open Crate. Right-click to set a filter. |\n| **Level Emitter** | Gives a redstone signal when the network holds more (or less) than a set amount of one item. Right-click to set the item and amount. |\n| **Inventory Interface** | A barrel. **Import**: everything put in goes into the network. **Export**: it is kept stocked with one stack of each item in its filter. Sneak + right-click with an empty hand for settings. |\n| **Open Crate** | A barrel that drops everything put into it on the ground in front. Sneak while placing to make it drop downwards. |\n| **Filing Cabinet** | Holds up to 256 items of **one kind** in all variants - perfect for enchanted books, potions or maps. Keeps its contents when broken. Works as part of a network too. |\n\n\n* [Old parts (0.1.11 and earlier)](/wiki?page=kura-parts-old-parts-0-1-11-and)\n* [Good to know](/wiki?page=kura-parts-good-to-know)\n"
   },
   {
-   "slug": "kura-parts-inventory-connector",
-   "title": "Inventory Connector",
+   "slug": "kura-parts-old-parts-0-1-11-and",
+   "title": "Old parts (0.1.11 and earlier)",
    "category": "Kura Storage",
    "parent": "kura-parts",
-   "content": "The heart of a network. Every chest, barrel and shulker box touching it joins, and so does every container touching those.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
+   "content": "Three parts used to do what a single cable does now. They can no longer be crafted, but **everything already placed keeps working** - each one behaves as a cable, keeps its look and its name:\n\n| Part | Was | Now |\n|---|---|---|\n| **Inventory Connector** | The heart of a network; without one nothing joined. | Behaves as a cable. |\n| **Inventory Trim** | Bridged a gap between chests; stores nothing; could be painted. | Behaves as a cable (still paintable). |\n| **Cable Connector** | The piece at the end of a cable, aimed at the chest it attached. | Behaves as a cable: it joins every side, no aiming needed. |\n\nBack to [Parts](/wiki?page=kura-parts)\n"
   },
   {
-   "slug": "kura-parts-storage-terminal",
-   "title": "Storage Terminal",
+   "slug": "kura-parts-good-to-know",
+   "title": "Good to know",
    "category": "Kura Storage",
    "parent": "kura-parts",
-   "content": "Shows and handles every item in the network. Place it against the connector, a trim, a cable or any chest of the network. On a lone chest (no connector) it shows just that chest.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-crafting-terminal",
-   "title": "Crafting Terminal",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "A Storage Terminal with a 3x3 crafting grid. After each craft the grid **refills itself** from the network, so you can keep clicking. **Shift-click** the result to craft a whole stack.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-inventory-trim",
-   "title": "Inventory Trim",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "Joins containers like a chest would, but stores nothing. Use it to bridge gaps. Can be painted.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-inventory-cable",
-   "title": "Inventory Cable",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "Carries the network over distance. Cables connect to the connector, to other cables and to Cable Connectors - not straight to chests.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-framed-inventory-cable",
-   "title": "Framed Inventory Cable",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "A full-block cable that can be painted to hide in a wall.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-cable-connector",
-   "title": "Cable Connector",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "Goes at the end of a cable, facing a container. That container (and everything touching it) joins the network.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-inventory-hopper",
-   "title": "Inventory Hopper",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "Moves items from the block behind it to the block in front, 8 at a time. Either side can be a whole network, a chest, or an Open Crate. Right-click to set a filter.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-level-emitter",
-   "title": "Level Emitter",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "Gives a redstone signal when the network holds more (or less) than a set amount of one item. Right-click to set the item and amount.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-inventory-interface",
-   "title": "Inventory Interface",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "A barrel. **Import**: everything put in goes into the network. **Export**: it is kept stocked with one stack of each item in its filter. Sneak + right-click with an empty hand for settings.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-open-crate",
-   "title": "Open Crate",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "A barrel that drops everything put into it on the ground in front. Sneak while placing to make it drop downwards.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
-  },
-  {
-   "slug": "kura-parts-filing-cabinet",
-   "title": "Filing Cabinet",
-   "category": "Kura Storage",
-   "parent": "kura-parts",
-   "content": "Holds up to 256 items of **one kind** in all variants - perfect for enchanted books, potions or maps. Keeps its contents when broken. Works as part of a network too.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
+   "content": "* Furnaces, hoppers and brewing stands are never used as storage, and neither are Sakagura sake casks (your drinks keep ageing).\n* Right-click a cable to see how big its network is - its blocks light up for a few seconds.\n* A very big network (over 4096 blocks) stops growing; the terminal tells you when that happens.\n\nBack to [Parts](/wiki?page=kura-parts)\n"
   },
   {
    "slug": "kura-tools",
@@ -139,14 +69,14 @@
    "title": "Paint Kit",
    "category": "Kura Storage",
    "parent": "kura-tools",
-   "content": "Right-click any full block to pick its look, then right-click an Inventory Trim or Framed Cable to give it that look. Sneak + right-click to clear it. The kit wears out after 64 uses.\n\nBack to [Tools](/wiki?page=kura-tools)\n"
+   "content": "Right-click any full block to pick its look, then right-click a Framed Cable (or an old Inventory Trim) to give it that look. Sneak + right-click to clear it. The kit wears out after 64 uses.\n\nBack to [Tools](/wiki?page=kura-tools)\n"
   },
   {
    "slug": "kura-recipes",
    "title": "Recipes",
    "category": "Kura Storage",
    "parent": null,
-   "content": "## Recipes\n\nShaped recipes are shown as rows (top / middle / bottom); a dot is an empty slot. Shapeless recipes can be put in any order.\n\n| Item | Recipe |\n|---|---|\n| Inventory Connector | . R . / C H C / . R . - R redstone, C copper ingot, H chest |\n| Storage Terminal | C G C / R Q R / C C C - C copper ingot, G glass pane, R redstone, Q comparator |\n| Crafting Terminal | Storage Terminal + crafting table + gold ingot |\n| Inventory Trim (4) | S P S / P . P / S P S - S stick, P any planks |\n| Inventory Cable (6) | C R C - copper ingot, redstone, copper ingot |\n| Framed Inventory Cable | Inventory Cable + 2 sticks |\n| Cable Connector | Inventory Cable + copper ingot + redstone |\n| Inventory Hopper | Hopper + copper ingot + redstone |\n| Level Emitter | Comparator + redstone torch + copper ingot |\n| Inventory Interface | Barrel + 2 copper ingots + redstone |\n| Open Crate | Barrel + iron bars |\n| Filing Cabinet | I P I / P H P / I P I - I iron ingot, P paper, H chest |\n| Wireless Terminal | Storage Terminal + ender pearl + gold ingot + redstone |\n| Advanced Wireless Terminal | Wireless Terminal + eye of ender + diamond + gold ingot |\n| Item Filter (2) | 2 paper + copper ingot |\n| Tag Filter | Item Filter + book |\n| Polymorphic Filter | Item Filter + chest |\n| Inventory Configurator | Stick + copper ingot + redstone + glass pane |\n| Paint Kit | Brush + red dye + green dye + blue dye |\n\n**Recipes on the website**\n\nAll Steamworks, Kitchen and Kura recipes are also listed on the website: **Play > Recipes**. That page has a search and a type filter, and a short guide to Zukan.\n"
+   "content": "## Recipes\n\nShaped recipes are shown as rows (top / middle / bottom); a dot is an empty slot. Shapeless recipes can be put in any order.\n\n| Item | Recipe |\n|---|---|\n| Storage Terminal | C G C / R Q R / C C C - C copper ingot, G glass pane, R redstone, Q comparator |\n| Crafting Terminal | Storage Terminal + crafting table + gold ingot |\n| Inventory Cable (6) | C R C - copper ingot, redstone, copper ingot |\n| Framed Inventory Cable | Inventory Cable + 2 sticks |\n| Inventory Hopper | Hopper + copper ingot + redstone |\n| Level Emitter | Comparator + redstone torch + copper ingot |\n| Inventory Interface | Barrel + 2 copper ingots + redstone |\n| Open Crate | Barrel + iron bars |\n| Filing Cabinet | I P I / P H P / I P I - I iron ingot, P paper, H chest |\n| Wireless Terminal | Storage Terminal + ender pearl + gold ingot + redstone |\n| Advanced Wireless Terminal | Wireless Terminal + eye of ender + diamond + gold ingot |\n| Item Filter (2) | 2 paper + copper ingot |\n| Tag Filter | Item Filter + book |\n| Polymorphic Filter | Item Filter + chest |\n| Inventory Configurator | Stick + copper ingot + redstone + glass pane |\n| Paint Kit | Brush + red dye + green dye + blue dye |\n\n**Recipes on the website**\n\nSince 0.1.11 the **Inventory Cable** is the only joiner: the Inventory Connector, Inventory Trim and Cable Connector\nare no longer crafted - what is already placed on the server keeps working as a cable.\n\nAll Steamworks, Kitchen and Kura recipes are also listed on the website: **Play > Recipes**. That page has a search and a type filter, and a short guide to Zukan.\n"
   },
   {
    "slug": "kura-automation",

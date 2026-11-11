@@ -32,7 +32,7 @@ SETS = {
     "Kura": ("kura", 0.06, 1, "Kura: a rare storage-network part.", [
         ("wireless_terminal", "Wireless Terminal", ["Right-click to open the terminal you look at,", "from up to 16 blocks away."], 1, [("EMERALD", 30), ("DIAMOND", 1), ("ENDER_PEARL", 1)], 1),
         ("filing_cabinet", "Filing Cabinet", [], 1, [("EMERALD", 18), ("IRON_INGOT", 8)], 1),
-        ("inventory_connector", "Inventory Connector", [], 1, [("EMERALD", 12), ("IRON_INGOT", 4)], 1),
+        ("framed_cable", "Framed Inventory Cable", ["Full-block cable, can be painted."], 2, [("EMERALD", 12), ("COPPER_INGOT", 4)], 1),
     ]),
 }
 
