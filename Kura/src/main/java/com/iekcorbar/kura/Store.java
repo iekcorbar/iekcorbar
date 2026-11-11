@@ -23,6 +23,11 @@ abstract class Store {
     /** Puts up to {@code max} of {@code it} in; returns how many fit. */
     abstract int insert(ItemStack it, int max, boolean simulate);
 
+    /** Same, with the contents the caller already read (containers reuse them; others re-read). */
+    int insert(ItemStack it, int max, boolean simulate, ItemStack[] c) {
+        return insert(it, max, simulate);
+    }
+
     /** Takes up to {@code n} items similar to {@code key}; returns how many were taken. */
     abstract int extract(ItemStack key, int n);
 
@@ -35,7 +40,12 @@ abstract class Store {
     }
 
     boolean holdsSimilar(ItemStack it) {
-        for (ItemStack s : contents()) if (s != null && !s.isEmpty() && s.isSimilar(it)) return true;
+        return holdsSimilar(it, contents());
+    }
+
+    /** Same check, but on contents the caller already read (the insert loop reuses them). */
+    boolean holdsSimilar(ItemStack it, ItemStack[] c) {
+        for (ItemStack s : c) if (s != null && !s.isEmpty() && s.isSimilar(it)) return true;
         return false;
     }
 
@@ -72,9 +82,13 @@ abstract class Store {
 
         @Override
         int insert(ItemStack it, int max, boolean simulate) {
+            return insert(it, max, simulate, inv.getStorageContents());
+        }
+
+        /** Same, but on a contents array the caller already read (the insert loop reuses one read per store). */
+        int insert(ItemStack it, int max, boolean simulate, ItemStack[] c) {
             if (max <= 0 || !accepts(it) || (shulker && Tag.SHULKER_BOXES.isTagged(it.getType()))) return 0;
             int left = max, stack = Math.min(it.getMaxStackSize(), inv.getMaxStackSize());
-            ItemStack[] c = inv.getStorageContents();
             for (int i = 0; i < c.length && left > 0; i++) {
                 ItemStack s = c[i];
                 if (s == null || s.isEmpty() || s.getAmount() >= stack || !s.isSimilar(it)) continue;

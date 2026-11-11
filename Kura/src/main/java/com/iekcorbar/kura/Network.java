@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,26 @@ final class Network {
         return out;
     }
 
+    /**
+     * Same totals but reused for a second (open terminals redraw every tick and a click redraws
+     * immediately after its own change - the insert/take calls below wipe this cache, so a redraw
+     * right after our own move always shows the new truth; changes made outside the plugin show
+     * up at most a second late, exactly like the timed refresh did before).
+     */
+    Map<ItemStack, Long> countsCached(long tick) {
+        if (countsCache != null && tick - countsAt < 20) return countsCache;
+        countsCache = counts();
+        countsAt = tick;
+        return countsCache;
+    }
+
+    private Map<ItemStack, Long> countsCache;
+    private long countsAt = Long.MIN_VALUE;
+
+    private void invalidateCounts() {
+        countsCache = null;
+    }
+
     long count(ItemStack key) {
         long n = 0;
         for (Store s : stores) {
@@ -65,13 +86,17 @@ final class Network {
     /** Puts {@code it} into the network (not into {@code except}); returns how many went in. */
     int insert(ItemStack it, Store except) {
         if (it == null || it.isEmpty()) return 0;
+        invalidateCounts();
         int left = it.getAmount();
+        // one contents read per store for the whole job (the old double read cloned every barrel twice)
+        Map<Store, ItemStack[]> seen = new IdentityHashMap<>();
         // first where the same item already is, then anywhere (highest priority first)
         for (int pass = 0; pass < 2 && left > 0; pass++) {
             for (Store s : stores) {
-                if (s == except || !s.valid()) continue;
-                if ((pass == 0) != s.holdsSimilar(it)) continue;
-                left -= s.insert(it, left, false);
+                if (s == except || !s.valid() || !s.accepts(it)) continue;   // filtered stores: don't even look inside
+                ItemStack[] c = seen.computeIfAbsent(s, k -> k.contents());
+                if ((pass == 0) != s.holdsSimilar(it, c)) continue;
+                left -= s.insert(it, left, false, c);
                 if (left <= 0) break;
             }
         }
@@ -81,9 +106,10 @@ final class Network {
     /** How many of {@code it} would fit. */
     int room(ItemStack it, Store except) {
         int left = it.getAmount();
+        Map<Store, ItemStack[]> seen = new IdentityHashMap<>();
         for (Store s : stores) {
-            if (s == except || !s.valid()) continue;
-            left -= s.insert(it, left, true);
+            if (s == except || !s.valid() || !s.accepts(it)) continue;
+            left -= s.insert(it, left, true, seen.computeIfAbsent(s, k -> k.contents()));
             if (left <= 0) break;
         }
         return it.getAmount() - left;
@@ -97,6 +123,7 @@ final class Network {
             if (s == except || !s.valid()) continue;
             got += s.extract(key, n - got);
         }
+        if (got > 0) invalidateCounts();
         return got <= 0 ? null : key.asQuantity(got);
     }
 

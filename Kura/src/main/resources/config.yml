@@ -26,6 +26,9 @@ inventory-interface:
 wireless:
   # Wireless Terminal: opens the terminal you look at from this far away.
   range: 16
+  # Right-clicking at nothing (or a terminal that is not bound yet for the advanced one) opens a browser:
+  # every network with a terminal in range, nearest first. false = keep the plain "look at a terminal" message.
+  browser: true
   # Advanced Wireless Terminal: bound to one terminal, works within this range.
   # A beacon within 8 blocks of that terminal makes it reachable anywhere in the same world (level 1-3) or from any world (level 4).
   advanced-range: 64

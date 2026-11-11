@@ -116,6 +116,20 @@ final class Parts implements Listener {
         return plugin.networks().around(p.block(), back, loader);
     }
 
+    /** Every terminal within this radius, nearest first (the wireless terminal's network browser). */
+    List<Part> terminalsNear(Location from, int radius) {
+        List<Part> out = new ArrayList<>();
+        Map<Long, Part> m = parts.get(from.getWorld().getUID());
+        if (m == null) return out;
+        double r2 = (double) radius * radius;
+        for (Part p : m.values()) {
+            if (!p.type.terminal()) continue;
+            if (p.center().distanceSquared(from) <= r2) out.add(p);
+        }
+        out.sort(java.util.Comparator.comparingDouble(p -> p.center().distanceSquared(from)));
+        return out;
+    }
+
     // ------------------------------------------------------------ chunks
 
     @EventHandler

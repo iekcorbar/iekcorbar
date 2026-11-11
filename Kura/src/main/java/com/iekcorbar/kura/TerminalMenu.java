@@ -30,7 +30,7 @@ import java.util.Set;
 final class TerminalMenu implements InventoryHolder {
     static final int[] GRID = {6, 7, 8, 15, 16, 17, 24, 25, 26};
     static final int RESULT = 34, CLEAR_GRID = 33, FILL_INFO = 35;
-    static final int PREV = 45, SEARCH = 46, SORT = 47, CLEAR_SEARCH = 48, INFO = 49, DEPOSIT = 50, RECIPES = 51, NEXT = 53;
+    static final int PREV = 45, SEARCH = 46, SORT = 47, CLEAR_SEARCH = 48, INFO = 49, DEPOSIT = 50, RECIPES = 51, RETRIEVE = 52, NEXT = 53;
     static final String[] SORTS = {"Amount", "Name", "Plugin / mod"};
 
     final KuraPlugin plugin;
@@ -43,6 +43,8 @@ final class TerminalMenu implements InventoryHolder {
     int sort, page;
     /** Item kind shown in each item slot (null = empty). */
     final ItemStack[] keys = new ItemStack[54];
+    /** Every kind matching the current search, in display order (all pages) - the Take-shown button works on this. */
+    final List<ItemStack> shownKeys = new ArrayList<>();
     /** Going to the search box: don't treat the close as leaving. */
     boolean switching;
     Network network;
@@ -99,9 +101,10 @@ final class TerminalMenu implements InventoryHolder {
         network = plugin.menus().resolve(this);
         int[] slots = itemSlots();
         java.util.Arrays.fill(keys, null);
+        shownKeys.clear();
         List<Entry> list = new ArrayList<>();
         if (network != null) {
-            for (Map.Entry<ItemStack, Long> e : network.counts().entrySet()) {
+            for (Map.Entry<ItemStack, Long> e : network.countsCached(plugin.tick).entrySet()) {
                 Entry en = new Entry(e.getKey(), e.getValue(), name(e.getKey()), namespace(e.getKey()));
                 if (matches(en)) list.add(en);
             }
@@ -114,6 +117,7 @@ final class TerminalMenu implements InventoryHolder {
         }
         int pages = Math.max(1, (list.size() + slots.length - 1) / slots.length);
         page = Math.min(page, pages - 1);
+        for (Entry e : list) shownKeys.add(e.key());
         for (int i = 0; i < slots.length; i++) {
             int idx = page * slots.length + i;
             if (idx >= list.size()) {
@@ -127,8 +131,8 @@ final class TerminalMenu implements InventoryHolder {
         // bottom row
         ItemStack pane = Menus.pane();
         for (int s = 45; s < 54; s++) inv.setItem(s, pane);
-        if (page > 0) inv.setItem(PREV, Menus.button(Material.ARROW, "Previous page", "Page " + page + " of " + pages));
-        if (page < pages - 1) inv.setItem(NEXT, Menus.button(Material.ARROW, "Next page", "Page " + (page + 2) + " of " + pages));
+        if (page > 0) inv.setItem(PREV, Menus.button(Material.ARROW, "Previous page", "Page " + page + " of " + pages, "Shift: first page"));
+        if (page < pages - 1) inv.setItem(NEXT, Menus.button(Material.ARROW, "Next page", "Page " + (page + 2) + " of " + pages, "Shift: last page"));
         inv.setItem(SEARCH, Menus.button(Material.COMPASS, search.isEmpty() ? "Search" : "Search: " + search,
                 "Click to type a search.", "Words: item name. #logs: item group.", "@kitchen: items of one plugin/mod."));
         inv.setItem(SORT, Menus.button(Material.HOPPER, "Sort: " + SORTS[sort], "Click to change."));
@@ -144,8 +148,11 @@ final class TerminalMenu implements InventoryHolder {
                     "Different items: " + list.size() + (search.isEmpty() ? "" : " (matching)"),
                     network.truncated ? "Too big: not everything is connected." : ""));
         }
-        inv.setItem(DEPOSIT, Menus.button(Material.CHEST, "Store your inventory", "Puts everything from your inventory", "(not the hotbar) into the network."));
-        if (plugin.recipeViewer() != null) inv.setItem(RECIPES, Menus.button(Material.KNOWLEDGE_BOOK, "Recipes", "Look up how to make things."));
+        inv.setItem(DEPOSIT, Menus.button(Material.CHEST, "Store your inventory", "Puts everything from your inventory", "(not the hotbar) into the network.", "Shift-click: hotbar too."));
+        inv.setItem(RETRIEVE, Menus.button(Material.DROPPER, "Take shown items",
+                search.isEmpty() ? "Takes everything the network holds" : "Takes every kind matching the search",
+                "into your inventory, one stack each,", "as far as you have room.", network == null || shownKeys.isEmpty() ? "Nothing to take." : shownKeys.size() + " kinds shown."));
+        if (plugin.recipeViewer() != null) inv.setItem(RECIPES, Menus.button(Material.KNOWLEDGE_BOOK, "Recipes", "Look up how to make things.", "Middle-click an item for its recipes."));
         if (crafting) {
             for (int s : new int[]{CLEAR_GRID, FILL_INFO, 42, 43, 44}) inv.setItem(s, pane);
             inv.setItem(CLEAR_GRID, Menus.button(Material.BUCKET, "Clear grid", "Puts the crafting grid back into the network."));
@@ -160,7 +167,9 @@ final class TerminalMenu implements InventoryHolder {
         ItemMeta m = it.getItemMeta();
         List<Component> lore = m.hasLore() && m.lore() != null ? new ArrayList<>(m.lore()) : new ArrayList<>();
         lore.add(Items.line("Stored: " + String.format(Locale.ROOT, "%,d", count), NamedTextColor.YELLOW));
-        lore.add(Items.line("Left: stack  Right: half  Shift: to inventory", NamedTextColor.DARK_GRAY));
+        lore.add(Items.line(plugin.recipeViewer() != null
+                ? "Left: stack  Right: half  Shift: to inventory  Middle: recipes"
+                : "Left: stack  Right: half  Shift: to inventory", NamedTextColor.DARK_GRAY));
         m.lore(lore);
         it.setItemMeta(m);
         return it;
