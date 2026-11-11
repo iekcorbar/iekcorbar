@@ -120,7 +120,7 @@ SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "
         "tanuki": 1.3, "crane": 1.25, "koi": 1.2, "macaque": 1.25,
         "kangaroo": 1.0, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.0, "mole": 1.35,
         "rhino": 0.8, "penguin": 0.95, "orca": 1.0, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.35, "lion": 1.3, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 1.4, "glowsprite": 1.0, "willowisp": 1.0}   # reduced for elephant/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 1.0 = 11-11: the mesh is centred on 0 now (mesh_rerig), so ±18.4 raw fits inside ±24 and the whale reads at its real ~2.5-block length with the new dorsal fin
+        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.55, "lion": 0.9, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 1.4, "glowsprite": 1.0, "willowisp": 1.0}   # reduced for elephant/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 1.0 = 11-11: the mesh is centred on 0 now (mesh_rerig), so ±18.4 raw fits inside ±24 and the whale reads at its real ~2.5-block length with the new dorsal fin; giraffe 0.55 + lion 0.9 = 11-12 re-voxel sizes (grab3d meshes have different raw spans than the lost Quaternius ones, tuned to keep the in-game length the same as build53 showed)
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
@@ -503,12 +503,13 @@ DOWNLOADS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "downloads"
 # of the hand-built boxes. Colours are quantised onto our wildlife palette, so the atlas, the
 # rare/baby variants, statues and the audit all keep working untouched. Params below tune the gait.
 MESH = {
+    # 11-12: everzwijn + makak TERUG naar hand-built — de Quaternius-mesh-versie was een
+    # homp (OBJ-bron niet meer beschikbaar; grab3d heeft geen zwijn/aap in CC0). Olifant,
+    # giraffe, leeuw en ara zijn opnieuw gevoxeld uit grab3d.com (CC0, AI-assist but free).
     "deer": dict(rig="quad", period=0.95, amp=27),
     "zebra": dict(rig="quad", period=1.0, amp=28),
-    "boar": dict(rig="quad", period=0.8, amp=24),
     "lion": dict(rig="quad", period=0.9, amp=26),
     "giraffe": dict(rig="quad", period=1.25, amp=20),
-    "macaque": dict(rig="quad", period=0.8, amp=24),
     "elephant": dict(rig="quad", period=1.4, amp=16, style="pace", head=2.0, tail=7),
     "crab": dict(rig="quad", period=0.5, amp=14, head=2.0),
     "penguin": dict(rig="bird", period=0.7, amp=13),

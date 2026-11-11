@@ -35,7 +35,7 @@ Prioriteit: `hoog` · `middel` · `laag`
 | # | Naam | Type | Plugin/Mod | Symptoom | Waar gezien | Prio | Status |
 |---|------|------|------------|----------|-------------|------|--------|
 | 1 | 13 CC0-dieren (hert/zebra/olifant/giraf/leeuw/everzwijn/makak/pinguin/ara/kreeft/orca/koi/piranha) | mob/animatie | Wildlife | bots niet gecentreerd (rotaties om modelhoek), staartpivot op staarttip, hoofdpivot op schedeltop, poten afgeknipt (giraf/olifant), ara/penguin-kop mis-ingedeeld, kreeft mank, krab liep opzij | in-game 11-11 | hoog | [x] her-rig 11-11 (mesh_rerig.py + build54 + Wildlife 0.9.27), wacht op uitlevering |
-| 2 | Olifant (mesh) | model | Wildlife | blijft voxel-blob: greedy-merge heeft borst+poten aan één plaat gesmeed, kleurkwantisatie gaf vleugelflinkers | preview3d 11-11 | laag | [ ] alleen op te lossen door opnieuw voxelliseren — Quaternius-OBJ is niet in de repo (bron opnieuw downloaden) |
+| 2 | Olifant (mesh) | model | Wildlife | blijft voxel-blob: greedy-merge heeft borst+poten aan één plaat gesmeed, kleurkwantisatie gaf vleugelflinkers | preview3d 11-11 | laag | [x] 11-12 HERBOUWD uit grab3d.com CC0-mesh (280 boxen, herkenbare slurf/oren/4 poten; zie downloads/SOURCES.md) — giraf/leeuw/ara ook zo vervangen, everzwijn+makak terug naar hand-built |
 
 ## Blocks / Props (placeable)
 

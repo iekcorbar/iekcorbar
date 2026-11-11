@@ -156,7 +156,7 @@ def voxelize(P, F, UV, tex, height_px, step):
             uv0, uv1, uv2 = np.array(UV[t0]), np.array(UV[t1]), np.array(UV[t2])
             uvs = uv0[None, :] + us[:, None] * (uv1 - uv0)[None, :] + vs[:, None] * (uv2 - uv0)[None, :]
             px = (np.clip(uvs[:, 0], 0, 0.999) * w).astype(int)
-            py = ((1 - np.clip(uvs[:, 1], 0, 0.999)) * h).astype(int)
+            py = (np.clip(1 - np.clip(uvs[:, 1], 0, 0.999), 0, 0.999) * h).astype(int)
             cols = img.load()
             for k in range(len(pts)):
                 rgb = cols[int(px[k]), int(py[k])]
@@ -390,6 +390,7 @@ def main():
     ap.add_argument("--up", default="y", choices=["y", "z"])
     ap.add_argument("--rig", default="quad", choices=["quad", "bird", "fish", "none"])
     ap.add_argument("--vox", type=float, default=1.15, help="voxel size in px")
+    ap.add_argument("--license", default="CC0 (Quaternius / OpenGameArt author pages)")
     ap.add_argument("--out", default=None)
     ARGS = ap.parse_args()
 
@@ -409,7 +410,7 @@ def main():
         rigged, orgs = {"body": dicts}, {"body": [0.0, round(0.55 * ARGS.h, 2), 0.0]}
     out = {
         "meta": {"source": os.path.basename(ARGS.obj), "face": ARGS.face, "up": ARGS.up, "rig": ARGS.rig,
-                 "height_px": ARGS.h, "license": "CC0 (Quaternius / OpenGameArt author pages)", "generated_by": "mesh2model.py"},
+                 "height_px": ARGS.h, "license": ARGS.license, "generated_by": "mesh2model.py"},
         "bones": orgs,
         "boxes": [],
     }
