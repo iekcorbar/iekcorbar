@@ -102,6 +102,7 @@ final class TerminalMenu implements InventoryHolder {
         int[] slots = itemSlots();
         java.util.Arrays.fill(keys, null);
         shownKeys.clear();
+        Set<String> favs = plugin.favourites().read(player);
         List<Entry> list = new ArrayList<>();
         if (network != null) {
             for (Map.Entry<ItemStack, Long> e : network.countsCached(plugin.tick).entrySet()) {
@@ -115,6 +116,7 @@ final class TerminalMenu implements InventoryHolder {
             case 2 -> list.sort(Comparator.comparing(Entry::ns).thenComparing(byName));
             default -> list.sort(Comparator.comparingLong((Entry e) -> -e.count()).thenComparing(byName));
         }
+        if (!favs.isEmpty()) list.sort(Comparator.comparing(e -> !favs.contains(Favourites.id(e.key()))));   // stable: pinned on top, sort kept
         int pages = Math.max(1, (list.size() + slots.length - 1) / slots.length);
         page = Math.min(page, pages - 1);
         for (Entry e : list) shownKeys.add(e.key());
@@ -126,7 +128,7 @@ final class TerminalMenu implements InventoryHolder {
             }
             Entry e = list.get(idx);
             keys[slots[i]] = e.key();
-            inv.setItem(slots[i], shown(e.key(), e.count()));
+            inv.setItem(slots[i], shown(e.key(), e.count(), favs.contains(Favourites.id(e.key()))));
         }
         // bottom row
         ItemStack pane = Menus.pane();
@@ -161,15 +163,16 @@ final class TerminalMenu implements InventoryHolder {
         }
     }
 
-    private ItemStack shown(ItemStack key, long count) {
+    private ItemStack shown(ItemStack key, long count, boolean fav) {
         ItemStack it = key.clone();
         it.setAmount((int) Math.max(1, Math.min(count, it.getMaxStackSize())));
         ItemMeta m = it.getItemMeta();
         List<Component> lore = m.hasLore() && m.lore() != null ? new ArrayList<>(m.lore()) : new ArrayList<>();
+        if (fav) lore.add(Items.line("★ Favourite - double-click to un-pin", NamedTextColor.AQUA));
         lore.add(Items.line("Stored: " + String.format(Locale.ROOT, "%,d", count), NamedTextColor.YELLOW));
-        lore.add(Items.line(plugin.recipeViewer() != null
+        lore.add(Items.line((plugin.recipeViewer() != null
                 ? "Left: stack  Right: half  Shift: to inventory  Middle: recipes"
-                : "Left: stack  Right: half  Shift: to inventory", NamedTextColor.DARK_GRAY));
+                : "Left: stack  Right: half  Shift: to inventory") + (fav ? "" : "  Dbl: pin"), NamedTextColor.DARK_GRAY));
         m.lore(lore);
         it.setItemMeta(m);
         return it;

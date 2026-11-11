@@ -735,13 +735,14 @@ final class Parts implements Listener {
             }
             return;
         }
-        // export: one stack of every wanted item
+        // export: keep the wanted items in stock - p.amount stacks each (0/1 = the classic single stack)
         List<ItemStack> wanted = wanted(p.filter);
         if (wanted.isEmpty()) return;
+        int stacks = Math.max(1, Math.min(27, p.amount));
         for (ItemStack w : wanted) {
             int have = 0;
             for (ItemStack it : inv.getContents()) if (it != null && it.isSimilar(w)) have += it.getAmount();
-            int need = w.getMaxStackSize() - have;
+            int need = w.getMaxStackSize() * stacks - have;
             if (need <= 0) continue;
             ItemStack got = net.take(w.asOne(), need, null);
             if (got == null) continue;

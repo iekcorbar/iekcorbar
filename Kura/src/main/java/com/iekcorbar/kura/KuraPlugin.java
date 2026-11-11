@@ -2,6 +2,7 @@ package com.iekcorbar.kura;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -44,12 +45,14 @@ public final class KuraPlugin extends JavaPlugin implements Listener {
     private Networks networks;
     private Menus menus;
     private Couriers couriers;
+    private Favourites favourites;
     private Adv adv;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         items = new Items(this);
+        favourites = new Favourites(new NamespacedKey(this, "favs"));
         parts = new Parts(this);
         networks = new Networks(this);
         menus = new Menus(this);
@@ -154,4 +157,6 @@ public final class KuraPlugin extends JavaPlugin implements Listener {
     Parts parts() { return parts; }
     Networks networks() { return networks; }
     Menus menus() { return menus; }
+    Couriers couriers() { return couriers; }
+    Favourites favourites() { return favourites; }
 }
