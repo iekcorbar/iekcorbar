@@ -10,7 +10,10 @@ from make_animals import PALETTE, NAMES  # noqa: E402
 
 out, model, cell = sys.argv[1], sys.argv[2], int(sys.argv[3])
 specs = [s.split(":") + ["0"] * (3 - s.count(":")) for s in sys.argv[4:]] or [["iso", "", 0]]
-YAWS = {"iso": 45, "side": 90, "front": -90, "back": 90, "top": 0}
+# yaw 0 = camera op de -Z-vlakte: horizontaal is model-X, dus DIT is het profiel. FMM-voorkant = -X,
+# dus -90 kijkt het dier in de ogen (front) en +90 ziet de achterkant. Voor 11-12 stond "side" op 90:
+# die tegels waren achterkant-gezichten, en dat vertekende elke review (rond-blob leek smal).
+YAWS = {"iso": 45, "side": 0, "front": -90, "back": 90, "top": 0}
 PITCH = {"top": 84, "iso": 24, "side": 8, "front": 8, "back": 8}
 
 M = json.load(open(model, encoding="utf-8"))

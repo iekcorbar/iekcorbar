@@ -506,7 +506,9 @@ MESH = {
     # 11-12: everzwijn + makak TERUG naar hand-built — de Quaternius-mesh-versie was een
     # homp (OBJ-bron niet meer beschikbaar; grab3d heeft geen zwijn/aap in CC0). Olifant,
     # giraffe, leeuw en ara zijn opnieuw gevoxeld uit grab3d.com (CC0, AI-assist but free).
-    "deer": dict(rig="quad", period=0.95, amp=27),
+    # 11-12 HERZIEN: deer eruit. Review-sheet (pose3d, profile-richting gecorrigeerd) liet zien
+    # dat mesh_deer een bruine bal is: 20 px breed op 26 px lang, poten als platen van 10 px.
+    # De hand-built deer() is rijkelijker lezend (nek, gewei, hoeven) en is weer de bron.
     "zebra": dict(rig="quad", period=1.0, amp=28),
     "lion": dict(rig="quad", period=0.9, amp=26),
     "giraffe": dict(rig="quad", period=1.25, amp=20),
