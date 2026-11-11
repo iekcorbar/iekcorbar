@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,6 +31,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -104,37 +106,30 @@ final class Goods implements Listener {
     }
 
     /**
-     * Recipe ingredient matching on our PDC id alone. exactChoice compares the WHOLE item
-     * including the spoilage stamp - a 5-minute bucket - so a fruit harvested after startup
-     * never equals the prototype taken at registration, which silently broke every
-     * fruit->seed and fruit->sapling recipe within minutes of each restart (review 10-11).
+     * PDC-id matching for recipe slots. exactChoice compares the WHOLE item including the
+     * spoilage stamp - a 5-minute bucket - so a fruit harvested after startup never equals the
+     * prototype taken at registration, which silently broke every fruit->seed recipe within
+     * minutes of each restart (review 10-11). Custom RecipeChoice objects can't be registered
+     * at all since build.135 ("Unknown recipe stack instance", crash 11-11 evening), so the
+     * recipe registers the plain base MATERIAL and this map enforces the real identity
+     * (own sakagura:item id OR the canonical Kitchen twin) in onCraft before crafting.
      */
-    private final class PdcChoice implements org.bukkit.inventory.RecipeChoice {
-        private final ItemStack sample;
-        private final String id;
+    private final Map<NamespacedKey, java.util.function.Predicate<ItemStack[]>> craftChecks = new HashMap<>();
 
-        PdcChoice(ItemStack sample) {
-            this.sample = sample;
-            String own = idOf(sample);
-            this.id = own != null ? own : KitchenShared.idOf(sample);     // shared crops carry the kitchen key
-        }
+    /** The sakagura sid of a produce sample (own id, or the Kitchen twin's mapped back). */
+    private String produceId(ItemStack sample) {
+        String own = idOf(sample);
+        return own != null ? own : KitchenShared.idOf(sample);
+    }
 
-        @Override
-        public ItemStack getItemStack() {
-            return sample;
+    /** True if any matrix cell carries this produce id (own or shared-Kitchen twin). */
+    private boolean hasProduce(ItemStack[] matrix, String want) {
+        for (ItemStack i : matrix) {
+            String id = idOf(i);
+            if (id == null) id = KitchenShared.idOf(i);
+            if (want.equals(id)) return true;
         }
-
-        @Override
-        public org.bukkit.inventory.RecipeChoice clone() {
-            return new PdcChoice(sample.clone());
-        }
-
-        @Override
-        public boolean test(ItemStack it) {
-            if (it == null || it.isEmpty() || id == null) return false;
-            // Ours OR the canonical Kitchen twin of the same crop (shared crops drop kitchen items now).
-            return id.equals(idOf(it)) || id.equals(KitchenShared.idOf(it));
-        }
+        return false;
     }
 
     // ------------------------------------------------------------ casks
@@ -264,6 +259,7 @@ final class Goods implements Listener {
     void registerRecipes() {
         for (NamespacedKey k : recipeKeys) Bukkit.removeRecipe(k, false);
         recipeKeys.clear();
+        craftChecks.clear();
         for (Woods w : Woods.values()) {
             NamespacedKey k = new NamespacedKey(plugin, "cask_" + w.id());
             ShapedRecipe r = new ShapedRecipe(k, cask(w, 1));
@@ -287,7 +283,10 @@ final class Goods implements Listener {
             if (f.seed == null) continue;
             NamespacedKey k = new NamespacedKey(plugin, f.seed);
             ShapelessRecipe r = new ShapelessRecipe(k, item(f.seed, 2));
-            r.addIngredient(new PdcChoice(item(f.produce, 1)));
+            ItemStack sample = item(f.produce, 1);
+            r.addIngredient(new RecipeChoice.MaterialChoice(sample.getType()));
+            String want = produceId(sample);
+            if (want != null) craftChecks.put(k, m -> hasProduce(m, want));
             Bukkit.addRecipe(r);
             recipeKeys.add(k);
         }
@@ -295,8 +294,12 @@ final class Goods implements Listener {
         for (Tree t : Tree.values()) {
             NamespacedKey k = new NamespacedKey(plugin, t.sapling());
             ShapelessRecipe r = new ShapelessRecipe(k, item(t.sapling(), 1));
-            if (t.fruit() != null) r.addIngredient(new PdcChoice(item(t.fruitId, 1)));
-            else {
+            if (t.fruit() != null) {
+                ItemStack sample = item(t.fruitId, 1);
+                r.addIngredient(new RecipeChoice.MaterialChoice(sample.getType()));
+                String want = produceId(sample);
+                if (want != null) craftChecks.put(k, m -> hasProduce(m, want));
+            } else {
                 r.addIngredient(Material.RED_MUSHROOM);
                 r.addIngredient(Material.RED_MUSHROOM);
             }
@@ -332,7 +335,13 @@ final class Goods implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onCraft(PrepareItemCraftEvent e) {
         org.bukkit.inventory.Recipe r = e.getRecipe();
-        if (r instanceof org.bukkit.Keyed k && k.getKey().getNamespace().equals(plugin.namespace())) return;
+        if (r instanceof org.bukkit.Keyed keyed && keyed.getKey().getNamespace().equals(plugin.namespace())) {
+            // since 11-11: fruit slots register plain material (build.135 refuses custom choices),
+            // the real produce identity is enforced here before the result may appear
+            java.util.function.Predicate<ItemStack[]> check = craftChecks.get(keyed.getKey());
+            if (check != null && !check.test(e.getInventory().getMatrix())) e.getInventory().setResult(null);
+            return;
+        }
         for (ItemStack i : e.getInventory().getMatrix()) {
             String id = idOf(i);
             // apples are allowed in vanilla recipes (golden apples etc.) even though they carry our PDC
