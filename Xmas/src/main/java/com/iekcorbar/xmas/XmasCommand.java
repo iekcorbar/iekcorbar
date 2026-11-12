@@ -2,6 +2,7 @@ package com.iekcorbar.xmas;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -45,9 +46,50 @@ final class XmasCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(Component.text("Xmas config reloaded.", NamedTextColor.GREEN));
             return true;
         }
+        if (args[0].equalsIgnoreCase("santa")) {
+            if (!(sender instanceof Player p)) {
+                sender.sendMessage(Component.text("Santa comes to a player, not to the console.",
+                        NamedTextColor.RED));
+                return true;
+            }
+            if (!p.hasPermission("xmas.admin")) {
+                p.sendMessage(Component.text("Only staff can place Santa.", NamedTextColor.RED));
+                return true;
+            }
+            String sub = args.length > 1 ? args[1].toLowerCase(Locale.ROOT) : "status";
+            switch (sub) {
+                case "spawn" -> {
+                    plugin.santa().summon(p.getLocation());
+                    p.sendMessage(Component.text("Santa stands where you stood. He will wander from there.",
+                            NamedTextColor.GREEN));
+                }
+                case "remove" -> {
+                    plugin.santa().dismiss();
+                    p.sendMessage(Component.text("Santa is gone until the next /xmas santa spawn.",
+                            NamedTextColor.YELLOW));
+                }
+                case "goto" -> {
+                    if (args.length < 3) {
+                        p.sendMessage(Component.text("Who? /xmas santa goto <player>", NamedTextColor.RED));
+                        return true;
+                    }
+                    Player t = Bukkit.getPlayerExact(args[2]);
+                    if (t == null) {
+                        p.sendMessage(Component.text("That player is not online.", NamedTextColor.RED));
+                        return true;
+                    }
+                    plugin.santa().summon(t.getLocation().add(2, 0, 2));
+                    p.sendMessage(Component.text("Santa arrives next to " + t.getName() + ".",
+                            NamedTextColor.GREEN));
+                }
+                default -> p.sendMessage(Component.text("Santa: ", NamedTextColor.GRAY)
+                        .append(Component.text(plugin.santa().status(), NamedTextColor.YELLOW)));
+            }
+            return true;
+        }
         if (!args[0].equalsIgnoreCase("give")) {
-            sender.sendMessage(Component.text("Usage: /xmas list | give <block> [amount] | reload",
-                    NamedTextColor.RED));
+            sender.sendMessage(Component.text("Usage: /xmas list | give <block> [amount] | "
+                    + "santa <spawn|remove|goto|status> | reload", NamedTextColor.RED));
             return true;
         }
         if (!(sender instanceof Player p)) {
@@ -92,7 +134,9 @@ final class XmasCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
-        if (args.length == 1) return List.of("list", "give", "reload");
+        if (args.length == 1) return List.of("list", "give", "santa", "reload");
+        if (args.length == 2 && args[0].equalsIgnoreCase("santa"))
+            return List.of("spawn", "remove", "goto", "status");
         if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
             List<String> ids = new ArrayList<>();
             ids.add("all");

@@ -5,7 +5,13 @@
 xmas-blocks:
   break-hits: 2
 
-# De kerstman (komt in 0.2.0). Staat hier alvast, zodat zijn intrede later geen
-# config-wijziging nodig heeft die niemand heeft afgevinkt.
+# De kerstman. Hij loopt rond vanaf het moment dat staff hem zet: /xmas santa spawn
+# (of /xmas santa goto <speler>). Zijn plek en UUID onthouden zich in deze file, dus een
+# serverherstart zet hem terug op het laatst Known vierkant - er staat nooit een tweede.
 santa:
   enabled: true
+  # Cadeaus geven kan normaal alleen in het kerstvenster van 24 t/m 26 december (hetzelfde
+  # venster als de Relics-cadeaudos). Zet op true tijdens het bouwen/testen van het dorp,
+  # en weer op false voor hij de spelers in gaat.
+  gifts-anytime: false
+  # uuid/world/pos schrijft de plugin zelf; die hoeven niet ingevuld te worden.

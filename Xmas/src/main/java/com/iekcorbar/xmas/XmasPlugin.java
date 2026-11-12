@@ -18,6 +18,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class XmasPlugin extends JavaPlugin {
 
     private XmasDecor decor;
+    private Fmm fmm;
+    private Santa santa;
     private long tick;
 
     @Override
@@ -25,6 +27,8 @@ public final class XmasPlugin extends JavaPlugin {
         saveDefaultConfig();
         decor = new XmasDecor(this);
         decor.decor.registerRecipes();
+        fmm = new Fmm();
+        santa = new Santa(this, fmm);
         var pm = getServer().getPluginManager();
         pm.registerEvents(decor.decor, this);
         var xmasCmd = getCommand("xmas");
@@ -43,18 +47,22 @@ public final class XmasPlugin extends JavaPlugin {
                 }
                 for (Chunk c : w.getLoadedChunks()) decor.decor.loadChunk(c);
             }
+            santa.restore();               // de kerstman keert terug op zijn laatste vierkant
         }, 40L);
         getServer().getScheduler().runTaskTimer(this, () -> {
             tick += 10;
             decor.decor.tick(tick);
+            santa.tick(tick);
         }, 10L, 10L);
         getLogger().info("Xmas enabled: " + decor.decor.defs.size() + " building blocks"
-                + (decor.decor.count() > 0 ? ", " + decor.decor.count() + " already placed." : "."));
+                + (decor.decor.count() > 0 ? ", " + decor.decor.count() + " already placed." : ".")
+                + (fmm.available() ? " FMM modelklaar voor de kerstman." : " (geen FMM: kerstman blijft kaal)"));
     }
 
     @Override
     public void onDisable() {
         if (decor == null) return;
+        if (santa != null) santa.remember();   // zijn plek onthouden voor de volgende boot
         if (getServer().isStopping()) return;   // displays vanish with the server anyway
         decor.decor.removeAllDisplays();
         decor.decor.unregisterRecipes();
@@ -62,6 +70,10 @@ public final class XmasPlugin extends JavaPlugin {
 
     XmasDecor decor() {
         return decor;
+    }
+
+    Santa santa() {
+        return santa;
     }
 
     void reload() {
