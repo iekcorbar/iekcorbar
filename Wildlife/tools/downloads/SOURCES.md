@@ -19,6 +19,15 @@ mesh-blob is vervangen door de hand-built builder (grab3d heeft geen zwijn/aap; 
 Quaternius-OBJ's zitten in de betaalde Ultimate-Animal-Pack). De `mesh_boar.json` /
 `mesh_macaque.json` blijven liggen als referentie.
 
+‡ 11-12 blob-ronde: **lion, penguin en macaw** zijn óók teruggezet op hun hand-built builder, om
+kwaliteit - niet om licentie. De ara werd een staande maiskolf (21,7 px hoog tegen 7,6 px voor z'n
+eigen blauwe/groene look: `species_builder()` kent een mesh alleen toe aan de SOORTNAAM, dus de
+EXTRA-looks bleven hand-built en kregen een ander formaat), de pinguin een strandbal van 2,5 × 1,8 ×
+1,8 m in plaats van 1,1 m op z'n poten, en de leeuw-rig gaf ONE voorpoot 48 boxen en de andere 4
+(vandaar "hoofd 3 px scheef"). `mesh_lion.json` / `mesh_penguin.json` / `mesh_macaw.json` blijven
+liggen als referentie; de statues/beeldjes en het Zoo-pack meebouwen doet dit werk pas ná één
+herbouw aan het eind van de dierenronde.
+
 Let op: de grab3d-licenses zijn CC0 maar vermelden "AI-generated (Meshy)". Voor een
 Minecraft-server met eigen voxel-omzetting is dat juridisch schoon; de bron is wel
 geen handmatig-modelleerder. Eigenaar is geïnformeeld via PROJECTBORD 11-12.

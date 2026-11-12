@@ -149,6 +149,37 @@ def find(nodes, *keys):
     return best[0] if best else None
 
 
+def torso_of(node):
+    """Box van het lijf ZONDER de staart: een staart schuift het volume-midden naar achteren, waardoor
+    de kop van elk dier met een grote staart "voorovergebukt" lijkt (meerkat: 3 px vlag die er geen
+    was). Rotaties van de staart-bota blijven hier buiten beschouwing - om te vergelijken is de romp
+    de referentie, niet de romp-plus-staart."""
+    pts = []
+
+    def walk(n, chain):
+        ch = chain + [(n.get("rotation"), n.get("origin") or [0, 0, 0])]
+        for e in n["_els"]:
+            a, b = e["from"], e["to"]
+            vol = max(1e-6, abs(b[0] - a[0]) * abs(b[1] - a[1]) * abs(b[2] - a[2]))
+            for c in [(x, y, z) for x in (a[0], b[0]) for y in (a[1], b[1]) for z in (a[2], b[2])]:
+                px, py, pz = c
+                for r, o in ch:
+                    px, py, pz = rot((px, py, pz), r, o)
+                pts.append((px, py, pz, vol))
+        for k in n["_kids"]:
+            if k.get("name", "").startswith("tail") or k.get("name", "") in ("fin", "fluke"):
+                continue
+            walk(k, ch)
+
+    walk(node, [])
+    if not pts:
+        return None
+    w = sum(p[3] for p in pts)
+    return {"cen": tuple(sum(p[i] * p[3] for p in pts) / w for i in range(3)),
+            "lo": tuple(min(p[i] for p in pts) for i in range(3)),
+            "hi": tuple(max(p[i] for p in pts) for i in range(3)), "n": len(pts)}
+
+
 def measure(stem):
     m = load(stem)
     roots, nodes = tree(m)
@@ -181,9 +212,10 @@ def measure(stem):
     head = find(nodes, "h_head", "head", "neck")
     hb = box_of(head) if head else None
     res["head"] = hb["cen"] if hb else None
-    if hb and bb:
-        dx = hb["cen"][0] - bb["cen"][0]
-        dz = hb["cen"][2] - bb["cen"][2]
+    tb = torso_of(body) or bb                      # kop versus RUIMP (zonder staart), niet versus alles
+    if hb and tb:
+        dx = hb["cen"][0] - tb["cen"][0]
+        dz = hb["cen"][2] - tb["cen"][2]
         res["face"] = (round(dx, 1), round(dz, 1))
         res["axiaal"] = "X" if abs(dx) >= abs(dz) else "Z"
     clips = [a["name"] for a in m.get("animations", [])]

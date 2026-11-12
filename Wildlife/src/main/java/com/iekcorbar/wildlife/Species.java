@@ -157,7 +157,7 @@ enum Species {
             "The tallest animal around. It browses the high leaves and watches the plains from above.",
             "Open savanna - look up, not down.",
             "entity.horse.ambient", "entity.horse.hurt", "entity.horse.death", 0.7f),
-    LION("Lion", EntityType.OCELOT, 3.0, 24, 0.12, Habitat.LAND, Time.ANY, 1, 3, 4,
+    LION("Lion", EntityType.OCELOT, 1.4, 24, 0.12, Habitat.LAND, Time.ANY, 1, 3, 4,
             List.of("savanna", "savanna_plateau"), "beef",
             "The king of the savanna. It rests in the shade and hunts when the sun drops.",
             "Savanna grass and acacia shade - listen for the roar.",
