@@ -27,6 +27,22 @@ The site is deployed to Plesk via Node.js/Passenger, not `next start` directly. 
 
 **`node_modules` is deliberately excluded**: ZIP archives don't reliably preserve Unix executable permissions, so shipping `node_modules` this way causes `node_modules/.bin/next` to lose its `+x` bit on extraction, which surfaces as `sh: 1: next: Permission denied` (exit 127) when Plesk runs `npm run build`/`npm run start`. After uploading and extracting the zip on Plesk, run `npm install` there (or use the **"NPM install"** button in the Plesk Node.js app panel) before building/starting â€” this installs dependencies natively on the Linux host with correct permissions.
 
+**Vaste regel, geleerd 12-11: `deploy/TE-DEPLOYEN.txt` wordt gemeten, niet onthoud.**
+Voordat ik de lijst schrijf vraag ik de server wat dáár draait
+(`ssh iekcorbar-vps "ls $V/plugins/*.jar"` + de mixer-map voor het pack) en zet die getallen erboven.
+De lijst mag alleen dingen bevatten die ** nieuwer** zijn dan live. Twee fouten die zo uit elkaar
+zien als "dingen staan door elkaar":
+1. twaalf jars die al live waren bleven in `deploy/` staan alsof ze nog moesten;
+2. `Gouw-0.3.0.jar` stond er terwijl de server **0.4.2** draait - die is in een ANDERE werkboom
+   gebouwd (`/home/baaye/projecten/iekcorbar-final/iekcorbar-final`, tak `main`). Dit
+   repo-exemplaar heeft Gouw-bron 0.3.0: hier `mvn package` draaien voor Gouw is een
+   **dowgrade** uitleveren (per-resident rechten, withdrawals en de jobs-correctie uit 0.4.x zijn
+   dan weg). Aan Gouw werken = eerst 0.4.x uit die werkboom hier binnentrekken.
+Ook de FMM-map is zo'n val: FMM registreert modellen op **bestandsstam** (`File.getName()`), dus
+`cp wildlife\*` vanaf Windows maakte 137 platte bestanden genaamd `wildlife\wl_bear.bbmodel` in de
+root van `models/` - heden ten dage rommel die niets doet maar wél elke start geladen wordt.
+Kopieren doe ik met `scp -r MAP iekcorbar-vps:"PAD/"` en daarna `chown -R pterodactyl:pterodactyl`.
+
 **`src/lib/db.json` is deliberately excluded too** (`scripts/build-zip.py`'s `EXCLUDE` set), after a real production data-loss incident: `db.js`'s MySQL-first-with-JSON-fallback design means any MySQL write that silently fails on production falls back to writing straight into production's own `src/lib/db.json` â€” so that file can end up holding real, live-only data (this has happened to chat messages, Starter Guide steps, and the seeded brewing recipes). Deploying used to overwrite that file with whatever was in the developer's own local `db.json`, permanently destroying whatever had only ever landed in production's fallback copy. If `db.json` genuinely needs to be reset or reseeded on the server, do that deliberately there (e.g. an admin-triggered route, same pattern as the brewing-recipe seeding described below) â€” never as a side effect of shipping unrelated code changes. This also means a flaky/failing MySQL connection in production is a real bug worth root-causing (check the app's server logs for `[MySQL DB Warning]` lines) rather than something to shrug off just because the fallback keeps the site visibly working.
 
 **`.node-version`** pins the Node version (currently `24`) for nodenv (or nvm/fnm) on the Plesk host. Without it, a bare `npm install` there can fail with `nodenv: node: command not found` â€” nodenv falls back to a nonexistent `"system"` Node when nothing pins a version, which surfaces specifically in subprocess-spawned steps like a dependency's `postinstall.js` even though the top-level `npm install` command itself resolved fine. If Plesk's Node.js app panel is configured for a different version, update this file to match.

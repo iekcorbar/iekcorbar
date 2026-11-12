@@ -1,4 +1,4 @@
-# Xmas Town
+name: Xmas
 version: '${project.version}'
 main: com.iekcorbar.xmas.XmasPlugin
 api-version: '26.2'

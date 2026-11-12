@@ -88,7 +88,8 @@ class Model:
 
     def bone(self, name, origin, parent=None):
         b = {"name": name, "origin": [float(v) for v in origin], "uuid": U(),
-             "rotation": [0, 0, 0], "children": []}
+             "rotation": [0, 0, 0], "children": [], "autouv": 0, "color": 0, "export": True,
+             "isOpen": False, "locked": False, "mirror_uv": False, "visibility": True}
         self.bones[name] = b
         if parent:
             self.bones[parent]["children"].append(b)
@@ -97,9 +98,14 @@ class Model:
         return b
 
     def cube(self, bone, x1, y1, z1, x2, y2, z2, col):
+        # FMM's CubeBlueprint.setTextureData cast de textuurverwijzing naar Double: het moet een
+        # INDEX (0) zijn, geen alias-string "#0" - met "#0" wordt het HELE model afgewezen
+        # ("Failed to parse model xmas_santa.bbmodel", 12-11 live op de server teruggevonden).
         e = {"name": "%s_%d" % (bone, len(self.elements)), "uuid": U(), "autouv": 0,
              "from": [x1, y1, z1], "to": [x2, y2, z2], "origin": [0, 0, 0], "rotation": [0, 0, 0],
-             "faces": {f: {"uv": uv(col), "texture": "#0"}
+             "type": "cube", "color": -1, "locked": False, "rescale": False,
+             "allow_mirror_modeling": False, "box_uv": False, "render_order": 0,
+             "faces": {f: {"uv": uv(col), "texture": 0}
                        for f in ("north", "south", "east", "west", "up", "down")}}
         self.elements.append(e)
         self.bones[bone]["children"].append(e["uuid"])
@@ -114,8 +120,9 @@ class Model:
             for chan, points in chans.items():
                 for t, (x, y, z) in points:
                     kfs.append({"channel": chan,
-                                "data_points": [{"x": str(round(x, 2)), "y": str(round(y, 2)),
-                                                 "z": str(round(z, 2))}],
+                                "data_points": [{"x": repr(round(float(x), 2)),
+                                                 "y": repr(round(float(y), 2)),
+                                                 "z": repr(round(float(z), 2))}],
                                 "uuid": U(), "time": round(t, 3), "color": -1,
                                 "interpolation": "linear"})
             animators[self.bones[bn]["uuid"]] = {"name": bn, "type": "bone", "keyframes": kfs}
@@ -129,20 +136,28 @@ class Model:
         for c in b["children"]:
             kids.append(c if isinstance(c, str) else self.outline(c))
         return {"name": b["name"], "origin": b["origin"], "rotation": b["rotation"], "color": 0,
-                "uuid": b["uuid"], "export": True, "children": kids}
+                "uuid": b["uuid"], "export": True, "autouv": 0, "isOpen": False, "locked": False,
+                "mirror_uv": False, "visibility": True, "children": kids}
 
     def bbmodel(self):
+        # De texture-sleutels zijn het Blockbench-4.9 schema zoals Blockbench het zelf wegschrijft.
+        # FMM's dataconverter leest o.a. `folder` (moet leeg, niet "texture"), `internal`, `saved`,
+        # `uv_width/uv_height` en `uuid`; een onbekende/ontbrekende sleutel geeft
+        # "Failed to parse texture xmas_santa.png!" en daarmee afwijzing van het HELE model.
+        # Gecheckt tegen Wildlife/fmm-models/wildlife/*.bbmodel (203 modellen die live laden).
         return {"meta": {"format_version": "4.9", "model_format": "free", "box_uv": False},
                 "name": self.name, "model_identifier": "", "visible_box": [1, 1, 0],
                 "variable_placeholders": "", "variable_placeholder_buttons": [],
                 "timeline_setups": [], "unhandled_root_fields": {},
                 "resolution": {"width": RES, "height": RES},
                 "elements": self.elements, "outliner": [self.outline(b) for b in self.roots],
-                "textures": [{"path": "", "name": "xmas_santa.png", "folder": "texture",
-                              "namespace": "", "id": "0", "width": RES, "height": RES,
-                              "uv_mode": "autoshow", "covered": False,
-                              "data": {"icon": "far", "mode": "bitmap", "palleted": False,
-                                       "resolution": 16}, "source": TEX}],
+                "textures": [{"path": "", "name": self.name + ".png", "folder": "", "namespace": "",
+                              "id": "0", "particle": False, "render_mode": "default",
+                              "render_sides": "auto", "frame_time": 1, "frame_order": "",
+                              "frame_order_type": "loop", "frame_interpolate": False,
+                              "internal": True, "saved": False, "visible": True,
+                              "width": RES, "height": RES, "uv_width": RES, "uv_height": RES,
+                              "relative_path": "", "uuid": U(), "source": TEX}],
                 "animations": self.anims}
 
 
