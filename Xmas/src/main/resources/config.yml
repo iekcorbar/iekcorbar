@@ -1,0 +1,11 @@
+# Xmas Town
+
+# Hoeveel klappen een gewoon overlevende nodig heeft om een kerstblok weg te slopen.
+# In creatief en voor staff (xmas.admin) gaat dat in één klik.
+xmas-blocks:
+  break-hits: 2
+
+# De kerstman (komt in 0.2.0). Staat hier alvast, zodat zijn intrede later geen
+# config-wijziging nodig heeft die niemand heeft afgevinkt.
+santa:
+  enabled: true

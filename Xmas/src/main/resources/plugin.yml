@@ -1,14 +1,18 @@
-name: Xmas
+# Xmas Town
 version: '${project.version}'
 main: com.iekcorbar.xmas.XmasPlugin
 api-version: '26.2'
-description: Kerst building blocks
+softdepend: [FreeMinecraftModels, Zukan]
+description: Xmas Town building blocks and the Kerstman
 commands:
   xmas:
-    description: Xmas commands
-    usage: /xmas give <block>
-    permission: xmas.admin
+    description: Xmas Town blocks (list, give, reload)
+    usage: /xmas list | give <block> [amount] | reload
+    permission: xmas.use
 permissions:
+  xmas.use:
+    description: Look up the Xmas blocks
+    default: true
   xmas.admin:
-    description: Give the xmas test blocks
+    description: Hand out Xmas blocks and reload the config
     default: op

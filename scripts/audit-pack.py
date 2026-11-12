@@ -268,4 +268,48 @@ if gen:
 else:
     print("check 6: alle geregistreerde plugin-items hebben een icoon + items/-definitie")
 
-sys.exit(1 if problems or OUR_ORPHANS or gen else 0)
+# ------------------------------------------------------------------ check 6b: propkit-decor-ids
+# De decor-props (Kitchen/Sakagura/Wildlife/Zoo/Xmas/Hihou/Additions) komen niet uit een enum maar
+# uit `new DecorDef("<id>", ...)`-regels, en de namespace staat in propkit/sync.py. Die tabel hier
+# uitlezen (in plaats nabiouwen) is de zin van deze check: wie een prop-plugin toevoegt aan sync.py
+# wordt automatisch meegenomen, en een namespace die hier handmatig stond kan gaan rammelen.
+# Connect-props (muur/hekwerken) zetten hun item_model op "<model>_0", dus dáár moet de def staan.
+def propkit_targets():
+    try:
+        src = open(os.path.join("propkit", "sync.py"), encoding="utf-8").read()
+    except OSError:
+        return {}
+    body = src.split("TARGETS = {", 1)[1].split("}\n", 1)[0]
+    # drie vangstgroepen (plugin, pakket, namespace) - de pakketnaam heb ik hier niet voor nodig
+    return {plug: ns for plug, _pkg, ns in re.findall(r'"([A-Za-z0-9_]+)":\s*\("([^"]+)",\s*"([^"]+)"\)', body)}
+
+gen6b = 0
+for plugin, ns in sorted(propkit_targets().items()):
+    ids = set()
+    for root, _d, files in os.walk(plugin):
+        if "target" in root.split(os.sep):
+            continue
+        for f in files:
+            if not f.endswith(".java"):
+                continue
+            txt = open(os.path.join(root, f), encoding="utf-8").read()
+            ids |= set(re.findall(r'new DecorDef\("([a-z_0-9]+)"', txt))
+            # variants("a","b") en muur-/plafondmodellen: ook die moeten een def hebben
+            for v in re.findall(r'\.variants\(([^)]*)\)', txt):
+                ids |= set(re.findall(r'"([a-z_0-9]+)"', v))
+            for w in re.findall(r'\.wallModels?\(([^)]*)\)|\.ceiling\(([^)]*)\)', txt):
+                ids |= {x for x in w if x}
+    for i in sorted(ids):
+        # een connect-prop leeft als <id>_0; de platte vorm heeft geen nummertje - één van beide is goed
+        ok = ("assets/%s/items/%s.json" % (ns, i) in names
+              or "assets/%s/items/%s_0.json" % (ns, i) in names)
+        if not ok:
+            gen6b += 1
+            print("NO DECOR DEF %s:%s (plugin %s) - magenta in 26.2; maak het model in tools/make_pack.py" % (ns, i, plugin))
+if gen6b:
+    print("check 6b: %d decor-props zonder icoon/definitie" % gen6b)
+else:
+    print("check 6b: alle propkit-decor-ids (%s) hebben model + items/-definitie"
+          % ", ".join(sorted(set(propkit_targets().values()))))
+
+sys.exit(1 if problems or OUR_ORPHANS or gen or gen6b else 0)

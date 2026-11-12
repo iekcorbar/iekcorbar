@@ -9,6 +9,7 @@ TARGETS = {
     "Kitchen": ("com.iekcorbar.kitchen", "kitchendecor"),
     "Hihou": ("com.iekcorbar.hihou", "hihou"),
     "SteamworksAdditions": ("com.iekcorbar.additions", "additions"),
+    "Xmas": ("com.iekcorbar.xmas", "xmas"),        # 12-11: de kerstbouwstenen draaien op de gedeelde engine
 }
 here = os.path.dirname(os.path.abspath(__file__))
 # Adv.java (advancement helper) goes into every plugin that shows advancements
