@@ -179,28 +179,64 @@ print("%s: %d models, %d item defs - %d problems in OUR namespaces, %d orphans i
 #
 # De bron van de ids is de plugin-zelf: alle `Key.key("<ns>", "<id>")`-letteralen plus de
 # konstanten van de item-enum(s). Wie een item toevoegt WITHOUT een icoon, vliegt er nu uit.
-ID_SOURCES = {                       # namespace -> (plugin-map, [java-bestanden met de item-enum])
-    "kitchen":  ("Kitchen",  ["Kitchen/src/main/java/com/iekcorbar/kitchen/KItem.java"]),
-    "sakagura": ("Sakagura", ["Sakagura/src/main/java/com/iekcorbar/sakagura/Fruit.java"]),
+ID_SOURCES = {                       # namespace -> (plugin-map, [(enum-bestand, id-regel), ...])
+    # Alleen namespaces waarvan de id-regel NAGEKEKEN is. Kura/Relics/Steamworks/Hihou staan er
+    # bewust níét bij: daar is de item-id niet de enum-naam maar een opgebouwd model
+    # ("cable_0", "advent_wreath_0", steamworks-decor heeft heel andere namen) - die opnemen
+    # geeft 100 vals alarm en een audit die liegt, erger dan een audit die te weinig ziet.
+    "kitchen":  ("Kitchen",  [("Kitchen/src/main/java/com/iekcorbar/kitchen/KItem.java", "naam")]),
+    "satchel":  ("Satchel",  [("Satchel/src/main/java/com/iekcorbar/satchel/SItem.java", "naam")]),
+    "kura":     ("Kura",     [("Kura/src/main/java/com/iekcorbar/kura/KItem.java", "naam")]),
+    "sakagura": ("Sakagura", [("Sakagura/src/main/java/com/iekcorbar/sakagura/Fruit.java", "args")]),
 }
 # Ids die GEEN inventory-item zijn: Kitchen-oesprongen bestaan als blok-model (block/<oesprong>_stageN)
 # en nooit als vaststaand item, dus hun naam hoeft geen items/-definitie te hebben.
-NOT_AN_ITEM = {"kitchen": {"cannabis", "hemp", "sesame", "shiso", "soybean", "tea", "wasabi"}}
+NOT_AN_ITEM = {
+    "kitchen": {"cannabis", "hemp", "sesame", "shiso", "soybean", "tea", "wasabi"},
+}
 
-def enum_constants(pad):
-    """De enum-waarden van een Java-enum, als id zoals de plugin ze maakt (naam.small)."""
+def enum_ids(pad, regel):
+    """De item-ids die een Java-enum registreert.
+       "naam" -> id() is name().toLowerCase()  (Kitchen KItem, Satchel SItem, Kura KItem)
+       "args" -> id's staan als letterlijke strings in de constante
+                 (Sakagura Fruit: YUZU("Yuzu", "yuzu", "yuzu_seeds", ...) -> vrucht + zaad)"""
     try:
         src = open(pad, encoding="utf-8").read()
     except OSError:
         return set()
     body = src[src.index("enum "):] if "enum " in src else ""
+    if regel == "args":
+        # Echte argumenten-splitting op hoofdniveau: een regel als
+        #   BARLEY("Barley", "barley", null, 2, 4, false, 18, List.of("plains", "meadow"))
+        # mag NIET als zaad-id "plains" gaan opleveren (de regex-greep pakt dan door de
+        # List.of-haakjes heen, en null schuift alles op).
+        out = set()
+        for m in re.findall(r'^\s{4}[A-Z_0-9]+\(((?:[^()]|\([^()]*\))*)\)', body, re.M):
+            depth, cur, args = 0, "", []
+            for ch in m:
+                if ch in "([":
+                    depth += 1
+                elif ch in ")]":
+                    depth -= 1
+                if ch == "," and depth == 0:
+                    args.append(cur.strip())
+                    cur = ""
+                else:
+                    cur += ch
+            if cur.strip():
+                args.append(cur.strip())
+            for a in args[1:3]:                      # [0] is de weergavenaam
+                q = re.fullmatch(r'"([a-z_0-9]+)"', a)
+                if q:
+                    out.add(q.group(1))
+        return out
     return {m.lower() for m in re.findall(r'^\s{4}([A-Z][A-Z_0-9]*)\s*[\(;]', body, re.M)}
 
 gen = 0
-for ns, (plugin, pads) in ID_SOURCES.items():
+for ns, (plugin, bronnen) in ID_SOURCES.items():
     ids = set()
-    for p in pads:
-        ids |= enum_constants(p)
+    for pad, regel in bronnen:
+        ids |= enum_ids(pad, regel)
     # plus alle letterlijke ids in Key.key("<ns>", "<id>")-aanroepen binnen die plugin.
     # Twee vormen: een complete id  ->  Key.key("kitchen", "yuzu_tea")
     #                een voorvoegsel  ->  Key.key("sakagura", "drink_" + id)  (let op de '+')
