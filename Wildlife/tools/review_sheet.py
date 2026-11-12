@@ -104,18 +104,29 @@ def rot(v, r, o):
 
 
 def box_of(node):
-    """Rest-bbox + volume-gewogen midden van een bot en zijn kinderen (cube-middens)."""
+    """Rest-bbox + volume-gewogen midden van een bot en zijn kinderen.
+
+    Let op: dit gaat langs de acht HOEKPUNTEN van elke box, niet langs het midden. Met de midde-
+    len leek elke poot van >2 px dik "1,3 boven de grond" (het midden van 0..2,6 is 1,3) en zag
+    een bbox te klein uit voor brede boxen - precies de maat-fouten die deze review moet vinden."""
     pts = []
 
     def walk(n, chain):
         ch = chain + [(n.get("rotation"), n.get("origin") or [0, 0, 0])]
         for e in n["_els"]:
             a, b = e["from"], e["to"]
-            px, py, pz = (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2
+            vol = max(1e-6, abs(b[0] - a[0]) * abs(b[1] - a[1]) * abs(b[2] - a[2]))
+            corners = [(x, y, z) for x in (a[0], b[0]) for y in (a[1], b[1]) for z in (a[2], b[2])]
+            for c in corners:
+                px, py, pz = c
+                for r, o in ch:
+                    px, py, pz = rot((px, py, pz), r, o)
+                pts.append((px, py, pz, vol))
+            mids = [sum(v[i] for v in corners) / 8.0 for i in range(3)]
+            px, py, pz = mids
             for r, o in ch:
                 px, py, pz = rot((px, py, pz), r, o)
-            vol = max(1e-6, abs(b[0] - a[0]) * abs(b[1] - a[1]) * abs(b[2] - a[2]))
-            pts.append((px, py, pz, vol))
+            pts.append((px, py, pz, 0.0))
         for k in n["_kids"]:
             walk(k, ch)
     walk(node, [])
@@ -158,7 +169,9 @@ def measure(stem):
                 hab = habitats()[kind]
                 break
         else:
-            hab = ("?", "?", 1.0, "?")
+            # een jong of zeldzame variant is GEEN eigen soort: val terug op de basisssoort
+            base = re.sub(r"(_rare|_baby)$", "", re.sub(r"(_rare|_baby)$", "", stem))
+            hab = habitats().get(base) or ("?", "?", 1.0, "?")
     res = {"stem": stem, "display": hab[0], "habitat": hab[1], "scale": hab[2], "base": hab[3],
            "eigen soort": hab[1] != "?", "look": stem in looks(),
            "lo": lo, "hi": hi,
@@ -300,6 +313,20 @@ def cmd_sheet(args):
     print("wrote %s (%d soorten, %dx%d, cell %d)" % (out, len(strips), img.width, img.height, cell))
 
 
+def head_scale(stem):
+    """De Species-schaal zo als hij in HEAD staat - voor de vergelijk-rule.
+    Anders krijgt het OUDE model de NIEUWE schaal te zien en is 'oud' plots een dwerg."""
+    rel = "Wildlife/src/main/java/com/iekcorbar/wildlife/Species.java"
+    top = subprocess.run(["git", "-C", ROOT, "rev-parse", "--show-toplevel"],
+                         capture_output=True, text=True).stdout.strip() or ROOT
+    p = subprocess.run(["git", "-C", top, "show", "HEAD:" + rel], capture_output=True, text=True)
+    if p.returncode != 0:
+        return None
+    ident = stem.replace("wl_", "").upper()
+    m = re.search(r'^\s{4}' + ident + r'\("[^"]+",\s*EntityType\.[A-Z_]+,\s*([0-9.]+)', p.stdout, re.M)
+    return float(m.group(1)) if m else None
+
+
 def cmd_vergelijk(args):
     """Oud (git HEAD) tegenover nieuw (werkboom), per dier, met de maatstaf-mens erbij.
 
@@ -339,6 +366,10 @@ def cmd_vergelijk(args):
         MODELS = src                             # measure() leest uit de bron die nu aan de beurt is
         try:
             r = measure(stem)
+            if src == old:                       # HEAD-rij: ook de schaal van HEAD, niet de nieuwe
+                hs = head_scale(stem)
+                if hs:
+                    r["scale"] = hs
         except Exception as e:  # noqa: BLE001
             print("meten mislukt %s: %s" % (stem, e)); bad += 1
             MODELS = cur
@@ -354,7 +385,8 @@ def cmd_vergelijk(args):
                                capture_output=True, text=True, env=env, cwd=HERE)
             row.append(Image.open(tmp).convert("RGB") if p.returncode == 0 and os.path.exists(tmp) else None)
         m = lambda v: v * r["scale"] / 16.0
-        labs.append("%s / %s — %s  %.2f x %.2f x %.2f m%s" % (
+        # geen gedachtestreep in de tekst: het standaard-bitmaplettertype van PIL kent U+2014 niet
+        labs.append("%s / %s  %s  %.2f x %.2f x %.2f m%s" % (
             stem.replace("wl_", ""), tag, "!" if verdict(r) else "ok",
             m(r["len_x"]), m(r["height"]), m(r["len_z"]),
             "" if not verdict(r) else "  [" + "; ".join(verdict(r)) + "]"))
