@@ -11,7 +11,7 @@
 
 Usage (repo root): python -I scripts/audit-pack.py   -> newest deploy/iekcorbar-pack-build*.zip
 """
-import glob, json, os, sys, zipfile, hashlib
+import glob, json, os, re, sys, zipfile, hashlib
 
 if len(sys.argv) > 1:
     path = sys.argv[1]
@@ -168,4 +168,68 @@ for name, m in models.items():
     problems += len(probs)
 
 print("%s: %d models, %d item defs - %d problems in OUR namespaces, %d orphans in OUR namespaces (mmoitems counted separately: %d)" % (path, len(models), n_defs, problems, len(OUR_ORPHANS), mmo_problems))
-sys.exit(1 if problems or OUR_ORPHANS else 0)
+
+# ------------------------------------------------------------------ check 6: plugin-ids vs pack-defs
+# Zesde look, want de vijf hierboven kunnen dit MIS niet zien: een item dat een plugin registreert
+# en waarvoor in het pack GEEN model én geen items/<id>.json bestaat. Zo'n model_loze id is geen
+# orphan (er is niets om te orfanen) - het is gewoon onzichtbaar, en de client laat dan een
+# MAGENTA blok zien. Ontdekt 12-11 in Zukan: tien Kitchen-items (yuzu, yuzu_seeds, persimmon,
+# persimmon_seeds, buckwheat, buckwheat_seeds, koji, enoki_spores, shiitake_spores, tsukemono)
+# kregen wel `item_model kitchen:<id>` maar nooit een icoon.
+#
+# De bron van de ids is de plugin-zelf: alle `Key.key("<ns>", "<id>")`-letteralen plus de
+# konstanten van de item-enum(s). Wie een item toevoegt WITHOUT een icoon, vliegt er nu uit.
+ID_SOURCES = {                       # namespace -> (plugin-map, [java-bestanden met de item-enum])
+    "kitchen":  ("Kitchen",  ["Kitchen/src/main/java/com/iekcorbar/kitchen/KItem.java"]),
+    "sakagura": ("Sakagura", ["Sakagura/src/main/java/com/iekcorbar/sakagura/Fruit.java"]),
+}
+# Ids die GEEN inventory-item zijn: Kitchen-oesprongen bestaan als blok-model (block/<oesprong>_stageN)
+# en nooit als vaststaand item, dus hun naam hoeft geen items/-definitie te hebben.
+NOT_AN_ITEM = {"kitchen": {"cannabis", "hemp", "sesame", "shiso", "soybean", "tea", "wasabi"}}
+
+def enum_constants(pad):
+    """De enum-waarden van een Java-enum, als id zoals de plugin ze maakt (naam.small)."""
+    try:
+        src = open(pad, encoding="utf-8").read()
+    except OSError:
+        return set()
+    body = src[src.index("enum "):] if "enum " in src else ""
+    return {m.lower() for m in re.findall(r'^\s{4}([A-Z][A-Z_0-9]*)\s*[\(;]', body, re.M)}
+
+gen = 0
+for ns, (plugin, pads) in ID_SOURCES.items():
+    ids = set()
+    for p in pads:
+        ids |= enum_constants(p)
+    # plus alle letterlijke ids in Key.key("<ns>", "<id>")-aanroepen binnen die plugin.
+    # Twee vormen: een complete id  ->  Key.key("kitchen", "yuzu_tea")
+    #                een voorvoegsel  ->  Key.key("sakagura", "drink_" + id)  (let op de '+')
+    exact, prefixes = set(), set()
+    for root, _d, files in os.walk(plugin):
+        for f in files:
+            if not f.endswith(".java"):
+                continue
+            try:
+                txt = open(os.path.join(root, f), encoding="utf-8").read()
+            except OSError:
+                continue
+            for lit, next_char in re.findall(r'Key\.key\("%s",\s*"([a-z_0-9]+)"\s*([),+])' % ns, txt):
+                (prefixes if next_char == "+" else exact).add(lit)
+    ids |= exact
+    for pre in sorted(prefixes):                      # van een voorvoegsel moet minstens ONE id bestaan
+        if not any(k.startswith("assets/%s/items/%s" % (ns, pre)) for k in names):
+            gen += 1
+            print("NO ITEM MODEL/DEF %s:%s* - geen enkel item begint met dit voorvoegsel" % (ns, pre))
+    for i in sorted(ids):
+        if i in NOT_AN_ITEM.get(ns, set()):
+            continue
+        if "assets/%s/items/%s.json" % (ns, i) not in names:
+            gen += 1
+            print("NO ITEM MODEL/DEF %s:%s - 26.2 toont dit als MAGENTA blok (voeg het icoon toe "
+                  "aan tools/make_pack.py van %s)" % (ns, i, ns))
+if gen:
+    print("check 6: %d geregistreerde items zonder icoon/definitie" % gen)
+else:
+    print("check 6: alle geregistreerde plugin-items hebben een icoon + items/-definitie")
+
+sys.exit(1 if problems or OUR_ORPHANS or gen else 0)

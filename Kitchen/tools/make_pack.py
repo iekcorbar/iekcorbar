@@ -288,6 +288,30 @@ def items():
     M["hash_pipe"] = [box(6, 0, 6, 10, 2, 10, "clay"), box(7, 2, 7, 9, 3, 9, "wood_dark")]
     M["magic_mushroom_spores"] = pile("straw_dark", "brown", 10, 9)
     M["magic_mushroom"] = [box(5, 0, 5, 11, 2, 11, "straw"), box(6, 2, 6, 10, 3.5, 10, "cap_red" if "cap_red" in PALETTE else "chili"), box(7, 3.5, 7, 9, 4, 9, "white")]
+    # 12-11 vulling voor de tien KItem-ids die WEL geregistreerd zijn maar nooit een icoon
+    # kregen: de plugin zet op élk KItem `item_model kitchen:<id>`, en zonder items/<id>.json
+    # in 26.2 geeft dat een MAGENTA blok -InView ontdekt in Zukan (yuzu, cannabis-omgeving).
+    # Alle kleuren zijn bestaande palette-cellen; geen nieuwe cellen (atlas-plafond 256).
+    M["yuzu"] = [box(5.4, 0, 5.4, 10.6, 4.6, 10.6, "corn"), box(6.2, 0, 4.7, 9.8, 3.8, 5.4, "corn"),
+                 box(4.7, 0.8, 6.2, 5.4, 3.8, 9.8, "corn_dark"), box(10.6, 0.8, 6.2, 11.3, 3.8, 9.8, "corn"),
+                 box(7.4, 4.6, 7.4, 8.6, 5.2, 8.6, "corn_dark"),            # navel
+                 box(6.6, 4.9, 6.6, 9.4, 5.4, 9.4, "leaf")]                 # citrusblad
+    M["yuzu_seeds"] = pile("straw", "sesame", 6, 3)
+    M["persimmon"] = [box(5.2, 0, 5.2, 10.8, 4.8, 10.8, "carrot"), box(6, 0, 4.5, 10, 4, 5.2, "carrot"),
+                      box(4.5, 0.8, 6, 5.2, 4, 10, "kabocha"), box(10.8, 0.8, 6, 11.5, 4, 10, "carrot"),
+                      box(6.8, 4.8, 6.8, 9.2, 5.4, 9.2, "kabocha_dark"),     # vruchtblad
+                      box(6.8, 5.4, 4.6, 9.2, 5.9, 7, "leaf_dark"), box(6.8, 5.4, 9, 9.2, 5.9, 11.4, "leaf_dark"),
+                      box(4.6, 5.4, 6.8, 7, 5.9, 9.2, "leaf_dark"), box(9, 5.4, 6.8, 11.4, 5.9, 9.2, "leaf_dark")]
+    M["persimmon_seeds"] = pile("brown", "seed_dark", 5, 7)
+    M["buckwheat"] = pile("soba", "soba_dark", 8, 5)                         # driehoekige korrels
+    M["buckwheat_seeds"] = pile("brown", "soil", 6, 11)
+    M["koji"] = pile("egg_white", "rice", 9, 2)                              # schimmelparels op rijst
+    M["enoki_spores"] = pile("enoki", "enoki_dark", 8, 4)
+    M["shiitake_spores"] = pile("shiitake_light", "shiitake_dark", 8, 6)
+    M["tsukemono"] = [box(4.4, 0, 4.4, 11.6, 1, 11.6, "porcelain"),           #.pekelschoteltje
+                      box(5.6, 1, 5.6, 8.2, 2.2, 10.4, "takuan"),
+                      box(8.2, 1, 6.4, 10.4, 2, 9.6, "cabbage"),
+                      box(6, 2.2, 7, 8, 2.6, 9, "shiso"), box(8.4, 2, 6.6, 10, 2.4, 8.2, "shiso_green")]
     # drinks
     M["yuzu_tea"] = [box(5, 0, 5, 11, 6, 11, "porcelain"), box(6, 6, 6, 10, 6.5, 10, "gold"), box(7, 6.5, 7, 9, 7, 9, "tea_drink")]
     M["persimmon_wine"] = [box(5, 0, 5, 11, 7, 11, "porcelain"), box(6, 7, 6, 10, 7.5, 10, "gold"), box(6, 1, 6, 10, 6, 10, "kabocha")]
