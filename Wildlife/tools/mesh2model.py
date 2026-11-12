@@ -270,8 +270,13 @@ SPECIES_RULES = {
                                                                           # (11-12 loupe: hip pivot sat
                                                                           # mid-body and a chest band swung
                                                                           # with the front-right leg)
-    "elephant":  {"leg_d": 0.30, "head_z": 0.30, "head_y": 0.35},   # pillar legs stay short boxes;
-                                                                    # head+tusks+trunk in front, low
+    "elephant":  {"leg_d": 0.30, "head_z": 0.30,
+                  "leg_cx": 0.20,                 # de slurf (|cx| 0,07) hing als "voorpoot" op de
+                                                  #   draai: een poot zit aan de ZIJKANT (poten hier 0,27+)
+                  "head_y": 0.15,                 # slurf hangt tot laag: hoofd-grens omlaag, dan wordt
+                                                  #   de slurf-deel van de kop in plaats van een ledemaat
+                  "tail_z": 0.98},                # de mesh heeft geen staart: het bovenste achterste
+                                                  #   driekwart was "staart" (37 boxen rug) - kont blijft romp
     "giraffe":   {"leg_cy": 0.52, "leg_top": 0.74, "leg_d": 0.50,
                   "leg_cx": 0.42, "leg_onside": True,          # kontbanden (|cx| 0,17) zijn GEEN poten:
                                                                 #   echte poten hangen aan de zijkant

@@ -71,7 +71,7 @@ enum Species {
             List.of("river", "swamp", "mangrove"), "sugar_cane",
             "Darts over water hunting midges, wings almost invisible.", "Above rivers and swamps on warm days.",
             "wildlife:dragonfly.buzz", null, null, 1f),
-    ELEPHANT("African Elephant", EntityType.COW, 1.85, 60, 0.06, Habitat.LAND, Time.ANY, 2, 4, 3,
+    ELEPHANT("African Elephant", EntityType.COW, 1.75, 60, 0.06, Habitat.LAND, Time.ANY, 2, 4, 3,
             List.of("savanna"), "bone",
             "The biggest animal around. A herd ambles across the savanna and the calves stay close to their mothers.",
             "Wide, dry savannas - listen for the rumbling.",

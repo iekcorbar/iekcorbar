@@ -3,6 +3,7 @@
 #   python -I tools/review_sheet.py meten [soort ...]      -> meetrapport (orienteering, poten, vloer)
 #   python -I tools/review_sheet.py sheet out.png [soort]  -> posesheet: rust, zij-loop, vooraan, achter
 #   python -I tools/review_sheet.py soorten                -> alle dieren-modellen, één per regel
+#   python -I tools/review_sheet.py vergelijk out.png soort  -> HEAD (build nu) vs werkboom, met mens
 #
 # Opties (omgevingsvariabelen):
 #   STEVE=1      elk vak krijgt de Species-schaal uit Species.java (authored px -> in-game px) én er
@@ -299,6 +300,84 @@ def cmd_sheet(args):
     print("wrote %s (%d soorten, %dx%d, cell %d)" % (out, len(strips), img.width, img.height, cell))
 
 
+def cmd_vergelijk(args):
+    """Oud (git HEAD) tegenover nieuw (werkboom), per dier, met de maatstaf-mens erbij.
+
+      python -I tools/review_sheet.py vergelijk out.png olifant [leeuw ...]
+
+    Rijen = bronnen, kolommen = rust-profiel / lopend-profiel / rust-iso. Maten in het label zijn
+    de IN-GAME meters: authored px x Species-schaal (FMM schaalt het model met generic_scale).
+    """
+    global MODELS
+    out, wants = args[0], [norm(a) for a in args[1:]]
+    if not wants:
+        print("geen soort gegeven")
+        return
+    from PIL import Image, ImageDraw
+    cell = int(os.environ.get("CELL", "220"))
+    top = subprocess.run(["git", "-C", ROOT, "rev-parse", "--show-toplevel"],
+                         capture_output=True, text=True).stdout.strip() or os.path.abspath(ROOT)
+    cur = MODELS
+    old = os.path.join("/tmp/opencode", "wl-vergelijk-oud")
+    os.makedirs(old, exist_ok=True)
+    rows = []                                    # (label, modeldir)
+    for stem in wants:
+        # git toont alleen paden relatief aan de werkboom-root - en er staat ook een (verouderde)
+        # fmm-models/wildlife op de repo-root, dus hier fout oplossen = het verkeerde dier tonen
+        rel = os.path.relpath(os.path.join(cur, stem + ".bbmodel"), top)
+        p = subprocess.run(["git", "-C", top, "show", "HEAD:" + rel], capture_output=True, text=True)
+        if p.returncode != 0:
+            print("  (git HEAD heeft %s niet - alleen de huidige versie)" % stem)
+            rows.append(("nieuw", cur, stem))
+            continue
+        open(os.path.join(old, stem + ".bbmodel"), "w", encoding="utf-8").write(p.stdout)
+        rows.append(("HEAD (build nu)", old, stem))
+        rows.append(("werkboom", cur, stem))
+    views = [("side::0", "rust (profiel)"), ("side:walk:0.25", "lopend (profiel)"), ("iso::0", "rust (iso)")]
+    tiles, labs, bad = [], [], 0
+    for tag, src, stem in rows:
+        MODELS = src                             # measure() leest uit de bron die nu aan de beurt is
+        try:
+            r = measure(stem)
+        except Exception as e:  # noqa: BLE001
+            print("meten mislukt %s: %s" % (stem, e)); bad += 1
+            MODELS = cur
+            continue
+        clip = r["clip"]
+        row = []
+        for spec, _t in views:
+            v, c, tm = spec.split(":")
+            tmp = os.path.join("/tmp/opencode", "wl-cmp-%s.png" % stem)
+            env = dict(os.environ, REF="steve", SCALE=repr(r["scale"]))
+            p = subprocess.run([sys.executable, "-I", os.path.join(HERE, "pose3d.py"), tmp,
+                                os.path.join(src, stem + ".bbmodel"), str(cell), spec],
+                               capture_output=True, text=True, env=env, cwd=HERE)
+            row.append(Image.open(tmp).convert("RGB") if p.returncode == 0 and os.path.exists(tmp) else None)
+        m = lambda v: v * r["scale"] / 16.0
+        labs.append("%s / %s — %s  %.2f x %.2f x %.2f m%s" % (
+            stem.replace("wl_", ""), tag, "!" if verdict(r) else "ok",
+            m(r["len_x"]), m(r["height"]), m(r["len_z"]),
+            "" if not verdict(r) else "  [" + "; ".join(verdict(r)) + "]"))
+        tiles.append(row)
+        MODELS = cur
+    pad, lab_w, head = 10, 250, 24
+    img = Image.new("RGB", (lab_w + len(views) * (cell + pad) + pad,
+                            len(tiles) * (cell + head + 34) + 2 * pad), (246, 246, 246))
+    d = ImageDraw.Draw(img)
+    for i, (_s, t) in enumerate(views):
+        d.text((lab_w + pad + i * (cell + pad), 8), t, fill=(60, 60, 60))
+    for r, (lab, row) in enumerate(zip(labs, tiles)):
+        y = head + 34 + r * (cell + head + 34)
+        d.text((6, y - 18), lab, fill=(20, 20, 20))
+        d.text((6, y + cell - 12), "(grijs = speler 1,8 m)", fill=(150, 150, 150))
+        for c, t in enumerate(row):
+            if t:
+                img.paste(t, (lab_w + pad + c * (cell + pad), y))
+    img.save(out)
+    print("wrote %s (%d rijen x %d kolommen%s)" % (out, len(tiles), len(views),
+                                                   ", %d mislukt" % bad if bad else ""))
+
+
 if __name__ == "__main__":
     a = sys.argv[1:]
     if not a or a[0] in ("-h", "--help"):
@@ -307,5 +386,7 @@ if __name__ == "__main__":
         cmd_measure(a[1:])
     elif a[0] == "sheet":
         cmd_sheet(a[1:])
+    elif a[0] == "vergelijk":
+        cmd_vergelijk(a[1:])
     elif a[0] == "soorten":
         print("\n".join(s.replace("wl_", "") for s in species_files()))

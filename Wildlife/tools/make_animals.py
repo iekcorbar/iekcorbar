@@ -115,7 +115,7 @@ def cell(col):
 
 # Size factor per species on top of the real-size drawing (1 block = 1 m): the real animals are shown a bit
 # larger so they read well next to vanilla mobs (cow 1.4 m, horse 1.6 m, player 1.8 m). Keep Species.scale in sync.
-SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "capybara": 0.9, "duck": 1.4, "tortoise": 1.3, "hedgehog": 1.3,
+SIZE = {"elephant": 1.0, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "capybara": 0.9, "duck": 1.4, "tortoise": 1.3, "hedgehog": 1.3,
         "lizard": 1.3, "crab": 1.2, "songbird": 1.3, "snail": 1.3, "butterfly": 1.2, "dragonfly": 1.2,
         "tanuki": 1.3, "crane": 1.25, "koi": 1.2, "macaque": 1.25,
         "kangaroo": 1.0, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.0, "mole": 1.35,
@@ -127,8 +127,10 @@ SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "
                                          # vol tekent, heeft aan een lagere schaal genoeg voor hetzelfde beeld - en krijgt daardoor
                                          # een kleinere, beter passende hitbox. giraffe 0.55 -> 0,95: authored 20,7 x 30,6 px,
                                          # bij schaal 2,3 is dat 2,98 m lang x 4,4 m hoog x 0,94 m breed (was 1,95 x 2,88 x 0,62
-                                         # bij 2,6, met een hitbox van 3,6 blokken breed). Let op: de leeuw is bij nader inzien
-                                         # te GROOT (5,3 m lang) - die krijgt zijn maat samen met zijn kop in ronde 3.
+                                         # bij 2,6, met een hitbox van 3,6 blokken breed). olifant 0,6 -> 1,0: authored 46 x 29 px
+                                         # (de x/z-ruimte is -24..24, dus 46 px is precies de halve marge) en schaal 1,85 -> 1,75
+                                         # = 5,05 x 3,20 x 2,30 m met een koe-hitbox van 1,6 x 2,4 blok. Let op: de leeuw is bij
+                                         # nader inzien te GROOT (5,3 m lang) - die krijgt zijn maat samen met zijn kop in ronde 3.
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
