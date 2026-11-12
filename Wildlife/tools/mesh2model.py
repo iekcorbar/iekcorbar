@@ -241,9 +241,16 @@ RULES = {                                   # generic quad defaults: slim lower 
     "leg_cy": 0.46, "leg_top": 0.62,        #   front/back split at z=0, left/right at x=0
     "leg_w": 0.34, "leg_d": 0.42,           #   (w/d are fractions of the body's own span)
     "leg_cz": 0.0,                          #   leg centres this far from mid-body (fraction of Lz);
+    "leg_cx": 0.0,                          #   ... en deze afstand van de MIDDEL lijn over de breedte
+                                            #   (giraffe: kontbanden zijn zo slank als poten en reiken
+                                            #   tot de vloer - alleen |cx| scheidt ze van echte poten)
     "leg_onside": False,                    #   and reject leg boxes that cross the centre line -
                                             #   both only for NARROW meshes (zebra): its flank bands
                                             #   are as slim as legs; verified species keep their rig
+    "neck_z": 0.0, "neck_y": 0.0,           #   nek-bot uit de romp halen (giraffe): boxen vóór neck_z
+                                            #   (fractie van de lengte) én boven neck_y*H worden "neck" -
+                                            #   zonder nek-bot zwaait bij elke kop-beweging het hele
+                                            #   voorlijf mee, en dat is precies wat de giraf verraadt
     "head_z": 0.24, "head_y": 0.52,         # head zone: front 24% of the length, above 52% height,
     "head_w": 0.60, "head_lo": 0.0,         #   head_lo: a head never reaches the ground (zebra uses it
                                             #   as fall-through guard for rejected belly bands)
@@ -266,7 +273,10 @@ SPECIES_RULES = {
     "elephant":  {"leg_d": 0.30, "head_z": 0.30, "head_y": 0.35},   # pillar legs stay short boxes;
                                                                     # head+tusks+trunk in front, low
     "giraffe":   {"leg_cy": 0.52, "leg_top": 0.74, "leg_d": 0.50,
-                  "head_y": 0.50},                                   # legs are half the animal
+                  "leg_cx": 0.42, "leg_onside": True,          # kontbanden (|cx| 0,17) zijn GEEN poten:
+                                                                #   echte poten hangen aan de zijkant
+                  "head_y": 0.50,
+                  "neck_z": 0.42, "neck_y": 0.42},              # los nek-bot, anders swingt het voorlijf
     "boar":      {"tail_z": 0.95},                       # the mesh has no tail: rump stays body
     "macaque":   {"leg_cy": 0.50, "leg_top": 0.70, "head_y": 0.45},  # arms and legs alike, head low
     "crab":      {"leg_cy": 0.55, "leg_top": 0.85, "leg_w": 0.45, "leg_d": 0.60,
@@ -304,7 +314,8 @@ def rig_boxes(boxes, rig, H, rules):
             low = cy < rules["leg_cy"] * H or (y0 < rules["leg_cy"] * H and y1 < rules["leg_top"] * H)
             onside = (not rules["leg_onside"]) or not (x0 < -1e-6 < x1)   # centre-crossing band: belly, not limb
             far = abs(cz) >= rules["leg_cz"] * Lz    # legs live under the chest or the rump
-            if slim and low and onside and far:
+            across = abs(cx) >= rules["leg_cx"] * (Wx / 2)   # ... and at the OUTSIDE of the body
+            if slim and low and onside and far and across:
                 bone = ("leg_f" if cz < 0 else "leg_b") + ("l" if cx > 0 else "r")
             elif (rel_z < rules["head_z"] and cy > rules["head_y"] * H and w <= rules["head_w"] * Wx
                   and (rules["head_lo"] <= 0 or y0 > rules["head_lo"] * H)):   # head_lo: no ground box is a head
@@ -312,6 +323,9 @@ def rig_boxes(boxes, rig, H, rules):
             elif (rel_z > rules["tail_z"] and w < rules["tail_w"] * Wx and d < rules["tail_d"] * Lz
                   and abs(cx) < 0.30 * Wx and y0 > 0.35 * H):   # tail: centre-line box springing from
                 bone = "tail"                                    # above the belly, off-centre is rump
+            elif (rules["neck_z"] > 0 and rules["head_z"] <= rel_z < rules["neck_z"]
+                  and cy > rules["neck_y"] * H):                 # nek: vóór de schouder, boven de borst
+                bone = "neck"
         elif rig == "bird":
             slim = w <= rules["leg_w_bird"] * Wx and d <= rules["leg_d_bird"] * Lz
             if cy < rules["leg_cy_bird"] * H and slim:
@@ -357,6 +371,12 @@ def bone_origins(rigged, rig, H):
             wy0 = min(b["from"][1] for b in bs); wy1 = max(b["to"][1] for b in bs)
             wz = sum((b["from"][2] + b["to"][2]) / 2 for b in bs) / len(bs)
             org[name] = [round(inner, 2), round(wy1 - 0.25 * (wy1 - wy0), 2), round(wz, 2)]
+    if "neck" in rigged:
+        bs = rigged["neck"]
+        nz1 = max(b["to"][2] for b in bs)                         # de nek groeit naar -Z toe: haar ROMP-
+        roots = [b for b in bs if b["to"][2] >= nz1 - 1e-6]       #   kant (max z) is waar ze vastzit
+        org["neck"] = [0.0, round(sum((b["from"][1] + b["to"][1]) / 2 for b in roots) / len(roots), 2),
+                       round(nz1 - 0.5, 2)]
     if "tail" in rigged:
         bs = rigged["tail"]
         base = min(b["from"][2] for b in bs)                          # tail sits at the +Z end: base is its

@@ -120,7 +120,15 @@ SIZE = {"elephant": 0.6, "zebra": 0.85, "deer": 0.9, "bear": 0.8, "boar": 0.9, "
         "tanuki": 1.3, "crane": 1.25, "koi": 1.2, "macaque": 1.25,
         "kangaroo": 1.0, "ostrich": 1.2, "crocodile": 1.25, "koala": 1.0, "mole": 1.35,
         "rhino": 0.8, "penguin": 0.95, "orca": 1.0, "piranha": 1.35, "macaw": 1.35,
-        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.55, "lion": 0.9, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 1.4, "glowsprite": 1.0, "willowisp": 1.0}   # reduced for elephant/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 1.0 = 11-11: the mesh is centred on 0 now (mesh_rerig), so ±18.4 raw fits inside ±24 and the whale reads at its real ~2.5-block length with the new dorsal fin; giraffe 0.55 + lion 0.9 = 11-12 re-voxel sizes (grab3d meshes have different raw spans than the lost Quaternius ones, tuned to keep the in-game length the same as build53 showed)
+        "wraith": 1.0, "dragon": 1.1, "giraffe": 0.95, "lion": 0.9, "hyena": 1.0, "arcticfox": 1.1, "snowyowl": 1.0, "reindeer": 0.8, "fennec": 1.3, "meerkat": 1.3, "vulture": 1.4, "glowsprite": 1.0, "willowisp": 1.0}   # reduced for elephant/deer/bear/zebra/boar/capybara/rhino to fit -24..24 (x/z) bounds; orca 1.0 = 11-11: the mesh is centred on 0 now (mesh_rerig), so ±18.4 raw fits inside ±24 and the whale reads at its real ~2.5-block length with the new dorsal fin; giraffe 0.55 + lion 0.9 = 11-12 re-voxel sizes (grab3d meshes have different raw spans than the lost Quaternius ones, tuned to keep the in-game length the same as build53 showed)
+                                         # 11-12 DIERENRONDE (maten): authored px zo groot mogelijk maken en de Species-schaal
+                                         # dáárnaar terugtrekken. FMM leest `generic_scale` elk tick (ModeledEntity.scaleModifier),
+                                         # dus die ene schaal stuurt het model én de hitbox tegelijk: een model dat de -16..32-ruimte
+                                         # vol tekent, heeft aan een lagere schaal genoeg voor hetzelfde beeld - en krijgt daardoor
+                                         # een kleinere, beter passende hitbox. giraffe 0.55 -> 0,95: authored 20,7 x 30,6 px,
+                                         # bij schaal 2,3 is dat 2,98 m lang x 4,4 m hoog x 0,94 m breed (was 1,95 x 2,88 x 0,62
+                                         # bij 2,6, met een hitbox van 3,6 blokken breed). Let op: de leeuw is bij nader inzien
+                                         # te GROOT (5,3 m lang) - die krijgt zijn maat samen met zijn kop in ronde 3.
                                          # dragon: ~2.8 m snout-to-tail, ~1.4 m at the back, drawn then x1.15
 
 # ------------------------------------------------------------------ model + bones + animations
@@ -511,7 +519,9 @@ MESH = {
     # De hand-built deer() is rijkelijker lezend (nek, gewei, hoeven) en is weer de bron.
     "zebra": dict(rig="quad", period=1.0, amp=28),
     "lion": dict(rig="quad", period=0.9, amp=26),
-    "giraffe": dict(rig="quad", period=1.25, amp=20),
+    "giraffe": dict(rig="quad", period=1.25, amp=20, style="pace",        # giraffen passen: dezelfde
+                    parents={"h_head": "neck"}, neck=6.0, head=5.0),      #   zijkant samen (zie gait());
+                                                                          #   nek 6° = hoofd ~1,4 blok swing
     "elephant": dict(rig="quad", period=1.4, amp=16, style="pace", head=2.0, tail=7),
     "crab": dict(rig="quad", period=0.5, amp=14, head=2.0),
     "penguin": dict(rig="bird", period=0.7, amp=13),
@@ -522,19 +532,36 @@ MESH = {
 }
 
 
-def mesh_build(m, sid, rig="quad", period=0.95, amp=26, head=3.0, tail=8.0, bob=0.15, style="walk", fluke=False):
+def mesh_build(m, sid, rig="quad", period=0.95, amp=26, head=3.0, tail=8.0, bob=0.15, style="walk",
+               fluke=False, parents=None, neck=0.0):
     """Animal from tools/downloads/mesh_<sid>.json (CC0 mesh voxellised by mesh2model.py).
-    Boxes are authored front=-Z like every hand-built species, so oriented() keeps working."""
+    Boxes are authored front=-Z like every hand-built species, so oriented() keeps working.
+    parents: een bot dat aan een ANDER bot dan "body" vastzit (giraffe: {"h_head": "neck"});
+    neck: graden nek-zwaai, alleen gezet als het reriggen echt een neck-bot heeft opgeleverd."""
     d = json.load(open(os.path.join(DOWNLOADS, "mesh_%s.json" % sid), encoding="utf-8"))
-    for name, org in d["bones"].items():
-        m.bone(name, tuple(org), None if name == "body" else "body")
+    par = {k: v for k, v in (parents or {}).items() if v in d["bones"] and k in d["bones"]}
+    todo, order = list(d["bones"]), []
+    while todo:                                   # ouders eerst: Model.bone() zoekt de ouder op
+        n = todo.pop(0)
+        p = par.get(n, "body")
+        if p != "body" and p not in order:
+            todo.append(n)
+            continue
+        order.append(n)
+    for name in order:
+        m.bone(name, tuple(d["bones"][name]), par.get(name, "body") if name != "body" else None)
     for b in d["boxes"]:
         m.box(b["bone"], b["from"][0], b["from"][1], b["from"][2], b["to"][0], b["to"][1], b["to"][2], b["color"])
+    has_neck = neck and "neck" in m.bones
     if rig == "quad":
-        gait(m, period, amp, head=head, tail=tail, style=style, bob=bob)
+        gait(m, period, amp, head=head, tail=tail, style=style, bob=bob,
+             extra={"neck": {"rotation": wave(8, period, neck, math.pi * 0.5)}} if has_neck else None)
         q = 2.8
-        m.anim("idle", q, {"body": {"position": [(0, (0, 0, 0)), (q / 2, (0, 0.12, 0)), (q, (0, 0, 0))]},
-                           "h_head": {"rotation": [(0, (0, 0, 0)), (q / 2, (0, 5, 0)), (q, (0, 0, 0))]}})
+        idle = {"body": {"position": [(0, (0, 0, 0)), (q / 2, (0, 0.12, 0)), (q, (0, 0, 0))]},
+                "h_head": {"rotation": [(0, (0, 0, 0)), (q / 2, (0, 5, 0)), (q, (0, 0, 0))]}}
+        if has_neck:
+            idle["neck"] = {"rotation": [(0, (0, 0, 0)), (q / 2, (neck * 0.8, 0, 0)), (q, (0, 0, 0))]}
+        m.anim("idle", q, idle)
         death(m, drop=1.5)
     elif rig == "bird":
         p = period

@@ -152,7 +152,7 @@ enum Species {
             "Over the jungle canopy - yes, it may land on your shoulder.",
             "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.85f),
     // Savanna set (0.9.15): three grazers/predators of the open savanna.
-    GIRAFFE("Giraffe", EntityType.HORSE, 2.6, 30, 0.07, Habitat.LAND, Time.ANY, 1, 3, 6,
+    GIRAFFE("Giraffe", EntityType.HORSE, 2.3, 30, 0.07, Habitat.LAND, Time.ANY, 1, 3, 6,
             List.of("savanna", "savanna_plateau", "windswept_savanna"), "apple",
             "The tallest animal around. It browses the high leaves and watches the plains from above.",
             "Open savanna - look up, not down.",

@@ -10,6 +10,11 @@ from make_animals import PALETTE, NAMES  # noqa: E402
 
 out, model, cell = sys.argv[1], sys.argv[2], int(sys.argv[3])
 specs = [s.split(":") + ["0"] * (3 - s.count(":")) for s in sys.argv[4:]] or [["iso", "", 0]]
+# SCALE = de Species-schaal uit Species.java: authored px x schaal = in-game px (16 px = 1 m).
+# REF=steve zet er een 1,8 m mens naast in dezelfde wereldunits, want de cell past zich altijd aan
+# (spread-fit) - zonder referentie is élke render even groot, hoe klein het dier ook is.
+SCALE = float(os.environ.get("SCALE", "1"))
+REF = os.environ.get("REF", "") == "steve"
 # yaw 0 = camera op de -Z-vlakte: horizontaal is model-X, dus DIT is het profiel. FMM-voorkant = -X,
 # dus -90 kijkt het dier in de ogen (front) en +90 ziet de achterkant. Voor 11-12 stond "side" op 90:
 # die tegels waren achterkant-gezichten, en dat vertekende elke review (rond-blob leek smal).
@@ -173,6 +178,25 @@ def render(spec):
     build_bones(quads)
     yaw, pitch = math.radians(YAWS.get(view, 45)), math.radians(PITCH.get(view, 24))
     W = cell; H = cell
+    if SCALE != 1.0:   # authored px -> in-game px; de schaal zit om y=0 heen, dus de vloer blijft raak
+        grown = []
+        for poly, c in quads:
+            grown.append([[tuple([v * SCALE for v in p]) for p in poly], c])
+        quads[:] = grown
+    if REF:
+        # Steve ernaast: 1,8 m = 28,8 px, op dezelfde vloer. De as die in beeld horizontaal is, krijgt
+        # de uitwijking, anders staat de mens in dit aanzicht achter het dier.
+        horiz = 0 if abs(math.cos(yaw)) >= 0.5 else 2
+        ox = max(max(p[horiz] for q, _ in quads for p in q), 0.0) + 14.0 if quads else 22.0
+        steve = [((-3.0, 0.0, -3.0), (0.0, 14.4, 3.0)), ((0.0, 0.0, -3.0), (3.0, 14.4, 3.0)),
+                 ((-3.6, 14.4, -1.6), (3.6, 23.0, 1.6)),
+                 ((-5.4, 14.4, -1.4), (-3.6, 23.0, 1.4)), ((3.6, 14.4, -1.4), (5.4, 23.0, 1.4)),
+                 ((-2.4, 23.0, -2.4), (2.4, 28.8, 2.4))]
+        for a, b in steve:
+            pts = [(x + (ox if horiz == 0 else 0.0), y, z + (ox if horiz == 2 else 0.0))
+                   for x in (a[0], b[0]) for y in (a[1], b[1]) for z in (a[2], b[2])]
+            for q in ((0, 1, 3, 2), (4, 5, 7, 6), (0, 1, 5, 4), (2, 3, 7, 6), (0, 2, 6, 4), (1, 3, 7, 5)):
+                quads.append(([pts[i] for i in q], (152, 152, 158)))
     lo = min(min(p) for q, _ in quads for p in q)
     hi = max(max(p) for q, _ in quads for p in q)
     span = max(hi - lo, 8)

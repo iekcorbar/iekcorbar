@@ -4,6 +4,11 @@
 #   python -I tools/review_sheet.py sheet out.png [soort]  -> posesheet: rust, zij-loop, vooraan, achter
 #   python -I tools/review_sheet.py soorten                -> alle dieren-modellen, één per regel
 #
+# Opties (omgevingsvariabelen):
+#   STEVE=1      elk vak krijgt de Species-schaal uit Species.java (authored px -> in-game px) én er
+#                staat een 1,8 m mens naast, zodat de rijgrote verhouding met het oog te zien is
+#   CELL=240     groter raster; MODELS_DIR=<pad>  een andere modelbron bekijken (oud vs nieuw)
+#
 # Waarom: FreeMinecraftModels draait een model om de entity-yaw en gebruikt **-X als voorkant**
 # (make_animals.oriented() draait de ontwerpas -Z daarheen). Dieren die "opzij" lopen hebben hun
 # hoofd langs Z. Deze tool meet dat per bot, zonder het spel in te gaan; de sheet laat het oog
@@ -21,7 +26,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-MODELS = os.path.join(ROOT, "fmm-models", "wildlife")
+# MODELS_DIR: een andere (tijdelijke) modelbron bekijken, bijvoorbeeld het model vóór de herbouw.
+MODELS = os.environ.get("MODELS_DIR") or os.path.join(ROOT, "fmm-models", "wildlife")
 SPECIES_JAVA = os.path.join(ROOT, "src", "main", "java", "com", "iekcorbar", "wildlife", "Species.java")
 
 # geen losse dieren: varianten, beeldjes, eieren, bottle-items en losse ledematen
@@ -247,21 +253,29 @@ def cmd_sheet(args):
     want = [norm(a) for a in rest] if rest else species_files()
     from PIL import Image, ImageDraw
     cell = int(os.environ.get("CELL", "150"))
+    steve = os.environ.get("STEVE", "") == "1"   # 1,8 m mens ernaast + de Species-schaal toepassen
     strips, labels = [], []
     for stem in want:
         r = measure(stem)
         clip = r["clip"]
         specs = ["iso::0", "side:%s:0.25" % clip, "front:%s:0.5" % clip, "back:%s:0.75" % clip]
         tmp = os.path.join("/tmp/opencode", "wl-strip-%s.png" % stem)
+        env = dict(os.environ)
+        if steve:
+            env.update({"REF": "steve", "SCALE": repr(r["scale"])})
         p = subprocess.run([sys.executable, "-I", os.path.join(HERE, "pose3d.py"), tmp,
                             os.path.join(MODELS, stem + ".bbmodel"), str(cell)] + specs,
-                           capture_output=True, text=True)
+                           capture_output=True, text=True, env=env, cwd=HERE)
         if p.returncode != 0 or not os.path.exists(tmp):
             print("render fout %s: %s" % (stem, (p.stderr.strip().splitlines() or ["?"])[-1]))
             continue
         im = Image.open(tmp).convert("RGB")
         strips.append(im)
-        labels.append("%s%s" % (stem.replace("wl_", ""), "!" if verdict(r) else ""))
+        # in-game maten: authored px x Species-schaal, 16 px = 1 m
+        m = lambda v: v * r["scale"] / 16.0
+        lab = "%s%s  %.2f x %.2f x %.2f m" % (stem.replace("wl_", ""), "!" if verdict(r) else "",
+                                              m(r["len_x"]), m(r["height"]), m(r["len_z"]))
+        labels.append(lab if steve else "%s%s" % (stem.replace("wl_", ""), "!" if verdict(r) else ""))
     if not strips:
         print("niets gerenderd")
         return
