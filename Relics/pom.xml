@@ -8,7 +8,7 @@
     <artifactId>Relics</artifactId>
     <!-- Lore relics: placeable props from the story of Iekcorbar (collection 1: Shoutlander's Shadow).
          Own models and sounds; uses the known history from the Story Room lore only. -->
-    <version>0.7.4</version>
+    <version>0.7.5</version>
     <packaging>jar</packaging>
 
     <name>Relics</name>

@@ -345,17 +345,22 @@ def tree(on):
 
 
 def string_lights(on, wall=True):
+    # 13-11 (owner): much too small - the wire spanned 14 px with pea-sized bulbs. Full block
+    # width, thicker wire, bulbs 1.1 px, deeper sag; the ceiling strand droops through the block.
     e = []
-    z = 15.4 if wall else 8
+    if wall:
+        z, y0 = 15.1, 14.6   # strand against the wall, high in the block
+    else:
+        z, y0 = 8.0, 15.2    # strand across the ceiling
     for i in range(8):
-        x = 1 + i * 2
-        sag = [0, 0.8, 1.2, 0.8][i % 4]
-        y = (12 - sag) if wall else (15 - sag)
-        e.append(box(x, y, z, x + 2, y + 0.3, z + 0.3, "coal"))
+        x = i * 2.0
+        d = [0, 0.9, 1.3, 0.9][i % 4]
+        y = y0 - d
+        e.append(box(x, y, z, x + 2.0, y + 0.45, z + 0.45, "coal"))
         col = ["bulb_red", "bulb_yellow", "bulb_blue", "xgreen"][i % 4]
         if not on and i % 2:
             col = "bulb_off"
-        e.append(box(x + 0.7, y - 1.0, z - 0.2, x + 1.3, y, z + 0.4, col))
+        e.append(box(x + 0.45, y - 1.25, z - 0.35, x + 1.55, y - 0.1, z + 0.8, col))
     return e
 
 
@@ -868,9 +873,24 @@ def green_keg():
 
 
 def telescope():
-    return [box(7.5, 0, 7.5, 8.5, 9, 8.5, "brass_d"), box(5, 0, 7.6, 11, 0.6, 8.4, "brass_d"), box(7.6, 0, 5, 8.4, 0.6, 11, "brass_d"),
-            box(7, 9, 7, 9, 10, 9, "brass"), box(7, 10, 2, 9, 12, 12, "brass"), box(6.6, 9.8, 0.8, 9.4, 12.2, 2.4, "brass_l"),
-            box(7.3, 10.3, 11.8, 8.7, 11.7, 14, "copper"), box(6.9, 10.4, 6, 9.1, 11.8, 6.6, "copper_d")]
+    # 13-11 (owner): te klein. Full-height brass instrument on a wide tripod: the tube rises
+    # through most of the block (stacked steps: only 22.5/45 deg single-axis turns are allowed,
+    # so a shallow diagonal is drawn as a staircase - invisible at 16 px scale).
+    return [box(5, 0, 5, 11, 0.7, 11, "brass_d"),                      # base plate
+            box(6.9, 0.7, 6.9, 9.1, 9.0, 9.1, "brass_d"),              # central column
+            box(3.4, 0.7, 7.6, 4.6, 1.3, 8.4, "brass"),                # tripod foot west
+            box(11.4, 0.7, 7.6, 12.6, 1.3, 8.4, "brass"),              # foot east
+            box(7.6, 0.7, 3.4, 8.4, 1.3, 4.6, "brass"),                # foot north
+            box(7.6, 0.7, 11.4, 8.4, 1.3, 12.6, "brass"),              # foot south
+            box(6.3, 8.2, 6.3, 9.7, 9.8, 9.7, "brass"),                # cradle
+            box(4.5, 9.4, 7.4, 6.1, 10.8, 8.6, "brass"),               # tube 1 (objective end)
+            box(5.9, 10.3, 7.4, 7.9, 11.9, 8.6, "brass_l"),            # tube 2
+            box(7.7, 11.4, 7.4, 9.7, 13.0, 8.6, "brass"),              # tube 3
+            box(9.5, 12.5, 7.4, 11.6, 14.1, 8.6, "brass_l"),           # tube 4 (eyepiece end)
+            box(11.2, 13.3, 7.2, 12.6, 14.7, 8.8, "copper"),           # eyepiece
+            box(3.9, 8.8, 7.1, 4.7, 11.4, 8.9, "copper_d"),            # objective ring
+            box(6.7, 9.0, 6.1, 7.1, 10.2, 6.5, "coal"),                # finder scope post
+            box(6.3, 10.0, 5.6, 7.9, 10.8, 6.6, "coal")]               # finder scope
 
 
 def gauge_panel(b=False):
