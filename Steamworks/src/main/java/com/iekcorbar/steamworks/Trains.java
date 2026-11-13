@@ -311,14 +311,23 @@ final class Trains implements Listener {
         track.put(k, d);
     }
 
-    /** Track is modelled north-south (curve: north leg to east leg); yaw and pitch put it in place. */
+    /**
+     * Track is modelled north-south; yaw and pitch put it in place. The curve's yaws are the INVERSE
+     * of vanilla's own rail.json table (NE 90 / NW 0 / SE 180 / SW 270): FMM bakes a 180° facing flip
+     * into these item models (facing = model -X), so the authored arc with its legs on -Z and +X is
+     * really the NORTH-WEST corner. With vanilla's table straight over (13-11, owner: "de rail staat
+     * nog steeds in spiegelbeeld") every corner drew its mirrored twin - legs into the wrong neighbours.
+     * Straights are symmetric and slopes matched in-game: both keep their old values on purpose.
+     */
     private static Quaternionf trackRot(Rail.Shape s) {
         float q = (float) Math.toRadians(90), h = (float) Math.toRadians(45);
         return switch (s) {
-            case NORTH_SOUTH, NORTH_EAST -> new Quaternionf();
-            case EAST_WEST, NORTH_WEST -> new Quaternionf().rotateY(q);
-            case SOUTH_EAST -> new Quaternionf().rotateY(-q);
-            case SOUTH_WEST -> new Quaternionf().rotateY((float) Math.toRadians(180));
+            case NORTH_SOUTH -> new Quaternionf();
+            case EAST_WEST -> new Quaternionf().rotateY(q);
+            case NORTH_EAST -> new Quaternionf().rotateY(-q);
+            case NORTH_WEST -> new Quaternionf();
+            case SOUTH_EAST -> new Quaternionf().rotateY((float) Math.toRadians(180));
+            case SOUTH_WEST -> new Quaternionf().rotateY(q);
             case ASCENDING_NORTH -> new Quaternionf().rotateX(h);
             case ASCENDING_SOUTH -> new Quaternionf().rotateX(-h);
             case ASCENDING_EAST -> new Quaternionf().rotateY(q).rotateX(-h);

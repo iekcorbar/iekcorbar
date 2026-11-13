@@ -1042,8 +1042,10 @@ def track_slope():
 
 
 def track_curve():
-    # sw curve (base shape: NORTH edge to EAST edge, quarter circle around the north-east corner
-    # (8,-8)). Rails: the west one sweeps R 10.1 (legs x -2.1 -> east edge z +2.1) and the east
+    # sw curve (model coords: legs on -Z and +X; FMM bakes a 180 degree facing flip, so at yaw 0 this
+    # actually renders as the NORTH-WEST corner arc around world (x=-8,z=-8). Trains.trackRot follows
+    # that convention since 0.3.43 - vanilla's own rail.json table would mirror every corner.
+    # Rails: the west one sweeps R 10.1 (legs x -2.1 -> east edge z +2.1) and the east
     # one R 5.9 (legs x +2.1 -> east edge z -2.1), theta 180 -> 90.
     # 13-11 (owner: "de bochtjes van de rails, model is niet goed"): the arc ran only theta
     # 157.5..112.5 with chord boxes (half 1.75) shorter than the 22.5 deg spacing - both rails
