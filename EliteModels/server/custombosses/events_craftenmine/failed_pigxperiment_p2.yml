@@ -6,6 +6,7 @@ isEnabled: true
 entityType: ZOGLIN
 name: $eventBossLevel &cFailed Pigxperiment
 level: dynamic
+maximumLevel: 50
 healthMultiplier: 3.5
 damageMultiplier: 1.1
 uniqueLootList:

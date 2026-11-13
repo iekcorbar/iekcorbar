@@ -1,0 +1,27 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: RABBIT
+disguise: RABBIT
+customModel: em_spring_hare
+name: $eventBossLevel &aCraftenmine's Spring Hare
+level: dynamic
+healthMultiplier: 2.8
+damageMultiplier: 0.8
+powers:
+- attack_push.yml
+- movement_speed.yml
+- bonus_coins.yml:15
+- bonus_loot.yml
+uniqueLootList:
+- filename=spring_carrot.yml:amount=1:chance=0.25
+- filename=shrunken_head_drop_charm.yml:amount=1:chance=0.15
+movementSpeedAttribute: 0.42
+followDistance: 60
+locationMessage: '&aCraftenmine''s Spring Hare: $distance blocks away!'
+spawnMessage: '&aA spring hare experiment of Dr. Craftenmine hops through the meadows!'
+deathMessage: '&aCraftenmine''s Spring Hare has been caught by $players!'
+escapeMessage: '&4Craftenmine''s Spring Hare has hopped away!'
+announcementPriority: 2
