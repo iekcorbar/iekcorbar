@@ -9,7 +9,7 @@ parent: steamworks
 
 * **Crafting:** 3 of the base item + 1 accent in a 2x2 square = 4 blocks. Stairs: 6 blocks in a stair shape = 4 stairs. Slab: 3 blocks in a row = 6 slabs.
 * **Mining:** stone and metal blocks go fastest with a pickaxe, wood and paper blocks with an axe. They always drop themselves.
-* Stairs and slabs behave like normal ones: corners, top and bottom halves and double slabs all work. Pistons can't move them.
+* Stairs and slabs behave like normal ones: corners, top and bottom halves and double slabs all draw exactly like vanilla stairs and slabs do - since the November update every corner is its own baked model, so left never mirrors right again. Neighbouring slabs sit flush without flickering. Pistons can't move them.
 
 ### Steampunk metal
 | Block | Crafting (3 + 1) | Tool |

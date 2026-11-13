@@ -6,6 +6,8 @@ parent: wildlife
 ---
 ## Species
 
+Since the November animal round, every species is drawn at its real-world size - an elephant is bigger than a door, a giraffe towers over players, a penguin is penguin-small, and babies are recognisably young. Zoo statues match their animal.
+
 | Animal | Where to look | When |
 |---|---|---|
 | Red Deer | forests, taiga, meadows, cherry groves | day and night |

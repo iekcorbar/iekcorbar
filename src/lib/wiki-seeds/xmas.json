@@ -1,0 +1,54 @@
+{
+ "source": "docs/wiki-xmas (regenerate with scripts/build-wiki-seed.py)",
+ "pages": [
+  {
+   "slug": "xmas-intro",
+   "title": "Introduction",
+   "category": "Xmas Town",
+   "parent": null,
+   "content": "## Welcome to Xmas Town\n\nIekcorbar does Christmas properly: a festive village district, craftable Christmas building blocks and a Santa who actually walks around and hands out presents. Everything is built into the normal game - no mods, no gimmicks.\n\n### What you will do\n\n* **Visit the village.** A plaza with a clock tower, a huge Christmas tree, cottages, a market street and lantern towers. Staff place new parts of it over the season, so every week it looks different.\n* **Meet Santa.** He wanders the plaza, his bell rings when you come close, and during **24-26 December he gives every player one present per day**. Find him before he walks back into the snow.\n* **Build for the season.** Eleven Christmas building blocks - pressed snow, clear ice, pine, roof tiles, lit windows, gift cubes, candy cane, gingerbread and a two-block street lamp - all craftable in a normal crafting table.\n* **Count down.** The countdown board on the plaza shows the time until Christmas in your own timezone (right-click it to switch).\n\n### How the pages are organised\n\n**Xmas Town** explains the village and its daily life, **Christmas Blocks** lists every craftable block with its recipe, and **Santa** tells you how and when he gives gifts. The decorative props - sleigh, advent calendar, music box, snow globe and friends - live in the **Relics** chapter, because they are relics.\n\n### Start here\n\n1. Read [Xmas Town](/wiki?page=xmas) for the lay of the land.\n2. Craft a few [Christmas Blocks](/wiki?page=xmas-blocks) for your own base.\n3. Read [Santa](/wiki?page=xmas-santa) before December 24.\n"
+  },
+  {
+   "slug": "xmas",
+   "title": "Xmas Town",
+   "category": "Xmas Town",
+   "parent": "xmas-intro",
+   "content": "## The village\n\nThe Xmas Town district is a Christmas village built from the seasonal blocks plus the relic props. It grows in parts:\n\n* **The plaza** - the heart, with the clock tower and a free lane kept open for the countdown board.\n* **The Great Tree** - a Christmas tree as tall as a small house, ringed by lights.\n* **The red hut** and the **row of cottages** - pine walls, roof tiles and lit windows; in the evenings half the street glows.\n* **The market street** - stalls with ginger, greens and gold, the place to meet other players during the season.\n* **The lantern tower** - village street lamps, two blocks tall, marking the path in the snow.\n\n### Daily life\n\n* **Santa walks the plaza** during the season (see [Santa](/wiki?page=xmas-santa)). He never hurts anyone; if you try to trade with him he just greets you.\n* **The countdown board** on the plaza ticks down to December 24. Right-click it with a time you live in - it remembers the setting.\n* Placed Christmas blocks and props keep working all year; most of the fun (gifts, advent doors, the countdown) follows the real calendar.\n\n### Good to know\n\n* Christmas props with a use (sleigh, gift box, advent calendar, music box, snow globe, cookie plate) are **Relics** - see the Relics chapter for what each one does.\n* The village is placed by staff piece by piece. A part that is not there yet will simply appear later; nothing you built nearby breaks.\n"
+  },
+  {
+   "slug": "xmas-blocks",
+   "title": "Christmas Blocks",
+   "category": "Xmas Town",
+   "parent": "xmas-intro",
+   "content": "## The eleven seasonal blocks\n\nAll of them craft in a normal 3x3 grid, are solid walkable blocks (the street lamp is two blocks tall) and break with two punches in survival. \"A+B+C\" means one of each, in any arrangement unless noted.\n\n| Block | Recipe | Makes |\n|---|---|---|\n| Pressed Snow Block | 2x Snow Block + Snowball + Gunpowder | 4 |\n| Clear Ice Block | 2x Ice + Glass Pane + Quartz (glows faintly) | 4 |\n| Pine Log | 2x Spruce Log + Hay Bale | 4 |\n| Pine Planks | Stripped Spruce Log + 2x Spruce Planks | 8 |\n| Roof Tile | Red Terracotta + Bricks + Snowball | 4 |\n| Lit Window Block | Glass Pane + Lantern + 2x Spruce Planks (light level 12) | 2 |\n| Gift Cube (Red) | 2x Red Wool + 2x Gold Nugget | 4 |\n| Gift Cube (Green) | 2x Green Wool + 2x Gold Nugget | 4 |\n| Candy Cane Block | 2x Sugar + Red Dye + White Dye | 4 |\n| Gingerbread Block | 3x Cookie + Egg | 4 |\n| Village Street Lamp | Iron Ingot + 2x Stick + Lantern + Snowball (2 blocks tall, light level 14) | 1 |\n\n### Good to know\n\n* Breaking a Christmas block is two punches in survival (one click in creative or for staff) and the block drops back as an item.\n* `/xmas list` shows the catalogue in game; the blocks also appear in `/zukan`.\n"
+  },
+  {
+   "slug": "xmas-santa",
+   "title": "Santa",
+   "category": "Xmas Town",
+   "parent": "xmas-intro",
+   "content": "## The man himself\n\nSanta lives in Xmas Town. Staff place him on the plaza and he stays there: he walks around within a short stroll of his spot, never attacks anybody, and does not despawn - between restarts he is put back exactly where he stood.\n\n\n* [What he does](/wiki?page=xmas-santa-what-he-does)\n* [What you cannot do](/wiki?page=xmas-santa-what-you-cannot-do)\n* [For staff](/wiki?page=xmas-santa-for-staff)\n"
+  },
+  {
+   "slug": "xmas-santa-what-he-does",
+   "title": "What he does",
+   "category": "Xmas Town",
+   "parent": "xmas-santa",
+   "content": "* **He rings his bell** when a player stands near him. You will hear him coming through the snow.\n* **He greets you** instead of trading - there is nothing to buy.\n* **He gives one present per player per day, on 24, 25 and 26 December.** The gift window is the same as the relic gift boxes. Come close, listen for the bell, and the box is yours - once per day, no farming.\n\nBack to [Santa](/wiki?page=xmas-santa)\n"
+  },
+  {
+   "slug": "xmas-santa-what-you-cannot-do",
+   "title": "What you cannot do",
+   "category": "Xmas Town",
+   "parent": "xmas-santa",
+   "content": "* Push him out of the village: he finds his way back to his stroll.\n* Lure a second one: there is exactly one Santa per server, always.\n\nBack to [Santa](/wiki?page=xmas-santa)\n"
+  },
+  {
+   "slug": "xmas-santa-for-staff",
+   "title": "For staff",
+   "category": "Xmas Town",
+   "parent": "xmas-santa",
+   "content": "Santa is placed and removed with `/xmas santa spawn` (optionally with a world and coordinates), `/xmas santa goto <player>`, `/xmas santa remove` and `/xmas santa status` - these also work from the console for scripts. His position and identity persist in `plugins/Xmas/config.yml`; set `santa.gifts-anytime: true` there to test gifts outside December 24-26, and turn it back off before the players arrive.\n\nBack to [Santa](/wiki?page=xmas-santa)\n"
+  }
+ ]
+}

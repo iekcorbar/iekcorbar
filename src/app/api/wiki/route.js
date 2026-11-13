@@ -15,6 +15,8 @@ import zukanSeed from '@/lib/wiki-seeds/zukan.json';
 import gouwSeed from '@/lib/wiki-seeds/gouw.json';
 import additionsSeed from '@/lib/wiki-seeds/additions.json';
 import powerSeed from '@/lib/wiki-seeds/power.json';
+import xmasSeed from '@/lib/wiki-seeds/xmas.json';
+import relicsSeed from '@/lib/wiki-seeds/relics.json';
 // Get all wiki pages, plus the staff-defined chapter (category) order if one
 // has ever been saved. Reuses the generic `settings` key-value store (same
 // one api/settings/route.js exposes) rather than a dedicated table, since
@@ -131,7 +133,7 @@ export async function POST(request) {
     // on saveWikiPage's Date.now() ids. Only a brand-new main page notifies
     // players - one bell entry instead of one per page.
     if (action === 'import_seed') {
-      const seeds = { steamworks: steamworksSeed, additions: additionsSeed, power: powerSeed, kitchen: kitchenSeed, wildlife: wildlifeSeed, sakagura: sakaguraSeed, kura: kuraSeed, satchel: satchelSeed, zukan: zukanSeed, gouw: gouwSeed };
+      const seeds = { steamworks: steamworksSeed, additions: additionsSeed, power: powerSeed, kitchen: kitchenSeed, wildlife: wildlifeSeed, sakagura: sakaguraSeed, kura: kuraSeed, satchel: satchelSeed, zukan: zukanSeed, gouw: gouwSeed, xmas: xmasSeed, relics: relicsSeed };
       const seed = seeds[body.seed];
       if (!seed) return NextResponse.json({ error: "Unknown seed" }, { status: 400 });
       const before = await db.getWikiPages();

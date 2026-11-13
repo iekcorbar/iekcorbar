@@ -4,6 +4,42 @@
 // tag = which guide to point to.
 export const WHATS_NEW = [
   {
+    date: '2026-11-12',
+    title: 'Christmas has begun in the village',
+    tag: 'Xmas Town',
+    link: { href: '/wiki?page=xmas', label: 'Xmas Town guide' },
+    items: [
+      'A Christmas village district is being placed piece by piece: a plaza with clock tower, a tree taller than a house, cottages, a market street and a lantern tower.',
+      'Santa walks the plaza. His bell rings when you come close - and on 24, 25 and 26 December he gives every player one present per day.',
+      'Eleven craftable Christmas blocks: pressed snow, clear ice, pine, roof tiles, lit windows, gift cubes, candy cane, gingerbread and a two-block street lamp.',
+      'The countdown board on the plaza ticks toward December 24 in your own timezone (sneak + right-click to switch).',
+      'Restart your client and let the resource pack download fully before joining.',
+    ],
+  },
+  {
+    date: '2026-11-12',
+    title: 'Kura got simpler: one rule for cables',
+    tag: 'Kura Storage',
+    link: { href: '/wiki?page=kura', label: 'Kura guide' },
+    items: [
+      'A cable now connects whatever it touches - chest, barrel, shulker box or another cable - and any cable makes a network on its own. The old connector blocks are retired, and everything you already placed keeps working.',
+      'Parts come off with one gesture: sneak + right-click with an empty hand. Works in survival and creative.',
+      'A cable draws a little arm toward the container it joins, so you can see at a glance what is connected.',
+    ],
+  },
+  {
+    date: '2026-11-12',
+    title: 'The animals grew up',
+    tag: 'Wildlife',
+    link: { href: '/wiki?page=wildlife-species', label: 'Species guide' },
+    items: [
+      'Every one of the 64 species was measured against a standing player and the wrong ones were rebuilt: the elephant is taller than a door with its trunk back on its head and ivory tusks, the giraffe’s head clears a two-block wall, the lion has a mane, the penguin is a penguin instead of a beach ball, and the macaw, meerkat, rhino, reindeer and hyena now match real life.',
+      'All skeletons were re-rigged: legs stay attached when animals walk, tails swing from the base and a falling animal lands like an animal. Deer, zebra and giraffe no longer freeze at small ledges.',
+      'Zoo statues were rebuilt to match, and the Field Journal entries follow.',
+      'Also fixed: the recipe browser (/zukan) showed purple-black cubes for ten Kitchen ingredients - yuzu, persimmon, buckwheat, koji and the mushroom spores have real icons again.',
+    ],
+  },
+  {
     date: '2026-11-07',
     title: 'New spirits in the wild',
     tag: 'Wildlife',

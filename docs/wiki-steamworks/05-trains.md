@@ -16,6 +16,8 @@ Steamworks trains run on **normal rails** - straight, curves and slopes - but th
 The moment a train rides a line the rails turn into **steampunk track**: ballast, sleepers and
 brass fishplates ("shakels") appear along every rail the train drives on. Only train routes change -
 plain rails everywhere else stay as they are, and if the train leaves a line the track follows it.
+Curves close properly now: the bend meets the straight rails exactly at the joint, with no
+gaps left since the November fix.
 The cars sit slightly higher than before: wheels now roll on top of the rail heads, like on a real train.
 
 ### Driving
