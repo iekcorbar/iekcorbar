@@ -81,6 +81,9 @@ final class ClaimStore {
                     for (Map.Entry<String, JsonElement> ren : ro.entrySet())
                         try { l.rentals.put(UUID.fromString(ren.getKey()), ren.getValue().getAsLong()); } catch (Exception ignored) { }
                 }
+                // 0.5.0: open invites (sent, not yet accepted)
+                if (o.has("invites"))
+                    for (JsonElement t : o.getAsJsonArray("invites")) l.invites.add(UUID.fromString(t.getAsString()));
                 if (o.has("welcome")) l.welcome = o.get("welcome").getAsString();
                 if (o.has("home") && o.get("home").isJsonObject()) {
                     JsonObject h = o.getAsJsonObject("home");
@@ -167,7 +170,14 @@ final class ClaimStore {
                 fr2 = false;
                 sb.append('"').append(e.getKey()).append("\": ").append(e.getValue());
             }
-            sb.append("}, \"welcome\": \"").append(esc(l.welcome)).append("\"");
+            sb.append("}, \"invites\": [");
+            boolean fi = true;
+            for (UUID u : l.invites) {
+                if (!fi) sb.append(", ");
+                fi = false;
+                sb.append('"').append(u).append('"');
+            }
+            sb.append("], \"welcome\": \"").append(esc(l.welcome)).append("\"");
             if (l.hasHome) sb.append(", \"home\": {\"world\": \"").append(esc(l.homeWorld)).append("\", \"x\": ").append(l.homeX).append(", \"y\": ").append(l.homeY).append(", \"z\": ").append(l.homeZ).append("}");
             sb.append("}");
         }
@@ -236,6 +246,30 @@ final class ClaimStore {
         return own != null ? own : membership(who);
     }
 
+    /** 0.5.0: since a resident may belong to several towns, claiming goes to the NEAREST one in this world. */
+    Land nearestMembership(UUID who, String world, int cx, int cz) {
+        Land best = null;
+        int bestD = Integer.MAX_VALUE;
+        for (Land l : byOwner.values()) {
+            if (!l.ranks.containsKey(who) || !l.world.equals(world)) continue;
+            int d = Integer.MAX_VALUE;
+            for (long k : l.chunks) d = Math.min(d, Math.max(Math.abs(Land.kx(k) - cx), Math.abs(Land.kz(k) - cz)));
+            if (d < bestD) { bestD = d; best = l; }
+        }
+        return best;
+    }
+
+    /**
+     * 0.5.0: the town a menu or command should act ON for this player. Since residents may belong
+     * to several towns, the town they are physically standing in wins (that is the one whose chest
+     * confused them); otherwise: own gouw, then first membership - the old homeOf order.
+     */
+    Land menuFor(Player p) {
+        Land here = land(p.getWorld(), p.getLocation().getBlockX(), p.getLocation().getBlockZ());
+        if (here != null && here.isMember(p.getUniqueId())) return here;
+        return homeOf(p.getUniqueId());
+    }
+
     /** True when this player may `flag` here: no gouw, bypassing, owner, or member with that flag on. */
     boolean may(Player p, World w, int blockX, int blockZ, Land.Flag flag) {
         if (plugin.isBypassing(p.getUniqueId())) return true;
@@ -274,7 +308,7 @@ final class ClaimStore {
         Land l = byOwner.get(p.getUniqueId());
         boolean own = l != null;
         if (l == null) {
-            Land town = membership(p.getUniqueId());
+            Land town = nearestMembership(p.getUniqueId(), w.getName(), cx, cz);
             if (town != null) {
                 // members claim INTO the town: officers always, residents only with the CLAIM right
                 if (!town.may(p.getUniqueId(), Land.Flag.CLAIM))
@@ -322,6 +356,7 @@ final class ClaimStore {
         if (who.equals(l.owner)) return false;
         l.ranks.remove(who);
         l.perms.remove(who);
+        l.invites.remove(who);
         if (!l.banned.add(who)) return false;
         save();
         return true;
@@ -354,6 +389,7 @@ final class ClaimStore {
         l.ranks.remove(newOwner);
         l.perms.remove(newOwner);
         l.banned.remove(newOwner);
+        l.invites.remove(newOwner);
         byOwner.put(newOwner, l);
         save();
         return null;
@@ -413,17 +449,61 @@ final class ClaimStore {
         return nowOn;
     }
 
-    /** Invite (= the old trust): immediately resident. Fails if they already run their own gouw. */
+    /**
+     * 0.5.0: an invite is an OPEN INVITE, not a membership. The mayor/officer sends it (the target
+     * may be offline); the target becomes resident only by accepting (/gouw accept or the clickable
+     * chat message). Owning a gouw yourself or being resident elsewhere no longer blocks anything -
+     * neighbouring towns trusting each other is what players always did anyway.
+     * @return null on success (invite sent), otherwise the reason it could not be sent.
+     */
     String invite(Land l, UUID who) {
         if (who.equals(l.owner)) return "that is you";
-        if (landOf(who) != null) return "they still own a gouw themselves - they must /gouw unclaim all first";
-        if (membership(who) != null) return "they are already a member of another town";
-        if (l.ranks.putIfAbsent(who, Land.Rank.RESIDENT) != null) return "already a member";
+        if (l.banned.contains(who)) return "they are banned from this town";
+        if (l.ranks.containsKey(who)) return "they are already a resident here";
+        if (l.invites.contains(who)) return "an invite is already waiting for them";
+        l.invites.add(who);
         save();
         return null;
     }
 
+    /** All towns with an open invite for this player (0.5.0 - a player can hold several). */
+    List<Land> invitesFor(UUID who) {
+        List<Land> out = new ArrayList<>();
+        for (Land l : byOwner.values()) if (l.invites.contains(who)) out.add(l);
+        return out;
+    }
+
+    /** Accept every open invite: the player joins each town as resident. @return the towns joined. */
+    List<Land> accept(UUID who) {
+        List<Land> joined = new ArrayList<>();
+        for (Land l : invitesFor(who)) {
+            l.invites.remove(who);
+            if (!l.ranks.containsKey(who)) {
+                l.ranks.put(who, Land.Rank.RESIDENT);
+                joined.add(l);
+            }
+        }
+        if (!joined.isEmpty()) save();
+        return joined;
+    }
+
+    /** Drop every open invite for this player. @return how many were declined. */
+    int decline(UUID who) {
+        int n = 0;
+        for (Land l : invitesFor(who)) { l.invites.remove(who); n++; }
+        if (n > 0) save();
+        return n;
+    }
+
+    /** Mayor/officer cancels one open invite again (shift-click on the grey head in LEDEN). */
+    boolean cancelInvite(Land l, UUID who) {
+        if (!l.invites.remove(who)) return false;
+        save();
+        return true;
+    }
+
     String kick(Land l, UUID who) {
+        l.invites.remove(who);
         if (l.ranks.remove(who) == null) return "not a member";
         l.perms.remove(who);
         save();

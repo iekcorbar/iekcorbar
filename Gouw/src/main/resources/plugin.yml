@@ -1,5 +1,5 @@
 name: Gouw
-version: '0.4.2'
+version: '0.5.0'
 main: com.iekcorbar.gouw.GouwPlugin
 api-version: '26.2'
 description: Chunk land claims & towns - the in-house successor to Lands; ranks, per-resident rights, town bank and bought chunks.
@@ -12,7 +12,7 @@ commands:
   gouw:
     description: Claim and manage your gouw (town).
     aliases: [g, claim]
-    usage: /gouw <menu|claim|autoclaim <r>|buy|unclaim [all]|invite|kick|promote|demote|members|bank|deposit|withdraw|rename|info|list|near|border|leave|admin ...>
+    usage: /gouw <menu|claim|autoclaim <r>|buy|unclaim [all]|invite|accept|decline|kick|promote|demote|members|bank|deposit|withdraw|rename|info|list|near|border|leave|admin ...>
 
 permissions:
   gouw.claim:

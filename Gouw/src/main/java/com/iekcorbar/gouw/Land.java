@@ -38,6 +38,8 @@ final class Land {
     final Map<UUID, Rank> ranks = new HashMap<>();
     /** personal rights per resident; absent = follow memberFlags */
     final Map<UUID, EnumSet<Flag>> perms = new HashMap<>();
+    /** 0.5.0: invites that were sent but not yet accepted (persisted - the target may be offline). */
+    final Set<UUID> invites = new java.util.LinkedHashSet<>();
     /** town bank - money put in via deposit, spent on chunk purchases */
     double bank;
     /** chunks the town bought on top of the mayor's rank limit */
@@ -102,7 +104,9 @@ final class Land {
     boolean may(UUID who, Flag f) {
         if (banned.contains(who)) return false;
         if (owner.equals(who) || ranks.get(who) == Rank.ASSISTANT) return true;
-        if (rentals.containsKey(who) && rentals.get(who) > System.currentTimeMillis()) return rights(who).contains(f) || true;
+        // renters follow the same rights as residents (0.4.x had `contains(f) || true` there:
+        // a typo that silently handed renters EVERYTHING, PvP and claim included)
+        if (rentals.containsKey(who) && rentals.get(who) > System.currentTimeMillis()) return rights(who).contains(f);
         return ranks.containsKey(who) && rights(who).contains(f);
     }
 

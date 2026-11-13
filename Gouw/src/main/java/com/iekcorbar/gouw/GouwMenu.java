@@ -106,7 +106,7 @@ final class GouwMenu implements Listener {
     private void show(Player p, Page page, UUID target) {
         Holder h = new Holder(p, page, target);
         int size = page == Page.MEMBERS ? 54 : 27;
-        h.inv = Bukkit.createInventory(h, size, Component.text(title(page, store.homeOf(p.getUniqueId()), target)));
+        h.inv = Bukkit.createInventory(h, size, Component.text(title(page, store.menuFor(p), target)));
         draw(h);
         p.openInventory(h.inv);
     }
@@ -115,7 +115,7 @@ final class GouwMenu implements Listener {
         switch (h.page) {
             case ADMIN -> drawAdmin(h);
             case DEFAULTS -> {
-                Land dl = store.homeOf(h.viewer.getUniqueId());
+                Land dl = store.menuFor(h.viewer);
                 if (dl == null) { h.viewer.closeInventory(); return; }
                 drawFlags(h, dl.memberFlags);
             }
@@ -128,7 +128,7 @@ final class GouwMenu implements Listener {
 
     /** Effective rights shown on the member page: personal set, or the defaults it follows. */
     private Set<Land.Flag> rightsOf(Holder h) {
-        Land l = store.homeOf(h.viewer.getUniqueId());
+        Land l = store.menuFor(h.viewer);
         if (l == null) return Set.of();
         EnumSet<Land.Flag> personal = l.perms.get(h.target);
         return personal != null ? personal : l.memberFlags;
@@ -142,7 +142,7 @@ final class GouwMenu implements Listener {
         Player p = h.viewer;
         Inventory inv = h.inv;
         panes(inv);
-        Land l = store.homeOf(p.getUniqueId());
+        Land l = store.menuFor(p);
         int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : (l != null ? store.limitOf(l) : plugin.getMaxChunks(p));
         String role = l == null ? "-" : l.isMayor(p.getUniqueId()) ? "mayor" : switch (l.rank(p.getUniqueId())) {
             case ASSISTANT -> "officer"; case RESIDENT -> "resident"; case null, default -> "-"; };
@@ -179,7 +179,7 @@ final class GouwMenu implements Listener {
         panes(inv);
         if (h.page == Page.MEMBER) {
             inv.setItem(4, head(h.target));
-            Land l = store.homeOf(h.viewer.getUniqueId());
+            Land l = store.menuFor(h.viewer);
             boolean mayor = l != null && l.isMayor(h.viewer.getUniqueId());
             if (l != null && mayor)
                 inv.setItem(24, icon(Material.GOLDEN_HELMET,
@@ -207,7 +207,7 @@ final class GouwMenu implements Listener {
     }
 
     private void drawMembers(Holder h) {
-        Land l = store.homeOf(h.viewer.getUniqueId());
+        Land l = store.menuFor(h.viewer);
         panes(h.inv);
         if (l == null) {
             h.viewer.sendActionBar(Component.text("Claim a chunk first.", NamedTextColor.RED));
@@ -230,12 +230,25 @@ final class GouwMenu implements Listener {
             it.setItemMeta(m);
             h.inv.setItem(slot++, it);
         }
-        h.inv.setItem(45, icon(Material.OAK_SIGN, "Invite someone", NamedTextColor.GREEN, "Closes the menu: type their name in chat."));
+        // 0.5.0: open invites sit behind the residents, waiting for /gouw accept
+        for (UUID who : l.invites) {
+            if (slot == 17) slot = 19;
+            if (slot > 43) break;
+            ItemStack it = head(who);
+            ItemMeta m = it.getItemMeta();
+            List<Component> lore = new ArrayList<>();
+            lore.add(Component.text("invited - waiting for their /gouw accept", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+            lore.add(Component.text("shift: cancel the invite", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+            m.lore(lore);
+            it.setItemMeta(m);
+            h.inv.setItem(slot++, it);
+        }
+        h.inv.setItem(45, icon(Material.OAK_SIGN, "Invite someone", NamedTextColor.GREEN, "Closes the menu: type their name in chat.", "They get an invite to accept - they are not"));
         h.inv.setItem(49, icon(Material.ARROW, "Back", NamedTextColor.YELLOW));
     }
 
     private void drawBank(Holder h) {
-        Land l = store.homeOf(h.viewer.getUniqueId());
+        Land l = store.menuFor(h.viewer);
         panes(h.inv);
         if (l == null) {
             h.viewer.sendActionBar(Component.text("Claim a chunk first.", NamedTextColor.RED));
@@ -315,7 +328,7 @@ final class GouwMenu implements Listener {
         if (!(e.getInventory().getHolder() instanceof Holder h)) return;
         e.setCancelled(true);
         if (e.getClickedInventory() != h.inv || !(e.getWhoClicked() instanceof Player p)) return;
-        Land mine = store.homeOf(p.getUniqueId());
+        Land mine = store.menuFor(p);
         int slot = e.getSlot();
 
         switch (h.page) {
@@ -365,11 +378,16 @@ final class GouwMenu implements Listener {
                     if (op == null || op.getUniqueId().equals(mine.owner)) return;
                     if (e.isShiftClick()) {
                         if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("Only mayor and officers remove residents.", NamedTextColor.RED));
-                        else {
+                        else if (!mine.ranks.containsKey(op.getUniqueId()) && mine.invites.contains(op.getUniqueId())) {
+                            store.cancelInvite(mine, op.getUniqueId());
+                            p.sendActionBar(Component.text("Invite to " + op.getName() + " cancelled.", NamedTextColor.GOLD));
+                        } else {
                             String err = store.kick(mine, op.getUniqueId());
                             p.sendActionBar(Component.text(err == null ? op.getName() + " is removed." : err, err == null ? NamedTextColor.GOLD : NamedTextColor.RED));
                         }
                         drawMembers(h);
+                    } else if (!mine.ranks.containsKey(op.getUniqueId()) && mine.invites.contains(op.getUniqueId())) {
+                        p.sendActionBar(Component.text(op.getName() + " has an open invite - waiting for /gouw accept.", NamedTextColor.GREEN));
                     } else {
                         if (!mine.mayManage(p.getUniqueId())) p.sendActionBar(Component.text("Only mayor and officers open the rights pages.", NamedTextColor.RED));
                         else show(p, Page.MEMBER, op.getUniqueId());
@@ -562,9 +580,21 @@ final class GouwMenu implements Listener {
             else {
                 String err = store.invite(l, who);
                 if (err != null) p.sendMessage(Component.text("Cannot invite " + typed + ": " + err + ".", NamedTextColor.RED));
-                else p.sendMessage(Component.text(typed + " is now a resident of " + l.name + ".", NamedTextColor.GREEN));
+                else {
+                    p.sendMessage(Component.text("Invite sent to " + typed + " - they join with /gouw accept.", NamedTextColor.GREEN));
+                    GouwCommand.notifyInvite(l, who);
+                }
             }
         });
+    }
+
+    /** 0.5.0: offline targets of an open invite get the same clickable notice on their next join. */
+    @EventHandler
+    public void onJoin(org.bukkit.event.player.PlayerJoinEvent e) {
+        List<Land> open = store.invitesFor(e.getPlayer().getUniqueId());
+        for (Land l : open) GouwCommand.sendInviteNotice(e.getPlayer(), l);
+        if (!open.isEmpty())
+            e.getPlayer().sendMessage(Component.text("Type /gouw accept to join, /gouw decline to drop them all.", NamedTextColor.GRAY));
     }
 
     /** True when the gouw was deleted (unclaimed fully) while the player was typing the name. */

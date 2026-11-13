@@ -53,7 +53,7 @@ final class GouwCommand implements TabExecutor {
 
     /** The gouw the player belongs to (own or town), with a ready error message if there is none. */
     private Land needTown(Player p) {
-        Land l = store.homeOf(p.getUniqueId());
+        Land l = store.menuFor(p);
         if (l == null) msg(p, "You have no gouw yet - stand in a chunk and /gouw claim.", NamedTextColor.GRAY);
         return l;
     }
@@ -113,14 +113,32 @@ final class GouwCommand implements TabExecutor {
                 msg(p, err != null ? "Cannot unclaim: " + err + "." : "Chunk released.", err == null ? NamedTextColor.GREEN : NamedTextColor.RED);
             }
             case "trust", "invite" -> {
-                Land l = needTown(p);
+                Land l = store.menuFor(p);
                 if (l == null || !l.mayManage(p.getUniqueId())) { if (l != null) msg(p, "Only the mayor and officer invite members.", NamedTextColor.RED); return true; }
                 if (a.length < 2) { msg(p, "/" + label + " invite <player>", NamedTextColor.RED); return true; }
                 UUID who = uuidOf(a[1]);
                 if (who == null) { msg(p, "Player '" + a[1] + "' is not known to this server.", NamedTextColor.RED); return true; }
                 String err = store.invite(l, who);
                 if (err != null) msg(p, "Cannot invite " + a[1] + ": " + err + ".", NamedTextColor.RED);
-                else { msg(p, a[1] + " is now a resident of " + l.name + ".", NamedTextColor.GREEN); plugin.adv().grant(p, "trusted"); }
+                else {
+                    msg(p, "Invite sent to " + a[1] + " - they join with /gouw accept.", NamedTextColor.GREEN);
+                    notifyInvite(l, who);
+                    plugin.adv().grant(p, "trusted");
+                }
+            }
+            case "accept" -> {
+                List<Land> joined = store.accept(p.getUniqueId());
+                if (joined.isEmpty()) { msg(p, "You have no open invites (check /gouw info where you stand).", NamedTextColor.GRAY); return true; }
+                for (Land l : joined) {
+                    msg(p, "You are now a resident of " + l.name + " - " + nameOf(l.owner) + " runs that town.", NamedTextColor.GREEN);
+                    Player mayor = Bukkit.getPlayer(l.owner);
+                    if (mayor != null) msg(mayor, p.getName() + " accepted your invite and joined " + l.name + ".", NamedTextColor.GOLD);
+                }
+                msg(p, "Type /gouw info inside the town to see what you may do there.", NamedTextColor.GRAY);
+            }
+            case "decline" -> {
+                int n = store.decline(p.getUniqueId());
+                msg(p, n == 0 ? "You have no open invites." : "Declined " + n + " invite(s).", n == 0 ? NamedTextColor.GRAY : NamedTextColor.GOLD);
             }
             case "untrust", "kick" -> {
                 Land l = needTown(p);
@@ -203,7 +221,17 @@ final class GouwCommand implements TabExecutor {
                 msg(p, l.name + " - gouw of " + nameOf(l.owner) + " in " + l.world, NamedTextColor.GOLD);
                 msg(p, " " + l.chunks.size() + "/" + store.limitOf(l) + " chunks (" + (store.limitOf(l) - l.purchased) + " rank+bonus + " + l.purchased + " bought), "
                         + l.ranks.size() + " residents, bank " + money(l.bank) + ".", NamedTextColor.GRAY);
-                msg(p, " You are " + (l.isMayor(p.getUniqueId()) ? "the mayor" : myRank == Land.Rank.ASSISTANT ? "an officer" : myRank == Land.Rank.RESIDENT ? "a resident" : "a stranger") + ".", NamedTextColor.GRAY);
+                boolean invitedHere = l.invites.contains(p.getUniqueId());
+                msg(p, " You are " + (l.isMayor(p.getUniqueId()) ? "the mayor" : myRank == Land.Rank.ASSISTANT ? "an officer" : myRank == Land.Rank.RESIDENT ? "a resident"
+                        : l.banned.contains(p.getUniqueId()) ? "banned here" : invitedHere ? "invited here - accept with /gouw accept" : "a stranger") + ".", NamedTextColor.GRAY);
+                if (myRank == Land.Rank.RESIDENT || invitedHere) {
+                    StringBuilder r = new StringBuilder();
+                    for (Land.Flag f : Land.Flag.values())
+                        r.append(f.name().toLowerCase(Locale.ROOT)).append(l.may(p.getUniqueId(), f) ? " yes  " : " NO   ");
+                    msg(p, " Your rights HERE: " + r.toString().trim() + " - other towns you belong to can differ; stand there and run /gouw info again.", NamedTextColor.YELLOW);
+                }
+                if (l.isMayor(p.getUniqueId()) && !l.invites.isEmpty())
+                    msg(p, " " + l.invites.size() + " invite(s) still waiting for an accept.", NamedTextColor.GRAY);
             }
             case "list" -> {
                 Land l = store.homeOf(p.getUniqueId());
@@ -297,7 +325,7 @@ final class GouwCommand implements TabExecutor {
                 UUID who = uuidOf(a[1]);
                 if (who == null) { msg(p, "Player '" + a[1] + "' is not known.", NamedTextColor.RED); return true; }
                 if (who.equals(p.getUniqueId())) { msg(p, "That is already yours.", NamedTextColor.GRAY); return true; }
-                if (store.homeOf(who) != null) { msg(p, a[1] + " already owns a gouw.", NamedTextColor.RED); return true; }
+                if (store.landOf(who) != null) { msg(p, a[1] + " already owns a gouw.", NamedTextColor.RED); return true; }
                 String err = store.transfer(l, who);
                 if (err != null) msg(p, err, NamedTextColor.RED);
                 else { msg(p, "Gouw transferred to " + a[1] + ".", NamedTextColor.GREEN); plugin.adv().grant(p, "transferred"); Player onl = Bukkit.getPlayer(who); if (onl != null) msg(onl, "You now own the gouw '" + l.name + "'.", NamedTextColor.GOLD); }
@@ -315,7 +343,7 @@ final class GouwCommand implements TabExecutor {
                 if (price < 0) { msg(p, "Price must be >= 0.", NamedTextColor.RED); return true; }
                 Player buyerP = Bukkit.getPlayer(buyer);
                 if (buyerP == null) { msg(p, "Buyer must be online to complete the sale.", NamedTextColor.RED); return true; }
-                if (store.homeOf(buyer) != null) { msg(p, buyerP.getName() + " already owns a gouw.", NamedTextColor.RED); return true; }
+                if (store.landOf(buyer) != null) { msg(p, buyerP.getName() + " already owns a gouw.", NamedTextColor.RED); return true; }
                 try {
                     Class<?> eco = Class.forName("net.milkbowl.vault.economy.Economy");
                     var rsp = Bukkit.getServicesManager().getRegistration(eco);
@@ -451,7 +479,8 @@ final class GouwCommand implements TabExecutor {
                 {"autoclaim [r]", "claim a square of chunks around you (r in chunks, default 2)"},
                 {"buy [n]", "buy n more chunks for the gouw - paid from the town bank"},
                 {"unclaim | unclaim all", "release a chunk or your whole gouw"},
-                {"invite <p> / kick <p>", "add or remove residents (was: trust/untrust)"},
+                {"invite <p> / kick <p>", "send an invite (they accept with /gouw accept) or remove a resident"},
+                {"accept / decline", "take or drop the open invites for you"},
                 {"promote <p> / demote <p>", "make a resident officer (mayor only)"},
                 {"bank / deposit <a> / withdraw <a>", "the town's money"},
                 {"members / info / list / near [r]", "who and what is around you"},
@@ -480,6 +509,32 @@ final class GouwCommand implements TabExecutor {
         return null;
     }
 
+    /**
+     * 0.5.0: tell the invited player they may join - clickable, so nobody has to remember the
+     * command. Offline targets get the same message on their next join (see GouwMenu.onJoin).
+     */
+    static void notifyInvite(Land l, UUID who) {
+        Player on = Bukkit.getPlayer(who);
+        if (on != null) sendInviteNotice(on, l);
+    }
+
+    static void sendInviteNotice(Player target, Land l) {
+        target.sendMessage(Component.text(nameStatic(l.owner) + " invites you to live in the town ", NamedTextColor.GOLD)
+                .append(Component.text(l.name, NamedTextColor.YELLOW))
+                .append(Component.text(" as resident.  ", NamedTextColor.GOLD))
+                .append(Component.text("[Accept]", NamedTextColor.GREEN)
+                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/gouw accept")))
+                .append(Component.text("  or  ", NamedTextColor.GRAY))
+                .append(Component.text("[Decline]", NamedTextColor.RED)
+                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/gouw decline"))));
+        target.playSound(target.getLocation(), "minecraft:block.note_block.pling", 1f, 1.4f);
+    }
+
+    private static String nameStatic(UUID u) {
+        String n = Bukkit.getOfflinePlayer(u).getName();
+        return n == null ? "someone" : n;
+    }
+
     private String nameOf(UUID u) {
         String n = Bukkit.getOfflinePlayer(u).getName();
         return n == null ? "unknown" : n;
@@ -490,9 +545,9 @@ final class GouwCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         String last = a[a.length - 1].toLowerCase(Locale.ROOT);
         if (a.length == 1) {
-            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "buy", "unclaim", "invite", "kick", "promote", "demote", "bank", "deposit", "withdraw", "members", "rename", "info", "list", "near", "border", "leave", "ban", "unban", "welcome", "sethome", "home", "chat", "c", "transfer", "sell", "rent", "top", "admin"})
+            for (String v : new String[]{"menu", "help", "claim", "autoclaim", "buy", "unclaim", "invite", "trust", "accept", "decline", "kick", "promote", "demote", "bank", "deposit", "withdraw", "members", "rename", "info", "list", "near", "border", "leave", "ban", "unban", "welcome", "sethome", "home", "chat", "c", "transfer", "sell", "rent", "top", "admin"})
                 if (v.startsWith(last)) out.add(v);
-        } else if (a.length == 2 && List.of("invite", "kick", "promote", "demote").contains(a[0].toLowerCase(Locale.ROOT))) {
+        } else if (a.length == 2 && List.of("invite", "trust", "kick", "promote", "demote").contains(a[0].toLowerCase(Locale.ROOT))) {
             Land l = s instanceof Player pl ? store.homeOf(pl.getUniqueId()) : null;
             if (l != null) for (UUID u : l.ranks.keySet()) {
                 String n = Bukkit.getOfflinePlayer(u).getName();
