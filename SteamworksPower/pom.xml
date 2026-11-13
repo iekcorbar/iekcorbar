@@ -8,7 +8,7 @@
     <artifactId>SteamworksPower</artifactId>
     <!-- Power add-on for Steamworks: water turbine, mechanical press, stock ticker, flywheel
          and sieve funnel. Joins the rotation network through Steamworks' public CustomPart API. -->
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <packaging>jar</packaging>
     <!-- STILSTANDENDE MODULE (10-11): de power-machines zijn sinds Steamworks 0.3.34 ingebouwd
          in de core (com.iekcorbar.power.*). Draait deze addon-jar naast Steamworks, dan botsen
@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <paper.api.version>26.2.build.135-stable</paper.api.version>
         <!-- keep in step with Steamworks/pom.xml (see the dependency note below) -->
-        <steamworks.version>0.3.41</steamworks.version>
+        <steamworks.version>0.3.42</steamworks.version>
     </properties>
 
     <repositories>

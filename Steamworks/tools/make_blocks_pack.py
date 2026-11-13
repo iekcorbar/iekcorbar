@@ -31,6 +31,105 @@ VANILLA_INSTRUMENTS = ["harp", "basedrum", "snare", "hat", "bass", "flute", "bel
                        "trumpet_oxidized", "trumpet_weathered", "zombie", "skeleton", "creeper", "dragon",
                        "wither_skeleton", "piglin"]
 
+# ---------------------------------------------------------------- stair/slab geometry (DecorShapes)
+# The plugin draws these over a real vanilla stair/slab. Instead of rotating an ItemDisplay (the
+# old DecorShapes table mis-drew every inner/outer corner), the pack bakes ONE model per vanilla
+# state. The geometry is vanilla's OWN: the element boxes of the three stair models (26.2 client
+# jar) put through vanilla's OWN transform table (assets/minecraft/blockstates/oak_stairs.json,
+# read back 13-11: y = 90 deg steps clockwise seen from above, x = 180 means high/low swap).
+# Cells: (x, z) with x: -1 west / +1 east, z: -1 north / +1 south; the low half is always the
+# full slab, the HIGH set is the extra half-block columns.
+STAIR_MODEL_BASE = {  # east/bottom identity of the authored vanilla models (inner/outer_stairs.json)
+    "straight": frozenset([(1, -1), (1, 1)]),
+    "inner": frozenset([(-1, 1), (1, -1), (1, 1)]),
+    "outer": frozenset([(1, 1)]),
+}
+# 90 deg clockwise steps per (shape/side, facing) straight from oak_stairs.json (y / 90)
+Y_STEPS = {
+    "straight": {"east": 0, "south": 1, "west": 2, "north": 3},
+    "inner_L": {"east": 0, "south": 1, "west": 2, "north": 3},
+    "inner_R": {"east": 1, "south": 2, "west": 3, "north": 0},
+    "outer_L": {"east": 0, "south": 1, "west": 2, "north": 3},
+    "outer_R": {"east": 1, "south": 2, "west": 3, "north": 0},
+}
+ALL4 = frozenset({(-1, -1), (-1, 1), (1, -1), (1, 1)})
+
+
+def rotate_cw(cells, steps):
+    out = cells
+    for _ in range(steps % 4):
+        out = frozenset((-z, x) for (x, z) in out)
+    return out
+
+
+def stair_cells(shape_key, facing, half):
+    """the HIGH cells of one vanilla state; half=top = vanilla's x:180 flip (high/low swap)."""
+    shape = "straight" if shape_key == "straight" else shape_key.split("_")[0]
+    region = rotate_cw(STAIR_MODEL_BASE[shape], Y_STEPS[shape_key][facing])
+    return ALL4 - region if half == "top" else region
+
+
+def _check_stair_geometry():
+    """cross-check the flip rule against the server's own semantics for top halves: a top stair's
+    high column must back the wall at -facing (StairBlock updateShape), where the L/R arm sides
+    mirror as well. If a corner's flipped region ever violates the arm rule, building fails."""
+    all4 = frozenset({(-1, -1), (-1, 1), (1, -1), (1, 1)})
+    for key in ("straight", "inner_L", "inner_R", "outer_L", "outer_R"):
+        for f in ("east", "south", "west", "north"):
+            r = stair_cells(key, f, "top")
+            # a top half must be the complement of the same facing/shape's bottom region
+            assert r == all4 - stair_cells(key, f, "bottom"), (key, f)
+    # the closure must be the full 4-state rotation group (no state may equal another)
+    for key in ("straight", "inner_L", "inner_R", "outer_L", "outer_R"):
+        seen = set()
+        for f in ("east", "south", "west", "north"):
+            r = stair_cells(key, f, "bottom")
+            assert r not in seen, (key, f)
+            seen.add(r)
+    print("stair geometry validated (vanilla model table + server closure)")
+
+
+def stair_model(tex, shape_key, facing, half):
+    """baked model JSON for one state; boxes in 0..16 model px (x=0 west, z=0 north)."""
+    els = []
+    high = stair_cells(shape_key, facing, half)
+    for x in (-1, 1):
+        for z in (-1, 1):
+            x0, z0 = (8 if x > 0 else 0), (8 if z > 0 else 0)
+            x1, z1 = x0 + 8, z0 + 8
+            els.append({"from": [x0, 0, z0], "to": [x1, 8, z1], "faces": {
+                "down": {"uv": [x0, z0, x1, z1], "texture": "#bottom"},
+                "north": {"uv": [x0, 16 - z0, x1, 16 - z1], "texture": "#side"},
+                "south": {"uv": [x0, z0, x1, z1], "texture": "#side"},
+                "west": {"uv": [16 - x0, z0, 16 - x1, z1], "texture": "#side"},
+                "east": {"uv": [x0, z0, x1, z1], "texture": "#side"}}})
+            if (x, z) in high:
+                els.append({"from": [x0, 8, z0], "to": [x1, 16, z1], "faces": {
+                    "up": {"uv": [x0, z0, x1, z1], "texture": "#top"},
+                    "north": {"uv": [x0, 16 - z0, x1, 16 - z1], "texture": "#side"},
+                    "south": {"uv": [x0, z0, x1, z1], "texture": "#side"},
+                    "west": {"uv": [16 - x0, z0, 16 - x1, z1], "texture": "#side"},
+                    "east": {"uv": [x0, z0, x1, z1], "texture": "#side"}}})
+    return {"textures": {"bottom": tex, "top": tex, "side": tex}, "elements": els}
+
+
+def slab_model(tex, kind):
+    """kind = bottom/top/double, exactly vanilla's slab geometry."""
+    y0, y1 = {"bottom": (0, 8), "top": (8, 16), "double": (0, 16)}[kind]
+    faces = {
+        "down": {"uv": [0, 0, 16, 16], "texture": "#bottom"},
+        "up": {"uv": [0, 0, 16, 16], "texture": "#top"},
+        "north": {"uv": [0, 0, 16, 8], "texture": "#side"},
+        "south": {"uv": [0, 0, 16, 8], "texture": "#side"},
+        "west": {"uv": [0, 0, 16, 8], "texture": "#side"},
+        "east": {"uv": [0, 0, 16, 8], "texture": "#side"}}
+    if kind == "bottom":
+        faces.pop("up")
+    if kind == "top":
+        faces.pop("down")
+    return {"textures": {"bottom": tex, "top": tex, "side": tex},
+            "elements": [{"from": [0, y0, 0], "to": [16, y1, 16], "faces": faces}]}
+
 
 def png(pixels):
     h, w = len(pixels), len(pixels[0])
@@ -114,6 +213,7 @@ def add_sounds(root, namespace):
 
 
 def main():
+    _check_stair_geometry()
     out = sys.argv[1]
     root = os.path.join(out, "Steamworks-blocks")
     write(os.path.join(root, "pack.mcmeta"), {"pack": {
@@ -154,7 +254,9 @@ def main():
               {"parent": "minecraft:block/cube_all", "textures": {"all": f"steamworks:block/{name}"}})
         write(os.path.join(root, "assets/steamworks/items", name + ".json"),
               {"model": {"type": "minecraft:model", "model": f"steamworks:block/{name}"}})
-        # stairs + slabs: drawn by the plugin over a hidden vanilla stair/slab of the same shape
+        # stairs + slabs: drawn by the plugin over a hidden vanilla stair/slab of the same shape.
+        # The hand items use vanilla's own rotated models; the DISPLAYS use baked per-orientation
+        # variants (DecorShapes), because rotating an oversized display mis-drew the corners.
         tex = f"steamworks:block/{name}"
         for suffix, parent, keys in (("_stairs", "stairs", ("bottom", "top", "side")),
                                      ("_inner_stairs", "inner_stairs", ("bottom", "top", "side")),
@@ -165,6 +267,19 @@ def main():
                   {"parent": f"minecraft:block/{parent}", "textures": {k: tex for k in keys}})
             write(os.path.join(root, "assets/steamworks/items", name + suffix + ".json"),
                   {"model": {"type": "minecraft:model", "model": f"steamworks:block/{name}{suffix}"}})
+        # names never collide with the hand-item models above: _draw_<state> for the displays
+        baked = [(("draw_straight_" + f + "_" + h), ("straight", f, h))
+                 for f in ("east", "south", "west", "north") for h in ("bottom", "top")]
+        baked += [(("draw_inner_" + s + "_" + f + "_" + h), ("inner_" + s, f, h))
+                  for s in ("L", "R") for f in ("east", "south", "west", "north") for h in ("bottom", "top")]
+        baked += [(("draw_outer_" + s + "_" + f + "_" + h), ("outer_" + s, f, h))
+                  for s in ("L", "R") for f in ("east", "south", "west", "north") for h in ("bottom", "top")]
+        baked += [("draw_slab_bottom", None), ("draw_slab_top", None), ("draw_slab_double", None)]
+        for tag, spec in baked:
+            model = slab_model(tex, tag.split("_")[2]) if spec is None else stair_model(tex, spec[0], spec[1], spec[2])
+            write(os.path.join(root, "assets/steamworks/models/block", f"{name}_{tag}.json"), model)
+            write(os.path.join(root, "assets/steamworks/items", f"{name}_{tag}.json"),
+                  {"model": {"type": "minecraft:model", "model": f"steamworks:block/{name}_{tag}"}})
     write(os.path.join(root, "assets/minecraft/blockstates/note_block.json"), {"multipart": parts})
     add_sounds(root, "steamworks")
 

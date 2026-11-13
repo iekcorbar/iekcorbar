@@ -329,10 +329,12 @@ final class PartListener implements Listener {
         if (plugin.hammers().holdsBack(h.getBlock(), e.getItem().getItemStack())) e.setCancelled(true);
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        e.getPlayer().discoverRecipes(plugin.items().recipeKeys);
-    }
+    // 13-11: we used to discoverRecipes() every Steamworks key on join so the book listed them.
+    // The vanilla book can only show the KALE material of our parts (PAPER/NOTE_BLOCK: Paper
+    // 26.2 strips the PDC from ExactChoice ingredients on the wire), so it promised "craftable"
+    // against plain paper and the result stayed empty - the "4 papiertjes die niet klikken" bug.
+    // The book now fills the vanilla way: a player who actually crafts a recipe unlocks it,
+    // with its REAL ingredients; Zukan (/zukan) is the honest browser for everything else.
 
     @EventHandler
     public void onCraft(PrepareItemCraftEvent e) {

@@ -1042,7 +1042,14 @@ def track_slope():
 
 
 def track_curve():
-    # sw curve (base shape: NORTH edge to EAST edge, quarter circle around the north-east corner)
+    # sw curve (base shape: NORTH edge to EAST edge, quarter circle around the north-east corner
+    # (8,-8)). Rails: the west one sweeps R 10.1 (legs x -2.1 -> east edge z +2.1) and the east
+    # one R 5.9 (legs x +2.1 -> east edge z -2.1), theta 180 -> 90.
+    # 13-11 (owner: "de bochtjes van de rails, model is niet goed"): the arc ran only theta
+    # 157.5..112.5 with chord boxes (half 1.75) shorter than the 22.5 deg spacing - both rails
+    # showed holes mid-curve and neither end reached the legs. Now three overlapping segments per
+    # rail at 168.75/135/101.25 (chord half 1.5: the 33.75 deg spacing = 2.65/3.73 px chords)
+    # whose end tangents land exactly on the leg rails: one continuous line edge to edge.
     m = Model("sw_track_curve", 0.6)
     m.cube("bed", (-8, 0.0, -8.0), (8, 2.0, 8.0), "darkstone")
     m.cube("sleeper_n", (-3.4, 2.0, -7.3), (3.4, 2.6, -5.9), "darkwood")
@@ -1054,11 +1061,11 @@ def track_curve():
         m.cube(f"railn{x}", (x, 2.6, -8.0), (x + 0.9, 3.4, -2.4), "steel")
     for z in (-2.55, 1.65):  # east leg rails
         m.cube(f"raile{z}", (2.4, 2.6, z), (8.0, 3.4, z + 0.9), "steel")
-    for R in (5.9, 10.1):    # arc segments at theta 157.5 / 135 / 112.5
-        for th in (157.5, 135.0, 112.5):
+    for R in (5.9, 10.1):
+        for th in (168.75, 135.0, 101.25):
             px = 8 + R * math.cos(math.radians(th))
             pz = -8 + R * math.sin(math.radians(th))
-            m.cube(f"raila{R}{th}", (px - 0.45, 2.6, pz - 1.75), (px + 0.45, 3.4, pz + 1.75),
+            m.cube(f"raila{R}_{th}", (px - 0.45, 2.6, pz - 1.5), (px + 0.45, 3.4, pz + 1.5),
                    "steel", (0, -th, 0), (px, 3.0, pz))
     for x in (-2.1, 2.1):  # fishplate at the north edge
         m.cube(f"shakeln{x}", (x - 0.65, 2.3, -8.0), (x + 0.65, 3.7, -7.15), "brass")

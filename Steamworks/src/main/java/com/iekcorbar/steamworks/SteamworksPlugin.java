@@ -160,7 +160,8 @@ getServer().getServicesManager().register(java.util.function.Function.class, (ja
                 }
             }
             trains.load();
-            for (Player p : getServer().getOnlinePlayers()) p.discoverRecipes(items.recipeKeys);
+            // 13-11: no forced discoverRecipes here any more (see PartListener's note: the vanilla
+            // book can only show kale PAPER/NOTE_BLOCK for our items and would lie about it).
             // Rebuild the machines chunk by chunk, a few chunks per tick: reading and spawning
             // every loaded chunk in one go is what made the server stutter for seconds at startup.
             java.util.List<Chunk> queue = new java.util.ArrayList<>();

@@ -45,9 +45,11 @@ public final class PowerRecipes implements Listener {
         sw.whenModelsReady(this::register);
     }
 
+    // 13-11: the vanilla book cannot render our ExactChoice ingredients (26.2 strips PDC from the
+    // wire -> kale paper icons + false "craftable"); recipes unlock the vanilla way, by crafting.
+    // (kept: onJoin no longer force-reveals)
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-        for (NamespacedKey k : keys) e.getPlayer().discoverRecipe(k);
+    public void onJoin(org.bukkit.event.player.PlayerJoinEvent e) {
     }
 
     private void register() {
@@ -69,7 +71,7 @@ public final class PowerRecipes implements Listener {
         // Sieve funnel: the belt funnel under a mesh of plates and one good string.
         shaped("pow_sieve_funnel", reg.item(sieve, 1), new String[]{"PSP", " F "},
                 'P', swItem("material/iron_plate"), 'S', new ItemStack(Material.STRING), 'F', swItem("part/funnel"));
-        for (Player p : Bukkit.getOnlinePlayers()) for (NamespacedKey k : keys) p.discoverRecipe(k);
+        // 13-11: no forced reveal (see onJoin): vanilla unlocks by crafting, with real items.
         sw.getLogger().info("Registered " + keys.size() + " workbench recipes for the Power machines.");
     }
 
