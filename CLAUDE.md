@@ -205,6 +205,36 @@ Wildlife 0.3.0 (2026-10-24): **elephant** (COW base, scale 2.1, savanna herds) a
 
 Zukan 0.2.0 steampunk GUI (2026-10-24): a server cannot extend the E-inventory screen (client-only, no Paper event), so the browser stays a 54-slot container but is drawn as a full-screen picture: `Zukan/tools/make_pack.py` (pure Python) writes `Zukan/resourcepack/Zukan-pack.zip` = font `zukan:gui` with two bitmap glyphs (\ue000 list, \ue001 recipe, 176x222 art at 2x) plus a space glyph (\uf800 = -8 px); `Gui.art()` puts that glyph in the window title (shadow off) and, with `gui-style: steampunk`, leaves free slots empty instead of grey panes (slot positions in the art match `Gui` GRID/FREE_IN/FREE_OUT/bottom bar - change both together). `gui-style: plain` = old look without any pack. `swap-key: true`: F with the Zukan book in a hand opens it. The pack is merged into Iekcorbar-pack.zip (`scripts/merge-packs.py`). Not live-tested; glyph alignment (ascent 13, -8 shift) is from the usual title-texture technique and may need a 1 px tweak.
 
+### Bug-golf 13-11 (negen punten van de eigenaar)
+
+- **Decor-trappen/-planken (Steamworks `DecorShapes` + `make_blocks_pack.py`):** de ItemDisplay-rotatietabel
+  was overal links/rechts-gespiegeld (binnen- en buitenhoeken tekenden verkeerd) en het DOUBLE-plankmodel
+  wees naar de note-state-`<naam>` in plaats van de eigen cube. Nu: **gebakte varianten per vanilla-toestand**
+  (`<decor>_draw_straight_<facing>_<half>`, `_draw_inner/outer_L/R_...`, `_draw_slab_bottom/top/double`),
+  opgebouwd uit de echte vanilla-rotatietabel (client jar: `oak_stairs.json`) + de geometrie van
+  `stairs/inner_stairs/outer_stairs.json`; `make_blocks_pack.py` valideren sluiting en verversen (`_check_stair_geometry`).
+  COVER 1.02→1.002: de 2%-groei liet naastliggende tekeningen in elkaar snijden = de gemelde flikkering.
+  Hand-item-iconen blijven de parented vanilla-varianten (dat was al goed).
+- **Spoorbocht:** de bocht liep theta 157.5..112.5 met koorde-boxen korter dan de spacing (gaten; noch
+  poot noch bocht raakten mekaar). Nu drie overlappende koorden (168.75/135/101.25, half 1.35) rond de
+  NE-hoek, einden precies op de pootrails - numeriek geverifieerd (afwijking van de cirkel < 0.2 px).
+  FMM-bestanden `sw_track_curve.{json,bbmodel}` meenemen naar de server bij de jar-deploy.
+- **Relics-maten:** string lights full-width + dikkere bollen (muur én plafond), brass telescope
+  volledig herbouwd (statief + gestapelde buis-segmenten, ~1 blok hoog), wish tree in `Hangings` van
+  kersenzaailing (0,4 m) naar een echte tanabata-boom van 2,2 m met kroon, takken, bamboe en
+  hangende wens-strips in de kronenrand.
+- **EliteMobs 1e22-health** (het getal 10000000000000000000000 en "beast lvl te hoog"): spigot.yml
+  `attribute.maxHealth.max` staat op Double.MAX; EliteMobs' formule `2.1875 * 2^(level/5) * mult` escaleert
+  dan bij player-combatlevel ~350 naar 1e22. Advies-plafond 1024.0 staat in TE-DEPLOYEN (paneelwerk eigenaar).
+  Craftenmine's Cryocorpse bijgeschaafd (hp 5.5→4.0, dmg 1.11→1.0) in mirror + server. **Nevenvondst:**
+  LibsDisguises ontbreekt → alle `disguise:`-velden worden genegeerd; `powers/sakura_petal_rain.lua:19`
+  `context.cooldowns.local_ready()` mist de aanroep-haken.
+- **Receptenboek (punt 9):** de vanilla-receptenboek toonde "4 papiertjes" omdat Paper 26.2 build 135 de
+  PDC van `RecipeChoice.ExactChoice`-ingredienten op de wire naar de client stript (server-handhaafd `validCraft`
+  weigert kaal papier - dus "beschikbaar maar niet maakbaar"). 0.3.42/Power 0.2.1 doen geen geforceerde
+  `discoverRecipes` meer: het boek onthult recepten zoals vanilla (na het eerste echte craft, met echte iconen);
+  `/zukan` blijft de complete browser.
+
 ### Clean server stop (2026-10-24)
 Plugin `onDisable`s skip work that vanishes with the server when `Bukkit.isStopping()` (display removal, recipe unregistering; Steamworks 0.3.6, Kitchen 0.1.4, Relics 0.1.5, Kura 0.1.4, Sakagura 0.1.3), and every `Bukkit.removeRecipe` uses `(key, false)` so the recipe book isn't resent to every player per recipe. `MySQLSync.stop()` (IekcorbarSiteSync 1.14.1) closes the connection on a daemon thread so a still-connecting async sync can't block the main thread. Cause of Discord "server hasn't ticked" on restart; not yet verified in-game.
 
