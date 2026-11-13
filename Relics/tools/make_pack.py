@@ -1067,10 +1067,23 @@ def tasting_counter():
 
 
 def noren():
-    return [box(0, 0, 7.6, 1, 16, 8.6, "wood_char"), box(15, 0, 7.6, 16, 16, 8.6, "wood_char"),
-            box(0, 14.8, 6.8, 16, 16, 9.4, "wood_warm"),
-            box(0.8, 2.5, 7.7, 8, 15, 8.5, "indigo"), box(8, 2.5, 7.7, 15.2, 15, 8.5, "indigo"),
-            box(3.2, 8, 7.4, 5.2, 10.5, 8.8, "washi"), box(10.8, 8, 7.4, 12.8, 10.5, 8.8, "washi")]
+    # 13-11 (owner): "noren is te klein" - it was a 1x1 block picture of a cloth. A real noren
+    # spans a two-block doorway: a bamboo rail at head height with four cloth panels hanging from
+    # it, the walking gap underneath stays open. Authored around the x=8 centre like every relic
+    # floor model (x -8..24 = 2 blocks wide; all axes inside -16..32 for 26.2).
+    e = []
+    e.append(box(-8.8, 20.0, 6.8, 24.8, 21.5, 9.4, "wood_warm"))        # bamboo rail
+    e.append(box(-8.8, 19.9, 6.6, -7.6, 21.6, 9.6, "wood_char"))        # rail end west
+    e.append(box(23.6, 19.9, 6.6, 24.8, 21.6, 9.6, "wood_char"))        # rail end east
+    for x in (-7.9, -0.2, 8.3, 16.4, 23.4):
+        e.append(box(x, 19.6, 7.0, x + 0.7, 21.9, 9.2, "washi"))        # cloth ties on the rail
+    e.append(box(-7.9, 8.2, 7.7, -0.2, 19.9, 8.5, "indigo"))            # panel 1 (edges hang lower)
+    e.append(box(-0.2, 8.6, 7.7, 7.6, 19.9, 8.5, "indigo"))             # panel 2
+    e.append(box(8.3, 8.6, 7.7, 16.0, 19.9, 8.5, "indigo"))             # panel 3
+    e.append(box(16.4, 8.2, 7.7, 24.1, 19.9, 8.5, "indigo"))            # panel 4
+    e.append(box(2.05, 12.5, 7.55, 4.05, 15.0, 8.65, "washi"))          # mon on panel 2
+    e.append(box(10.15, 12.5, 7.55, 12.15, 15.0, 8.65, "washi"))        # mon on panel 3
+    return e
 
 
 def brew_kettle():
