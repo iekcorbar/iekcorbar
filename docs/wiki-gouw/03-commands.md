@@ -16,7 +16,8 @@ All gouw commands live under one command — `/gouw` (short: `/g`, alias `/claim
 
 **Town**
 
-* `/gouw invite <name>` — make someone a resident (they must not own a gouw themselves).
+* `/gouw invite <name>` — send an invite (aliases: `/gouw trust`). It stays open until the target accepts - owning your own gouw or living in other towns is no problem.
+* `/gouw accept` / `/gouw decline` — take or drop every open invite for you (the chat notice has clickable buttons too).
 * `/gouw kick <name>` — remove a resident; residents may also leave themselves with `/gouw leave`.
 * `/gouw promote <name>` / `/gouw demote <name>` — resident ↔ officer (mayor only).
 * `/gouw members` — list the residents of your gouw with their roles and rights.

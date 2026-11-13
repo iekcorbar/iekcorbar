@@ -10,9 +10,9 @@ Since 0.4 every gouw doubles as a small town. No alliances, no wars — just peo
 
 * **Mayor** — the player who claimed the first chunk. The mayor runs everything: invites and removes members, hands out rights, promotes officers, buys chunks with town money, and releases the whole gouw. Only the mayor can promote and demote.
 * **Officer** — a promoted resident. Officers manage almost everything the mayor can (claim, unclaim chunks, invite, remove, rights, bank withdrawals, buying) but can't promote, demote or release the whole gouw.
-* **Resident** — an invited member with a personal set of rights. Residents live in the town; whether they may claim new chunks is one of those rights.
+* **Resident** — an invited member who **accepted the invite**, with a personal set of rights. Residents live in the town; whether they may claim new chunks is one of those rights.
 
-One rule from the old days stays: **one gouw per player**. To join a town you first `/gouw unclaim all` your own claims; the invite will refuse politely otherwise.
+Since version 0.5 **an invite is an invite, not a membership**: the mayor sends it, the target gets a chat message with **[Accept]** / **[Decline]** (offline players are notified when they next join) and only then becomes a resident. Being a resident of other towns alongside your own gouw is normal and allowed — neighbours regularly welcome each other, and you can be a member of several towns at once. Your menu and `/gouw info` always act on the town you are standing in.
 
 ## Rights, per resident
 
