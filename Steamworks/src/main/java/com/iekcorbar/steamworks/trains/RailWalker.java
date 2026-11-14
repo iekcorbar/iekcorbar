@@ -140,11 +140,21 @@ public final class RailWalker {
         Shape s = rails.shape(x, y, z);
         if (s == null) return out;
         if (!connects(s, entry)) {
-            // through the back of a curve: the vanilla way to run a straight line across a junction
-            if (curve(s) && connects(s, entry.getOppositeFace())) {
+            if (!curve(s)) return out;
+            // The live point does not face us: coming in across its back the train can run STRAIGHT on...
+            if (connects(s, entry.getOppositeFace())) {
                 BlockFace thru = entry.getOppositeFace();
                 Edge straight = forwardEdge(rails, x, y, z, entry, thru);
                 if (straight != null) out.add(straight);
+            }
+            // ...and the route may also ask the point to flip TO us: every curve that connects this
+            // entry (that is how a junction branch stays reachable whatever way the point stands now).
+            for (BlockFace f : new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST}) {
+                if (f == entry || f == entry.getOppositeFace()) continue;
+                Shape alt = shapePair(entry, f);
+                if (alt == null || alt == s) continue;
+                Edge flip = stepEdge(rails, x, y, z, entry, alt);
+                if (flip != null) out.add(flip);
             }
             return out;
         }
@@ -260,9 +270,14 @@ public final class RailWalker {
             BlockFace opp = entry.getOppositeFace();
             Shape s0 = rails.shape(nx, exitY, nz);
             if (s0 != null && curve(s0) && !connects(s0, entry) && connects(s0, opp)) {
-                // straight over the back of a curve: the vanilla through-line across a junction
+                // coming in across the back of a curve: straight on, unless this train already
+                // committed to a branch here (point flipped under the train) - then follow memory
+                long bk = blockKey(nx, exitY, nz);
+                BlockFace committed0 = route == null ? null : route.committedExit(bk, entry);
+                BlockFace take = committed0 != null && shapePair(entry, committed0) != null ? committed0 : opp;
                 w.x = nx; w.y = exitY; w.z = nz;
-                w.shape = s0; w.from = entry; w.to = opp;
+                w.shape = s0; w.from = entry; w.to = take;
+                if (route != null && committed0 == null) route.commitExit(bk, entry, take);
                 w.t = left;
                 continue;
             }

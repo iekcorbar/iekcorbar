@@ -112,6 +112,21 @@ public class RailTest {
         check("edgesOut offers the flipped point as second edge",
                 sides.size() == 2 && sides.stream().anyMatch(e -> e.shape() == Shape.SOUTH_WEST));
 
+        // the 14-11 fix: a branch behind a point that stands AGAINST the arriving train
+        track.put("10,0,0", Shape.NORTH_EAST); // legs N+E: coming from the south it does not connect us
+        java.util.List<RailWalker.Edge> against = RailWalker.edgesOut(RAILS, 10, 0, 0, BlockFace.SOUTH);
+        check("straight through the back is still offered",
+                against.stream().anyMatch(e -> e.exit() == BlockFace.NORTH));
+        check("branch found by flipping the point to us (SOUTH_EAST edge)",
+                against.stream().anyMatch(e -> e.exit() == BlockFace.EAST && e.shape() == Shape.SOUTH_EAST));
+
+        RouteMemory mem2 = new RouteMemory();
+        RailWalker g1 = new RailWalker(10, 0, 1, Shape.NORTH_SOUTH, BlockFace.SOUTH, BlockFace.NORTH, 0.5);
+        check("first train runs straight and commits it", g1.move(2.0, RAILS, mem2) && g1.z == -1);
+        track.put("10,0,0", Shape.SOUTH_EAST); // while straddling, the point ends up facing the branch
+        RailWalker g2 = new RailWalker(10, 0, 1, Shape.NORTH_SOUTH, BlockFace.SOUTH, BlockFace.NORTH, 0.5);
+        check("the rest of the train keeps the committed straight-through", g2.move(2.0, RAILS, mem2) && g2.z == -1);
+
         System.out.println(fails == 0 ? "ALL PASSED" : fails + " FAILED");
         System.exit(fails == 0 ? 0 : 1);
     }
