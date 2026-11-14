@@ -3,8 +3,12 @@
 Eén overzicht van wat er speelt. De agent werkt dit bij na elke afgeronde werkblok;
 jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPLOYEN.txt`.)
 
-**Peildatum: 6 nov 2026 avond — rollback naar Paper 26.2 (backup 6 nov 04:00)**
-**Reden:** 26.3 Vulkan-backend faalt op `#moj_import` (client shader-compile), pack kan niet laden; 26.3 wordt overgeslagen, wachten op 26.4.
+**Peildatum: 14 nov 2026 ~21:00 — ✅ herinnering OVERDRACHTEN NAAR MORGEN (15 nov):**
+**Steamworks 0.3.45 [e1b9726623cd] uitrollen zodra de server leeg is** (vanavond bezet door DarExHunter) —
+jar staat in `deploy/`, instructie + testpunten = TE-DEPLOYEN punt 11. Kern van de fix: wissel-planning
+(T-splitsingen) + punt-verzet onder een trein. Dwell staat intussen op 20 s in de live config.
+Vorige peildata: 6 nov avond — rollback naar Paper 26.2 (backup 6 nov 04:00); reden: 26.3 Vulkan-backend
+faalt op `#moj_import` (client shader-compile), pack kan niet laden; 26.3 wordt overgeslagen, wachten op 26.4.
 
 ## 🟢 Live op de server
 | Blok | Sinds | Wat |
