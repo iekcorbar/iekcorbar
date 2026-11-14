@@ -77,6 +77,41 @@ public class RailTest {
         }
         check("wheel distance stays sane through the curve", ok);
 
+        // --- 0.3.44 switches, commit memory and junction through-lines ---
+        // junction (10,0,0) shape SOUTH_EAST: legs south (main line from z=1..2) and east;
+        // west is the flipped point's branch, north the main line straight through the junction.
+        rail(10, 0, 1, Shape.NORTH_SOUTH);
+        rail(10, 0, 2, Shape.NORTH_SOUTH);
+        rail(10, 0, -1, Shape.NORTH_SOUTH);
+        rail(11, 0, 0, Shape.EAST_WEST);
+        rail(12, 0, 0, Shape.EAST_WEST);
+        rail(9, 0, 0, Shape.EAST_WEST);
+        rail(10, 0, 0, Shape.SOUTH_EAST); // the point: main line branches east while unflipped
+
+        check("shapePair and alternateShape",
+                RailWalker.shapePair(BlockFace.NORTH, BlockFace.EAST) == Shape.NORTH_EAST
+                        && RailWalker.alternateShape(Shape.SOUTH_EAST, BlockFace.SOUTH) == Shape.SOUTH_WEST
+                        && RailWalker.alternateShape(Shape.NORTH_SOUTH, BlockFace.NORTH) == null);
+
+        RouteMemory mem = new RouteMemory();
+        RailWalker n1 = new RailWalker(10, 0, 2, Shape.NORTH_SOUTH, BlockFace.SOUTH, BlockFace.NORTH, 0.5);
+        check("live switch sends the train east", n1.move(2.5, RAILS, mem) && n1.x == 11);
+        track.put("10,0,0", Shape.SOUTH_WEST); // redstone flips the point mid-train
+        RailWalker n2 = new RailWalker(10, 0, 2, Shape.NORTH_SOUTH, BlockFace.SOUTH, BlockFace.NORTH, 0.5);
+        check("flipped switch sends an unaware train west", n2.move(2.5, RAILS) && n2.x == 9);
+        RailWalker n3 = new RailWalker(10, 0, 2, Shape.NORTH_SOUTH, BlockFace.SOUTH, BlockFace.NORTH, 0.5);
+        check("committed route keeps the train on the east branch", n3.move(2.5, RAILS, mem) && n3.x == 11);
+        track.put("10,0,0", Shape.SOUTH_EAST);
+
+        RailWalker n4 = new RailWalker(10, 0, -1, Shape.NORTH_SOUTH, BlockFace.NORTH, BlockFace.SOUTH, 0.5);
+        check("straight over the back of the junction curve", n4.move(2.0, RAILS) && n4.z == 1);
+        java.util.List<RailWalker.Edge> backs = RailWalker.edgesOut(RAILS, 10, 0, 0, BlockFace.NORTH);
+        check("edgesOut sees the through-line as well",
+                backs.stream().anyMatch(e -> e.exit() == BlockFace.SOUTH));
+        java.util.List<RailWalker.Edge> sides = RailWalker.edgesOut(RAILS, 10, 0, 0, BlockFace.SOUTH);
+        check("edgesOut offers the flipped point as second edge",
+                sides.size() == 2 && sides.stream().anyMatch(e -> e.shape() == Shape.SOUTH_WEST));
+
         System.out.println(fails == 0 ? "ALL PASSED" : fails + " FAILED");
         System.exit(fails == 0 ? 0 : 1);
     }

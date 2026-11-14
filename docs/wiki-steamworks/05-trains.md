@@ -56,17 +56,35 @@ Right-click the locomotive with fuel (sneak = the whole stack). You only burn fu
 ## Autopilot
 Right-click a locomotive with a **Clock** to switch the autopilot on (click again to switch it off). The train then:
 * drives itself (needs fuel, nobody has to sit in the cab),
-* stops at every **station** for 6 seconds,
+* stops at every **station** for 20 seconds (config: `trains.station-wait-seconds`),
 * waits in front of **red signals** and other trains,
 * waits at the **end of the track** and drives back.
 
 A line with a station at each end is a working shuttle service. Pressing W or S in the cab takes over and switches the autopilot off.
+
+## Switches and routing
+Trains follow the rails, so a **switched point** (a curved rail that also connects to the next
+rail on its other side) sends them down the chosen branch: flip it with redstone like vanilla,
+the train takes whatever route the points show. Since 0.3.44 trains are smarter:
+
+* A train on a **line or trip plans its route** through the network and **sets the switches on its
+  path itself** - a lever click's sound tells you the point moved ahead of you.
+* A switch with **any train standing on it cannot be moved**: routes wait in front of it and the
+  train on it drives on undisturbed.
+* The front wheels **remember** which branch they took: a point flipped under a moving train can
+  no longer split it in two.
 
 ## Lines and timetables
 Click a locomotive with a piece of **paper** to open its **line board**:
 * The top row shows the stops of this line, in driving order; click one to remove it.
 * The rows below list every named station on this world's rails - click to add (or remove) a stop, up to nine.
 * With a line set, the autopilot **only stops at its own stations** and runs the line as a shuttle:
-  dwell at each stop, next, and bounce (with a short wait) at the ends of the list.
+  dwell at each stop, next, and bounce (with a short wait) at the ends of the list. On a network,
+  each leg is routed (see above); a plain dead-end shuttle line keeps bouncing as before.
 * An empty line keeps the plain autopilot: stop at every station along the way.
 * Lines are saved with the train and survive a restart. Name your stations first (anvil or name tag) - the board speaks names.
+
+### Trips (one-way)
+**Shift-click** any station on the line board to send that one train there once: it routes there,
+dwells, gives the arrival whistle and switches the autopilot off. Useful for "this wagon train
+goes to the sawmill and stays there". The train must be standing when you set the trip.

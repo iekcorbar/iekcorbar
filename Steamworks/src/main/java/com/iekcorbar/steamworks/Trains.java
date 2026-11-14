@@ -47,6 +47,7 @@ import org.joml.Vector3f;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,7 +75,7 @@ final class Trains implements Listener {
     private final Map<UUID, Map<Long, KNode>> stationRails = new HashMap<>(), signalRails = new HashMap<>();
     private final Map<UUID, Map<Long, Train>> occupied = new HashMap<>();
 
-    enum Stop { STATION, SIGNAL, TRAIN, END }
+    enum Stop { STATION, SIGNAL, TRAIN, END, BLOCK }
 
     record Obstacle(Stop kind, double dist, long rail, KNode node) {}
     private final File file;
@@ -335,11 +336,17 @@ final class Trains implements Listener {
         };
     }
 
+    /**
+     * The car's world pose. FMM bakes a 180° facing flip into these item models (same trap as the
+     * curve tracks in 0.3.43), so the model entity needs the yaw OPPOSITE to the direction of
+     * travel: without it the locomotive drives tail-first and W/S feel swapped (owner, 14-11).
+     * Seats, signs and the chimney particle stay in the true travel frame (seatLoc).
+     */
     private static Location loc(Car car) {
         Vector c = car.center(), d = car.dir();
         Location l = c.toLocation(car.train.world);
-        l.setYaw((float) Math.toDegrees(Math.atan2(-d.getX(), d.getZ())));
-        l.setPitch((float) -Math.toDegrees(Math.asin(Math.max(-1, Math.min(1, d.getY())))));
+        l.setYaw((float) Math.toDegrees(Math.atan2(d.getX(), -d.getZ())));
+        l.setPitch((float) Math.toDegrees(Math.asin(Math.max(-1, Math.min(1, d.getY()))))); // sign flipped with the yaw: the same facing-mirror
         return l;
     }
 
@@ -409,6 +416,7 @@ final class Trains implements Listener {
                 }
             }
             if (t.auto) {
+                if (t.route != null) { advanceRoute(t); enforceSwitches(t, cfg); }
                 steam = autopilot(t, cfg);
                 if (driver != null && tick % 10 == 0) driver.sendActionBar(dashboard(t).append(Component.text("  |  autopilot", NamedTextColor.AQUA)));
             } else if (driver != null && driver.getCurrentInput() != null) { // same null-guard: one NPE
@@ -463,7 +471,7 @@ final class Trains implements Listener {
                 return;
             }
             RailWalker f = c.front.copy(), r = c.rear.copy();
-            if (!f.move(t.speed, rails) || !r.move(t.speed, rails)) {
+            if (!f.move(t.speed, rails, t.commit) || !r.move(t.speed, rails, t.commit)) {
                 bump(t);
                 return;
             }
@@ -617,11 +625,37 @@ final class Trains implements Listener {
     private boolean autopilot(Train t, Settings cfg) {
         if (t.waitTicks > 0) {
             t.speed = 0;
-            if (--t.waitTicks == 0 && t.turnAfterWait) {
-                t.turnAfterWait = false;
-                t.autoDir = -t.autoDir;
+            if (--t.waitTicks == 0) {
+                if (t.tripDone) {          // rit-aankomst: éénrichtingsklus geklaard, trein teruggeven
+                    t.tripDone = false;
+                    t.trip = null;
+                    resetPlan(t);
+                    t.auto = false;
+                    whistle(t);
+                    for (Player p : riders(t))
+                        p.sendActionBar(Component.text("Arrived - autopilot off", NamedTextColor.AQUA));
+                    save();
+                    return false;
+                }
+                if (t.turnAfterWait) {
+                    t.turnAfterWait = false;
+                    t.autoDir = -t.autoDir;
+                }
             }
             return false;
+        }
+        if (t.trip != null && t.route == null && t.speed == 0) { // rit hervat na herstart of overname
+            List<Leg> r = planRoute(t, t.trip);
+            if (r == null || r.isEmpty()) {
+                String was = t.trip;
+                t.trip = null;
+                for (Player p : riders(t))
+                    p.sendActionBar(Component.text("No route to " + was + " - trip cancelled.", NamedTextColor.RED));
+            } else {
+                t.route = r;
+                t.routePos = 0;
+                t.routeDest = t.trip;
+            }
         }
         double v = Math.abs(t.speed);
         if (t.fuel <= 0) {
@@ -629,13 +663,14 @@ final class Trains implements Listener {
             return false;
         }
         double range = v * v / (2 * cfg.trainBrake) + 4;
-        Obstacle o = scan(t, range, t.autoDir, true);
+        Obstacle o = t.route != null && t.autoDir > 0 ? scanRoute(t, range) : scan(t, range, t.autoDir, true);
         double allowed = cfg.trainAutoSpeed;
         if (o != null) {
             double stopAt = switch (o.kind()) {
                 case STATION -> o.dist();
                 case SIGNAL -> o.dist() - 1.0;
                 case TRAIN -> o.dist() - 2.5;
+                case BLOCK -> o.dist() - 1.2;
                 case END -> o.dist();
             };
             allowed = Math.min(allowed, Math.sqrt(Math.max(0, 2 * cfg.trainBrake * stopAt)));
@@ -646,7 +681,9 @@ final class Trains implements Listener {
                     t.lastStation = o.rail();
                     t.sinceStation = 0;
                     // lijn-bediening: volgende stop onthouden, bij een eindpunt omkeren
-                    if (!t.line.isEmpty()) {
+                    if (t.trip != null && t.routeDest != null && t.routeDest.equals(stationName(o.node()))) {
+                        t.tripDone = true;                 // rit: aankomen, dwellen, klaar
+                    } else if (!t.line.isEmpty()) {
                         int idx = t.line.indexOf(stationName(o.node()));
                         if (idx >= 0) t.linePos = idx;
                         int np = t.linePos + t.lineDir;
@@ -656,11 +693,36 @@ final class Trains implements Listener {
                             np = t.linePos + t.lineDir;
                         }
                         t.linePos = Math.max(0, np);
+                        // netwerk: rijd de volgende stop echt aan (wissels zelf zetten); lukt
+                        // dat niet (doodlopende enkele lijn) dan blijft de oude pendel-bounce
+                        if (t.autoDir > 0) {
+                            String next = t.line.get(t.linePos);
+                            List<Leg> r = planRoute(t, next);
+                            if (r != null && !r.isEmpty()) {
+                                t.route = r;
+                                t.routePos = 0;
+                                t.routeDest = next;
+                                t.commit.clear();
+                                t.turnAfterWait = false;
+                            } else {
+                                t.route = null;
+                                t.routeDest = null;
+                            }
+                        }
                     }
                     arrived(t, o.node());
                 } else if (o.kind() == Stop.END) {
                     t.waitTicks = cfg.trainStationWait;
                     t.turnAfterWait = true;
+                    if (t.route != null) {  // route veroudert (spoor weg/omgebogen): terug naar plain
+                        t.route = null;
+                        t.routeDest = null;
+                        if (t.trip != null) {
+                            t.trip = null;
+                            for (Player p : riders(t))
+                                p.sendActionBar(Component.text("The track to your destination is gone - trip cancelled.", NamedTextColor.RED));
+                        }
+                    }
                 }
                 return false;
             }
@@ -678,6 +740,162 @@ final class Trains implements Listener {
         return false;
     }
 
+    // ------------------------------------------------------------ network routing (0.3.44)
+
+    /** One rail piece of a planned path: through this block, from entry to exit, with this shape. */
+    static final class Leg {
+        final int x, y, z;
+        final long key, occKey;
+        final BlockFace entry, exit;
+        final Rail.Shape shape;
+        Leg(int x, int y, int z, BlockFace entry, BlockFace exit, Rail.Shape shape) {
+            this.x = x; this.y = y; this.z = z;
+            this.key = RailWalker.blockKey(x, y, z);
+            this.occKey = KNode.key(x, y, z);
+            this.entry = entry; this.exit = exit; this.shape = shape;
+        }
+    }
+
+    private static void resetPlan(Train t) {
+        t.route = null;
+        t.routePos = 0;
+        t.routeDest = null;
+        t.trip = null;
+        t.tripDone = false;
+        t.commit.clear();
+    }
+
+    /**
+     * Breadth-first search over the rail graph towards the named station, taking switches into
+     * account: every edge is either the piece's live exit or the flipped alternative of a point.
+     * Flip-edges are pushed to the back of the queue, so the route that needs the fewest switch
+     * moves comes out first. Returns the legs to drive, an empty list when already there, or null
+     * when the station is unreachable from here.
+     */
+    private List<Leg> planRoute(Train t, String destName) {
+        if (t.cars.isEmpty() || destName == null) return null;
+        RailWalker.Rails rails = rails(t.world);
+        Set<Long> dest = new HashSet<>();
+        for (KNode n : plugin.kinetics().stations)
+            if (n.world == t.world && stationName(n).equals(destName))
+                for (BlockFace f : new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST})
+                    for (int dy = 0; dy >= -1; dy--) {
+                        Block b = n.world.getBlockAt(n.x + f.getModX(), n.y + dy, n.z + f.getModZ());
+                        if (b.getBlockData() instanceof Rail) dest.add(KNode.key(b.getX(), b.getY(), b.getZ()));
+                    }
+        if (dest.isEmpty()) return null;
+        RailWalker head = t.cars.get(0).front;
+        long startKey = KNode.key(head.x, head.y, head.z);
+        if (dest.contains(startKey)) return List.of();
+
+        record At(int x, int y, int z, BlockFace entry) {
+            long id() { return RailWalker.blockKey(x, y, z) * 32L + entry.ordinal(); }
+        }
+        record Node(At at, At parent, RailWalker.Edge via) {}
+        Map<Long, Node> seen = new HashMap<>();
+        ArrayDeque<At> queue = new ArrayDeque<>();
+        At start = new At(head.x, head.y, head.z, head.from);
+        seen.put(start.id(), new Node(start, null, null));
+        queue.add(start);
+        At goal = null;
+        int budget = 4096;
+        while (!queue.isEmpty() && budget-- > 0) {
+            At a = queue.poll();
+            if (dest.contains(KNode.key(a.x(), a.y(), a.z()))) { goal = a; break; }
+            for (RailWalker.Edge e : RailWalker.edgesOut(rails, a.x(), a.y(), a.z(), a.entry())) {
+                At b = new At(e.nx(), e.ny(), e.nz(), e.exit().getOppositeFace());
+                if (seen.containsKey(b.id())) continue;
+                seen.put(b.id(), new Node(b, a, e));
+                boolean flip = e.shape() != rails.shape(a.x(), a.y(), a.z());
+                if (flip) queue.addLast(b); else queue.addFirst(b);
+            }
+        }
+        if (goal == null) return null;
+        List<Leg> legs = new ArrayList<>();
+        At cur = goal;
+        while (true) {
+            Node n = seen.get(cur.id());
+            if (n.parent() == null) break;
+            At p = n.parent();
+            legs.add(new Leg(p.x(), p.y(), p.z(), p.entry(), n.via().exit(), n.via().shape()));
+            cur = p;
+        }
+        java.util.Collections.reverse(legs);
+        return legs;
+    }
+
+    /** Keep routePos at the leg the leading wheel rides (or enters) right now. */
+    private static void advanceRoute(Train t) {
+        if (t.route == null || t.route.isEmpty()) return;
+        Car lead = t.speed < 0 ? t.cars.get(t.cars.size() - 1) : t.cars.get(0);
+        RailWalker head = t.speed < 0 ? lead.rear : lead.front;
+        for (int i = t.routePos; i < t.route.size(); i++) {
+            Leg L = t.route.get(i);
+            if (L.x == head.x && L.y == head.y && L.z == head.z) {
+                t.routePos = i;
+                return;
+            }
+        }
+    }
+
+    /** Set the switches ahead of the train to the shapes its route needs - never under a wheel. */
+    private void enforceSwitches(Train t, Settings cfg) {
+        if (t.route == null || t.route.isEmpty()) return;
+        Map<Long, Train> occ = occupied.getOrDefault(t.world.getUID(), Map.of());
+        int limit = Math.min(t.route.size(), t.routePos + (int) cfg.trainSwitchLookahead);
+        for (int i = t.routePos + 1; i < limit; i++) {
+            Leg L = t.route.get(i);
+            Block b = t.world.getBlockAt(L.x, L.y, L.z);
+            if (!(b.getBlockData() instanceof Rail r)) continue;
+            if (r.getShape() == L.shape) continue;
+            if (occ.containsKey(L.occKey)) continue;
+            r.setShape(L.shape);
+            b.setBlockData(r, false);
+            t.world.playSound(b.getLocation().add(0.5, 0.3, 0.5), Sound.BLOCK_LEVER_CLICK, 0.3f, 1.4f);
+        }
+    }
+
+    /** Like scan() but down the planned route. Looks ahead: the piece AFTER the one the nose rides
+     *  must have the shape the route wants; a switch that cannot be moved (another train stands on
+     *  it) is a BLOCK obstacle to stop in front of. Stops only for the route's own destination. */
+    private Obstacle scanRoute(Train t, double range) {
+        RailWalker.Rails rails = rails(t.world);
+        RailWalker w = t.cars.get(0).front.copy();
+        double step = 0.5;
+        Map<Long, Train> occ = occupied.getOrDefault(t.world.getUID(), Map.of());
+        Map<Long, KNode> st = stationRails.getOrDefault(t.world.getUID(), Map.of());
+        Map<Long, KNode> sg = signalRails.getOrDefault(t.world.getUID(), Map.of());
+        long last = railKey(w);
+        int li = t.routePos;
+        for (double d = 0; d < range; d += step) {
+            // align to the leg the nose rides (advanceRoute keeps routePos fresh; search forward from there)
+            Leg cur = null;
+            for (int i = li; i < t.route.size() && i <= li + 4; i++) {
+                Leg L = t.route.get(i);
+                if (L.x == w.x && L.y == w.y && L.z == w.z) { cur = L; li = i; break; }
+            }
+            Leg next = cur != null && li + 1 < t.route.size() ? t.route.get(li + 1) : null;
+            if (next != null && rails.shape(next.x, next.y, next.z) != next.shape) {
+                double remaining = Math.max(0, w.length() - w.t);
+                return new Obstacle(Stop.BLOCK, d + remaining, railKey(w), null);
+            }
+            if (!w.move(step, rails)) return new Obstacle(Stop.END, d, last, null);
+            long k = railKey(w);
+            if (k == last) continue;
+            last = k;
+            Train o = occ.get(k);
+            if (o != null && o != t) return new Obstacle(Stop.TRAIN, d, k, null);
+            KNode signal = sg.get(k);
+            if (signal != null && (SteamworksPlugin.hasSignal(signal) || sectionTaken(t.world, t, w.copy(), step)))
+                return new Obstacle(Stop.SIGNAL, d, k, signal);
+            KNode station = st.get(k);
+            if (station != null && k != t.lastStation && t.routeDest != null
+                    && t.routeDest.equals(stationName(station)))
+                return new Obstacle(Stop.STATION, d + 0.5, k, station);
+        }
+        return null;
+    }
+
     private List<Player> riders(Train t) {
         List<Player> out = new ArrayList<>();
         for (Car c : t.cars) for (ItemDisplay s : c.seats) for (Entity e : s.getPassengers()) if (e instanceof Player p) out.add(p);
@@ -686,6 +904,15 @@ final class Trains implements Listener {
 
     /** "Next stop" for everyone on board when a station comes up. */
     private void announce(Train t) {
+        if (t.auto && t.route != null && t.routeDest != null) { // routed: the destination is known up-front
+            if (t.routeDest.equals(t.announced)) return;
+            t.announced = t.routeDest;
+            for (Player p : riders(t)) {
+                p.showTitle(net.kyori.adventure.title.Title.title(Component.empty(),
+                        Component.text("Next stop: " + t.routeDest, NamedTextColor.GOLD)));
+            }
+            return;
+        }
         Obstacle o = scan(t, 14, (int) Math.signum(t.speed), true);
         if (o == null || o.kind() != Stop.STATION) return;
         String name = stationName(o.node());
@@ -1038,6 +1265,21 @@ final class Trains implements Listener {
             t.waitTicks = 0;
             t.turnAfterWait = false;
             if (t.auto) t.autoDir = t.speed < 0 ? -1 : 1;
+            if (t.auto) {
+                if (!t.line.isEmpty() && t.trip == null) { // lijn + netwerk: plan meteen de eerste rit
+                    t.routeDest = t.line.get(Math.max(0, Math.min(t.linePos, t.line.size() - 1)));
+                    List<Leg> r = planRoute(t, t.routeDest);
+                    if (r != null && !r.isEmpty()) {
+                        t.route = r;
+                        t.routePos = 0;
+                        t.commit.clear();
+                    } else {
+                        t.routeDest = null; // er staat al, of geen route: plain lijnbedrijf
+                    }
+                }
+            } else {
+                resetPlan(t);
+            }
             p.sendActionBar(Component.text(t.auto ? "Autopilot on: runs its line (or every station), waits at red signals, turns round at the ends"
                     : "Autopilot off", t.auto ? NamedTextColor.AQUA : NamedTextColor.YELLOW));
             p.playSound(p.getLocation(), Sound.BLOCK_LEVER_CLICK, 0.6f, t.auto ? 1.2f : 0.8f);
@@ -1153,8 +1395,10 @@ final class Trains implements Listener {
                 back.cars.add(c);
             }
             trains.add(back);
+            resetPlan(back);
         }
         t.speed = 0;
+        resetPlan(t);
         if (t.cars.isEmpty()) {
             releaseTickets(t);
             trains.remove(t);
@@ -1197,11 +1441,16 @@ final class Trains implements Listener {
             ItemStack info = new ItemStack(Material.BOOK);
             ItemMeta im = info.getItemMeta();
             im.displayName(Component.text("Line board", NamedTextColor.DARK_AQUA));
-            im.lore(List.of(Component.text(t.line.isEmpty()
+            List<Component> lore = new ArrayList<>();
+            if (t.trip != null)
+                lore.add(Component.text("Trip: running to " + t.trip + " (one way)", NamedTextColor.AQUA));
+            lore.add(Component.text(t.line.isEmpty()
                             ? "No line set: the autopilot stops at every station."
-                            : "The autopilot runs this line back and forth,", NamedTextColor.GRAY),
-                    t.line.isEmpty() ? Component.text("Click stations below to build a line.", NamedTextColor.GRAY)
-                            : Component.text("stopping only at the stops above.", NamedTextColor.GRAY)));
+                            : "The autopilot runs this line back and forth,", NamedTextColor.GRAY));
+            lore.add(Component.text(t.line.isEmpty() ? "Click stations below to build a line."
+                            : "stopping only at the stops above.", NamedTextColor.GRAY));
+            lore.add(Component.text("Shift-click a station: send this train there once.", NamedTextColor.DARK_GRAY));
+            im.lore(lore);
             info.setItemMeta(im);
             gui.setItem(slot, info);
         }
@@ -1214,7 +1463,8 @@ final class Trains implements Listener {
             ItemMeta im = it.getItemMeta();
             boolean on = t.line.contains(name);
             im.displayName(Component.text(name, on ? NamedTextColor.GREEN : NamedTextColor.WHITE));
-            im.lore(List.of(Component.text(on ? "On the line - click to remove" : "Click to add to the line", NamedTextColor.GRAY)));
+            im.lore(List.of(Component.text(on ? "On the line - click to remove" : "Click to add to the line", NamedTextColor.GRAY),
+                    Component.text("Shift-click: one-way trip here", NamedTextColor.DARK_GRAY)));
             im.getPersistentDataContainer().set(lineNameKey, PersistentDataType.STRING, name);
             it.setItemMeta(im);
             gui.setItem(s2++, it);
@@ -1229,6 +1479,10 @@ final class Trains implements Listener {
         String name = e.getCurrentItem().getItemMeta().getPersistentDataContainer().get(lineNameKey, PersistentDataType.STRING);
         if (name == null) return;
         Train t = h.train;
+        if (e.isShiftClick()) {
+            startTrip(p, t, name);
+            return;
+        }
         if (!t.line.remove(name)) {
             if (t.line.size() >= 9) { p.sendActionBar(Component.text("Nine stops is a long enough line.", NamedTextColor.YELLOW)); return; }
             t.line.add(name);
@@ -1247,6 +1501,36 @@ final class Trains implements Listener {
         if (e.getInventory().getHolder() instanceof LineHolder) e.setCancelled(true);
     }
 
+    /** Rit-mode (0.3.44): one-way run to the chosen station; on arrival the autopilot switches off. */
+    private void startTrip(Player p, Train t, String name) {
+        if (t.speed != 0) {
+            p.sendActionBar(Component.text("Stop the train first (S), then set the trip.", NamedTextColor.YELLOW));
+            return;
+        }
+        List<Leg> r = planRoute(t, name);
+        if (r == null) {
+            p.sendActionBar(Component.text("No route to " + name + " from here.", NamedTextColor.RED));
+            return;
+        }
+        if (r.isEmpty()) {
+            p.sendActionBar(Component.text("The train is already at " + name + ".", NamedTextColor.YELLOW));
+            return;
+        }
+        t.trip = name;
+        t.routeDest = name;
+        t.route = r;
+        t.routePos = 0;
+        t.autoDir = 1;
+        t.turnAfterWait = false;
+        t.tripDone = false;
+        t.waitTicks = 0;
+        t.commit.clear();
+        t.auto = true;
+        p.sendActionBar(Component.text("Trip set: runs to " + name + " once, then autopilot off.", NamedTextColor.AQUA));
+        p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.7f, 1.2f);
+        save();
+    }
+
     // ------------------------------------------------------------ saving
 
     void save() {
@@ -1260,6 +1544,7 @@ final class Trains implements Listener {
             s.set("auto", t.auto);
             s.set("auto-dir", t.autoDir);
             if (!t.line.isEmpty()) s.set("line", new ArrayList<>(t.line));
+            if (t.trip != null) s.set("trip", t.trip);
             List<Map<String, Object>> cars = new ArrayList<>();
             for (Car c : t.cars) {
                 Map<String, Object> m = new HashMap<>();
@@ -1298,6 +1583,7 @@ final class Trains implements Listener {
                 t.auto = s.getBoolean("auto");
                 t.autoDir = s.getInt("auto-dir", 1) < 0 ? -1 : 1;
                 for (Object stop : s.getList("line", new ArrayList<>())) t.line.add(String.valueOf(stop));
+                t.trip = s.getString("trip"); // the route itself is re-planned when the trip resumes
                 for (Map<?, ?> m : s.getMapList("cars")) {
                     Car c = new Car(CarType.valueOf(String.valueOf(m.get("type"))),
                             RailWalker.load(String.valueOf(m.get("front"))), RailWalker.load(String.valueOf(m.get("rear"))));
