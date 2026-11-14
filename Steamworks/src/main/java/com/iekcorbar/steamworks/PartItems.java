@@ -124,6 +124,23 @@ final class PartItems {
         return id == null ? null : CarType.byId(id);
     }
 
+    /**
+     * A train-car item whose hidden tag was stripped (the 26.2 recipe-book wire bug made revealed
+     * recipes hand out bare paper): recognisable again by the FMM item_model it still carries.
+     * Returns the car, or null for a normal paper / a paper that is properly tagged already.
+     */
+    CarType ghostCar(ItemStack item) {
+        if (item == null || item.getType() != Material.PAPER || !item.hasItemMeta()) return null;
+        ItemMeta im = item.getItemMeta();
+        if (im.getPersistentDataContainer().has(carKey, PersistentDataType.STRING)) return null;
+        NamespacedKey model = im.getItemModel();
+        if (model == null) return null;
+        String key = model.getKey().toLowerCase(java.util.Locale.ROOT).replace("_", "");
+        for (CarType t : CarType.values())
+            if (key.equals(t.model().toLowerCase(java.util.Locale.ROOT).replace("_", ""))) return t;
+        return null;
+    }
+
     /** Any Steamworks item (part, material or train car). */
     boolean isOurs(ItemStack item) {
         return typeOf(item) != null || materialOf(item) != null || carOf(item) != null;

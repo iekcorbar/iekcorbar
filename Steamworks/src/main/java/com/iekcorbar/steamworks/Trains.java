@@ -103,7 +103,17 @@ final class Trains implements Listener {
     public void onPlace(PlayerInteractEvent e) {
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getHand() != EquipmentSlot.HAND) return;
         CarType type = plugin.items().carOf(e.getItem());
-        if (type == null) return;
+        if (type == null) {
+            CarType ghost = plugin.items().ghostCar(e.getItem()); // bare paper with a wagon's look: heal it in place
+            if (ghost != null) {
+                Player p = e.getPlayer();
+                p.getInventory().setItemInMainHand(plugin.items().createCar(ghost, 1));
+                p.sendActionBar(Component.text("Repaired that blank-looking " + ghost.displayName
+                        + " item - try placing it again.", NamedTextColor.GOLD));
+                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.7f, 1.4f);
+            }
+            return;
+        }
         e.setCancelled(true);
         Block b = e.getClickedBlock();
         if (b == null || !(b.getBlockData() instanceof Rail rail)) {
