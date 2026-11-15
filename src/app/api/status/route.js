@@ -20,9 +20,11 @@ export async function GET() {
   // protocol (server.properties enable-query) first — direct, console-free,
   // and it carries the actual player names. The old third-party mcsrvstat.us
   // call remains only as a fallback for when query is unreachable/firewalled.
-  // Query port defaults to the game port; override with MINECRAFT_QUERY_PORT.
-  const queryPort = parseInt(process.env.MINECRAFT_QUERY_PORT, 10) || serverPort;
-  const queried = await queryServerStatus(serverHost, queryPort);
+  // Target: MINECRAFT_QUERY_TARGET ("ip:port", e.g. the game box when the
+  // website's own domain doesn't point there) > the ":port" in the staff
+  // address > MINECRAFT_QUERY_PORT > _minecraft._tcp SRV > game port.
+  const [queryHost, queryHostPort] = (process.env.MINECRAFT_QUERY_TARGET || serverAddress).split(':');
+  const queried = await queryServerStatus(queryHost, queryHostPort || serverPortStr);
   if (queried) {
     online = true;
     playersOnline = queried.playersOnline;

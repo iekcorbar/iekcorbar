@@ -1,24 +1,48 @@
 import dgram from 'dgram';
+import { promisify } from 'util';
+import dns from 'dns';
 
-// Minimal Minecraft GS4 "Query" client (the UDP protocol behind
-// server.properties' enable-query / query.port), implemented directly here
-// since 2026-11-15. The site used to ask the third-party mcsrvstat.us API for
-// live server status — that works, but it's an extra external hop. The query
-// protocol answers straight from our own server (no RCON involved, and
-// nothing ever touches the server console) and additionally returns the
-// player-name list.
+// Minecraft Query client for the protocol Paper actually runs — verified
+// byte-by-byte on 2026-11-15 by disassembling the live paper-26.2.jar
+// (net.minecraft.server.rcon.thread.QueryThreadGs4). NOTE: this is NOT the
+// pre-1.18 plain-GS4 format most libraries implement. The live exchange:
 //
-// Protocol (GameSpy4, as vanilla/Paper implement it):
-//   1. handshake:  0xFE 0x00 <sessionID int32 BE>              -> "HELLO \0<challenge>\0"
-//   2. stats:      0xFE 0x01 <sessionID> <challenge cstring> <int32 0>
-//      -> single packet: 0xFE 0x00 <sessionID echoed> then null-terminated
-//         key/value pairs ("hostname", "numplayers", "player_0", ...) ending
-//         at "\0\0". Large answers are split over several UDP packets with a
-//         0xFE 0x00 <requestID 4 LE> <packetNumber 4 BE> frame instead; the
-//         key/value text then simply continues across those packets.
+//   1. handshake: client -> 0xFE 0xFD 0x09 <session: 4 ASCII-digit bytes>
+//      server  -> 0x09 <session> <challenge as DECIMAL digits> 0x00
+//      (the session bytes round-trip through the server as a UTF-8 string,
+//       so they must stay ASCII; Paper echoes them back untouched)
+//   2. full status: client -> 0xFE 0xFD 0x00 <session> <challenge as 4-byte
+//      BIG-ENDIAN int> <4 padding bytes>   — exactly 15 bytes total; that
+//      length is what selects the full response. 11 bytes would only get the
+//      short header-only variant without player names.
+//      server -> 0x00 <session> then classic GS4 cstring sections:
+//      "splitnum" 0x80 0x00, key\0value\0 pairs (hostname, gametype, game_id,
+//      version, plugins, map, numplayers, maxplayers, hostport, hostip), a
+//      \0\0 terminator, then the player section (player_0\0<name>\0 ...).
+//
+// Why this exists: it gives the website live status AND player names
+// directly from our own server — UDP-only, unauthenticated, and it never
+// touches the server console. That is what let RCON be switched off
+// (2026-11-15, console-spam was the last RCON consumer together with the
+// DB command queue in src/lib/rcon.js).
 
-const QUERY_MAGIC = 0xfe;
-const SESSION_ID = 0x01020304; // arbitrary fixed int32, echoed back in single-packet replies
+const resolveSrv = promisify(dns.resolveSrv);
+
+// Which UDP port to query `host` on: explicit argument (a ":port" in the
+// staff-entered server address) > MINECRAFT_QUERY_PORT > the host's
+// _minecraft._tcp SRV record (servers behind a non-default port, like ours,
+// publish that record; the vanilla client follows it the same way) > 25565.
+export async function resolveQueryTarget(host, explicitPort) {
+  const explicit = parseInt(explicitPort, 10);
+  if (Number.isFinite(explicit) && explicit > 0) return explicit;
+  const envPort = parseInt(process.env.MINECRAFT_QUERY_PORT, 10);
+  if (Number.isFinite(envPort) && envPort > 0) return envPort;
+  try {
+    const recs = await resolveSrv(`_minecraft._tcp.${host}`);
+    if (recs && recs.length) return recs[0].port;
+  } catch { /* no SRV record - plain port it is */ }
+  return 25565;
+}
 
 // Reads null-terminated cstrings starting at `offset`, as key/value pairs,
 // until an empty key (the section terminator). Returns a flat map.
@@ -39,8 +63,8 @@ function readKeyValues(buf, offset) {
   return out;
 }
 
-// Waits for the first matching UDP reply (rejects on timeout), then keeps
-// collecting for `quietMs` of silence so multi-packet tails are not lost.
+// Sends one request and collects the reply. The extra quiet window after
+// the first packet picks up any split tail.
 function ask(socket, host, port, packet, timeoutMs, quietMs) {
   return new Promise((resolve, reject) => {
     const packets = [];
@@ -53,7 +77,6 @@ function ask(socket, host, port, packet, timeoutMs, quietMs) {
       resolve(packets);
     };
     const onMessage = (msg) => {
-      if (msg.length < 6 || msg[0] !== QUERY_MAGIC || msg[1] !== 0x00) return;
       packets.push(msg);
       clearTimeout(quietTimer);
       quietTimer = setTimeout(finish, quietMs);
@@ -72,54 +95,55 @@ function ask(socket, host, port, packet, timeoutMs, quietMs) {
   });
 }
 
-// Pulls the merged key/value map out of one-or-more stats packets. Rather
-// than hardcoding every framing offset (vanilla and Paper differ by a
-// padding field or two), each packet's payload is scanned for where its
-// cstring section actually begins.
-function parseStatsPackets(packets) {
-  const kv = {};
-  for (const p of packets) {
-    let start = p.indexOf('hostname');
-    if (start === -1) start = p.indexOf('splitnum');
-    if (start === -1) start = p.indexOf('player_');
-    if (start === -1) continue;
-    Object.assign(kv, readKeyValues(p, start));
-  }
-  return kv;
-}
-
 /**
- * Queries a Minecraft server over the UDP query protocol.
+ * Queries a Minecraft server over its query protocol.
  * Resolves null when the server doesn't answer (query disabled, firewall,
  * offline) so callers can fall back gracefully.
  */
 export async function queryServerStatus(host, queryPort) {
+  queryPort = await resolveQueryTarget(host, queryPort);
+  // Four ASCII digits: the session id survives a Java String round-trip.
+  const session = Buffer.from(String(1000 + Math.floor(Math.random() * 9000)), 'ascii');
   const socket = dgram.createSocket('udp4');
   try {
-    const hello = await ask(socket, host, queryPort, Buffer.from([
-      QUERY_MAGIC, 0x00,
-      (SESSION_ID >>> 24) & 0xff, (SESSION_ID >>> 16) & 0xff, (SESSION_ID >>> 8) & 0xff, SESSION_ID & 0xff,
-    ]), 3000, 300);
-    const challenge = hello[0].toString('latin1', 6).split('\0')[1];
-    if (!challenge) throw new Error('Minecraft query handshake returned no challenge');
+    // 1. handshake -> 0x09 <session> <challenge digits> 0x00
+    const hello = await ask(socket, host, queryPort,
+      Buffer.concat([Buffer.from([0xfe, 0xfd, 0x09]), session]), 3000, 200);
+    const reply = hello[0];
+    const tail = reply.subarray(1 + session.length);
+    const nul = tail.indexOf(0x00);
+    const digits = tail.toString('ascii', 0, nul === -1 ? tail.length : nul);
+    if (!/^\d+$/.test(digits)) throw new Error('Minecraft query handshake returned no challenge');
 
-    const sid = Buffer.alloc(4);
-    sid.writeInt32BE(SESSION_ID, 0);
-    const statsPacket = Buffer.concat([
-      Buffer.from([QUERY_MAGIC, 0x01]),
-      sid,
-      Buffer.from(challenge + '\0', 'latin1'),
+    // 2. full status: header + session + BE-challenge + 4 padding (15 bytes)
+    const challengeBuf = Buffer.alloc(4);
+    challengeBuf.writeUInt32BE(parseInt(digits, 10), 0);
+    const stats = await ask(socket, host, queryPort, Buffer.concat([
+      Buffer.from([0xfe, 0xfd, 0x00]),
+      session,
+      challengeBuf,
       Buffer.alloc(4),
-    ]);
-    const replies = await ask(socket, host, queryPort, statsPacket, 3000, 800);
-    const kv = parseStatsPackets(replies);
+    ]), 3000, 800);
+
+    const kv = {};
+    let players = [];
+    for (const pkt of stats) {
+      const start = pkt.indexOf('hostname');
+      if (start !== -1) Object.assign(kv, readKeyValues(pkt, start));
+      // The player section is behind the "\0\0" section terminator; scan it
+      // by pattern instead of relying on the exact header length.
+      let m;
+      const re = /player_(\d+)\x00([^\x00]+)\x00/g;
+      const buf = pkt.toString('latin1');
+      while ((m = re.exec(buf)) !== null) players[parseInt(m[1], 10)] = Buffer.from(m[2], 'latin1').toString('utf8');
+    }
+    players = players.filter(Boolean);
     if (kv.hostname === undefined && kv.numplayers === undefined) return null;
-    const players = [];
-    for (let i = 0; kv[`player_${i}`] !== undefined; i++) players.push(kv[`player_${i}`]);
     return {
       online: true,
-      hostname: kv.hostname || '',
-      version: kv.version || kv.software || '',
+      hostname: (kv.hostname || '').replace(/§./g, ''),
+      version: kv.version || '',
+      software: (kv.plugins || '').split(':')[0].replace(/§./g, '').trim(),
       playersOnline: parseInt(kv.numplayers, 10) || 0,
       playersMax: parseInt(kv.maxplayers, 10) || 0,
       playersList: players,
