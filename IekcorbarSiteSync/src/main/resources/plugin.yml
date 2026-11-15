@@ -18,7 +18,7 @@ loadbefore: [FreeMinecraftModels]
 
 commands:
   webstats:
-    description: Returns JSON player statistics for the website via RCON
+    description: Returns JSON player statistics for the website (via RCON before 15-11-2026, now via the site_command_queue)
     permission: iekcorbar.webstats
     permission-message: You do not have permission to execute webstats.
     usage: /webstats <username>

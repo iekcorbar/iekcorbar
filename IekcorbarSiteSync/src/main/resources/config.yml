@@ -33,6 +33,20 @@ season-sync:
   enabled: true
   every-seconds: 300
 
+# Website → server commando-queue — de RCON-vervanging (15-11-2026).
+# RCON stond uit in server.properties omdat elk site-commando (en elke
+# reconnect-poging) de live console in spamde. De site schrijft commando's nu
+# in de tabel `site_command_queue` in deze database; deze plugin claimt ze,
+# voert ze als console uit MET GEVANGLIGE output (antwoord gaat terug naar de
+# tabel, nooit naar de console) en markeert de rij klaar.
+# Veiligheid: wie naar deze database kan schrijven, kan console-commando's
+# draaien — exact hetzelfde vertrouwensniveau als het oude RCON-wachtwoord.
+command-queue:
+  enabled: true
+  poll-seconds: 1              # hoe vaak de tabel wordt gelezen
+  max-per-tick: 10             # max commando's per tick (rijgen op = netjes achter elkaar)
+  command-timeout-seconds: 8   # langer dan dit = de site krijgt een foutmelding
+
 # Generic PlaceholderAPI bridge — lets the website show data from ANY plugin
 # that registers PlaceholderAPI placeholders (Lands, ValhallaMMO, ValhallaRaces,
 # etc.) without needing a code change/plugin rebuild every time you want a new
