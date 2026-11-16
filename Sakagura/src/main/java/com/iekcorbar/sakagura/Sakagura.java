@@ -44,6 +44,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     private Drunk drunk;
     private Garden garden;
     private Trees trees;
+    private Orchard orchard;
     private GardenDecor gardenDecor;
     private Adv adv;
     private Competition competition;
@@ -67,10 +68,11 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
         drunk = new Drunk(this);
         garden = new Garden(this);
         trees = new Trees(this);
+        orchard = new Orchard(this);
         gardenDecor = new GardenDecor(this);
         spoilage = new Spoilage(this);
         var pm = getServer().getPluginManager();
-        for (var l : new org.bukkit.event.Listener[]{goods, cauldrons, stills, casks, drunk, garden, trees}) pm.registerEvents(l, this);
+        for (var l : new org.bukkit.event.Listener[]{goods, cauldrons, stills, casks, drunk, garden, trees, orchard}) pm.registerEvents(l, this);
         pm.registerEvents(gardenDecor.decor, this);
         // items sold by wandering traders (WanderingTrades hands out a plain paper, see TraderSwap)
         pm.registerEvents(new TraderSwap(this, "Sakagura", name -> {
@@ -102,6 +104,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
                     stills.loadChunk(c);
                     garden.loadChunk(c);
                     trees.loadChunk(c);
+                    orchard.loadChunk(c);
                     gardenDecor.decor.loadChunk(c);
                 }
         });
@@ -112,12 +115,14 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
             drunk.tick();
             garden.tick();
             trees.tick();
+            orchard.tick();
             seasons.tick();
         if (spoilage != null && tick % 10 == 0) spoilage.tick();
             if (tick % 30 == 0) {
                 casks.relight();
                 stills.relight();
                 trees.relight();
+                orchard.relight();
             }
         }, 20L, 20L);
         long[] decorTick = {0};
@@ -136,6 +141,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
             stills.removeAll();
             garden.removeAllDisplays();
             trees.removeAllDisplays();
+            orchard.removeAllDisplays();
             gardenDecor.decor.removeAllDisplays();
             gardenDecor.decor.unregisterRecipes();
         }
@@ -151,6 +157,7 @@ public final class Sakagura extends JavaPlugin implements TabExecutor {
     Goods goods() { return goods; }
     Stills stills() { return stills; }
     Trees trees() { return trees; }
+    Orchard orchard() { return orchard; }
     Adv adv() { return adv; }
     Drunk drunk() { return drunk; }
     GardenDecor gardenDecor() { return gardenDecor; }

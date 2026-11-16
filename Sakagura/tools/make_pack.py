@@ -303,6 +303,20 @@ def tree_models():
         model(f"{tid}_sapling", [box(4, 0, 4, 12, 1.5, 12, "pit"), box(7.6, 1.5, 7.6, 8.4, 7, 8.4, "stem"),
                                  box(5.6, 6, 7.7, 7.4, 6.7, 8.3, cc), box(8.6, 4.5, 7.7, 10.4, 5.2, 8.3, ccd)])
 
+
+# ------------------------------------------------------------------ hanging fruit (0.8.0 real trees)
+# block/fruit_<id> - one small cube per fruiting Tree.java species (Orchard.java displays these
+# under the canopy leaves; the produce id must match Fruit.java).
+FRUITCUBES = [("apple", "red"), ("cherry", "cherry"), ("ume", "ume"), ("mikan", "yuzu"),
+              ("peach", "peach"), ("yuzu", "yuzu"), ("fig", "fig"), ("olive", "olive")]
+
+
+def fruit_models():
+    for fid, col in FRUITCUBES:
+        block_model(f"fruit_{fid}", [box(5.5, 5.5, 5.5, 10.5, 10.5, 10.5, col),
+                                     box(5.5, 5.5, 5.5, 10.5, 7.5, 10.5, col + "_d"),
+                                     box(7.4, 10.5, 7.4, 8.6, 12.5, 8.6, "stem")])
+
 # ------------------------------------------------------------------ crop sprites (16x16, 3 stages)
 
 
@@ -428,6 +442,7 @@ def main():
         model("cask_" + wid, cask(col))
     model("still", still())
     tree_models()
+    fruit_models()
     for i, (name, col) in enumerate(FRUITS):
         for st in range(3):
             tex = f"{name}_stage{st}"
