@@ -5,7 +5,7 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 
 **Peildatum: 15 nov 2026 ~15:00 — stoomtrein-verhaal COMPLEET LIVE: Steamworks 0.3.45 (wissel-planning-fix)
 gemeten in de boot van 14:44 (Done 72,9 s · 4 treinen · 0 fouten). Discord-posts `deploy/discord-treinnetwerk-1115.md`
-wachten alleen nog op publiceren. Rest: site-zip (Plesk) + eigenaars-werk.**
+wachten alleen nog op publiceren. Site-1511 staat live. Rest: wiki-imports klikken + eigenaars-werk.**
 Vorige peildata: 14 nov: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
 
 ## 🟢 Live op de server
@@ -34,10 +34,10 @@ Vorige peildata: 14 nov: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (2
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| Volgende site-bouw: treinteksten meenemen | site-zip + staff-paneel | De 0.3.44-wiki-teksten (wisselsysteem, ritten, 20 s dwell) zitten in de herbouwde seeds in de repo; de live site laat ze pas zien na de volgende site-zip (Plesk) + **"Import Steamworks pages"** in het staff-paneel. Geen losse zip nodig - koppel aan de eerstvolgende site-bouw. |
-| Site-zip `site-1311b.zip` | Plesk (TE punt 5/8) | Uitpakken + NPM install + build + restart; daarna staff-importknoppen: Xmas Town, Relics, Steamworks, Wildlife, **Gouw**. Vervangt site-1311.zip (peuze gouw-seed) én de 11-11 zip. |
+| Volgende site-bouw: treinteksten meenemen | staff-paneel | Site-1511 is LIVE (eigenaar 15-11 ~15:45), dus de 0.3.44/0.3.45-wiki-teksten zitten in de zaden op de server. Rest alleen nog: in het staff-paneel de importknoppen klikken — "Import Steamworks pages" + "Import Gouw pages" (en Xmas/Relics/Wildlife als die nog niet klaar staan). |
+| ~~Site-zip naar Plesk~~ ✅ LIVE 15 nov | — | site-1511.zip [50f1649de3f4] staat live en is bevestigd ("website in orde"); zip uit deploy/ weg. site-1311b/site-1311 zijn damit evervallen. |
 | **2 Discord-posts van de kerstbatch publiceren** | Discord #announcements + #staff | `deploy/discord-kerstdorp-dierenronde-1112.md` + de LIVE-herrwerkte `discord-buggolf-1311.md` (pers-tijd, wacht alleen nog op de 0.3.43-restart). Oude `discord-wildlife-storage-1112.md` is VEROUDERD; `discord-kura-0.1.11.md` blijft geldig als verdieping. |
-| site-zip + **Shop Settings-commando's** | TE-DEPLOYEN punt 63 (nieuw: sha1 ecf1d85c) | zip uitpakken + NPM + restart (die zip ís inmiddels vervangen door site-1311.zip [bbac5cdfbc30] - deze regel gaat nog alleen over de twee commando-strings); dan Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online) |
+| **Shop Settings-commando's** | staff-paneel (TE punt 63) | Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online). De site-zip zelf is sindsdien vervangen en LIVE (site-1511). |
 | 2 site-SQL's importeren | deploy/site-30-10-kits.sql + site-30-10-nieuws.sql | phpMyAdmin → iekcorbar-DB; kits zijn nu veilig (Relics 0.5.0 draait), nieuws kan direct |
 | 2 announcement-posts publiceren | Discord #announcements | per post nog op 'Publish' klikken - anders zien abonnees de Halloween- en Blood Moon-post niet |
 | RAM-plafond + nachtelijke herstart (2 paneel-klikken) | TE-DEPLOYEN punten 47-48 | BluMap is al door de agent afgezet (punt 46); Fenneswereld = van nichtje, blijft staan |
