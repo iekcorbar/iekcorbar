@@ -89,6 +89,19 @@ public final class BwListeners implements Listener {
         mgr.trackPlacement(e.getPlayer(), e.getBlock());
     }
 
+    /** 0.5.0: right-click a team's shop marker (anvil in the script-built bases) to open the store. */
+    @EventHandler(ignoreCancelled = true)
+    public void onShopBlock(org.bukkit.event.player.PlayerInteractEvent e) {
+        if (e.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK || e.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
+        if (mgr.shopClick(e.getPlayer(), e.getClickedBlock())) e.setCancelled(true);
+    }
+
+    /** 0.5.0: every click inside a shop GUI belongs to the store - never to the player's real inventory. */
+    @EventHandler
+    public void onShopInventory(org.bukkit.event.inventory.InventoryClickEvent e) {
+        if (e.getInventory().getHolder() instanceof BwStore.StoreHolder) mgr.storeClick(e);
+    }
+
     /** Beds sit in the middle of the map: blast-proof, piston-proof, whatever arena state. */
     @EventHandler
     public void onExplode(EntityExplodeEvent e) {

@@ -27,6 +27,8 @@ public final class BwTeam {
     /** Persisted generator positions for this team's iron/gold pads. */
     private final List<String> ironLocs = new ArrayList<>();
     private final List<String> goldLocs = new ArrayList<>();
+    /** 0.5.0: the clicked shop marker block ("world:x:y:z") - right-click it in-game to open the store. */
+    private String shop;
 
     BwTeam(String name, DyeColor color, Location spawn) {
         this.name = name;
@@ -88,5 +90,13 @@ public final class BwTeam {
 
     List<String> genLocs(String kind) {
         return kind.equals("Iron") ? ironLocs : goldLocs;
+    }
+
+    String shop() {
+        return shop;
+    }
+
+    void setShop(String s) {
+        shop = s;
     }
 }

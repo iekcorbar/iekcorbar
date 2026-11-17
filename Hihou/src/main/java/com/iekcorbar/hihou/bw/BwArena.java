@@ -74,6 +74,13 @@ final class BwArena {
     final Map<UUID, Long> protectUntil = new LinkedHashMap<>();
     /** Blocks placed by participants - air'ed again at finish() (our lite map reset). */
     final List<Location> placed = new ArrayList<>();
+    /* ---- 0.5.0: shop, upgrades and kits ---- */
+    /** uuid -> chosen kit name (BwKits); resets with the session like everything runtime. */
+    final Map<UUID, String> kitChoice = new LinkedHashMap<>();
+    /** team name -> levels [protection, sharpness, forge, healers, trap]; armed at launch, reset per game. */
+    final Map<String, int[]> upg = new LinkedHashMap<>();
+    /** trap alarm cooldowns: uuid of the intruder -> epoch ms. */
+    final Map<UUID, Long> trapCool = new LinkedHashMap<>();
 
     BwArena(BwGameManager mgr, String name) {
         this.mgr = mgr;
@@ -180,6 +187,9 @@ final class BwArena {
         respawn.clear();
         protectUntil.clear();
         placed.clear();
+        kitChoice.clear();
+        upg.clear();
+        trapCool.clear();
     }
 
     void stopTask() {

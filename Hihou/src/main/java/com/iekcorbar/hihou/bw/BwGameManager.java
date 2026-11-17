@@ -62,10 +62,13 @@ public final class BwGameManager {
     private final BwRejoin rejoin;
     /** Lobby-dead players are restored on quit; their home spot waits here for the respawn click. */
     private final Map<UUID, Location> pendingReturn = new LinkedHashMap<>();
+    /** 0.5.0: team shop + team upgrades GUI and its purchase rules. */
+    final BwStore store;
 
     public BwGameManager(HihouPlugin plugin) {
         this.plugin = plugin;
         rejoin = new BwRejoin(plugin);
+        store = new BwStore(this);
         file = new File(plugin.getDataFolder(), "arenas.json");
         if (file.exists()) {
             try {
@@ -89,6 +92,7 @@ public final class BwGameManager {
                                 loc(y.getString("arenas." + name + ".teams." + t + ".bed2")));
                         team.genLocs("Iron").addAll(y.getStringList("arenas." + name + ".teams." + t + ".iron"));
                         team.genLocs("Gold").addAll(y.getStringList("arenas." + name + ".teams." + t + ".gold"));
+                        team.setShop(y.getString("arenas." + name + ".teams." + t + ".shop"));
                         a.teams.put(t, team);
                     }
                 }
@@ -202,6 +206,57 @@ public final class BwGameManager {
 
     public Set<String> names() {
         return arenas.keySet();
+    }
+
+    // ------------------------------------------------------------ 0.5.0: shop / upgrades / kits
+
+    java.util.Collection<BwArena> arenas() {
+        return arenas.values();
+    }
+
+    BwArena arena(String name) {
+        return name == null ? null : arenas.get(name.toLowerCase(Locale.ROOT));
+    }
+
+    /** The shop's announcement lane: participants and spectators hear it (秘宝 BW prefixed like the rest). */
+    void toArena(BwArena a, String text, NamedTextColor c) {
+        msg(a.everyone(), text, c);
+    }
+
+    /** Forge re-tunes the team's IRON generators: 1 -> +1 per spawn, 2 -> also faster, 3 -> faster and richer. */
+    void applyForge(BwArena a, BwTeam t, int lvl) {
+        for (BwGen g : a.gens) {
+            if (g.type != BwGen.Type.IRON || !t.name().equals(g.teamName)) continue;
+            if (lvl == 1) g.amount = 3;
+            else if (lvl == 2) {
+                g.amount = 3;
+                g.delay = 1;
+            } else if (lvl >= 3) {
+                g.amount = 4;
+                g.delay = 1;
+            }
+        }
+    }
+
+    /** Player right-clicked a block; true when it was some team's shop marker (listener cancels then). */
+    public boolean shopClick(Player p, Block b) {
+        return b != null && store.blockClick(p, b);
+    }
+
+    public void storeClick(org.bukkit.event.inventory.InventoryClickEvent e) {
+        store.onClick(e);
+    }
+
+    /** /ih bw shop - opens the shop of the team the player plays for. */
+    public String shop(Player p) {
+        return store.openCommand(p);
+    }
+
+    /** /ih bw kit <name> - choice lives in the session; every base spawn hands it out. */
+    public String kit(Player p, String name) {
+        BwArena a = arenaOf(p.getUniqueId());
+        if (a == null) return "Join an arena first (/ih bw join <arena>) - kits are chosen per game.";
+        return BwKits.select(p, a, name);
     }
 
     public Set<String> teamNames(String arena) {
@@ -373,6 +428,20 @@ public final class BwGameManager {
         return "";
     }
 
+    /** 0.5.0: mark the block that opens this team's shop (look at it - same trick as the bed). */
+    public String teamSetShop(Player looker, String arena, String team) {
+        BwArena a = arenas.get(arena.toLowerCase(Locale.ROOT));
+        if (a == null) return "No such arena.";
+        BwTeam t = a.team(team);
+        if (t == null) return "No such team.";
+        Block b = looker.getTargetBlock(null, 6);
+        if (b == null || b.getType().isAir()) return "Look at the shop marker block (within 6 blocks).";
+        t.setShop(blockStr(b));
+        y.set("arenas." + a.name + ".teams." + t.name() + ".shop", blockStr(b));
+        save();
+        return "Shop marker for " + t.name() + " set on the block you are looking at.";
+    }
+
     private static boolean isBed(Block b) {
         return b != null && b.getType().name().endsWith("_BED");
     }
@@ -503,6 +572,8 @@ public final class BwGameManager {
         if (picked != null) a.addTo(picked, p.getUniqueId());
         msg(List.of(p), "You joined " + a.name + ". Teams are balanced when the game starts - or pick one: /ih bw join "
                 + a.name + " <team>.", NamedTextColor.GOLD);
+        msg(List.of(p), "Kit for this game: /ih bw kit " + BwKits.names() + " (default classic) - you get it at every respawn.",
+                NamedTextColor.GRAY);
         msg(a.online(), p.getName() + " joined " + a.name + " (" + a.players.size() + "/" + a.maxPlayers() + ")", NamedTextColor.GRAY);
 
         // auto-start when the lobby has enough people (BedWars' waiting -> starting)
@@ -665,6 +736,8 @@ public final class BwGameManager {
         a.status = BwArena.Status.PLAYING;
         a.elapsed = 0;
         a.firedEvents.clear();
+        a.upg.clear();       // team investments belong to ONE match
+        a.trapCool.clear();
         buildGens(a);
         for (BwGen g : a.gens) g.startTick();
         StringBuilder teamsLine = new StringBuilder();
@@ -685,7 +758,7 @@ public final class BwGameManager {
             for (UUID u : t.members()) {
                 Player p = Bukkit.getPlayer(u);
                 if (p == null) continue;
-                spawnFresh(p, t);
+                spawnFresh(p, t, a);
                 a.protectUntil.put(u, System.currentTimeMillis() + PROTECT_MS);
                 p.showTitle(Title.title(Component.text("GO!", chat(t.color())), Component.text(t.name() + " team", NamedTextColor.GRAY)));
             }
@@ -693,8 +766,8 @@ public final class BwGameManager {
         msg(a.online(), a.name + " is ON - " + teamsLine, NamedTextColor.GOLD);
     }
 
-    /** Fresh game state at a team spawn: survival, empty hands, full belly, challenge sound. */
-    private void spawnFresh(Player p, BwTeam t) {
+    /** Fresh game state at a team spawn: survival, empty hands, kit, full belly, challenge sound. */
+    private void spawnFresh(Player p, BwTeam t, BwArena a) {
         p.setGameMode(GameMode.SURVIVAL);
         p.teleport(t.spawn());
         p.getInventory().clear();
@@ -703,6 +776,7 @@ public final class BwGameManager {
         p.setFoodLevel(20);
         p.setFireTicks(0);
         p.getActivePotionEffects().forEach(e -> p.removePotionEffect(e.getType()));
+        BwKits.apply(p, a);
         p.playSound(p.getLocation(), "minecraft:ui.toast.challenge_complete", 0.9f, 1.4f);
     }
 
@@ -729,6 +803,7 @@ public final class BwGameManager {
         a.elapsed++;
 
         for (BwGen g : a.gens) if (g.shouldRun(a)) g.tick();
+        store.tick(a);   // 0.5.0: protection/sharpness/healers/trap hum along every second
 
         // respawn sessions: the death screen holds them; when the timer hits zero we respawn for them
         if (!a.respawn.isEmpty()) {
@@ -850,7 +925,7 @@ public final class BwGameManager {
         if (wasRespawning && a.status == BwArena.Status.PLAYING && t != null && !t.bedDestroyed()) {
             e.setRespawnLocation(t.spawn());
             Bukkit.getScheduler().runTask(plugin, () -> {
-                spawnFresh(p, t);
+                spawnFresh(p, t, a);
                 a.protectUntil.put(u, System.currentTimeMillis() + PROTECT_MS);
                 msg(a.everyone(), p.getName() + " respawned at " + t.name() + " base.", NamedTextColor.GRAY);
             });
@@ -925,6 +1000,7 @@ public final class BwGameManager {
     /** End of a match: everyone handed back, placed blocks and dropped gear cleaned, beds restored. */
     private void finish(BwArena a) {
         a.stopTask();
+        store.closeFor(a.name);
         for (Player p : new ArrayList<>(a.everyone())) {
             BwArena.Goods g = a.goods.remove(p.getUniqueId());
             if (g != null) takeBack(p, g);
@@ -1084,7 +1160,7 @@ public final class BwGameManager {
         handIn(p, a);
         a.players.add(p.getUniqueId());
         a.addTo(t, p.getUniqueId());
-        spawnFresh(p, t);
+        spawnFresh(p, t, a);
         a.protectUntil.put(p.getUniqueId(), System.currentTimeMillis() + PROTECT_MS);
         rejoin.remove(p.getUniqueId());
         msg(a.everyone(), p.getName() + " rejoins for " + t.name() + "!", chat(t.color()));
