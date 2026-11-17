@@ -146,7 +146,9 @@ final class GouwMenu implements Listener {
         int max = p.hasPermission("gouw.admin") ? Integer.MAX_VALUE : (l != null ? store.limitOf(l) : plugin.getMaxChunks(p));
         String role = l == null ? "-" : l.isMayor(p.getUniqueId()) ? "mayor" : switch (l.rank(p.getUniqueId())) {
             case ASSISTANT -> "officer"; case RESIDENT -> "resident"; case null, default -> "-"; };
-        inv.setItem(LAND, icon(l == null ? Material.OAK_SIGN : Material.GOLD_NUGGET, "Your gouw", NamedTextColor.GOLD,
+        inv.setItem(LAND, icon(l == null ? Material.OAK_SIGN : Material.GOLD_NUGGET,
+                l == null || l.isMayor(p.getUniqueId()) ? "Your gouw" : "Town of " + nameOf(l.owner), NamedTextColor.GOLD,
+                l == null ? "Claim your first chunk below." : "Gouw: " + l.name,
                 l == null ? "Claim your first chunk below." : "Chunks: " + l.chunks.size() + (max == Integer.MAX_VALUE ? "" : " / " + max),
                 l == null ? "-" : "World: " + l.world,
                 l == null ? "-" : "Residents: " + l.ranks.size() + " - you are " + role,
@@ -581,7 +583,7 @@ final class GouwMenu implements Listener {
                 String err = store.invite(l, who);
                 if (err != null) p.sendMessage(Component.text("Cannot invite " + typed + ": " + err + ".", NamedTextColor.RED));
                 else {
-                    p.sendMessage(Component.text("Invite sent to " + typed + " - they join with /gouw accept.", NamedTextColor.GREEN));
+                    p.sendMessage(Component.text("Invite sent to " + typed + " for " + l.name + " - they accept with /gouw accept " + l.name + ".", NamedTextColor.GREEN));
                     GouwCommand.notifyInvite(l, who);
                 }
             }
@@ -594,7 +596,7 @@ final class GouwMenu implements Listener {
         List<Land> open = store.invitesFor(e.getPlayer().getUniqueId());
         for (Land l : open) GouwCommand.sendInviteNotice(e.getPlayer(), l);
         if (!open.isEmpty())
-            e.getPlayer().sendMessage(Component.text("Type /gouw accept to join, /gouw decline to drop them all.", NamedTextColor.GRAY));
+            e.getPlayer().sendMessage(Component.text("Accept ONE of them with /gouw accept <town> - /gouw decline drops them all.", NamedTextColor.GRAY));
     }
 
     /** True when the gouw was deleted (unclaimed fully) while the player was typing the name. */

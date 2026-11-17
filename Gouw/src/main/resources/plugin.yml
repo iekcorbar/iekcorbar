@@ -1,5 +1,5 @@
 name: Gouw
-version: '0.5.0'
+version: '0.5.1'
 main: com.iekcorbar.gouw.GouwPlugin
 api-version: '26.2'
 description: Chunk land claims & towns - the in-house successor to Lands; ranks, per-resident rights, town bank and bought chunks.

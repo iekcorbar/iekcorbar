@@ -121,19 +121,31 @@ final class GouwCommand implements TabExecutor {
                 String err = store.invite(l, who);
                 if (err != null) msg(p, "Cannot invite " + a[1] + ": " + err + ".", NamedTextColor.RED);
                 else {
-                    msg(p, "Invite sent to " + a[1] + " - they join with /gouw accept.", NamedTextColor.GREEN);
+                    msg(p, "Invite sent to " + a[1] + " for " + l.name + " - they accept with /gouw accept " + l.name + ".", NamedTextColor.GREEN);
                     notifyInvite(l, who);
                     plugin.adv().grant(p, "trusted");
                 }
             }
             case "accept" -> {
-                List<Land> joined = store.accept(p.getUniqueId());
-                if (joined.isEmpty()) { msg(p, "You have no open invites (check /gouw info where you stand).", NamedTextColor.GRAY); return true; }
-                for (Land l : joined) {
-                    msg(p, "You are now a resident of " + l.name + " - " + nameOf(l.owner) + " runs that town.", NamedTextColor.GREEN);
-                    Player mayor = Bukkit.getPlayer(l.owner);
-                    if (mayor != null) msg(mayor, p.getName() + " accepted your invite and joined " + l.name + ".", NamedTextColor.GOLD);
+                List<Land> open = store.invitesFor(p.getUniqueId());
+                if (open.isEmpty()) { msg(p, "You have no open invites (check /gouw info where you stand).", NamedTextColor.GRAY); return true; }
+                // 0.5.1: accept ONE town, never all at once - bulk accept pulled players into
+                // towns they had forgotten about, which is where the "mayor in someone else's
+                // gouw" confusion started.
+                if (a.length < 2) {
+                    msg(p, "You have " + open.size() + " open invite(s) - accept one town by name:", NamedTextColor.GOLD);
+                    for (Land l : open) msg(p, "  /gouw accept " + l.name + "   (invited by " + nameOf(l.owner) + ")", NamedTextColor.GRAY);
+                    return true;
                 }
+                String town = String.join(" ", List.of(a).subList(1, a.length));
+                Land target = null;
+                for (Land l : open) if (l.name.equalsIgnoreCase(town)) target = l;
+                if (target == null) { msg(p, "You have no open invite from a town called '" + town + "'.", NamedTextColor.RED); return true; }
+                String err3 = store.acceptInvite(target, p.getUniqueId());
+                if (err3 != null) { msg(p, err3 + ".", NamedTextColor.RED); return true; }
+                msg(p, "You are now a resident of " + target.name + " - " + nameOf(target.owner) + " runs that town.", NamedTextColor.GREEN);
+                Player mayor = Bukkit.getPlayer(target.owner);
+                if (mayor != null) msg(mayor, p.getName() + " accepted your invite and joined " + target.name + ".", NamedTextColor.GOLD);
                 msg(p, "Type /gouw info inside the town to see what you may do there.", NamedTextColor.GRAY);
             }
             case "decline" -> {
@@ -223,7 +235,7 @@ final class GouwCommand implements TabExecutor {
                         + l.ranks.size() + " residents, bank " + money(l.bank) + ".", NamedTextColor.GRAY);
                 boolean invitedHere = l.invites.contains(p.getUniqueId());
                 msg(p, " You are " + (l.isMayor(p.getUniqueId()) ? "the mayor" : myRank == Land.Rank.ASSISTANT ? "an officer" : myRank == Land.Rank.RESIDENT ? "a resident"
-                        : l.banned.contains(p.getUniqueId()) ? "banned here" : invitedHere ? "invited here - accept with /gouw accept" : "a stranger") + ".", NamedTextColor.GRAY);
+                        : l.banned.contains(p.getUniqueId()) ? "banned here" : invitedHere ? "invited here - accept with /gouw accept " + l.name : "a stranger") + ".", NamedTextColor.GRAY);
                 if (myRank == Land.Rank.RESIDENT || invitedHere) {
                     StringBuilder r = new StringBuilder();
                     for (Land.Flag f : Land.Flag.values())
@@ -479,8 +491,8 @@ final class GouwCommand implements TabExecutor {
                 {"autoclaim [r]", "claim a square of chunks around you (r in chunks, default 2)"},
                 {"buy [n]", "buy n more chunks for the gouw - paid from the town bank"},
                 {"unclaim | unclaim all", "release a chunk or your whole gouw"},
-                {"invite <p> / kick <p>", "send an invite (they accept with /gouw accept) or remove a resident"},
-                {"accept / decline", "take or drop the open invites for you"},
+                {"invite <p> / kick <p>", "send an invite (they accept with /gouw accept <town>) or remove a resident"},
+                {"accept [town] / decline", "take ONE open invite by name, or drop them all"},
                 {"promote <p> / demote <p>", "make a resident officer (mayor only)"},
                 {"bank / deposit <a> / withdraw <a>", "the town's money"},
                 {"members / info / list / near [r]", "who and what is around you"},
@@ -523,7 +535,7 @@ final class GouwCommand implements TabExecutor {
                 .append(Component.text(l.name, NamedTextColor.YELLOW))
                 .append(Component.text(" as resident.  ", NamedTextColor.GOLD))
                 .append(Component.text("[Accept]", NamedTextColor.GREEN)
-                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/gouw accept")))
+                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/gouw accept " + l.name)))
                 .append(Component.text("  or  ", NamedTextColor.GRAY))
                 .append(Component.text("[Decline]", NamedTextColor.RED)
                         .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/gouw decline"))));

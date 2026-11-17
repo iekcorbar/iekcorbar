@@ -312,7 +312,7 @@ final class ClaimStore {
             if (town != null) {
                 // members claim INTO the town: officers always, residents only with the CLAIM right
                 if (!town.may(p.getUniqueId(), Land.Flag.CLAIM))
-                    return "residents need the CLAIM right - ask the mayor or an officer (LEDEN menu)";
+                    return "you need the CLAIM right in " + town.name + " - ask the mayor or an officer (RESIDENTS page)";
                 if (!town.world.equals(w.getName())) return town.name + " lies in " + town.world;
                 l = town;
             } else {
@@ -473,18 +473,18 @@ final class ClaimStore {
         return out;
     }
 
-    /** Accept every open invite: the player joins each town as resident. @return the towns joined. */
-    List<Land> accept(UUID who) {
-        List<Land> joined = new ArrayList<>();
-        for (Land l : invitesFor(who)) {
-            l.invites.remove(who);
-            if (!l.ranks.containsKey(who)) {
-                l.ranks.put(who, Land.Rank.RESIDENT);
-                joined.add(l);
-            }
-        }
-        if (!joined.isEmpty()) save();
-        return joined;
+    /**
+     * 0.5.1: ONE invite is accepted at a time (the clickable [Accept] carries the town name).
+     * The old bulk accept silently joined players into every town that had ever invited them -
+     * residents turning up in towns they had forgotten, the root of the "I am suddenly mayor in
+     * someone else's gouw" reports. Callers pass a Land from invitesFor(); reason or null back.
+     */
+    String acceptInvite(Land l, UUID who) {
+        if (!l.invites.remove(who)) return "there is no open invite from " + l.name + " for you";
+        if (l.ranks.containsKey(who)) { save(); return "you already live in " + l.name; }
+        l.ranks.put(who, Land.Rank.RESIDENT);
+        save();
+        return null;
     }
 
     /** Drop every open invite for this player. @return how many were declined. */

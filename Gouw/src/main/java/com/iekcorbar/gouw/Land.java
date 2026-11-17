@@ -9,8 +9,9 @@ import java.util.UUID;
 
 /**
  * A gouw: a claimed area, since 0.4 run like a small town. The owner is the mayor; trusted
- * players are members with a Rank (ASSISTANT manages the town, RESIDENT lives there within the
- * permissions handed out per resident - see perms/memberFlags). The town bank is filled by the
+ * players are members with a Rank (ASSISTANT manages the town but, since 0.5.1, lives under the
+ * same rights list as a resident - only the mayor may always do everything). Each resident can be
+ * granted a personal set of rights (see perms/memberFlags). The town bank is filled by the
  * residents' own deposits (job earnings come from JobsReborn/onboarding, never from Gouw) and
  * pays for chunk purchases. The chunk limit is rank-based and grows when the town buys
  * (ClaimStore.buyChunks).
@@ -103,7 +104,10 @@ final class Land {
 
     boolean may(UUID who, Flag f) {
         if (banned.contains(who)) return false;
-        if (owner.equals(who) || ranks.get(who) == Rank.ASSISTANT) return true;
+        if (owner.equals(who)) return true;
+        // 0.5.1: officers MANAGE the town (invite/kick/rights/bank, see mayManage) but their own
+        // hands follow the same rights list as any resident's - adjunct somewhere is no longer
+        // indistinguishable from being the mayor of it (players reported exactly that feeling).
         // renters follow the same rights as residents (0.4.x had `contains(f) || true` there:
         // a typo that silently handed renters EVERYTHING, PvP and claim included)
         if (rentals.containsKey(who) && rentals.get(who) > System.currentTimeMillis()) return rights(who).contains(f);
