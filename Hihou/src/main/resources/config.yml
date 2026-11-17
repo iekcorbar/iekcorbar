@@ -16,3 +16,14 @@ lucky-pool:
   - "DIAMOND 1 8"
   - "NAME_TAG 1 4"
   - "TOTEM_OF_UNDYING 1 1"
+
+# --- BedWars (Hihou's bw/ module) -----------------------------------------------------------
+# 0.6.0: pick a random match mode (classic / no beds / double iron / need for speed) at every
+# launch unless staff forced one with /ih bw mode. false = always classic.
+bw-random-modes: true
+# 0.6.0: coin rewards paid through the Vault economy plugin (0 switches that reward off).
+# The numbers are per match event: a kill, a bed destroyed, and the win itself.
+bw-rewards:
+  kill: 5
+  bed: 10
+  win: 25

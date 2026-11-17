@@ -45,13 +45,14 @@ final class BwStore {
 
     private static final String[] PAGES = {"Blocks", "Armor", "Weapons", "Food", "Potions", "Upgrades"};
 
-    private static final Map<String, List<Offer>> STOCK = new LinkedHashMap<>();
+    private final Map<String, List<Offer>> STOCK = new LinkedHashMap<>();
 
-    private static Offer of(Material m, int amount, Material cost, int costAmount, String blurb) {
+    private Offer of(Material m, int amount, Material cost, int costAmount, String blurb) {
         return new Offer(new ItemStack(m, amount), cost, costAmount, blurb);
     }
 
-    static {
+    /** Instance-built stock (0.6.0): the breach charge is a tagged item and only the manager can tag it. */
+    private void stock() {
         STOCK.put("Blocks", List.of(
                 of(Material.WHITE_WOOL, 16, Material.IRON_INGOT, 4, "The classic bridge material."),
                 of(Material.WHITE_WOOL, 64, Material.IRON_INGOT, 12, "A whole stack: finish that bridge."),
@@ -75,7 +76,8 @@ final class BwStore {
                 of(Material.ARROW, 12, Material.GOLD_INGOT, 2, "Aim for the bridge."),
                 of(Material.SHEARS, 1, Material.IRON_INGOT, 6, "Enemy wool is a resource; bed wool is a crime scene."),
                 of(Material.TNT, 1, Material.EMERALD, 3, "Careful - beds are blocks too."),
-                of(Material.ENDER_PEARL, 1, Material.DIAMOND, 3, "Out of a corner, into their face.")));
+                of(Material.ENDER_PEARL, 1, Material.DIAMOND, 3, "Out of a corner, into their face."),
+                new Offer(mgr.breachItem(), Material.EMERALD, 8, "Right-click near an enemy bed (16 blocks) - it is gone.")));
         STOCK.put("Food", List.of(
                 of(Material.BREAD, 4, Material.IRON_INGOT, 3, "Cheap fuel."),
                 of(Material.COOKED_CHICKEN, 4, Material.GOLD_INGOT, 2, "Hunger heals nobody fast."),
@@ -99,6 +101,10 @@ final class BwStore {
                     "Every 45 s the whole team gets Regeneration I."),
             new Upgrade("Trap", Material.TRIPWIRE_HOOK, 2, new int[]{4, 6},
                     "Intruders near spawn get slowed - and announced to you."),
+            new Upgrade("Auto-Earn", Material.HOPPER, 1, new int[]{6},
+                    "Your team's iron and gold fly straight into a teammate's pockets."),
+            new Upgrade("Shockwave", Material.PISTON, 2, new int[]{5, 8},
+                    "Attackers sometimes get blasted away from you."),
     };
 
     private final BwGameManager mgr;
@@ -107,6 +113,7 @@ final class BwStore {
 
     BwStore(BwGameManager mgr) {
         this.mgr = mgr;
+        stock();
     }
 
     // ------------------------------------------------------------ potions (real items, meta baked)

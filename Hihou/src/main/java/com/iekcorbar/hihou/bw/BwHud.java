@@ -90,6 +90,7 @@ final class BwHud {
             lines.add(beds > 0 ? "beds left: " + beds : "SUDDEN DEATH");
             int at = mgr.bedsAt(a);
             lines.add(at - a.elapsed > 0 ? "beds go in " + clock(at - a.elapsed) : "ends in " + clock(mgr.endAt(a) - a.elapsed));
+            lines.add("mode: " + mgr.modeName(a));
         } else {
             lines.add("waiting for players");
         }

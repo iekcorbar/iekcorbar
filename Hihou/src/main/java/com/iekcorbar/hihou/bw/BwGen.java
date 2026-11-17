@@ -4,8 +4,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+
+import java.util.List;
 
 /**
  * One resource generator, ported from BedWars1058's OreGenerator with its stock
@@ -63,13 +66,15 @@ final class BwGen {
         };
     }
 
-    /** Called once per second while the arena is PLAYING. */
-    void tick() {
+    /** Called once per second while the arena is PLAYING. With the Auto-Earn upgrade the ore goes
+     *  straight into a team member's pockets instead of onto the pad (0.6.0). */
+    void tick(BwArena a) {
         if (cd > 1) {
             cd--;
             return;
         }
         cd = delay;
+        int auto = a.upgTeam(teamName, 5);   // -1 when there is no auto-earn for this gen
         if (spawnLimit > 0) {
             int onGround = 0;
             for (Entity e : loc.getWorld().getNearbyEntities(loc, 3, 3, 3)) {
@@ -78,9 +83,19 @@ final class BwGen {
                 }
             }
         }
+        Player pocket = null;
+        if (auto > 0) {
+            List<Player> on = a.onlineTeam(teamName);
+            if (!on.isEmpty()) pocket = on.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(on.size()));
+        }
         for (int i = 0; i < amount; i++) {
-            Item it = loc.getWorld().dropItem(loc, new ItemStack(ore()));
-            it.setVelocity(new Vector(0, 0.05, 0)); // a tiny lift so items don't sink into the pad
+            if (pocket != null) {
+                var left = pocket.getInventory().addItem(new ItemStack(ore()));
+                for (ItemStack rem : left.values()) pocket.getWorld().dropItem(loc, rem);
+            } else {
+                Item it = loc.getWorld().dropItem(loc, new ItemStack(ore()));
+                it.setVelocity(new Vector(0, 0.05, 0)); // a tiny lift so items don't sink into the pad
+            }
         }
         // our steamworks-energie tint: a small spark at the pad when shared fields pay out
         if (type == Type.DIAMOND || type == Type.EMERALD)

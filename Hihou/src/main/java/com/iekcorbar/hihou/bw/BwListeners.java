@@ -62,9 +62,30 @@ public final class BwListeners implements Listener {
         Player attacker = attackerOf(e.getDamager());
         if (attacker == null || attacker == victim) return;
         String deny = mgr.pvpDeny(victim, attacker);
-        if (deny == null) return;
+        if (deny == null) {
+            mgr.shockwave(victim, attacker);   // 0.6.0: the victim's team may have bought the blast
+            return;
+        }
         e.setCancelled(true);
         attacker.sendActionBar(Component.text("You can't hit that - " + deny + ".", NamedTextColor.RED));
+    }
+
+    /** 0.6.0: the Bed Breach Charge - right-click with it near an enemy bed and that bed is history. */
+    @EventHandler(ignoreCancelled = true)
+    public void onBreach(org.bukkit.event.player.PlayerInteractEvent e) {
+        if (e.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_AIR
+                && e.getAction() != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) return;
+        if (e.getHand() != org.bukkit.inventory.EquipmentSlot.HAND) return;
+        org.bukkit.inventory.ItemStack hand = e.getItem();
+        if (!mgr.isBreach(hand)) return;
+        String err = mgr.breach(e.getPlayer());
+        if (!err.isEmpty()) {
+            e.getPlayer().sendActionBar(Component.text(err, NamedTextColor.RED));
+            return;
+        }
+        e.setCancelled(true);
+        if (e.getPlayer().getGameMode() != org.bukkit.GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+        e.getPlayer().swingMainHand();
     }
 
     @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST)

@@ -85,6 +85,8 @@ final class BwArena {
     final Map<String, int[]> upg = new LinkedHashMap<>();
     /** trap alarm cooldowns: uuid of the intruder -> epoch ms. */
     final Map<UUID, Long> trapCool = new LinkedHashMap<>();
+    /** 0.6.0: shockwave cooldowns: uuid of the struck attacker -> epoch ms. */
+    final Map<UUID, Long> shockCool = new LinkedHashMap<>();
 
     BwArena(BwGameManager mgr, String name) {
         this.mgr = mgr;
@@ -148,6 +150,24 @@ final class BwArena {
         return t == null ? null : teams.get(t.toLowerCase(Locale.ROOT));
     }
 
+    /** Level of one shared team upgrade (slot order = BwStore.UPGRADES); -1 when the team bought nothing. */
+    int upgTeam(String teamName, int slot) {
+        int[] lv = upg.get(teamName);
+        return lv != null && slot < lv.length ? lv[slot] : 0;
+    }
+
+    /** Online members of one team by name - used by the generators' auto-earn. */
+    List<Player> onlineTeam(String teamName) {
+        List<Player> out = new ArrayList<>();
+        BwTeam t = team(teamName);
+        if (t == null) return out;
+        for (UUID u : t.members()) {
+            Player p = org.bukkit.Bukkit.getPlayer(u);
+            if (p != null && !p.isDead()) out.add(p);
+        }
+        return out;
+    }
+
     BwTeam teamOf(UUID u) {
         return team(pickedTeam.get(u));
     }
@@ -195,6 +215,7 @@ final class BwArena {
         upg.clear();
         trapCool.clear();
         showing = false;
+        shockCool.clear();
     }
 
     void stopTask() {

@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -67,12 +68,31 @@ public final class BwGameManager {
     final BwStore store;
     /** 0.5.1: the per-player sidebar + the victory show. */
     final BwHud hud;
+    /** 0.6.0: season stats (bwstats.json) and the lobby-only party group. */
+    final BwStats stats;
+    final BwParty party = new BwParty();
+    /** 0.6.0: arena -> mode picked at launch (classic/no-beds/double-iron/speed). */
+    final Map<String, BwMode> modes = new LinkedHashMap<>();
+    private final org.bukkit.NamespacedKey breachKey;
+
+    /** Random match flavors; each one is applied once at launch and announced like the original's specials. */
+    enum BwMode {
+        CLASSIC("classic"), NO_BEDS("no beds - last life each!"), DOUBLE_IRON("double iron"), NEED_FOR_SPEED("need for speed");
+
+        final String label;
+
+        BwMode(String label) {
+            this.label = label;
+        }
+    }
 
     public BwGameManager(HihouPlugin plugin) {
         this.plugin = plugin;
         rejoin = new BwRejoin(plugin);
         store = new BwStore(this);
         hud = new BwHud(this, plugin);
+        stats = new BwStats(new File(plugin.getDataFolder(), "bwstats.json"));
+        breachKey = new org.bukkit.NamespacedKey(plugin, "breach");
         file = new File(plugin.getDataFolder(), "arenas.json");
         if (file.exists()) {
             try {
@@ -501,6 +521,155 @@ public final class BwGameManager {
         return "";
     }
 
+    // ------------------------------------------------------------ 0.6.0: party, stats, modes, breach, rewards
+
+    public String partyInvite(Player leader, String name) {
+        return party.invite(leader, name);
+    }
+
+    public String partyJoin(Player p, String leaderName) {
+        return party.join(p, leaderName);
+    }
+
+    public String partyIgnore(Player p, String leaderName) {
+        return party.ignore(p, leaderName);
+    }
+
+    public String partyLeave(Player p) {
+        return party.leave(p);
+    }
+
+    public String partyList(Player p) {
+        return party.list(p);
+    }
+
+    private static java.util.UUID findPlayer(String name) {
+        Player on = Bukkit.getPlayerExact(name);
+        if (on != null) return on.getUniqueId();
+        org.bukkit.OfflinePlayer off = Bukkit.getOfflinePlayerIfCached(name);
+        return off == null ? null : off.getUniqueId();
+    }
+
+    /** /ih bw stats [player] - one readable season line. */
+    public String statsLine(Player p, String name) {
+        if (name == null) return stats.line(p.getUniqueId());
+        java.util.UUID u = findPlayer(name);
+        return u == null ? "Player '" + name + "' is not known to this server." : stats.line(u);
+    }
+
+    /** /ih bw stats top - the ten loudest winners of this season. */
+    public List<String> statsTop() {
+        List<String> out = new ArrayList<>();
+        for (Map.Entry<java.util.UUID, int[]> e : stats.top(10)) out.add(stats.line(e.getKey()));
+        return out;
+    }
+
+    public String seasonReset() {
+        stats.resetSeason();
+        return "Season " + stats.season() + " started - everyone's numbers are fresh.";
+    }
+
+    public int season() {
+        return stats.season();
+    }
+
+    /** Staff pre-picks a mode (otherwise the launch rolls one, if bw-random-modes is on). */
+    public String modeForce(String arena, String name) {
+        BwArena a = arenas.get(arena.toLowerCase(Locale.ROOT));
+        if (a == null) return "No such arena.";
+        if (a.status == BwArena.Status.PLAYING) return "Match running - stop it first.";
+        BwMode m = switch (name.toLowerCase(Locale.ROOT)) {
+            case "classic" -> BwMode.CLASSIC;
+            case "no-beds", "nobeds" -> BwMode.NO_BEDS;
+            case "double-iron", "doubleiron" -> BwMode.DOUBLE_IRON;
+            case "speed" -> BwMode.NEED_FOR_SPEED;
+            default -> null;
+        };
+        if (m == null) return "Mode: classic|no-beds|double-iron|speed.";
+        modes.put(a.name, m);
+        return "Next game in " + a.name + ": " + m.label + ".";
+    }
+
+    String modeName(BwArena a) {
+        BwMode m = modes.get(a.name);
+        return m == null ? "classic" : m.label;
+    }
+
+    /** The Bed Breach Charge: a marked fire charge that detonates an enemy bed from 16 blocks. */
+    ItemStack breachItem() {
+        ItemStack it = new ItemStack(Material.FIRE_CHARGE);
+        org.bukkit.inventory.meta.ItemMeta m = it.getItemMeta();
+        m.displayName(Component.text("Bed Breach Charge", NamedTextColor.DARK_RED).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false));
+        m.lore(List.of(Component.text("Right-click within 16 blocks of an enemy bed - it is gone.", NamedTextColor.GRAY)
+                .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false)));
+        m.getPersistentDataContainer().set(breachKey, org.bukkit.persistence.PersistentDataType.BYTE, (byte) 1);
+        it.setItemMeta(m);
+        return it;
+    }
+
+    boolean isBreach(ItemStack it) {
+        return it != null && it.getType() == Material.FIRE_CHARGE && it.hasItemMeta()
+                && it.getItemMeta().getPersistentDataContainer().has(breachKey, org.bukkit.persistence.PersistentDataType.BYTE);
+    }
+
+    /** @return "" on success (listener consumes the charge), otherwise the reason shown to the player. */
+    public String breach(Player p) {
+        BwArena a = arenaOf(p.getUniqueId());
+        if (a == null) return "You are not in a BedWars game.";
+        if (a.status != BwArena.Status.PLAYING) return "No match running.";
+        BwTeam mine = a.teamOf(p.getUniqueId());
+        BwTeam hit = null;
+        double bd = 16 * 16;
+        for (BwTeam t : a.teams.values()) {
+            if (t == mine || t.bedDestroyed() || t.bed() == null || !t.bed().getWorld().equals(p.getWorld())) continue;
+            double d = t.bed().distanceSquared(p.getLocation());
+            if (d < bd) {
+                bd = d;
+                hit = t;
+            }
+        }
+        if (hit == null) return "No enemy bed within 16 blocks.";
+        clearBedBlocks(hit);
+        stats.bed(p.getUniqueId());
+        pay(p, "bed");
+        msg(a.everyone(), hit.name().toUpperCase(Locale.ROOT) + "'s bed was BREACHED by " + p.getName() + "!", chat(hit.color()));
+        hit.bed().getWorld().playSound(hit.bed().add(0.5, 0.5, 0.5), "minecraft:entity.ender_dragon.growl", 0.7f, 1.3f);
+        hit.bed().getWorld().spawnParticle(org.bukkit.Particle.EXPLOSION_EMITTER, hit.bed().add(0.5, 0.5, 0.5), 4);
+        checkEnd(a);
+        return "";
+    }
+
+    /** Shockwave upgrade: one in four (chance grows with the level) attackers get blasted off you. */
+    public void shockwave(Player victim, Player attacker) {
+        BwArena a = arenaOf(victim.getUniqueId());
+        if (a == null || a.status != BwArena.Status.PLAYING) return;
+        BwTeam t = a.teamOf(victim.getUniqueId());
+        if (t == null || a.upgTeam(t.name(), 6) <= 0) return;
+        long now = System.currentTimeMillis();
+        Long until = a.shockCool.get(attacker.getUniqueId());
+        if (until != null && until > now) return;
+        a.shockCool.put(attacker.getUniqueId(), now + 3000);
+        if (new java.util.Random().nextDouble() > 0.25 + 0.1 * (a.upgTeam(t.name(), 6) - 1)) return;
+        org.bukkit.util.Vector dir = attacker.getLocation().toVector().subtract(victim.getLocation().toVector());
+        dir.setY(0);
+        if (dir.lengthSquared() < 0.01) dir = victim.getLocation().getDirection().multiply(-1);
+        attacker.setVelocity(dir.normalize().multiply(1.6).add(new org.bukkit.util.Vector(0, 0.5, 0)));
+        victim.playSound(victim.getLocation(), "minecraft:entity.generic.explode", 0.5f, 1.7f);
+    }
+
+    /** Coin reward via Vault (config bw-rewards.*). No economy plugin, or 0: nobody hears about it. */
+    private void pay(Player p, String what) {
+        int amount = plugin.getConfig().getInt("bw-rewards." + what, switch (what) {
+            case "kill" -> 5;
+            case "bed" -> 10;
+            case "win" -> 25;
+            default -> 0;
+        });
+        if (amount <= 0 || !Eco.pay(p, amount)) return;
+        stats.coins(p.getUniqueId(), amount);
+        p.sendMessage(Component.text("+" + amount + " BedWars reward (" + what + ").", NamedTextColor.GOLD));
+    }
+
     private static boolean isBed(Block b) {
         return b != null && b.getType().name().endsWith("_BED");
     }
@@ -802,6 +971,15 @@ public final class BwGameManager {
         a.trapCool.clear();
         buildGens(a);
         for (BwGen g : a.gens) g.startTick();
+        // 0.6.0: pick + arm the match mode (unless staff forced one), and parties have done their job
+        BwMode mode = modes.remove(a.name);
+        if (mode == null && plugin.getConfig().getBoolean("bw-random-modes", true))
+            mode = BwMode.values()[new java.util.Random().nextInt(BwMode.values().length)];
+        if (mode == null) mode = BwMode.CLASSIC;
+        modes.put(a.name, mode);
+        if (mode == BwMode.DOUBLE_IRON) for (BwGen g : a.gens) if (g.type == BwGen.Type.IRON) g.amount += 2;
+        party.dissolve(a.players);
+        for (UUID u : a.players) stats.game(u);
         StringBuilder teamsLine = new StringBuilder();
         for (BwTeam t : a.teams.values()) {
             if (t.members().isEmpty()) {
@@ -826,6 +1004,9 @@ public final class BwGameManager {
             }
         }
         msg(a.online(), a.name + " is ON - " + teamsLine, NamedTextColor.GOLD);
+        if (mode == BwMode.NO_BEDS)
+            for (BwTeam t : a.teams.values()) if (!t.members().isEmpty()) clearBedBlocks(t);
+        if (mode != BwMode.CLASSIC) announce(a, "Match mode: " + mode.label + "!", NamedTextColor.LIGHT_PURPLE);
     }
 
     /** Fresh game state at a team spawn: survival, empty hands, kit, full belly, challenge sound. */
@@ -847,16 +1028,25 @@ public final class BwGameManager {
      * BedWars' LegacyTeamAssigner minus the party support: shuffle, then give every player without
      * an explicit pick the currently-smallest team that still has room.
      */
+    /**
+     * Team assignment. 0.6.0: parties move as a unit - the smallest team gets the whole unit
+     * first, and members who no longer fit fall back to the next smallest team in order.
+     */
     private void balance(BwArena a) {
         List<BwTeam> order = new ArrayList<>(a.teams.values());
         Collections.shuffle(order);
+        Set<UUID> done = new HashSet<>();
         for (UUID u : new ArrayList<>(a.players)) {
-            if (a.pickedTeam.containsKey(u)) continue;
-            BwTeam best = null;
-            for (BwTeam t : order) {
-                if (t.members().size() < a.maxInTeam() && (best == null || t.members().size() < best.members().size())) best = t;
+            if (a.pickedTeam.containsKey(u) || done.contains(u)) continue;
+            for (UUID mate : party.unit(u)) {
+                if (!a.players.contains(mate) || a.pickedTeam.containsKey(mate)) continue;
+                BwTeam best = null;
+                for (BwTeam t : order) {
+                    if (t.members().size() < a.maxInTeam() && (best == null || t.members().size() < best.members().size())) best = t;
+                }
+                if (best != null) a.addTo(best, mate);
+                done.add(mate);
             }
-            if (best != null) a.addTo(best, u);
         }
     }
 
@@ -865,9 +1055,11 @@ public final class BwGameManager {
     private void tickPlaying(BwArena a) {
         a.elapsed++;
 
-        for (BwGen g : a.gens) if (g.shouldRun(a)) g.tick();
+        for (BwGen g : a.gens) if (g.shouldRun(a)) g.tick(a);
         store.tick(a);   // 0.5.0: protection/sharpness/healers/trap hum along every second
         hud.update(a);   // 0.5.1: the sidebar is the match as the player sees it
+        if (modes.get(a.name) == BwMode.NEED_FOR_SPEED)
+            for (Player q : a.online()) q.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SPEED, 120, 1, false, false, false));
 
         // respawn sessions: the death screen holds them; when the timer hits zero we respawn for them
         if (!a.respawn.isEmpty()) {
@@ -960,6 +1152,12 @@ public final class BwGameManager {
         }
         e.setDroppedExp(0); // levels are not a BedWars currency - the kit on the ground is loot enough
         BwTeam t = a.teamOf(p.getUniqueId());
+        stats.death(p.getUniqueId());
+        Player killer = p.getKiller();
+        if (killer != null && a.players.contains(killer.getUniqueId()) && a.teamOf(killer.getUniqueId()) != t) {
+            stats.kill(killer.getUniqueId());
+            pay(killer, "kill");
+        }
         msg(a.everyone(), p.getName() + " died" + (t != null ? " (" + t.name() + ")" : "") + ".", NamedTextColor.RED);
         if (t != null && !t.bedDestroyed() && t.members().contains(p.getUniqueId())) {
             a.respawn.put(p.getUniqueId(), RESPAWN_SECONDS); // stay a member; the timer sends them back
@@ -1049,8 +1247,10 @@ public final class BwGameManager {
             msg(a.everyone(), "TEAM " + winner.name().toUpperCase(Locale.ROOT) + " WINS " + a.name + "!", chat(winner.color()));
             broadcast(winner.name() + " wins " + a.name + "!", NamedTextColor.GOLD);
             for (UUID u : winner.members()) {
+                stats.win(u);
                 Player p = Bukkit.getPlayer(u);
                 if (p != null) {
+                    pay(p, "win");
                     p.getWorld().spawnParticle(org.bukkit.Particle.END_ROD, p.getLocation().add(0, 1.2, 0), 32, 0.5, 0.6, 0.5, 0.02);
                     p.playSound(p.getLocation(), "minecraft:ui.toast.challenge_complete", 1f, 1.2f);
                 }
@@ -1098,6 +1298,7 @@ public final class BwGameManager {
             }
         }
         a.clearRuntime();
+        stats.flush();
     }
 
     private void clearBedBlocks(BwTeam t) {
@@ -1139,6 +1340,8 @@ public final class BwGameManager {
             if (!a.players.contains(breaker.getUniqueId())) return "this bed is part of a running match";
             if (a.teamOf(breaker.getUniqueId()) == t) return "you cannot break your own bed";
             clearBedBlocks(t);
+            stats.bed(breaker.getUniqueId());
+            pay(breaker, "bed");
             msg(a.everyone(), t.name().toUpperCase(Locale.ROOT) + "'s bed was destroyed by " + breaker.getName() + "!", chat(t.color()));
             for (Player q : a.everyone()) q.playSound(q.getLocation(), "minecraft:entity.item.break", 0.9f, 0.8f);
             checkEnd(a);
@@ -1157,6 +1360,8 @@ public final class BwGameManager {
             if (!a.players.contains(sleeper.getUniqueId())) return "this bed is part of a running match";
             if (a.teamOf(sleeper.getUniqueId()) == t) return "you cannot sleep in your own team's bed";
             clearBedBlocks(t);
+            stats.bed(sleeper.getUniqueId());
+            pay(sleeper, "bed");
             msg(a.everyone(), t.name().toUpperCase(Locale.ROOT) + "'s bed was destroyed by " + sleeper.getName() + "!", chat(t.color()));
             checkEnd(a);
             return "";
