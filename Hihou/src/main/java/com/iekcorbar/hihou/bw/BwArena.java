@@ -41,6 +41,8 @@ final class BwArena {
         int food;
         float xp;
         int level;
+        /** 0.5.1: the scoreboards before BedWars (TAB/main) - the HUD gives this one back. */
+        org.bukkit.scoreboard.Scoreboard mainboard;
     }
 
     final String name;
@@ -75,7 +77,9 @@ final class BwArena {
     /** Blocks placed by participants - air'ed again at finish() (our lite map reset). */
     final List<Location> placed = new ArrayList<>();
     /* ---- 0.5.0: shop, upgrades and kits ---- */
-    /** uuid -> chosen kit name (BwKits); resets with the session like everything runtime. */
+    /** 0.5.1: victory show - the 15 s between "GO home in a second" and the actual hand-over. */
+    boolean showing;
+    /** uuid -> chosen kit name (BwStore hands out what you picked at every base spawn). */
     final Map<UUID, String> kitChoice = new LinkedHashMap<>();
     /** team name -> levels [protection, sharpness, forge, healers, trap]; armed at launch, reset per game. */
     final Map<String, int[]> upg = new LinkedHashMap<>();
@@ -190,6 +194,7 @@ final class BwArena {
         kitChoice.clear();
         upg.clear();
         trapCool.clear();
+        showing = false;
     }
 
     void stopTask() {

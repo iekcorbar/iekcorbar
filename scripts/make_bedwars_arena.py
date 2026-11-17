@@ -191,13 +191,15 @@ Setting in de plugin (na het plakken, alle commands staff):
      sta op het wol-veld van het eiland:  /ih bw team eekdam spawn red
      kijk naar het bed:                   /ih bw team eekdam bed red
      kijk naar de ambeer:                 /ih bw team eekdam shop red
+     kijk naar de teamkist:               /ih bw team eekdam chest red
      kijk naar een note_block (goud-voet):/ih bw gen eekdam add iron red
      ...tweede ijzer-pad opnieuw, en:     /ih bw gen eekdam add gold red
   (idem blauw/groen/geel), dan de mids:
      kijk naar het note_block op het diamond-mid: /ih bw gen eekdam add diamond
      idem emerald-mid:                             /ih bw gen eekdam add emerald
   /ih bw start eekdam            (of wacht op 2 wachtenden - auto-start)
-Tijdens de wedstrijd: /ih bw shop | /ih bw kit classic|builder|miner|archer
+Tijdens de wedstrijd: /ih bw shop | /ih bw kit classic|builder|miner|archer | /ih bw follow <speler>
+Sidebar: team-levens, klok, eigen portemonnee - automatisch, niks te zetten.
 """
 
 

@@ -323,6 +323,7 @@ final class BwStore {
         Map<Integer, ItemStack> left = p.getInventory().addItem(o.give().clone());
         for (ItemStack rem : left.values()) p.getWorld().dropItemNaturally(p.getLocation(), rem);
         p.playSound(p.getLocation(), "minecraft:block.note_block.pling", 0.6f, 1.5f);
+        wallet(p);
         StoreHolder h = open.get(p);
         if (h != null) draw(h, h.page);
     }
@@ -345,6 +346,7 @@ final class BwStore {
         if (idx == 2) mgr.applyForge(a, t, lv[2]);
         mgr.toArena(a, p.getName() + " bought " + t.name() + " " + u.label() + " " + lv[idx] + "!",
                 NamedTextColor.GREEN);
+        wallet(p);
         StoreHolder h = open.get(p);
         if (h != null) draw(h, "Upgrades");
     }
@@ -353,6 +355,13 @@ final class BwStore {
 
     private static String costName(Material m) {
         return m.name().toLowerCase(Locale.ROOT).replace("_ingot", "");
+    }
+
+    /** 0.5.1: the little money peek - after every purchase and every base deploy. */
+    void wallet(Player p) {
+        p.sendActionBar(Component.text("wallet: " + count(p, Material.IRON_INGOT) + " iron  "
+                + count(p, Material.GOLD_INGOT) + " gold  " + count(p, Material.DIAMOND) + " diamond  "
+                + count(p, Material.EMERALD) + " emerald", NamedTextColor.GRAY));
     }
 
     /** Resource money in the inventory: generator ore IS the wallet. */

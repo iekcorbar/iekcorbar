@@ -40,7 +40,7 @@ public final class HihouPlugin extends JavaPlugin {
         games.onEnableCleanupAnnounce();
         bw.onEnableCleanupAnnounce();
         getLogger().info("Hihou enabled: " + Chests.TYPES.length + " chest types, " + Games.GAME_TYPES.length
-                + " game modes, " + bw.names().size() + " BedWars arenas (etappe 0.5.0: shop, team upgrades and kits).");
+                + " game modes, " + bw.names().size() + " BedWars arenas (etappe 0.5.1: shop, upgrades, kits, sidebar, team chests and the victory show).");
     }
 
     @Override

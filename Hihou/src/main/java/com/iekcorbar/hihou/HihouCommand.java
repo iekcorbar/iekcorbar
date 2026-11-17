@@ -191,7 +191,7 @@ final class HihouCommand implements TabExecutor {
 
     private void bw(CommandSender s, String[] a) {
         if (a.length < 2) {
-            msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|start|stop <...>", NamedTextColor.RED);
+            msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|follow|start|stop <...>", NamedTextColor.RED);
             return;
         }
         String sub = a[1].toLowerCase(Locale.ROOT);
@@ -238,7 +238,7 @@ final class HihouCommand implements TabExecutor {
             }
             case "team" -> {
                 if (!admin(s) || !(s instanceof Player p)) return;
-                if (a.length < 4) { msg(s, "/ih bw team <arena> add <name> <color>|del <name>|spawn <name>|bed <name>", NamedTextColor.RED); return; }
+                if (a.length < 4) { msg(s, "/ih bw team <arena> add <name> <color>|del <name>|spawn <name>|bed <name>|shop <name>|chest <name>", NamedTextColor.RED); return; }
                 String arena = a[2].toLowerCase(Locale.ROOT), op = a[3].toLowerCase(Locale.ROOT);
                 String err = switch (op) {
                     case "add" -> a.length > 5 ? mgr.teamAdd(arena, a[4], a[5]) : "Give a team name and a color.";
@@ -246,6 +246,7 @@ final class HihouCommand implements TabExecutor {
                     case "spawn" -> a.length > 4 ? mgr.teamSetSpawn(p, arena, a[4]) : "Give a team name (stand where the team spawns).";
                     case "bed" -> a.length > 4 ? mgr.teamSetBed(p, arena, a[4]) : "Give a team name (look at the bed).";
                     case "shop" -> a.length > 4 ? mgr.teamSetShop(p, arena, a[4]) : "Give a team name (look at the shop marker).";
+                    case "chest" -> a.length > 4 ? mgr.teamSetChest(p, arena, a[4]) : "Give a team name (look at the team chest).";
                     default -> "Unknown team op.";
                 };
                 msg(s, err.isEmpty() ? "Saved." : err, err.isEmpty() ? NamedTextColor.GREEN : NamedTextColor.RED);
@@ -291,6 +292,12 @@ final class HihouCommand implements TabExecutor {
                 String err = mgr.kit(p, a[2]);
                 if (err != null) msg(s, err, NamedTextColor.RED);
             }
+            case "follow" -> {
+                if (!(s instanceof Player p)) { msg(s, "Players only.", NamedTextColor.RED); return; }
+                if (a.length < 3) { msg(s, "/ih bw follow <speler>", NamedTextColor.RED); return; }
+                String err = mgr.follow(p, a[2]);
+                if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
+            }
             case "start" -> {
                 if (!admin(s)) return;
                 if (a.length < 3) { msg(s, "/ih bw start <arena> [seconds]", NamedTextColor.RED); return; }
@@ -303,7 +310,7 @@ final class HihouCommand implements TabExecutor {
                 String err = mgr.stop(a[2]);
                 if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
             }
-            default -> msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|start|stop", NamedTextColor.RED);
+            default -> msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|follow|start|stop", NamedTextColor.RED);
         }
     }
 
@@ -320,12 +327,12 @@ final class HihouCommand implements TabExecutor {
         List<String> out = new ArrayList<>();
         if (a.length == 1) out.addAll(List.of("give", "key", "edit", "remove", "map", "event", "game", "bw", "reload", "help"));
         else if (a.length == 2 && a[0].equalsIgnoreCase("game")) out.addAll(List.of("create", "set", "start", "stop", "win", "delete", "list"));
-        else if (a.length == 2 && a[0].equalsIgnoreCase("bw")) out.addAll(List.of("list", "info", "create", "delete", "set", "team", "gen", "join", "leave", "rejoin", "shop", "kit", "start", "stop"));
+        else if (a.length == 2 && a[0].equalsIgnoreCase("bw")) out.addAll(List.of("list", "info", "create", "delete", "set", "team", "gen", "join", "leave", "rejoin", "shop", "kit", "follow", "start", "stop"));
         else if (a.length == 3 && a[0].equalsIgnoreCase("bw")
                 && List.of("info", "delete", "set", "team", "gen", "join", "start", "stop").contains(a[1].toLowerCase(Locale.ROOT)))
             out.addAll(plugin.bw().names());
         else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("set")) out.addAll(List.of("spawn", "spec", "center", "size", "min", "maxteam", "beds", "end"));
-        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team")) out.addAll(List.of("add", "del", "spawn", "bed", "shop"));
+        else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("team")) out.addAll(List.of("add", "del", "spawn", "bed", "shop", "chest"));
         else if (a.length == 3 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("kit")) out.addAll(List.of("classic", "builder", "miner", "archer"));
         else if (a.length == 4 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("gen")) out.addAll(List.of("add", "del"));
         else if (a.length == 5 && a[0].equalsIgnoreCase("bw") && a[1].equalsIgnoreCase("gen")) out.addAll(List.of(BwGameManager.GEN_TYPES));

@@ -123,6 +123,17 @@ public final class BwListeners implements Listener {
         if (e.getBlocks().stream().anyMatch(mgr::bedProtected)) e.setCancelled(true);
     }
 
+    /** 0.5.1: team chests are members-only while their match runs; outside a game they are plain world chests. */
+    @EventHandler(ignoreCancelled = true)
+    public void onChestOpen(org.bukkit.event.inventory.InventoryOpenEvent e) {
+        if (!(e.getInventory().getHolder() instanceof org.bukkit.block.BlockState bs) || !(e.getPlayer() instanceof Player p)) return;
+        String deny = mgr.chestDeny(p, bs.getBlock());
+        if (deny == null) return;
+        if (deny.isEmpty()) return;                 // own team chest: let it open
+        e.setCancelled(true);
+        p.sendActionBar(Component.text("Not your chest - " + deny + ".", NamedTextColor.RED));
+    }
+
     private static Player attackerOf(org.bukkit.entity.Entity damager) {
         if (damager instanceof Player p) return p;
         if (damager instanceof Projectile pr) {

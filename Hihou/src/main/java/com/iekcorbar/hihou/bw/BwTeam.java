@@ -29,6 +29,8 @@ public final class BwTeam {
     private final List<String> goldLocs = new ArrayList<>();
     /** 0.5.0: the clicked shop marker block ("world:x:y:z") - right-click it in-game to open the store. */
     private String shop;
+    /** 0.5.1: the team chest block ("world:x:y:z") - members-only while the match runs, emptied at finish. */
+    private String chest;
 
     BwTeam(String name, DyeColor color, Location spawn) {
         this.name = name;
@@ -98,5 +100,13 @@ public final class BwTeam {
 
     void setShop(String s) {
         shop = s;
+    }
+
+    String chest() {
+        return chest;
+    }
+
+    void setChest(String s) {
+        chest = s;
     }
 }

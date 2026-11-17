@@ -16,6 +16,7 @@ import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -47,11 +48,11 @@ public final class BwGameManager {
     private static final int DIAMOND_II = 360, EMERALD_II = 720, DIAMOND_III = 1080, EMERALD_III = 1440,
             BEDS_DESTROY = 1500, GAME_END = 2400, RESPAWN_SECONDS = 5, PROTECT_MS = 2000;
 
-    private int bedsAt(BwArena a) {
+    int bedsAt(BwArena a) {
         return cfgI(a.name, "bedsAt", BEDS_DESTROY);
     }
 
-    private int endAt(BwArena a) {
+    int endAt(BwArena a) {
         return cfgI(a.name, "endAt", GAME_END);
     }
 
@@ -64,11 +65,14 @@ public final class BwGameManager {
     private final Map<UUID, Location> pendingReturn = new LinkedHashMap<>();
     /** 0.5.0: team shop + team upgrades GUI and its purchase rules. */
     final BwStore store;
+    /** 0.5.1: the per-player sidebar + the victory show. */
+    final BwHud hud;
 
     public BwGameManager(HihouPlugin plugin) {
         this.plugin = plugin;
         rejoin = new BwRejoin(plugin);
         store = new BwStore(this);
+        hud = new BwHud(this, plugin);
         file = new File(plugin.getDataFolder(), "arenas.json");
         if (file.exists()) {
             try {
@@ -93,6 +97,7 @@ public final class BwGameManager {
                         team.genLocs("Iron").addAll(y.getStringList("arenas." + name + ".teams." + t + ".iron"));
                         team.genLocs("Gold").addAll(y.getStringList("arenas." + name + ".teams." + t + ".gold"));
                         team.setShop(y.getString("arenas." + name + ".teams." + t + ".shop"));
+                        team.setChest(y.getString("arenas." + name + ".teams." + t + ".chest"));
                         a.teams.put(t, team);
                     }
                 }
@@ -442,6 +447,60 @@ public final class BwGameManager {
         return "Shop marker for " + t.name() + " set on the block you are looking at.";
     }
 
+    /** 0.5.1: mark this team's chest (the script-built bases ship one next to the anvil). */
+    public String teamSetChest(Player looker, String arena, String team) {
+        BwArena a = arenas.get(arena.toLowerCase(Locale.ROOT));
+        if (a == null) return "No such arena.";
+        BwTeam t = a.team(team);
+        if (t == null) return "No such team.";
+        Block b = looker.getTargetBlock(null, 6);
+        if (b == null || !(b.getBlockData() instanceof org.bukkit.block.data.type.Chest)) return "Look at a chest block (within 6 blocks).";
+        t.setChest(blockStr(b));
+        y.set("arenas." + a.name + ".teams." + t.name() + ".chest", blockStr(b));
+        save();
+        return "Team chest for " + t.name() + " marked.";
+    }
+
+    /**
+     * Inventory-open gate for team chests. null = nothing to do (not a tracked chest, or the match
+     * is not running), "" = tracked and allowed (let the open through), otherwise the denial reason.
+     */
+    public String chestDeny(Player p, Block b) {
+        String key = b.getWorld().getName() + ":" + b.getX() + ":" + b.getY() + ":" + b.getZ();
+        for (BwArena a : arenas.values()) {
+            for (BwTeam t : a.teams.values()) {
+                if (!key.equals(t.chest())) continue;
+                if (a.status != BwArena.Status.PLAYING || a.showing) return null;   // outside a match it is an ordinary chest
+                if (!a.players.contains(p.getUniqueId())) return "this chest belongs to a running match";
+                if (a.teamOf(p.getUniqueId()) != t) return "that is " + t.name() + "'s team chest";
+                return "";
+            }
+        }
+        return null;
+    }
+
+    /** Match over: whatever a team stored goes back on top of the chest (BedWars empties, we hand out). */
+    private void emptyChest(BwTeam t) {
+        Block b = blockFrom(t.chest());
+        if (b == null || !(b.getState() instanceof org.bukkit.block.Container c)) return;
+        Inventory inv = c.getInventory();
+        if (inv == null) return;
+        for (ItemStack it : inv.getContents())
+            if (it != null) b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 1.1, 0.5), it);
+        inv.clear();
+    }
+
+    /** 0.5.1: spectators (and the dead on their respawn screen) fly to a player they name. */
+    public String follow(Player p, String name) {
+        BwArena a = arenaOf(p.getUniqueId());
+        if (a == null) return "You are not in a BedWars game.";
+        Player q = Bukkit.getPlayerExact(name);
+        if (q == null || arenaOf(q.getUniqueId()) != a) return q == null ? "'" + name + "' is not online." : name + " is not in your arena.";
+        p.teleport(q.getLocation());
+        msg(List.of(p), "Following " + q.getName() + " - walk away or /ih bw leave to stop.", NamedTextColor.GRAY);
+        return "";
+    }
+
     private static boolean isBed(Block b) {
         return b != null && b.getType().name().endsWith("_BED");
     }
@@ -603,6 +662,7 @@ public final class BwGameManager {
         g.food = p.getFoodLevel();
         g.xp = p.getExp();
         g.level = p.getLevel();
+        g.mainboard = p.getScoreboard();
         a.goods.put(p.getUniqueId(), g);
 
         p.closeInventory();
@@ -618,6 +678,7 @@ public final class BwGameManager {
         p.getActivePotionEffects().forEach(e -> p.removePotionEffect(e.getType()));
         p.setFlying(false);
         p.setAllowFlight(false);
+        hud.give(a, p);
     }
 
     public String leave(Player p) {
@@ -662,6 +723,7 @@ public final class BwGameManager {
     }
 
     private void takeBack(Player p, BwArena.Goods g) {
+        hud.release(p, g.mainboard);
         p.setGameMode(g.gameMode);
         p.getInventory().setContents(g.contents);
         p.getInventory().setArmorContents(g.armor);
@@ -777,6 +839,7 @@ public final class BwGameManager {
         p.setFireTicks(0);
         p.getActivePotionEffects().forEach(e -> p.removePotionEffect(e.getType()));
         BwKits.apply(p, a);
+        store.wallet(p);   // 0.5.1: empty pockets first, then the shop can fill them
         p.playSound(p.getLocation(), "minecraft:ui.toast.challenge_complete", 0.9f, 1.4f);
     }
 
@@ -804,6 +867,7 @@ public final class BwGameManager {
 
         for (BwGen g : a.gens) if (g.shouldRun(a)) g.tick();
         store.tick(a);   // 0.5.0: protection/sharpness/healers/trap hum along every second
+        hud.update(a);   // 0.5.1: the sidebar is the match as the player sees it
 
         // respawn sessions: the death screen holds them; when the timer hits zero we respawn for them
         if (!a.respawn.isEmpty()) {
@@ -997,15 +1061,28 @@ public final class BwGameManager {
         finish(a);
     }
 
-    /** End of a match: everyone handed back, placed blocks and dropped gear cleaned, beds restored. */
+    /** End of a match: a 15 s victory show (rockets + no accidents), then the real hand-over and re-arm. */
     private void finish(BwArena a) {
+        if (a.showing) return;
         a.stopTask();
         store.closeFor(a.name);
+        a.showing = true;
+        for (Player q : a.everyone()) if (q.getGameMode() == GameMode.SURVIVAL) q.setGameMode(GameMode.ADVENTURE);
+        BwTeam winner = lastStanding(a);
+        if (winner != null) hud.celebrate(a, winner);
+        msg(a.everyone(), "Arena resets in 15 seconds - thanks for playing!", NamedTextColor.GOLD);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> conclude(a), 20L * 15);
+    }
+
+    /** After the show: everything handed back, team chests drop their match loot, map tidied, beds restored. */
+    private void conclude(BwArena a) {
+        a.showing = false;
         for (Player p : new ArrayList<>(a.everyone())) {
             BwArena.Goods g = a.goods.remove(p.getUniqueId());
             if (g != null) takeBack(p, g);
         }
         rejoin.markEnded(a.name);
+        for (BwTeam t : a.teams.values()) emptyChest(t);
         for (Location l : a.placed) {
             Block b = l.getBlock();
             if (b.getType() != Material.AIR) b.setType(Material.AIR); // bridges and walls made during this game
@@ -1057,6 +1134,7 @@ public final class BwGameManager {
         for (BwArena a : arenas.values()) {
             BwTeam t = a.bedOwner(bed);
             if (t == null) continue;
+            if (a.showing) return "the match just ended - enjoy the show";
             if (a.status != BwArena.Status.PLAYING) return "the " + a.name + " match is not running";
             if (!a.players.contains(breaker.getUniqueId())) return "this bed is part of a running match";
             if (a.teamOf(breaker.getUniqueId()) == t) return "you cannot break your own bed";
@@ -1074,6 +1152,7 @@ public final class BwGameManager {
         for (BwArena a : arenas.values()) {
             BwTeam t = a.bedOwner(bed);
             if (t == null) continue;
+            if (a.showing) return "the match just ended - enjoy the show";
             if (a.status != BwArena.Status.PLAYING) return "the " + a.name + " match is not running";
             if (!a.players.contains(sleeper.getUniqueId())) return "this bed is part of a running match";
             if (a.teamOf(sleeper.getUniqueId()) == t) return "you cannot sleep in your own team's bed";
