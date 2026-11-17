@@ -452,6 +452,8 @@ final class Decor implements Listener {
             }
             draw(r);
             r.world.playSound(r.center(), "minecraft:block.iron_door.open", 0.7f, 1.2f);
+            save(r); // open is field 8 of the stored prop line; without this an open prop left
+                     // standing at chunk unload came back closed-but-air: a walk-through ghost
         }
         r.closeAt = tick + ticks;
     }
@@ -468,6 +470,7 @@ final class Decor implements Listener {
         if (r.def.base == DecorDef.Base.SOLID) for (int i = 0; i < r.height(); i++) r.world.getBlockAt(r.x, r.y + i, r.z).setType(Material.BARRIER, false);
         draw(r);
         r.world.playSound(r.center(), "minecraft:block.iron_door.close", 0.7f, 1.2f);
+        save(r); // and the other way round: a close that was never stored leaves the line at open=1
     }
 
     // ------------------------------------------------------------ use / seats

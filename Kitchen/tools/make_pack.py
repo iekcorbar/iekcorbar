@@ -72,7 +72,7 @@ PALETTE = {
 "rack": (140, 100, 60), "rack_dark": (90, 65, 40),
 "smoker": (60, 60, 60), "smoker_dark": (40, 40, 40), "smoker_iron": (120, 120, 130),
 "clay_oven": (180, 120, 80), "clay_oven_dark": (120, 80, 50), "clay_oven_light": (220, 170, 120),
-"steamer": (140, 100, 70), "steamer_dark": (90, 65, 45), "steamer_lid": (160, 120, 80),
+"steam": (230, 235, 245), "steamer": (140, 100, 70), "steamer_dark": (90, 65, 45), "steamer_lid": (160, 120, 80),
 "bread": (220, 180, 110), "bread_dark": (180, 140, 80),
 "melonpan": (240, 200, 100), "melonpan_dark": (200, 160, 70),
 "castella": (230, 180, 90), "castella_dark": (190, 140, 60),
@@ -274,6 +274,49 @@ def items():
     M["kabocha"] = [box(5, 0, 5, 11, 6, 11, "kabocha"), box(4.5, 0, 6, 5, 5, 10, "kabocha_skin"), box(11, 0, 6, 11.5, 5, 10, "kabocha_skin")]
     M["bamboo_shoots"] = [box(6, 0, 6, 10, 4, 10, "bamboo_shoot"), box(7, 4, 7, 9, 5, 9, "bamboo_dark")]
     M["eggplant"] = [box(5, 0, 5, 11, 5, 11, "eggplant"), box(6, 0, 4.5, 10, 4, 5, "eggplant_light"), box(5.5, 0, 10.5, 10.5, 4, 11, "eggplant_dark")]
+    M["cannabis_seeds"] = pile("leaf", "leaf_dark", 11, 12)
+    M["cannabis_buds"] = [box(4, 0, 6, 12, 2, 10, "leaf"), box(5, 2, 7, 11, 3.5, 9, "leaf_dark"), box(6, 3.5, 7.5, 10, 4.5, 8.5, "gold")]
+    M["hemp_seeds"] = pile("straw", "straw_dark", 10, 8)
+    M["hemp_leaves"] = [box(4, 0, 4, 12, 1, 12, "leaf"), box(5, 1, 5, 11, 1.5, 11, "leaf_dark")]
+    M["dried_cannabis"] = [box(4, 0, 6, 12, 1.5, 10, "leaf_dark"), box(5, 1.5, 7, 11, 2.5, 9, "leaf")]
+    M["hash"] = [box(5, 0, 5, 11, 3, 11, "wood_dark"), box(6, 0, 6, 10, 3.2, 10, "wood")]
+    M["hemp_fiber"] = [box(6, 0, 4, 10, 0.6, 12, "straw"), box(5, 0.6, 5, 11, 1.2, 11, "straw_dark")]
+    M["hemp_string"] = [box(7, 0, 2, 9, 0.8, 14, "straw"), box(7.5, 0.8, 3, 8.5, 1.2, 13, "straw_dark")]
+    M["hemp_rope"] = [box(6, 0, 4, 10, 1.5, 12, "straw_dark"), box(7, 1.5, 5, 9, 2.5, 11, "straw")]
+    M["hemp_cloth"] = [box(4, 0, 4, 12, 0.8, 12, "straw"), box(4, 0.8, 4, 12, 1.6, 12, "straw_dark")]
+    M["joint"] = [box(7, 0, 4, 9, 0.8, 12, "straw"), box(7.2, 0.8, 5, 8.8, 1.2, 11, "leaf")]
+    M["hash_pipe"] = [box(6, 0, 6, 10, 2, 10, "clay"), box(7, 2, 7, 9, 3, 9, "wood_dark")]
+    M["magic_mushroom_spores"] = pile("straw_dark", "brown", 10, 9)
+    M["magic_mushroom"] = [box(5, 0, 5, 11, 2, 11, "straw"), box(6, 2, 6, 10, 3.5, 10, "cap_red" if "cap_red" in PALETTE else "chili"), box(7, 3.5, 7, 9, 4, 9, "white")]
+    # 12-11 vulling voor de tien KItem-ids die WEL geregistreerd zijn maar nooit een icoon
+    # kregen: de plugin zet op élk KItem `item_model kitchen:<id>`, en zonder items/<id>.json
+    # in 26.2 geeft dat een MAGENTA blok -InView ontdekt in Zukan (yuzu, cannabis-omgeving).
+    # Alle kleuren zijn bestaande palette-cellen; geen nieuwe cellen (atlas-plafond 256).
+    M["yuzu"] = [box(5.4, 0, 5.4, 10.6, 4.6, 10.6, "corn"), box(6.2, 0, 4.7, 9.8, 3.8, 5.4, "corn"),
+                 box(4.7, 0.8, 6.2, 5.4, 3.8, 9.8, "corn_dark"), box(10.6, 0.8, 6.2, 11.3, 3.8, 9.8, "corn"),
+                 box(7.4, 4.6, 7.4, 8.6, 5.2, 8.6, "corn_dark"),            # navel
+                 box(6.6, 4.9, 6.6, 9.4, 5.4, 9.4, "leaf")]                 # citrusblad
+    M["yuzu_seeds"] = pile("straw", "sesame", 6, 3)
+    M["persimmon"] = [box(5.2, 0, 5.2, 10.8, 4.8, 10.8, "carrot"), box(6, 0, 4.5, 10, 4, 5.2, "carrot"),
+                      box(4.5, 0.8, 6, 5.2, 4, 10, "kabocha"), box(10.8, 0.8, 6, 11.5, 4, 10, "carrot"),
+                      box(6.8, 4.8, 6.8, 9.2, 5.4, 9.2, "kabocha_dark"),     # vruchtblad
+                      box(6.8, 5.4, 4.6, 9.2, 5.9, 7, "leaf_dark"), box(6.8, 5.4, 9, 9.2, 5.9, 11.4, "leaf_dark"),
+                      box(4.6, 5.4, 6.8, 7, 5.9, 9.2, "leaf_dark"), box(9, 5.4, 6.8, 11.4, 5.9, 9.2, "leaf_dark")]
+    M["persimmon_seeds"] = pile("brown", "seed_dark", 5, 7)
+    M["buckwheat"] = pile("soba", "soba_dark", 8, 5)                         # driehoekige korrels
+    M["buckwheat_seeds"] = pile("brown", "soil", 6, 11)
+    M["koji"] = pile("egg_white", "rice", 9, 2)                              # schimmelparels op rijst
+    M["enoki_spores"] = pile("enoki", "enoki_dark", 8, 4)
+    M["shiitake_spores"] = pile("shiitake_light", "shiitake_dark", 8, 6)
+    M["tsukemono"] = [box(4.4, 0, 4.4, 11.6, 1, 11.6, "porcelain"),           #.pekelschoteltje
+                      box(5.6, 1, 5.6, 8.2, 2.2, 10.4, "takuan"),
+                      box(8.2, 1, 6.4, 10.4, 2, 9.6, "cabbage"),
+                      box(6, 2.2, 7, 8, 2.6, 9, "shiso"), box(8.4, 2, 6.6, 10, 2.4, 8.2, "shiso_green")]
+    # drinks
+    M["yuzu_tea"] = [box(5, 0, 5, 11, 6, 11, "porcelain"), box(6, 6, 6, 10, 6.5, 10, "gold"), box(7, 6.5, 7, 9, 7, 9, "tea_drink")]
+    M["persimmon_wine"] = [box(5, 0, 5, 11, 7, 11, "porcelain"), box(6, 7, 6, 10, 7.5, 10, "gold"), box(6, 1, 6, 10, 6, 10, "kabocha")]
+    M["mushroom_tea"] = [box(5, 0, 5, 11, 6, 11, "porcelain"), box(6, 6, 6, 10, 6.5, 10, "gold"), box(6, 1, 6, 10, 5, 10, "broth")]
+    M["buckwheat_tea"] = [box(5, 0, 5, 11, 6, 11, "porcelain"), box(6, 6, 6, 10, 6.5, 10, "gold"), box(6, 1, 6, 10, 5, 10, "straw")]
     M["cabbage_leaf"] = [box(4, 0, 5, 12, 0.6, 11, "cabbage_light"), box(5, 0.6, 6, 11, 0.8, 10, "leaf")]
     M["daikon_slices"] = disc(2.2, 0, 0.8, "daikon", cx=6, cz=8) + disc(2.2, 0.8, 1.6, "daikon", cx=8, cz=8) + disc(2.2, 0, 0.8, "daikon", cx=10, cz=8)
     M["chopped_green_onion"] = pile("negi", "negi_white", 10, 6)
@@ -667,10 +710,92 @@ def sprite(crop, stage, wild=False):
                 x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
                 for dx, dy in ((0, 0), (1, 0), (0, 1), (1, 1)):
                     put(px, x + dx, y + dy, PALETTE["eggplant"] if (dx + dy) % 2 == 0 else PALETTE["eggplant_light"])
+    elif crop == "cannabis":
+        leafy(px, rnd, h, PALETTE["leaf"], PALETTE["leaf_dark"], 5, 4)
+        if stage >= 2 or wild:
+            for _ in range(6 if stage == 3 else 3):
+                x, y = rnd.randint(3, 12), rnd.randint(max(1, h - 4), max(2, h - 1))
+                put(px, x, y, PALETTE["leaf_dark"] if rnd.random() < 0.5 else PALETTE["gold"])
+                put(px, x + 1, y, PALETTE["leaf_dark"] if rnd.random() < 0.5 else PALETTE["gold"])
+    elif crop == "hemp":
+        for i in range(3):
+            x = 4 + i * 4
+            hh = h + rnd.randint(-1, 1)
+            stem(px, x, hh, PALETTE["leaf"], 0)
+            if stage >= 1:
+                for dy in range(max(1, hh - 4), hh):
+                    put(px, x - 1, dy, PALETTE["leaf_dark"])
+                    put(px, x + 1, dy, PALETTE["leaf_dark"])
+            if stage >= 2 or wild:
+                for dy in range(max(1, hh - 2), hh + 1):
+                    put(px, x - 2, dy, PALETTE["leaf"])
+                    put(px, x + 2, dy, PALETTE["leaf"])
+    elif crop == "magic_mushroom":
+        # red cap with white spots, grows in the dark
+        cap_color = PALETTE["cap_red"] if "cap_red" in PALETTE else PALETTE["chili"]
+        spot_color = PALETTE["white"]
+        stem_color = PALETTE["straw"]
+        for stage_h in range(2, h + 1):
+            put(px, 7, stage_h, stem_color)
+            put(px, 8, stage_h, stem_color)
+        if stage >= 1:
+            for x in range(5, 11):
+                for y in range(max(2, h - 2), h + 1):
+                    put(px, x, y, cap_color)
+            # white spots
+            for _ in range(4 if stage == 3 else 2):
+                x, y = rnd.randint(5, 10), rnd.randint(max(2, h - 2), h)
+                put(px, x, y, spot_color)
+    elif crop == "shiitake":
+        # brown mushroom on a log
+        for x in range(4, 12):
+            put(px, x, 0, PALETTE["wood_dark"])
+            put(px, x, 1, PALETTE["wood_dark"])
+        if stage >= 1:
+            for x in range(5, 11):
+                for y in range(2, 5):
+                    put(px, x, y, PALETTE["brown"])
+            for _ in range(3 if stage == 3 else 1):
+                x, y = rnd.randint(5, 10), rnd.randint(2, 4)
+                put(px, x, y, PALETTE["brown"])
+    elif crop == "enoki":
+        # thin white stems in a cluster
+        for i in range(5):
+            x = 3 + i * 2 + rnd.randint(0, 1)
+            hh = h - rnd.randint(0, 2)
+            stem(px, x, hh, PALETTE["white"])
+            if stage >= 2:
+                put(px, x, hh, PALETTE["white"])
+                put(px, x + 1, hh, PALETTE["white"])
+    elif crop == "yuzu":
+        # citrus tree: green leaves with yellow fruit
+        leafy(px, rnd, h, PALETTE["leaf"], PALETTE["leaf_dark"], 5, 4)
+        if stage >= 2 or wild:
+            for _ in range(4 if stage == 3 else 2):
+                x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
+                put(px, x, y, PALETTE["gold"])
+                put(px, x + 1, y, PALETTE["gold"])
+    elif crop == "persimmon":
+        # orange fruit on a tree
+        leafy(px, rnd, h, PALETTE["leaf"], PALETTE["leaf_dark"], 5, 4)
+        if stage >= 2 or wild:
+            for _ in range(3 if stage == 3 else 1):
+                x, y = rnd.randint(3, 12), rnd.randint(1, max(2, h - 2))
+                put(px, x, y, PALETTE["kabocha"] if "kabocha" in PALETTE else PALETTE["gold"])
+                put(px, x + 1, y, PALETTE["kabocha"] if "kabocha" in PALETTE else PALETTE["gold"])
+    elif crop == "buckwheat":
+        # small white flowers on thin stems
+        for i in range(4):
+            x = 3 + i * 3
+            hh = h - rnd.randint(0, 2)
+            stem(px, x, hh, PALETTE["leaf"], 0)
+            if stage >= 2 or wild:
+                for _ in range(2):
+                    put(px, x + rnd.randint(-1, 1), hh, PALETTE["white"])
     return png(px)
 
 
-CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant"]  # CropType order
+CROPS = ["rice", "soybean", "napa_cabbage", "green_onion", "daikon", "tea", "corn", "tomato", "chili", "sesame", "shiso", "ginger", "wasabi", "mizuna", "kabocha", "bamboo_shoots", "eggplant", "cannabis", "hemp", "magic_mushroom", "yuzu", "persimmon", "buckwheat"]  # CropType order
 
 # ------------------------------------------------------------------ sounds
 
@@ -681,7 +806,24 @@ def add_sounds(root, namespace):
     if not os.path.isdir(src):
         print("note: no sounds in", src, "- run sounds/make_sounds.py first (pack built without sounds)")
         return
-    shutil.copytree(src, os.path.join(root, "assets", namespace), dirs_exist_ok=True)
+    dst = os.path.join(root, "assets", namespace)
+    djson = os.path.join(dst, "sounds.json")
+    keep = {}
+    if os.path.exists(djson):
+        try:
+            keep = json.load(open(djson, encoding="utf-8"))
+        except Exception:
+            keep = {}
+    shutil.copytree(src, dst, dirs_exist_ok=True)
+    # Hand-added events (e.g. quest voices steamworks:milo.lineNN, which live only in the
+    # exploded pack's sounds.json) must survive rebuilds: generated events win, extras stay.
+    if keep and os.path.exists(djson):
+        cur = json.load(open(djson, encoding="utf-8"))
+        extra = {k: v for k, v in keep.items() if k not in cur}
+        if extra:
+            cur.update(extra)
+            with open(djson, "w", encoding="utf-8") as f:
+                json.dump(cur, f, indent=1)
 
 # ------------------------------------------------------------------ main
 

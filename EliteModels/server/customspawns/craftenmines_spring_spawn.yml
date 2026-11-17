@@ -1,0 +1,14 @@
+validBiomesV2: []
+isEnabled: true
+validWorlds: []
+validWorldEnvironments:
+- NORMAL
+- CUSTOM
+validBiomes:
+- PLAINS
+- MEADOW
+- FLOWER_FOREST
+- SUNFLOWER_PLAINS
+- CHERRY_GROVE
+isSurfaceSpawn: true
+canSpawnInLight: true

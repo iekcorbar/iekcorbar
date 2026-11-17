@@ -55,8 +55,8 @@ def make_texture(color, slug):
             if 6 <= x <= 9 and y == 0:
                 px[x, y] = (140, 100, 60, 255)
     os.makedirs(TEXTURES_DIR, exist_ok=True)
-    img.save(f"{TEXTURES_DIR}/{slug}.png")
-    return f"textures/drinks/{slug}.png"
+    img.save(f"{TEXTURES_DIR}/drink_{slug}.png")
+    return f"textures/drinks/drink_{slug}.png"
 
 def main():
     with open(RECIPES) as f:
@@ -82,8 +82,13 @@ def main():
                 "model": f"sakagura:item/drink_{slug}"
             }
         }
-        with open(f"{ITEMS_DIR}/{slug}.json", "w") as f:
+        # item_model component resolves via assets/<ns>/items/<id>.json where id = "drink_<slug>"
+        with open(f"{ITEMS_DIR}/drink_{slug}.json", "w") as f:
             json.dump(item_def, f, indent=2)
+        # remove obsolete def written under the bare slug by older versions of this script
+        old_def = os.path.join(ITEMS_DIR, f"{slug}.json")
+        if os.path.exists(old_def):
+            os.remove(old_def)
         
         # Create model (copy of base with texture reference)
         model = json.loads(json.dumps(base_model))

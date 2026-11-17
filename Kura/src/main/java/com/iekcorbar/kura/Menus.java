@@ -42,17 +42,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /** Every Kura GUI: terminals (+ search box), settings menus, filter editors; also wireless terminals. */
 final class Menus implements Listener {
     /** Settings / filter GUIs. */
     static final class Config implements InventoryHolder {
-        enum Kind { CONTAINER, HOPPER, EMITTER, INTERFACE, ITEM_FILTER, TAG_FILTER }
+        enum Kind { CONTAINER, HOPPER, EMITTER, INTERFACE, COURIER, ITEM_FILTER, TAG_FILTER }
 
         final Kind kind;
         final Part part;
         final Block block;
+        /** COURIER: the bound copper golem whose carry filter is being set. */
+        UUID golem;
         final Inventory inv;
         int[] settings;
         ItemStack filter;
@@ -192,6 +195,10 @@ final class Menus implements Listener {
         ClickType click = e.getClick();
         if (click == ClickType.DOUBLE_CLICK) {
             e.setCancelled(true); // would collect the shown items
+            if (top && m.isItemSlot(raw) && m.keys[raw] != null) {
+                toggleFav(m, m.keys[raw]);   // double-click an item in the list: pin/unpin as favourite
+                m.refresh();
+            }
             return;
         }
         if (!top) {
@@ -229,12 +236,13 @@ final class Menus implements Listener {
             return;
         }
         switch (raw) {
-            case TerminalMenu.PREV -> { if (m.page > 0) m.page--; m.refresh(); }
-            case TerminalMenu.NEXT -> { m.page++; m.refresh(); }
+            case TerminalMenu.PREV -> { m.page = e.isShiftClick() ? 0 : Math.max(0, m.page - 1); m.refresh(); }
+            case TerminalMenu.NEXT -> { if (e.isShiftClick()) m.page = Integer.MAX_VALUE / 4; else m.page++; m.refresh(); }
             case TerminalMenu.SORT -> { m.sort = (m.sort + 1) % TerminalMenu.SORTS.length; m.refresh(); }
             case TerminalMenu.CLEAR_SEARCH -> { m.search = ""; m.page = 0; m.refresh(); }
             case TerminalMenu.SEARCH -> openSearch(m);
-            case TerminalMenu.DEPOSIT -> deposit(m);
+            case TerminalMenu.DEPOSIT -> deposit(m, e.isShiftClick());
+            case TerminalMenu.RETRIEVE -> retrieve(m);
             case TerminalMenu.RECIPES -> {
                 var viewer = plugin.recipeViewer();
                 if (viewer != null) {
@@ -264,6 +272,15 @@ final class Menus implements Listener {
         }
         ItemStack key = m.keys[raw];
         if (key == null) return;
+        if (click == ClickType.MIDDLE) {
+            // middle-click (pick block): look this exact item up in the recipe viewer
+            var viewer = plugin.recipeViewer();
+            if (viewer == null) return;
+            if (m.crafting) clearGrid(m);
+            m.switching = true;
+            viewer.accept(p, TerminalMenu.name(key));
+            return;
+        }
         int stack = key.getMaxStackSize();
         if (click.isShiftClick()) {
             ItemStack got = net.take(key, stack, null);
@@ -287,15 +304,37 @@ final class Menus implements Listener {
         m.refresh();
     }
 
-    private void deposit(TerminalMenu m) {
+    private void deposit(TerminalMenu m, boolean hotbarToo) {
         if (m.network == null) return;
         Inventory pi = m.player.getInventory();
-        for (int i = 9; i < 36; i++) {
+        for (int i = hotbarToo ? 0 : 9; i < 36; i++) {
             ItemStack it = pi.getItem(i);
             if (it == null || it.isEmpty() || plugin.items().typeOf(it) == KItem.WIRELESS_TERMINAL
                     || plugin.items().typeOf(it) == KItem.ADV_WIRELESS_TERMINAL) continue;
             int in = m.network.insert(it, null);
             if (in > 0) pi.setItem(i, it.getAmount() - in <= 0 ? null : it.asQuantity(it.getAmount() - in));
+        }
+        m.refresh();
+    }
+
+    /** Take one stack of every kind currently shown (the search narrows it), as far as there is room. */
+    private void retrieve(TerminalMenu m) {
+        if (m.network == null || m.shownKeys.isEmpty()) return;
+        Player p = m.player;
+        int kinds = 0;
+        for (ItemStack key : new ArrayList<>(m.shownKeys)) {
+            ItemStack probe = key.asOne();
+            if (p.getInventory().firstEmpty() < 0 && !fits(p.getInventory(), probe)) break;   // no room left at all
+            if (!fits(p.getInventory(), key)) continue;                                        // this stack would not fit anywhere
+            ItemStack got = m.network.take(key, key.getMaxStackSize(), null);
+            if (got == null) continue;
+            kinds++;
+            for (ItemStack left : p.getInventory().addItem(got).values()) m.network.insert(left, null);   // race with machines
+        }
+        if (kinds > 0) {
+            p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.5f, 1.1f);
+        } else {
+            p.sendActionBar(Component.text("No room in your inventory (or nothing to take).", NamedTextColor.GRAY));
         }
         m.refresh();
     }
@@ -436,6 +475,7 @@ final class Menus implements Listener {
         if (m == null || !m.crafting) return false;
         m.network = resolve(m);
         clearGrid(m);
+        Set<ItemStack> kinds = m.network == null ? Set.of() : m.network.countsCached(plugin.tick).keySet();
         for (int i = 0; i < 9 && i < cells.size(); i++) {
             List<ItemStack> options = cells.get(i);
             if (options == null || options.isEmpty() || m.network == null) continue;
@@ -443,7 +483,7 @@ final class Menus implements Listener {
                 ItemStack got = m.network.take(option.asOne(), 1, null);
                 if (got == null) {
                     // same kind with other data (e.g. damaged tools) also fits most recipes
-                    for (ItemStack k : m.network.counts().keySet()) {
+                    for (ItemStack k : kinds) {
                         if (k.getType() == option.getType() && Filter.sameKind(k, option)) {
                             got = m.network.take(k, 1, null);
                             break;
@@ -566,7 +606,7 @@ final class Menus implements Listener {
             default -> null;
         };
         if (kind == null) {
-            p.sendActionBar(Component.text("Cable Connectors attach the container they face. Nothing to set.", NamedTextColor.GRAY));
+            p.sendActionBar(Component.text("A cable joins whatever it touches - nothing to set here.", NamedTextColor.GRAY));
             return;
         }
         Config c = new Config(kind, part, part.block(), part.type.item.displayName);
@@ -576,6 +616,15 @@ final class Menus implements Listener {
     }
 
     private static final String[] PRIORITY = {"Lowest", "Low", "Normal", "High", "Highest"};
+
+    /** A bound copper golem courier: choose what it may carry (Inventory Configurator, sneak + right-click). */
+    void openCourierSettings(Player p, UUID golem, ItemStack filter) {
+        Config c = new Config(Config.Kind.COURIER, null, null, "Courier filter");
+        c.golem = golem;
+        c.filter = filter;
+        drawConfig(c);
+        p.openInventory(c.inv);
+    }
 
     private void drawConfig(Config c) {
         Inventory inv = c.inv;
@@ -617,11 +666,23 @@ final class Menus implements Listener {
             case INTERFACE -> {
                 Part p = c.part;
                 inv.setItem(11, button(p.mode == 0 ? Material.HOPPER : Material.DROPPER, p.mode == 0 ? "Mode: Import" : "Mode: Export",
-                        p.mode == 0 ? "Everything put into the barrel goes into the network." : "The barrel is kept stocked with one stack",
-                        p.mode == 0 ? "" : "of each item in the filter (Item Filter or one item).", "Click to change."));
+                        p.mode == 0 ? "Everything put into the barrel goes into the network." : "The barrel is kept stocked with",
+                        p.mode == 0 ? "" : "the filter's items, N stacks per item.", "Click to change."));
                 inv.setItem(13, filterSlot(c.filter, p.mode == 0 ? "Import only these items." : "Items to keep in stock."));
+                if (p.mode == 1) {
+                    int stacks = Math.max(1, Math.min(27, p.amount));
+                    inv.setItem(15, button(p.amount <= 1 ? Material.CHEST_MINECART : Material.MINECART, "Stock: " + stacks + " stack" + (stacks == 1 ? "" : "s") + " of each",
+                            "Click: 1 - 2 - 3 - 4 - 6 - 8 - 12 - 16 - 24.", "The barrel fills to this much, per item."));
+                    inv.setItem(24, button(Material.GRAY_STAINED_GLASS_PANE, "Hint", "Export runs every " + plugin.getConfig().getInt("inventory-interface.interval-ticks", 20) + " ticks.", "With an Item Filter in the middle,", "every listed item is kept stocked."));
+                }
             }
             case ITEM_FILTER, TAG_FILTER -> { }
+            case COURIER -> {
+                inv.setItem(11, button(Material.COPPER_BLOCK, "Copper golem courier",
+                        "Carries items from copper chests and machine outputs", "to the bound Inventory Interface."));
+                inv.setItem(13, filterSlot(c.filter, "Only these items are carried (any item or a filter). Empty: everything."));
+                inv.setItem(22, button(Material.IRON_DOOR, "Close", "Freed golem: right-click it with the", "Configurator without sneaking."));
+            }
         }
     }
 
@@ -653,6 +714,7 @@ final class Menus implements Listener {
             return;
         }
         ItemStack cursor = p.getItemOnCursor();
+        if (c.kind == Config.Kind.COURIER && raw == 22) { p.closeInventory(); return; }
         int filterSlot = c.kind == Config.Kind.CONTAINER ? 12 : 13;
         if (raw == filterSlot && c.kind != Config.Kind.EMITTER) {
             setFilter(c, p, cursor);
@@ -691,6 +753,13 @@ final class Menus implements Listener {
         } else if (c.kind == Config.Kind.INTERFACE && raw == 11) {
             c.part.mode ^= 1;
             plugin.parts().markDirty(c.part);
+        } else if (c.kind == Config.Kind.INTERFACE && raw == 15) {
+            int[] steps = {1, 2, 3, 4, 6, 8, 12, 16, 24};
+            int cur = Math.max(1, Math.min(27, c.part.amount));
+            int i = 0;
+            while (i < steps.length - 1 && steps[i] < cur) i++;
+            c.part.amount = steps[(i + 1) % steps.length];
+            plugin.parts().markDirty(c.part);
         } else {
             return;
         }
@@ -716,7 +785,9 @@ final class Menus implements Listener {
             if (oldReal) give(p, old);
         }
         c.filter = next;
-        if (c.part != null) {
+        if (c.kind == Config.Kind.COURIER) {
+            plugin.couriers().setFilter(c.golem, next);
+        } else if (c.part != null) {
             c.part.filter = next;
             plugin.parts().markDirty(c.part);
         } else {
@@ -863,6 +934,75 @@ final class Menus implements Listener {
         p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.3f, 1.4f);
     }
 
+    // ------------------------------------------------------------ network browser (wireless terminals)
+
+    /** Chest listing every network with a terminal in range; click opens it. */
+    static final class Browser implements InventoryHolder {
+        final Inventory inv;
+        final boolean remote;
+        final List<Part> targets = new ArrayList<>();
+
+        Browser(String title, boolean remote) {
+            inv = Bukkit.createInventory(this, 54, Component.text(title));
+            this.remote = remote;
+        }
+
+        @Override
+        public Inventory getInventory() {
+            return inv;
+        }
+    }
+
+    private void openBrowser(Player p, int range, boolean remote) {
+        if (!plugin.getConfig().getBoolean("wireless.browser", true)) {
+            p.sendActionBar(Component.text("Look at a Storage or Crafting Terminal (up to " + range + " blocks).", NamedTextColor.GRAY));
+            return;
+        }
+        List<Part> near = plugin.parts().terminalsNear(p.getLocation(), range);
+        if (near.isEmpty()) {
+            p.sendActionBar(Component.text("No terminals within " + range + " blocks.", NamedTextColor.GRAY));
+            return;
+        }
+        Browser b = new Browser("Networks nearby", remote);
+        Set<Network> seen = java.util.Collections.newSetFromMap(new java.util.IdentityHashMap<>());
+        ItemStack pane = pane();
+        for (int i = 0; i < 54; i++) b.inv.setItem(i, pane);
+        for (Part part : near) {
+            if (b.targets.size() >= 45) break;
+            Network net = plugin.parts().networkOf(part, null);   // loaded view only: opening it later uses tickets
+            if (net == null || !seen.add(net)) continue;
+            ItemStack icon = plugin.items().create(part.type.item, 1);
+            ItemMeta meta = icon.getItemMeta();
+            meta.displayName(Component.text(part.type.item.displayName + "  " + part.x + " " + part.y + " " + part.z, NamedTextColor.GOLD));
+            int free = net.freeSlots(), all = net.slots();
+            List<Component> lore = new ArrayList<>();
+            lore.add(Items.line(net.stores.size() + " container" + (net.stores.size() == 1 ? "" : "s")
+                    + (all > 0 ? " · " + free + " of " + all + " slots free" : ""), NamedTextColor.GRAY));
+            if (remote) lore.add(Items.line("Opening loads the chunks it needs (max "
+                    + plugin.getConfig().getInt("wireless.max-loaded-chunks", 25) + ").", NamedTextColor.DARK_GRAY));
+            lore.add(Items.line("Click to open.", NamedTextColor.YELLOW));
+            meta.lore(lore);
+            icon.setItemMeta(meta);
+            b.targets.add(part);
+            b.inv.setItem(b.targets.size() - 1, icon);
+        }
+        if (b.targets.isEmpty()) {
+            p.sendActionBar(Component.text("Those terminals are not connected to a network.", NamedTextColor.GRAY));
+            return;
+        }
+        p.openInventory(b.inv);
+        p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 0.4f, 1.0f);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onBrowserClick(InventoryClickEvent e) {
+        if (!(e.getInventory().getHolder(false) instanceof Browser b)) return;
+        e.setCancelled(true);
+        int raw = e.getRawSlot();
+        if (raw < 0 || raw >= b.targets.size()) return;
+        openTerminal((Player) e.getWhoClicked(), b.targets.get(raw), b.remote);
+    }
+
     // ------------------------------------------------------------ item use: filters, wireless terminals
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -903,7 +1043,7 @@ final class Menus implements Listener {
         RayTraceResult hit = p.getWorld().rayTraceBlocks(p.getEyeLocation(), p.getEyeLocation().getDirection(), range, FluidCollisionMode.NEVER, true);
         Part part = hit == null || hit.getHitBlock() == null ? null : plugin.parts().at(hit.getHitBlock());
         if (part == null || !part.type.terminal()) {
-            p.sendActionBar(Component.text("Look at a Storage or Crafting Terminal (up to " + range + " blocks).", NamedTextColor.GRAY));
+            openBrowser(p, range, false);   // looking at nothing: choose a nearby network instead
             return;
         }
         openTerminal(p, part, false);
@@ -912,7 +1052,7 @@ final class Menus implements Listener {
     private void advancedWireless(Player p, ItemStack hand) {
         String bound = plugin.items().string(hand, "bound");
         if (bound == null) {
-            p.sendActionBar(Component.text("Sneak + right-click a terminal to bind it first.", NamedTextColor.GRAY));
+            openBrowser(p, plugin.getConfig().getInt("wireless.advanced-range", 64), true);
             return;
         }
         String[] f = bound.split(",");
@@ -991,5 +1131,13 @@ final class Menus implements Listener {
 
     static void give(Player p, ItemStack it) {
         for (ItemStack left : p.getInventory().addItem(it).values()) p.getWorld().dropItemNaturally(p.getLocation(), left);
+    }
+
+    /** Double-click in a terminal: pin or unpin this kind as favourite (always shown first). */
+    private void toggleFav(TerminalMenu m, ItemStack key) {
+        boolean on = plugin.favourites().toggle(m.player, Favourites.id(key));
+        m.player.sendActionBar(Component.text((on ? "★ Pinned to the top of your terminals." : "☆ Unpinned."),
+                on ? NamedTextColor.AQUA : NamedTextColor.GRAY));
+        m.player.playSound(m.player.getLocation(), Sound.UI_BUTTON_CLICK, 0.3f, on ? 1.7f : 0.9f);
     }
 }

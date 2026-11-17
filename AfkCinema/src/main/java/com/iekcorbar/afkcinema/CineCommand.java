@@ -96,6 +96,7 @@ final class CineCommand implements CommandExecutor, TabCompleter {
         Player p = sender instanceof Player pl ? pl : null;
         switch (actie) {
             case "add" -> {
+                if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§cno permission"); return; } // pad mutation = admin (plugin.yml promises it; audit 10-11)
                 if (p == null) { sender.sendMessage("in game only"); return; }
                 CineSession s = plugin.manager().sessie(p);
                 Pad pad = s.opneemPad;
@@ -106,6 +107,7 @@ final class CineCommand implements CommandExecutor, TabCompleter {
                 p.sendMessage("§8[§6Cinema§8] §fpoint " + pad.punten().size() + " added to '" + pad.naam() + "'");
             }
             case "remove", "verwijder" -> {
+                if (!sender.hasPermission("afkcinema.admin")) { sender.sendMessage("§cno permission"); return; } // ditto
                 if (args.length < 3) { sender.sendMessage("usage: /cine pad remove <number> [path name]"); return; }
                 Pad pad = kiesPad(sender, args, 3);
                 if (pad == null) return;

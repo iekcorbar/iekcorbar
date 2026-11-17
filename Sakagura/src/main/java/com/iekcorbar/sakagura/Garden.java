@@ -415,7 +415,9 @@ final class Garden implements Listener {
             return;
         }
         if (e.getHand() != EquipmentSlot.HAND || e.getBlockFace() != BlockFace.UP || soil.getType() != Material.FARMLAND) return;
-        Fruit f = Fruit.byPlantItem(plugin.goods().idOf(hand));
+        String pid = plugin.goods().idOf(hand);
+        if (pid == null) pid = KitchenShared.sidOf(hand);              // shared crops: the kitchen root is the seed too
+        Fruit f = Fruit.byPlantItem(pid);
         if (f == null || !b.getType().isAir()) return;
         e.setCancelled(true);
         BlockState old = b.getState();

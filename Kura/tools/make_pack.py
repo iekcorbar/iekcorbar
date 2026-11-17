@@ -391,8 +391,25 @@ def paint_kit():
 def add_sounds(root, namespace):
     import shutil
     src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "sounds", "out", namespace)
-    if os.path.isdir(src):
-        shutil.copytree(src, os.path.join(root, "assets", namespace), dirs_exist_ok=True)
+    if not os.path.isdir(src):
+        return
+    dst = os.path.join(root, "assets", namespace)
+    djson = os.path.join(dst, "sounds.json")
+    keep = {}
+    if os.path.exists(djson):
+        try:
+            keep = json.load(open(djson, encoding="utf-8"))
+        except Exception:
+            keep = {}
+    shutil.copytree(src, dst, dirs_exist_ok=True)
+    # Hand-added events survive a rebuild: generated events win, extras stay.
+    if keep and os.path.exists(djson):
+        cur = json.load(open(djson, encoding="utf-8"))
+        extra = {k: v for k, v in keep.items() if k not in cur}
+        if extra:
+            cur.update(extra)
+            with open(djson, "w", encoding="utf-8") as fh:
+                json.dump(cur, fh, indent=1)
 
 
 def main():

@@ -1,0 +1,20 @@
+validBiomesV2: []
+isEnabled: true
+validWorlds: []
+validWorldEnvironments:
+- NORMAL
+- CUSTOM
+validBiomes:
+- WINDSWEPT_HILLS
+- WINDSWEPT_FOREST
+- WINDSWEPT_GRAVELLY_HILLS
+- STONY_PEAKS
+- MEADOW
+- CHERRY_GROVE
+- OLD_GROWTH_PINE_TAIGA
+- OLD_GROWTH_SPRUCE_TAIGA
+- TAIGA
+- FOREST
+- DARK_FOREST
+isSurfaceSpawn: true
+canSpawnInLight: true

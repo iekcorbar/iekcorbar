@@ -48,7 +48,8 @@ public final class PowerPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new org.bukkit.event.Listener() {
             @org.bukkit.event.EventHandler
             public void onJoin(org.bukkit.event.player.PlayerJoinEvent e) {
-                for (NamespacedKey k : recipeKeys) e.getPlayer().discoverRecipe(k);
+                // 13-11: no forced reveal - the vanilla book shows kale paper for ExactChoice
+                // ingredients on Paper 26.2 and would lie; recipes unlock by crafting (see core).
             }
         }, this);
         getLogger().info("Steamworks Power enabled - the river can mind the factory now.");
@@ -90,8 +91,7 @@ public final class PowerPlugin extends JavaPlugin {
         ItemStack sieveItem = reg.item(sieve, 1);
         shaped("sieve_funnel", sieveItem, new String[]{"PSP", " F "},
                 'P', swItem("material/iron_plate"), 'S', new ItemStack(Material.STRING), 'F', swItem("part/funnel"));
-        for (org.bukkit.entity.Player p : Bukkit.getOnlinePlayers())
-            for (NamespacedKey k : recipeKeys) p.discoverRecipe(k);
+        // 13-11: no forced reveal (see the join listener above).
         getLogger().info("Registered 5 workbench recipes for the add-on machines.");
     }
 

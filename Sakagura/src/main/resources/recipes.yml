@@ -23,7 +23,7 @@ recipes:
     lore: ["+Is there any Apple in this?", "++Refreshing taste of Apple", "+++Sweetest hint of Apple"]
     effects: ["WATER_BREATHING/1-2/150"]
     steps:
-      - {type: cook, time: 4, ingredients: ["Sugar Cane/6", "Apple/2"]}
+      - {type: cook, time: 4, ingredients: ["Sugar Cane/6", "sakagura:apple/2"]}
       - {type: age, years: 4, wood: "oak"}
   beer:
     names: ["Skunky Beer", "Beer", "Fine Beer"]
@@ -43,7 +43,7 @@ recipes:
     lore: []
     effects: []
     steps:
-      - {type: cook, time: 7, ingredients: ["Apple/14"]}
+      - {type: cook, time: 7, ingredients: ["sakagura:apple/14"]}
       - {type: age, years: 3, wood: "any"}
   darkbeer:
     names: ["Skunky Darkbeer", "Darkbeer", "Fine Darkbeer"]
@@ -83,7 +83,7 @@ recipes:
     lore: ["++With the", "++taste of juniper", "+++Perfectly finished off", "+++with juniper"]
     effects: []
     steps:
-      - {type: cook, time: 6, ingredients: ["Wheat/9", "Blue Orchid/6", "Apple/1"]}
+      - {type: cook, time: 6, ingredients: ["Wheat/9", "Blue Orchid/6", "sakagura:apple/1"]}
       - {type: distill, runs: 2}
   hot_choc:
     names: ["Hot Chocolate"]
@@ -174,7 +174,7 @@ recipes:
     lore: []
     effects: []
     steps:
-      - {type: cook, time: 6, ingredients: ["Apple/9", "Sugar/6"]}
+      - {type: cook, time: 6, ingredients: ["sakagura:apple/9", "Sugar/6"]}
   red_sangria:
     names: ["Red Sangria"]
     color: "4a0408"
@@ -183,7 +183,7 @@ recipes:
     lore: []
     effects: []
     steps:
-      - {type: mix, time: 4, ingredients: ["Red Wine/1", "Apple Liquor/1", "Brandy/1", "Sugar/6", "Apple/1"]}
+      - {type: mix, time: 4, ingredients: ["Red Wine/1", "Apple Liquor/1", "Brandy/1", "Sugar/6", "sakagura:apple/1"]}
       - {type: age, years: 1, wood: "copper"}
   french_75:
     names: ["French 75"]
@@ -242,7 +242,7 @@ recipes:
     lore: ["<gray>Shochu, yuzu and bubbles"]
     effects: ["SPEED/0/60-120"]
     steps:
-      - {type: mix, time: 2, ingredients: ["sakagura:yuzu/3", "Sugar/2", "Shochu/1"]}
+      - {type: mix, time: 2, ingredients: ["kitchen:yuzu/3", "Sugar/2", "Shochu/1"]}
   momo_sake:
     names: ["Bland Momo Sake", "Momo Sake", "Blushing Momo Sake"]
     color: "f7b2a2"
@@ -303,7 +303,7 @@ recipes:
     lore: ["<gray>Juniper and a little ginger"]
     effects: ["NIGHT_VISION/0/120-300"]
     steps:
-      - {type: cook, time: 5, ingredients: ["sakagura:juniper/6", "sakagura:ginger/1", "Wheat/3"]}
+      - {type: cook, time: 5, ingredients: ["sakagura:juniper/6", "kitchen:ginger/1", "Wheat/3"]}
       - {type: distill, runs: 3}
   berry_wine:
     names: ["Sour Berry Wine", "Berry Wine", "Forest Berry Wine"]
@@ -323,7 +323,7 @@ recipes:
     lore: ["<gray>Needed for a good sangria"]
     effects: []
     steps:
-      - {type: cook, time: 5, ingredients: ["Apple/6", "Sugar/2"]}
+      - {type: cook, time: 5, ingredients: ["sakagura:apple/6", "Sugar/2"]}
       - {type: distill, runs: 2}
   bloody_mary:
     names: ["Poor Bloody Mary", "Bloody Mary", "Strong Bloody Mary"]
@@ -390,7 +390,7 @@ recipes:
     lore: ["<light_purple>The spider that does not bite"]
     effects: ["INVISIBILITY/0/15-30", "SATURATION/0/2"]
     steps:
-      - {type: cook, time: 5, ingredients: ["Spider Eye/3", "Apple/3", "Sugar/2"]}
+      - {type: cook, time: 5, ingredients: ["Spider Eye/3", "sakagura:apple/3", "Sugar/2"]}
       - {type: age, years: 2, wood: "cherry"}
   sculk_swill:
     names: ["Graveyard Dregs", "Midnight Vine", "Sculk Swill"]
@@ -466,7 +466,7 @@ recipes:
     lore: ["<gold>One koi scale, glittering at the bottom of the cup"]
     effects: ["LUCK/0/120-240", "WATER_BREATHING/0/60-180"]
     steps:
-      - {type: cook, time: 5, ingredients: ["sakagura:rice/4", "wildlife:koi_scale/1", "Sugar/1"]}
+      - {type: cook, time: 5, ingredients: ["kitchen:rice/4", "wildlife:koi_scale/1", "Sugar/1"]}
       - {type: distill, runs: 1}
       - {type: age, years: 1, wood: "birch"}
   wasabi_fire:
@@ -506,7 +506,7 @@ recipes:
     lore: ["<gold>Apple cider. Probably not chili."]
     effects: ["FIRE_RESISTANCE/0/120-240", "NAUSEA/0/2-6"]
     steps:
-      - {type: cook, time: 5, ingredients: ["kitchen:chili/3", "Apple/4", "Sugar/3"]}
+      - {type: cook, time: 5, ingredients: ["kitchen:chili/3", "sakagura:apple/4", "Sugar/3"]}
       - {type: distill, runs: 1}
   blightcap_bock:
     names: ["Toadspill", "Mushroom Bock", "Blightcap Bock"]
@@ -535,7 +535,7 @@ recipes:
     lore: ["<gray>Green tea with a dark side"]
     effects: ["SPEED/0/120-240", "FIRE_RESISTANCE/0/30-60"]
     steps:
-      - {type: mix, time: 2, ingredients: ["kitchen:green_tea/1", "kitchen:chili/1", "Sugar/2", "sakagura:yuzu/1"]}
+      - {type: mix, time: 2, ingredients: ["kitchen:green_tea/1", "kitchen:chili/1", "Sugar/2", "kitchen:yuzu/1"]}
   midnight_stout:
     names: ["Dusk Water", "Midnight Stout", "Eclipse Reserve"]
     color: "1c1208"
@@ -630,7 +630,7 @@ recipes:
     lore: ["<gold>The first sip is the last calm one"]
     effects: ["SPEED/0/60-150", "WEAKNESS/0/2-8"]
     steps:
-      - {type: cook, time: 5, ingredients: ["sakagura:ginger/3", "Sugar/3", "Wheat/2"]}
+      - {type: cook, time: 5, ingredients: ["kitchen:ginger/3", "Sugar/3", "Wheat/2"]}
       - {type: age, years: 1, wood: "any"}
   gazpacho_grande:
     names: ["Tomato Water", "Bisque Broth", "Gazpacho Grande"]
@@ -677,7 +677,7 @@ recipes:
     lore: ["<green>Green, fizzy, polite"]
     effects: ["SPEED/0/60-120", "SATURATION/0/2"]
     steps:
-      - {type: mix, time: 2, ingredients: ["kitchen:tea_leaves/3", "sakagura:ginger/1", "Sugar/2", "Sake/1"]}
+      - {type: mix, time: 2, ingredients: ["kitchen:tea_leaves/3", "kitchen:ginger/1", "Sugar/2", "Sake/1"]}
   stone_gold:
     names: ["Cloudy Leaf", "Amber Rocks", "Stone-Gold Oolong"]
     color: "c9a05a"
@@ -707,7 +707,7 @@ recipes:
     lore: ["<green>Desert island, one glass wide"]
     effects: ["FIRE_RESISTANCE/0/60-120", "SATURATION/0/5"]
     steps:
-      - {type: mix, time: 3, ingredients: ["Cactus/3", "Sugar/2", "sakagura:yuzu/2", "Snowball/2"]}
+      - {type: mix, time: 3, ingredients: ["Cactus/3", "Sugar/2", "kitchen:yuzu/2", "Snowball/2"]}
   crimson_elixir:
     names: ["Dishwater", "Beetroot Blood", "Crimson Elixir"]
     color: "8e1b3a"
@@ -762,7 +762,7 @@ recipes:
     lore: ["<gray>Sweet rice drink, no alcohol"]
     effects: ["SATURATION/0/3"]
     steps:
-      - {type: cook, time: 4, ingredients: ["kitchen:steamed_rice/3", "sakagura:ginger/1"]}
+      - {type: cook, time: 4, ingredients: ["kitchen:steamed_rice/3", "kitchen:ginger/1"]}
   matcha_latte:
     names: ["Watery Matcha", "Matcha Latte", "Ceremonial Matcha Latte"]
     color: "8fbf5a"
@@ -789,7 +789,7 @@ recipes:
     lore: ["<aqua>The marble rattles"]
     effects: ["JUMP_BOOST/0-1/60-120"]
     steps:
-      - {type: mix, time: 1, ingredients: ["Sugar/3", "sakagura:yuzu/1", "Glass/1"]}
+      - {type: mix, time: 1, ingredients: ["Sugar/3", "kitchen:yuzu/1", "Glass/1"]}
   blind_date:
     names: ["Dim Date", "Blind Date", "Sight-Seeing Romance"]
     color: "8a1f3d"
@@ -826,7 +826,7 @@ recipes:
     lore: ["<pink>Chasing them, and somehow enjoying it."]
     effects: ["NAUSEA/0/20-45", "SPEED/0/120-240"]
     steps:
-      - {type: mix, time: 3, ingredients: ["sakagura:passionfruit/4", "sakagura:yuzu/2", "Sugar/2"]}
+      - {type: mix, time: 3, ingredients: ["sakagura:passionfruit/4", "kitchen:yuzu/2", "Sugar/2"]}
   clear_channels:
     names: ["Watery Eyes", "Clear Channels", "The Seventh Sinus"]
     color: "9be564"
@@ -835,7 +835,7 @@ recipes:
     lore: ["<green>Nose: evacuated. Lungs: ocean."]
     effects: ["WATER_BREATHING/0/240-420", "GLOWING/0/2-6"]
     steps:
-      - {type: cook, time: 3, ingredients: ["sakagura:wasabi/2", "kitchen:daikon_slices/2", "Sugar/1"]}
+      - {type: cook, time: 3, ingredients: ["kitchen:wasabi_root/2", "kitchen:daikon_slices/2", "Sugar/1"]}
   mango_tango:
     names: ["Solo Tango", "Mango-Tango", "Two Left Feet, Gone"]
     color: "ffb437"
@@ -853,7 +853,7 @@ recipes:
     lore: ["<aqua>Hairy outside, majestic inside."]
     effects: ["WATER_BREATHING/0/120-240", "DOLPHIN_GRACE/0/120-240"]
     steps:
-      - {type: cook, time: 5, ingredients: ["sakagura:rambutan/4", "sakagura:longan/2", "sakagura:ginger/1"]}
+      - {type: cook, time: 5, ingredients: ["sakagura:rambutan/4", "sakagura:longan/2", "kitchen:ginger/1"]}
       - {type: distill, runs: 2}
   wyrms_regret:
     names: ["Hiccup", "Wyrm's Regret", "Dragon's Apology"]
@@ -873,7 +873,7 @@ recipes:
     lore: ["<yellow>The garden's smallest citrus, loudest effect."]
     effects: ["SATURATION/0/6", "SPEED/0/120-240"]
     steps:
-      - {type: mix, time: 2, ingredients: ["sakagura:sudachi/4", "sakagura:shiso/2", "Sugar/2", "Sake/1"]}
+      - {type: mix, time: 2, ingredients: ["sakagura:sudachi/4", "kitchen:shiso_leaves/2", "Sugar/2", "Sake/1"]}
   silk_road:
     names: ["Threadbare", "Silk Road", "Loom Reserve"]
     color: "e8d7b8"

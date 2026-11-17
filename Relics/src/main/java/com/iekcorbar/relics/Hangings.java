@@ -179,20 +179,25 @@ final class Hangings implements Listener {
                 d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(0.34f, 0.34f, 0.34f), new Quaternionf()));
             }));
         } else {
-            box(r, out, yaw, -0.28, 0, -0.28, 0.28, 0.10, 0.28, Material.STONE_BRICKS);
-            box(r, out, yaw, -0.07, 0.10, -0.07, 0.07, 0.95, 0.07, Material.CHERRY_LOG);
-            box(r, out, yaw, 0.05, 0.55, -0.04, 0.30, 0.62, 0.04, Material.CHERRY_LOG);
-            box(r, out, yaw, -0.30, 0.65, -0.04, -0.05, 0.72, 0.04, Material.CHERRY_LOG);
-            box(r, out, yaw, -0.50, 0.85, -0.50, 0.50, 1.30, 0.50, Material.CHERRY_LEAVES);
-            box(r, out, yaw, -0.38, 1.30, -0.38, 0.38, 1.65, 0.38, Material.CHERRY_LEAVES);
-            box(r, out, yaw, -0.24, 1.65, -0.24, 0.24, 1.90, 0.24, Material.CHERRY_LEAVES);
+            // 13-11 (owner): "wishing tree is veel te klein" - the tanabata tree grew up: a real
+            // cherry tree two blocks high with a wide canopy and two bamboo stalks beside it.
+            box(r, out, yaw, -0.42, 0, -0.42, 0.42, 0.10, 0.42, Material.STONE_BRICKS);
+            box(r, out, yaw, -0.11, 0.10, -0.11, 0.11, 1.18, 0.11, Material.CHERRY_LOG);
+            box(r, out, yaw, 0.08, 0.62, -0.05, 0.42, 0.70, 0.05, Material.CHERRY_LOG);
+            box(r, out, yaw, -0.42, 0.76, -0.05, -0.08, 0.84, 0.05, Material.CHERRY_LOG);
+            box(r, out, yaw, -0.05, 0.95, 0.08, 0.05, 1.03, 0.42, Material.CHERRY_LOG);
+            box(r, out, yaw, -0.70, 0.10, 0.52, -0.58, 1.55, 0.64, Material.BAMBOO);
+            box(r, out, yaw, 0.58, 0.10, -0.60, 0.70, 1.45, -0.48, Material.BAMBOO_BLOCK);
+            box(r, out, yaw, -0.80, 1.00, -0.90, 0.90, 1.55, 0.90, Material.CHERRY_LEAVES);
+            box(r, out, yaw, -0.60, 1.55, -0.60, 0.60, 1.95, 0.60, Material.CHERRY_LEAVES);
+            box(r, out, yaw, -0.30, 1.95, -0.30, 0.30, 2.20, 0.30, Material.CHERRY_LEAVES);
             List<String> wishes = data.getStringList("wishes." + key(r));
             for (int i = 0; i < wishes.size() && i < MAX_WISHES; i++) {
                 String[] w = wishes.get(i).split("\\|", 3);
                 int col = Math.floorMod(parseInt(w[0]), STRIP.length);
                 double ang = i * 2.399963;   // golden angle: the strips spread evenly over the canopy fringe
-                double rad = 0.30 + 0.17 * ((i % 3) / 2.0);
-                Location at = new Location(r.world, r.x + 0.5 + Math.cos(ang) * rad, r.y + 0.66 - 0.04 * (i % 2), r.z + 0.5 + Math.sin(ang) * rad);
+                double rad = 0.62 + 0.22 * ((i % 3) / 2.0);
+                Location at = new Location(r.world, r.x + 0.5 + Math.cos(ang) * rad, r.y + 1.30 - 0.10 * (i % 2), r.z + 0.5 + Math.sin(ang) * rad);
                 final int bg = STRIP[col];
                 out.add(r.world.spawn(at, TextDisplay.class, d -> {
                     d.setPersistent(false);
@@ -201,9 +206,9 @@ final class Hangings implements Listener {
                     d.setBackgroundColor(Color.fromARGB(bg >>> 24, (bg >> 16) & 255, (bg >> 8) & 255, bg & 255));
                     if (lastDay) d.setBrightness(new Display.Brightness(15, 15));
                     d.setShadowed(false);
-                    d.setViewRange(0.4f);
-                    d.text(Component.text("  \n  \n  "));
-                    d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(0.35f, 0.35f, 0.35f), new Quaternionf()));
+                    d.setViewRange(0.5f);
+                    d.text(Component.text("  \n  \n  "));
+                    d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(0.45f, 0.45f, 0.45f), new Quaternionf()));
                 }));
             }
         }

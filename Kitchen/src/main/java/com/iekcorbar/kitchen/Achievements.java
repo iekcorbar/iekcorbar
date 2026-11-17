@@ -21,6 +21,17 @@ final class Achievements {
         a.add("tomato", "harvest", "melon_slice", "Straight Off The Vine", "Harvest tomatoes.", "task");
         a.add("chili", "harvest", "fire_charge", "Bring The Heat", "Harvest chili peppers.", "task");
         a.add("sesame", "harvest", "sugar", "Open Sesame", "Harvest sesame.", "task");
+        a.add("cannabis", "harvest", "green_dye", "Green Thumb", "Harvest cannabis.", "task");
+        a.add("hemp", "harvest", "string", "Fiber and Thread", "Harvest hemp.", "task");
+        a.add("magic_mushroom", "harvest", "red_mushroom", "Trip", "Harvest a magic mushroom.", "task");
+        a.add("yuzu", "harvest", "lime_dye", "Citrus", "Harvest yuzu.", "task");
+        a.add("persimmon", "harvest", "orange_dye", "Autumn Fruit", "Harvest persimmon.", "task");
+        a.add("buckwheat", "harvest", "wheat_seeds", "Soba", "Harvest buckwheat.", "task");
+        a.add("yuzu_tea", "yuzu", "potion", "Citrus Sip", "Make yuzu tea.", "task");
+        a.add("hash", "cannabis", "coal", "Compressed", "Make hash from dried cannabis.", "task");
+        a.add("joint", "hash", "paper", "Roll It Up", "Roll a joint.", "task");
+        a.add("hemp_rope", "hemp", "lead", "Strong Rope", "Craft hemp rope.", "task");
+        a.add("hemp_cloth", "hemp", "white_wool", "Woven", "Craft hemp cloth.", "task");
         a.add("six_crops", "harvest", "golden_hoe", "The Whole Garden", "Harvest all six new crops.", "challenge").allOf("rice", "soybeans", "napa", "onion", "daikon", "tea");
         a.add("soil", "planted", "podzol", "Rich Soil", "Make Rich Soil from Organic Compost.", "task");
         // tools and stations

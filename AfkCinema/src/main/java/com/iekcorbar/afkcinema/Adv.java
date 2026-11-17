@@ -33,10 +33,15 @@ final class Adv {
     void register() {
         for (Map.Entry<String, Def> e : defs.entrySet()) {
             NamespacedKey k = key(e.getKey());
-            if (Bukkit.getAdvancement(k) != null) {
-                try { Bukkit.getUnsafe().removeAdvancement(k); } catch (Throwable ignored) { }
+            // "only load when missing" (like propkit/Adv since 26-10): remove+reload on every
+            // enable wiped player progress, so the three film advancements re-toasted each
+            // restart (audit 10-11).
+            if (Bukkit.getAdvancement(k) != null) continue;
+            try {
+                Bukkit.getUnsafe().loadAdvancement(k, json(e.getValue()));
+            } catch (Exception ex) {
+                plugin.getLogger().warning("Could not load advancement " + k + ": " + ex.getMessage());
             }
-            Bukkit.getUnsafe().loadAdvancement(k, json(e.getValue()));
         }
     }
 

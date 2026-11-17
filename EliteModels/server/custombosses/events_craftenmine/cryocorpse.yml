@@ -1,0 +1,27 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: ZOMBIE
+disguise: SNOWMAN
+name: $eventBossLevel &bCraftenmine's Cryocorpse
+level: dynamic # 60 - zelfde lijn als clockwork_oni/bane (was hp 5.5/dmg 1.11: de zwaarste baas van de set)
+healthMultiplier: 4.0
+damageMultiplier: 1.0
+powers:
+- attack_freeze.yml
+- frost_cone.yml
+- frost_walker.yml
+- invulnerability_fire.yml
+- bonus_coins.yml:5
+- shield_wall.yml
+uniqueLootList:
+- filename=cryocorpse_drop_helmet.yml:amount=1:chance=0.5
+movementSpeedAttribute: 0.36
+followDistance: 70
+locationMessage: '&cCryocorpse: $distance blocks away!'
+spawnMessage: '&cA Dr. Craftenmine experiment has escaped from the cryo-chamber!'
+deathMessage: '&aThe Cryocorpse have been slain by $players!'
+escapeMessage: '&4The Crycorpse has wandered away!'
+announcementPriority: 2

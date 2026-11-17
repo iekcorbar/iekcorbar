@@ -529,6 +529,32 @@ CREATE TABLE IF NOT EXISTS player_stats (
   last_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- WEBSITE → MINECRAFT COMMAND QUEUE (RCON's replacement, 2026-11-15).
+-- Lives in the PLUGIN database (same one player_stats above lives in).
+-- The site INSERTs console commands here (src/lib/rcon.js → db.enqueueSiteCommand)
+-- and polls its own row; CommandQueueService.java claims rows each tick,
+-- runs them as console with output captured AWAY from the live console and
+-- written back to `response`. site_queue_status is bumped by the plugin once
+-- per tick — the site uses its heartbeat to tell "queue dead" apart from
+-- "command still running" and refuses to enqueue silently otherwise.
+-- Both tables are also auto-created by the plugin itself, same as player_stats.
+CREATE TABLE IF NOT EXISTS site_command_queue (
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  command TEXT NOT NULL,
+  status VARCHAR(10) NOT NULL DEFAULT 'queued',
+  response MEDIUMTEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  started_at DATETIME NULL,
+  done_at DATETIME NULL,
+  KEY idx_queue_status (status, id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS site_queue_status (
+  id TINYINT NOT NULL PRIMARY KEY,
+  heartbeat DATETIME NOT NULL,
+  command_queue_enabled TINYINT NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Real, verified votes — written by VotifierListener.java whenever the
 -- server's Votifier-compatible receiver (VoteSpeed's built-in one) actually
 -- receives a vote, from any service (external sites or our own direct

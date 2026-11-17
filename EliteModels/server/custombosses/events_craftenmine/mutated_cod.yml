@@ -1,0 +1,41 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: DROWNED
+mainHand: TRIDENT
+disguise: COD
+name: $eventBossLevel &bMutated Cod
+level: dynamic
+healthMultiplier: 3.0
+damageMultiplier: 1.0
+powers:
+- attack_freeze.yml
+- attack_push.yml
+- plasma_blaster.yml
+- bonus_loot.yml
+- invulnerability_fire.yml
+trails:
+- CLOUD
+- CLOUD
+uniqueLootList:
+- filename=mutated_cod_drop_rod.yml:amount=1:chance=0.1
+movementSpeedAttribute: 0.3
+followDistance: 70
+locationMessage: '&cMutated Cod: $distance blocks away!'
+spawnMessage: '&cA fishy Dr. Craftenmine creation has escaped!'
+deathMessage: '&aThe Mutated Cod was slain by $players!'
+escapeMessage: '&4The Mutated Cod has swam away!'
+announcementPriority: 2
+eliteScript:
+  FlopLikeFish:
+    Events:
+    - EliteMobSpawnEvent
+    Actions:
+    - action: PUSH
+      Target:
+        targetType: SELF
+      vValue: 0,0.6,0
+      repeatEvery: 20
+      times: 99999

@@ -1,0 +1,16 @@
+validBiomesV2: []
+isEnabled: true
+validWorlds: []
+validWorldEnvironments:
+- NORMAL
+- CUSTOM
+validBiomes:
+- BEACH
+- WARM_OCEAN
+- LUKEWARM_OCEAN
+- OCEAN
+- DEEP_OCEAN
+- COLD_OCEAN
+- DEEP_COLD_OCEAN
+isSurfaceSpawn: true
+canSpawnInLight: true

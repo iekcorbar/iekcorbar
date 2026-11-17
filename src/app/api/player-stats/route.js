@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
-import { sendRconCommand } from '@/lib/rcon';
 import { db } from '@/lib/db';
 import { getCmiPlayerData } from '@/lib/cmi-db';
 
 /**
  * In-memory cache for player stats.
- * Prevents hammering the server with RCON queries for the same player.
+ * Prevents hammering the plugin database for the same player.
  * Each entry expires after 60 seconds.
  */
 const statsCache = new Map();

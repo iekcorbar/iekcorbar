@@ -4,12 +4,12 @@ main: com.iekcorbar.hihou.HihouPlugin
 api-version: '26.2'
 description: 秘宝 treasure, event and vote chests with physical keys - every prize is a chest you unlock yourself.
 author: iekcorbar
-softdepend: [AfkCinema, Gouw, IekcorbarSiteSync, IekQuests, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
+softdepend: [AfkCinema, Gouw, IekcorbarSiteSync, Kitchen, Kura, Relics, Sakagura, Satchel, Steamworks, SteamworksAdditions, SteamworksPower, Wildlife, Zukan]
 
 commands:
   hihou:
     description: Hihou chests and keys
-    usage: /hihou <give|key|edit|remove|map|event|game|bw|help>
+    usage: /hihou <give|key|edit|remove|map|event|game|bw|reload|help>
     aliases: [ih]
 
 permissions:

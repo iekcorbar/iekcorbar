@@ -20,6 +20,7 @@ final class Settings {
     final double mixerImpact, mixerDivisor, mixerMinRate, mixerMaxRate;
     final double trainMaxSpeed, trainAccel, trainBrake, trainReverseMax, trainFriction, trainMaxFuel, trainAutoSpeed;
     final int trainStationWait, trainSectionLength;
+    final double trainSwitchLookahead;
     final double pumpjackImpact, pumpjackRate, oilChance, oilMin, oilMax, refineryFuelPart;
     final int tankCapacity, refineryBatch, canisterFuelTicks, pollutionDecay;
     final double drillImpact, drillHardnessFactor;
@@ -77,8 +78,9 @@ final class Settings {
         trainFriction = c.getDouble("trains.friction", 0.0015);
         trainMaxFuel = c.getDouble("trains.max-fuel-ticks", 72000);
         trainAutoSpeed = c.getDouble("trains.autopilot-speed", 0.3);
-        trainStationWait = Math.max(1, c.getInt("trains.station-wait-seconds", 6)) * 20;
+        trainStationWait = Math.max(1, c.getInt("trains.station-wait-seconds", 20)) * 20;
         trainSectionLength = Math.max(8, c.getInt("trains.signal-section-max-blocks", 128));
+        trainSwitchLookahead = Math.max(4, c.getDouble("trains.switch-lookahead-blocks", 14));
         pumpjackImpact = c.getDouble("oil.pumpjack-impact", 8);
         pumpjackRate = c.getDouble("oil.pumpjack-mb-per-rpm-second", 2);
         oilChance = c.getDouble("oil.field-chance", 0.08);

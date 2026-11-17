@@ -60,6 +60,9 @@ final class Couriers implements Listener {
         Block source;
         long since, nextSearch;
         int failures;
+        /** Optional: only these items may be carried (Item/Tag/Polymorphic Filter or a plain item). */
+        ItemStack filterItem;
+        Filter filter;
 
         Courier(CopperGolem golem, UUID owner, Location home) {
             this.golem = golem;
@@ -69,13 +72,14 @@ final class Couriers implements Listener {
     }
 
     private final KuraPlugin plugin;
-    private final NamespacedKey homeKey, ownerKey;
+    private final NamespacedKey homeKey, ownerKey, filterKey;
     private final Map<UUID, Courier> couriers = new HashMap<>();
 
     Couriers(KuraPlugin plugin) {
         this.plugin = plugin;
         this.homeKey = new NamespacedKey(plugin, "courier_home");
         this.ownerKey = new NamespacedKey(plugin, "courier_owner");
+        this.filterKey = new NamespacedKey(plugin, "courier_filter");
     }
 
     private boolean enabled() {
@@ -96,9 +100,15 @@ final class Couriers implements Listener {
         e.setCancelled(true);
         var pdc = g.getPersistentDataContainer();
         if (pdc.has(homeKey, PersistentDataType.STRING)) {
+            if (p.isSneaking()) {   // sneak + click a bound courier: choose what it may carry
+                plugin.menus().openCourierSettings(p, g.getUniqueId(),
+                    Part.decode(pdc.get(filterKey, PersistentDataType.STRING)));
+                return;
+            }
             Courier c = couriers.remove(g.getUniqueId());
             pdc.remove(homeKey);
             pdc.remove(ownerKey);
+            pdc.remove(filterKey);
             if (c != null) drop(c);
             p.sendActionBar(Component.text("The copper golem is free again.", NamedTextColor.GRAY));
             return;
@@ -119,7 +129,18 @@ final class Couriers implements Listener {
         p.playSound(g.getLocation(), Sound.BLOCK_COPPER_PLACE, 1f, 1.3f);
         plugin.adv().grant(p, "courier");
         p.sendActionBar(Component.text("Courier bound to the interface at " + home.x + " " + home.y + " " + home.z
-                + ". It fetches from copper chests and Steamworks machine outputs. Right-click again to free it.", NamedTextColor.GREEN));
+                + ". It fetches from copper chests and Steamworks machine outputs. Sneak + right-click: what to carry; right-click again: free it.", NamedTextColor.GREEN));
+    }
+
+    /** Choose what a bound courier may carry (null = everything); kept in the golem's own data. */
+    void setFilter(UUID golem, ItemStack filter) {
+        Courier c = couriers.get(golem);
+        if (c == null) return;
+        c.filterItem = filter == null ? null : filter.asOne();
+        c.filter = Filter.of(plugin.items(), c.filterItem);
+        var pdc = c.golem.getPersistentDataContainer();
+        if (c.filterItem == null) pdc.remove(filterKey);
+        else pdc.set(filterKey, PersistentDataType.STRING, Part.encode(c.filterItem));
     }
 
     private Part nearestInterface(Location from) {
@@ -172,8 +193,11 @@ final class Couriers implements Listener {
             String[] f = h.split("\\|");
             World w = Bukkit.getWorld(UUID.fromString(f[0]));
             if (w == null) return;
-            couriers.put(g.getUniqueId(), new Courier(g, UUID.fromString(o),
-                    new Location(w, Integer.parseInt(f[1]), Integer.parseInt(f[2]), Integer.parseInt(f[3]))));
+            Courier c = new Courier(g, UUID.fromString(o),
+                    new Location(w, Integer.parseInt(f[1]), Integer.parseInt(f[2]), Integer.parseInt(f[3])));
+            c.filterItem = Part.decode(pdc.get(filterKey, PersistentDataType.STRING));
+            c.filter = Filter.of(plugin.items(), c.filterItem);
+            couriers.put(g.getUniqueId(), c);
         } catch (RuntimeException ex) {
             plugin.getLogger().warning("Bad courier data on a copper golem: " + h);
         }
@@ -252,6 +276,7 @@ final class Couriers implements Listener {
                 for (int i = 0; i < inv.getSize(); i++) {
                     ItemStack it = inv.getItem(i);
                     if (it == null || it.isEmpty()) continue;
+                    if (c.filter != null && !c.filter.test(it, null)) continue;
                     ItemStack take = it.clone();
                     inv.setItem(i, null);
                     g.getEquipment().setItemInMainHand(take);
@@ -342,13 +367,22 @@ final class Couriers implements Listener {
                     Block b = bs.getBlock();
                     if (plugin.parts().at(b) != null || plugin.networks().at(b, null) != null) continue;   // never empty the network itself
                     boolean ok = isCopperChest(b.getType()) || (sw != null && sw.test(b));
-                    if (!ok || ((Container) bs).getInventory().isEmpty()) continue;
+                    if (!ok) continue;
+                    Inventory inv = ((Container) bs).getInventory();
+                    if (inv.isEmpty()) continue;
+                    if (c.filter != null && !carries(inv, c.filter)) continue;   // nothing in there it may carry
                     bd = d;
                     best = b;
                 }
             }
         if (best != null && !canBreak(owner, best)) return null;
         return best;
+    }
+
+    /** Does this container hold at least one item the courier's filter lets through? */
+    private static boolean carries(Inventory inv, Filter f) {
+        for (ItemStack it : inv.getContents()) if (it != null && !it.isEmpty() && f.test(it, null)) return true;
+        return false;
     }
 
     private boolean canBreak(Player owner, Block b) {

@@ -11,7 +11,7 @@
 
 Usage (repo root): python -I scripts/audit-pack.py   -> newest deploy/iekcorbar-pack-build*.zip
 """
-import glob, json, os, sys, zipfile, hashlib
+import glob, json, os, re, sys, zipfile, hashlib
 
 if len(sys.argv) > 1:
     path = sys.argv[1]
@@ -168,4 +168,148 @@ for name, m in models.items():
     problems += len(probs)
 
 print("%s: %d models, %d item defs - %d problems in OUR namespaces, %d orphans in OUR namespaces (mmoitems counted separately: %d)" % (path, len(models), n_defs, problems, len(OUR_ORPHANS), mmo_problems))
-sys.exit(1 if problems or OUR_ORPHANS else 0)
+
+# ------------------------------------------------------------------ check 6: plugin-ids vs pack-defs
+# Zesde look, want de vijf hierboven kunnen dit MIS niet zien: een item dat een plugin registreert
+# en waarvoor in het pack GEEN model én geen items/<id>.json bestaat. Zo'n model_loze id is geen
+# orphan (er is niets om te orfanen) - het is gewoon onzichtbaar, en de client laat dan een
+# MAGENTA blok zien. Ontdekt 12-11 in Zukan: tien Kitchen-items (yuzu, yuzu_seeds, persimmon,
+# persimmon_seeds, buckwheat, buckwheat_seeds, koji, enoki_spores, shiitake_spores, tsukemono)
+# kregen wel `item_model kitchen:<id>` maar nooit een icoon.
+#
+# De bron van de ids is de plugin-zelf: alle `Key.key("<ns>", "<id>")`-letteralen plus de
+# konstanten van de item-enum(s). Wie een item toevoegt WITHOUT een icoon, vliegt er nu uit.
+ID_SOURCES = {                       # namespace -> (plugin-map, [(enum-bestand, id-regel), ...])
+    # Alleen namespaces waarvan de id-regel NAGEKEKEN is. Kura/Relics/Steamworks/Hihou staan er
+    # bewust níét bij: daar is de item-id niet de enum-naam maar een opgebouwd model
+    # ("cable_0", "advent_wreath_0", steamworks-decor heeft heel andere namen) - die opnemen
+    # geeft 100 vals alarm en een audit die liegt, erger dan een audit die te weinig ziet.
+    "kitchen":  ("Kitchen",  [("Kitchen/src/main/java/com/iekcorbar/kitchen/KItem.java", "naam")]),
+    "satchel":  ("Satchel",  [("Satchel/src/main/java/com/iekcorbar/satchel/SItem.java", "naam")]),
+    "kura":     ("Kura",     [("Kura/src/main/java/com/iekcorbar/kura/KItem.java", "naam")]),
+    "sakagura": ("Sakagura", [("Sakagura/src/main/java/com/iekcorbar/sakagura/Fruit.java", "args")]),
+}
+# Ids die GEEN inventory-item zijn: Kitchen-oesprongen bestaan als blok-model (block/<oesprong>_stageN)
+# en nooit als vaststaand item, dus hun naam hoeft geen items/-definitie te hebben.
+NOT_AN_ITEM = {
+    "kitchen": {"cannabis", "hemp", "sesame", "shiso", "soybean", "tea", "wasabi"},
+}
+
+def enum_ids(pad, regel):
+    """De item-ids die een Java-enum registreert.
+       "naam" -> id() is name().toLowerCase()  (Kitchen KItem, Satchel SItem, Kura KItem)
+       "args" -> id's staan als letterlijke strings in de constante
+                 (Sakagura Fruit: YUZU("Yuzu", "yuzu", "yuzu_seeds", ...) -> vrucht + zaad)"""
+    try:
+        src = open(pad, encoding="utf-8").read()
+    except OSError:
+        return set()
+    body = src[src.index("enum "):] if "enum " in src else ""
+    if regel == "args":
+        # Echte argumenten-splitting op hoofdniveau: een regel als
+        #   BARLEY("Barley", "barley", null, 2, 4, false, 18, List.of("plains", "meadow"))
+        # mag NIET als zaad-id "plains" gaan opleveren (de regex-greep pakt dan door de
+        # List.of-haakjes heen, en null schuift alles op).
+        out = set()
+        for m in re.findall(r'^\s{4}[A-Z_0-9]+\(((?:[^()]|\([^()]*\))*)\)', body, re.M):
+            depth, cur, args = 0, "", []
+            for ch in m:
+                if ch in "([":
+                    depth += 1
+                elif ch in ")]":
+                    depth -= 1
+                if ch == "," and depth == 0:
+                    args.append(cur.strip())
+                    cur = ""
+                else:
+                    cur += ch
+            if cur.strip():
+                args.append(cur.strip())
+            for a in args[1:3]:                      # [0] is de weergavenaam
+                q = re.fullmatch(r'"([a-z_0-9]+)"', a)
+                if q:
+                    out.add(q.group(1))
+        return out
+    return {m.lower() for m in re.findall(r'^\s{4}([A-Z][A-Z_0-9]*)\s*[\(;]', body, re.M)}
+
+gen = 0
+for ns, (plugin, bronnen) in ID_SOURCES.items():
+    ids = set()
+    for pad, regel in bronnen:
+        ids |= enum_ids(pad, regel)
+    # plus alle letterlijke ids in Key.key("<ns>", "<id>")-aanroepen binnen die plugin.
+    # Twee vormen: een complete id  ->  Key.key("kitchen", "yuzu_tea")
+    #                een voorvoegsel  ->  Key.key("sakagura", "drink_" + id)  (let op de '+')
+    exact, prefixes = set(), set()
+    for root, _d, files in os.walk(plugin):
+        for f in files:
+            if not f.endswith(".java"):
+                continue
+            try:
+                txt = open(os.path.join(root, f), encoding="utf-8").read()
+            except OSError:
+                continue
+            for lit, next_char in re.findall(r'Key\.key\("%s",\s*"([a-z_0-9]+)"\s*([),+])' % ns, txt):
+                (prefixes if next_char == "+" else exact).add(lit)
+    ids |= exact
+    for pre in sorted(prefixes):                      # van een voorvoegsel moet minstens ONE id bestaan
+        if not any(k.startswith("assets/%s/items/%s" % (ns, pre)) for k in names):
+            gen += 1
+            print("NO ITEM MODEL/DEF %s:%s* - geen enkel item begint met dit voorvoegsel" % (ns, pre))
+    for i in sorted(ids):
+        if i in NOT_AN_ITEM.get(ns, set()):
+            continue
+        if "assets/%s/items/%s.json" % (ns, i) not in names:
+            gen += 1
+            print("NO ITEM MODEL/DEF %s:%s - 26.2 toont dit als MAGENTA blok (voeg het icoon toe "
+                  "aan tools/make_pack.py van %s)" % (ns, i, ns))
+if gen:
+    print("check 6: %d geregistreerde items zonder icoon/definitie" % gen)
+else:
+    print("check 6: alle geregistreerde plugin-items hebben een icoon + items/-definitie")
+
+# ------------------------------------------------------------------ check 6b: propkit-decor-ids
+# De decor-props (Kitchen/Sakagura/Wildlife/Zoo/Xmas/Hihou/Additions) komen niet uit een enum maar
+# uit `new DecorDef("<id>", ...)`-regels, en de namespace staat in propkit/sync.py. Die tabel hier
+# uitlezen (in plaats nabiouwen) is de zin van deze check: wie een prop-plugin toevoegt aan sync.py
+# wordt automatisch meegenomen, en een namespace die hier handmatig stond kan gaan rammelen.
+# Connect-props (muur/hekwerken) zetten hun item_model op "<model>_0", dus dáár moet de def staan.
+def propkit_targets():
+    try:
+        src = open(os.path.join("propkit", "sync.py"), encoding="utf-8").read()
+    except OSError:
+        return {}
+    body = src.split("TARGETS = {", 1)[1].split("}\n", 1)[0]
+    # drie vangstgroepen (plugin, pakket, namespace) - de pakketnaam heb ik hier niet voor nodig
+    return {plug: ns for plug, _pkg, ns in re.findall(r'"([A-Za-z0-9_]+)":\s*\("([^"]+)",\s*"([^"]+)"\)', body)}
+
+gen6b = 0
+for plugin, ns in sorted(propkit_targets().items()):
+    ids = set()
+    for root, _d, files in os.walk(plugin):
+        if "target" in root.split(os.sep):
+            continue
+        for f in files:
+            if not f.endswith(".java"):
+                continue
+            txt = open(os.path.join(root, f), encoding="utf-8").read()
+            ids |= set(re.findall(r'new DecorDef\("([a-z_0-9]+)"', txt))
+            # variants("a","b") en muur-/plafondmodellen: ook die moeten een def hebben
+            for v in re.findall(r'\.variants\(([^)]*)\)', txt):
+                ids |= set(re.findall(r'"([a-z_0-9]+)"', v))
+            for w in re.findall(r'\.wallModels?\(([^)]*)\)|\.ceiling\(([^)]*)\)', txt):
+                ids |= {x for x in w if x}
+    for i in sorted(ids):
+        # een connect-prop leeft als <id>_0; de platte vorm heeft geen nummertje - één van beide is goed
+        ok = ("assets/%s/items/%s.json" % (ns, i) in names
+              or "assets/%s/items/%s_0.json" % (ns, i) in names)
+        if not ok:
+            gen6b += 1
+            print("NO DECOR DEF %s:%s (plugin %s) - magenta in 26.2; maak het model in tools/make_pack.py" % (ns, i, plugin))
+if gen6b:
+    print("check 6b: %d decor-props zonder icoon/definitie" % gen6b)
+else:
+    print("check 6b: alle propkit-decor-ids (%s) hebben model + items/-definitie"
+          % ", ".join(sorted(set(propkit_targets().values()))))
+
+sys.exit(1 if problems or OUR_ORPHANS or gen or gen6b else 0)

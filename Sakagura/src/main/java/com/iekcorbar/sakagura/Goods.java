@@ -19,8 +19,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,6 +31,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -58,7 +61,14 @@ final class Goods implements Listener {
     // ------------------------------------------------------------ garden items
 
     ItemStack item(String id, int amount) {
-        ItemStack it = new ItemStack(Material.PAPER, Math.max(1, amount));
+        // Shared crops (11-11): nine fruits also grow in Kitchen's fields; they drop ONE canonical
+        // item - Kitchen's - so the server never shows two daikons. Without Kitchen we make our own.
+        ItemStack shared = KitchenShared.get(id, amount);
+        if (shared != null) return shared;
+        // Sakagura apples are real vanilla apples under the hood, so they keep every vanilla
+        // behaviour (golden apples, brewing, food) while still carrying our model and PDC id.
+        Material base = "apple".equals(id) ? Material.APPLE : Material.PAPER;
+        ItemStack it = new ItemStack(base, Math.max(1, amount));
         ItemMeta m = it.getItemMeta();
         Fruit f = Fruit.byId(id);
         Fruit planted = Fruit.byPlantItem(id);
@@ -93,6 +103,33 @@ final class Goods implements Listener {
     String idOf(ItemStack it) {
         if (it == null || it.isEmpty() || !it.hasItemMeta()) return null;
         return it.getItemMeta().getPersistentDataContainer().get(itemKey, PersistentDataType.STRING);
+    }
+
+    /**
+     * PDC-id matching for recipe slots. exactChoice compares the WHOLE item including the
+     * spoilage stamp - a 5-minute bucket - so a fruit harvested after startup never equals the
+     * prototype taken at registration, which silently broke every fruit->seed recipe within
+     * minutes of each restart (review 10-11). Custom RecipeChoice objects can't be registered
+     * at all since build.135 ("Unknown recipe stack instance", crash 11-11 evening), so the
+     * recipe registers the plain base MATERIAL and this map enforces the real identity
+     * (own sakagura:item id OR the canonical Kitchen twin) in onCraft before crafting.
+     */
+    private final Map<NamespacedKey, java.util.function.Predicate<ItemStack[]>> craftChecks = new HashMap<>();
+
+    /** The sakagura sid of a produce sample (own id, or the Kitchen twin's mapped back). */
+    private String produceId(ItemStack sample) {
+        String own = idOf(sample);
+        return own != null ? own : KitchenShared.idOf(sample);
+    }
+
+    /** True if any matrix cell carries this produce id (own or shared-Kitchen twin). */
+    private boolean hasProduce(ItemStack[] matrix, String want) {
+        for (ItemStack i : matrix) {
+            String id = idOf(i);
+            if (id == null) id = KitchenShared.idOf(i);
+            if (want.equals(id)) return true;
+        }
+        return false;
     }
 
     // ------------------------------------------------------------ casks
@@ -222,6 +259,7 @@ final class Goods implements Listener {
     void registerRecipes() {
         for (NamespacedKey k : recipeKeys) Bukkit.removeRecipe(k, false);
         recipeKeys.clear();
+        craftChecks.clear();
         for (Woods w : Woods.values()) {
             NamespacedKey k = new NamespacedKey(plugin, "cask_" + w.id());
             ShapedRecipe r = new ShapedRecipe(k, cask(w, 1));
@@ -245,7 +283,10 @@ final class Goods implements Listener {
             if (f.seed == null) continue;
             NamespacedKey k = new NamespacedKey(plugin, f.seed);
             ShapelessRecipe r = new ShapelessRecipe(k, item(f.seed, 2));
-            r.addIngredient(org.bukkit.inventory.RecipeChoice.exactChoice(item(f.produce, 1)));
+            ItemStack sample = item(f.produce, 1);
+            r.addIngredient(new RecipeChoice.MaterialChoice(sample.getType()));
+            String want = produceId(sample);
+            if (want != null) craftChecks.put(k, m -> hasProduce(m, want));
             Bukkit.addRecipe(r);
             recipeKeys.add(k);
         }
@@ -253,8 +294,12 @@ final class Goods implements Listener {
         for (Tree t : Tree.values()) {
             NamespacedKey k = new NamespacedKey(plugin, t.sapling());
             ShapelessRecipe r = new ShapelessRecipe(k, item(t.sapling(), 1));
-            if (t.fruit() != null) r.addIngredient(org.bukkit.inventory.RecipeChoice.exactChoice(item(t.fruitId, 1)));
-            else {
+            if (t.fruit() != null) {
+                ItemStack sample = item(t.fruitId, 1);
+                r.addIngredient(new RecipeChoice.MaterialChoice(sample.getType()));
+                String want = produceId(sample);
+                if (want != null) craftChecks.put(k, m -> hasProduce(m, want));
+            } else {
                 r.addIngredient(Material.RED_MUSHROOM);
                 r.addIngredient(Material.RED_MUSHROOM);
             }
@@ -271,11 +316,37 @@ final class Goods implements Listener {
         e.getPlayer().discoverRecipes(recipeKeys);
     }
 
+    // Disable vanilla apples from oak/dark-oak leaf drops so only Sakagura apples remain.
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void onLeafDrop(BlockDropItemEvent e) {
+        org.bukkit.block.Block b = e.getBlock();
+        org.bukkit.Material t = b.getType();
+        if (t != org.bukkit.Material.OAK_LEAVES && t != org.bukkit.Material.DARK_OAK_LEAVES) return;
+        e.getItems().removeIf(di -> {
+            org.bukkit.inventory.ItemStack it = di.getItemStack();
+            if (it.getType() != org.bukkit.Material.APPLE) return false;
+            // keep our own tagged apples (they never drop from leaves, but be safe)
+            if (it.hasItemMeta() && it.getItemMeta().getPersistentDataContainer().has(itemKey, org.bukkit.persistence.PersistentDataType.STRING)) return false;
+            return true;
+        });
+    }
+
     /** Our paper items only count in our own recipes. */
     @EventHandler(priority = EventPriority.HIGH)
     public void onCraft(PrepareItemCraftEvent e) {
         org.bukkit.inventory.Recipe r = e.getRecipe();
-        if (r instanceof org.bukkit.Keyed k && k.getKey().getNamespace().equals(plugin.namespace())) return;
-        for (ItemStack i : e.getInventory().getMatrix()) if (idOf(i) != null || brewOf(i) != null) e.getInventory().setResult(null);
+        if (r instanceof org.bukkit.Keyed keyed && keyed.getKey().getNamespace().equals(plugin.namespace())) {
+            // since 11-11: fruit slots register plain material (build.135 refuses custom choices),
+            // the real produce identity is enforced here before the result may appear
+            java.util.function.Predicate<ItemStack[]> check = craftChecks.get(keyed.getKey());
+            if (check != null && !check.test(e.getInventory().getMatrix())) e.getInventory().setResult(null);
+            return;
+        }
+        for (ItemStack i : e.getInventory().getMatrix()) {
+            String id = idOf(i);
+            // apples are allowed in vanilla recipes (golden apples etc.) even though they carry our PDC
+            if (id != null && "apple".equals(id)) continue;
+            if (id != null || brewOf(i) != null) e.getInventory().setResult(null);
+        }
     }
 }

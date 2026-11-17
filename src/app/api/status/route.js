@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { queryServerStatus } from '@/lib/mc-query';
 
 export async function GET() {
   let online = false;
@@ -15,23 +16,40 @@ export async function GET() {
   const [serverHost, serverPortStr] = serverAddress.split(':');
   const serverPort = parseInt(serverPortStr, 10) || 25565;
 
-  try {
-    const res = await fetch(`https://api.mcsrvstat.us/3/${serverAddress}`, {
-      signal: AbortSignal.timeout(2500),
-      cache: 'no-store'
-    });
-    const data = await res.json();
-    if (data && data.online) {
-      online = true;
-      playersOnline = data.players?.online || 0;
-      playersMax = data.players?.max || 100;
-      version = data.version || "Paper 26.1.2";
-      if (data.players?.list) {
-        playersList = data.players.list.map(p => p.name);
+  // 2026-11-15: the live status now comes from the server's own UDP query
+  // protocol (server.properties enable-query) first — direct, console-free,
+  // and it carries the actual player names. The old third-party mcsrvstat.us
+  // call remains only as a fallback for when query is unreachable/firewalled.
+  // Target: MINECRAFT_QUERY_TARGET ("ip:port", e.g. the game box when the
+  // website's own domain doesn't point there) > the ":port" in the staff
+  // address > MINECRAFT_QUERY_PORT > _minecraft._tcp SRV > game port.
+  const [queryHost, queryHostPort] = (process.env.MINECRAFT_QUERY_TARGET || serverAddress).split(':');
+  const queried = await queryServerStatus(queryHost, queryHostPort || serverPortStr);
+  if (queried) {
+    online = true;
+    playersOnline = queried.playersOnline;
+    playersMax = queried.playersMax || 100;
+    version = queried.version || version;
+    playersList = queried.playersList;
+  } else {
+    try {
+      const res = await fetch(`https://api.mcsrvstat.us/3/${serverAddress}`, {
+        signal: AbortSignal.timeout(2500),
+        cache: 'no-store'
+      });
+      const data = await res.json();
+      if (data && data.online) {
+        online = true;
+        playersOnline = data.players?.online || 0;
+        playersMax = data.players?.max || 100;
+        version = data.version || "Paper 26.1.2";
+        if (data.players?.list) {
+          playersList = data.players.list.map(p => p.name);
+        }
       }
+    } catch (err) {
+      console.error("Failed to query live Minecraft server status:", err.message);
     }
-  } catch (err) {
-    console.error("Failed to query live Minecraft server status:", err.message);
   }
 
   // Real-time Discord server invite data query

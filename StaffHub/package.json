@@ -1,6 +1,6 @@
 {
   "name": "staffhub",
-  "version": "1.12.1",
+  "version": "1.12.3",
   "private": true,
   "type": "module",
   "scripts": {

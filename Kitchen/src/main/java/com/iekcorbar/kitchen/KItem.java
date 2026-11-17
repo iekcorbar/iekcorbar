@@ -33,6 +33,37 @@ enum KItem {
     KABOCHA("Kabocha", Kind.SEED, 3, 3.6f, Rem.NONE, 64, "Plant on farmland. Japanese pumpkin."),
     BAMBOO_SHOOTS("Bamboo Shoots", Kind.SEED, 2, 2.4f, Rem.NONE, 64, "Plant on farmland. Spring delicacy."),
     EGGPLANT("Eggplant", Kind.SEED, 2, 2.0f, Rem.NONE, 64, "Plant on farmland. Nasu dengaku!"),
+    // ---- cannabis & hemp
+    CANNABIS_SEEDS("Cannabis Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Grows into a cannabis plant."),
+    CANNABIS_BUDS("Cannabis Buds", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Harvested from a cannabis plant. Dry it for hash."),
+    HEMP_SEEDS("Hemp Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Grows into hemp."),
+    HEMP_LEAVES("Hemp Leaves", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Harvested from hemp. Craft into fiber."),
+    // ---- magic mushrooms
+    MAGIC_MUSHROOM_SPORES("Magic Mushroom Spores", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland in the dark. Grows into a magic mushroom."),
+    MAGIC_MUSHROOM("Magic Mushroom", Kind.FOOD, 2, 1.2f, Rem.NONE, 64, "A psychedelic mushroom. Eat at your own risk."),
+    // ---- new crops
+    SHIITAKE_SPORES("Shiitake Spores", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on a log in the dark. Grows shiitake."),
+    ENOKI_SPORES("Enoki Spores", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on a log in the dark. Grows enoki."),
+    YUZU_SEEDS("Yuzu Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Citrus tree."),
+    YUZU("Yuzu", Kind.FOOD, 2, 1.6f, Rem.NONE, 64, "Japanese citrus. Tart and fragrant."),
+    PERSIMMON_SEEDS("Persimmon Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Autumn fruit."),
+    PERSIMMON("Persimmon", Kind.FOOD, 3, 2.4f, Rem.NONE, 64, "Sweet autumn fruit. Hachiya or fuyu."),
+    BUCKWHEAT_SEEDS("Buckwheat Seeds", Kind.SEED, 0, 0, Rem.NONE, 64, "Plant on farmland. Makes soba flour."),
+    BUCKWHEAT("Buckwheat", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "For soba noodles and tea."),
+    // ---- new drinks
+    YUZU_TEA("Yuzu Tea", Kind.DRINK, 2, 1.6f, Rem.BOTTLE, 16, "Hot yuzu tea. Refreshing."),
+    PERSIMMON_WINE("Persimmon Wine", Kind.DRINK, 1, 0.8f, Rem.BOTTLE, 16, "Sweet fruit wine."),
+    MUSHROOM_TEA("Mushroom Tea", Kind.DRINK, 1, 0.8f, Rem.BOTTLE, 16, "Earthy mushroom tea."),
+    BUCKWHEAT_TEA("Buckwheat Tea", Kind.DRINK, 1, 0.8f, Rem.BOTTLE, 16, "Roasted buckwheat tea."),
+    // ---- cannabis & hemp products
+    DRIED_CANNABIS("Dried Cannabis", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Dried buds. Smoke or compress into hash."),
+    HASH("Hash", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Compressed cannabis resin. Strong."),
+    HEMP_FIBER("Hemp Fiber", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "From hemp leaves. Craft into string or cloth."),
+    HEMP_STRING("Hemp String", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Stronger than regular string."),
+    HEMP_ROPE("Hemp Rope", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Strong rope for leads and nets."),
+    HEMP_CLOTH("Hemp Cloth", Kind.INGREDIENT, 0, 0, Rem.NONE, 64, "Woven hemp fabric."),
+    JOINT("Joint", Kind.FOOD, 1, 0.4f, Rem.NONE, 64, "A rolled joint. Smoke responsibly."),
+    HASH_PIPE("Hash Pipe", Kind.TOOL, 0, 0, Rem.NONE, 1, "Reusable pipe. Right-click with hash to smoke."),
     // ---- cut on the cutting board
     CABBAGE_LEAF("Cabbage Leaf", Kind.FOOD, 1, 0.6f, Rem.NONE, 64),
     DAIKON_SLICES("Daikon Slices", Kind.FOOD, 1, 1.2f, Rem.NONE, 64),

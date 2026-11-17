@@ -1,0 +1,19 @@
+validBiomesV2: []
+isEnabled: true
+validWorlds: []
+validWorldEnvironments:
+- NORMAL
+- CUSTOM
+validBiomes:
+- WARM_OCEAN
+- LUKEWARM_OCEAN
+- DEEP_LUKEWARM_OCEAN
+- DEEP_COLD_OCEAN
+- DEEP_FROZEN_OCEAN
+- OCEAN
+- DEEP_OCEAN
+- COLD_OCEAN
+- FROZEN_OCEAN
+- DEEP_FROZEN_OCEAN
+earliestTime: 12000
+isSurfaceSpawn: true

@@ -345,17 +345,22 @@ def tree(on):
 
 
 def string_lights(on, wall=True):
+    # 13-11 (owner): much too small - the wire spanned 14 px with pea-sized bulbs. Full block
+    # width, thicker wire, bulbs 1.1 px, deeper sag; the ceiling strand droops through the block.
     e = []
-    z = 15.4 if wall else 8
+    if wall:
+        z, y0 = 15.1, 14.6   # strand against the wall, high in the block
+    else:
+        z, y0 = 8.0, 15.2    # strand across the ceiling
     for i in range(8):
-        x = 1 + i * 2
-        sag = [0, 0.8, 1.2, 0.8][i % 4]
-        y = (12 - sag) if wall else (15 - sag)
-        e.append(box(x, y, z, x + 2, y + 0.3, z + 0.3, "coal"))
+        x = i * 2.0
+        d = [0, 0.9, 1.3, 0.9][i % 4]
+        y = y0 - d
+        e.append(box(x, y, z, x + 2.0, y + 0.45, z + 0.45, "coal"))
         col = ["bulb_red", "bulb_yellow", "bulb_blue", "xgreen"][i % 4]
         if not on and i % 2:
             col = "bulb_off"
-        e.append(box(x + 0.7, y - 1.0, z - 0.2, x + 1.3, y, z + 0.4, col))
+        e.append(box(x + 0.45, y - 1.25, z - 0.35, x + 1.55, y - 0.1, z + 0.8, col))
     return e
 
 
@@ -868,9 +873,24 @@ def green_keg():
 
 
 def telescope():
-    return [box(7.5, 0, 7.5, 8.5, 9, 8.5, "brass_d"), box(5, 0, 7.6, 11, 0.6, 8.4, "brass_d"), box(7.6, 0, 5, 8.4, 0.6, 11, "brass_d"),
-            box(7, 9, 7, 9, 10, 9, "brass"), box(7, 10, 2, 9, 12, 12, "brass"), box(6.6, 9.8, 0.8, 9.4, 12.2, 2.4, "brass_l"),
-            box(7.3, 10.3, 11.8, 8.7, 11.7, 14, "copper"), box(6.9, 10.4, 6, 9.1, 11.8, 6.6, "copper_d")]
+    # 13-11 (owner): te klein. Full-height brass instrument on a wide tripod: the tube rises
+    # through most of the block (stacked steps: only 22.5/45 deg single-axis turns are allowed,
+    # so a shallow diagonal is drawn as a staircase - invisible at 16 px scale).
+    return [box(5, 0, 5, 11, 0.7, 11, "brass_d"),                      # base plate
+            box(6.9, 0.7, 6.9, 9.1, 9.0, 9.1, "brass_d"),              # central column
+            box(3.4, 0.7, 7.6, 4.6, 1.3, 8.4, "brass"),                # tripod foot west
+            box(11.4, 0.7, 7.6, 12.6, 1.3, 8.4, "brass"),              # foot east
+            box(7.6, 0.7, 3.4, 8.4, 1.3, 4.6, "brass"),                # foot north
+            box(7.6, 0.7, 11.4, 8.4, 1.3, 12.6, "brass"),              # foot south
+            box(6.3, 8.2, 6.3, 9.7, 9.8, 9.7, "brass"),                # cradle
+            box(4.5, 9.4, 7.4, 6.1, 10.8, 8.6, "brass"),               # tube 1 (objective end)
+            box(5.9, 10.3, 7.4, 7.9, 11.9, 8.6, "brass_l"),            # tube 2
+            box(7.7, 11.4, 7.4, 9.7, 13.0, 8.6, "brass"),              # tube 3
+            box(9.5, 12.5, 7.4, 11.6, 14.1, 8.6, "brass_l"),           # tube 4 (eyepiece end)
+            box(11.2, 13.3, 7.2, 12.6, 14.7, 8.8, "copper"),           # eyepiece
+            box(3.9, 8.8, 7.1, 4.7, 11.4, 8.9, "copper_d"),            # objective ring
+            box(6.7, 9.0, 6.1, 7.1, 10.2, 6.5, "coal"),                # finder scope post
+            box(6.3, 10.0, 5.6, 7.9, 10.8, 6.6, "coal")]               # finder scope
 
 
 def gauge_panel(b=False):
@@ -1047,10 +1067,23 @@ def tasting_counter():
 
 
 def noren():
-    return [box(0, 0, 7.6, 1, 16, 8.6, "wood_char"), box(15, 0, 7.6, 16, 16, 8.6, "wood_char"),
-            box(0, 14.8, 6.8, 16, 16, 9.4, "wood_warm"),
-            box(0.8, 2.5, 7.7, 8, 15, 8.5, "indigo"), box(8, 2.5, 7.7, 15.2, 15, 8.5, "indigo"),
-            box(3.2, 8, 7.4, 5.2, 10.5, 8.8, "washi"), box(10.8, 8, 7.4, 12.8, 10.5, 8.8, "washi")]
+    # 13-11 (owner): "noren is te klein" - it was a 1x1 block picture of a cloth. A real noren
+    # spans a two-block doorway: a bamboo rail at head height with four cloth panels hanging from
+    # it, the walking gap underneath stays open. Authored around the x=8 centre like every relic
+    # floor model (x -8..24 = 2 blocks wide; all axes inside -16..32 for 26.2).
+    e = []
+    e.append(box(-8.8, 20.0, 6.8, 24.8, 21.5, 9.4, "wood_warm"))        # bamboo rail
+    e.append(box(-8.8, 19.9, 6.6, -7.6, 21.6, 9.6, "wood_char"))        # rail end west
+    e.append(box(23.6, 19.9, 6.6, 24.8, 21.6, 9.6, "wood_char"))        # rail end east
+    for x in (-7.9, -0.2, 8.3, 16.4, 23.4):
+        e.append(box(x, 19.6, 7.0, x + 0.7, 21.9, 9.2, "washi"))        # cloth ties on the rail
+    e.append(box(-7.9, 8.2, 7.7, -0.2, 19.9, 8.5, "indigo"))            # panel 1 (edges hang lower)
+    e.append(box(-0.2, 8.6, 7.7, 7.6, 19.9, 8.5, "indigo"))             # panel 2
+    e.append(box(8.3, 8.6, 7.7, 16.0, 19.9, 8.5, "indigo"))             # panel 3
+    e.append(box(16.4, 8.2, 7.7, 24.1, 19.9, 8.5, "indigo"))            # panel 4
+    e.append(box(2.05, 12.5, 7.55, 4.05, 15.0, 8.65, "washi"))          # mon on panel 2
+    e.append(box(10.15, 12.5, 7.55, 12.15, 15.0, 8.65, "washi"))        # mon on panel 3
+    return e
 
 
 def brew_kettle():
@@ -1615,7 +1648,24 @@ def add_sounds(root, namespace):
     if not os.path.isdir(src):
         print("note: no sounds in", src, "- run sounds/make_sounds.py first (pack built without sounds)")
         return
-    shutil.copytree(src, os.path.join(root, "assets", namespace), dirs_exist_ok=True)
+    dst = os.path.join(root, "assets", namespace)
+    djson = os.path.join(dst, "sounds.json")
+    keep = {}
+    if os.path.exists(djson):
+        try:
+            keep = json.load(open(djson, encoding="utf-8"))
+        except Exception:
+            keep = {}
+    shutil.copytree(src, dst, dirs_exist_ok=True)
+    # Hand-added events (e.g. quest voices steamworks:milo.lineNN, which live only in the
+    # exploded pack's sounds.json) must survive rebuilds: generated events win, extras stay.
+    if keep and os.path.exists(djson):
+        cur = json.load(open(djson, encoding="utf-8"))
+        extra = {k: v for k, v in keep.items() if k not in cur}
+        if extra:
+            cur.update(extra)
+            with open(djson, "w", encoding="utf-8") as f:
+                json.dump(cur, f, indent=1)
 
 
 # ------------------------------------------------------------------ music discs (data from tools/make_discs.py)
@@ -1675,7 +1725,10 @@ def add_discs():
     if os.path.exists(frag):
         shutil.copytree(os.path.join(out, "assets"), os.path.join(ROOT, "assets"), dirs_exist_ok=True)
         sj = os.path.join(ROOT, "assets", "relics", "sounds.json")
-        data = json.load(open(sj, encoding="utf-8"))
+        if os.path.exists(sj):
+            data = json.load(open(sj, encoding="utf-8"))
+        else:
+            data = {}
         data.update(json.load(open(frag, encoding="utf-8")))
         json.dump(data, open(sj, "w", encoding="utf-8"), indent=1)
         lp = os.path.join(ROOT, "assets", "relics", "lang", "en_us.json")

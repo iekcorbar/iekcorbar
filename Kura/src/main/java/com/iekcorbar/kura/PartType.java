@@ -8,15 +8,21 @@ import org.bukkit.Sound;
  * ItemDisplay; the Interface and Open Crate are real vanilla barrels (so hoppers,
  * Steamworks belts and arms can use them) covered by our model, and the Level
  * Emitter swaps between a barrier and a redstone block to give its signal.
+ *
+ * <p><b>0.1.11 - the network is one rule.</b> There are only three kinds left: a
+ * {@code WIRE} (any cable, also the old connector/trim/cable-connector, which still
+ * work but are no longer crafted) joins whatever it touches, a {@code STORE} is
+ * inventory, and a {@code DEVICE} (terminal, hopper, emitter, interface, crate) hangs
+ * on a network instead of carrying it. Cables reaching a chest is all there is to it.
  */
 enum PartType {
-    CONNECTOR(KItem.INVENTORY_CONNECTOR, Material.BARRIER, Kind.CONNECTOR, false, Sound.BLOCK_COPPER_PLACE),
+    CONNECTOR(KItem.INVENTORY_CONNECTOR, Material.BARRIER, Kind.WIRE, false, Sound.BLOCK_COPPER_PLACE),
     TERMINAL(KItem.STORAGE_TERMINAL, Material.BARRIER, Kind.DEVICE, true, Sound.BLOCK_COPPER_PLACE),
     CRAFTING_TERMINAL(KItem.CRAFTING_TERMINAL, Material.BARRIER, Kind.DEVICE, true, Sound.BLOCK_COPPER_PLACE),
-    TRIM(KItem.INVENTORY_TRIM, Material.BARRIER, Kind.TRIM, false, Sound.BLOCK_WOOD_PLACE),
-    CABLE(KItem.INVENTORY_CABLE, Material.BARRIER, Kind.CABLE, false, Sound.BLOCK_COPPER_PLACE),
-    FRAMED_CABLE(KItem.FRAMED_CABLE, Material.BARRIER, Kind.CABLE, false, Sound.BLOCK_WOOD_PLACE),
-    CABLE_CONNECTOR(KItem.CABLE_CONNECTOR, Material.BARRIER, Kind.CABLE_CONNECTOR, true, Sound.BLOCK_COPPER_PLACE),
+    TRIM(KItem.INVENTORY_TRIM, Material.BARRIER, Kind.WIRE, false, Sound.BLOCK_WOOD_PLACE),
+    CABLE(KItem.INVENTORY_CABLE, Material.BARRIER, Kind.WIRE, false, Sound.BLOCK_COPPER_PLACE),
+    FRAMED_CABLE(KItem.FRAMED_CABLE, Material.BARRIER, Kind.WIRE, false, Sound.BLOCK_WOOD_PLACE),
+    CABLE_CONNECTOR(KItem.CABLE_CONNECTOR, Material.BARRIER, Kind.WIRE, true, Sound.BLOCK_COPPER_PLACE),
     INVENTORY_HOPPER(KItem.INVENTORY_HOPPER, Material.BARRIER, Kind.DEVICE, true, Sound.BLOCK_METAL_PLACE),
     LEVEL_EMITTER(KItem.LEVEL_EMITTER, Material.BARRIER, Kind.DEVICE, true, Sound.BLOCK_METAL_PLACE),
     INTERFACE(KItem.INVENTORY_INTERFACE, Material.BARREL, Kind.DEVICE, false, Sound.BLOCK_WOOD_PLACE),
@@ -24,7 +30,7 @@ enum PartType {
     FILING_CABINET(KItem.FILING_CABINET, Material.BARRIER, Kind.STORE, true, Sound.BLOCK_WOOD_PLACE);
 
     /** How a part takes part in the network search (see Networks.links). */
-    enum Kind { CONNECTOR, TRIM, CABLE, CABLE_CONNECTOR, STORE, DEVICE }
+    enum Kind { WIRE, STORE, DEVICE }
 
     final KItem item;
     final Material base;
@@ -56,6 +62,16 @@ enum PartType {
     /** Points at any of the six sides (else only horizontal). */
     boolean anySide() {
         return this == CABLE_CONNECTOR || this == INVENTORY_HOPPER || this == OPEN_CRATE;
+    }
+
+    /** Carries the network: the cables, and the three old joiners still placed in the world. */
+    boolean wire() {
+        return kind == Kind.WIRE;
+    }
+
+    /** Parts the 0.1.11 simplification dropped from crafting (already placed ones keep working). */
+    boolean legacy() {
+        return item.legacy();
     }
 
     static PartType of(KItem item) {

@@ -7,6 +7,7 @@ entityType: ZOMBIFIED_PIGLIN
 mainHand: IRON_SWORD
 name: $eventBossLevel &cFailed Pigxperiment
 level: dynamic
+maximumLevel: 50
 healthMultiplier: 3.5
 damageMultiplier: 1.1
 phases:

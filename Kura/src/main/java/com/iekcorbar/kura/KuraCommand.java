@@ -60,12 +60,19 @@ final class KuraCommand implements CommandExecutor, TabCompleter {
                     s.sendMessage(Component.text("/kura giveall [player]", NamedTextColor.GRAY));
                     return true;
                 }
-                for (KItem t : KItem.values()) Menus.give(target, plugin.items().create(t, 1));
-                s.sendMessage(Component.text("Gave one of every Kura item (" + KItem.values().length + ") to " + target.getName() + ".", NamedTextColor.GREEN));
+                int given = 0;
+                for (KItem t : KItem.values()) {
+                    if (t.legacy()) continue;   // 0.1.11: cables do what these three did
+                    Menus.give(target, plugin.items().create(t, 1));
+                    given++;
+                }
+                s.sendMessage(Component.text("Gave " + given + " Kura items to " + target.getName() + " ("
+                        + (KItem.values().length - given) + " old parts left out; give them by id if needed).", NamedTextColor.GREEN));
             }
             case "list" -> {
                 s.sendMessage(Component.text("Kura items:", NamedTextColor.GOLD));
-                for (KItem t : KItem.values()) s.sendMessage(Component.text(" " + t.id() + " - " + t.displayName, NamedTextColor.GRAY));
+                for (KItem t : KItem.values()) s.sendMessage(Component.text(" " + t.id() + " - " + t.displayName
+                        + (t.legacy() ? "  (old part: a cable does this now)" : ""), NamedTextColor.GRAY));
                 if (s.hasPermission("kura.admin")) {
                     s.sendMessage(Component.text(plugin.parts().count() + " parts loaded, " + plugin.networks().cachedNetworks() + " networks cached.", NamedTextColor.DARK_GRAY));
                 }
@@ -77,8 +84,8 @@ final class KuraCommand implements CommandExecutor, TabCompleter {
             }
             default -> {
                 s.sendMessage(Component.text("Kura - storage network", NamedTextColor.GOLD));
-                s.sendMessage(Component.text("Put chests next to an Inventory Connector, then place a Storage Terminal against it.", NamedTextColor.GRAY));
-                s.sendMessage(Component.text("Cables + Cable Connectors reach chests further away.", NamedTextColor.GRAY));
+                s.sendMessage(Component.text("Run an Inventory Cable beside your chests and put a Storage Terminal on it.", NamedTextColor.GRAY));
+                s.sendMessage(Component.text("One rule: a cable joins whatever it touches.", NamedTextColor.GRAY));
                 s.sendMessage(Component.text("Guide: " + plugin.docsUrl(), NamedTextColor.AQUA).clickEvent(ClickEvent.openUrl(plugin.docsUrl())));
             }
         }

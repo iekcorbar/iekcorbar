@@ -34,9 +34,10 @@ import java.util.Set;
 import java.util.UUID;
 
 /**
- * Finds networks and keeps them cached. A network starts at an Inventory Connector:
- * storage touching it (and touching that storage, or a trim) joins, cables carry it
- * further and Cable Connectors attach the container they face. Every member block is
+ * Finds networks and keeps them cached. Since 0.1.11 the rule is one sentence: a cable
+ * joins whatever it touches - chests, barrels, shulker boxes and other cables - and a
+ * chest that touches a joined chest joins too. Any cable in the search makes it a
+ * network; without one, containers are each on their own. Every member block is
  * indexed, so a block change next to a member only marks that one network for a
  * rebuild; nothing scans the world on a timer.
  */
@@ -52,7 +53,7 @@ final class Networks implements Listener {
         boolean load(World w, int cx, int cz);
     }
 
-    private record Node(PartType.Kind kind, BlockFace facing) { }
+    private record Node(PartType.Kind kind) { }
 
     static final BlockFace[] FACES = {BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST};
 
@@ -150,29 +151,24 @@ final class Networks implements Listener {
     private Node node(Block b) {
         Part p = plugin.parts().at(b);
         if (p != null) {
-            return p.type.kind == PartType.Kind.DEVICE ? null : new Node(p.type.kind, p.facing);
+            return p.type.kind == PartType.Kind.DEVICE ? null : new Node(p.type.kind);
         }
-        if (isStorage(b) && settings(b)[1] == 0) return new Node(PartType.Kind.STORE, null);
+        if (isStorage(b) && settings(b)[1] == 0) return new Node(PartType.Kind.STORE);
         return null;
     }
 
-    private static boolean half(Node x, Node y, BlockFace dir) {
-        return switch (x.kind) {
-            case CONNECTOR -> true;
-            case STORE, TRIM -> y.kind == PartType.Kind.STORE || y.kind == PartType.Kind.TRIM || y.kind == PartType.Kind.CONNECTOR
-                    || y.kind == PartType.Kind.CABLE_CONNECTOR;
-            case CABLE -> y.kind == PartType.Kind.CABLE || y.kind == PartType.Kind.CABLE_CONNECTOR || y.kind == PartType.Kind.CONNECTOR;
-            case CABLE_CONNECTOR -> y.kind == PartType.Kind.CABLE || y.kind == PartType.Kind.CABLE_CONNECTOR || y.kind == PartType.Kind.CONNECTOR
-                    || (dir == x.facing && (y.kind == PartType.Kind.STORE || y.kind == PartType.Kind.TRIM));
-            case DEVICE -> false;
-        };
+    /**
+     * The whole network rule since 0.1.11: every two touching members join. A member is a wire
+     * (any cable, or one of the old connector/trim/cable-connector parts still standing in the
+     * world) or a container - devices hang on a network, they never carry one, so they are not
+     * members at all. Cables reaching a chest is all there is to it; chests keep joining each
+     * other the way the Inventory Connector always did ("and touching those").
+     */
+    private static boolean links(Node a, Node b) {
+        return true;
     }
 
-    private static boolean links(Node a, Node b, BlockFace dir) {
-        return half(a, b, dir) && half(b, a, dir.getOppositeFace());
-    }
-
-    /** Searches from {@code start}; the result has no roots when no connector was found. */
+    /** Searches from {@code start}; the result has no roots when it holds no cable at all. */
     private Network search(Block start, Loader loader) {
         Node first = node(start);
         if (first == null) return null;
@@ -189,7 +185,7 @@ final class Networks implements Listener {
             Node n = seen.get(pos);
             net.members.add(pos);
             net.chunks.add(Chunk.getChunkKey(b.getX() >> 4, b.getZ() >> 4));
-            if (n.kind == PartType.Kind.CONNECTOR) net.roots.add(pos);
+            if (n.kind == PartType.Kind.WIRE) net.roots.add(pos);   // a cable makes a network
             if (n.kind == PartType.Kind.STORE) addStore(net, b, invs);
             if (seen.size() >= maxBlocks) {
                 net.truncated = true;
@@ -207,7 +203,7 @@ final class Networks implements Listener {
                 Pos np = Pos.of(nb);
                 if (seen.containsKey(np)) continue;
                 Node m = node(nb);
-                if (m == null || !links(n, m, f)) continue;
+                if (m == null || !links(n, m)) continue;
                 seen.put(np, m);
                 queue.add(nb);
             }
@@ -285,11 +281,17 @@ final class Networks implements Listener {
         List<BlockFace> order = new ArrayList<>(6);
         if (preferred != null) order.add(preferred);
         for (BlockFace f : FACES) if (f != preferred) order.add(f);
+        // 0.1.11: any cable makes a network, so a cable with nothing on it yet is a real (empty)
+        // answer. Prefer a network that actually holds something, then the container the device
+        // sits against, and only then the empty cable network - a terminal beside a lone cable and
+        // a chest then shows the chest, not an empty screen.
+        Network empty = null;
         for (BlockFace f : order) {
             Block n = device.getRelative(f);
             if (!loaded(n)) continue;
             Network net = at(n, loader);
-            if (net != null) return net;
+            if (net != null && !net.stores.isEmpty()) return net;
+            if (net != null && empty == null) empty = net;
         }
         for (BlockFace f : order) {
             Block n = device.getRelative(f);
@@ -297,7 +299,7 @@ final class Networks implements Listener {
             Network single = single(n);
             if (single != null) return single;
         }
-        return null;
+        return empty;
     }
 
     /** One container (or Filing Cabinet) on its own, not indexed. */
@@ -318,6 +320,9 @@ final class Networks implements Listener {
 
     /** Something changed at {@code b}: the networks around it need a rebuild. */
     void touch(Block b) {
+        // a cable draws its arm towards the chest beside it, so a plain chest being placed or
+        // broken has to redraw the wires around it too (0.1.11: touching a chest IS the network)
+        plugin.parts().refreshAround(b);
         UUID w = b.getWorld().getUID();
         mark(new Pos(w, b.getX(), b.getY(), b.getZ()));
         for (BlockFace f : FACES) mark(new Pos(w, b.getX() + f.getModX(), b.getY() + f.getModY(), b.getZ() + f.getModZ()));

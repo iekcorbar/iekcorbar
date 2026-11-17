@@ -29,6 +29,7 @@ repo-root, mvn groen, 133 modellen, 0 bot-audit mismatches. NIET live-getest.
 
 ## Nog open (later)
 - Sets restant: poolvos, sneeuwuil; giraf, leeuw, hyena; fenek, meerkat, aasgier.
+- Sfeerwezens 0.9.14: + kappa (TURTLE, water, trekt zwemmers), tengu (PHANTOM, bergen, wind-push), automaton (IRON_GOLEM, grotten, mechanisch), willowisp_green/red/gold/white/purple (ALLAY, elk eigen biome + gedrag: monsters aantrekken / jagen+steken / schat droppen / helen / speed+jump). custom creatures, staff-plaatsbaar.
 - Custom wildlife-sounds (nu vanilla placeholders) — sounds/make_sounds.py, ALLEEN toevoegen.
 - Tanuki-knipoog-easter-egg: **GEBOUWD 29-10** (Wildlife 0.7.1, `Animals` case TANUKI, `tanuki_wink`).
 - Mol: graaft MOLHEUVEL bij spawn; optioneel later: mol verdwijnt in heuvel bij panic.

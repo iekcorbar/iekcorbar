@@ -19,6 +19,7 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
     private BookManager bookManager;
     private MusicManager musicManager;
     private CreativeHeadsManager creativeHeadsManager;
+    private CommandQueueService commandQueue;
 
     @Override
     public void onEnable() {
@@ -54,6 +55,11 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
             // Sakagura garden season -> settings table, for the website calendar.
             seasonSync = new SeasonSync(this, mysqlSync);
             seasonSync.start();
+            // Website command queue — the RCON replacement (15-11-2026): the
+            // site inserts console commands into site_command_queue, we run
+            // them with output captured away from the live console.
+            commandQueue = new CommandQueueService(this, mysqlSync);
+            commandQueue.start();
         }
 
         // Real vote verification (VoteSpeed's built-in NuVotifier receiver,
@@ -102,6 +108,9 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
         }
         if (seasonSync != null) {
             seasonSync.stop();
+        }
+        if (commandQueue != null) {
+            commandQueue.stop();
         }
         if (mysqlSync != null) {
             mysqlSync.stop();

@@ -52,7 +52,9 @@ import java.util.UUID;
  * back when the chunk loads.
  */
 final class DecorShapes implements Listener {
-    private static final float COVER = 1.02f;
+    // the display is a hair bigger than the carrier block; 1.02 made neighbouring drawings
+    // interpenetrate (z-fighting flicker along the seams, owner 13-11), 1.002 is the Relics value
+    private static final float COVER = 1.002f;
 
     private record Shape(DecorType type, boolean stairs, ItemDisplay display) {}
 
@@ -112,37 +114,24 @@ final class DecorShapes implements Listener {
         return m == null ? null : m.get(key(b));
     }
 
-    /** Model + rotation for the vanilla block's current state (same table as vanilla's stair blockstates). */
+    /** Model id for the vanilla block's current state: a baked variant per orientation (the pack
+     *  applies vanilla's own stair model table), so corners can never mis-rotate again. */
     private void refresh(Block b, Shape s) {
         if (s.display() == null || !s.display().isValid()) return;
         BlockData d = b.getBlockData();
         String model;
-        Quaternionf rot = new Quaternionf();
         if (s.stairs() && d instanceof Stairs st) {
-            Stairs.Shape shape = st.getShape();
-            model = switch (shape) {
-                case STRAIGHT -> "_stairs";
-                case INNER_LEFT, INNER_RIGHT -> "_inner_stairs";
-                default -> "_outer_stairs";
-            };
-            int y = switch (st.getFacing()) {
-                case SOUTH -> 90;
-                case WEST -> 180;
-                case NORTH -> 270;
-                default -> 0;
-            };
-            boolean top = st.getHalf() == org.bukkit.block.data.Bisected.Half.TOP;
-            boolean left = shape == Stairs.Shape.INNER_LEFT || shape == Stairs.Shape.OUTER_LEFT;
-            boolean right = shape == Stairs.Shape.INNER_RIGHT || shape == Stairs.Shape.OUTER_RIGHT;
-            if (!top && left) y -= 90;
-            if (top && right) y += 90;
-            rot.rotateY((float) Math.toRadians(-y));
-            if (top) rot.rotateX((float) Math.PI);
+            String shape = st.getShape() == Stairs.Shape.STRAIGHT ? "straight"
+                    : st.getShape() == Stairs.Shape.INNER_LEFT ? "inner_L"
+                    : st.getShape() == Stairs.Shape.INNER_RIGHT ? "inner_R"
+                    : st.getShape() == Stairs.Shape.OUTER_LEFT ? "outer_L" : "outer_R";
+            model = "_draw_" + shape + "_" + st.getFacing().name().toLowerCase(Locale.ROOT)
+                    + "_" + (st.getHalf() == org.bukkit.block.data.Bisected.Half.TOP ? "top" : "bottom");
         } else if (!s.stairs() && d instanceof Slab sl) {
             model = switch (sl.getType()) {
-                case TOP -> "_slab_top";
-                case DOUBLE -> "";
-                default -> "_slab";
+                case TOP -> "_draw_slab_top";
+                case DOUBLE -> "_draw_slab_double";
+                default -> "_draw_slab_bottom";
             };
         } else {
             return; // the block is no longer what we drew (WorldEdit etc.) - removed on the next break/load
@@ -152,7 +141,7 @@ final class DecorShapes implements Listener {
         meta.setItemModel(new NamespacedKey("steamworks", s.type().id() + model));
         look.setItemMeta(meta);
         s.display().setItemStack(look);
-        s.display().setTransformation(new Transformation(new Vector3f(), rot, new Vector3f(COVER, COVER, COVER), new Quaternionf()));
+        s.display().setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(COVER, COVER, COVER), new Quaternionf()));
     }
 
     private Shape spawn(Block b, DecorType t, boolean stairs) {

@@ -4474,6 +4474,43 @@ export const db = {
     return null;
   },
 
+  // ── Website → Minecraft command queue (RCON's replacement since 2026-11-15) ──
+  // These deliberately WRITE to the plugin database — an exception to
+  // plugin-data-db.js's "read-only by convention" header rule. Nothing else
+  // touches site_command_queue: the website only ever enqueues/polls/cancels
+  // its own rows, and the IekcorbarSiteSync plugin is the only consumer.
+  // See src/lib/rcon.js for the transport and CommandQueueService.java on the
+  // plugin side.
+
+  enqueueSiteCommand: async (command) => {
+    const result = await pluginDataQuery(
+      "INSERT INTO site_command_queue (command, status) VALUES (?, 'queued')",
+      [command]
+    );
+    return result.insertId;
+  },
+
+  getSiteCommandResult: async (id) => {
+    const rows = await pluginDataQuery('SELECT status, response FROM site_command_queue WHERE id = ?', [id]);
+    if (!rows || rows.length === 0) return null;
+    return { status: rows[0].status, response: rows[0].response };
+  },
+
+  // Site gave up waiting (timeout) — drop the row so the plugin doesn't run
+  // a command nobody is waiting for anymore, and so the table can't accumulate
+  // abandoned rows.
+  abandonSiteCommand: async (id) => {
+    await pluginDataQuery("DELETE FROM site_command_queue WHERE id = ? AND status IN ('queued', 'running')", [id]);
+  },
+
+  // The plugin bumps this row once per poll tick; rcon.js uses it to tell
+  // "plugin not consuming the queue" apart from "command just takes a while".
+  getSiteQueueHeartbeat: async () => {
+    const rows = await pluginDataQuery('SELECT heartbeat, command_queue_enabled AS enabled FROM site_queue_status WHERE id = 1');
+    if (!rows || rows.length === 0) return null;
+    return { heartbeat: rows[0].heartbeat, enabled: rows[0].enabled };
+  },
+
   getPlayerStats: async (username) => {
     try {
       const rows = await pluginDataQuery('SELECT username, online, playtime_hours as playtimeHours, kills, deaths, mob_kills as mobKills, blocks_mined as blocksMined, balance, elite_coins as eliteCoins, lands_claimed as landsClaimed, jobs_json as jobsJson, plugin_placeholders_json as pluginStatsJson FROM player_stats WHERE LOWER(username) = LOWER(?)', [username]);

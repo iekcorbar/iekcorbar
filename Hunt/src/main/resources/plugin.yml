@@ -1,0 +1,9 @@
+name: Hunt
+version: '${project.version}'
+main: com.iekcorbar.hunt.HuntPlugin
+api-version: '26.2'
+description: Server-wide achievement hunt with physical prop rewards.
+commands:
+  hunt:
+    description: Show your hunt progress
+    usage: /hunt [claim]

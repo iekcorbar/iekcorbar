@@ -21,7 +21,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
@@ -37,8 +40,11 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
@@ -129,6 +135,27 @@ final class Items implements Listener {
     private final java.util.Map<java.util.UUID, java.util.ArrayDeque<Long>> feesten = new java.util.HashMap<>();
 
     @EventHandler(ignoreCancelled = true)
+    public void onPipeUse(PlayerInteractEvent e) {
+        if (e.getHand() != EquipmentSlot.HAND || (e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK)) return;
+        KItem t = typeOf(e.getItem());
+        if (t != KItem.HASH_PIPE) return;
+        e.setCancelled(true);
+        Player p = e.getPlayer();
+        // find hash in inventory
+        ItemStack hash = null;
+        for (ItemStack i : p.getInventory().getContents()) {
+            if (i != null && typeOf(i) == KItem.HASH) { hash = i; break; }
+        }
+        if (hash == null) {
+            p.sendActionBar(Component.text("No hash to smoke.", NamedTextColor.GRAY));
+            return;
+        }
+        if (p.getGameMode() != org.bukkit.GameMode.CREATIVE) hash.setAmount(hash.getAmount() - 1);
+        applyEffects(p, KItem.HASH);
+        p.getWorld().playSound(p.getLocation(), "entity.generic.drink", 0.6f, 0.8f);
+    }
+
+    @EventHandler(ignoreCancelled = true)
     public void onEat(PlayerItemConsumeEvent e) {
         KItem t = typeOf(e.getItem());
         if (t != null) applyEffects(e.getPlayer(), t);
@@ -172,6 +199,46 @@ final class Items implements Listener {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 600, 0));
                 }
             }
+            case JOINT -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 200, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 400, 0));
+                p.sendActionBar(Component.text("You feel relaxed...", NamedTextColor.GREEN));
+            }
+            case HASH -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 600, 1));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 400, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 800, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 200, 0));
+                p.sendActionBar(Component.text("Strong stuff...", NamedTextColor.DARK_GREEN));
+            }
+            case MAGIC_MUSHROOM -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 600, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 100, 0));
+                p.sendActionBar(Component.text("The world shifts...", NamedTextColor.LIGHT_PURPLE));
+            }
+            case YUZU_TEA -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 600, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 0));
+                p.sendActionBar(Component.text("Refreshing!", NamedTextColor.YELLOW));
+            }
+            case PERSIMMON_WINE -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 300, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 200, 0));
+                p.sendActionBar(Component.text("Sweet and warming...", NamedTextColor.GOLD));
+            }
+            case MUSHROOM_TEA -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 600, 0));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 160, 0));
+                p.sendActionBar(Component.text("Earthy and calming.", NamedTextColor.DARK_GREEN));
+            }
+            case BUCKWHEAT_TEA -> {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 200, 0));
+                p.removePotionEffect(PotionEffectType.HUNGER);
+                p.sendActionBar(Component.text("Warm and toasty.", NamedTextColor.GOLD));
+            }
             default -> { }
         }
         // Sakagura sake-pairing: if the player is drunk, food gives a bonus
@@ -191,10 +258,30 @@ final class Items implements Listener {
 
     // ------------------------------------------------------------ recipes
 
-    private RecipeChoice of(KItem... types) {
-        List<ItemStack> list = new ArrayList<>();
-        for (KItem t : types) list.add(create(t, 1));
-        return RecipeChoice.exactChoice(list);
+    /** Ingredient for our own items. build.135 rejects custom RecipeChoice objects in
+     *  addRecipe, so we register the plain base MATERIAL (vanilla matches material + count)
+     *  and enforce the real kitchen:item PDC identity per slot in onCraft. The Set is the
+     *  accepted id(s) for this one slot (a crop = 1 id; the maki filling = "any of these"). */
+    private record OurIngredient(RecipeChoice vanilla, Set<String> ids) {}
+
+    private OurIngredient of(KItem... types) {
+        // NOT RecipeChoice.exactChoice: create() stamps the spoilage timer and the bucket rolls
+        // every 5 minutes, so prototypes registered at startup stopped matching picked-up food
+        // within minutes (same trap as the Sakagura seed recipes, review 10-11).
+        // And build.135 rejects CUSTOM RecipeChoice implementations in addRecipe entirely
+        // ("Unknown recipe stack instance", crash of 11-11 evening). So: register with the plain
+        // base MATERIAL - vanilla matching then accepts any paper/sword - and the real identity
+        // check (kitchen:item PDC id, per slot) runs in onCraft through the extraChecks below.
+        java.util.Set<Material> mats = new java.util.LinkedHashSet<>();
+        Set<String> ids = new LinkedHashSet<>();
+        for (KItem t : types) { mats.add(base(t)); ids.add(t.id()); }
+        return new OurIngredient(new RecipeChoice.MaterialChoice(new ArrayList<>(mats)), ids);
+    }
+
+    /** kitchen:item PDC id of a stack, or null for a non-Kitchen item. */
+    private String pdcId(ItemStack it) {
+        if (it == null || it.isEmpty() || !it.hasItemMeta()) return null;
+        return it.getItemMeta().getPersistentDataContainer().get(itemKey, PersistentDataType.STRING);
     }
 
     private NamespacedKey key(String id) {
@@ -204,27 +291,83 @@ final class Items implements Listener {
         return k;
     }
 
-    /** {shape..., char, ingredient, char, ingredient...}; ingredient = Material, Tag, KItem or RecipeChoice. */
+    /** {shape..., char, ingredient, char, ingredient...}; ingredient = Material, Tag, KItem, OurIngredient or RecipeChoice. */
     private void shaped(String id, ItemStack result, String[] shape, Object... ing) {
         ShapedRecipe r = new ShapedRecipe(key(id), result);
         r.shape(shape);
-        for (int i = 0; i < ing.length; i += 2) r.setIngredient((char) ing[i], choice(ing[i + 1]));
-        Bukkit.addRecipe(r);
+        List<Set<String>> slots = new ArrayList<>();
+        for (int i = 0; i < ing.length; i += 2) {
+            Object src = ing[i + 1];
+            r.setIngredient((char) ing[i], vanillaChoice(src));
+            Set<String> ids = ourIds(src);
+            if (ids != null) slots.add(ids);
+        }
+        register(r, slots);
     }
 
     private void shapeless(String id, ItemStack result, Object... ing) {
         ShapelessRecipe r = new ShapelessRecipe(key(id), result);
-        for (Object o : ing) r.addIngredient(choice(o));
+        List<Set<String>> slots = new ArrayList<>();
+        for (Object o : ing) {
+            r.addIngredient(vanillaChoice(o));
+            Set<String> ids = ourIds(o);
+            if (ids != null) slots.add(ids);
+        }
+        register(r, slots);
+    }
+
+    /** The vanilla-acceptable choice for any ingredient source. */
+    @SuppressWarnings("unchecked")
+    private RecipeChoice vanillaChoice(Object o) {
+        if (o instanceof OurIngredient our) return our.vanilla();
+        if (o instanceof RecipeChoice c) return c;
+        if (o instanceof KItem k) return of(k).vanilla();
+        if (o instanceof Material m) return new RecipeChoice.MaterialChoice(m);
+        if (o instanceof Tag<?> t) return new RecipeChoice.MaterialChoice((Tag<Material>) t);
+        throw new IllegalArgumentException("bad ingredient " + o);
+    }
+
+    /** Accepted kitchen:item ids for the slot, or null when it is a plain vanilla ingredient. */
+    private Set<String> ourIds(Object o) {
+        if (o instanceof OurIngredient our) return our.ids();
+        if (o instanceof KItem k) return of(k).ids();
+        return null;
+    }
+
+    private void register(org.bukkit.inventory.Recipe r, List<Set<String>> ourSlots) {
+        NamespacedKey k = ((org.bukkit.Keyed) r).getKey();
+        if (!ourSlots.isEmpty()) {
+            List<Set<String>> frozen = List.copyOf(ourSlots);
+            extraChecks.put(k, matrix -> idsMatch(matrix, frozen));
+        }
         Bukkit.addRecipe(r);
+    }
+
+    /** Every custom slot must be filled by one of our items whose PDC id is in that slot's set,
+     *  and every such item in the grid must be consumed by a slot that accepts it (bipartite match).
+     *  This is what the rejected custom RecipeChoice used to guarantee; vanilla only sees material. */
+    private boolean idsMatch(ItemStack[] matrix, List<Set<String>> slots) {
+        List<String> present = new ArrayList<>();
+        for (ItemStack it : matrix) { String p = pdcId(it); if (p != null) present.add(p); }
+        if (present.size() != slots.size()) return false;         // same number of Kitchen items as custom slots
+        return matchRecursively(slots, present, new boolean[present.size()], 0);
+    }
+
+    private boolean matchRecursively(List<Set<String>> slots, List<String> present, boolean[] used, int s) {
+        if (s == slots.size()) return true;
+        Set<String> allowed = slots.get(s);
+        for (int j = 0; j < present.size(); j++) {
+            if (used[j] || !allowed.contains(present.get(j))) continue;
+            used[j] = true;
+            if (matchRecursively(slots, present, used, s + 1)) return true;
+            used[j] = false;
+        }
+        return false;
     }
 
     @SuppressWarnings("unchecked")
     private RecipeChoice choice(Object o) {
-        if (o instanceof RecipeChoice c) return c;
-        if (o instanceof KItem k) return of(k);
-        if (o instanceof Material m) return new RecipeChoice.MaterialChoice(m);
-        if (o instanceof Tag<?> t) return new RecipeChoice.MaterialChoice((Tag<Material>) t);
-        throw new IllegalArgumentException("bad ingredient " + o);
+        return vanillaChoice(o);
     }
 
     void registerRecipes() {
@@ -234,7 +377,7 @@ final class Items implements Listener {
         shaped("iron_knife", create(KItem.IRON_KNIFE, 1), new String[]{" I", "S "}, 'I', Material.IRON_INGOT, 'S', Material.STICK);
         shaped("diamond_knife", create(KItem.DIAMOND_KNIFE, 1), new String[]{" D", "S "}, 'D', Material.DIAMOND, 'S', Material.STICK);
         SmithingTransformRecipe nk = new SmithingTransformRecipe(key("netherite_knife"), create(KItem.NETHERITE_KNIFE, 1),
-                new RecipeChoice.MaterialChoice(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE), of(KItem.DIAMOND_KNIFE),
+                new RecipeChoice.MaterialChoice(Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE), of(KItem.DIAMOND_KNIFE).vanilla(),
                 new RecipeChoice.MaterialChoice(Material.NETHERITE_INGOT), false);
         Bukkit.addRecipe(nk);
         shaped("plate", create(KItem.PLATE, 2), new String[]{"CCC"}, 'C', Material.CLAY_BALL);
@@ -283,15 +426,29 @@ final class Items implements Listener {
         shapeless("bento_box", create(KItem.BENTO_BOX, 1), Tag.WOODEN_SLABS, KItem.STEAMED_RICE, KItem.TAMAGOYAKI,
                 KItem.TEMPURA, KItem.TAKUAN, KItem.SALMON_SASHIMI);
         shapeless("tea_set", create(KItem.TEA_SET, 1), KItem.PLATE, KItem.GREEN_TEA, KItem.GREEN_TEA, KItem.GREEN_TEA, KItem.GREEN_TEA);
+        // cannabis & hemp
+        shapeless("hemp_fiber", create(KItem.HEMP_FIBER, 2), KItem.HEMP_LEAVES, KItem.HEMP_LEAVES, KItem.HEMP_LEAVES, KItem.HEMP_LEAVES);
+        shapeless("hemp_string", create(KItem.HEMP_STRING, 1), KItem.HEMP_FIBER, KItem.HEMP_FIBER);
+        shapeless("hemp_rope", create(KItem.HEMP_ROPE, 1), KItem.HEMP_STRING, KItem.HEMP_STRING, KItem.HEMP_STRING);
+        shapeless("hemp_cloth", create(KItem.HEMP_CLOTH, 1), KItem.HEMP_FIBER, KItem.HEMP_FIBER, KItem.HEMP_FIBER, KItem.HEMP_FIBER);
+        shapeless("dried_cannabis", create(KItem.DRIED_CANNABIS, 1), KItem.CANNABIS_BUDS);
+        shapeless("hash", create(KItem.HASH, 1), KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS, KItem.DRIED_CANNABIS);
+        shapeless("joint", create(KItem.JOINT, 1), Material.PAPER, KItem.DRIED_CANNABIS);
+        // drinks
+        shapeless("yuzu_tea", create(KItem.YUZU_TEA, 1), KItem.YUZU, Material.GLASS_BOTTLE);
+        shapeless("persimmon_wine", create(KItem.PERSIMMON_WINE, 1), KItem.PERSIMMON, KItem.PERSIMMON, Material.SUGAR, Material.GLASS_BOTTLE);
+        shapeless("mushroom_tea", create(KItem.MUSHROOM_TEA, 1), KItem.SHIITAKE, Material.GLASS_BOTTLE);
+        shapeless("buckwheat_tea", create(KItem.BUCKWHEAT_TEA, 1), KItem.BUCKWHEAT, Material.GLASS_BOTTLE);
         for (Player p : Bukkit.getOnlinePlayers()) p.discoverRecipes(recipeKeys);
     }
 
-    private void crate(String id, KItem crate, RecipeChoice content, ItemStack nine) {
-        RecipeChoice[] in = new RecipeChoice[9];
-        java.util.Arrays.fill(in, content);
+    private void crate(String id, KItem crate, Object content, ItemStack nine) {
         ShapelessRecipe r = new ShapelessRecipe(key(id), create(crate, 1));
-        for (RecipeChoice c : in) r.addIngredient(c);
-        Bukkit.addRecipe(r);
+        RecipeChoice vc = vanillaChoice(content);
+        Set<String> ids = ourIds(content);
+        List<Set<String>> slots = new ArrayList<>();
+        for (int i = 0; i < 9; i++) { r.addIngredient(vc); if (ids != null) slots.add(ids); }
+        register(r, slots);
         shapeless(id + "_unpack", nine, crate);
     }
 
@@ -330,7 +487,12 @@ final class Items implements Listener {
     public void onSmith(PrepareSmithingEvent e) {
         ItemStack base = e.getInventory().getInputEquipment();
         KItem t = typeOf(base);
-        // only our own knife upgrade (vanilla's diamond->netherite sword recipe would also take the knife)
-        if (t != null && typeOf(e.getResult()) != KItem.NETHERITE_KNIFE) e.setResult(null);
+        KItem res = typeOf(e.getResult());
+        // Only our own knife upgrades. Both our recipe (DIAMOND_KNIFE as a plain DIAMOND_SWORD
+        // material choice, 11-11: build.135 rejects the custom choice) and vanilla's sword upgrade
+        // match the same inputs - each direction must be blocked: our knife into the vanilla
+        // recipe, and any vanilla sword into ours.
+        if (t != null && res != KItem.NETHERITE_KNIFE) { e.setResult(null); return; }
+        if (res == KItem.NETHERITE_KNIFE && t != KItem.DIAMOND_KNIFE) e.setResult(null);
     }
 }

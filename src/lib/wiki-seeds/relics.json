@@ -1,0 +1,208 @@
+{
+ "source": "docs/wiki-relics (regenerate with scripts/build-wiki-seed.py)",
+ "pages": [
+  {
+   "slug": "relics-intro",
+   "title": "Introduction",
+   "category": "Relics",
+   "parent": null,
+   "content": "## Welcome to Relics\n\nRelics are placeable props with a past: lanterns, gramophones, gift boxes, whole holiday sets. They are not blocks - you place them like furniture, right-click them to use them, and many have a mind of their own (they light, play, count down or react to the calendar).\n\n### What you will do\n\n* **Place a scene.** Props sit flush on the floor, wall or ceiling and keep the style of the room. The steampunk and Japanese collections fit the whole year; the seasonal sets bring a holiday to your street.\n* **Use them.** If a relic does something, right-click does it. Sneak + right-click often opens a small menu (music props, countdown boards).\n* **Follow the calendar.** Some relics only come alive in their season: the advent calendar opens one door a day from December 1, gift boxes only open in the gift window, the temple bell rings out the old year.\n\n### How the pages are organised\n\n**Xmas Town Props** covers the December collection (sleigh, tree, advent calendar, music box and all). **Gift Boxes & Advent** explains the two relics that follow the real calendar. Every relic description tells you what right-click does.\n\n### Start here\n\n1. Look at [Xmas Town Props](/wiki?page=relics-xmas-props) for the December set.\n2. Read [Gift Boxes & Advent](/wiki?page=relics-gifts) before December 24.\n"
+  },
+  {
+   "slug": "relics-xmas-props",
+   "title": "Xmas Town Props",
+   "category": "Relics",
+   "parent": null,
+   "content": "## The December collection\n\nSeventeen props make Xmas Town, and you can own any of them for your own base. All are Relics: placeable, right-clickable, and they keep working after a restart.\n\n* [Christmas Tree](/wiki?page=relics-xmas-props-christmas-tree) - Brass gears, glass baubles and a star that never dims (twinkles)\n* [String Lights](/wiki?page=relics-xmas-props-string-lights) - Hangs on a wall or from a ceiling; full-block strands with fat bulbs\n* [Advent Wreath](/wiki?page=relics-xmas-props-advent-wreath) - One more candle burns every Sunday of Advent\n* [Brass Steam Lantern](/wiki?page=relics-xmas-props-brass-steam-lantern) - Warm light with a little puff of steam\n* [Snow Lantern](/wiki?page=relics-xmas-props-snow-lantern) - A yukimi stone lantern, capped with snow\n* [Giant Candy Cane](/wiki?page=relics-xmas-props-giant-candy-cane) - Two blocks of peppermint - right-click with a dye to repaint the stripes\n* [Kadomatsu](/wiki?page=relics-xmas-props-kadomatsu) - Bamboo and pine to welcome the new year\n* [Hearth](/wiki?page=relics-xmas-props-hearth) - Stockings on the mantle, a fire that keeps the snow outside\n* [Snowman](/wiki?page=relics-xmas-props-snowman) - Top hat, brass goggles, carrot nose, gentle snowfall\n* [Sleigh](/wiki?page=relics-xmas-props-sleigh) - Right-click to sit in it\n* [Clockwork Toy Train](/wiki?page=relics-xmas-props-clockwork-toy-train) - Round and round it goes\n* [Gift Box](/wiki?page=relics-xmas-props-gift-box) - Fill it, lock it for one player (see [Gift Boxes & Advent](/wiki?page=relics-gifts))\n* [Advent Calendar](/wiki?page=relics-xmas-props-advent-calendar) - One door a day, December 1 to 24\n* [Music Box](/wiki?page=relics-xmas-props-music-box) - Right-click plays the carol playlist; sneak + right-click for songs, shuffle and pause\n* [Snow Globe](/wiki?page=relics-xmas-props-snow-globe) - Shake it with a right-click\n* [Christmas Market Stall](/wiki?page=relics-xmas-props-christmas-market-stall) - Ginger, greens and gold for sale\n* [Cookie Plate](/wiki?page=relics-xmas-props-cookie-plate) - Take a cookie with a right-click; refill it with gingerbread\n\n### Good to know\n\n* The **countdown board** on the village plaza and the **Countdown Clock** and **Temple Bell** are New Year relics - same idea, different season.\n* Placed props keep their old look after a resource-pack update until the chunk reloads: break and replace is the quickest way to see a fresh version.\n"
+  },
+  {
+   "slug": "relics-xmas-props-christmas-tree",
+   "title": "Christmas Tree",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Brass gears, glass baubles and a star that never dims (twinkles)\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-string-lights",
+   "title": "String Lights",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Hangs on a wall or from a ceiling; full-block strands with fat bulbs\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-advent-wreath",
+   "title": "Advent Wreath",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "One more candle burns every Sunday of Advent\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-brass-steam-lantern",
+   "title": "Brass Steam Lantern",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Warm light with a little puff of steam\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-snow-lantern",
+   "title": "Snow Lantern",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "A yukimi stone lantern, capped with snow\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-giant-candy-cane",
+   "title": "Giant Candy Cane",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Two blocks of peppermint - right-click with a dye to repaint the stripes\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-kadomatsu",
+   "title": "Kadomatsu",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Bamboo and pine to welcome the new year\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-hearth",
+   "title": "Hearth",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Stockings on the mantle, a fire that keeps the snow outside\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-snowman",
+   "title": "Snowman",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Top hat, brass goggles, carrot nose, gentle snowfall\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-sleigh",
+   "title": "Sleigh",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Right-click to sit in it\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-clockwork-toy-train",
+   "title": "Clockwork Toy Train",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Round and round it goes\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-gift-box",
+   "title": "Gift Box",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Fill it, lock it for one player (see [Gift Boxes & Advent](/wiki?page=relics-gifts))\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-advent-calendar",
+   "title": "Advent Calendar",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "One door a day, December 1 to 24\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-music-box",
+   "title": "Music Box",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Right-click plays the carol playlist; sneak + right-click for songs, shuffle and pause\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-snow-globe",
+   "title": "Snow Globe",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Shake it with a right-click\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-christmas-market-stall",
+   "title": "Christmas Market Stall",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Ginger, greens and gold for sale\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-xmas-props-cookie-plate",
+   "title": "Cookie Plate",
+   "category": "Relics",
+   "parent": "relics-xmas-props",
+   "content": "Take a cookie with a right-click; refill it with gingerbread\n\nBack to [Xmas Town Props](/wiki?page=relics-xmas-props)\n"
+  },
+  {
+   "slug": "relics-gifts",
+   "title": "Gift Boxes & Advent",
+   "category": "Relics",
+   "parent": null,
+   "content": "## The relics that follow the calendar\n\n\n* [Gift Box](/wiki?page=relics-gifts-gift-box)\n* [Advent Calendar](/wiki?page=relics-gifts-advent-calendar)\n* [Countdown board & Countdown Clock](/wiki?page=relics-gifts-countdown-board-countdown)\n* [Secret Santa](/wiki?page=relics-gifts-secret-santa)\n* [Good to know](/wiki?page=relics-gifts-good-to-know)\n"
+  },
+  {
+   "slug": "relics-gifts-gift-box",
+   "title": "Gift Box",
+   "category": "Relics",
+   "parent": "relics-gifts",
+   "content": "Right-click fills it with presents (nine). Pick a wrapping colour, then **lock it for one player** by typing their name in chat - from that moment only they can open it, and only during the **gift window: December 24 to 26**. \"cancel\" puts the box back in your hand. You cannot open your own box, and a locked box cannot be broken by anyone but staff. Gift boxes are not craftable: they are handed out for events such as the Secret Santa.\n\nBack to [Gift Boxes & Advent](/wiki?page=relics-gifts)\n"
+  },
+  {
+   "slug": "relics-gifts-advent-calendar",
+   "title": "Advent Calendar",
+   "category": "Relics",
+   "parent": "relics-gifts",
+   "content": "The calendar has a door for **each day from December 1 to 25**, and each player can open each door exactly once. No skipping, no stacking.\n\nBack to [Gift Boxes & Advent](/wiki?page=relics-gifts)\n"
+  },
+  {
+   "slug": "relics-gifts-countdown-board-countdown",
+   "title": "Countdown board & Countdown Clock",
+   "category": "Relics",
+   "parent": "relics-gifts",
+   "content": "The plaza countdown board counts down to Christmas; its placer can change the timezone (sneak + right-click cycles the ten zones). The New Year Countdown Clock does the same for midnight on the 31st and strikes twelve when it is time. Both also work as staff-placed village furniture.\n\nBack to [Gift Boxes & Advent](/wiki?page=relics-gifts)\n"
+  },
+  {
+   "slug": "relics-gifts-secret-santa",
+   "title": "Secret Santa",
+   "category": "Relics",
+   "parent": "relics-gifts",
+   "content": "Not a prop but a staff command (`/relics secret`): named players draw lots, everyone gets a fresh box and a whisper of who to fill it for. Announced on Discord before each run - check the [news page](/news).\n\nBack to [Gift Boxes & Advent](/wiki?page=relics-gifts)\n"
+  },
+  {
+   "slug": "relics-gifts-good-to-know",
+   "title": "Good to know",
+   "category": "Relics",
+   "parent": "relics-gifts",
+   "content": "* The gift window is also when Santa walks with presents (see the Xmas Town chapter).\n* Filling and wrapping take one chest's worth of luck: contents come from the server's gift table, so nobody knows what is inside - not even the placer.\n\nBack to [Gift Boxes & Advent](/wiki?page=relics-gifts)\n"
+  },
+  {
+   "slug": "relics-curios",
+   "title": "Wish Tree & Curios",
+   "category": "Relics",
+   "parent": null,
+   "content": "## Evergreen curiosities\n\nNot every relic waits for a holiday. The **Curio** collection lives in your builds all year. Two favourites:\n\n\n* [Wish Tree (tanabata)](/wiki?page=relics-curios-wish-tree-tanabata)\n* [Brass Telescope](/wiki?page=relics-curios-brass-telescope)\n* [Good to know](/wiki?page=relics-curios-good-to-know)\n"
+  },
+  {
+   "slug": "relics-curios-wish-tree-tanabata",
+   "title": "Wish Tree (tanabata)",
+   "category": "Relics",
+   "parent": "relics-curios",
+   "content": "Craft: cherry sapling + flower pot + paper. Place it, then **right-click with a sheet of paper and type your wish** - it hangs in the branches as a coloured strip, and everyone who passes can read the canopy. There is no fee and no rule about what you wish for. The tree grows into a proper cherry tree two blocks high with bamboo beside it, and since November the wishes hang in the fringe of the crown instead of a sad little seedling.\n\nBack to [Wish Tree & Curios](/wiki?page=relics-curios)\n"
+  },
+  {
+   "slug": "relics-curios-brass-telescope",
+   "title": "Brass Telescope",
+   "category": "Relics",
+   "parent": "relics-curios",
+   "content": "Craft: spyglass + two gold ingots. Place it and **right-click to look through it**. Since November it is a proper full-height brass instrument on a wide tripod with stacked tube segments - and whether the lens shows you across the map is a staff secret.\n\nBack to [Wish Tree & Curios](/wiki?page=relics-curios)\n"
+  },
+  {
+   "slug": "relics-curios-good-to-know",
+   "title": "Good to know",
+   "category": "Relics",
+   "parent": "relics-curios",
+   "content": "* Curios are purely decoration unless right-click does something - try right-click first, then sneak + right-click.\n* Everything craftable shows up in `/zukan`; the rest is event, shop or quest reward.\n\nBack to [Wish Tree & Curios](/wiki?page=relics-curios)\n"
+  }
+ ]
+}

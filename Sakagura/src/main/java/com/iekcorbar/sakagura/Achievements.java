@@ -57,6 +57,7 @@ final class Achievements {
             if (plugin.goods().caskWood(it) != null) return "cask";
             if (plugin.goods().isStillItem(it)) return "still";
             String id = plugin.goods().idOf(it);
+            if (id == null) id = KitchenShared.sidOf(it);          // shared crops: the canonical item is Kitchen's
             if (id == null) return null;
             Fruit f = Fruit.byId(id);
             return f != null ? "f:" + f.id() : null;

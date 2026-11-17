@@ -65,8 +65,9 @@ final class Drunk implements Listener {
     public void onConsume(PlayerItemConsumeEvent e) {
         Player p = e.getPlayer();
         ItemStack item = e.getItem();
-        // Hangover cure: milk or ginger removes hangover effects
-        if (item.getType() == Material.MILK_BUCKET || (plugin.goods().idOf(item) != null && plugin.goods().idOf(item).equals("ginger"))) {
+        // Hangover cure: milk or ginger (canonical ginger = the shared Kitchen item since 11-11) removes hangover effects
+        if (item.getType() == Material.MILK_BUCKET || "ginger".equals(plugin.goods().idOf(item))
+                || "ginger".equals(KitchenShared.idOf(item))) {
             if (p.hasPotionEffect(PotionEffectType.SLOWNESS) || p.hasPotionEffect(PotionEffectType.WEAKNESS) || p.hasPotionEffect(PotionEffectType.MINING_FATIGUE)) {
                 p.removePotionEffect(PotionEffectType.SLOWNESS);
                 p.removePotionEffect(PotionEffectType.WEAKNESS);

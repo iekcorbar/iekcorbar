@@ -219,8 +219,14 @@ final class Spawner {
         Material m = top.getType();
         if (s.habitat == Species.Habitat.CAVE) return null;   // the surface pass never places cave species (tryCave does)
         if (s.habitat == Species.Habitat.POND) {   // koi live IN the water: top must be a water surface with depth
-            return m == Material.WATER && top.getRelative(0, -1, 0).getType() == Material.WATER
-                    && top.getRelative(0, 1, 0).getType().isAir() ? top.getLocation().add(0.5, 0.5, 0.5) : null;
+            if (m != Material.WATER || !top.getRelative(0, 1, 0).getType().isAir()) return null;
+            // an orca is a dolphin with a ~2-block-thick scaled body: in a 2-deep pond its pathfinder jams
+            // against bottom and surface and the animal just hangs there (owner 11-12: "stilstand ipv zwemmen")
+            int need = s == Species.ORCA ? 3 : 2;
+            for (int d = 1; d <= need; d++) {
+                if (top.getRelative(0, -d, 0).getType() != Material.WATER) return null;
+            }
+            return top.getLocation().add(0.5, 0.5, 0.5);
         }
         Block above = top.getRelative(BlockFace.UP);
         if (!above.getType().isAir()) return null;

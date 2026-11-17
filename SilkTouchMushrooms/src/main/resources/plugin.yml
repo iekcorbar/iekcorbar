@@ -1,0 +1,5 @@
+name: SilkTouchMushrooms
+version: '${project.version}'
+main: com.iekcorbar.silktouchmushrooms.SilkTouchMushroomsPlugin
+api-version: '26.2'
+description: Lets red/brown mushrooms be picked up with Silk Touch.

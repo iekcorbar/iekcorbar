@@ -5,7 +5,7 @@ category: Steamworks
 parent: steamworks
 ---
 ## Crafting recipes
-Rows are the crafting grid from top to bottom; "-" is an empty slot. Steamworks parts and materials (shaft, cogwheel, plates...) must be the real Steamworks item, not plain paper. All recipes also show up in your recipe book.
+Rows are the crafting grid from top to bottom; "-" is an empty slot. Steamworks parts and materials (shaft, cogwheel, plates...) must be the real Steamworks item, not plain paper. The complete, honest recipe browser is **/zukan**; the vanilla recipe book shows a Steamworks recipe once you have crafted it for real (it used to reveal them early with blank-paper icons - since November it behaves the vanilla way again).
 This page is generated from the plugin's own recipe table - run `node scripts/build-recipes-data.js && python -I scripts/build-wiki-recipes-md.py` after recipe changes.
 
 ### Materials

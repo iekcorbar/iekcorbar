@@ -142,6 +142,54 @@ final class WildItems implements Listener {
         return make(Material.PAPER, "lizard_tail", "Lizard Tail", "wl_lizard_tail", "Still wriggling a little.", "Don't worry - it grows back.");
     }
 
+    /** A glass bottle with a caught will-o'-wisp inside (Zelda-style). Right-click to release it. */
+    ItemStack bottledWisp(String variant) {
+        String id = "bottled_wisp:" + variant;
+        String name = switch (variant) {
+            case "green" -> "Bottled Green Will-o'-wisp";
+            case "red" -> "Bottled Red Will-o'-wisp";
+            case "gold" -> "Bottled Golden Will-o'-wisp";
+            case "white" -> "Bottled White Will-o'-wisp";
+            case "purple" -> "Bottled Purple Will-o'-wisp";
+            default -> "Bottled Will-o'-wisp";
+        };
+        String model = "wl_willowisp_bottled" + (variant.equals("blue") ? "" : "_" + variant);
+        ItemStack it = new ItemStack(Material.PAPER);
+        ItemMeta m = it.getItemMeta();
+        m.displayName(Component.text(name, NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false));
+        m.lore(List.of(Component.text("Right-click to release it.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+                Component.text("Wildlife", NamedTextColor.DARK_GREEN).decoration(TextDecoration.ITALIC, false)));
+        m.getPersistentDataContainer().set(itemKey, PersistentDataType.STRING, id);
+        m.setEnchantmentGlintOverride(true);
+        it.setItemMeta(m);
+        plugin.fmm().itemModel(it, model);
+        return it;
+    }
+
+    /** Map a will-o'-wisp variant name to its Species. */
+    static Species wispSpecies(String variant) {
+        return switch (variant) {
+            case "green" -> Species.WILLOWISP_GREEN;
+            case "red" -> Species.WILLOWISP_RED;
+            case "gold" -> Species.WILLOWISP_GOLD;
+            case "white" -> Species.WILLOWISP_WHITE;
+            case "purple" -> Species.WILLOWISP_PURPLE;
+            default -> Species.WILLOWISP;
+        };
+    }
+
+    /** Short variant name from a Species. */
+    static String wispVariant(Species s) {
+        return switch (s) {
+            case WILLOWISP_GREEN -> "green";
+            case WILLOWISP_RED -> "red";
+            case WILLOWISP_GOLD -> "gold";
+            case WILLOWISP_WHITE -> "white";
+            case WILLOWISP_PURPLE -> "purple";
+            default -> "blue";
+        };
+    }
+
     /** Calls every tamed dragon of the owner (blown from anywhere in the same world). Looks like a goat horn. */
     ItemStack whistle() {
         ItemStack it = new ItemStack(Material.PAPER);
@@ -193,6 +241,20 @@ final class WildItems implements Listener {
             String[] part = id.substring(4).split(":", 2);
             Species egg = Species.byId(part[0]);
             if (egg != null) useEgg(e, egg, part.length > 1 ? part[1] : null);
+            return;
+        }
+        if (id != null && id.startsWith("bottled_wisp:")) {
+            e.setCancelled(true);
+            String variant = id.substring("bottled_wisp:".length());
+            Species sp = wispSpecies(variant);
+            Player p = e.getPlayer();
+            var at = p.getLocation().add(p.getLocation().getDirection().multiply(1.5)).add(0, 0.5, 0);
+            if (plugin.animals().spawn(sp, at, false, false, null) == null) {
+                p.sendActionBar(Component.text("The model isn't loaded in FreeMinecraftModels.", NamedTextColor.RED));
+                return;
+            }
+            if (p.getGameMode() != org.bukkit.GameMode.CREATIVE) held.setAmount(held.getAmount() - 1);
+            p.getWorld().playSound(p.getLocation(), "entity.allay.ambient", 0.6f, 1.8f);
             return;
         }
         if ("dragon_whistle".equals(id)) {

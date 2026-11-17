@@ -72,7 +72,7 @@ final class Animals implements Listener {
         int ageStage = 0; // 0=baby, 1=adult, 2=senior
         long busyUntil, tailBack, rideUntil, awakeAt, panicUntil, fleeUntil;
         /** Babies: world time they grow up, and how long was left when a golden dandelion froze them. Adults: love mode (plugin tick) and next breeding (world time). */
-        long growAt, frozenLeft, loveUntil, breedAfter, lastFed, birthTime;
+        long growAt, frozenLeft, loveUntil, breedAfter, lastFed, birthTime, stuckSince;
         org.bukkit.Location threat;
 
         Animal(LivingEntity entity, Species species, boolean rare, String model, boolean baby) {
@@ -92,7 +92,7 @@ final class Animals implements Listener {
     }
 
     private final WildlifePlugin plugin;
-    final NamespacedKey autoNameKey, hungerKey, speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey;
+    final NamespacedKey autoNameKey, hungerKey, speciesKey, rareKey, modelKey, keptKey, babyKey, growKey, frozenKey, breedKey, birthKey, ageKey, trickKey;
     final Breeding breeding;
     private final Map<UUID, Animal> animals = new HashMap<>();
     private boolean warnedModels;
@@ -111,7 +111,8 @@ final class Animals implements Listener {
     birthKey = new NamespacedKey(plugin, "birth_time");
     ageKey = new NamespacedKey(plugin, "age_stage");
     hungerKey = new NamespacedKey(plugin, "hunger");
-        autoNameKey = new NamespacedKey(plugin, "auto_name");
+    autoNameKey = new NamespacedKey(plugin, "auto_name");
+    trickKey = new NamespacedKey(plugin, "trick_cooldown");
         brain = new Brain(plugin);
         breeding = new Breeding(plugin, this);
     }
@@ -185,10 +186,12 @@ final class Animals implements Listener {
             m.setAI(true); // ensure pathfinding is active (some base mobs spawn with AI off)
         }
         // Suppress vanilla base-mob behaviors that fight the FMM model:
-        // 1. Horses (DEER, ZEBRA) jump over obstacles on their own, which makes the model look like
-        //    it is "springing but not walking". Disable jumping entirely.
+        // 1. Horses (DEER, ZEBRA, GIRAFFE, REINDEER) used to be set to jump strength 0 so they would never
+        //    spring in place of walking - but the vanilla horse pathfinder refuses jump-nodes without it, and
+        //    every 1-block kerb, log or slope then froze the animal permanently (owner 11-12: "dieren stonden
+        //    stil"). 0.35 is enough to step over single-block obstacles, far too small to leap fences.
         if (e instanceof org.bukkit.entity.Horse h) {
-            h.setJumpStrength(0.0); // no jumping at all - it walks around obstacles instead
+            h.setJumpStrength(0.35);
             h.setDomestication(h.getMaxDomestication()); // fully tamed: no rearing animation
         }
         // 2. Chickens (DUCK, CRANE, OSTRICH, PENGUIN) flap their wings when falling, which can
@@ -223,6 +226,14 @@ final class Animals implements Listener {
             g.setRightHorn(true);
         }
         if (e instanceof Chicken c) c.setEggLayTime(Integer.MAX_VALUE);
+        // custom creatures (sfeerwezens): strip any default equipment the base mob carries
+        // (vindicators spawn with an iron axe) so nothing floats in the air
+        if (e instanceof org.bukkit.entity.Vindicator v) {
+            v.getEquipment().clear();
+        }
+        if (e instanceof org.bukkit.entity.Allay al) {
+            al.getEquipment().clear();
+        }
     }
 
     private static void set(LivingEntity e, Attribute a, double v) {
@@ -497,6 +508,22 @@ final class Animals implements Listener {
                         if (water != null) startFishing(a, water, tick);
                     }
                 }
+                case ORCA -> {
+                    // A dolphin base with a 2.27x body gets stuck in tight or shallow ponds: its vanilla
+                    // swim-pathfinding jams on bottom and banks and the orca just hangs there (owner 11-12).
+                    // If it waters around without advancing for a while, aim it at a genuinely open spot.
+                    if (e instanceof Mob m && e.isInWater()) {
+                        boolean idle = e.getVelocity().getX() * e.getVelocity().getX()
+                                     + e.getVelocity().getZ() * e.getVelocity().getZ() < 0.002;
+                        if (!idle) a.stuckSince = 0;
+                        else if (a.stuckSince == 0) a.stuckSince = tick;
+                        else if (tick - a.stuckSince > 120) {              // 6 s of standing in the water
+                            Location away = openWater(e.getLocation(), 10, r);
+                            if (away != null) m.getPathfinder().moveTo(away, 1.0);
+                            a.stuckSince = tick - 60;                      // try again in 3 s
+                        }
+                    } else a.stuckSince = 0;
+                }
                 case KOALA -> {
                     // koalas nap in the sun and wake on their own (or when something happens)
                     boolean calm2 = !(e instanceof Mob mm) || mm.getTarget() == null;
@@ -521,26 +548,341 @@ final class Animals implements Listener {
                     }
                 }
                 case WRAITH -> {
-                    // A placed atmosphere piece, not an animal (0.7.0): it owns the dark and the
-                    // morning takes it away, exactly like the fireflies do. No fight, no flight.
                     if (night) {
                         for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "wraith_night");
                     }
                     if (!night) {
                         for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 16)) plugin.adv().grant(pl, "wraith_dissolve");
-                        for (int i = 0; i < 5; i++)   // it unravels into soul flames at dawn
+                        for (int i = 0; i < 5; i++)
                             w.spawnParticle(Particle.SOUL, e.getLocation().add(0, 0.3 + r.nextDouble() * 1.1, 0), 1, 0.25, 0.2, 0.25, 0.0);
                         e.remove();
                         continue;
                     }
-                    // slow dwarreling: a small random lift now and then, capped so it never takes off
                     Vector v = e.getVelocity();
                     e.setVelocity(v.setY(Math.max(-0.04, Math.min(0.05, v.getY() + (r.nextDouble() - 0.5) * 0.05))));
-                    // mist off the hem, a cold spark at the hood, both modest
                     if (r.nextInt(2) == 0)
                         w.spawnParticle(Particle.SMOKE, e.getLocation().add(0, 0.2 + r.nextDouble() * 0.5, 0), 1, 0.3, 0.15, 0.3, 0.0);
                     if (r.nextInt(12) == 0)
                         w.spawnParticle(Particle.SOUL, e.getLocation().add(0, 1.25, 0), 1, 0.12, 0.1, 0.12, 0.0);
+                }
+                case WILLOWISP -> {
+                    if (!night) {
+                        for (int i = 0; i < 6; i++)
+                            w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.3 + r.nextDouble() * 0.6, 0), 1, 0.15, 0.1, 0.15, 0.02);
+                        e.remove();
+                        continue;
+                    }
+                    // drift slowly toward the nearest player, luring them deeper
+                    Player nearP = nearestPlayer(e, 16);
+                    if (nearP != null && r.nextInt(4) == 0) {
+                        Vector to = nearP.getLocation().toVector().subtract(e.getLocation().toVector());
+                        double len = to.length();
+                        if (len > 0.5) {
+                            to.normalize().multiply(0.06);
+                            e.setVelocity(e.getVelocity().add(to).setY(Math.max(-0.02, Math.min(0.04, e.getVelocity().getY() + (r.nextDouble() - 0.5) * 0.03))));
+                        }
+                    } else {
+                        Vector vv = e.getVelocity();
+                        e.setVelocity(vv.setY(Math.max(-0.03, Math.min(0.04, vv.getY() + (r.nextDouble() - 0.5) * 0.04))));
+                    }
+                    // blue glow
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.2, 0), 1, 0.05, 0.05, 0.05, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(120, 200, 255), 1.1f));
+                    if (r.nextInt(8) == 0)
+                        w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.3, 0), 1, 0.1, 0.1, 0.1, 0.01);
+                    // vanish if a player gets too close
+                    Player close = nearestPlayer(e, 2);
+                    if (close != null) {
+                        for (int i = 0; i < 8; i++)
+                            w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.4, 0), 1, 0.2, 0.2, 0.2, 0.03);
+                        w.playSound(e.getLocation(), "entity.allay.hurt", 0.6f, 1.6f);
+                        e.remove();
+                        continue;
+                    }
+                }
+                case STEAMGOLEM -> {
+                    // steam vents on the back, occasionally a heavy step sound
+                    if (r.nextInt(3) == 0)
+                        w.spawnParticle(Particle.CLOUD, e.getLocation().add(0, 1.6, -0.4), 1, 0.15, 0.2, 0.15, 0.02);
+                    if (r.nextInt(40) == 0)
+                        w.playSound(e.getLocation(), "entity.iron_golem.step", 0.7f, 0.6f);
+                    if (r.nextInt(60) == 0)
+                        w.playSound(e.getLocation(), "block.fire.extinguish", 0.4f, 1.2f);
+                    // slow turn toward a nearby player
+                    Player p2 = nearestPlayer(e, 10);
+                    if (p2 != null && r.nextInt(6) == 0) {
+                        Vector to = p2.getLocation().toVector().subtract(e.getLocation().toVector());
+                        float yaw = (float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ()));
+                        e.setRotation(yaw + 90, 0);
+                    }
+                }
+                case ONI -> {
+                    if (!night) {
+                        for (int i = 0; i < 6; i++)
+                            w.spawnParticle(Particle.LARGE_SMOKE, e.getLocation().add(0, 1.0 + r.nextDouble() * 0.8, 0), 1, 0.2, 0.2, 0.2, 0.01);
+                        e.remove();
+                        continue;
+                    }
+                    // red glow eyes + faint smoke
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 1.7, 0), 1, 0.05, 0.05, 0.05, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(220, 40, 40), 0.9f));
+                    if (r.nextInt(6) == 0)
+                        w.spawnParticle(Particle.LARGE_SMOKE, e.getLocation().add(0, 0.6, 0), 1, 0.2, 0.15, 0.2, 0.0);
+                    // occasional laugh
+                    if (r.nextInt(120) == 0)
+                        w.playSound(e.getLocation(), "entity.vindicator.ambient", 0.7f, 0.7f);
+                    // keep distance: drift away from the nearest player if too close
+                    Player pc = nearestPlayer(e, 6);
+                    if (pc != null && r.nextInt(3) == 0) {
+                        Vector away = e.getLocation().toVector().subtract(pc.getLocation().toVector());
+                        if (away.length() > 0.1) {
+                            away.normalize().multiply(0.08);
+                            e.setVelocity(e.getVelocity().add(away).setY(e.getVelocity().getY()));
+                        }
+                    }
+                }
+                case KITSUNE -> {
+                    if (!night) {
+                        for (int i = 0; i < 8; i++)
+                            w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.6 + r.nextDouble() * 0.8, 0), 1, 0.25, 0.2, 0.25, 0.02);
+                        e.remove();
+                        continue;
+                    }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.9, 0), 1, 0.15, 0.2, 0.15, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(180, 220, 255), 1.0f));
+                    if (r.nextInt(4) == 0)
+                        w.spawnParticle(Particle.CHERRY_LEAVES, e.getLocation().add(0, 1.0, 0), 1, 0.3, 0.2, 0.3, 0.0);
+                    if (r.nextInt(90) == 0)
+                        w.playSound(e.getLocation(), "entity.fox.ambient", 0.6f, 1.3f);
+                    Player pk = nearestPlayer(e, 5);
+                    if (pk != null && r.nextInt(3) == 0) {
+                        Vector away = e.getLocation().toVector().subtract(pk.getLocation().toVector());
+                        if (away.length() > 0.1) {
+                            away.normalize().multiply(0.07);
+                            e.setVelocity(e.getVelocity().add(away));
+                        }
+                    }
+                }
+                case KAPPA -> {
+                    if (r.nextInt(3) == 0)
+                        w.spawnParticle(Particle.SPLASH, e.getLocation().add(0, 0.6, 0), 3, 0.2, 0.15, 0.2, 0.05);
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.8, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(60, 180, 160), 0.9f));
+                    // pull nearby swimmers gently toward it
+                    for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 6)) {
+                        if (pl.isInWater() && r.nextInt(4) == 0) {
+                            Vector to = e.getLocation().toVector().subtract(pl.getLocation().toVector());
+                            if (to.length() < 6 && to.length() > 0.5) {
+                                to.normalize().multiply(0.05);
+                                pl.setVelocity(pl.getVelocity().add(to));
+                            }
+                        }
+                    }
+                    if (r.nextInt(100) == 0)
+                        w.playSound(e.getLocation(), "entity.turtle.ambient_land", 0.6f, 0.9f);
+                }
+                case TENGU -> {
+                    if (!night) {
+                        for (int i = 0; i < 5; i++)
+                            w.spawnParticle(Particle.CLOUD, e.getLocation().add(0, 0.5 + r.nextDouble() * 0.8, 0), 1, 0.3, 0.2, 0.3, 0.02);
+                        e.remove();
+                        continue;
+                    }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 1.2, 0), 1, 0.15, 0.2, 0.15, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(220, 60, 40), 1.0f));
+                    if (r.nextInt(3) == 0)
+                        w.spawnParticle(Particle.CLOUD, e.getLocation().add(0, 0.8, 0), 1, 0.4, 0.2, 0.4, 0.02);
+                    // push nearby players up and away
+                    for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 8)) {
+                        if (r.nextInt(6) == 0) {
+                            pl.setVelocity(pl.getVelocity().setY(Math.max(pl.getVelocity().getY(), 0.15)));
+                            pl.getWorld().playSound(pl.getLocation(), "entity.phantom.flap", 0.4f, 1.2f);
+                        }
+                    }
+                    if (r.nextInt(80) == 0)
+                        w.playSound(e.getLocation(), "entity.phantom.ambient", 0.5f, 0.9f);
+                }
+                case AUTOMATON -> {
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.SMOKE, e.getLocation().add(0, 1.4, -0.3), 1, 0.15, 0.2, 0.15, 0.01);
+                    if (r.nextInt(3) == 0)
+                        w.spawnParticle(Particle.ELECTRIC_SPARK, e.getLocation().add(0, 1.6, 0), 1, 0.2, 0.2, 0.2, 0.05);
+                    if (r.nextInt(40) == 0)
+                        w.playSound(e.getLocation(), "block.piston.contract", 0.5f, 1.4f);
+                    if (r.nextInt(60) == 0)
+                        w.playSound(e.getLocation(), "entity.iron_golem.step", 0.6f, 0.5f);
+                    // turn toward nearest player
+                    Player pa = nearestPlayer(e, 12);
+                    if (pa != null && r.nextInt(8) == 0) {
+                        Vector to = pa.getLocation().toVector().subtract(e.getLocation().toVector());
+                        float yaw = (float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ()));
+                        e.setRotation(yaw + 90, 0);
+                    }
+                }
+                case WILLOWISP_GREEN -> {
+                    if (!night) { removeWisp(e, w, r); continue; }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.3, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(60, 200, 80), 1.1f));
+                    // attract monsters nearby
+                    for (org.bukkit.entity.Entity en : e.getNearbyEntities(12, 6, 12)) {
+                        if (en instanceof org.bukkit.entity.Monster m && r.nextInt(5) == 0) {
+                            Vector to = e.getLocation().toVector().subtract(en.getLocation().toVector());
+                            if (to.length() > 0.5) {
+                                to.normalize().multiply(0.06);
+                                en.setVelocity(en.getVelocity().add(to));
+                            }
+                        }
+                    }
+                }
+                case WILLOWISP_RED -> {
+                    if (!night) { removeWisp(e, w, r); continue; }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.3, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(220, 40, 40), 1.1f));
+                    // hunt the nearest player
+                    Player pr = nearestPlayer(e, 12);
+                    if (pr != null) {
+                        Vector to = pr.getLocation().toVector().subtract(e.getLocation().toVector());
+                        if (to.length() > 0.5) {
+                            to.normalize().multiply(0.08);
+                            e.setVelocity(e.getVelocity().add(to).setY(Math.max(-0.02, Math.min(0.04, e.getVelocity().getY()))));
+                        }
+                        // sting on contact
+                        if (pr.getLocation().distance(e.getLocation()) < 1.5 && r.nextInt(20) == 0) {
+                            pr.damage(1.0, e);
+                            w.spawnParticle(Particle.FLAME, e.getLocation().add(0, 0.4, 0), 6, 0.2, 0.2, 0.2, 0.02);
+                            w.playSound(e.getLocation(), "entity.allay.hurt", 0.8f, 0.8f);
+                            removeWisp(e, w, r);
+                            continue;
+                        }
+                    }
+                }
+                case WILLOWISP_GOLD -> {
+                    if (!night) { removeWisp(e, w, r); continue; }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.3, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(240, 200, 60), 1.1f));
+                    // leave a gift if a player stays near for a while
+                    Player pg = nearestPlayer(e, 4);
+                    if (pg != null) {
+                        if (a.busyUntil == 0) a.busyUntil = plugin.tick + 200;
+                        if (plugin.tick >= a.busyUntil) {
+                            w.dropItem(e.getLocation().add(0, 0.5, 0), new ItemStack(Material.GOLD_NUGGET, 1 + r.nextInt(3)));
+                            w.playSound(e.getLocation(), "entity.experience_orb.pickup", 0.6f, 1.4f);
+                            removeWisp(e, w, r);
+                            continue;
+                        }
+                    } else {
+                        a.busyUntil = 0;
+                    }
+                }
+                case WILLOWISP_WHITE -> {
+                    if (!night) { removeWisp(e, w, r); continue; }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.3, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(240, 240, 255), 1.1f));
+                    // soothe nearby players
+                    for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 6)) {
+                        if (r.nextInt(4) == 0) {
+                            if (pl.getHealth() < pl.getMaxHealth()) pl.setHealth(Math.min(pl.getMaxHealth(), pl.getHealth() + 0.5));
+                            pl.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.REGENERATION, 40, 0, true, false));
+                        }
+                    }
+                }
+                case WILLOWISP_PURPLE -> {
+                    if (!night) { removeWisp(e, w, r); continue; }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.3, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(180, 80, 220), 1.1f));
+                    if (r.nextInt(3) == 0)
+                        w.spawnParticle(Particle.PORTAL, e.getLocation().add(0, 0.4, 0), 2, 0.2, 0.2, 0.2, 0.05);
+                    // quicken nearby players
+                    for (org.bukkit.entity.Player pl : w.getNearbyPlayers(e.getLocation(), 6)) {
+                        if (r.nextInt(6) == 0) {
+                            pl.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SPEED, 60, 0, true, false));
+                            pl.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.JUMP_BOOST, 60, 0, true, false));
+                        }
+                    }
+                }
+                case GIRAFFE -> {
+                    // browses high leaves: eats occasionally
+                    if (r.nextInt(200) == 0) {
+                        plugin.fmm().play(e, "eat", false);
+                        a.busyUntil = tick + 60;
+                    }
+                    if (r.nextInt(120) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.7f, a.species.pitch);
+                }
+                case LION -> {
+                    // rests in shade; roars occasionally
+                    if (r.nextInt(200) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.9f, a.species.pitch * 0.8f);
+                    if (r.nextInt(80) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.6, 0), 1, 0.1, 0.1, 0.1, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(220, 180, 60), 0.8f));
+                }
+                case HYENA -> {
+                    // laughs occasionally
+                    if (r.nextInt(150) == 0)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.8f, a.species.pitch * 0.7f);
+                    if (r.nextInt(60) == 0)
+                        w.spawnParticle(Particle.SMOKE, e.getLocation().add(0, 0.5, 0), 1, 0.15, 0.1, 0.15, 0.0);
+                }
+                case ARCTICFOX -> {
+                    if (r.nextInt(150) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.7f, a.species.pitch);
+                }
+                case SNOWYOWL -> {
+                    if (r.nextInt(120) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.6f, a.species.pitch);
+                    if (r.nextInt(80) == 0)
+                        w.spawnParticle(Particle.WHITE_ASH, e.getLocation().add(0, 0.8, 0), 2, 0.2, 0.1, 0.2, 0.0);
+                }
+                case REINDEER -> {
+                    if (r.nextInt(100) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.7f, a.species.pitch);
+                }
+                case FENNEC -> {
+                    if (r.nextInt(120) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.9f, a.species.pitch);
+                }
+                case MEERKAT -> {
+                    // sentinels stand up occasionally
+                    if (r.nextInt(60) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.8, 0), 1, 0.05, 0.1, 0.05, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(180, 140, 80), 0.7f));
+                    if (r.nextInt(180) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.6f, a.species.pitch);
+                }
+                case VULTURE -> {
+                    if (r.nextInt(100) == 0 && a.species.ambient != null)
+                        w.playSound(e.getLocation(), a.species.ambient, 0.5f, a.species.pitch);
+                    if (r.nextInt(40) == 0)
+                        w.spawnParticle(Particle.ASH, e.getLocation().add(0, 0.6, 0), 1, 0.3, 0.1, 0.3, 0.0);
+                }
+                case GLOWSPRITE -> {
+                    // glow sprite: floating light in caves, vanishes in daylight/surface
+                    if (e.getLocation().getY() > 40) {
+                        for (int i = 0; i < 6; i++)
+                            w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.3, 0), 1, 0.2, 0.2, 0.2, 0.02);
+                        e.remove();
+                        continue;
+                    }
+                    if (r.nextInt(2) == 0)
+                        w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.2, 0), 1, 0.1, 0.1, 0.1, 0.02);
+                    if (r.nextInt(3) == 0)
+                        w.spawnParticle(Particle.DUST, e.getLocation().add(0, 0.2, 0), 1, 0.05, 0.05, 0.05, 0,
+                                new Particle.DustOptions(org.bukkit.Color.fromRGB(255, 240, 120), 1.2f));
+                    Vector v = e.getVelocity();
+                    e.setVelocity(v.setY(Math.max(-0.03, Math.min(0.04, v.getY() + (r.nextDouble() - 0.5) * 0.04))));
+                    if (r.nextInt(60) == 0)
+                        w.playSound(e.getLocation(), "entity.allay.ambient", 0.4f, 1.8f);
                 }
                 case CRAB -> {
                     // waves its big claw at a player who comes close, turned to face them
@@ -647,9 +989,38 @@ final class Animals implements Listener {
         }
     }
 
+    /** Shared fade-out for the will-o'-wisp family: a small burst of light, then gone. */
+    private void removeWisp(LivingEntity e, World w, ThreadLocalRandom r) {
+        for (int i = 0; i < 6; i++)
+            w.spawnParticle(Particle.END_ROD, e.getLocation().add(0, 0.4 + r.nextDouble() * 0.6, 0), 1, 0.2, 0.2, 0.2, 0.03);
+        w.playSound(e.getLocation(), "entity.allay.hurt", 0.5f, 1.5f);
+        e.remove();
+    }
+
     /** The nearest water block within {@code radius} of the animal (its bank included), or null. */
-    private static Location waterNear(LivingEntity e, int radius) {
-        Location c = e.getLocation();
+    /** A random mid-water spot in a column at least 3 deep, within range of {@code here}: a goal a
+     *  scaled-up dolphin can actually swim to. Null when no loaded chunk around here has open water. */
+    private static Location openWater(Location here, int range, ThreadLocalRandom r) {
+        World w = here.getWorld();
+        for (int i = 0; i < 12; i++) {
+            double ang = r.nextDouble() * Math.PI * 2, d = 2 + r.nextDouble() * (range - 2);
+            int x = here.getBlockX() + (int) (Math.cos(ang) * d);
+            int z = here.getBlockZ() + (int) (Math.sin(ang) * d);
+            if (!w.isChunkLoaded(x >> 4, z >> 4)) continue;
+            int top = here.getBlockY();
+            while (top < here.getBlockY() + 8 && w.getBlockAt(x, top, z).getType() == Material.WATER) top++;
+            int surface = top - 1;
+            if (surface > here.getBlockY() + 6) continue;               // dry spot above: not our kind of water
+            Block s = w.getBlockAt(x, surface, z);
+            if (s.getType() != Material.WATER || !s.getRelative(0, 1, 0).getType().isAir()) continue;
+            if (w.getBlockAt(x, surface - 1, z).getType() != Material.WATER
+                    || w.getBlockAt(x, surface - 2, z).getType() != Material.WATER) continue;   // needs 3 deep
+            return new Location(w, x + 0.5, surface - 0.5, z + 0.5);
+        }
+        return null;
+    }
+
+    private static Location waterNear(LivingEntity e, int radius) {        Location c = e.getLocation();
         World w = c.getWorld();
         int bx = c.getBlockX(), by = c.getBlockY(), bz = c.getBlockZ();
         for (int dx = -radius; dx <= radius; dx++) {
@@ -669,7 +1040,7 @@ final class Animals implements Listener {
         if (!(a.entity instanceof Mob m)) return;
         Location spot = water.clone().add(0.5, 1.0, 0.5);
         Vector to = spot.toVector().subtract(a.entity.getLocation().toVector());
-        a.entity.setRotation((float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ())), 0);
+        a.entity.setRotation((float) Math.toDegrees(Math.atan2(-to.getX(), to.getZ())) + 90, 0);
         m.getPathfinder().moveTo(spot.clone().subtract(to.clone().normalize().multiply(1.2)), 1.0);
         a.fishing = true;
         a.busyUntil = tick + 60;
@@ -776,6 +1147,21 @@ final class Animals implements Listener {
             return; // name tags keep an animal
         }
         if (hand.getType() == Material.LEAD) return; // leads keep an animal
+        // catch a will-o'-wisp in a glass bottle (Zelda-style)
+        if (hand.getType() == Material.GLASS_BOTTLE && a.species.name().startsWith("WILLOWISP")) {
+            e.setCancelled(true);
+            String variant = WildItems.wispVariant(a.species);
+            ItemStack bottled = plugin.items().bottledWisp(variant);
+            if (e.getPlayer().getGameMode() != org.bukkit.GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+            var leftover = e.getPlayer().getInventory().addItem(bottled);
+            if (!leftover.isEmpty()) e.getPlayer().getWorld().dropItemNaturally(e.getPlayer().getLocation(), bottled);
+            LivingEntity ent = (LivingEntity) e.getRightClicked();
+            e.getPlayer().getWorld().playSound(ent.getLocation(), "entity.allay.ambient", 0.8f, 2.0f);
+            ent.remove();
+            animals.remove(ent.getUniqueId());
+            plugin.adv().grant(e.getPlayer(), "first_catch");
+            return;
+        }
         e.setCancelled(true);
         if (e.getHand() == EquipmentSlot.HAND) {
             // dragons answer to coal (taming) and to their owner's empty hand (sit/ride) before breeding thinks of it
@@ -891,6 +1277,15 @@ final class Animals implements Listener {
                 add(d, Material.COPPER_INGOT, r.nextInt(3));
                 add(d, Material.COAL, r.nextInt(2));
             }
+            case GIRAFFE -> { d.add(new ItemStack(Material.LEATHER, 2 + r.nextInt(3))); add(d, Material.BEEF, r.nextInt(3)); }
+            case LION -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.BEEF, 1 + r.nextInt(3)); }
+            case HYENA -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.ROTTEN_FLESH, r.nextInt(2)); }
+            case ARCTICFOX -> { d.add(new ItemStack(Material.WHITE_WOOL, 1 + r.nextInt(2))); add(d, Material.RABBIT, r.nextInt(2)); }
+            case SNOWYOWL -> { add(d, Material.FEATHER, 1 + r.nextInt(3)); add(d, Material.CHICKEN, r.nextInt(2)); }
+            case REINDEER -> { d.add(new ItemStack(Material.LEATHER, 1 + r.nextInt(2))); add(d, Material.BEEF, 1 + r.nextInt(3)); }
+            case FENNEC -> { d.add(new ItemStack(Material.RABBIT_HIDE, 1 + r.nextInt(2))); add(d, Material.RABBIT, r.nextInt(2)); }
+            case MEERKAT -> { add(d, Material.RABBIT, r.nextInt(2)); }
+            case VULTURE -> { add(d, Material.FEATHER, 2 + r.nextInt(3)); add(d, Material.ROTTEN_FLESH, r.nextInt(2)); }
             default -> { }
         }
         d.addAll(plugin.drops().roll(a.species, a.rare));

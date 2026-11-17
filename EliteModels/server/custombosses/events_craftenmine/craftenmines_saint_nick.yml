@@ -1,0 +1,29 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: VINDICATOR
+disguise: VINDICATOR
+customModel: em_npc_saint_nick
+name: $eventBossLevel &cCraftenmine's Saint Nick
+level: dynamic
+healthMultiplier: 4.0
+damageMultiplier: 0.9
+powers:
+- attack_push.yml
+- attack_blinding.lua
+- movement_speed.yml
+- bonus_coins.yml:25
+- bonus_loot.yml
+uniqueLootList:
+- filename=festive_bell_rare.yml:amount=1:chance=0.05
+- filename=festive_bell.yml:amount=1:chance=0.25
+- filename=shrunken_head_drop_charm.yml:amount=1:chance=0.2
+movementSpeedAttribute: 0.32
+followDistance: 60
+locationMessage: '&cCraftenmine''s Saint Nick: $distance blocks away!'
+spawnMessage: '&cHo ho ho! A festive Dr. Craftenmine experiment appears!'
+deathMessage: '&aCraftenmine''s Saint Nick has been defeated by $players!'
+escapeMessage: '&4Craftenmine''s Saint Nick has flown away!'
+announcementPriority: 2

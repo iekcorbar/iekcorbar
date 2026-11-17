@@ -586,6 +586,66 @@ public class BookManager implements Listener, TabExecutor {
         if (args.length == 0) { help(sender, label); return true; }
         switch (args[0].toLowerCase(Locale.ROOT)) {
             case "reload" -> send(sender, "&a" + reload());
+            case "convert" -> {
+                if (!(sender instanceof Player p)) { send(sender, "&cOnly players can convert."); return true; }
+                if (args.length < 2) { send(sender, "&cUsage: /" + label + " convert <id> [model] [series] [volume] [loot:true/false] [copyable:true/false]"); return true; }
+                ItemStack held = p.getInventory().getItemInMainHand();
+                if (held.getType() != Material.WRITTEN_BOOK || !held.hasItemMeta()) { send(sender, "&cHold a written book in your main hand."); return true; }
+                BookMeta bm = (BookMeta) held.getItemMeta();
+                String id = cleanId(args[1]);
+                if (id == null) { send(sender, "&cInvalid id (use a-z 0-9 _ -)."); return true; }
+                if (books.containsKey(id)) { send(sender, "&cA book with id '" + id + "' already exists. Pick another id or /" + label + " reload after editing."); return true; }
+                // model: arg or default-model from books.yml
+                String model = args.length > 2 ? args[2].trim() : defaultModel;
+                if (model.equalsIgnoreCase("none")) model = "";
+                // series
+                String series = args.length > 3 ? args[3].trim() : null;
+                if (series != null && (series.isBlank() || series.equalsIgnoreCase("-"))) series = null;
+                // volume
+                int volume = 0;
+                if (args.length > 4) { try { volume = Integer.parseInt(args[4]); } catch (NumberFormatException ignored) { } }
+                // loot
+                boolean loot = true;
+                if (args.length > 5) loot = args[5].equalsIgnoreCase("true") || args[5].equalsIgnoreCase("yes") || args[5].equals("1");
+                // copyable
+                boolean copyable = false;
+                if (args.length > 6) copyable = args[6].equalsIgnoreCase("true") || args[6].equalsIgnoreCase("yes") || args[6].equals("1");
+
+                // extract title/author/pages from the held book
+                String title = bm.hasTitle() ? bm.getTitle() : id;
+                String author = bm.hasAuthor() ? bm.getAuthor() : p.getName();
+                List<String> pages = new ArrayList<>();
+                for (String pg : bm.getPages()) pages.add(pg);
+                if (pages.isEmpty()) { send(sender, "&cThe book has no pages."); return true; }
+
+                // build the .txt content
+                StringBuilder sb = new StringBuilder();
+                sb.append("id: ").append(id).append('\n');
+                sb.append("title: ").append(title).append('\n');
+                sb.append("author: ").append(author).append('\n');
+                sb.append("description: Converted from a written book by ").append(p.getName()).append('\n');
+                if (series != null) sb.append("series: ").append(series).append('\n');
+                if (volume > 0) sb.append("volume: ").append(volume).append('\n');
+                sb.append("model: ").append(model).append('\n');
+                sb.append("loot: ").append(loot).append('\n');
+                sb.append("copyable: ").append(copyable).append('\n');
+                sb.append("===\n");
+                for (int pi = 0; pi < pages.size(); pi++) {
+                    if (pi > 0) sb.append("---\n");
+                    sb.append(pages.get(pi)).append('\n');
+                }
+
+                File out = new File(booksDir, id + ".txt");
+                try {
+                    Files.write(out.toPath(), sb.toString().getBytes(StandardCharsets.UTF_8));
+                } catch (IOException ex) {
+                    send(sender, "&cFailed to write: " + ex.getMessage());
+                    return true;
+                }
+                reload();
+                send(sender, "&aConverted &f" + pages.size() + " page(s) &ato &f" + out.getName() + "&a. Model: &f" + (model.isEmpty() ? "(none)" : model));
+                send(sender, "&7Use &f/" + label + " give " + p.getName() + " " + id + " &7to get the custom book.");
+            }
             case "list" -> list(sender, args.length > 1 ? String.join(" ", java.util.Arrays.copyOfRange(args, 1, args.length)) : null);
             case "info" -> {
                 BookDef b = args.length > 1 ? books.get(args[1].toLowerCase(Locale.ROOT)) : null;
@@ -666,6 +726,7 @@ public class BookManager implements Listener, TabExecutor {
         send(s, "&6/" + label + " progress <player> &7- which books / series a player has read");
         send(s, "&6/" + label + " forget <player> [id|all] &7- reset read status (testing)");
         send(s, "&6/" + label + " reload &7- re-read books.yml and books/*.txt");
+        send(s, "&6/" + label + " convert <id> [model] [series] [volume] [loot] [copyable] &7- convert the held written book");
     }
 
     private void list(CommandSender sender, String series) {
@@ -704,7 +765,7 @@ public class BookManager implements Listener, TabExecutor {
         List<String> out = new ArrayList<>();
         String last = args[args.length - 1].toLowerCase(Locale.ROOT);
         if (args.length == 1) {
-            out.addAll(List.of("list", "info", "give", "giveseries", "open", "progress", "forget", "reload"));
+            out.addAll(List.of("list", "info", "give", "giveseries", "open", "progress", "forget", "reload", "convert"));
         } else {
             String sub = args[0].toLowerCase(Locale.ROOT);
             if (args.length == 2 && Set.of("give", "giveseries", "progress", "forget").contains(sub)) {

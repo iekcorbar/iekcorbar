@@ -2,6 +2,7 @@ package com.iekcorbar.kura;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -22,9 +23,9 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 /**
- * Kura: a storage network. An Inventory Connector joins the chests touching it,
- * cables carry the network further, and a Storage/Crafting Terminal shows every
- * item in it. Inventory Hoppers, Interfaces and Open Crates move items in and out
+ * Kura: a storage network. Since 0.1.11 one rule does it all: an Inventory Cable
+ * joins whatever it touches (chests, barrels, shulker boxes, other cables), and a
+ * Storage/Crafting Terminal shows every item in it. Inventory Hoppers, Interfaces and Open Crates move items in and out
  * (also for Steamworks belts and arms, which see the Interface as a normal barrel),
  * Level Emitters give redstone signals, and wireless terminals open it from afar.
  * Behaviour modelled on the MIT-licensed Tom's Simple Storage mod; own code and models.
@@ -44,12 +45,14 @@ public final class KuraPlugin extends JavaPlugin implements Listener {
     private Networks networks;
     private Menus menus;
     private Couriers couriers;
+    private Favourites favourites;
     private Adv adv;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         items = new Items(this);
+        favourites = new Favourites(new NamespacedKey(this, "favs"));
         parts = new Parts(this);
         networks = new Networks(this);
         menus = new Menus(this);
@@ -154,4 +157,6 @@ public final class KuraPlugin extends JavaPlugin implements Listener {
     Parts parts() { return parts; }
     Networks networks() { return networks; }
     Menus menus() { return menus; }
+    Couriers couriers() { return couriers; }
+    Favourites favourites() { return favourites; }
 }

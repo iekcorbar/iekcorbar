@@ -2,6 +2,7 @@ package com.iekcorbar.steamworks;
 
 import com.iekcorbar.steamworks.trains.CarType;
 import com.iekcorbar.steamworks.trains.RailWalker;
+import com.iekcorbar.steamworks.trains.RouteMemory;
 import org.bukkit.World;
 import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
@@ -44,6 +45,15 @@ final class Train {
     // dwell, next stop, bounce at the ends of the list.
     final List<String> line = new ArrayList<>();
     int linePos, lineDir = 1;
+    // Netwerk-routing 0.3.44: route = the rail pieces planned to the next stop / trip target,
+    // null = plain (pre-0.3.44) autopilot. routePos = the leg the leading wheel is in.
+    // commit = the switch exits the front wheel took, replayed by the wheels behind it.
+    List<Trains.Leg> route;
+    int routePos;
+    String routeDest;
+    String trip;          // one-way journey: autopilot switches off after arriving
+    boolean tripDone;     // set when the trip's station stop is made, handled after the dwell
+    final RouteMemory commit = new RouteMemory();
 
     Train(UUID id, World world) {
         this.id = id;

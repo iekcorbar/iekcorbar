@@ -71,7 +71,7 @@ enum Species {
             List.of("river", "swamp", "mangrove"), "sugar_cane",
             "Darts over water hunting midges, wings almost invisible.", "Above rivers and swamps on warm days.",
             "wildlife:dragonfly.buzz", null, null, 1f),
-    ELEPHANT("African Elephant", EntityType.COW, 1.85, 60, 0.06, Habitat.LAND, Time.ANY, 2, 4, 3,
+    ELEPHANT("African Elephant", EntityType.COW, 1.75, 60, 0.06, Habitat.LAND, Time.ANY, 2, 4, 3,
             List.of("savanna"), "bone",
             "The biggest animal around. A herd ambles across the savanna and the calves stay close to their mothers.",
             "Wide, dry savannas - listen for the rumbling.",
@@ -126,7 +126,7 @@ enum Species {
             "You mostly meet its work: a fresh pile of dug-up earth. The mole itself does not stay above ground long.",
             "Beside a molehill in lawns and forest edges.",
             null, "entity.armadillo.hurt", "entity.armadillo.death", 1.6f),
-    RHINO("White Rhinoceros", EntityType.COW, 2.5, 40, 0.045, Habitat.LAND, Time.ANY, 1, 2, 2,
+    RHINO("White Rhinoceros", EntityType.COW, 1.44, 40, 0.045, Habitat.LAND, Time.ANY, 1, 2, 2,
             List.of("savanna"), "iron_ingot",
             "Armour on four legs, horn out front. Calm until its path is blocked - then the ground is a problem.",
             "Wallowing in the dry savanna dust.",
@@ -151,6 +151,54 @@ enum Species {
             "A tail longer than its body, a beak like bolt cutters, and the vocabulary of a sailor.",
             "Over the jungle canopy - yes, it may land on your shoulder.",
             "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.85f),
+    // Savanna set (0.9.15): three grazers/predators of the open savanna.
+    GIRAFFE("Giraffe", EntityType.HORSE, 2.3, 30, 0.07, Habitat.LAND, Time.ANY, 1, 3, 6,
+            List.of("savanna", "savanna_plateau", "windswept_savanna"), "apple",
+            "The tallest animal around. It browses the high leaves and watches the plains from above.",
+            "Open savanna - look up, not down.",
+            "entity.horse.ambient", "entity.horse.hurt", "entity.horse.death", 0.7f),
+    LION("Lion", EntityType.OCELOT, 1.4, 24, 0.12, Habitat.LAND, Time.ANY, 1, 3, 4,
+            List.of("savanna", "savanna_plateau"), "beef",
+            "The king of the savanna. It rests in the shade and hunts when the sun drops.",
+            "Savanna grass and acacia shade - listen for the roar.",
+            "entity.ravager.ambient", "entity.ravager.hurt", "entity.ravager.death", 1.0f),
+    HYENA("Spotted Hyena", EntityType.WOLF, 0.9, 16, 0.13, Habitat.LAND, Time.ANY, 2, 4, 5,
+            List.of("savanna", "savanna_plateau", "windswept_savanna"), "bone",
+            "A laughing scavenger of the plains. It lives in a clan and never travels alone.",
+            "Open savanna at dusk - you hear the laugh before you see them.",
+            "entity.wolf.ambient", "entity.wolf.hurt", "entity.wolf.death", 0.9f),
+    // Cold set (0.9.16): animals of snow and ice.
+    ARCTICFOX("Arctic Fox", EntityType.FOX, 0.8, 10, 0.14, Habitat.LAND, Time.ANY, 1, 2, 5,
+            List.of("snowy", "ice", "frozen", "grove", "taiga"), "white_wool",
+            "A small fox in a white winter coat. It disappears into the snow when you blink.",
+            "Snowy tundra and frozen rivers - watch for the moving snow.",
+            "entity.fox.ambient", "entity.fox.hurt", "entity.fox.death", 1.3f),
+    SNOWYOWL("Snowy Owl", EntityType.PARROT, 0.9, 8, 0.18, Habitat.AIR, Time.DAY, 1, 2, 4,
+            List.of("snowy", "ice", "frozen", "taiga", "grove"), "feather",
+            "A silent white hunter of the tundra. It sits still for hours, then drops like a stone.",
+            "Snowy plains and taiga by day - look for a white shape on a fence post.",
+            "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.7f),
+    REINDEER("Reindeer", EntityType.HORSE, 1.0, 20, 0.09, Habitat.LAND, Time.ANY, 2, 5, 6,
+            List.of("snowy", "ice", "frozen", "taiga", "grove"), "leather",
+            "A sturdy grazer of the cold north. The herd moves together across the snow.",
+            "Snowy taiga and frozen plains - listen for the crunch of hooves.",
+            "entity.horse.ambient", "entity.horse.hurt", "entity.horse.death", 0.8f),
+    // Desert set (0.9.16): animals of sand and heat.
+    FENNEC("Fennec Fox", EntityType.FOX, 0.6, 8, 0.15, Habitat.LAND, Time.NIGHT, 1, 2, 5,
+            List.of("desert", "badlands", "savanna"), "rabbit_foot",
+            "A tiny fox with enormous ears. It hunts at night and sleeps in the sand by day.",
+            "Deserts and badlands after dark - listen for the high-pitched bark.",
+            "entity.fox.ambient", "entity.fox.hurt", "entity.fox.death", 1.6f),
+    MEERKAT("Meerkat", EntityType.RABBIT, 0.5, 6, 0.16, Habitat.LAND, Time.DAY, 3, 6, 6,
+            List.of("desert", "badlands", "savanna"), "rabbit_hide",
+            "A small sentinel that stands on its hind legs to watch for danger. Always in a group.",
+            "Deserts and badlands by day - look for the sentinels on the rocks.",
+            "entity.rabbit.ambient", "entity.rabbit.hurt", "entity.rabbit.death", 1.2f),
+    VULTURE("Vulture", EntityType.PARROT, 1.35, 10, 0.15, Habitat.AIR, Time.DAY, 1, 3, 4,
+            List.of("desert", "badlands", "savanna", "plains"), "feather",
+            "A broad-winged scavenger of the open sky. It circles high and lands where something has fallen.",
+            "Deserts and open plains by day - look up for the circling shadow.",
+            "entity.parrot.ambient", "entity.parrot.hurt", "entity.parrot.death", 0.5f),
     // Steam Dragon (0.8.0): the rideable companion. PARROT base = proven 3D flight (all gravity
     // off in setup(): it hovers, never falls, takes no fall damage). Coal to tame like a wolf;
     // two of one kind in love make a baby like every other animal; the lead works as always.
@@ -179,7 +227,75 @@ enum Species {
             List.of("dark_forest", "mushroom_fields", "swamp", "old_growth"), "soul_lantern",
             "A cold shape in a torn robe, drifting a hand above the ground. It does not hunt and does not flee - it watches, and the morning takes it away.",
             "Not found in the wild: staff place them at dark, quiet spots.",
-            "wildlife:wraith.ambient", "wildlife:wraith.hurt", "wildlife:wraith.death", 0.65f);
+            "wildlife:wraith.ambient", "wildlife:wraith.hurt", "wildlife:wraith.death", 0.65f),
+    // Sfeerwezens (0.9.x): custom creatures, not animals - no journal, no rare, no baby, no spawn egg, no statue.
+    // Steve = 1.8 m is the size reference (1 block = 1 m).
+    WILLOWISP("Will-o'-wisp", EntityType.ALLAY, 0.9, 4, 0.12, Habitat.AIR, Time.NIGHT, 1, 3, 0,
+            List.of("swamp", "mangrove", "dark_forest"), "glowstone_dust",
+            "A drifting blue light over the marsh. It lures the curious deeper and vanishes the moment you reach it.",
+            "Swamps and mangroves after dark - follow the light, if you dare.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.6f),
+    STEAMGOLEM("Steam Golem", EntityType.IRON_GOLEM, 1.0, 60, 0.04, Habitat.LAND, Time.ANY, 1, 1, 0,
+            List.of(), "copper_ingot",
+            "A brass-and-iron hulk left by the old engineers. It patrols the ruins on slow, heavy steps and vents steam when disturbed.",
+            "Deep in caves and old ruins - listen for the hiss of steam.",
+            "entity.iron_golem.step", "entity.iron_golem.hurt", "entity.iron_golem.death", 0.55f),
+    ONI("Oni", EntityType.VINDICATOR, 1.0, 30, 0.14, Habitat.LAND, Time.NIGHT, 1, 2, 0,
+            List.of(), "redstone",
+            "A red-skinned demon of the deep woods. It does not attack unprovoked, but its laugh carries far on a still night.",
+            "Dark forests at night - you hear it before you see it.",
+            "entity.vindicator.ambient", "entity.vindicator.hurt", "entity.vindicator.death", 0.75f),
+    GLOWSPRITE("Glow Sprite", EntityType.ALLAY, 0.4, 3, 0.1, Habitat.CAVE, Time.ANY, 1, 3, 0,
+            List.of(), "glowstone",
+            "A tiny floating light in the deep dark. It drifts through caverns and vanishes in the sun.",
+            "Deep caves - follow the light.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.8f),
+    KITSUNE("Kitsune", EntityType.WOLF, 1.1, 18, 0.15, Habitat.LAND, Time.NIGHT, 1, 1, 0,
+            List.of("forest", "taiga", "dark_forest", "cherry_grove", "bamboo", "old_growth", "grove", "flower_forest"),
+            "amethyst_shard",
+            "A fox with more than one tail, glowing faintly in the dark. It watches from the tree line and never quite lets you close.",
+            "Old forests and cherry groves after dark - count the tails.",
+            "entity.fox.ambient", "entity.wolf.hurt", "entity.wolf.death", 1.2f),
+    KAPPA("Kappa", EntityType.TURTLE, 1.0, 16, 0.06, Habitat.WATER, Time.ANY, 1, 1, 0,
+            List.of("river", "swamp", "mangrove", "beach", "ocean"), "nautilus_shell",
+            "A water spirit with a bowl of water on its head. Tip the bowl and it loses its power - and its nerve.",
+            "Rivers, swamps and mangroves - look for ripples that move against the current.",
+            "entity.turtle.ambient_land", "entity.turtle.hurt_land", "entity.turtle.death_land", 0.9f),
+    TENGU("Tengu", EntityType.PHANTOM, 1.2, 20, 0.2, Habitat.AIR, Time.NIGHT, 1, 1, 0,
+            List.of("windswept", "grove", "taiga", "snowy", "cherry_grove", "old_growth", "mountain"), "phantom_membrane",
+            "A mountain spirit with a long nose and red skin. It rides the wind above the peaks and laughs at those below.",
+            "High mountain peaks after dark - listen for the wind and the laugh.",
+            "entity.phantom.ambient", "entity.phantom.hurt", "entity.phantom.death", 1.0f),
+    AUTOMATON("Automaton", EntityType.IRON_GOLEM, 1.0, 40, 0.05, Habitat.LAND, Time.ANY, 1, 1, 0,
+            List.of(), "copper_ingot",
+            "A clockwork soldier left by the old engineers. It patrols on heavy steps, hissing steam, and never sleeps.",
+            "Deep in caves and old ruins - listen for the ticking.",
+            "block.piston.contract", "entity.iron_golem.hurt", "entity.iron_golem.death", 0.5f),
+    WILLOWISP_GREEN("Green Will-o'-wisp", EntityType.ALLAY, 0.9, 4, 0.12, Habitat.AIR, Time.NIGHT, 1, 2, 0,
+            List.of("dark_forest", "swamp", "mangrove"), "glowstone_dust",
+            "A sickly green light over the marsh. Monsters gather where it drifts.",
+            "Dark forests and swamps after dark - it draws the hungry.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.5f),
+    WILLOWISP_RED("Red Will-o'-wisp", EntityType.ALLAY, 0.9, 4, 0.14, Habitat.AIR, Time.NIGHT, 1, 2, 0,
+            List.of("dark_forest", "forest", "taiga"), "glowstone_dust",
+            "A burning red light that hunts the living. It stings when it reaches you.",
+            "Dark forests at night - it comes to you, not the other way around.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.6f),
+    WILLOWISP_GOLD("Golden Will-o'-wisp", EntityType.ALLAY, 0.9, 4, 0.1, Habitat.AIR, Time.NIGHT, 1, 1, 0,
+            List.of("plains", "meadow", "flower_forest", "sunflower_plains"), "glowstone_dust",
+            "A warm golden light over the open fields. Follow it and it leaves a gift.",
+            "Open fields and meadows at night - follow the gold.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.4f),
+    WILLOWISP_WHITE("White Will-o'-wisp", EntityType.ALLAY, 0.9, 4, 0.08, Habitat.AIR, Time.NIGHT, 1, 1, 0,
+            List.of("snowy", "ice", "frozen", "grove"), "glowstone_dust",
+            "A pale, calm light over the snow. It soothes those who stand near it.",
+            "Snowy peaks and ice at night - it heals the cold.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.3f),
+    WILLOWISP_PURPLE("Purple Will-o'-wisp", EntityType.ALLAY, 0.9, 4, 0.16, Habitat.AIR, Time.NIGHT, 1, 2, 0,
+            List.of("cherry_grove", "flower_forest", "birch_forest"), "glowstone_dust",
+            "A violet light that hums with magic. It quickens the step of those near it.",
+            "Cherry groves and flower forests at night - it lends you speed.",
+            null, "entity.allay.hurt", "entity.allay.death", 1.7f);
 
     enum Habitat { LAND, WATER, SHORE, AIR, POND,
         /** The steam dragon: 3D flight like AIR, but spawned by the Spawner's underground pass, never on the surface. */
@@ -235,8 +351,12 @@ enum Species {
      * placements only: no journal page or advancement, no rare look, no baby, no spawn egg
      * and no craftable statue, and they never enter the wild (config + Spawner keep them off).
      */
+    /** Custom creatures (sfeerwezens): not animals - no journal, rare, baby, spawn egg, statue or breeding. */
     boolean animal() {
-        return this != WRAITH;
+        return this != WRAITH && this != WILLOWISP && this != STEAMGOLEM && this != ONI && this != KITSUNE
+            && this != KAPPA && this != TENGU && this != AUTOMATON && this != GLOWSPRITE
+            && this != WILLOWISP_GREEN && this != WILLOWISP_RED && this != WILLOWISP_GOLD
+            && this != WILLOWISP_WHITE && this != WILLOWISP_PURPLE;
     }
 
     /** Species that the Field Journal actually tracks: everything that is an animal. Keeps the
@@ -256,7 +376,8 @@ enum Species {
     int shy() {
         return switch (this) {
             case DEER, ZEBRA, KANGAROO, SONGBIRD, MACAW, LIZARD, MOLE, TANUKI, CRANE -> 3;
-            case BOAR, DUCK, CRAB, KOALA, MACAQUE, OSTRICH, ELEPHANT -> 2;
+            case BOAR, DUCK, CRAB, KOALA, MACAQUE, OSTRICH, ELEPHANT, GIRAFFE, ARCTICFOX, SNOWYOWL, REINDEER, FENNEC, MEERKAT -> 2;
+            case HYENA, VULTURE -> 1;
             default -> 0;
         };
     }
@@ -324,8 +445,18 @@ enum Species {
             case ORCA -> "White Orca";
             case PIRANHA -> "Golden Piranha";
             case MACAW -> "Albino Macaw";
+            case GIRAFFE -> "White Giraffe";
+            case LION -> "White Lion";
+            case HYENA -> "Golden Hyena";
+            case ARCTICFOX -> "Blue Arctic Fox";
+            case SNOWYOWL -> "Golden Snowy Owl";
+            case REINDEER -> "White Reindeer";
+            case FENNEC -> "Black Fennec";
+            case MEERKAT -> "Golden Meerkat";
+            case VULTURE -> "White Vulture";
             case DRAGON -> "Gilded Dragon";   // the gilded one: every brass cell turned to gold
-            case WRAITH -> displayName;   // not an animal: there is no rare look (animal() guard)
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON, GLOWSPRITE,
+                 WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> displayName;
         };
     }
 
@@ -361,8 +492,18 @@ enum Species {
             case ORCA -> m == Material.COD || m == Material.SALMON || m == Material.TROPICAL_FISH;
             case PIRANHA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.CHICKEN || m == Material.MUTTON;
             case MACAW -> m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS || m == Material.COCOA_BEANS;
+            case GIRAFFE -> Tag.LEAVES.isTagged(m) || m == Material.APPLE || m == Material.HAY_BLOCK;
+            case LION -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.MUTTON || m == Material.CHICKEN || m == Material.RABBIT;
+            case HYENA -> m == Material.BEEF || m == Material.PORKCHOP || m == Material.MUTTON || m == Material.CHICKEN || m == Material.ROTTEN_FLESH;
+            case ARCTICFOX -> m == Material.COD || m == Material.SALMON || m == Material.RABBIT || m == Material.SWEET_BERRIES;
+            case SNOWYOWL -> m == Material.RABBIT || m == Material.CHICKEN || m == Material.COD || m == Material.SALMON;
+            case REINDEER -> m == Material.WHEAT || m == Material.HAY_BLOCK || m == Material.APPLE || m == Material.CARROT;
+            case FENNEC -> m == Material.RABBIT || m == Material.CHICKEN || m == Material.SPIDER_EYE;
+            case MEERKAT -> m == Material.SPIDER_EYE || m == Material.WHEAT_SEEDS || m == Material.MELON_SEEDS;
+            case VULTURE -> m == Material.ROTTEN_FLESH || m == Material.BEEF || m == Material.MUTTON || m == Material.CHICKEN;
             case DRAGON -> m == Material.COAL || m == Material.CHARCOAL;   // coal: it is a furnace
-            case WRAITH -> false;   // not an animal: nothing tempts it, breeding is out of the question
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON, GLOWSPRITE,
+                 WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> false;
         };
     }
 
@@ -398,8 +539,18 @@ enum Species {
             case ORCA -> "a big fish";
             case PIRANHA -> "any raw meat";
             case MACAW -> "seeds or cocoa beans";
+            case GIRAFFE -> "leaves, apples or hay";
+            case LION -> "any raw meat";
+            case HYENA -> "meat or rotten flesh";
+            case ARCTICFOX -> "fish, rabbit or sweet berries";
+            case SNOWYOWL -> "rabbit, chicken or fish";
+            case REINDEER -> "wheat, hay, apples or carrots";
+            case FENNEC -> "rabbit, chicken or spider eyes";
+            case MEERKAT -> "spider eyes or seeds";
+            case VULTURE -> "rotten flesh or raw meat";
             case DRAGON -> "coal or charcoal";
-            case WRAITH -> "nothing - it is not an animal and cannot be bred";
+            case WRAITH, WILLOWISP, STEAMGOLEM, ONI, KITSUNE, KAPPA, TENGU, AUTOMATON, GLOWSPRITE,
+                 WILLOWISP_GREEN, WILLOWISP_RED, WILLOWISP_GOLD, WILLOWISP_WHITE, WILLOWISP_PURPLE -> "nothing - it is not an animal and cannot be bred";
         };
     }
 

@@ -1,0 +1,31 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: IRON_GOLEM
+disguise: IRON_GOLEM
+customModel: em_clockwork_oni
+name: $eventBossLevel &6Craftenmine's Clockwork Oni
+level: dynamic
+healthMultiplier: 4.5
+damageMultiplier: 1.0
+powers:
+- steam_burst.lua
+- attack_push.yml
+- attack_gravity.lua
+- attack_lightning.yml
+- movement_speed.yml
+- bonus_coins.yml:25
+- bonus_loot.yml
+uniqueLootList:
+- filename=clockwork_gear_rare.yml:amount=1:chance=0.05
+- filename=clockwork_gear.yml:amount=1:chance=0.25
+- filename=shrunken_head_drop_charm.yml:amount=1:chance=0.15
+movementSpeedAttribute: 0.34
+followDistance: 60
+locationMessage: '&6Craftenmine''s Clockwork Oni: $distance blocks away!'
+spawnMessage: '&6A steampunk Oni of Dr. Craftenmine stomps through the mountains!'
+deathMessage: '&aCraftenmine''s Clockwork Oni has been dismantled by $players!'
+escapeMessage: '&4Craftenmine''s Clockwork Oni has wound down and left!'
+announcementPriority: 2

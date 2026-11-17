@@ -116,53 +116,8 @@ final class Trees implements Listener {
         return at(w.getBlockAt(x, y, z)) == null;
     }
 
-    // ------------------------------------------------------------ planting
-
-    @EventHandler(priority = EventPriority.HIGH)
-    public void onInteract(PlayerInteractEvent e) {
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getHand() != EquipmentSlot.HAND) return;
-        ItemStack hand = e.getItem();
-        Tree t = Tree.bySapling(plugin.goods().idOf(hand));
-        if (t == null) return;
-        Block soil = e.getClickedBlock();
-        if (soil == null || !isSoil(soil.getType())) return;
-        Block b = soil.getRelative(BlockFace.UP);
-        if (!b.getType().isAir()) return;
-        // room to grow: two more air levels and no neighbour closer than two blocks
-        if (!b.getRelative(BlockFace.UP, 2).getType().isAir() || !b.getRelative(BlockFace.UP, 3).getType().isAir()) {
-            e.getPlayer().sendActionBar(Component.text("The tree needs four blocks of air above it.", NamedTextColor.RED));
-            return;
-        }
-        for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) {
-            for (int level = 0; level < 4; level++) {
-                Block near = b.getRelative(dx, level, dz);
-                Rec r = at(near);
-                if (r != null && (dx != 0 || dz != 0 || level != 0)) {
-                    e.getPlayer().sendActionBar(Component.text("Too close to another tree.", NamedTextColor.RED));
-                    return;
-                }
-            }
-        }
-        e.setCancelled(true);
-        Player p = e.getPlayer();
-        var old = b.getState();
-        b.setType(Material.BARRIER, false);
-        BlockPlaceEvent ev = new BlockPlaceEvent(b, old, soil, hand, p, true, EquipmentSlot.HAND);
-        plugin.getServer().getPluginManager().callEvent(ev);
-        if (ev.isCancelled() || !ev.canBuild()) {
-            b.setType(Material.AIR, false);
-            old.update(true, false);
-            return;
-        }
-        Rec r = new Rec(t, b.getWorld(), b.getX(), b.getY(), b.getZ(), 0, false);
-        trees.computeIfAbsent(b.getWorld().getUID(), k -> new HashMap<>()).put(key(r.x, r.y, r.z), r);
-        draw(r);
-        saveChunk(b.getWorld(), r.x >> 4, r.z >> 4);
-        plugin.adv().grant(p, "sapling");
-        if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
-        b.getWorld().playSound(b.getLocation(), "minecraft:block.sapling.place", 1f, 0.9f);
-        p.swingMainHand();
-    }
+    // ------------------------------------------------------------ planting (0.8.0: new plantings grow as
+    // REAL block trees in Orchard.java; this class only keeps the old display-stack trees alive)
 
     private static boolean isSoil(Material m) {
         return m == Material.GRASS_BLOCK || m == Material.DIRT || m == Material.PODZOL

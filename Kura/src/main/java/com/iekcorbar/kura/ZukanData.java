@@ -22,7 +22,7 @@ final class ZukanData implements Supplier<Map<String, Object>> {
     @Override
     public Map<String, Object> get() {
         List<ItemStack> all = new ArrayList<>();
-        for (KItem t : KItem.values()) all.add(plugin.items().create(t, 1));
+        for (KItem t : KItem.values()) if (!t.legacy()) all.add(plugin.items().create(t, 1));  // 0.1.11: no recipes for the old parts
         Map<String, Object> out = new LinkedHashMap<>();
         out.put("items", all);
         out.put("recipes", new ArrayList<>());

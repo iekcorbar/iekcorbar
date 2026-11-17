@@ -1,0 +1,30 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: FOX
+disguise: FOX
+customModel: em_spirit_fox
+name: $eventBossLevel &dCraftenmine's Spirit Fox
+level: dynamic
+healthMultiplier: 3.0
+damageMultiplier: 0.85
+powers:
+- sakura_petal_rain.lua
+- attack_blinding.lua
+- attack_push.yml
+- movement_speed.yml
+- bonus_coins.yml:18
+- bonus_loot.yml
+uniqueLootList:
+- filename=sakura_petal_rare.yml:amount=1:chance=0.05
+- filename=sakura_petal.yml:amount=1:chance=0.25
+- filename=shrunken_head_drop_charm.yml:amount=1:chance=0.15
+movementSpeedAttribute: 0.4
+followDistance: 60
+locationMessage: '&dCraftenmine''s Spirit Fox: $distance blocks away!'
+spawnMessage: '&dA spirit fox experiment of Dr. Craftenmine flickers among the blossoms!'
+deathMessage: '&aCraftenmine''s Spirit Fox has been purified by $players!'
+escapeMessage: '&4Craftenmine''s Spirit Fox has vanished into the grove!'
+announcementPriority: 2

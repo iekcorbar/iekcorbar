@@ -1,0 +1,30 @@
+classLoot: true
+onSpawnBlockStates: []
+onRemoveBlockStates: []
+bossType: NORMAL
+isEnabled: true
+entityType: SNOW_GOLEM
+disguise: SNOW_GOLEM
+customModel: em_frost_beast
+name: $eventBossLevel &bCraftenmine's Frost Experiment
+level: dynamic
+healthMultiplier: 3.5
+damageMultiplier: 0.9
+powers:
+- frost_nova.lua
+- attack_freeze.yml
+- attack_push.yml
+- movement_speed.yml
+- bonus_coins.yml:20
+- bonus_loot.yml
+uniqueLootList:
+- filename=frost_charm_rare.yml:amount=1:chance=0.05
+- filename=frost_charm.yml:amount=1:chance=0.25
+- filename=shrunken_head_drop_charm.yml:amount=1:chance=0.15
+movementSpeedAttribute: 0.32
+followDistance: 60
+locationMessage: '&bCraftenmine''s Frost Experiment: $distance blocks away!'
+spawnMessage: '&bA frozen Dr. Craftenmine experiment wanders the snow!'
+deathMessage: '&aCraftenmine''s Frost Experiment has melted away, slain by $players!'
+escapeMessage: '&4Craftenmine''s Frost Experiment has frozen over and left!'
+announcementPriority: 2
