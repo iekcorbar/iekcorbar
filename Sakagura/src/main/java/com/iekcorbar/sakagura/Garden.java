@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.entity.Display;
@@ -414,6 +415,10 @@ final class Garden implements Listener {
             pick(b, p, hand);
             return;
         }
+        if (soil.getType() == Material.COMPOSTER) {                    // garden items into the composter
+            if (e.getHand() == EquipmentSlot.HAND) compost(soil, p, hand, e);
+            return;
+        }
         if (e.getHand() != EquipmentSlot.HAND || e.getBlockFace() != BlockFace.UP || soil.getType() != Material.FARMLAND) return;
         String pid = plugin.goods().idOf(hand);
         if (pid == null) pid = KitchenShared.sidOf(hand);              // shared crops: the kitchen root is the seed too
@@ -432,6 +437,39 @@ final class Garden implements Listener {
         plugin.adv().grant(p, "planted");
         if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
         b.getWorld().playSound(b.getLocation(), "minecraft:item.crop.plant", 1f, 1f);
+        p.swingMainHand();
+    }
+
+    /**
+     * Right-click a composter with a garden item: produce 50%, seeds/pips/cuttings 30%,
+     * vanilla-style - bone meal pops out on the eighth success. Only our own PDC ids are
+     * read here; the shared Kitchen twins are composted by Kitchen's own listener, so an
+     * item is never consumed twice.
+     */
+    private void compost(Block comp, Player p, ItemStack hand, PlayerInteractEvent e) {
+        String id = plugin.goods().idOf(hand);
+        if (id == null) return;
+        double chance;
+        if (Fruit.byId(id) != null) chance = 0.5;
+        else if (Fruit.byPlantItem(id) != null) chance = 0.3;
+        else return;
+        e.setCancelled(true);
+        if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+        if (!(comp.getBlockData() instanceof Levelled d)) return;
+        boolean success = ThreadLocalRandom.current().nextDouble() < chance;
+        int level = d.getLevel();
+        if (success && level == d.getMaximumLevel() - 1) {
+            d.setLevel(0);
+            comp.setBlockData(d);
+            comp.getWorld().dropItemNaturally(comp.getLocation().add(0.5, 1.1, 0.5), new ItemStack(Material.BONE_MEAL));
+            comp.getWorld().playSound(comp.getLocation(), "minecraft:block.composter.ready", 1f, 1f);
+        } else if (success) {
+            d.setLevel(level + 1);
+            comp.setBlockData(d);
+            comp.getWorld().playSound(comp.getLocation(), "minecraft:block.composter.fill_success", 1f, 1f);
+        } else {                                                          // vanilla wastes the item too
+            comp.getWorld().playSound(comp.getLocation(), "minecraft:block.composter.fill", 1f, 1f);
+        }
         p.swingMainHand();
     }
 

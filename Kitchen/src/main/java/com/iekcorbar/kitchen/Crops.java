@@ -15,6 +15,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.entity.Display;
@@ -424,6 +425,10 @@ final class Crops implements Listener {
             }
             return;
         }
+        if (soil.getType() == Material.COMPOSTER) {                     // crop items into the composter
+            if (e.getHand() == EquipmentSlot.HAND) compost(soil, e.getPlayer(), hand, e);
+            return;
+        }
         if (e.getHand() != EquipmentSlot.HAND || e.getBlockFace() != BlockFace.UP) return;
         CropType t = CropType.bySeed(plugin.items().typeOf(hand));
         if (t == null || !canPlantOn(soil)) return;
@@ -464,6 +469,47 @@ final class Crops implements Listener {
                 && ThreadLocalRandom.current().nextDouble() < 0.35) {
             b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.3, 0.5), plugin.items().create(KItem.STRAW, 1));
         }
+    }
+
+    // ------------------------------------------------------------ composting
+
+    /** Compost chance per crop item, vanilla-style: real harvest 50%, seeds/greens/straw 30%. */
+    static double compostChance(KItem t) {
+        return switch (t) {
+            case SOYBEANS, NAPA_CABBAGE, DAIKON, GREEN_ONION, CORN, TOMATO, CHILI, GINGER, WASABI_ROOT, KABOCHA,
+                 EGGPLANT, YUZU, PERSIMMON, MAGIC_MUSHROOM, SHIITAKE, ENOKI -> 0.5;
+            case RICE, BAMBOO_SHOOTS, NAPA_CABBAGE_SEEDS, DAIKON_SEEDS, TEA_SEEDS, TEA_LEAVES, SESAME_SEEDS,
+                 SHISO_SEEDS, SHISO_LEAVES, MIZUNA_SEEDS, MIZUNA, CANNABIS_SEEDS, CANNABIS_BUDS, HEMP_SEEDS,
+                 HEMP_LEAVES, MAGIC_MUSHROOM_SPORES, SHIITAKE_SPORES, ENOKI_SPORES, YUZU_SEEDS, PERSIMMON_SEEDS,
+                 BUCKWHEAT_SEEDS, BUCKWHEAT, STRAW -> 0.3;
+            default -> -1;
+        };
+    }
+
+    /** Right-click a composter with a crop item: same deal as vanilla wheat, bone meal pops out at 8. */
+    private void compost(Block comp, Player p, ItemStack hand, PlayerInteractEvent e) {
+        KItem t = plugin.items().typeOf(hand);
+        if (t == null) return;
+        double chance = compostChance(t);
+        if (chance < 0) return;
+        e.setCancelled(true);
+        if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+        if (!(comp.getBlockData() instanceof Levelled d)) return;
+        boolean success = ThreadLocalRandom.current().nextDouble() < chance;
+        int level = d.getLevel();
+        if (success && level == d.getMaximumLevel() - 1) {
+            d.setLevel(0);
+            comp.setBlockData(d);
+            comp.getWorld().dropItemNaturally(comp.getLocation().add(0.5, 1.1, 0.5), new ItemStack(Material.BONE_MEAL));
+            comp.getWorld().playSound(comp.getLocation(), Sound.BLOCK_COMPOSTER_READY, 1f, 1f);
+        } else if (success) {
+            d.setLevel(level + 1);
+            comp.setBlockData(d);
+            comp.getWorld().playSound(comp.getLocation(), Sound.BLOCK_COMPOSTER_FILL_SUCCESS, 1f, 1f);
+        } else {                                                          // vanilla wastes the item too
+            comp.getWorld().playSound(comp.getLocation(), Sound.BLOCK_COMPOSTER_FILL, 1f, 1f);
+        }
+        p.swingMainHand();
     }
 
     // ------------------------------------------------------------ keep the spot safe
