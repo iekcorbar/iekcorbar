@@ -87,6 +87,15 @@ final class BwArena {
     final Map<UUID, Long> trapCool = new LinkedHashMap<>();
     /** 0.6.0: shockwave cooldowns: uuid of the struck attacker -> epoch ms. */
     final Map<UUID, Long> shockCool = new LinkedHashMap<>();
+    /* ---- 0.6.1: the real map reset ---- */
+    /** Blockstates captured by /ih bw snapshot, "x:y:z" -> blockdata string; survives sessions. */
+    final Map<String, String> snapshot = new LinkedHashMap<>();
+    /** World the snapshot lives in (null = never snapshotted, conclude() uses the old lite path). */
+    String snapWorld;
+    /** Y-band actually captured; also restored - everything outside it is not the arena's business. */
+    int snapLo, snapHi;
+    /** Runtime: every block a participant placed, broke or blew during THIS match. */
+    final Set<String> touched = new LinkedHashSet<>();
 
     BwArena(BwGameManager mgr, String name) {
         this.mgr = mgr;
@@ -216,6 +225,7 @@ final class BwArena {
         trapCool.clear();
         showing = false;
         shockCool.clear();
+        touched.clear();
     }
 
     void stopTask() {

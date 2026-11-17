@@ -126,12 +126,20 @@ public final class BwListeners implements Listener {
     /** Beds sit in the middle of the map: blast-proof, piston-proof, whatever arena state. */
     @EventHandler
     public void onExplode(EntityExplodeEvent e) {
+        mgr.trackExploded(e.blockList());   // 0.6.1: what the blast DID take gets restored after the match
         e.blockList().removeIf(mgr::bedProtected);
     }
 
     @EventHandler
     public void onBlockExplode(org.bukkit.event.block.BlockExplodeEvent e) {
+        mgr.trackExploded(e.blockList());
         e.blockList().removeIf(mgr::bedProtected);
+    }
+
+    /** 0.6.1: every block a participant breaks is remembered - the snapshot puts it back afterwards. */
+    @EventHandler(ignoreCancelled = true)
+    public void onBreak(BlockBreakEvent e) {
+        mgr.trackBreak(e.getPlayer(), e.getBlock());
     }
 
     @EventHandler

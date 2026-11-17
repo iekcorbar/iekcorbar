@@ -10,7 +10,7 @@
          Built on the shared propkit Decor engine (see propkit/sync.py), like the zoo props.
          v0.3: BedWars etappe 0.3.0 - arenas, teams and the join flow in the bw/ module.
          v0.4: etappe 0.4.0 - generators, beds, sudden-death timeline, respawn, spectators, ReJoin. -->
-    <version>0.6.0</version>
+    <version>0.6.1</version>
     <packaging>jar</packaging>
 
     <name>Hihou</name>

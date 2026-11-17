@@ -121,6 +121,19 @@ public final class BwGameManager {
                         a.teams.put(t, team);
                     }
                 }
+                var sn = y.getConfigurationSection("arenas." + name + ".snapshot");
+                if (sn != null) {
+                    a.snapWorld = sn.getString("world");
+                    var ys = sn.getIntegerList("y");
+                    if (ys.size() == 2) {
+                        a.snapLo = ys.get(0);
+                        a.snapHi = ys.get(1);
+                    }
+                    for (String row : sn.getStringList("blocks")) {
+                        int eq = row.indexOf('=');
+                        if (eq > 0) a.snapshot.put(row.substring(0, eq), row.substring(eq + 1));
+                    }
+                }
                 arenas.put(name, a);
             }
         }
@@ -593,6 +606,101 @@ public final class BwGameManager {
     String modeName(BwArena a) {
         BwMode m = modes.get(a.name);
         return m == null ? "classic" : m.label;
+    }
+
+    // ------------------------------------------------------------ 0.6.1: snapshot - the real map reset
+
+    /**
+     * Capture the arena: every non-air blockstate in the center/size square between lo..hi
+     * (default: spawn y +/- 64). One synchronous pass, a second or so on r=70 - staff-only,
+     * run it when the map looks like it should. conclude() restores exactly this afterwards.
+     */
+    public String snapshot(Player stander, String arena, Integer lo, Integer hi) {
+        BwArena a = arenas.get(arena.toLowerCase(Locale.ROOT));
+        if (a == null) return "No such arena.";
+        int[] c = a.center();
+        Location sp = a.spawn();
+        if (c == null || sp == null) return "Set center and spawn first (/ih bw set " + a.name + " ...).";
+        World w = sp.getWorld();
+        int r = a.radius();
+        int yLo = lo != null ? lo : sp.getBlockY() - 64;
+        int yHi = hi != null ? hi : sp.getBlockY() + 64;
+        yLo = Math.max(w.getMinHeight(), yLo);
+        yHi = Math.min(w.getMaxHeight() - 1, yHi);
+        if (yHi - yLo < 8) return "That y-band is too small to hold an arena.";
+        a.snapshot.clear();
+        a.snapWorld = w.getName();
+        a.snapLo = yLo;
+        a.snapHi = yHi;
+        for (int x = c[0] - r; x <= c[0] + r; x++)
+            for (int z = c[1] - r; z <= c[1] + r; z++) {
+                if (Math.max(Math.abs(x - c[0]), Math.abs(z - c[1])) > r) continue;
+                for (int y = yLo; y <= yHi; y++) {
+                    org.bukkit.block.Block b = w.getBlockAt(x, y, z);
+                    if (b.getType().isAir()) continue;
+                    a.snapshot.put(x + ":" + y + ":" + z, b.getBlockData().getAsString());
+                }
+            }
+        if (a.snapshot.isEmpty()) return "Nothing captured - is the center/size right over the islands?";
+        List<String> rows = new ArrayList<>();
+        for (Map.Entry<String, String> e : a.snapshot.entrySet()) rows.add(e.getKey() + "=" + e.getValue());
+        y.set("arenas." + a.name + ".snapshot.world", a.snapWorld);
+        y.set("arenas." + a.name + ".snapshot.y", List.of(a.snapLo, a.snapHi));
+        y.set("arenas." + a.name + ".snapshot.blocks", rows);
+        save();
+        return "Snapshot armed: " + a.snapshot.size() + " blocks in " + a.snapWorld + " (r=" + r + ", y " + a.snapLo + ".." + a.snapHi + ").";
+    }
+
+    /**
+     * The full reset: everything the participants touched goes back to the snapshot, and
+     * snapshot blocks that were destroyed are re-placed with their exact state (facing,
+     * waterlogged, the lot). Without a snapshot conclude() falls back to the old lite path.
+     */
+    private int restoreSnapshot(BwArena a) {
+        World w = Bukkit.getWorld(a.snapWorld);
+        if (w == null) return -1;
+        Set<String> coords = new LinkedHashSet<>(a.snapshot.keySet());
+        coords.addAll(a.touched);
+        for (String k : coords) {
+            String[] p = k.split(":");
+            org.bukkit.block.Block b = w.getBlockAt(Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2]));
+            String data = a.snapshot.get(k);
+            if (data == null) {
+                if (!b.getType().isAir()) b.setType(Material.AIR, false);
+            } else if (!data.equals(b.getBlockData().getAsString())) {
+                try {
+                    b.setBlockData(Bukkit.createBlockData(data), false);
+                } catch (IllegalArgumentException ignored) {   // stale state from an old MC version - skip it
+                }
+            }
+        }
+        return coords.size();
+    }
+
+    /** Placed, broken or blown: remember where the match got its hands dirty. */
+    private void touch(BwArena a, org.bukkit.block.Block b) {
+        if (a.snapWorld == null || !b.getWorld().getName().equals(a.snapWorld)) return;
+        a.touched.add(b.getX() + ":" + b.getY() + ":" + b.getZ());
+    }
+
+    private boolean inRegion(BwArena a, org.bukkit.block.Block b) {
+        int[] c = a.center();
+        return c != null && Math.max(Math.abs(b.getX() - c[0]), Math.abs(b.getZ() - c[1])) <= a.radius();
+    }
+
+    /** BlockBreakEvent lane (participants only, during a match). */
+    public void trackBreak(Player p, org.bukkit.block.Block b) {
+        BwArena a = arenaOf(p.getUniqueId());
+        if (a == null || a.status != BwArena.Status.PLAYING || a.snapWorld == null) return;
+        if (inRegion(a, b)) touch(a, b);
+    }
+
+    /** Explosions remove blocks without a break event - grab the coordinates while the list is intact. */
+    public void trackExploded(List<org.bukkit.block.Block> blocks) {
+        for (BwArena a : arenas.values()) {
+            if (a.status != BwArena.Status.PLAYING || a.snapWorld == null) continue;
+            for (org.bukkit.block.Block b : blocks) if (inRegion(a, b)) touch(a, b);
+        }
     }
 
     /** The Bed Breach Charge: a marked fire charge that detonates an enemy bed from 16 blocks. */
@@ -1283,11 +1391,17 @@ public final class BwGameManager {
         }
         rejoin.markEnded(a.name);
         for (BwTeam t : a.teams.values()) emptyChest(t);
-        for (Location l : a.placed) {
-            Block b = l.getBlock();
-            if (b.getType() != Material.AIR) b.setType(Material.AIR); // bridges and walls made during this game
+        if (!a.snapshot.isEmpty()) {
+            int n = restoreSnapshot(a);   // 0.6.1: the real reset - every touched block back to the capture
+            if (n >= 0) plugin.getLogger().info("BedWars " + a.name + ": map restored (" + n + " blocks checked against the snapshot).");
+            else msg(a.online(), "Snapshot world '" + a.snapWorld + "' is not loaded - map NOT restored!", NamedTextColor.RED);
+        } else {
+            for (Location l : a.placed) {
+                Block b = l.getBlock();
+                if (b.getType() != Material.AIR) b.setType(Material.AIR); // bridges and walls made during this game
+            }
+            for (BwTeam t : a.teams.values()) restoreBed(t);
         }
-        for (BwTeam t : a.teams.values()) restoreBed(t);
         int[] c = a.center();
         if (c != null && a.spawn() != null) {
             World w = a.spawn().getWorld();
@@ -1378,8 +1492,10 @@ public final class BwGameManager {
     /** Track participant-built blocks so finish() can tidy the map again. */
     public void trackPlacement(Player p, Block b) {
         BwArena a = arenaOf(p.getUniqueId());
-        if (a != null && a.status == BwArena.Status.PLAYING && a.players.contains(p.getUniqueId()))
+        if (a != null && a.status == BwArena.Status.PLAYING && a.players.contains(p.getUniqueId())) {
             a.placed.add(b.getLocation());
+            touch(a, b);
+        }
     }
 
     // ------------------------------------------------------------ quit, rejoin, reconnect

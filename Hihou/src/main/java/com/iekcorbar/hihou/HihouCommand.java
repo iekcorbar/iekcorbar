@@ -191,7 +191,7 @@ final class HihouCommand implements TabExecutor {
 
     private void bw(CommandSender s, String[] a) {
         if (a.length < 2) {
-            msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|follow|party|stats|mode|season <...>", NamedTextColor.RED);
+            msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|follow|party|stats|mode|season|snapshot <...>", NamedTextColor.RED);
             return;
         }
         String sub = a[1].toLowerCase(Locale.ROOT);
@@ -329,6 +329,14 @@ final class HihouCommand implements TabExecutor {
                 if (!admin(s)) return;
                 msg(s, mgr.seasonReset(), NamedTextColor.GREEN);
             }
+            case "snapshot" -> {
+                if (!(s instanceof Player p) || !admin(s)) { msg(s, "Stand in the arena - staff only.", NamedTextColor.RED); return; }
+                if (a.length < 3) { msg(s, "/ih bw snapshot <arena> [lo] [hi]  - capture the map for the after-match reset", NamedTextColor.RED); return; }
+                Integer lo = a.length > 3 ? parseIntOrNull(a[3]) : null;
+                Integer hi = a.length > 4 ? parseIntOrNull(a[4]) : null;
+                String err = mgr.snapshot(p, a[2], lo, hi);
+                msg(s, err, err.startsWith("Snapshot") ? NamedTextColor.GREEN : NamedTextColor.RED);
+            }
             case "start" -> {
                 if (!admin(s)) return;
                 if (a.length < 3) { msg(s, "/ih bw start <arena> [seconds]", NamedTextColor.RED); return; }
@@ -341,7 +349,7 @@ final class HihouCommand implements TabExecutor {
                 String err = mgr.stop(a[2]);
                 if (!err.isEmpty()) msg(s, err, NamedTextColor.RED);
             }
-            default -> msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|follow|party|stats|mode|season", NamedTextColor.RED);
+            default -> msg(s, "/ih bw list|info|create|delete|set|team|gen|join|leave|rejoin|shop|kit|follow|party|stats|mode|season|snapshot", NamedTextColor.RED);
         }
     }
 
@@ -353,12 +361,21 @@ final class HihouCommand implements TabExecutor {
         }
     }
 
+    /** Snapshot y-bands can be negative (deepslate arenas) - null instead of the Math.max(1,…) helper. */
+    private static Integer parseIntOrNull(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender s, Command cmd, String label, String[] a) {
         List<String> out = new ArrayList<>();
         if (a.length == 1) out.addAll(List.of("give", "key", "edit", "remove", "map", "event", "game", "bw", "reload", "help"));
         else if (a.length == 2 && a[0].equalsIgnoreCase("game")) out.addAll(List.of("create", "set", "start", "stop", "win", "delete", "list"));
-        else if (a.length == 2 && a[0].equalsIgnoreCase("bw")) out.addAll(List.of("list", "info", "create", "delete", "set", "team", "gen", "join", "leave", "rejoin", "shop", "kit", "follow", "party", "stats", "mode", "season", "start", "stop"));
+        else if (a.length == 2 && a[0].equalsIgnoreCase("bw")) out.addAll(List.of("list", "info", "create", "delete", "set", "team", "gen", "join", "leave", "rejoin", "shop", "kit", "follow", "party", "stats", "mode", "season", "snapshot", "start", "stop"));
         else if (a.length == 3 && a[0].equalsIgnoreCase("bw")
                 && List.of("info", "delete", "set", "team", "gen", "join", "start", "stop").contains(a[1].toLowerCase(Locale.ROOT)))
             out.addAll(plugin.bw().names());
