@@ -58,5 +58,5 @@ belongs to the dark only.
 Wraiths are deliberately outside everything that makes an animal an animal: they are **not in the Field
 Journal** (no page, no advancement, no spyglass record), they **cannot be bred** and have no babies,
 there is **no spawn egg and no statue** for them, and **no recipe** anywhere makes one. They are placed
-by staff with `/wildlife spawn wraith` (an admin command; they are also switched off in the wild-spawner
+by staff for special events (they are normally switched off in the wild-spawner
 config). So if you meet one, it was put there on purpose - enjoy the chill.

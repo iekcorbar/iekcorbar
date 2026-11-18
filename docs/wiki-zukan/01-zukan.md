@@ -37,11 +37,6 @@ Each item can have several recipe types, shown as tabs along the top: crafting, 
 
 Standing at a Kura **Crafting Terminal**, press the **Recipes** button to look up an item. On a crafting recipe, **Move ingredients** takes what you need out of the storage network and fills the crafting grid for you.
 
-### Staff
-
-* **/zukan reload** rebuilds the list after you change plugins or recipes.
-* Staff with the cheat permission get a **Cheat mode** button: click an item to take it.
-
 **Recipes on the website**
 
 All Steamworks, Kitchen and Kura recipes are also listed on the website: **Play > Recipes**. That page has a search and a type filter, and a short guide to Zukan.

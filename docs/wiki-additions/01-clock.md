@@ -29,5 +29,3 @@ Shapeless: **1 Clock + 2 Copper Ingots + 2 Gold Nuggets + 1 Redstone** → 1 Ste
 ### Placing and moving
 
 Right-click with the clock item to place it (needs 2 blocks of air above its spot). Left-click twice to take it back; the time plate disappears with it.
-
-Staff: `/sa give <player> steam_clock`.

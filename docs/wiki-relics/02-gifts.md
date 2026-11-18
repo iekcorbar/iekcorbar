@@ -20,7 +20,7 @@ The plaza countdown board counts down to Christmas; its placer can change the ti
 
 ### Secret Santa
 
-Not a prop but a staff command (`/relics secret`): named players draw lots, everyone gets a fresh box and a whisper of who to fill it for. Announced on Discord before each run - check the [news page](/news).
+Secret Santa is drawn by staff right before the gift window: named players draw lots, everyone gets a fresh box and a whisper of who to fill it for. It is announced on Discord before each run - check the [news page](/news).
 
 ### Good to know
 

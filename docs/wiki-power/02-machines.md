@@ -10,7 +10,7 @@ A brass arch over a heavy ram. Items that lie **on top** of the press get stampe
 
 * Needs rotation from below: a shaft enters through the bottom, like a millstone.
 * Work speed depends on the network (full speed ≈ 3 s per item at 12 RPM).
-* The recipe list lives in the plugin's `config.yml` under `press:` - server owners add their own compacting recipes; `/swpower reload` applies them.
+* The press recipe list is curated by staff — got a compaction idea? Drop it in #support.
 
 Defaults:
 
@@ -24,7 +24,6 @@ Defaults:
 
 Craft: **iron plates** over an andesite casing, piston and two iron ingots as the legs.
 
-Staff: `/swpower give <player> pow_mechanical_press`.
 
 ## Stock Ticker
 
@@ -34,7 +33,6 @@ A copper box with two little dials that **counts the container it leans against*
 * Right-click: a one-line summary of the container in your action bar.
 * Craft: glass panes around a comparator, on a brass casing.
 
-Staff: `/swpower give <player> pow_stock_ticker`.
 
 ## Brass Flywheel
 
@@ -47,7 +45,6 @@ A heavy brass wheel on a steel axle. While the network runs it stores the spin; 
 
 Craft: **four brass plates** bolted around a **brass casing**.
 
-Staff: `/swpower give <player> pow_brass_flywheel`.
 
 ## Sieve Funnel
 
@@ -60,7 +57,6 @@ A brass mesh on four steel legs, sitting at the end of a belt or chute line. Rig
 
 Craft: **two iron plates** and a **string** for the mesh frame, around your old faithful **funnel**.
 
-Staff: `/swpower give <player> pow_sieve_funnel`.
 
 ## Taking them back
 

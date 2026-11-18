@@ -8,6 +8,7 @@ Questa cartella contiene i manuali dello staff di iekcorbar tradotti in italiano
 | Oggetti personalizzati | IekItems (editor in gioco, modelli) e MMOItems. |
 | Gouw - claim del territorio | Claim, flag, bypass, impostazioni. |
 | IekQuests - quest e NPC | Quest, wizard, modalità GUI/chat, travel, oggetti nelle quest. |
+| Hihou - BedWars | Costruire e marcare l'arena, snapshot, partite, modalità, ricompense, config. |
 | Kitchen - cucina e agricoltura | Raccolti, postazioni, gara di cucina. |
 | Kura - rete di magazzino | Terminali, rete, corrieri. |
 | Gradi - da Adventure a Jōki Tennō | Scala dei gradi, LuckPerms, CMI. |

@@ -4,7 +4,7 @@ title: Gouw Commands
 category: Gouw Land Claims
 parent:
 ---
-All gouw commands live under one command — `/gouw` (short: `/g`, alias `/claim`). Typing it with no arguments opens the **gouw menu**, a clickable inventory screen with pages for Residents, Rights, the Bank and staff tools.
+All gouw commands live under one command — `/gouw` (short: `/g`, alias `/claim`). Typing it with no arguments opens the **gouw menu**, a clickable inventory screen with pages for Residents, Rights and the Bank.
 
 **Land**
 
@@ -33,13 +33,6 @@ All gouw commands live under one command — `/gouw` (short: `/g`, alias `/claim
 * `/gouw info` — the gouw under your feet: who owns it, size vs limit, residents, bank.
 * `/gouw list` — your own town's numbers plus server-wide totals.
 * `/gouw near [r]` — the gouws within r chunks, with their distance.
-
-Staff (permission `gouw.admin`):
-
-* `/gouw admin delete <name>` — remove a player's claims (e.g. after a confirmed request).
-* `/gouw admin import [force]` — re-run the old Lands import; `/gouw admin reload` re-reads the config.
-* `/gouw admin bypass [on|off]` — toggle walking through and building in *any* gouw while inspecting.
-* `/gouw admin addchunks <player> <n>` / `buychunks <player> <n> <cost>` — grant personal bonus chunks (the contract-NPC flow; personal, not town).
 
 > Jobs are not part of Gouw: your job comes from the onboarding tutorial (Jobs Reborn) and is paid there. The town bank only holds what residents deposit.
 

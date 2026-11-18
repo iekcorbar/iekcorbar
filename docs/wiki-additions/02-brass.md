@@ -23,5 +23,3 @@ A copper frame with three green-brass slats over a dark opening, with bolts in t
 ## Taking them back
 
 Left-click twice like every prop. Railing sections come apart per piece: take one from the middle and the neighbours re-shape themselves the next time they load.
-
-Staff: `/sa give <player> brass_railing|vent_grille`.

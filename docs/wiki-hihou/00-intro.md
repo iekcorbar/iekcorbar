@@ -25,4 +25,4 @@ BedWars runs on the dedicated arena islands (built from the `bedwars-*` schemati
 
 During a match a **sidebar** replaces your normal tab list: teams, beds, the match clock, the mode and your own purse of ore. It leaves again the moment you leave the game.
 
-[In the match](/wiki?page=hihou-play) · [Shop & upgrades](/wiki?page=hihou-shop) · [Kits](/wiki?page=hihou-kits) · [Modes & rewards](/wiki?page=hihou-modes) · [Staff: arenas](/wiki?page=hihou-staff)
+[In the match](/wiki?page=hihou-play) · [Shop & upgrades](/wiki?page=hihou-shop) · [Kits](/wiki?page=hihou-kits) · [Modes & rewards](/wiki?page=hihou-modes)

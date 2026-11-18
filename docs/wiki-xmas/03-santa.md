@@ -21,4 +21,4 @@ Santa lives in Xmas Town. Staff place him on the plaza and he stays there: he wa
 
 ### For staff
 
-Santa is placed and removed with `/xmas santa spawn` (optionally with a world and coordinates), `/xmas santa goto <player>`, `/xmas santa remove` and `/xmas santa status` - these also work from the console for scripts. His position and identity persist in `plugins/Xmas/config.yml`; set `santa.gifts-anytime: true` there to test gifts outside December 24-26, and turn it back off before the players arrive.
+Santa is placed, moved and removed by staff — his spot and name survive restarts, and the gift rules above are hard-coded so they can't be farmed.

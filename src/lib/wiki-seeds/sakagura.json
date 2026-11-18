@@ -412,14 +412,14 @@
    "title": "How it works",
    "category": "Sakagura",
    "parent": "sakagura-competitions",
-   "content": "1. **An admin starts a competition** with `/brew comp start <days> [theme]`. The theme is optional (e.g. \"bloody_mary\" for a themed competition, or \"any\" for all drinks).\n2. **Players brew their best drink** and submit it while holding it: `/brew comp submit`.\n3. **Each submission is scored** based on quality (1-10 stars) and difficulty (1-10). Score = quality × 10 + difficulty × 5.\n4. **Only your best submission counts** — if you submit a better drink, it replaces your previous one.\n5. **When the competition ends** (admin runs `/brew comp stop` or the timer runs out), the top 3 players receive rewards:\n   - 1st place: $500 + 20 elite coins + \"Master of the Still\" title\n   - 2nd place: $250 + 10 elite coins + \"Skilled Brewer\" title\n   - 3rd place: $100 + 5 elite coins + \"Rising Brewer\" title\n6. **The winner** also earns the \"Master of the Still\" advancement.\n\nBack to [Brewing Competitions](/wiki?page=sakagura-competitions)\n"
+   "content": "1. **Staff start a competition** and announce it on Discord, usually with a theme (a single drink family, or \"any\" for everything).\n2. **Players brew their best drink** and submit it while holding it: `/brew comp submit`.\n3. **Each submission is scored** based on quality (1-10 stars) and difficulty (1-10). Score = quality × 10 + difficulty × 5.\n4. **Only your best submission counts** — if you submit a better drink, it replaces your previous one.\n5. **When the competition ends** (by timer or by staff), the top 3 players receive rewards:\n   - 1st place: $500 + 20 elite coins + \"Master of the Still\" title\n   - 2nd place: $250 + 10 elite coins + \"Skilled Brewer\" title\n   - 3rd place: $100 + 5 elite coins + \"Rising Brewer\" title\n6. **The winner** also earns the \"Master of the Still\" advancement.\n\nBack to [Brewing Competitions](/wiki?page=sakagura-competitions)\n"
   },
   {
    "slug": "sakagura-competitions-commands",
    "title": "Commands",
    "category": "Sakagura",
    "parent": "sakagura-competitions",
-   "content": "| Command | Who | What |\n|---|---|---|\n| `/brew comp status` | Everyone | Show if a competition is running and time remaining |\n| `/brew comp submit` | Everyone | Submit the drink you're holding |\n| `/brew comp leaderboard` | Everyone | Show the current top 10 |\n| `/brew comp start <days> [theme]` | Admin | Start a competition (1-30 days) |\n| `/brew comp stop` | Admin | End the competition and give rewards |\n\nBack to [Brewing Competitions](/wiki?page=sakagura-competitions)\n"
+   "content": "| Command | Who | What |\n|---|---|---|\n| `/brew comp status` | Everyone | Show if a competition is running and time remaining |\n| `/brew comp submit` | Everyone | Submit the drink you're holding |\n| `/brew comp leaderboard` | Everyone | Show the current top 10 |\n\nBack to [Brewing Competitions](/wiki?page=sakagura-competitions)\n"
   },
   {
    "slug": "sakagura-competitions-tips",
@@ -447,21 +447,21 @@
    "title": "How it works",
    "category": "Sakagura",
    "parent": "sakagura-seasons",
-   "content": "- **Seasons advance automatically** every 7 real days (configurable). A broadcast announces the change.\n- **In-season crops** grow at normal speed.\n- **Out-of-season crops** grow 30-70% slower (they're not meant for this season).\n- **Wild spawns** only include crops for the current season.\n- **Admins** can force a season change with `/brew season set <spring|summer|autumn|winter>`.\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
+   "content": "- **Seasons advance automatically** every 7 real days (configurable). A broadcast announces the change.\n- **In-season crops** grow at normal speed.\n- **Out-of-season crops** grow 30-70% slower (they're not meant for this season).\n- **Wild spawns** only include crops for the current season.\n- On rare occasions staff push the season forward manually (announced in chat first).\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
   },
   {
    "slug": "sakagura-seasons-commands",
    "title": "Commands",
    "category": "Sakagura",
    "parent": "sakagura-seasons",
-   "content": "| Command | Who | What |\n|---|---|---|\n| `/brew season status` | Everyone | Show current season and time until next |\n| `/brew season list` | Everyone | List all seasons with their crops |\n| `/brew season crops` | Everyone | Show which crops grow this season |\n| `/brew season set <season>` | Admin | Force a season change |\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
+   "content": "| Command | Who | What |\n|---|---|---|\n| `/brew season status` | Everyone | Show current season and time until next |\n| `/brew season list` | Everyone | List all seasons with their crops |\n| `/brew season crops` | Everyone | Show which crops grow this season |\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
   },
   {
    "slug": "sakagura-seasons-tips",
    "title": "Tips",
    "category": "Sakagura",
    "parent": "sakagura-seasons",
-   "content": "- **Plan ahead** — plant crops that will be in-season soon\n- **Winter is for hardy crops** — ginger, wasabi, daikon, rice, and juniper thrive\n- **Seasonal drinks** — some recipes taste better with seasonal ingredients\n- **Competition themes** — admins can run themed competitions per season\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
+   "content": "- **Plan ahead** — plant crops that will be in-season soon\n- **Winter is for hardy crops** — ginger, wasabi, daikon, rice, and juniper thrive\n- **Seasonal drinks** — some recipes taste better with seasonal ingredients\n- **Competition themes** — themed competitions are announced per season\n\nBack to [Seasons](/wiki?page=sakagura-seasons)\n"
   }
  ]
 }

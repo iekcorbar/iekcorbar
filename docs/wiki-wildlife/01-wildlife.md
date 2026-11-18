@@ -32,12 +32,8 @@ Open the advancement screen and look for the **Wildlife** tab: one advancement p
 * **/wildlife list [filter]** - list all species and where they live.
 * **/wildlife find <species>** - find the nearest animal of that species.
 * **/wildlife tamed** - list your tamed dragons.
-* **/wildlife spawn <species> [rare] [baby]** - spawn an animal (staff only).
-* **/wildlife egg <species> [player]** - give a spawn egg (staff only).
-* **/wildlife give <player> <item>** - give an item (staff only).
-* **/wildlife info** - server info (staff only).
-* **/wildlife reload** - reload config (staff only).
-* **/wildlife remove <radius>** - remove animals in a radius (staff only).
+
+Spawning, removal and server-side tweaks are staff-only commands and deliberately not listed here - report a stuck or misplaced animal in #support and staff will sort it out.
 
 ### Zoo-builder
 

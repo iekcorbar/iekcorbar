@@ -23,7 +23,7 @@ The Sakagura garden follows the seasons. Every 7 real days, the season changes, 
 - **In-season crops** grow at normal speed.
 - **Out-of-season crops** grow 30-70% slower (they're not meant for this season).
 - **Wild spawns** only include crops for the current season.
-- **Admins** can force a season change with `/brew season set <spring|summer|autumn|winter>`.
+- On rare occasions staff push the season forward manually (announced in chat first).
 
 ### Commands
 
@@ -32,11 +32,10 @@ The Sakagura garden follows the seasons. Every 7 real days, the season changes, 
 | `/brew season status` | Everyone | Show current season and time until next |
 | `/brew season list` | Everyone | List all seasons with their crops |
 | `/brew season crops` | Everyone | Show which crops grow this season |
-| `/brew season set <season>` | Admin | Force a season change |
 
 ### Tips
 
 - **Plan ahead** — plant crops that will be in-season soon
 - **Winter is for hardy crops** — ginger, wasabi, daikon, rice, and juniper thrive
 - **Seasonal drinks** — some recipes taste better with seasonal ingredients
-- **Competition themes** — admins can run themed competitions per season
+- **Competition themes** — themed competitions are announced per season

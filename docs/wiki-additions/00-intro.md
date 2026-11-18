@@ -17,7 +17,6 @@ Steamworks Additions is a small sister plugin of Steamworks: **atmosphere props*
 ### In the game
 
 * Every prop has a workbench recipe (see the [recipes page](/recipes) or `/zukan`), shows up in your recipe book, and is picked back up by left-clicking it (twice by default).
-* Staff hand them out with `/sa give <player> <prop>`; `/sa list` shows what exists.
 * The props save themselves in the chunk, exactly like Steamworks machines: reload a chunk, the prop is back on its spot.
 
 ### Good to know

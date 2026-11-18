@@ -15,14 +15,13 @@ Every game rolls a mode (the server can keep this off, then it is always classic
 | double iron | Team generators throw 4 iron per tick - bridges fly everywhere |
 | need for speed | Everyone gets a standing Swiftness dose for the whole match - bridges go up fast and retreats are optional |
 
-Staff can force the next game's mode with `/ih bw mode <arena> <classic|no-beds|double-iron|speed>`.
+Staff can force the next game's mode and will announce it before the drop.
 
 ## Season stats
 
 `/ih bw stats` — your own season line: games, wins, kills, deaths, beds broken and coins earned.
 `/ih bw stats <player>` — look someone else up.
-`/ih bw stats top` — the season leaderboard by wins.
-The staff command `/ih bw season` starts a new season and clears the books.
+`/ih bw stats top` — the season leaderboard by wins. Seasons are reset by staff between eras; when that happens the books start fresh.
 
 ## Rewards
 
@@ -34,6 +33,6 @@ BedWars pays into the server economy (the same money as the shop and the train n
 | Bed destroyed | 10 |
 | Winning the match | 25 |
 
-You get a chat line for each ("+10 BedWars reward (bed)."). The numbers live in the plugin config (`bw-rewards.*`) and can be tuned by staff without a restart.
+You get a chat line for each ("+10 BedWars reward (bed)."). The amounts are set in the server config and can be tuned by staff without a restart.
 
-Back to [BedWars](/wiki?page=hihou-intro) · [Staff: arenas](/wiki?page=hihou-staff)
+Back to [BedWars](/wiki?page=hihou-intro)
