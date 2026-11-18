@@ -3,7 +3,9 @@
 Eén overzicht van wat er speelt. De agent werkt dit bij na elke afgeronde werkblok;
 jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPLOYEN.txt`.)
 
-**Peildatum: 17 nov 2026 avond — BedWars uitgebouwd naar etappe 0.6.0 (shop/upgrades/kits + sidebar/show/kisten + partijen/stats/rewards/modes) + arena-schemgenerator.
+**📌 MORGEN (do 19 nov): de hele 17-nov-batch uitrollen bij lege server = TE-punten 15, 16, 18, 19+20, 21+22 + claims-cleaned bij stilstand — daarna de twee Engelse Discord-posts publiceren (punt 23: eerst staff, dan spelers) en de nieuwe arena bouwen uit `deploy/bedwars/*.schem` (checklist-print; **/ih bw snapshot vóór de eerste pot!**). Wachtend in deploy/: Gouw-0.5.1.jar, Hihou-0.6.1.jar, Kitchen-0.3.28.jar, Sakagura-0.8.0.jar, pack build61, 8 schems, Gouw-claims-cleaned.json.
+
+Peildatum: 17 nov 2026 avond — BedWars uitgebouwd naar etappe 0.6.0 (shop/upgrades/kits + sidebar/show/kisten + partijen/stats/rewards/modes) + arena-schemgenerator.
 Klaar voor de restart-batch: TE-DEPLOYEN punten 15, 16, 18, 19+20, 21+22 (Gouw 0.5.1 + compospenningen + Hihou 0.6.0 + schems).**
 Vorige peildata: 16 nov: 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
 
