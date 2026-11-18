@@ -12,11 +12,11 @@ JOUW RESTJES: arena plakken + aanwijzen (checklist-print `scripts/make_bedwars_a
 vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21.
 ~~Discord~~ ✅ batch-, website- wiki-splitsposts GEPUBLICEERD 18-11 (zeven losse + vier batch/website
 md'tjes naar `archief/discord-gepubliceerd/`); site-1811d (wiki-scheiding + events-fix) UITGEROLD en live.
-**site-1811f.zip** (TE-punt 25, vervangt 1811e) naar Plesk: **live-map af** (route, menu's,
+**site-1811g.zip** [28199beb55e1] (TE-punt 25/26, vervangt 1811f/e) naar Plesk: **live-map af** (route, menu's,
 startpagina-tekst, staff-veld "Live Map URL", map_url-default, zoekindex) + **Staff Paneel →
 Analytics verhuist naar StaffHub** - StaffHub-deel is al live via SSH (knop website-analyse,
 token-doorlus, gids hoofdstuk 7 in node 3150); de token staat in /opt/staffhub/.env en moet
-ook in de site-.env.local op Plesk (exacte regel in TE-25). BluMap zelf draait door op map.iekcorbar.com.
+ook in de site-.env.local op Plesk (exacte regel in TE-25). BluMap zelf draait door op map.iekcorbar.com. EN NIEUW (lees-triggers, eigenaarsidee): **enchanting-glow op de boekenkast** - paarse shimmer = boek nog nooit geopend, gouden shimmer = nieuwe update sinds je het las; openslaand boek dooft (TE-26).
 
 Peildatum: 18 nov 2026 ochtend — 17-nov-batch live (echte fruitbomen, compostpennigen, Gouw 0.5.1, BedWars 0.6.1 + build61).
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
@@ -48,7 +48,7 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| **site-1811f.zip naar Plesk** (TE punt 25) | deploy/site-1811f.zip [1800720313ef] | Live-map-sectie eraf (route/menu/startpagina/staff-veld/map_url/zoekindex; BluMap blijft op map.iekcorbar.com) EN **Analytics uit het website-staffpaneel overgezet naar StaffHub**: oude tab+component+route weg, nieuwe `/api/staffhub/analytics` met token-auth, StaffHub-knop 'Website-analyse' draait al op de VPS (build groen, cache 5 min). Enige restpunt voor de eigenaar: `STAFFHUB_API_TOKEN=...` (exact in TE-25) in de Plesk `.env.local` zetten en diezelfde zip uitrollen. |
+| **site-1811g.zip naar Plesk** (TE punten 25+26) | deploy/site-1811g.zip [28199beb55e1] | Drie lagen in één pakket: live-map-sectie eraf; Analytics uit het staffpaneel → StaffHub (StaffHub-deel al live, enige restpunt = token-regel in Plesk .env.local, exact in TE-25); en de **enchanting-glow lees-triggers** op de wiki-kast (paars=ongelezen, goud=geüpdate, per browser onthouden). Plesk: unzip zónder "map leegmaken" → NPM install → restart → imports klikken. |
 | ~~Site-zip naar Plesk~~ ✅ LIVE 15 nov | — | site-1511.zip [50f1649de3f4] staat live en is bevestigd ("website in orde"); zip uit deploy/ weg. site-1311b/site-1311 zijn damit evervallen. |
 | ~~Discord-posts publiceren~~ ✅ GEDAAN 16 nov | — | treinnetwerk-1115 (spelers + staff), kerstdorp-dierenronde-1112 en buggolf-1311 zijn gepubliceerd; md'tjes uit deploy/ naar archief/. |
 | **Shop Settings-commando's** | staff-paneel (TE punt 63) | Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online). De site-zip zelf is sindsdien vervangen en LIVE (site-1511). |

@@ -95,7 +95,7 @@ function usePerRow() {
   return perRow;
 }
 
-export function Bookcase({ categories, counts, openBook, onOpen, isStaff, draggedCategory, setDraggedCategory, onDropCategory, totalTopics }) {
+export function Bookcase({ categories, counts, openBook, onOpen, isStaff, draggedCategory, setDraggedCategory, onDropCategory, totalTopics, glowOf }) {
   const perRow = usePerRow();
   const rows = perRow === 0 || categories.length === 0
     ? [categories]
@@ -128,12 +128,13 @@ export function Bookcase({ categories, counts, openBook, onOpen, isStaff, dragge
                 <Gear size={26} teeth={9} className={`bc-bookend ${r % 2 ? 'bc-spin-slow-rev' : 'bc-spin-slow'}`} />
                 {row.map((cat) => {
                   const look = spineLook(cat);
+                  const glow = glowOf ? glowOf(cat) : '';
                   const i = index++;
                   return (
                     <button
                       key={cat}
                       type="button"
-                      className={`bc-spine ${openBook === cat ? 'is-out' : ''} ${draggedCategory === cat ? 'is-dragged' : ''}`}
+                      className={`bc-spine ${openBook === cat ? 'is-out' : ''} ${draggedCategory === cat ? 'is-dragged' : ''} ${glow}`}
                       style={{
                         '--c': look.bg, '--band': look.band, '--h': `${look.height}px`, '--w': `${look.width}px`,
                         '--tilt': `${look.tilt}deg`, '--i': i
@@ -152,6 +153,7 @@ export function Bookcase({ categories, counts, openBook, onOpen, isStaff, dragge
                       <span className="bc-count">{counts[cat] || 0}</span>
                       <span className="bc-band bc-band-b" />
                       <span className="bc-tag">{cat}</span>
+                      {glow && <span className="bc-glint" aria-hidden="true" />}
                     </button>
                   );
                 })}
@@ -164,6 +166,10 @@ export function Bookcase({ categories, counts, openBook, onOpen, isStaff, dragge
 
         <div className="bc-base">
           <span>{perRow === 0 ? 'Swipe along the shelf · tap a volume to open it' : isStaff ? 'Drag volumes to rearrange the shelves' : 'Pick a volume to open it'}</span>
+          <span className="bc-legend">
+            <i className="bc-dot bc-dot-purple" aria-hidden="true" /> unread
+            <i className="bc-dot bc-dot-gold" aria-hidden="true" /> updated since your last read
+          </span>
         </div>
       </div>
     </div>

@@ -356,3 +356,51 @@
 .bka-foot { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 18px; padding-top: 10px; border-top: 1px solid rgba(90, 60, 20, .25); font-size: 10px; color: #8a6a3a; }
 .bka-foot span { display: inline-flex; align-items: center; gap: 5px; }
 .bka-foot strong { color: #5a2a10; }
+
+/* Enchanting-glow reading triggers (owner 18-11): like an enchanted book in
+   Minecraft - unread volumes shimmer purple, volumes updated since your last
+   read shimmer gold. The glint is an overlay span: the sweep band and the
+   sparkles stay clipped to the spine, while its box-shadow provides the
+   outer glow without touching the hover shadow of the spine itself. */
+.bc-glint {
+  position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none;
+}
+.bc-spine.is-glow-unread .bc-glint { box-shadow: 0 0 12px 1px rgba(185, 120, 255, .55), 0 0 30px 8px rgba(185, 120, 255, .18); }
+.bc-spine.is-glow-new .bc-glint { box-shadow: 0 0 12px 1px rgba(255, 190, 80, .55), 0 0 30px 8px rgba(255, 190, 80, .18); }
+
+.bc-glint::before {
+  content: ''; position: absolute; top: -60%; left: -130%; width: 55%; height: 220%;
+  transform: rotate(18deg);
+  background: linear-gradient(90deg, transparent, rgba(200, 150, 255, .50), rgba(255, 255, 255, .55), rgba(200, 150, 255, .50), transparent);
+  animation: bc-sheen 3.2s ease-in-out infinite;
+}
+.bc-spine.is-glow-new .bc-glint::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 210, 120, .55), rgba(255, 255, 240, .60), rgba(255, 210, 120, .55), transparent);
+  animation-duration: 3.8s;
+}
+@keyframes bc-sheen { 0% { left: -130%; } 60%, 100% { left: 170%; } }
+
+/* Enchant glints: two twinkling star specks, like the vanilla item shimmer. */
+.bc-glint::after {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle at 24% 22%, #e9d5ff 0 .9px, transparent 1.6px),
+    radial-gradient(circle at 70% 46%, #f5e6ff 0 .8px, transparent 1.5px),
+    radial-gradient(circle at 40% 78%, #e9d5ff 0 .9px, transparent 1.6px),
+    radial-gradient(circle at 82% 14%, #fff7e0 0 .8px, transparent 1.5px);
+  animation: bc-twinkle 2.6s ease-in-out infinite;
+}
+.bc-spine.is-glow-new .bc-glint::after { animation-duration: 3.1s; }
+@keyframes bc-twinkle { 0%, 100% { opacity: .25; } 45%, 60% { opacity: 1; } }
+
+/* Shelf hint: what the two glows mean. */
+.bc-legend { display: inline-flex; align-items: center; gap: 6px; }
+.bc-dot { width: 7px; height: 7px; border-radius: 50%; margin-left: 12px; }
+.bc-dot-purple { background: #b978ff; box-shadow: 0 0 6px 2px rgba(185, 120, 255, .65); margin-right: 2px; }
+.bc-dot-gold { background: #ffce6a; box-shadow: 0 0 6px 2px rgba(255, 190, 80, .65); margin-right: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bc-glint::before, .bc-glint::after { animation: none; }
+  .bc-glint::before { left: 20%; }
+  .bc-glint::after { opacity: .9; }
+}

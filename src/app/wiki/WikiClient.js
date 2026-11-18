@@ -99,6 +99,38 @@ export default function WikiClient() {
   const [copiedId, setCopiedId] = useState(null);
 
   const pagesList = Array.isArray(pages) ? pages : [];
+
+  // "Enchanting-glow" reading triggers (owner 18-11): a volume shimmers purple
+  // until the visitor has opened it at least once, and shimmers gold again
+  // whenever the archive contains a page newer than their last opening of it.
+  // Per-browser state in localStorage; null until loaded so the server and the
+  // first client render agree (no hydration flash - glow appears after mount).
+  const WIKI_READ_KEY = 'iekcorbar.wikiRead';
+  const [readAt, setReadAt] = useState(null);
+  useEffect(() => {
+    try { setReadAt(JSON.parse(window.localStorage.getItem(WIKI_READ_KEY)) || {}); } catch { setReadAt({}); }
+  }, []);
+  useEffect(() => {
+    if (!openBook) return;
+    setReadAt((prev) => {
+      const next = { ...(prev || {}), [openBook]: Date.now() };
+      try { window.localStorage.setItem(WIKI_READ_KEY, JSON.stringify(next)); } catch { /* private mode: glow just never clears */ }
+      return next;
+    });
+  }, [openBook]);
+  const newestByCat = {};
+  pagesList.forEach((p) => {
+    const raw = p.updatedAt;
+    const t = typeof raw === 'number' ? raw : Date.parse(String(raw || '').replace(' ', 'T')) || 0;
+    if (t > (newestByCat[p.category] || 0)) newestByCat[p.category] = t;
+  });
+  const glowOf = (cat) => {
+    if (!readAt) return '';
+    const seen = readAt[cat];
+    if (!seen) return 'is-glow-unread';
+    return (newestByCat[cat] || 0) > seen ? 'is-glow-new' : '';
+  };
+
   // Purely data-driven — this used to always union in the site's original
   // ['Races', 'Jobs', 'Brewery', 'Lands'] seed categories regardless of
   // whether any page still used them, which left permanent empty chapter
@@ -454,6 +486,7 @@ export default function WikiClient() {
           totalTopics={pagesList.length}
           openBook={bookCategory}
           onOpen={setOpenBook}
+          glowOf={glowOf}
           isStaff={isStaff}
           draggedCategory={draggedCategory}
           setDraggedCategory={setDraggedCategory}
