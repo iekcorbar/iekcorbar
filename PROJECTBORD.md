@@ -50,7 +50,7 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 |---|---|---|
 
 ## 🟡 Wacht op JOU
-| **Sakagura 0.8.1 - pit bij boom-pluk** (TE punt 28) | deploy/Sakagura-0.8.1.jar [13bf32bf5545] | Pluk van de vruchtbomen geeft nu dezelfde 1-op-3 kans op een pit als de tuin (eigenaarskeuze na "abrikoos geeft geen zaden" - dat was geen bug: 1-op-3 bestond al in de tuin). Restart bij lege server - zeg wanneer. site-1811k mee (wiki-zaad). |
+| **Sakagura 0.8.1 - pit bij boom-pluk** (TE punt 28) | deploy/Sakagura-0.8.1.jar [2c9fa47ab642] | Pluk van de vruchtbomen geeft dezelfde 1-op-3 pit-kans als de tuin (abrikoos zelf was geen bug: 1-op-3 bestond al). EN **wilde orchards**: elke chunk rolt eens, 8% groep van 1-3 bij-passende soorten, driekwart volwassen - vindbaar door lopen (marker orchard_wild_v1, config trees.wild-chance-per-chunk). Restart bij lege server - zeg wanneer. site-1811l mee (wiki-zaad). |
 
 | ~~Xmas-props~~ ✅ LIVE 18-11 19:21 (eerste rij hierboven, 🟢) | TE-DEPLOYEN punt 27 (afgehandeld) | **Relics 0.7.7** [393fa789c2b3] + **pack build65** [1ebd261831c3] in deploy/ (groottes nagemeten: hitbox = modelhoogte, kroonluchter-vlammen onder het plafond): Peperkoekhuis (snoep-tegelen delen), Koekoeksklok (wand/tafel, vogel zingt), Nootkraker-wacht (2 hoog), Kronenluchter (plafond, twinkelend licht 13), Kerstpudding (stoom), Santa-brievenbus (papier erin = repost naar de Noordpool) en **KRAMPUS** - niet craftbaar, staf-stock, right-click = vonnis ("The Krampus has read your chat logs."). Audit 0/0, wiki-rijen mee in site-1811j. Restart nodig bij lege server - zeg wanneer. |
 

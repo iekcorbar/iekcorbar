@@ -104,13 +104,14 @@ final class Orchard implements Listener {
     }
 
     private final Sakagura plugin;
-    private final NamespacedKey dataKey, fruitKey, hitKey;
+    private final NamespacedKey dataKey, fruitKey, hitKey, wildKey;
     private final Map<String, Form> forms = new HashMap<>();
     private final Map<UUID, Map<Long, Rec>> trees = new HashMap<>();
     private final Map<Long, Rec> cellOwner = new HashMap<>();   // every pasted cell -> its tree
     private final Map<UUID, Rec> byHitbox = new HashMap<>();    // fruit Interaction -> tree
     private final Map<UUID, Integer> slotByHitbox = new HashMap<>();
     private final double stageChance, fruitChance;
+    private final double wildChance;
     private long tick;
 
     Orchard(Sakagura plugin) {
@@ -118,8 +119,10 @@ final class Orchard implements Listener {
         dataKey = new NamespacedKey(plugin, "orchard");
         fruitKey = new NamespacedKey(plugin, "orchard_fruit");
         hitKey = new NamespacedKey(plugin, "orchard_fruit_hit");
+        wildKey = new NamespacedKey(plugin, "orchard_wild_v1");
         stageChance = 1 / (60.0 * Math.max(1, plugin.getConfig().getInt("trees.minutes-per-stage", 20)));
         fruitChance = 1 / (60.0 * Math.max(1, plugin.getConfig().getInt("trees.fruit-minutes", 20)));
+        wildChance = plugin.getConfig().getDouble("trees.wild-chance-per-chunk", 0.08);
         load();
     }
 
@@ -553,6 +556,59 @@ final class Orchard implements Listener {
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent e) {
         loadChunk(e.getChunk());
+        wild(e.getChunk());
+    }
+
+    /**
+     * Wild orchards (owner 18-11: "de orchard trees moeten ook gewoon te vinden zijn in de
+     * wereld"). Same one-marker-per-chunk discipline as Garden's wild bushes: each chunk
+     * rolls once, ever. A hit plants a small group - 1 to 3 trees of one fruit species that
+     * belongs to this biome - mostly full-grown with the shared ripening clock filling the
+     * canopy, sometimes a young one. Overtoplanting is impossible: the 5x5 spacing check and
+     * fits() refuse spots the same way player planting does. Tunable with
+     * trees.wild-chance-per-chunk (default 0.08: bushes 0.10 stay the common find, orchards
+     * the special one).
+     */
+    private void wild(Chunk c) {
+        if (c.getPersistentDataContainer().has(wildKey, PersistentDataType.BYTE)) return;
+        c.getPersistentDataContainer().set(wildKey, PersistentDataType.BYTE, (byte) 1);
+        ThreadLocalRandom r = ThreadLocalRandom.current();
+        if (r.nextDouble() >= wildChance) return;
+        World w = c.getWorld();
+        int cx = (c.getX() << 4) + 4 + r.nextInt(8), cz = (c.getZ() << 4) + 4 + r.nextInt(8);
+        String biome = w.getBiome(cx, w.getHighestBlockYAt(cx, cz), cz).getKey().getKey();
+        List<Tree> fit = new ArrayList<>();
+        for (Tree t : Tree.values()) {
+            Fruit f = t.fruit();
+            if (f == null) continue;                                   // maples admire themselves in peace
+            for (String bi : f.wildBiomes) if (biome.contains(bi)) fit.add(t);
+        }
+        if (fit.isEmpty()) return;
+        Tree t = fit.get(r.nextInt(fit.size()));
+        Form form = form(t);
+        if (form == null) return;
+        int want = 1 + r.nextInt(3);
+        for (int i = 0; i < want; i++) {
+            int x = (c.getX() << 4) + 2 + r.nextInt(13), z = (c.getZ() << 4) + 2 + r.nextInt(13);
+            int y = w.getHighestBlockYAt(x, z);
+            Block soil = w.getBlockAt(x, y, z);
+            if (!isSoil(soil.getType())) continue;
+            Block b = soil.getRelative(BlockFace.UP);
+            if (!b.getType().isAir() && !replaceable(b.getType())) continue;
+            boolean crowded = false;
+            for (int dx = -2; dx <= 2 && !crowded; dx++) for (int dz = -2; dz <= 2; dz++)
+                if (cellOwner.containsKey(key(b.getX() + dx, b.getY(), b.getZ() + dz))
+                        || plugin.trees().at(b.getRelative(dx, 0, dz)) != null) { crowded = true; break; }
+            if (crowded) continue;
+            int stage = r.nextInt(4) == 0 ? 1 : STAGES - 1;            // three quarters full-grown orchard
+            Shape s = form.stages[stage];
+            if (!fits(b, s, null)) { if (stage != STAGES - 1) continue; stage = 1; s = form.stages[1]; if (!fits(b, s, null)) continue; }
+            b.setType(s.trunk, false);
+            Rec rec = new Rec(t, w, b.getX(), b.getY(), b.getZ(), stage);
+            trees.computeIfAbsent(w.getUID(), k -> new HashMap<>()).put(key(b.getX(), b.getY(), b.getZ()), rec);
+            paste(b, s, rec);
+            saveChunk(w, rec.x >> 4, rec.z >> 4);
+        }
     }
 
     void loadChunk(Chunk c) {

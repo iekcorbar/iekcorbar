@@ -33,7 +33,7 @@ Since Sakagura 0.8.0 the orchard grows **real trees**: actual log trunks you can
 
 ### Saplings
 
-One craft: the tree's own fruit (or two red mushrooms for the maple) plus two sticks in any arrangement. Fruiting trees can also be bonemealed as sprouts to speed them up. Wild trees do not spawn - an orchard is something you plant.
+One craft: the tree's own fruit (or two red mushrooms for the maple) plus two sticks in any arrangement. Fruiting trees can also be bonemealed as sprouts to speed them up. Wild orchards exist: every so often a hillside hides a small group of one species - mostly full-grown, sometimes young. Wandering is how most players find their first peach. What you plant yourself grows exactly the same way.
 
 ### Old plantings
 
