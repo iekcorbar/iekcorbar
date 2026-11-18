@@ -672,10 +672,15 @@ def nutcracker():
 
 
 def chandelier(ring, lit):
-    """Ceiling chandelier: chain, brass ring, four candles and a centre lamp. lit toggles flames."""
+    """Brass chandelier: chain, ring, four candles and a centre lamp. ring=3 hangs one block
+    below the ceiling (flames stay clear of it); ring=0 is the table version - short chain,
+    no ceiling to hit. lit toggles the flames (the TWINKLE pass swaps in the _b model)."""
     flame = "flame" if lit else "bulb_off"
     core = "flame_core" if lit else "glass"
-    e = [box(7.5, 11.4 + ring, 7.5, 8.5, 16, 8.5, "chain")]             # chain up to the ceiling
+    top = 16 if ring else 13.2                                          # table version: chain ends in a finial
+    e = [box(7.5, 11.4 + ring, 7.5, 8.5, top, 8.5, "chain")]
+    if not ring:
+        e.append(box(7.2, 13.2, 7.2, 8.8, 13.7, 8.8, "brass"))          # finial cap
     e += [box(6.6, 10.6 + ring, 6.6, 9.4, 11.6 + ring, 9.4, "brass")]   # hub
     y = 10 + ring
     e += [box(4, y, 7.5, 12, y + 0.7, 8.5, "brass"), box(4, y, 7.5, 5, y + 0.7, 8.5, "brass"),
@@ -774,7 +779,7 @@ XMAS = {
     "cuckoo_clock": lambda: cuckoo_clock(False), "cuckoo_clock_wall": lambda: cuckoo_clock(True),
     "nutcracker": nutcracker,
     "chandelier": lambda: chandelier(0, True), "chandelier_b": lambda: chandelier(0, False),
-    "chandelier_ceiling": lambda: chandelier(3, True), "chandelier_ceiling_b": lambda: chandelier(3, False),
+    "chandelier_ceiling": lambda: chandelier(2, True), "chandelier_ceiling_b": lambda: chandelier(2, False),
     "plum_pudding": plum_pudding, "santa_mailbox": santa_mailbox,
     "krampus": krampus,
     "candy_cane": lambda: [box(7.4, 0, 7.4, 8.6, 10, 8.6, "icing")] + [box(7.35, y, 7.35, 8.65, y + 1, 8.65, "xred") for y in (1, 4, 7)]
