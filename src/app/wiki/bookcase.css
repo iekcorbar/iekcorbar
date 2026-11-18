@@ -361,26 +361,31 @@
    Minecraft - unread volumes shimmer purple, volumes updated since your last
    read shimmer gold. The glint is an overlay span: the sweep band and the
    sparkles stay clipped to the spine, while its box-shadow provides the
-   outer glow without touching the hover shadow of the spine itself. */
+   outer glow without touching the hover shadow of the spine itself.
+   Anti-stroboscope pass (same day, owner: "het is een stroboscoop"): every
+   volume takes its own animation phase via the --i index (negative delay =
+   offset mid-cycle), the sweep runs slow with a long off-screen rest, and
+   the sparkles/glow were dimmed - the shelf should breathe, not flash. */
 .bc-glint {
   position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none;
 }
-.bc-spine.is-glow-unread .bc-glint { box-shadow: 0 0 12px 1px rgba(185, 120, 255, .55), 0 0 30px 8px rgba(185, 120, 255, .18); }
-.bc-spine.is-glow-new .bc-glint { box-shadow: 0 0 12px 1px rgba(255, 190, 80, .55), 0 0 30px 8px rgba(255, 190, 80, .18); }
+.bc-spine.is-glow-unread .bc-glint { box-shadow: 0 0 8px rgba(185, 120, 255, .38), 0 0 22px rgba(185, 120, 255, .12); }
+.bc-spine.is-glow-new .bc-glint { box-shadow: 0 0 8px rgba(255, 190, 80, .38), 0 0 22px rgba(255, 190, 80, .12); }
 
 .bc-glint::before {
-  content: ''; position: absolute; top: -60%; left: -130%; width: 55%; height: 220%;
+  content: ''; position: absolute; top: -60%; left: -130%; width: 45%; height: 220%;
   transform: rotate(18deg);
-  background: linear-gradient(90deg, transparent, rgba(200, 150, 255, .50), rgba(255, 255, 255, .55), rgba(200, 150, 255, .50), transparent);
-  animation: bc-sheen 3.2s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, rgba(200, 150, 255, .30), rgba(255, 255, 255, .34), rgba(200, 150, 255, .30), transparent);
+  animation: bc-sheen 7s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -1.9s);
 }
 .bc-spine.is-glow-new .bc-glint::before {
-  background: linear-gradient(90deg, transparent, rgba(255, 210, 120, .55), rgba(255, 255, 240, .60), rgba(255, 210, 120, .55), transparent);
-  animation-duration: 3.8s;
+  background: linear-gradient(90deg, transparent, rgba(255, 210, 120, .32), rgba(255, 255, 240, .38), rgba(255, 210, 120, .32), transparent);
 }
-@keyframes bc-sheen { 0% { left: -130%; } 60%, 100% { left: 170%; } }
+@keyframes bc-sheen { 0% { left: -130%; } 32%, 100% { left: 175%; } }
 
-/* Enchant glints: two twinkling star specks, like the vanilla item shimmer. */
+/* Enchant glints: twinkling star specks, desynchronised per volume and kept
+   well below full opacity so they never blink as one. */
 .bc-glint::after {
   content: ''; position: absolute; inset: 0;
   background-image:
@@ -388,10 +393,10 @@
     radial-gradient(circle at 70% 46%, #f5e6ff 0 .8px, transparent 1.5px),
     radial-gradient(circle at 40% 78%, #e9d5ff 0 .9px, transparent 1.6px),
     radial-gradient(circle at 82% 14%, #fff7e0 0 .8px, transparent 1.5px);
-  animation: bc-twinkle 2.6s ease-in-out infinite;
+  animation: bc-twinkle 5.2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * -1.1s);
 }
-.bc-spine.is-glow-new .bc-glint::after { animation-duration: 3.1s; }
-@keyframes bc-twinkle { 0%, 100% { opacity: .25; } 45%, 60% { opacity: 1; } }
+@keyframes bc-twinkle { 0%, 100% { opacity: 0; } 42%, 58% { opacity: .5; } }
 
 /* Shelf hint: what the two glows mean. */
 .bc-legend { display: inline-flex; align-items: center; gap: 6px; }

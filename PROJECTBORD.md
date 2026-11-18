@@ -12,7 +12,7 @@ JOUW RESTJES: arena plakken + aanwijzen (checklist-print `scripts/make_bedwars_a
 vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21.
 ~~Discord~~ ✅ batch-, website- wiki-splitsposts GEPUBLICEERD 18-11 (zeven losse + vier batch/website
 md'tjes naar `archief/discord-gepubliceerd/`); site-1811d (wiki-scheiding + events-fix) UITGEROLD en live.
-**site-1811h.zip** [e5d64d5f1965] (TE-punt 25/26, vervangt 1811g/f/e) naar Plesk: **live-map af** (route, menu's,
+**site-1811i.zip** [fdefe32ac6e4] (TE-punt 25/26, vervangt 1811h/g/f/e) naar Plesk: **live-map af** (route, menu's,
 startpagina-tekst, staff-veld "Live Map URL", map_url-default, zoekindex) + **Staff Paneel →
 Analytics verhuist naar StaffHub** - StaffHub-deel is al live via SSH (knop website-analyse,
 token-doorlus, gids hoofdstuk 7 in node 3150); de token staat in /opt/staffhub/.env en moet
@@ -48,7 +48,7 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| **site-1811g.zip naar Plesk** (TE punten 25+26) | deploy/site-1811g.zip [28199beb55e1] | Drie lagen in één pakket: live-map-sectie eraf; Analytics uit het staffpaneel → StaffHub (StaffHub-deel al live, enige restpunt = token-regel in Plesk .env.local, exact in TE-25); en de **enchanting-glow lees-triggers** op de wiki-kast (paars=ongelezen, goud=geüpdate, per browser onthouden). **Glitch hersteld:** de import-klikte altijd updated_at door langs alle pagina's - elke Refresh gaf de hele kast een valse gouden gloed; identieke pagina's worden nu overgeslagen (1811h, TE-26). Plesk: unzip zónder "map leegmaken" → NPM install → restart → imports klikken. |
+| **site-1811g.zip naar Plesk** (TE punten 25+26) | deploy/site-1811g.zip [28199beb55e1] | Drie lagen in één pakket: live-map-sectie eraf; Analytics uit het staffpaneel → StaffHub (StaffHub-deel al live, enige restpunt = token-regel in Plesk .env.local, exact in TE-25); en de **enchanting-glow lees-triggers** op de wiki-kast (paars=ongelezen, goud=geüpdate, per browser onthouden). **Glitch hersteld:** de import-klikte altijd updated_at door langs alle pagina's - elke Refresh gaf de hele kast een valse gouden gloed; identieke pagina's worden nu overgeslagen (TE-26). En de gloed zelf is getemd: per boek een eigen fase, tragere sweep met rust, halve helderheid - geen stroboscoop meer (1811i). Plesk: unzip zónder "map leegmaken" → NPM install → restart → imports klikken. |
 | ~~Site-zip naar Plesk~~ ✅ LIVE 15 nov | — | site-1511.zip [50f1649de3f4] staat live en is bevestigd ("website in orde"); zip uit deploy/ weg. site-1311b/site-1311 zijn damit evervallen. |
 | ~~Discord-posts publiceren~~ ✅ GEDAAN 16 nov | — | treinnetwerk-1115 (spelers + staff), kerstdorp-dierenronde-1112 en buggolf-1311 zijn gepubliceerd; md'tjes uit deploy/ naar archief/. |
 | **Shop Settings-commando's** | staff-paneel (TE punt 63) | Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online). De site-zip zelf is sindsdien vervangen en LIVE (site-1511). |
