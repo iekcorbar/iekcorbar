@@ -55,7 +55,6 @@ export default function StartPage() {
         <p>
           Create your account, accept the rules and link your Minecraft name on the{' '}
           <Link href="/welcome" className="text-sp-gold underline">welcome page</Link>. Then join the server and look around.
-          The <Link href="/map" className="text-sp-gold underline">live map</Link> shows where everyone has built.
         </p>
       </Step>
 

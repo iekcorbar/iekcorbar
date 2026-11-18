@@ -21,7 +21,7 @@ import hihouSeed from '@/lib/wiki-seeds/hihou.json';
 // Get all wiki pages, plus the staff-defined chapter (category) order if one
 // has ever been saved. Reuses the generic `settings` key-value store (same
 // one api/settings/route.js exposes) rather than a dedicated table, since
-// this is just one more string value alongside java_version/map_url.
+// this is just one more string value alongside java_version/server_address.
 export async function GET() {
   try {
     const pages = await db.getWikiPages();

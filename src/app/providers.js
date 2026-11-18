@@ -27,7 +27,6 @@ import {
   Heart,
   Users,
   Sparkles,
-  Map,
   ThumbsUp,
   Shield,
   Bell,
@@ -916,7 +915,6 @@ export default function ClientProviders({ children }) {
                   pathname={pathname}
                   items={[
                     { href: '/start', label: 'New here? Start', icon: Compass, match: (p) => p === '/start' },
-                    { href: '/map', label: 'Map', icon: Map, match: (p) => p === '/map' },
                     { href: '/vote', label: 'Vote', icon: ThumbsUp, match: (p) => p === '/vote' },
                     { href: 'https://shop.iekcorbar.com', label: 'Shop', icon: ShoppingBag, match: () => false },
                     { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },
@@ -1132,7 +1130,6 @@ export default function ClientProviders({ children }) {
               <span className="block text-[10px] uppercase font-bold text-sp-gold/80 tracking-widest px-2 pt-2 pb-0.5">Play</span>
               {[
                 { href: '/start', label: 'New here? Start', icon: Compass, match: (p) => p === '/start' },
-                { href: '/map', label: 'Map', icon: Map, match: (p) => p === '/map' },
                 { href: '/vote', label: 'Vote', icon: ThumbsUp, match: (p) => p === '/vote' },
                 { href: 'https://shop.iekcorbar.com', label: 'Shop', icon: ShoppingBag, match: () => false },
                 { href: '/donate', label: 'Support', icon: HeartHandshake, match: (p) => p.startsWith('/donate') },

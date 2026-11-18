@@ -384,7 +384,6 @@ function ModerationContent() {
   const [pdLoading, setPdLoading] = useState(false);
   const [pdError, setPdError] = useState('');
   const [settingsJavaVersion, setSettingsJavaVersion] = useState('');
-  const [settingsMapUrl, setSettingsMapUrl] = useState('');
   const [settingsServerAddress, setSettingsServerAddress] = useState('');
   const [settingsDonatePaypal, setSettingsDonatePaypal] = useState('');
   const [settingsSaved, setSettingsSaved] = useState(false);
@@ -1417,7 +1416,6 @@ function ModerationContent() {
       const data = await res.json();
       if (res.ok && data.settings) {
         setSettingsJavaVersion(data.settings.java_version || '');
-        setSettingsMapUrl(data.settings.map_url || '');
         setSettingsServerAddress(data.settings.server_address || '');
         setSettingsDonatePaypal(data.settings.donate_paypal_url || '');
       }
@@ -5551,7 +5549,7 @@ function ModerationContent() {
                   e.preventDefault();
                   setError(''); setSuccessMsg('');
                   try {
-                    const res = await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ java_version: settingsJavaVersion, map_url: settingsMapUrl, server_address: settingsServerAddress, donate_paypal_url: settingsDonatePaypal, role: user.role }) });
+                    const res = await fetch('/api/settings', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ java_version: settingsJavaVersion, server_address: settingsServerAddress, donate_paypal_url: settingsDonatePaypal, role: user.role }) });
                     const data = await res.json();
                     if (res.ok) { setSuccessMsg('Settings saved!'); setSettingsSaved(true); setTimeout(() => { setSuccessMsg(''); setSettingsSaved(false); }, 3000); }
                     else setError(data.error);
@@ -5566,11 +5564,6 @@ function ModerationContent() {
                     <label className="block text-[9px] uppercase font-bold text-sp-gold/80">Java Version</label>
                     <p className="text-[10px] text-text-warm/40">Displayed as a badge on the homepage hero section.</p>
                     <input value={settingsJavaVersion} onChange={e => setSettingsJavaVersion(e.target.value)} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2.5 focus:outline-hidden focus:border-sp-gold" placeholder="e.g. 25" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-[9px] uppercase font-bold text-sp-gold/80">Live Map URL</label>
-                    <p className="text-[10px] text-text-warm/40">Players will be directed to this URL from the Map page. Leave empty to show a placeholder.</p>
-                    <input type="url" value={settingsMapUrl} onChange={e => setSettingsMapUrl(e.target.value)} className="w-full bg-neutral-900 border border-sp-bronze text-white text-xs rounded-lg px-3 py-2.5 focus:outline-hidden focus:border-sp-gold" placeholder="https://map.yourserver.com" />
                   </div>
                   <div className="space-y-2">
                     <label className="block text-[9px] uppercase font-bold text-sp-gold/80">Donation PayPal.me URL</label>

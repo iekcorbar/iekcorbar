@@ -3065,7 +3065,7 @@ export const db = {
     // by hand. This default is only the seed value for a fresh table row —
     // once staff save a value it's read from MySQL/db.json like any other
     // setting.
-    const DEFAULTS = { java_version: "25", map_url: "", server_address: "play.iekcorbar.com", donate_paypal_url: "" };
+    const DEFAULTS = { java_version: "25", server_address: "play.iekcorbar.com", donate_paypal_url: "" };
     try {
       const rows = await query('SELECT setting_key, setting_value FROM settings');
       const settingsObj = { ...DEFAULTS };

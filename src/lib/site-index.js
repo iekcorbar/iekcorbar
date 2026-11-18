@@ -15,7 +15,6 @@ export const SITE_PAGES = [
   { href: '/tools', title: 'Storage, backpacks & Zukan', text: 'Kura storage networks, Satchel backpacks and the Zukan recipe browser.', kw: 'kura storage chest terminal backpack satchel zukan jei recipe book inventory' },
   { href: '/recipes', title: 'Recipes', text: 'Every custom recipe of the server plugins.', kw: 'craft crafting recipe ingredients' },
   { href: '/wiki', title: 'Wiki', text: 'The reference for every plugin and system.', kw: 'wiki reference docs help' },
-  { href: '/map', title: 'Map', text: 'The live world map.', kw: 'bluemap world location' },
   { href: '/vote', title: 'Vote', text: 'Vote for the server and earn rewards.', kw: 'voting reward' },
   { href: '/shop', title: 'Shop', text: 'Spend yen and coins on kits and items.', kw: 'buy kit crate yen coins gears currency' },
   { href: '/calendar', title: 'Calendar', text: 'Events, holidays and the seasons of the garden.', kw: 'schedule when date christmas halloween easter season' },

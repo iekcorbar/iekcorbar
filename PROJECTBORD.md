@@ -10,11 +10,11 @@ versies van de server gehaald (backup `/root/deploy-backup-20261118/`). Voorspoe
 null PDC-key (breachKey vóór de shop-builder zetten) - gerepareerd, jar [d6664b99603d], git 37d421ab pushed.
 JOUW RESTJES: arena plakken + aanwijzen (checklist-print `scripts/make_bedwars_arena.py`; **/ih bw snapshot
 vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21.
-~~Discord~~ ✅ batch- én website-posts zijn GEPUBLICEERD 18-11 (oud papier naar `archief/discord-gepubliceerd/`);
-het nieuwe paar `discord-wikisplit-1811.md` + `-staff.md` (wiki-scheiding + events-fix) wacht op de site-deploy.
-**site-1811d.zip** naar Plesk (TE-punt 24: unzip zónder "map leegmaken" → NPM install → restart → in het
-staff-paneel de imports klikken: Hihou BedWars, Sakagura, Gouw, Kitchen + de negen gestripte categorieën;
-StaffHub is al live bijgewerkt via SSH: nieuwe BedWars-arena-gids + Novità + indice).
+~~Discord~~ ✅ batch-, website- wiki-splitsposts GEPUBLICEERD 18-11 (zeven losse + vier batch/website
+md'tjes naar `archief/discord-gepubliceerd/`); site-1811d (wiki-scheiding + events-fix) UITGEROLD en live.
+**site-1811e.zip** (TE-punt 25) naar Plesk: de **live-map-sectie is van de website af** - route, beide
+menu's, startpagina-tekst, staff-instellingveld "Live Map URL", map_url-default en de zoekindex-regel;
+BluMap zelf draait gewoon door op map.iekcorbar.com.
 
 Peildatum: 18 nov 2026 ochtend — 17-nov-batch live (echte fruitbomen, compostpennigen, Gouw 0.5.1, BedWars 0.6.1 + build61).
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
@@ -46,7 +46,7 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| **site-1811d.zip naar Plesk** (TE punt 24) | deploy/site-1811d.zip [decef1ccf4d0] | **Grens getrokken: wiki = alleen spelers, staffinformatie = StaffHub** (18-11 via SSH live gezet: nieuwe Italiaanse arena-gids 'Hihou - BedWars' node 3169 + Novità 3161 + indice 3138; db-backup `staffhub-backup-20261118-pre-wikisplit.db`). Alle staff-commandoregels uit negen wiki-categorieën geschrapt (meting: 0 hits in de seeds) en naar staffhub-it verhuisd. Deze zip: BedWars-player-wiki (10 pagina's), Sakagura-vruchtbomen, Gouw 0.5.1, compost-teksten, events nieuwste-boven + Amsterdam-tijd. Plesk: unzip zónder "map leegmaken" → NPM install → restart → staff-paneel imports: Hihou BedWars, Sakagura, Gouw, Kitchen (+ Xmas/Relics/Steamworks/Wildlife/Zukan voor de strip-werk). |
+| **site-1811e.zip naar Plesk** (TE punt 25) | deploy/site-1811e.zip [3a769e160665] | **Live-map-sectie van de website gehaald** (eigenaar 18-11): route `/map` weg, menu-items desktop+mobiel weg, startpagina-zin zonder "live map", staff-paneel zonder "Live Map URL", `map_url`-default + zoekindex-regel opgeruimd. BluMap draait door op map.iekcorbar.com. site-1811d (wiki-scheiding/events) is uitgerold en de wikisplit-posts zijn gepubliceerd. Plesk: unzip zónder "map leegmaken" → NPM install → restart app. Test: /map = 404, menu zonder Map, zoeken "map" zonder map-resultaat. |
 | ~~Site-zip naar Plesk~~ ✅ LIVE 15 nov | — | site-1511.zip [50f1649de3f4] staat live en is bevestigd ("website in orde"); zip uit deploy/ weg. site-1311b/site-1311 zijn damit evervallen. |
 | ~~Discord-posts publiceren~~ ✅ GEDAAN 16 nov | — | treinnetwerk-1115 (spelers + staff), kerstdorp-dierenronde-1112 en buggolf-1311 zijn gepubliceerd; md'tjes uit deploy/ naar archief/. |
 | **Shop Settings-commando's** | staff-paneel (TE punt 63) | Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online). De site-zip zelf is sindsdien vervangen en LIVE (site-1511). |
