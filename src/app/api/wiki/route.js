@@ -143,16 +143,28 @@ export async function POST(request) {
       if (clash) {
         return NextResponse.json({ error: `A page "${clash.title}" (${clash.slug}) already exists in another category - rename it first.` }, { status: 409 });
       }
-      let created = 0, updated = 0;
+      let created = 0, updated = 0, unchanged = 0;
       for (const [i, sp] of seed.pages.entries()) {
-        const exists = before.some(p => p.slug === sp.slug);
+        const parentId = sp.parent ? idOf(sp.parent) : null;
+        const prior = before.find(p => p.slug === sp.slug);
+        // Deliberate skip: saveWikiPage stamps updated_at=NOW() and writes a
+        // revision on every call, so re-saving an identical page would spam the
+        // revision history AND relight every reader's golden "new update" glow
+        // on the bookcase for a change that never happened (owner 18-11: the
+        // shelf glowed gold after every staff "Refresh pages" click). Only real
+        // content changes may touch the timestamp.
+        if (prior && prior.content === sp.content && prior.title === sp.title && prior.category === sp.category && (prior.parentId || null) === parentId) {
+          unchanged++;
+          continue;
+        }
+        const exists = !!prior;
         await db.saveWikiPage({
           id: idOf(sp.slug),
           slug: sp.slug,
           title: sp.title,
           category: sp.category,
           content: sp.content,
-          parentId: sp.parent ? idOf(sp.parent) : null,
+          parentId,
           updatedBy: auth.user.mcUsername || auth.user.email || 'Staff',
           silent: !(i === 0 && !exists),
         });
@@ -163,8 +175,8 @@ export async function POST(request) {
       if (missing.length) {
         return NextResponse.json({ error: `Could not save: ${missing.join(', ')} (database unreachable?)`, pages: after }, { status: 500 });
       }
-      await logAudit(auth.user, { area: 'wiki', action: 'import pages', target: body.seed, detail: `${created} created, ${updated} updated` });
-      return NextResponse.json({ success: true, created, updated, pages: after });
+      await logAudit(auth.user, { area: 'wiki', action: 'import pages', target: body.seed, detail: `${created} created, ${updated} updated, ${unchanged} unchanged (skipped)` });
+      return NextResponse.json({ success: true, created, updated, unchanged, pages: after });
     }
 
     // Renames a category across every page inside it — used both by the
