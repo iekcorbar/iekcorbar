@@ -1792,11 +1792,16 @@ export const db = {
   // EVENTS
   getEvents: async () => {
     await cleanupFinishedContent();
+    // Newest first (date/time are 'YYYY-MM-DD'/'HH:MM' strings - lexicographic
+    // sort is chronological). The owner asked for latest events on top; without
+    // an ORDER BY MySQL returned insertion order, which put them at the bottom.
     try {
-      return await query('SELECT id, title, description, date, time, timezone, image FROM events');
+      const rows = await query('SELECT id, title, description, date, time, timezone, image FROM events ORDER BY date DESC, time DESC');
+      return rows;
     } catch {
       const fb = readFallbackJson();
-      return fb.events || [];
+      const evts = fb.events || [];
+      return evts.sort((a, b) => `${b.date}T${b.time}`.localeCompare(`${a.date}T${a.time}`));
     }
   },
 

@@ -45,8 +45,29 @@ export default function EventsClient() {
   const [registerError, setRegisterError] = useState('');
   const [pollError, setPollError] = useState('');
 
-  // User Local Timezone
-  const [userTimezone, setUserTimezone] = useState('UTC');
+  // Event times are Dutch wall-clock times and are ALWAYS shown in
+  // Europe/Amsterdam - deliberately not the viewer's browser timezone (a
+  // Reykjavik/UTC browser used to print that zone and shift the clock).
+  // amsterdamInstant() resolves the wall-clock string to the true UTC instant
+  // including DST (Amsterdam is +01:00 in winter, +02:00 in summer - the old
+  // hardcoded '+02:00' was an hour off for half the year).
+  const EVENT_TZ = 'Europe/Amsterdam';
+  const amsterdamInstant = (dateStr, timeStr) => {
+    const wall = Date.UTC(
+      +dateStr.slice(0, 4), +dateStr.slice(5, 7) - 1, +dateStr.slice(8, 10),
+      +(timeStr.slice(0, 2) || 0), +(timeStr.slice(3, 5) || 0)
+    );
+    let ts = wall;
+    for (let i = 0; i < 2; i++) {
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: EVENT_TZ, hourCycle: 'h23',
+        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+      }).formatToParts(new Date(ts));
+      const v = (t) => Number(parts.find(p => p.type === t)?.value ?? 0);
+      ts += wall - Date.UTC(v('year'), v('month') - 1, v('day'), v('hour') % 24, v('minute'));
+    }
+    return ts;
+  };
 
   // Share-link support: which event's link was just copied (brief
   // "Copied!" state), and which event a ?event=<id> deep link should
@@ -60,9 +81,6 @@ export default function EventsClient() {
   useEffect(() => {
     fetchEvents();
     fetchPolls();
-    if (typeof window !== 'undefined') {
-      setUserTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone);
-    }
   }, []);
 
   async function fetchEvents() {
@@ -171,14 +189,10 @@ export default function EventsClient() {
       const now = new Date().getTime();
       const futureEvents = eventsList
         .map(e => {
-          // Parse date & time string in UTC+2 (Central European Summer Time) or given timezone
-          // Simple parser assuming YYYY-MM-DD and HH:MM
-          const [yr, mo, dy] = (e.date || '').split('-');
-          const [hr, mn] = (e.time || '').split(':');
-          // Create date in local timezone first, then offset to represent server timezone (UTC+2)
-          // For simplicity we create standard ISO string:
-          const eventDate = new Date(`${e.date}T${e.time}:00+02:00`); // Assuming UTC+2 server time
-          return { ...e, ts: eventDate.getTime() };
+          // Event date/time are Amsterdam wall-clock times - resolve the real
+          // UTC instant through the tz-aware helper (no fixed +02:00 guesswork).
+          if (!e.date || !e.time) return { ...e, ts: NaN };
+          return { ...e, ts: amsterdamInstant(e.date, e.time) };
         })
         .filter(e => e.ts > now)
         .sort((a, b) => a.ts - b.ts);
@@ -292,11 +306,12 @@ export default function EventsClient() {
 
 
 
-  // Convert Server Time (assuming input is in UTC+2) to Local Browser Time
+  // Convert the stored Amsterdam wall-clock time to a display string - shown
+  // in Amsterdam for every visitor, regardless of their own browser timezone.
   const formatLocalTime = (dateStr, timeStr) => {
     try {
-      const serverDate = new Date(`${dateStr}T${timeStr}:00+02:00`);
-      return serverDate.toLocaleString(undefined, {
+      return new Date(amsterdamInstant(dateStr, timeStr)).toLocaleString(undefined, {
+        timeZone: EVENT_TZ,
         dateStyle: 'medium',
         timeStyle: 'short'
       });
@@ -363,7 +378,7 @@ export default function EventsClient() {
             </div>
 
             <p className="text-[10px] text-text-warm/40 flex items-center justify-center gap-1">
-              <Globe className="w-3.5 h-3.5" /> Synchronized with browser timezone: <strong className="text-white">{userTimezone}</strong>
+              <Globe className="w-3.5 h-3.5" /> All times in Amsterdam timezone: <strong className="text-white">Europe/Amsterdam</strong>
             </p>
           </div>
         </section>
@@ -443,7 +458,7 @@ export default function EventsClient() {
                         {/* Local Time */}
                         <div className="flex items-center gap-2">
                           <Globe className="w-4 h-4 text-sakura-accent" />
-                          <span suppressHydrationWarning>Your Local Time: <strong className="text-white">{formatLocalTime(event.date, event.time)}</strong></span>
+                          <span suppressHydrationWarning>Time (Amsterdam): <strong className="text-white">{formatLocalTime(event.date, event.time)}</strong></span>
                         </div>
                         {/* Attendees Count */}
                         <div className="flex items-center gap-2">

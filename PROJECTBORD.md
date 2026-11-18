@@ -11,7 +11,7 @@ null PDC-key (breachKey vóór de shop-builder zetten) - gerepareerd, jar [d6664
 JOUW RESTJES: arena plakken + aanwijzen (checklist-print `scripts/make_bedwars_arena.py`; **/ih bw snapshot
 vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21, Discord publiceren (punt 23:
 eerst staff, dan spelers; beide md'tjes zeggen "nog niet live" - één regel "live sinds 18-11" derven kan netjes),
-en **site-1811.zip** naar Plesk (TE-punt 24: unzip zónder "map leegmaken" → NPM install → restart → in het
+en **site-1811c.zip** naar Plesk (TE-punt 24: unzip zónder "map leegmaken" → NPM install → restart → in het
 staff-paneel "Import Sakagura/Gouw/Kitchen pages" klikken; de wiki-teksten van de hele batch zitten erin).
 
 Peildatum: 18 nov 2026 ochtend — 17-nov-batch live (echte fruitbomen, compostpennigen, Gouw 0.5.1, BedWars 0.6.1 + build61).
@@ -44,7 +44,7 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| **site-1811b.zip naar Plesk** (TE punt 24) | deploy/site-1811b.zip [c08e1d7740c8] | Nieuwe wiki-laag: **Hihou BedWars** (11 pagina's: intro, match/ertsprijslijst, shop+upgrades, kits, modes/stats/rewards, staff-arena-runbook) + Sakagura **echte fruitbomen** + Gouw **0.5.1** + Kitchen/Tuin **composteren**. Plesk: upload + unzip in /httpdocs (**nooit "map leegmaken"**), NPM install, restart app; daarna staff-paneel → "Import Hihou BedWars pages" + "Import Sakagura pages" + "Import Gouw pages" + "Import Kitchen pages" (en de Xmas/Relics/Steamworks/Wildlife-imports als die nog open stonden). Verving site-1811.zip (mistte BedWars). |
+| **site-1811c.zip naar Plesk** (TE punt 24) | deploy/site-1811c.zip [676609427bd5] | Nieuwe wiki-laag: **Hihou BedWars** (11 pagina's: intro, match/ertsprijslijst, shop+upgrades, kits, modes/stats/rewards, staff-arena-runbook) + Sakagura **echte fruitbomen** + Gouw **0.5.1** + Kitchen/Tuin **composteren**. PLUS events-pagina naar eigenaarswish: **nieuwste boven** (ORDER BY date/time DESC) en **alle tijden vast op Europe/Amsterdam** met echte zomertijd-berekening (de browser-tijdzone-"Reykjavik"-label en de harde +02:00-uaanname zijn eraf). Plesk: upload + unzip in /httpdocs (**nooit "map leegmaken"**), NPM install, restart app; daarna staff-paneel → "Import Hihou BedWars pages" + "Import Sakagura pages" + "Import Gouw pages" + "Import Kitchen pages" (en de Xmas/Relics/Steamworks/Wildlife-imports als die nog open stonden). |
 | ~~Site-zip naar Plesk~~ ✅ LIVE 15 nov | — | site-1511.zip [50f1649de3f4] staat live en is bevestigd ("website in orde"); zip uit deploy/ weg. site-1311b/site-1311 zijn damit evervallen. |
 | ~~Discord-posts publiceren~~ ✅ GEDAAN 16 nov | — | treinnetwerk-1115 (spelers + staff), kerstdorp-dierenronde-1112 en buggolf-1311 zijn gepubliceerd; md'tjes uit deploy/ naar archief/. |
 | **Shop Settings-commando's** | staff-paneel (TE punt 63) | Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online). De site-zip zelf is sindsdien vervangen en LIVE (site-1511). |
