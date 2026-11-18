@@ -27,6 +27,13 @@ Seventeen props make Xmas Town, and you can own any of them for your own base. A
 | Snow Globe | Shake it with a right-click |
 | Christmas Market Stall | Ginger, greens and gold for sale |
 | Cookie Plate | Take a cookie with a right-click; refill it with gingerbread |
+| Gingerbread House | The roof is candy - right-click to snap a piece off, press a cookie against it to re-decorate |
+| Cuckoo Clock | Wall or table; right-click and the little bird in the gable sings |
+| Nutcracker Guard | Two blocks of very serious cheer keeping your door |
+| Candle Chandelier | Hung from a ceiling, five brass candles flickering away |
+| Plum Pudding | Brandy icing and steam that keeps the table warm |
+| Santa Mailbox | Right-click with paper (or a written book) to post a wish to the North Pole |
+| Krampus | Santa's other half - right-click and he weighs your November. Not craftable: he appears where he is wanted |
 
 ### Good to know
 

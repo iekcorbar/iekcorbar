@@ -46,6 +46,8 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 | Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
 ## 🟡 Wacht op JOU
+| **Xmas-props: er zitten er zeven bij -inclusief Krampus** | TE-DEPLOYEN punt 27 | **Relics 0.7.7** [e3f97f3288ec] + **pack build64** [c94d101b522b] in deploy/: Peperkoekhuis (snoep-tegelen delen), Koekoeksklok (wand/tafel, vogel zingt), Nootkraker-wacht (2 hoog), Kronenluchter (plafond, twinkelend licht 13), Kerstpudding (stoom), Santa-brievenbus (papier erin = repost naar de Noordpool) en **KRAMPUS** - niet craftbaar, staf-stock, right-click = vonnis ("The Krampus has read your chat logs."). Audit 0/0, wiki-rijen mee in site-1811j. Restart nodig bij lege server - zeg wanneer. |
+
 | Wat | Waar | Actie |
 |---|---|---|
 | **site-1811g.zip naar Plesk** (TE punten 25+26) | deploy/site-1811g.zip [28199beb55e1] | Drie lagen in één pakket: live-map-sectie eraf; Analytics uit het staffpaneel → StaffHub (StaffHub-deel al live, enige restpunt = token-regel in Plesk .env.local, exact in TE-25); en de **enchanting-glow lees-triggers** op de wiki-kast (paars=ongelezen, goud=geüpdate, per browser onthouden). **Glitch hersteld:** de import-klikte altijd updated_at door langs alle pagina's - elke Refresh gaf de hele kast een valse gouden gloed; identieke pagina's worden nu overgeslagen (TE-26). En de gloed zelf is getemd: per boek een eigen fase, tragere sweep met rust, halve helderheid - geen stroboscoop meer (1811i). Plesk: unzip zónder "map leegmaken" → NPM install → restart → imports klikken. |

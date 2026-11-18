@@ -120,6 +120,7 @@ final class Relics implements Listener {
             if ((type == RelicType.GIFT_BOX || type == RelicType.EASTER_EGG || type == RelicType.GIANT_CANDY_CANE
                     || type == RelicType.BLOOD_TOKEN) && !variant.isEmpty()) m = variant;
             if (type == RelicType.COOKIE_PLATE) m = count > 3 ? "cookie_plate" : count > 0 ? "cookie_plate_3" : "cookie_plate_0";
+            if (type == RelicType.GINGERBREAD_HOUSE) m = count > 3 ? "gingerbread_house" : count > 0 ? "gingerbread_house_half" : "gingerbread_house_0";
             if (type == RelicType.CHAMPAGNE_TOWER) m = count > 6 ? "champagne_tower" : count > 0 ? "champagne_tower_half" : "champagne_tower_empty";
             if (type == RelicType.CANDY_HEART_JAR) m = count > 4 ? "candy_heart_jar" : count > 0 ? "candy_heart_jar_half" : "candy_heart_jar_empty";
             if (((type.effect == RelicType.Effect.TWINKLE || type.effect == RelicType.Effect.SWAP || type.effect == RelicType.Effect.SHISHI) && twinkle)
@@ -333,6 +334,12 @@ final class Relics implements Listener {
         recipe(RelicType.MARKET_STALL, 1, Tag.PLANKS, Tag.PLANKS, Tag.PLANKS, Tag.PLANKS, Material.RED_WOOL, Material.WHITE_WOOL, Material.STICK, Material.STICK);
         RecipeChoice cookie = plugin.treats().exact(Treats.Treat.GINGERBREAD_COOKIE);
         recipe(RelicType.COOKIE_PLATE, 1, Material.CLAY_BALL, cookie, cookie, cookie, cookie, cookie, cookie);
+        recipe(RelicType.GINGERBREAD_HOUSE, 1, Material.WHEAT, Material.WHEAT, Material.COCOA_BEANS, Material.EGG, Material.SUGAR, Material.SUGAR);
+        recipe(RelicType.CUCKOO_CLOCK, 1, Tag.PLANKS, Tag.PLANKS, Material.CLOCK, Material.NOTE_BLOCK, Material.GOLD_NUGGET);
+        recipe(RelicType.NUTCRACKER, 1, Tag.PLANKS, Tag.PLANKS, Material.STICK, Material.STICK, Material.RED_WOOL, Material.GOLD_NUGGET);
+        recipe(RelicType.CHANDELIER, 1, Material.IRON_NUGGET, Material.IRON_NUGGET, Material.GOLD_INGOT, Tag.CANDLES, Tag.CANDLES);
+        recipe(RelicType.PLUM_PUDDING, 1, Material.COCOA_BEANS, Material.EGG, Material.WHEAT, Material.SUGAR, Material.BOWL);
+        recipe(RelicType.SANTA_MAILBOX, 1, Material.CHEST, Material.RED_DYE, Material.RED_DYE, Material.SNOWBALL, Material.GOLD_NUGGET);
         // New Year
         recipe(RelicType.FIREWORK_LAUNCHER, 1, Material.COPPER_INGOT, Material.COPPER_INGOT, Material.COPPER_INGOT, Material.GUNPOWDER, Material.GOLD_INGOT);
         recipe(RelicType.COUNTDOWN_BOARD, 1, Tag.PLANKS, Tag.PLANKS, Material.CLOCK, Material.CLOCK, Material.GOLD_INGOT, Material.GLOWSTONE_DUST, Material.BLACK_DYE);
@@ -501,6 +508,7 @@ final class Relics implements Listener {
         Relic r = new Relic(target.getWorld(), target.getX(), target.getY(), target.getZ(), t, mount, facing);
         r.staffPlaced = p.hasPermission("relics.admin"); // what staff places, players can never break
         if (t == RelicType.COOKIE_PLATE) r.count = 6;
+        if (t == RelicType.GINGERBREAD_HOUSE) r.count = 6;
         if (t == RelicType.CHAMPAGNE_TOWER) r.count = 14;
         if (t == RelicType.EASTER_EGG) {
             String[] eggs = {"easter_egg", "easter_egg_blue", "easter_egg_yellow"};
@@ -1236,11 +1244,52 @@ final class Relics implements Listener {
                         p.getWorld().dropItemNaturally(p.getLocation(), left);
                     r.world.playSound(r.center(), "minecraft:entity.item.pickup", 0.5f, 1.2f);
                 } else {
-                    p.sendActionBar(Component.text("The plate is empty - refill it with Gingerbread Cookies.", NamedTextColor.GRAY));
+                    p.sendActionBar(Component.text(r.type == RelicType.GINGERBREAD_HOUSE
+                            ? "The roof is picked bare - press a Gingerbread Cookie against it to re-decorate."
+                            : "The plate is empty - refill it with Gingerbread Cookies.", NamedTextColor.GRAY));
                     return;
                 }
                 r.display.setItemStack(look(r.model()));
                 markDirty(r);
+            }
+            case CHIME -> {                if (plugin.tick < r.busyUntil) return;
+                r.busyUntil = plugin.tick + 60;    // two "ku-ku"s, then he clears his throat again
+                var cloc = r.center().add(0, 0.9, 0);
+                r.world.playSound(cloc, "minecraft:block.bell.use", 0.6f, 1.4f);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> r.world.playSound(cloc, "minecraft:block.bell.use", 0.6f, 1.1f), 10L);
+                r.world.spawnParticle(Particle.NOTE, cloc, 3, 0.2, 0.25, 0.2, 0.4);
+            }
+            case POST -> {
+                ItemStack held = hand;
+                boolean wish = held.getType() == Material.PAPER || held.getType() == Material.WRITTEN_BOOK || held.getType() == Material.WRITABLE_BOOK;
+                if (wish) {
+                    if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+                    r.world.playSound(r.center(), "minecraft:block.bell.use", 0.9f, 0.9f);
+                    r.world.playSound(r.center(), "minecraft:entity.experience_orb.pickup", 0.7f, 1.6f);
+                    r.world.spawnParticle(Particle.SNOWFLAKE, r.center().add(0, 1.0, 0), 12, 0.3, 0.3, 0.3, 0.02);
+                    p.sendActionBar(Component.text("Posted. The North Pole reads every one of these.", NamedTextColor.GOLD));
+                    org.bukkit.entity.Item flown = r.world.dropItem(r.center().add(0, 1.2, 0), new ItemStack(Material.PAPER),
+                            d -> { d.setVelocity(new org.bukkit.util.Vector(0, 0.7, 0)); d.setPickupDelay(60); d.setPersistent(false); });
+                    if (flown != null) flown.setGlowing(true);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> { if (flown != null) flown.remove(); }, 30L);
+                } else {
+                    p.sendActionBar(Component.text("Right-click with paper (or a written book) to post a wish.", NamedTextColor.GRAY));
+                }
+            }
+            case KRAMPUS -> {
+                if (plugin.tick < r.busyUntil) return;
+                r.busyUntil = plugin.tick + 80;
+                String[] verdicts = {
+                        "The Krampus has read your chat logs. He has notes.",
+                        "He smells of birch smoke and old grudges.",
+                        "One lump of coal is missing from his basket. Suspicious.",
+                        "He looks at your inventory. Then at you. Then at the basket.",
+                        "The bell says: behave." };
+                String line = verdicts[Math.floorMod(p.getName().hashCode() + Long.hashCode(java.time.LocalDate.now().toEpochDay()), verdicts.length)];
+                r.world.playSound(r.center(), "minecraft:block.bell.use", 1.0f, 0.6f);
+                r.world.playSound(r.center(), "minecraft:entity.pig.angry", 0.7f, 0.5f);
+                r.world.spawnParticle(Particle.CLOUD, r.center().add(0, 1.4, 0), 6, 0.4, 0.3, 0.4, 0.01);
+                p.sendActionBar(Component.text(line, NamedTextColor.DARK_RED));
             }
             case JAR -> {
                 Treats.Treat held = plugin.treats().typeOf(hand);

@@ -584,6 +584,176 @@ def blood_token_wall(blessed=False):
             box(7.4, 3.2, 14.5, 8.6, 4.4, 15.05, mark)]
 
 
+def gingerbread_house(level):
+    """A 2-block-wide candy house. level 2 = all sweets, 1 = half picked over, 0 = shared bare."""
+    e = [
+        box(1.5, 0, 2.5, 14.5, 7, 13.5, "ginger"),                       # walls
+        box(1, 6.6, 2, 15, 7.4, 14, "icing"),                            # icing sill band
+        box(6.5, 0.5, 1.7, 9.5, 5.5, 2.6, "cocoa"),                      # door
+        box(6.9, 1, 1.6, 9.1, 5.2, 1.9, "cocoa_d"),
+        box(8.8, 2.6, 1.5, 9.2, 3.4, 1.8, "gold"),                       # door knob
+        box(3.2, 3.4, 1.8, 5.6, 5.6, 2.4, "amber"), box(3, 3.2, 1.7, 5.8, 5.8, 2.5, "icing"),   # window L
+        box(10.4, 3.4, 1.8, 12.8, 5.6, 2.4, "amber"), box(10.2, 3.2, 1.7, 13, 5.8, 2.5, "icing"),  # window R
+        box(0.5, 7, 1.5, 8.5, 8, 14.5, "xred"),                          # stepped roof, left
+        box(1.5, 8, 2.5, 7.5, 9, 13.5, "xred_d"),
+        box(2.5, 9, 3.5, 6.5, 9.8, 12.5, "xred"),
+        box(7.5, 7, 1.5, 15.5, 8, 14.5, "xred_d"),                       # right
+        box(8.5, 8, 2.5, 14.5, 9, 13.5, "xred"),
+        box(9.5, 9, 3.5, 13.5, 9.8, 12.5, "xred_d"),
+        box(6.5, 9.8, 3, 9.5, 10.4, 13, "icing"),                        # ridge icing
+        box(0.5, 6.6, 1.2, 8.5, 7.3, 1.9, "icing"),                      # eave drips front
+        box(7.5, 6.6, 1.2, 15.5, 7.3, 1.9, "icing"),
+        box(11.5, 9.5, 7, 13.5, 12.5, 9, "ginger_d"),                    # chimney
+        box(11.3, 12.5, 6.8, 13.7, 13.3, 9.2, "snow"),
+    ]
+    if level >= 1:                                                        # gumdrops along both eaves
+        for i, x in enumerate(range(2, 15, 3)):
+            col = ("bulb_red", "bulb_yellow", "bulb_blue")[i % 3]
+            e += [box(x, 7.6, 1.1, x + 1.4, 8.7, 2.2, col)]
+            if level >= 2 and i % 2 == 0:
+                e += [box(x, 8.6, 14, x + 1.4, 9.7, 14.9, ("bulb_yellow", "bulb_blue", "bulb_red")[i % 3])]
+    if level >= 2:                                                        # peppermint window crowns + star
+        e += [box(3.2, 5.8, 1.9, 5.6, 6.4, 2.3, "icing"), box(10.4, 5.8, 1.9, 12.8, 6.4, 2.3, "icing"),
+              box(7.2, 10.4, 7.2, 8.8, 11.2, 8.8, "gold")]
+    return e
+
+
+def cuckoo_clock(wall):
+    """Chalet clock: brass dial, wooden shutters, a bird above the door. wall=True hangs flush."""
+    z0 = 11.2 if wall else 5.5          # body front edge; back is at z16 on walls, mid-block on tables
+    d = 16 - z0 if wall else 5
+    e = [
+        box(4, 2.5, z0, 12, 13.5, z0 + d, "wood_old"),                   # case
+        box(3.5, 13.5, z0 - 0.4, 12.5, 15, z0 + d + 0.4, "wood_warm"),   # chalet roof
+        box(7.4, 15, z0 + d / 2 - 0.5, 8.6, 15.8, z0 + d / 2 + 0.5, "gold"),  # ridge knob
+        box(5.4, 7.6, z0 - 0.5, 10.6, 11.6, z0 + 0.3, "dial"),           # face
+        box(7.7, 8.4, z0 - 0.7, 8.3, 11.1, z0 - 0.4, "char"),            # hands
+        box(7.2, 9.3, z0 - 0.7, 9.6, 9.9, z0 - 0.4, "char"),
+        box(6.9, 11.7, z0 - 0.3, 7.6, 12.9, z0 + 0.4, "cocoa"),          # bird doors
+        box(8.4, 11.7, z0 - 0.3, 9.1, 12.9, z0 + 0.4, "cocoa"),
+        box(7.3, 12.1, z0 - 0.8, 8.7, 12.7, z0 - 0.2, "gold"),           # bird (peeking)
+        box(8.7, 12.2, z0 - 1.2, 9.3, 12.5, z0 - 0.8, "carrot"),         # beak
+        box(6.4, 2.8, z0 + 0.6, 6.8, 6.6, z0 + 1, "chain"),              # pendulum chain + weight
+        box(6, 1.4, z0 + 0.4, 7.2, 2.8, z0 + 1.2, "gold"),
+        box(9.2, 2.8, z0 + 0.6, 9.6, 6.2, z0 + 1, "chain"),
+        box(8.8, 1.6, z0 + 0.4, 10, 3, z0 + 1.2, "pine"),
+    ]
+    if wall:
+        e.append(box(4.5, 3, 15.6, 11.5, 13, 16, "wood_warm_d"))         # back plate against the wall
+    else:
+        e += [box(4.2, 0, z0 + 0.5, 5.4, 2.5, z0 + d - 0.5, "wood_warm_d"),   # table legs
+              box(10.6, 0, z0 + 0.5, 11.8, 2.5, z0 + d - 0.5, "wood_warm_d")]
+    return e
+
+
+def nutcracker():
+    """Two blocks of stern brass-coated cheer: gold braid, teeth, and a hat with a plume."""
+    e = [
+        box(5, 0, 5, 11, 2.5, 11, "char"),                               # boot plinth
+        box(4.8, 2.5, 5.2, 11.2, 12.5, 10.8, "xred"),                    # coat
+        box(4.5, 12.5, 4.9, 11.5, 13.8, 11.1, "char"),                   # belt
+        box(7, 12.6, 4.7, 9, 13.7, 5.1, "gold"),                         # buckle
+        box(3.2, 4, 6, 4.8, 12, 10, "xred_d"), box(11.2, 4, 6, 12.8, 12, 10, "xred_d"),   # arms
+        box(3.2, 3, 6.4, 4.8, 4, 9.6, "gold"), box(11.2, 3, 6.4, 12.8, 4, 9.6, "gold"),   # gloves
+        box(5.8, 13.8, 5.8, 10.2, 18.5, 10.2, "cream"),                  # head
+        box(6.4, 16.4, 5.6, 7.2, 17.2, 6.2, "char"), box(8.8, 16.4, 5.6, 9.6, 17.2, 6.2, "char"),  # eyes
+        box(6.6, 14, 5.4, 9.4, 15.6, 6.2, "icing"),                      # teeth (upper jaw)
+        box(7, 14.1, 5.3, 7.3, 15.5, 6.3, "char_d"), box(8.6, 14.1, 5.3, 8.9, 15.5, 6.3, "char_d"),
+        box(6.8, 13.2, 5.4, 9.2, 14, 6.2, "xred_d"),                     # grumpy lower lip
+        box(5.2, 18.5, 5.2, 10.8, 22.5, 10.8, "lacquer_black"),          # hat
+        box(4.9, 18.4, 4.9, 11.1, 19.3, 11.1, "gold"),                   # hat band
+        box(7.4, 22.5, 7.4, 8.6, 24, 8.6, "xred"), box(7.2, 24, 7.2, 8.8, 25, 8.8, "gold"),  # plume
+        box(5.4, 16.8, 10.2, 10.6, 17.6, 10.6, "gold"),                  # back-of-collar braid
+        box(5.6, 10.6, 4.9, 10.4, 11.4, 5.3, "gold"), box(5.6, 8.4, 4.9, 10.4, 9.2, 5.3, "gold"),  # chest braid
+        box(5.6, 6.2, 4.9, 10.4, 7, 5.3, "gold"),
+        box(6.9, 25.6, 6.9, 9.1, 26.4, 9.1, "snow"),                     # a snowflake landed on the hat
+    ]
+    return e
+
+
+def chandelier(ring, lit):
+    """Ceiling chandelier: chain, brass ring, four candles and a centre lamp. lit toggles flames."""
+    flame = "flame" if lit else "bulb_off"
+    core = "flame_core" if lit else "glass"
+    e = [box(7.5, 11.4 + ring, 7.5, 8.5, 16, 8.5, "chain")]             # chain up to the ceiling
+    e += [box(6.6, 10.6 + ring, 6.6, 9.4, 11.6 + ring, 9.4, "brass")]   # hub
+    y = 10 + ring
+    e += [box(4, y, 7.5, 12, y + 0.7, 8.5, "brass"), box(4, y, 7.5, 5, y + 0.7, 8.5, "brass"),
+          box(11, y, 7.5, 12, y + 0.7, 8.5, "brass")]
+    for (cx, cz) in ((4.4, 8), (11, 8), (8, 4.4), (8, 11)):             # four candle cups
+        e += [box(cx - 0.5, y + 0.2, cz - 0.5, cx + 0.5, y + 0.9, cz + 0.5, "brass_d"),
+              box(cx - 0.5, y + 0.9, cz - 0.5, cx + 0.5, y + 2.7, cz + 0.5, "icing")]
+        if lit:
+            e += [box(cx - 0.25, y + 2.7, cz - 0.25, cx + 0.25, y + 3.5, cz + 0.25, flame),
+                  box(cx - 0.12, y + 2.8, cz - 0.12, cx + 0.12, y + 3.3, cz + 0.12, core)]
+    e += [box(7.2, y - 1.4, 7.2, 8.8, y, 8.8, "amber" if lit else "glass")]  # centre oil lamp
+    e += [box(7.5, y - 1.7, 7.5, 8.5, y - 1.3, 8.5, "brass_d")]
+    return e
+
+
+def plum_pudding():
+    """Dinner-table classic: brown dome, brandy icing drip, holly and a warm glow."""
+    return [
+        box(3, 0, 3, 13, 0.7, 13, "icing"), box(2.6, 0.35, 2.6, 13.4, 0.9, 13.4, "icing_d"),   # plate
+        box(5.2, 0.9, 5.2, 10.8, 4.6, 10.8, "cocoa"),                    # dome
+        box(6, 4.6, 6, 10, 5.4, 10, "cocoa_d"),
+        box(5.2, 4, 5.2, 10.8, 4.6, 5.6, "icing"), box(5.2, 4, 10.4, 10.8, 4.6, 10.8, "icing"),  # icing drips
+        box(6.6, 4.7, 6.6, 9.4, 5.2, 9.4, "icing"),
+        box(7.4, 5.2, 5.6, 8.6, 5.7, 7, "xgreen"), box(6.2, 5.2, 7.4, 7.4, 5.7, 8.6, "xgreen_d"),  # holly
+        box(8.2, 5.4, 7.6, 9, 6, 8.4, "glow_red"),                       # berries
+        box(7, 5.4, 7, 7.8, 6, 7.8, "glow_red"),
+    ]
+
+
+def santa_mailbox():
+    """North- Pole post box: red drum, snow cap, brass slot and a little horn for the rush."""
+    return [
+        box(5.5, 0, 5.5, 10.5, 1, 10.5, "snow_d"),                       # snowy plinth
+        box(6, 1, 6, 10, 10.5, 10, "xred"),                              # drum
+        box(5.5, 10.5, 5.5, 10.5, 12.5, 10.5, "xred_d"),                 # dome top
+        box(6.5, 12.5, 6.5, 9.5, 13.3, 9.5, "snow"), box(7.6, 13.3, 7.6, 8.4, 14.5, 8.4, "gold"),  # cap + knob
+        box(6.8, 7.6, 5.7, 9.2, 8.8, 6.4, "char"),                       # mail slot
+        box(6.6, 7.4, 5.6, 9.4, 7.8, 6.5, "gold"), box(6.6, 8.7, 5.6, 9.4, 9.1, 6.5, "gold"),
+        box(6.4, 3.6, 5.7, 9.6, 6.2, 6.3, "gold"),                       # plaque
+        box(6.8, 4, 5.6, 9.2, 5.8, 6.1, "xred_d"),                       # plaque cut-out (NP lettering hint)
+        box(7.5, 4.5, 5.5, 8.5, 5.3, 6, "icing"),
+        box(4.6, 2.4, 7, 5.4, 3.2, 9, "brass"), box(10.6, 2.4, 7, 11.4, 3.2, 9, "brass"),   # side bands
+        box(9.8, 1.2, 4.4, 11, 2.2, 5.6, "gold"),                        # little horn at the base
+    ]
+
+
+def krampus():
+    """Santa's other half: shaggy dark fur, bone horns, a brass bell on a chain and a straw
+    basket of lumps of coal. Right-click handler lives in Relics.java (Use.KRAMPUS)."""
+    e = [
+        box(5.5, 0, 6.5, 7, 4, 8, "wood_char"), box(9, 0, 6.5, 10.5, 4, 8, "wood_char"),   # legs
+        box(5.3, 0, 6.3, 7.2, 1.2, 8.2, "bone_old"), box(8.8, 0, 6.3, 10.7, 1.2, 8.2, "bone_old"),  # hooves
+        box(4.5, 3.5, 5.5, 11.5, 15, 10.5, "wood_char"),                                   # shaggy body
+        box(4, 12.5, 5, 12, 15.5, 11, "char"),                                             # hunched shoulders
+        box(4.9, 6, 5.2, 6.1, 9, 5.8, "wood_old"), box(9.9, 7, 5.2, 11.1, 10, 5.8, "wood_old"),  # fur tufts
+        box(4.2, 4, 10.2, 5.4, 7, 11, "wood_old"),                                         # tail-side tuft
+        box(3.2, 5, 6, 4.5, 12, 9.5, "wood_char"), box(11.5, 5, 6, 12.8, 12, 9.5, "wood_char"),  # arms
+        box(3, 11.5, 6.5, 4.7, 13.5, 9, "bone_old"), box(11.3, 11.5, 6.5, 13, 13.5, 9, "bone_old"),  # claw hands
+        box(6, 15, 5.2, 10, 19.2, 9.5, "wood_old"),                                        # head
+        box(6.4, 15, 4.2, 9.6, 17.2, 5.4, "cloth"),                                        # snout
+        box(6.8, 15.1, 3.9, 9.2, 15.6, 5.4, "icing"),                                      # teeth
+        box(7.6, 15.7, 3.9, 8.4, 16.2, 4.6, "glow_red"),                                   # tongue
+        box(6.7, 17.4, 4.9, 7.5, 18.2, 5.3, "glow_red"), box(8.5, 17.4, 4.9, 9.3, 18.2, 5.3, "glow_red"),  # eyes
+        box(5.6, 18.6, 6.4, 6.8, 21, 7.8, "bone"), box(4.7, 20.6, 6.7, 5.9, 23.2, 7.9, "bone_old"),
+        box(3.9, 22.8, 6.9, 4.9, 25, 7.9, "bone"),                                         # left horn (curving)
+        box(9.2, 18.6, 6.4, 10.4, 21, 7.8, "bone"), box(10.1, 20.6, 6.7, 11.3, 23.2, 7.9, "bone_old"),
+        box(11.1, 22.8, 6.9, 12.1, 25, 7.9, "bone"),                                       # right horn
+        box(6.6, 13, 9.8, 7.2, 14, 10.4, "chain"), box(7.2, 12.4, 10, 8.8, 13, 10.8, "chain"),  # collar + chain
+        box(7.4, 11.6, 9.8, 8.6, 12.6, 11, "gold"),                                        # brass bell
+        box(3.5, 6, 9.6, 12.5, 12.5, 14.5, "straw"), box(4.2, 11.5, 10.2, 11.8, 12.6, 14, "straw_d"),  # basket
+        box(5, 12, 11, 6.5, 13.2, 12.5, "coal"), box(8, 12.1, 11.4, 9.5, 13.4, 12.9, "coal"),        # coal in the basket
+        box(11.6, 3.5, 6.6, 12.6, 10, 7.6, "wood_warm"), box(12.1, 3, 6.4, 13.1, 9.5, 7.2, "wood_old"),  # birch rods
+        box(11.3, 8.6, 6.2, 13.4, 9.6, 8, "cloth"),                                        # red binding
+        box(5.5, 25.4, 6.6, 6.4, 26, 7.6, "snow"),                                         # one honest snowflake on the horn
+    ]
+    return e
+
+
 XMAS = {
     "christmas_tree": lambda: tree(True), "christmas_tree_b": lambda: tree(False),
     "string_lights": lambda: string_lights(True), "string_lights_b": lambda: string_lights(False),
@@ -599,6 +769,14 @@ XMAS = {
     "mulled_cider": lambda: mug("glass", "cider", [box(9.5, 6, 5, 10.5, 9, 7, "carrot")]),
     "gingerbread_cookie": lambda: gingerbread_man(8, 8, 0),
     "christmas_stollen": lambda: [box(3, 0, 5, 13, 4, 11, "ginger_l"), box(3.5, 4, 5.5, 12.5, 4.6, 10.5, "icing"), box(3, 1.5, 4.9, 13, 2.5, 11.1, "cream")],
+    "gingerbread_house": lambda: gingerbread_house(2), "gingerbread_house_half": lambda: gingerbread_house(1),
+    "gingerbread_house_0": lambda: gingerbread_house(0),
+    "cuckoo_clock": lambda: cuckoo_clock(False), "cuckoo_clock_wall": lambda: cuckoo_clock(True),
+    "nutcracker": nutcracker,
+    "chandelier": lambda: chandelier(0, True), "chandelier_b": lambda: chandelier(0, False),
+    "chandelier_ceiling": lambda: chandelier(3, True), "chandelier_ceiling_b": lambda: chandelier(3, False),
+    "plum_pudding": plum_pudding, "santa_mailbox": santa_mailbox,
+    "krampus": krampus,
     "candy_cane": lambda: [box(7.4, 0, 7.4, 8.6, 10, 8.6, "icing")] + [box(7.35, y, 7.35, 8.65, y + 1, 8.65, "xred") for y in (1, 4, 7)]
                           + [box(7.4, 10, 7.4, 10.5, 11.2, 8.6, "icing"), box(9.3, 8.5, 7.4, 10.5, 10, 8.6, "xred")],
 }
