@@ -9,8 +9,10 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 versies van de server gehaald (backup `/root/deploy-backup-20261118/`). Voorspoed: Hihou crashte de eerste boot op een
 null PDC-key (breachKey vóór de shop-builder zetten) - gerepareerd, jar [d6664b99603d], git 37d421ab pushed.
 JOUW RESTJES: arena plakken + aanwijzen (checklist-print `scripts/make_bedwars_arena.py`; **/ih bw snapshot
-vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21, en Discord publiceren (punt 23:
-eerst staff, dan spelers; beide md'tjes zeggen "nog niet live" - één regel "live sinds 18-11" derven kan netjes).
+vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21, Discord publiceren (punt 23:
+eerst staff, dan spelers; beide md'tjes zeggen "nog niet live" - één regel "live sinds 18-11" derven kan netjes),
+en **site-1811.zip** naar Plesk (TE-punt 24: unzip zónder "map leegmaken" → NPM install → restart → in het
+staff-paneel "Import Sakagura/Gouw/Kitchen pages" klikken; de wiki-teksten van de hele batch zitten erin).
 
 Peildatum: 18 nov 2026 ochtend — 17-nov-batch live (echte fruitbomen, compostpennigen, Gouw 0.5.1, BedWars 0.6.1 + build61).
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
@@ -42,7 +44,7 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 ## 🟡 Wacht op JOU
 | Wat | Waar | Actie |
 |---|---|---|
-| Volgende site-bouw: treinteksten meenemen | staff-paneel | Site-1511 is LIVE (eigenaar 15-11 ~15:45), dus de 0.3.44/0.3.45-wiki-teksten zitten in de zaden op de server. Rest alleen nog: in het staff-paneel de importknoppen klikken — "Import Steamworks pages" + "Import Gouw pages" (en Xmas/Relics/Wildlife als die nog niet klaar staan). |
+| **site-1811.zip naar Plesk** (TE punt 24) | deploy/site-1811.zip [7a83cda22fa0] | Verse wiki-zaden voor de hele 17-nov-batch: Sakagura **echte fruitbomen**, Gouw **0.5.1** (accept per stad, officer ≠ almachtig), Kitchen+Tuin **composteren**. Plesk: upload + unzip in /httpdocs (**nooit "map leegmaken"**), NPM install, restart app; daarna staff-paneel → "Import Sakagura pages" + "Import Gouw pages" + "Import Kitchen pages" (en de Xmas/Relics/Steamworks/Wildlife-imports uit deze rij's voorganger als die nog open stonden). |
 | ~~Site-zip naar Plesk~~ ✅ LIVE 15 nov | — | site-1511.zip [50f1649de3f4] staat live en is bevestigd ("website in orde"); zip uit deploy/ weg. site-1311b/site-1311 zijn damit evervallen. |
 | ~~Discord-posts publiceren~~ ✅ GEDAAN 16 nov | — | treinnetwerk-1115 (spelers + staff), kerstdorp-dierenronde-1112 en buggolf-1311 zijn gepubliceerd; md'tjes uit deploy/ naar archief/. |
 | **Shop Settings-commando's** | staff-paneel (TE punt 63) | Staff Panel → Shop Settings: money-take `cmi money take {player} {amount}` en coins-take `em money remove {player} {amount}` (de oude 'elitecoins take'/'em money take' bestaan niet op de server; balance-koop lukt alleen als koper ONLINE is - CMI pakt doelen uitsluitend online). De site-zip zelf is sindsdien vervangen en LIVE (site-1511). |
