@@ -62,3 +62,5 @@ Everything for brewing grows on **farmland**, in three stages. Plants need light
 **Good to know:** hops, grapes, passion fruit and vanilla are thirsty - they only grow on wet farmland. Grains and roots (barley, rice, rye, maize, ginger, wasabi, daikon) are dug up whole and replanted. Wild bushes appear here and there in the world; break or pick them for your first seeds. Fruiting plants sometimes drop their pit or seeds when picked, and one fruit crafts into two seeds. Many fruits are also nice to eat.
 
 **Looking for bigger harvests?** The garden has an orchard too: [Orchard Trees](/wiki?page=sakagura-trees) grow from saplings into full trees whose fruit you pick off the canopy.
+
+**Waste not**: right-click a composter with a seed (30%) or with fruit/vegetable harvest (50%) and the level goes up; every eighth success gives **bone meal** back. Kitchen's crops compost the same way, and shared twins only count once.

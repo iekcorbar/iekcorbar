@@ -29,3 +29,4 @@ Kitchen crops grow on **farmland** (or [Rich Soil](/wiki?page=kitchen-props)) li
 * Breaking a young crop gives the seed back. Breaking a ripe one gives the harvest.
 * Trampling the farmland pops the crop off, just like wheat.
 * With a **knife**, breaking tall grass sometimes gives **Straw** (for bales, mats and compost).
+* **Compost your greens**: right-click a vanilla composter with any crop seed (30% chance to raise the level) or with the harvest itself - vegetables and fruit (50%). Every eighth success pops **bone meal** out of the composter. This works for Kitchen crops, Sakagura garden crops and orchard produce alike; shared twins (daikon, chili, tomato...) count once, no matter which plugin grew them. Plates, bowls and knives still open the composter like normal - no accidental meals in the bin.
