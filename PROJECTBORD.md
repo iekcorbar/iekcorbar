@@ -9,10 +9,12 @@ jij leest hier alleen wat er doet. (Detailstatus per serverpunt: `deploy/TE-DEPL
 versies van de server gehaald (backup `/root/deploy-backup-20261118/`). Voorspoed: Hihou crashte de eerste boot op een
 null PDC-key (breachKey vóór de shop-builder zetten) - gerepareerd, jar [d6664b99603d], git 37d421ab pushed.
 JOUW RESTJES: arena plakken + aanwijzen (checklist-print `scripts/make_bedwars_arena.py`; **/ih bw snapshot
-vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21, Discord publiceren (punt 23:
-eerst staff, dan spelers; beide md'tjes zeggen "nog niet live" - één regel "live sinds 18-11" derven kan netjes),
-en **site-1811d.zip** naar Plesk (TE-punt 24: unzip zónder "map leegmaken" → NPM install → restart → in het
-staff-paneel "Import Sakagura/Gouw/Kitchen pages" klikken; de wiki-teksten van de hele batch zitten erin).
+vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21.
+~~Discord~~ ✅ batch- én website-posts zijn GEPUBLICEERD 18-11 (oud papier naar `archief/discord-gepubliceerd/`);
+het nieuwe paar `discord-wikisplit-1811.md` + `-staff.md` (wiki-scheiding + events-fix) wacht op de site-deploy.
+**site-1811d.zip** naar Plesk (TE-punt 24: unzip zónder "map leegmaken" → NPM install → restart → in het
+staff-paneel de imports klikken: Hihou BedWars, Sakagura, Gouw, Kitchen + de negen gestripte categorieën;
+StaffHub is al live bijgewerkt via SSH: nieuwe BedWars-arena-gids + Novità + indice).
 
 Peildatum: 18 nov 2026 ochtend — 17-nov-batch live (echte fruitbomen, compostpennigen, Gouw 0.5.1, BedWars 0.6.1 + build61).
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
