@@ -83,7 +83,17 @@ Drive WebDAV: crea un token nel tuo profilo. In Esplora risorse di Windows: Conn
 - Backup: il database e i file stanno nella cartella dati sulla VPS; deploy/backup.sh conserva tar settimanali. Fai una copia del database prima di ogni aggiornamento.
 - Aggiornamento: nuovo sorgente in /opt/staffhub, poi docker compose up -d --build. La memoria è limitata a 512 MB così il server Minecraft non ne risente mai.
 
-## 7. Quando qualcosa non va
+## 7. Website-analyse (dal 18 novembre)
+
+La vecchia scheda "Analytics" del pannello staff del sito è stata **spostata qui**: il sito pubblico è per i giocatori, gli strumenti di staff stanno in StaffHub.
+
+- Pulsante **grafico a barre** nella barra in alto (accanto a Server Status): apre un pannello con 7/30/90 giorni, totali (pagine viste, giocatori attivi, utenti app, download), grafici giornalieri, top pagine / piattaforme / browser / sistemi / referral / versioni app, e la tabella di attività per giocatore con lo stato delle notifiche push.
+- I numeri vengono da iekcorbar.com (endpoint `/api/staffhub/analytics`), letti lato server e **messati in cache 5 minuti** — premi il pulsante di aggiornamento dopo un deploy, non più spesso.
+- Nessun indirizzo email lascia mai il sito: la tabella giocatori è nominata solo con il minecraft-name.
+- Se il pannello dice "STAFFHUB_API_TOKEN non impostato": il segreto manca nella `.env` di StaffHub **o** nella `.env.local` del sito su Plesk (devono essere identici). "Site non raggiungibile" = problema di rete/Plesk, non tuo.
+- Il pannello è per chi ha accesso a StaffHub; non serve più nessun permesso speciale sul sito.
+
+## 8. Quando qualcosa non va
 
 | Sintomo | Cosa fare |
 |---|---|

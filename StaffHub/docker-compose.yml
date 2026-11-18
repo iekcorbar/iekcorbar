@@ -10,6 +10,8 @@ services:
       COOKIE_SECURE: "1"
       STAFFHUB_AI_URL: ${STAFFHUB_AI_URL}       # Boord-AI (zie deploy/ai/) - uit: .env op ''
       STAFFHUB_AI_PASS: ${STAFFHUB_AI_PASS}
+      SITE_ANALYTICS_URL: ${SITE_ANALYTICS_URL:-https://iekcorbar.com}
+      STAFFHUB_API_TOKEN: ${STAFFHUB_API_TOKEN}   # gedeeld geheim met de site (.env.local Plesk) - API /api/site-analytics
     volumes:
       - ./data:/app/data            # sqlite + bestanden: dit IS de NAS-bak
     mem_limit: 512m                 # de Minecraft-server mag never knocken

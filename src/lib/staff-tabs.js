@@ -53,7 +53,6 @@ export const STAFF_TABS = [
   // --- Administration ---
   { key: 'applications', label: 'Staff Applications', description: 'Review player applications for a Staff role, contact applicants, and approve or decline.', group: 'Administration' },
   { key: 'access', label: 'Access Control', description: 'View the live ban list and whitelist mirrored from the server (read-only).', group: 'Administration' },
-  { key: 'analytics', label: 'Analytics', description: 'Website and app usage: visitors, page views, devices, app downloads/versions, and per-player activity and push status.', group: 'Administration' },
   { key: 'player_data', label: 'Player Data', description: 'Look up a player\'s full plugin dossier: SiteSync webstats, deep-synced advancements & vanilla stats, EliteMobs, MMOCore, ValhallaMMO, BetonQuest and the Sakagura brew log. Nothing loads until you search a username.', group: 'Administration' },
   { key: 'console', label: 'RCON Console', description: 'Run free-text commands directly on the Minecraft server. No allowlist — this is full server access, every command is logged.', group: 'Administration' },
   { key: 'settings', label: 'Settings', description: "Umbrella tab for the site-configuration tools below — granted automatically once a role has at least one of them, not something you toggle directly.", group: 'Administration', isUmbrella: true },

@@ -12,6 +12,7 @@ import DeployChecklist from '@/components/DeployChecklist';
 import Navigation from '@/components/Navigation';
 import VersionHistory from '@/components/VersionHistory';
 import ServerStatus from '@/components/ServerStatus';
+import SiteAnalytics from '@/components/SiteAnalytics';
 import MarkdownImport from '@/components/MarkdownImport';
 import { MediaPlayer, Model3D, mediaKind } from '@/components/Media';
 import Assistant from '@/components/Assistant';
@@ -424,6 +425,7 @@ useEffect(() => {
 <button title="Deploy Checklist" onClick={() => setModal('deploy')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><ClipboardList size={18} /></button>
 <button title="Navigatie" onClick={() => setModal('nav')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><Star size={18} /></button>
 <button title="Server Status" onClick={() => setModal('server')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><Server size={18} /></button>
+<button title="Website-analyse" onClick={() => setModal('siteanalytics')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><BarChart3 size={18} /></button>
 <button title="Versiegeschiedenis" onClick={() => setModal('versions')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><History size={18} /></button>
 <button title="Markdown Importeren" onClick={() => setModal('mdimport')} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><FileText size={18} /></button>
 <button title="Sync docs" onClick={async () => { const r = await fetch('/api/sync', { method: 'POST' }); const j = await r.json(); alert('Synced ' + (j.synced || 0) + ' files'); load(parent); }} className="p-1.5 rounded hover:bg-white/10 text-gold/70 hover:text-gold"><RefreshCw size={18} /></button>
@@ -622,6 +624,7 @@ useEffect(() => {
 {modal === 'nav' && <Navigation onClose={() => setModal(null)} onOpen={(n) => { openById(n.id); setModal(null); }} />}
 {modal === 'versions' && sel && <VersionHistory node={sel} onClose={() => setModal(null)} onRestore={() => { /* reload */ }} />}
 {modal === 'server' && <ServerStatus onClose={() => setModal(null)} />}
+{modal === 'siteanalytics' && <SiteAnalytics onClose={() => setModal(null)} />}
 {modal === 'mdimport' && <MarkdownImport parent={parent?.id} onDone={() => load(parent?.id)} onClose={() => setModal(null)} />}
       {modal === 'admin' && <AdminModal onClose={() => setModal(null)} me={me} openAccounts={() => setModal('users')} />}
       {modal === 'tokens' && <TokensModal onClose={() => setModal(null)} />}

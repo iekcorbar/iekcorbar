@@ -72,7 +72,6 @@ import {
   Wine,
 } from 'lucide-react';
 import { renderMarkdown } from '@/lib/markdown';
-import AnalyticsTab from '@/components/AnalyticsTab';
 import StoryRoomTab from '@/components/StoryRoomTab';
 import { StaffSidebar, StaffOverview } from './StaffShell';
 import AuditLogView from './AuditLogView';
@@ -100,7 +99,7 @@ const NAV_HUBS = [
   { key: 'hub-moderation', label: 'Moderation', Icon: Shield, description: 'Sanctions and staff notes, player reports, and the server ban list / whitelist.', tabs: ['moderation', 'reports', 'access'] },
   { key: 'hub-community', label: 'Community', Icon: Users, description: 'Bug reports, staff applications, events and polls.', tabs: ['bugs', 'applications', 'events', 'polls'] },
   { key: 'hub-content', label: 'Content', Icon: BookOpen, description: 'Wiki, updates, news and the Story Room.', tabs: ['wiki', 'updates', 'news', 'story'] },
-  { key: 'hub-server', label: 'Server', Icon: Terminal, description: 'RCON console, website/app analytics, and the EliteMobs/MMOCore player database lookup.', tabs: ['console', 'analytics', 'player_data'] }
+  { key: 'hub-server', label: 'Server', Icon: Terminal, description: 'RCON console and the EliteMobs/MMOCore player database lookup. (Website/app analytics moved to StaffHub.)', tabs: ['console', 'player_data'] }
 ];
 
 const SETTINGS_TAB_ICONS = {
@@ -5180,7 +5179,6 @@ function ModerationContent() {
       )}
 
       {/* ======= ANALYTICS TAB (website + app usage) ======= */}
-      {effectiveTab === 'analytics' && canAccessTab('analytics') && <AnalyticsTab />}
 
       {/* ======= STORY ROOM TAB (staff storyline workspace) ======= */}
       {effectiveTab === 'story' && canAccessTab('story') && (

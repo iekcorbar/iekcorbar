@@ -1,14 +1,35 @@
 import { NextResponse } from 'next/server';
+import crypto from 'node:crypto';
 import { db } from '@/lib/db';
-import { requirePermission } from '@/lib/permissions';
 import { normalizePushPreferences } from '@/lib/push';
 
-// Staff Panel → Analytics. Permission 'analytics' (admins always; other roles
-// only if granted in Roles & Permissions). Players are shown by Minecraft
-// name, never by email.
+// Machine-to-machine feed for StaffHub's "Website-analyse" screen (the old
+// Staff Panel → Analytics tab, moved to StaffHub per owner 18-11: the public
+// website is for players, staff tooling lives in StaffHub).
+//
+// Auth: header `x-staffhub-token` must equal env STAFFHUB_API_TOKEN (constant-
+// time compare). The same secret goes in this site's .env.local (Plesk) and
+// StaffHub's .env on the VPS. Unconfigured host => 503, wrong token => 401.
+// Payload is deliberately email-free (players are named by mcUsername only).
+export const dynamic = 'force-dynamic';
+
+function authorized(request) {
+  const want = process.env.STAFFHUB_API_TOKEN;
+  if (!want) return 'unconfigured';
+  const got = request.headers.get('x-staffhub-token') || '';
+  try {
+    const a = Buffer.from(String(want));
+    const b = Buffer.from(got);
+    return a.length === b.length && crypto.timingSafeEqual(a, b) ? 'ok' : 'denied';
+  } catch {
+    return 'denied';
+  }
+}
+
 export async function GET(request) {
-  const auth = await requirePermission(request, 'analytics');
-  if (auth.error) return auth.error;
+  const auth = authorized(request);
+  if (auth === 'unconfigured') return NextResponse.json({ error: 'STAFFHUB_API_TOKEN is not set on this host' }, { status: 503 });
+  if (auth !== 'ok') return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
 
   const days = new URL(request.url).searchParams.get('days') || 30;
   try {
@@ -41,7 +62,7 @@ export async function GET(request) {
     const prefs = await db.getPushPreferencesFor([...rows.keys()]);
     const players = [...rows.values()].map(r => {
       const p = normalizePushPreferences(prefs.get(r.email));
-      const { email, ...rest } = r; // never send emails to the client
+      const { email, ...rest } = r; // never send emails over this wire either
       return { ...rest, notificationsOff: !p.enabled };
     }).sort((x, y) => new Date(y.lastSeen || 0) - new Date(x.lastSeen || 0));
 
@@ -74,7 +95,7 @@ export async function GET(request) {
       players
     });
   } catch (err) {
-    console.error('Analytics API error:', err);
+    console.error('StaffHub analytics API error:', err);
     return NextResponse.json({ error: 'Could not load analytics (is the analytics_events table created?)' }, { status: 500 });
   }
 }
