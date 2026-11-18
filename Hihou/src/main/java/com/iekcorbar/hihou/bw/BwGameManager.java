@@ -88,11 +88,13 @@ public final class BwGameManager {
 
     public BwGameManager(HihouPlugin plugin) {
         this.plugin = plugin;
+        // breachKey MOET vóór de BwStore: diens constructor bouwt direct het
+        // breach-charge-item (stock() -> breachItem()) en schrijft de key in de PDC.
+        breachKey = new org.bukkit.NamespacedKey(plugin, "breach");
         rejoin = new BwRejoin(plugin);
         store = new BwStore(this);
         hud = new BwHud(this, plugin);
         stats = new BwStats(new File(plugin.getDataFolder(), "bwstats.json"));
-        breachKey = new org.bukkit.NamespacedKey(plugin, "breach");
         file = new File(plugin.getDataFolder(), "arenas.json");
         if (file.exists()) {
             try {
