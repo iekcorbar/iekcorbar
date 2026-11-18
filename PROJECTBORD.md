@@ -45,8 +45,12 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 | **IekQuests 0.5.4 + Igor conversatie-quest** | 30-10 18:05 | stage-dialoog in chat + paneel sluit voor leespauze; Igor: 4 verduidelijkte stages + receptuur in de praat |
 | Tank- + plateauwagen | 30-10 05:05 | jar + 2 sw-modellen + pack-build (build19; intussen opgevolgd door 20/21) |
 
+## 🟢 Live op de server
+| **Xmas-props: zeven nieuw -inclusief Krampus (Relics 0.7.7 + pack build65)** | 18 nov 19:21 | Peperkoekhuis (snoep tegels delen), Koekoeksklok (wand/tafel, vogel zingt), Nootkraker 1.98 blk, Kronenluchter (licht 13, twinkelend, vlammen onder het plafond), Kerstpudding (tafel 0.47 blk), Santa-brievenbus (papier/boek = posted), KRAMPUS (niet craftbaar, right-click vonnis). 114 relics, Done 74 s, 0 errors, mixer alleen build65. **Clients: herstarten (build61→65).** Testen: /relics give <p> krampus enz. + groottes kloppen met hitbox. |
+|---|---|---|
+
 ## 🟡 Wacht op JOU
-| **Xmas-props: er zitten er zeven bij -inclusief Krampus** | TE-DEPLOYEN punt 27 | **Relics 0.7.7** [393fa789c2b3] + **pack build65** [1ebd261831c3] in deploy/ (groottes nagemeten: hitbox = modelhoogte, kroonluchter-vlammen onder het plafond): Peperkoekhuis (snoep-tegelen delen), Koekoeksklok (wand/tafel, vogel zingt), Nootkraker-wacht (2 hoog), Kronenluchter (plafond, twinkelend licht 13), Kerstpudding (stoom), Santa-brievenbus (papier erin = repost naar de Noordpool) en **KRAMPUS** - niet craftbaar, staf-stock, right-click = vonnis ("The Krampus has read your chat logs."). Audit 0/0, wiki-rijen mee in site-1811j. Restart nodig bij lege server - zeg wanneer. |
+| ~~Xmas-props~~ ✅ LIVE 18-11 19:21 (eerste rij hierboven, 🟢) | TE-DEPLOYEN punt 27 (afgehandeld) | **Relics 0.7.7** [393fa789c2b3] + **pack build65** [1ebd261831c3] in deploy/ (groottes nagemeten: hitbox = modelhoogte, kroonluchter-vlammen onder het plafond): Peperkoekhuis (snoep-tegelen delen), Koekoeksklok (wand/tafel, vogel zingt), Nootkraker-wacht (2 hoog), Kronenluchter (plafond, twinkelend licht 13), Kerstpudding (stoom), Santa-brievenbus (papier erin = repost naar de Noordpool) en **KRAMPUS** - niet craftbaar, staf-stock, right-click = vonnis ("The Krampus has read your chat logs."). Audit 0/0, wiki-rijen mee in site-1811j. Restart nodig bij lege server - zeg wanneer. |
 
 | Wat | Waar | Actie |
 |---|---|---|
