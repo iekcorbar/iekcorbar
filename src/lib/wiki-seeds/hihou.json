@@ -1,0 +1,82 @@
+{
+ "source": "docs/wiki-hihou (regenerate with scripts/build-wiki-seed.py)",
+ "pages": [
+  {
+   "slug": "hihou-intro",
+   "title": "BedWars - Introduction",
+   "category": "Hihou BedWars",
+   "parent": null,
+   "content": "## BedWars\n\nProtect your team's bed. Break theirs. That is the whole war.\n\nBedWars runs on the dedicated arena islands (built from the `bedwars-*` schematics): every team gets a home island with a **bed**, two **iron generators** and one **gold generator**, a shop marker and a team chest. Diamond and emerald islands float between the teams - those are the mid-game fights.\n\n**Getting in**\n\n* `/ih bw list` — the arenas on the server and who is waiting.\n* `/ih bw join <arena>` — stand in the lobby circle and wait. When enough players are in, a 10-second countdown starts and the islands open.\n* `/ih bw kit` — pick your kit before the drop (see [Kits](/wiki?page=hihou-kits)).\n\n**Winning and losing**\n\n* With your bed alive you respawn on your island after a 5-second death timer.\n* Lose the bed and every death is permanent - you flip to spectator and watch through the sidebar.\n* The last team with a live bed (or just live players) wins, followed by a 15-second fireworks show in the team colours before everyone is handed back to the survival world.\n* Nobody is winning fast enough? The clock decides: at 25 minutes every remaining bed crumbles (sudden death), and at 40 minutes the game is called.\n\nDuring a match a **sidebar** replaces your normal tab list: teams, beds, the match clock, the mode and your own purse of ore. It leaves again the moment you leave the game.\n\n[In the match](/wiki?page=hihou-play) · [Shop & upgrades](/wiki?page=hihou-shop) · [Kits](/wiki?page=hihou-kits) · [Modes & rewards](/wiki?page=hihou-modes) · [Staff: arenas](/wiki?page=hihou-staff)\n"
+  },
+  {
+   "slug": "hihou-play",
+   "title": "In the match",
+   "category": "Hihou BedWars",
+   "parent": null,
+   "content": "## In the match\n\n**Ore** is money. The pads on your island print it while the match runs:\n\n| Generator | Drops | Every | Up to |\n|---|---|---|---|\n| Iron (×2 per team) | 2 iron | 2 s | 32 lying around |\n| Gold | 2 gold | 6 s | 7 lying around |\n| Diamond (mid) | 1 diamond | 30 s → 20 s at 6 min → 15 s at 18 min | 4 |\n| Emerald (mid) | 1 emerald | 70 s → 50 s at 12 min → 30 s at 24 min | 4 |\n\nYou pay with the ore you physically carry - pick it up off the pad or spend it straight from the pile.\n\n**The bed** can only be destroyed by enemies: breaking it, sleeping in it, TNT next to it, or a well-timed **Bed Breach Charge** from the shop. Wool around it is normal; wool *on* it is a crime scene (buy shears).\n\n**Dying** costs 5 seconds and nothing else - your kit and carried ore wait at base as long as the bed stands. If you quit or crash mid-match, `/ih bw rejoin` pulls you back into the same game.\n\n**Spectating your friends**: after elimination, `/ih bw follow <player>` parks you next to anyone still fighting.\n\n**Parties**: `/ih bw party invite <player>` sends a clickable invite; whoever accepts is placed on the same team as you at balance time. `/ih bw party leave` opts out again.\n\n**Team chest**: every island has one that only your team can open during the match. It pays out: when the game finishes, whatever is still inside drops on top of the chest instead of vanishing.\n\n**The sidebar** (in-match tab list) shows teams and their bed status, the clock, the current mode and your own purse. `/ih bw stats` or `/ih bw stats top` work from anywhere and report your season numbers.\n\nBack to [BedWars](/wiki?page=hihou-intro) · [Shop & upgrades](/wiki?page=hihou-shop)\n"
+  },
+  {
+   "slug": "hihou-shop",
+   "title": "Shop & team upgrades",
+   "category": "Hihou BedWars",
+   "parent": null,
+   "content": "* [The shop](/wiki?page=hihou-shop-the-shop)\n* [Team upgrades](/wiki?page=hihou-shop-team-upgrades)\n"
+  },
+  {
+   "slug": "hihou-shop-the-shop",
+   "title": "The shop",
+   "category": "Hihou BedWars",
+   "parent": "hihou-shop",
+   "content": "Right-click your team's **shop marker** (an anvil at base) or type `/ih bw shop`. Six tabs, paid with the ore you carry - no coins, no shopkeeper, no refund games.\n\n**Blocks**\n\n| Item | Costs |\n|---|---|\n| White wool ×16 | 4 iron |\n| White wool ×64 | 12 iron |\n| Glass ×8 | 4 iron |\n| Ladder ×16 | 3 gold |\n| Oak planks ×32 | 6 iron |\n\n**Armor**\n\n| Item | Costs |\n|---|---|\n| Leather helmet | 10 iron |\n| Chain leggings | 15 iron |\n| Chain chestplate | 20 iron |\n| Iron helmet | 4 gold |\n| Iron chestplate | 3 diamonds |\n| Iron leggings | 2 diamonds |\n\n**Weapons**\n\n| Item | Costs |\n|---|---|\n| Wooden sword | 5 iron |\n| Stone sword | 10 iron |\n| Stone axe | 12 iron |\n| Iron sword | 6 gold |\n| Diamond sword | 6 diamonds |\n| Bow | 4 gold |\n| Arrows ×12 | 2 gold |\n| Shears | 6 iron |\n| TNT | 3 emeralds |\n| Ender pearl | 3 diamonds |\n| **Bed Breach Charge** | 8 emeralds |\n\nThe breach charge is the siege tool: right-click it within 16 blocks of an enemy bed and that bed is gone - it counts and pays exactly like breaking it by hand.\n\n**Food**: bread ×4 (3 iron), cooked chicken ×4 (2 gold), cooked beef ×4 (3 gold), golden carrots ×2 (5 gold), cake (10 iron).\n\n**Potions**: Healing splash (1 emerald), Fire Resistance (4 gold), Leaping (2 emeralds).\n\nBack to [Shop & team upgrades](/wiki?page=hihou-shop)\n"
+  },
+  {
+   "slug": "hihou-shop-team-upgrades",
+   "title": "Team upgrades",
+   "category": "Hihou BedWars",
+   "parent": "hihou-shop",
+   "content": "The **Upgrades** tab spends **emeralds for the whole team** - bought once, they hold for the rest of the match:\n\n| Upgrade | Levels | Cost per level | What it does |\n|---|---|---|---|\n| Protection | 3 | 2 / 4 / 6 | Resistance I on the team |\n| Sharpness | 3 | 2 / 4 / 7 | Strength on the team |\n| Forge | 3 | 3 / 5 / 8 | Your iron gens tick faster and richer |\n| Healers | 2 | 4 / 7 | Team-wide Regeneration pulse every 45 s |\n| Trap | 2 | 4 / 6 | Intruders within 6 blocks of your spawn are slowed and announced |\n| Auto-Earn | 1 | 6 | Your team's iron and gold fly straight into a teammate's pockets |\n| Shockwave | 2 | 5 / 8 | Attackers sometimes get blasted off you |\n\nBack to [BedWars](/wiki?page=hihou-intro) · [In the match](/wiki?page=hihou-play)\n\nBack to [Shop & team upgrades](/wiki?page=hihou-shop)\n"
+  },
+  {
+   "slug": "hihou-kits",
+   "title": "Kits",
+   "category": "Hihou BedWars",
+   "parent": null,
+   "content": "## Kits\n\nPick one with `/ih bw kit <name>` - in the lobby or any time during the match. The choice is yours until you change it, and a fresh copy is handed out at **every spawn and respawn**, so dying never leaves you empty-handed.\n\n| Kit | In your hands from the drop |\n|---|---|\n| **classic** | Stone sword - a fair fight to start the war |\n| **builder** | Wooden axe + 16 white wool on the hotbar - bridge first, fight later |\n| **miner** | Iron pickaxe - the diamond islands will thank you |\n| **archer** | Bow + 12 arrows - keep them honest from 20 blocks |\n\nThere is no penalty for swapping mid-match; the next respawn simply hands you the new kit.\n\nBack to [BedWars](/wiki?page=hihou-intro) · [Shop & upgrades](/wiki?page=hihou-shop)\n"
+  },
+  {
+   "slug": "hihou-modes",
+   "title": "Match modes, stats & rewards",
+   "category": "Hihou BedWars",
+   "parent": null,
+   "content": "* [Match modes](/wiki?page=hihou-modes-match-modes)\n* [Season stats](/wiki?page=hihou-modes-season-stats)\n* [Rewards](/wiki?page=hihou-modes-rewards)\n"
+  },
+  {
+   "slug": "hihou-modes-match-modes",
+   "title": "Match modes",
+   "category": "Hihou BedWars",
+   "parent": "hihou-modes",
+   "content": "Every game rolls a mode (the server can keep this off, then it is always classic). The current mode is announced at the drop and shown on the in-match sidebar:\n\n| Mode | Twist |\n|---|---|\n| classic | Beds, standard rules - the war as intended |\n| no beds | Nobody has a bed; every life is final from the first drop |\n| double iron | Team generators throw 4 iron per tick - bridges fly everywhere |\n| need for speed | Everyone gets a standing Swiftness dose for the whole match - bridges go up fast and retreats are optional |\n\nStaff can force the next game's mode with `/ih bw mode <arena> <classic|no-beds|double-iron|speed>`.\n\nBack to [Match modes, stats & rewards](/wiki?page=hihou-modes)\n"
+  },
+  {
+   "slug": "hihou-modes-season-stats",
+   "title": "Season stats",
+   "category": "Hihou BedWars",
+   "parent": "hihou-modes",
+   "content": "`/ih bw stats` — your own season line: games, wins, kills, deaths, beds broken and coins earned.\n`/ih bw stats <player>` — look someone else up.\n`/ih bw stats top` — the season leaderboard by wins.\nThe staff command `/ih bw season` starts a new season and clears the books.\n\nBack to [Match modes, stats & rewards](/wiki?page=hihou-modes)\n"
+  },
+  {
+   "slug": "hihou-modes-rewards",
+   "title": "Rewards",
+   "category": "Hihou BedWars",
+   "parent": "hihou-modes",
+   "content": "BedWars pays into the server economy (the same money as the shop and the train network):\n\n| Feat | Coins |\n|---|---|\n| Kill | 5 |\n| Bed destroyed | 10 |\n| Winning the match | 25 |\n\nYou get a chat line for each (\"+10 BedWars reward (bed).\"). The numbers live in the plugin config (`bw-rewards.*`) and can be tuned by staff without a restart.\n\nBack to [BedWars](/wiki?page=hihou-intro) · [Staff: arenas](/wiki?page=hihou-staff)\n\nBack to [Match modes, stats & rewards](/wiki?page=hihou-modes)\n"
+  },
+  {
+   "slug": "hihou-staff",
+   "title": "Staff - building and running arenas",
+   "category": "Hihou BedWars",
+   "parent": null,
+   "content": "## Staff: building and running arenas\n\nA BedWars arena is a named collection of points: a lobby and spectator spot, a bounding region for the map-reset, and per team a spawn, bed, shop marker and team chest, plus generator pads. All of it is wired in-game with `/ih bw` commands (staff only unless stated).\n\n**1. Build the map.** The eight `bedwars-*` schematic parts (lobby, four team islands, two diamond mids, one emerald mid) live in `plugins/WorldEdit/schematics/`. Paste them with WorldEdit (`//schem load bedwars-01-rood` + `//paste -a`) in the order printed by `python -I scripts/make_bedwars_arena.py` - the islands share one layout, so keep the spacing from the checklist.\n\n**2. Register the arena.**\n\n* `/ih bw create <name>` then `/ih bw set <arena> spawn|spec|center|size|end <value>` — lobby spot, spectator spot and the reset region (center + radius). `end <seconds>` moves the sudden-death moment when every standing bed crumbles (default 1500 s = 25 min).\n* `/ih bw team <arena> add <team> <color>` — red/blue/green/yellow by default, any name works; then stand on the spot and set each point: `spawn <team>`, `bed <team>` (look at the bed), `shop <team>` (look at the anvil), `chest <team>` (look at the team chest). `del <team>` removes.\n* `/ih bw gen <arena> add iron|gold <team>|diamond|emerald` — stand on the pad; iron and gold need their owning team, mids do not.\n\n**3. Snapshot before the first game.** `/ih bw snapshot <arena> [lo] [hi]` captures every non-air block in the region. After each match the reset restores **exactly** that state - placed, broken and blasted blocks all return. Take the snapshot while the arena is pristine; without it the reset falls back to the lite path (own placements only).\n\n**4. Running games.**\n\n* `/ih bw list` / `/ih bw info <arena>` — what exists and how it is wired.\n* `/ih bw start <arena> [seconds]` / `/ih bw stop <arena>` — force the countdown or end a match; matches also auto-start when the lobby fills the minimum.\n* `/ih bw mode <arena> <mode>` — force the next game's twist.\n* `/ih bw season` — new season, stats cleared.\n* `/ih bw delete <arena>` — forget it (the blocks stay; the reset restores what the snapshot knows).\n\nConfig keys (survive restarts): `bw-rewards.kill/bed/win` (coins), `bw-random-modes` (roll a twist per game, default on).\n\nBack to [BedWars](/wiki?page=hihou-intro) · [Modes & rewards](/wiki?page=hihou-modes)\n"
+  }
+ ]
+}
