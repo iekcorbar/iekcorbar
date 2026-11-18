@@ -370,6 +370,10 @@ final class Orchard implements Listener {
         int[] d = form.stages[STAGES - 1].fruit.get(slot);
         Location at = new Location(r.world, r.x + d[0] + 0.5, r.y + d[1] + 0.3, r.z + d[2] + 0.5);
         r.world.dropItemNaturally(at, plugin.goods().item(f.produce, 1));
+        // Seeds from the canopy (owner 18-11): picked fruit rolls the same one-in-three
+        // chance as a garden harvest, so ripe orchard trees are a real seed source too.
+        if (f.seed != null && java.util.concurrent.ThreadLocalRandom.current().nextInt(3) == 0)
+            r.world.dropItemNaturally(at, plugin.goods().item(f.seed, 1));
         hideFruit(r, slot);
         saveChunk(r.world, r.x >> 4, r.z >> 4);
         plugin.adv().grant(p, "tree_harvest");

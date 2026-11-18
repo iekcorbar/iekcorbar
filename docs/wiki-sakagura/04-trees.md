@@ -26,6 +26,7 @@ Since Sakagura 0.8.0 the orchard grows **real trees**: actual log trunks you can
 ### Picking and felling
 
 * When a mature tree ripens, the fruit hangs **visibly under the canopy leaves** - a small cube of the actual produce. Click each piece to pick it; once the tree is picked bare, a fresh batch ripens in about twenty minutes.
+* About one pick in three also drops the tree's **seed, pip or kernel** - an orchard is a real seed source, not just a fruit machine.
 * Right-click the trunk or leaves for a quick status (young / ripening / decorative).
 * Break the trunk block with an axe and the tree comes down: the sapling returns to you, any fruit still hanging drops too, and the leftover wood and leaves stay in the world - chop them or let the leaves decay, just like vanilla.
 * Trees need clear air above the planting spot and a few blocks from their neighbours; the full canopy reaches out about three blocks.
