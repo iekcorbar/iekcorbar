@@ -18,7 +18,7 @@ Analytics verhuist naar StaffHub** - StaffHub-deel is al live via SSH (knop webs
 token-doorlus, gids hoofdstuk 7 in node 3150); de token staat in /opt/staffhub/.env en moet
 ook in de site-.env.local op Plesk (exacte regel in TE-25). BluMap zelf draait door op map.iekcorbar.com. EN NIEUW (lees-triggers, eigenaarsidee): **enchanting-glow op de boekenkast** - paarse shimmer = boek nog nooit geopend, gouden shimmer = nieuwe update sinds je het las; openslaand boek dooft (TE-26).
 
-Peildatum: 19 nov 2026 ochtend — 17-nov-batch + Xmas-props/Krampus + Sakagura 0.8.1 (pit + wilde orchards) live; Krampus torent 2,4 blokken. Wacht: site-1811l → Plesk, arena, wikiglow-post.
+Peildatum: 19 nov 2026 middag — Xmas-props/Krampus(2,4 blk) + Sakagura 0.8.1 live; site-1811m live (import-prune werkt). Wacht: site-1811n uitrollen (map-erasie ouderwetse Plesk-src + StaffHub-token via plugin-DB), arena, wikiglow-post.
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
 
 ## 🟢 Live op de server

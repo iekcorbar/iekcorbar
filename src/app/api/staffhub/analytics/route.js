@@ -2,19 +2,32 @@ import { NextResponse } from 'next/server';
 import crypto from 'node:crypto';
 import { db } from '@/lib/db';
 import { normalizePushPreferences } from '@/lib/push';
+import { pluginDataQuery } from '@/lib/plugin-data-db';
 
 // Machine-to-machine feed for StaffHub's "Website-analyse" screen (the old
 // Staff Panel → Analytics tab, moved to StaffHub per owner 18-11: the public
 // website is for players, staff tooling lives in StaffHub).
 //
-// Auth: header `x-staffhub-token` must equal env STAFFHUB_API_TOKEN (constant-
-// time compare). The same secret goes in this site's .env.local (Plesk) and
-// StaffHub's .env on the VPS. Unconfigured host => 503, wrong token => 401.
-// Payload is deliberately email-free (players are named by mcUsername only).
+// Auth: header `x-staffhub-token` must match the shared secret, looked up in
+// two places, first hit wins:
+//   1. env STAFFHUB_API_TOKEN (site .env.local on Plesk) - optional
+//   2. plugin MySQL table staffhub_shared, row k='analytics_token' - the
+//      practical half (owner "fix 2", 19-11): StaffHub already carries its
+//      token in /opt/staffhub/.env, and this site reaches that same DB via
+//      the existing PLUGIN_DB_* credentials, so no Plesk env edit is needed.
+//      The plugin DB stays read-only from the site, as everywhere else - the
+//      row itself was written once by the agent over SSH on the VPS.
+// No secret anywhere => 503; wrong token => 401. Payload is email-free.
 export const dynamic = 'force-dynamic';
 
-function authorized(request) {
-  const want = process.env.STAFFHUB_API_TOKEN;
+async function authorized(request) {
+  let want = process.env.STAFFHUB_API_TOKEN || '';
+  if (!want) {
+    try {
+      const rows = await pluginDataQuery("SELECT v FROM staffhub_shared WHERE k = 'analytics_token' LIMIT 1");
+      want = rows?.[0]?.v || '';
+    } catch { return 'unconfigured'; }
+  }
   if (!want) return 'unconfigured';
   const got = request.headers.get('x-staffhub-token') || '';
   try {
@@ -27,8 +40,8 @@ function authorized(request) {
 }
 
 export async function GET(request) {
-  const auth = authorized(request);
-  if (auth === 'unconfigured') return NextResponse.json({ error: 'STAFFHUB_API_TOKEN is not set on this host' }, { status: 503 });
+  const auth = await authorized(request);
+  if (auth === 'unconfigured') return NextResponse.json({ error: 'shared analytics token is not configured (env or staffhub_shared)' }, { status: 503 });
   if (auth !== 'ok') return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
 
   const days = new URL(request.url).searchParams.get('days') || 30;
