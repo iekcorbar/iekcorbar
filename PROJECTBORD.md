@@ -22,6 +22,9 @@ Peildatum: 18 nov 2026 ochtend — 17-nov-batch live (echte fruitbomen, compostp
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
 
 ## 🟢 Live op de server
+| **Sakagura 0.8.1 - pit bij boom-pluk + wilde orchards** | 19 nov 09:45 | Plukken hangfruit geeft dezelfde 1-op-3 pit-kans als de tuin; elke chunk rolt once 8% op een groep van 1-3 bomen passend bij het biome (driekwart volwassen, rijp-klok vult). Bestaande chunks doen mee bij herbelading. Gemeten: v0.8.1 enabled, Done 75,1 s, 0 fouten. Preview van zo'n boom: `archief/wild-orchard/wilde-appelboom.png`. site-1811l (wiki-zaad) wacht nog op Plesk. |
+|---|---|---|
+
 | Blok | Sinds | Wat |
 |---|---|---|
 | **17-nov-batch: Sakagura 0.8.0 + Kitchen-compost + Gouw 0.5.1 + Hihou 0.6.1 + pack build61 + claims-cleaned** | 18 nov ochtend (boot ~09:32) | Via SSH uitgerold bij lege server; gemeten: Done 73,4 s, 0 ERROR/Exception van eigen plugins, "Gouw enabled - 3 gouwen, 123 chunks", "Hihou enabled (etappe 0.6.0)", RPM "pack is live via self-hosting" met alleen build61 in de mixer. Oude jars (Sakagura 0.7.14, Gouw 0.5.0, Hihou 0.4.0) en build60 van de server verwijderd; originelen + claims → `/root/deploy-backup-20261118/`, claims-origineel ook als `plugins/Gouw/claims.json.bak-1711`. **Live-fix onderweg:** Hihou 0.6.1 crashte de eerste boot (breachKey null bij shop-bouw — initialisatie-volgorde in BwGameManager), jar herbouwd [d6664b99603d], git 37d421ab. 8 bedwars-schems staan in `plugins/WorldEdit/schematics/`. **Jij nog:** arena plakken + `ih bw snapshot` vóór de eerste pot, client-herstart (build61), testpunten, Discord-posts (punt 23). TechCore-RPM-waarschuwing is bestaande ruis (stond vóór de uitrol ook al in de boots van vanochtend, ander asset-naam per boot). |
@@ -50,7 +53,7 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 |---|---|---|
 
 ## 🟡 Wacht op JOU
-| **Sakagura 0.8.1 - pit bij boom-pluk** (TE punt 28) | deploy/Sakagura-0.8.1.jar [2c9fa47ab642] | Pluk van de vruchtbomen geeft dezelfde 1-op-3 pit-kans als de tuin (abrikoos zelf was geen bug: 1-op-3 bestond al). EN **wilde orchards**: elke chunk rolt eens, 8% groep van 1-3 bij-passende soorten, driekwart volwassen - vindbaar door lopen (marker orchard_wild_v1, config trees.wild-chance-per-chunk). Restart bij lege server - zeg wanneer. site-1811l mee (wiki-zaad). |
+| ~~Sakagura 0.8.1 - pit + wilde orchards~~ ✅ LIVE 19-11 09:45 (rij hierboven) | TE punt 28 af | Pluk van de vruchtbomen geeft dezelfde 1-op-3 pit-kans als de tuin (abrikoos zelf was geen bug: 1-op-3 bestond al). EN **wilde orchards**: elke chunk rolt eens, 8% groep van 1-3 bij-passende soorten, driekwart volwassen - vindbaar door lopen (marker orchard_wild_v1, config trees.wild-chance-per-chunk). Restart bij lege server - zeg wanneer. site-1811l mee (wiki-zaad). |
 
 | ~~Xmas-props~~ ✅ LIVE 18-11 19:21 (eerste rij hierboven, 🟢) | TE-DEPLOYEN punt 27 (afgehandeld) | **Relics 0.7.7** [393fa789c2b3] + **pack build65** [1ebd261831c3] in deploy/ (groottes nagemeten: hitbox = modelhoogte, kroonluchter-vlammen onder het plafond): Peperkoekhuis (snoep-tegelen delen), Koekoeksklok (wand/tafel, vogel zingt), Nootkraker-wacht (2 hoog), Kronenluchter (plafond, twinkelend licht 13), Kerstpudding (stoom), Santa-brievenbus (papier erin = repost naar de Noordpool) en **KRAMPUS** - niet craftbaar, staf-stock, right-click = vonnis ("The Krampus has read your chat logs."). Audit 0/0, wiki-rijen mee in site-1811j. Restart nodig bij lege server - zeg wanneer. |
 
