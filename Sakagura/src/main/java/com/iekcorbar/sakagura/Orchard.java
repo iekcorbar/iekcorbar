@@ -110,6 +110,10 @@ final class Orchard implements Listener {
     private final Map<Long, Rec> cellOwner = new HashMap<>();   // every pasted cell -> its tree
     private final Map<UUID, Rec> byHitbox = new HashMap<>();    // fruit Interaction -> tree
     private final Map<UUID, Integer> slotByHitbox = new HashMap<>();
+    /** Cells of felled trees whose leaves are still decaying: vanilla saplings/apples/azaleas from
+        these must stay suppressed until the last leaf has dropped (owner 19-11: "geeft ook een
+        normale vanilla sapling"). key -> tick when the grace window ends. */
+    private final Map<Long, Long> decaying = new HashMap<>();
     private final double stageChance, fruitChance;
     private final double wildChance;
     private long tick;
@@ -120,8 +124,8 @@ final class Orchard implements Listener {
         fruitKey = new NamespacedKey(plugin, "orchard_fruit");
         hitKey = new NamespacedKey(plugin, "orchard_fruit_hit");
         wildKey = new NamespacedKey(plugin, "orchard_wild_v1");
-        stageChance = 1 / (60.0 * Math.max(1, plugin.getConfig().getInt("trees.minutes-per-stage", 20)));
-        fruitChance = 1 / (60.0 * Math.max(1, plugin.getConfig().getInt("trees.fruit-minutes", 20)));
+        stageChance = 1 / (60.0 * Math.max(1, plugin.getConfig().getInt("trees.minutes-per-stage", 5)));
+        fruitChance = 1 / (60.0 * Math.max(1, plugin.getConfig().getInt("trees.fruit-minutes", 6)));
         wildChance = plugin.getConfig().getDouble("trees.wild-chance-per-chunk", 0.08);
         load();
     }
@@ -315,7 +319,10 @@ final class Orchard implements Listener {
         if (slot < 0 || slot >= s.fruit.size()) return;
         int[] d = s.fruit.get(slot);
         Block at = r.world.getBlockAt(r.x + d[0], r.y + d[1], r.z + d[2]);
-        Location loc = new Location(r.world, r.x + d[0] + 0.5, r.y + d[1] + 0.25, r.z + d[2] + 0.5);
+        // Hang the cube BELOW the leaf block instead of inside it (owner 19-11: "of het is niet
+        // goed zichtbaar"): at +0.25 it sat in the leaf mass; now its top just overlaps the
+        // block's bottom edge and the rest dangles visibly under the canopy.
+        Location loc = new Location(r.world, r.x + d[0] + 0.5, r.y + d[1] - 0.05, r.z + d[2] + 0.5);
         ItemStack look = new ItemStack(Material.PAPER);
         look.setData(DataComponentTypes.ITEM_MODEL, Key.key("sakagura", "block/fruit_" + fr.id()));
         ItemDisplay disp = r.world.spawn(loc, ItemDisplay.class, it -> {
@@ -326,7 +333,7 @@ final class Orchard implements Listener {
             it.setTransformation(new Transformation(new Vector3f(), new Quaternionf().rotationY(slot * 1.7f), new Vector3f(0.9f, 0.9f, 0.9f), new Quaternionf()));
             it.setBrightness(new Display.Brightness(Math.max(at.getLightFromBlocks(), 4), at.getLightFromSky()));
         });
-        Interaction hit = r.world.spawn(new Location(r.world, r.x + d[0] + 0.5, r.y + d[1] - 0.1, r.z + d[2] + 0.5), Interaction.class, i -> {
+        Interaction hit = r.world.spawn(new Location(r.world, r.x + d[0] + 0.5, r.y + d[1] - 0.25, r.z + d[2] + 0.5), Interaction.class, i -> {
             i.setPersistent(false);
             i.getPersistentDataContainer().set(hitKey, PersistentDataType.BYTE, (byte) 1);
             i.setInteractionWidth(0.8f);
@@ -431,11 +438,13 @@ final class Orchard implements Listener {
     /** Leaves of our trees do not drop vanilla saplings or apples - fruit hangs where you can pick it. */
     @EventHandler(ignoreCancelled = true)
     public void onDrop(BlockDropItemEvent e) {
-        Rec r = cellOwner.get(key(e.getBlock().getX(), e.getBlock().getY(), e.getBlock().getZ()));
-        if (r == null) return;
+        long k = key(e.getBlock().getX(), e.getBlock().getY(), e.getBlock().getZ());
+        if (cellOwner.get(k) == null && !decaying.containsKey(k)) return;
         e.getItems().removeIf(it -> {
             Material m = it.getItemStack().getType();
-            return m.name().endsWith("_SAPLING") || m == Material.APPLE;
+            // ume/peach/lemon use azalea leaves: their "sapling" is an AZALEA / FLOWERING_AZALEA
+            // item and slipped through the old endsWith("_SAPLING") test (owner 19-11 leak).
+            return m.name().endsWith("_SAPLING") || m == Material.APPLE || m == Material.AZALEA || m == Material.FLOWERING_AZALEA;
         });
     }
 
@@ -469,6 +478,11 @@ final class Orchard implements Listener {
         }
         Map<Long, Rec> m = trees.get(r.world.getUID());
         if (m != null) m.remove(key(r.x, r.y, r.z));
+        // Leaves stay in the world and decay on their own (vanilla feel) - hand their cells to a
+        // grace window so the drop filter keeps working after the record itself is gone.
+        if (form != null && r.stage >= 0 && r.stage < STAGES)
+            for (int[] d : form.stages[r.stage].cells) decaying.put(key(r.x + d[0], r.y + d[1], r.z + d[2]), tick + 1200);
+        removeCellOwner(r);
         saveChunk(r.world, r.x >> 4, r.z >> 4);
         if (drop) r.world.dropItemNaturally(at, plugin.goods().item(r.type.sapling(), 1));
         r.world.playSound(at, "minecraft:block.big_dripleaf.break", 0.9f, 0.9f);
@@ -478,6 +492,7 @@ final class Orchard implements Listener {
 
     void tick() {
         tick++;
+        if (tick % 200 == 0) decaying.entrySet().removeIf(en -> en.getValue() < tick);   // grace windows past their leaves
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
         for (Map<Long, Rec> m : new ArrayList<>(trees.values())) {
             for (Rec r : new ArrayList<>(m.values())) {

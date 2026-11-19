@@ -18,7 +18,7 @@ Analytics verhuist naar StaffHub** - StaffHub-deel is al live via SSH (knop webs
 token-doorlus, gids hoofdstuk 7 in node 3150); de token staat in /opt/staffhub/.env en moet
 ook in de site-.env.local op Plesk (exacte regel in TE-25). BluMap zelf draait door op map.iekcorbar.com. EN NIEUW (lees-triggers, eigenaarsidee): **enchanting-glow op de boekenkast** - paarse shimmer = boek nog nooit geopend, gouden shimmer = nieuwe update sinds je het las; openslaand boek dooft (TE-26).
 
-Peildatum: 19 nov 2026 middag — Xmas-props/Krampus(2,4 blk) + Sakagura 0.8.1 live; site-1811m live (import-prune werkt). Wacht: site-1811n uitrollen (map-erasie ouderwetse Plesk-src + StaffHub-token via plugin-DB), arena, wikiglow-post.
+Peildatum: 19 nov 2026 avond — Sakagura 0.8.2 klaar (fruit 5+6 min en zichtbaar ONDER het blad, azalea-sapling-lek gestopt, eigen saplings blijven); site-1811o klaar (map-eraf + StaffHub-token via plugin-DB + wiki-tijden). Wacht: Sakagura-restart + Plesk-zip, arena, wikiglow-post.
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
 
 ## 🟢 Live op de server
@@ -53,6 +53,8 @@ Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dw
 |---|---|---|
 
 ## 🟡 Wacht op JOU
+| **Sakagura 0.8.2 - fruit sneller/zichtbaar + geen vanilla saplings** (TE punt 29) | deploy/Sakagura-0.8.2.jar [bc8e2308a014] | Volwassen in ~10 i.p.v. ~40 min, rijp in ~6, vrucht hangt nu ONDER het blad (klikbaar zoals voorheen). Azalea-bladdrops (ume/perzik/citroen) lekten door de sapling-filter - uitgebouwd + grace-window na kappen. De tien eigen sapling-items bestonden al en zijn nu de ENIGE drop. Restart bij lege server - zeg wanneer. |
+| **site-1811o.zip naar Plesk** (TE punten 25+29) | deploy/site-1811o.zip [4dd9f7dd7155] | Alles van 1811n/m (map-route eraf uit de code, StaffHub-token-lezen-uit-plugin-DB, wiki-import-prune, Sakagura-tijden) PLUS: ouderwetse `/httpdocs/src/app/map`-map op Plesk ZELF verwijderen (zip wist niets) - dan wordt /map echt 404. NPM install + restart; daarna imports klikken (hihou=prune staff-arena). |
 | ~~Sakagura 0.8.1 - pit + wilde orchards~~ ✅ LIVE 19-11 09:45 (rij hierboven) | TE punt 28 af | Pluk van de vruchtbomen geeft dezelfde 1-op-3 pit-kans als de tuin (abrikoos zelf was geen bug: 1-op-3 bestond al). EN **wilde orchards**: elke chunk rolt eens, 8% groep van 1-3 bij-passende soorten, driekwart volwassen - vindbaar door lopen (marker orchard_wild_v1, config trees.wild-chance-per-chunk). Restart bij lege server - zeg wanneer. site-1811l mee (wiki-zaad). |
 
 | ~~Xmas-props~~ ✅ LIVE 18-11 19:21 (eerste rij hierboven, 🟢) | TE-DEPLOYEN punt 27 (afgehandeld) | **Relics 0.7.7** [393fa789c2b3] + **pack build65** [1ebd261831c3] in deploy/ (groottes nagemeten: hitbox = modelhoogte, kroonluchter-vlammen onder het plafond): Peperkoekhuis (snoep-tegelen delen), Koekoeksklok (wand/tafel, vogel zingt), Nootkraker-wacht (2 hoog), Kronenluchter (plafond, twinkelend licht 13), Kerstpudding (stoom), Santa-brievenbus (papier erin = repost naar de Noordpool) en **KRAMPUS** - niet craftbaar, staf-stock, right-click = vonnis ("The Krampus has read your chat logs."). **19-11 ✅ LIVE 09:58:** Krampus opgeschaald naar 2,4 blokken (scale 1,45) - jar [2ccb4fde3e05] uitgerold (114 relics, Done 75,2 s, 0 errors). Zichtregel: model is units/16 × java-scale; de display-transform telt niet voor display-entities. |

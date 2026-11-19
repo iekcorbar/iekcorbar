@@ -6,7 +6,7 @@ parent: sakagura
 ---
 ## Orchard Trees
 
-Since Sakagura 0.8.0 the orchard grows **real trees**: actual log trunks you can walk around and real leaf canopies you can hear rustle. A sapling is planted with a right-click on grass or dirt (not farmland - trees take a spot of their own) and grows in three stages: a sprout, a young tree and a full tree. Each step takes about twenty minutes of real time; bone meal on any block of the tree skips one. Chopping is plain vanilla - take an axe to the trunk and the wood drops like any other tree.
+Since Sakagura 0.8.0 the orchard grows **real trees**: actual log trunks you can walk around and real leaf canopies you can hear rustle. A sapling is planted with a right-click on grass or dirt (not farmland - trees take a spot of their own) and grows in three stages: a sprout, a young tree and a full tree. Each step takes about five minutes of real time and ripe fruit follows within minutes; bone meal on any block of the tree skips a step. Chopping is plain vanilla - take an axe to the trunk and the wood drops like any other tree.
 
 ### The ten species
 
@@ -25,7 +25,7 @@ Since Sakagura 0.8.0 the orchard grows **real trees**: actual log trunks you can
 
 ### Picking and felling
 
-* When a mature tree ripens, the fruit hangs **visibly under the canopy leaves** - a small cube of the actual produce. Click each piece to pick it; once the tree is picked bare, a fresh batch ripens in about twenty minutes.
+* When a mature tree ripens, the fruit hangs **visibly under the canopy leaves** - a small cube of the actual produce. Click each piece to pick it; once the tree is picked bare, a fresh batch ripens within ten minutes.
 * About one pick in three also drops the tree's **seed, pip or kernel** - an orchard is a real seed source, not just a fruit machine.
 * Right-click the trunk or leaves for a quick status (young / ripening / decorative).
 * Break the trunk block with an axe and the tree comes down: the sapling returns to you, any fruit still hanging drops too, and the leftover wood and leaves stay in the world - chop them or let the leaves decay, just like vanilla.
