@@ -95,7 +95,7 @@ enum RelicType {
     SANTA_MAILBOX(Collection.XMAS, "Santa Mailbox", "Right-click with paper or a written book to post a wish to the North Pole.",
             Base.SOLID, 1, 0, "santa_mailbox", null, null, Effect.NONE, Use.POST, 1f),
     KRAMPUS(Collection.XMAS, "Krampus", "Santa's other half. Right-click and he weighs your November - the basket on his back is not full of toys.",
-            Base.SOLID, 2, 0, "krampus", null, null, Effect.NONE, Use.KRAMPUS, 1.45f),
+            Base.SOLID, 2, 0, "krampus", null, null, Effect.NONE, Use.KRAMPUS, 2.9f),
 
     // ---------------------------------------------------------------- New Year
     FIREWORK_LAUNCHER(Collection.NEW_YEAR, "Firework Launcher", "Right-click for a little show. At midnight on New Year it fires by itself.",
