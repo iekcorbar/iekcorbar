@@ -39,11 +39,11 @@ enum RelicType {
     CREATURE_EGG_SAC("Creature Egg Sac", "Found in the ruins. It is warm. It is moving.",
             Base.NONE, 1, 0, "creature_egg_sac", null, "creature_egg_sac_ceiling", Effect.PULSE),
     GIBBET_CAGE("Gibbet Cage", "Someone was left in here. The bones did not leave.",
-            Base.NONE, 1, 0, "gibbet_cage", null, "gibbet_cage_hanging", Effect.CAGE),
+            Base.NONE, 1, 0, "gibbet_cage", null, "gibbet_cage_hanging", Effect.CAGE, Use.NONE, 2f, false),
     ASH_PILE("Ash Pile", "What the creatures left of the first outpost.",
             Base.NONE, 1, 0, "ash_pile", null, null, Effect.ASH),
     WARDING_TOTEM("Warding Totem", "Guild work. Its lens wakes when creatures come close.",
-            Base.SOLID, 2, 0, "warding_totem", null, null, Effect.TOTEM),
+            Base.SOLID, 2, 0, "warding_totem", null, null, Effect.TOTEM, Use.NONE, 2f, false),
     SHATTERED_PORTAL_SHARD("Shattered Portal Shard", "A piece of the way out - the arch the survivors took to the Guild.",
             Base.SOLID, 1, 0, "shattered_portal_shard", null, null, Effect.PORTAL),
 

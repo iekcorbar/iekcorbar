@@ -28,6 +28,9 @@ Let op:
 | 4 | `creature_ribcage` | schaal 3,0 | **in verhouding met de (grotere) schedel** | `scale` 3f → **4,5f** (dezelfde ×1,5; verhouding ribcage/skull blijft 2,0; eronderdoorlopen blijft, hitbox `NONE`), vorm/model niet aangepast | ✅ code-aanpassing, wacht op build |
 | 5 | `charred_outpost_lantern` | schaal 1,0 (constructie zonder scale-veld) | **1,5x zo groot** | naar volledige constructor: `scale` **1,5f** (floor+wall+hanging meegeschaaald, lichtlevel 11 blijft, light-basis 1 blok) | ✅ code-aanpassing, wacht op build |
 | 6 | `ruin_monolith` | schaal 1,0 | **4x zo groot** | naar volledige constructor: `scale` **4f** — zuil ~4x, barrière-hitbox blijft 2 blokken (Krampus-precedent); glyph-glow volgt display, ENCHANT-deeltjes staan vast bij y+0,6 (bodem) - nacomment van eigenaar nodig of meepakken | ✅ code-aanpassing, wacht op build |
+| 7 | `torn_settlement_banner` | schaal 3,0 (15-eenheden model) | **3x, op optie 2 (model + ophanging netjes)** | banner_cloth gegeneraliseerd (h/w), floor-banner herbouwd (~30 eenheden: sm hogere paal, lat bovenaan, langer dook), wall-banner evenredig; `scale` 3f → **4,5f**, hitbox-kolom height 3 → **5** | ⏳ in uitvoering |
+| 8 | `gibbet_cage` | schaal 1,0 (9-args) | **2x visueel** | naar volledige constructor: `scale` **2f** (vloer + hangend meeschakend; craftable blijft false) | ✅ code-aanpassing, wacht op build |
+| 9 | `warding_totem` | schaal 1,0 (9-args) | **2x** | `scale` **2f** (ook de lit-variant - zelfde RelicType, draw() herberekent schaal); barriere-hitbox blijft 2 | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -42,7 +45,7 @@ Let op:
 | `ruin_monolith` | Ruin Monolith | 2 | ~~1.0~~ → **4.0** (#6) | · | · | nee |
 | `specimen_jar` | Specimen Jar | 1 | 1.0 | · | · | nee |
 | `creature_egg_sac` | Creature Egg Sac | 1 | 1.0 | · | X | nee |
-| `gibbet_cage` | Gibbet Cage | 1 | 1.0 | · | X | nee |
+| `gibbet_cage` | Gibbet Cage | 1 | ~~1.0~~ → **2.0** (#8) | · | X | nee |
 | `ash_pile` | Ash Pile | 1 | 1.0 | · | · | ja |
 | `warding_totem` | Warding Totem | 2 | 1.0 | · | · | ja |
 | `shattered_portal_shard` | Shattered Portal Shard | 1 | 1.0 | · | · | ja |
