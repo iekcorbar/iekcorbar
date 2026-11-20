@@ -236,8 +236,8 @@ Let op:
 ### Game Night (7)
 | id | naam | hb-hoogte | scale | wall | plafond | craft |
 |---|---|---|---|---|---|---|
-| `gamenight_crate` | Winner's Crate | 1 | 1 | X | · | nee |
-| `gamenight_key` | Game Night Key | 1 | 1 | · | · | nee |
+| `gamenight_crate` | Winner's Crate | 1 | ~~1~~ → **2** (#1) | X | · | nee |
+| `gamenight_key` | Game Night Key | 1 | ~~1~~ → **2** (#2) | · | · | nee |
 | `gamenight_trophy` | Champion's Trophy | 1 | 1 | · | · | nee |
 | `gamenight_sword` | Champion's Blade | 1 | 1 | X | · | nee |
 | `gamenight_sash` | Winner's Sash | 1 | 1 | · | · | nee |
