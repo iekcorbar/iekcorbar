@@ -66,6 +66,10 @@ Let op:
 | 42 | `torii_gate` | schaal 1,5 | **1,5x** | `scale` 1,5f → **2,25f** (loop-through poort, hitbox blijft leeg) | ✅ code-aanpassing, wacht op build |
 | 43 | `shishi_odoshi` | schaal 1,0 | **2x** | `scale` 1f → **2f** (klak-animatie via variant-model, ongewijzigd) | ✅ code-aanpassing, wacht op build |
 | 44 | `byobu_screen` | schaal 1,0 | **2x** | `scale` 1f → **2f** | ✅ code-aanpassing, wacht op build |
+| 45 | `notice_board` | schaal 1,0 | **2x** | `scale` 1f → **2f**; Hangings: `box()`-coördinaten, tekstdisplay-positie/formaat en Interaction-hitbox (1,1×1,65) volgen de schaal | ✅ code-aanpassing, wacht op build |
+| 46 | `wish_tree` | schaal 1,0 | **3x** | `scale` 1f → **3f**; Hangings: takken/bladeren/wensstroken + hitbox (1,1×1,9) volgen de schaal | ✅ code-aanpassing, wacht op build |
+| 47 | `dragon_nest` | schaal 1,5 | **2x** | `scale` 1,5f → **3f** (nest en Wildlife-drakenpaar groter op het nest) | ✅ code-aanpassing, wacht op build |
+| 48 | `barrel_stack` | schaal 1,0 | **2x** | `scale` 1f → **2f** (shop-only, niet-craftbaar) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -183,14 +187,14 @@ Let op:
 | `bonsai` | Bonsai | 1 | 1 | · | · | ja |
 | `byobu_screen` | Byobu Screen | 1 | ~~1~~ → **2** (#44) | · | · | ja |
 | `wagasa_stand` | Wagasa Stand | 1 | 1 | · | · | ja |
-| `notice_board` | Notice Board | 1 | 1 | · | · | ja |
-| `wish_tree` | Wish Tree | 2 | 1 | · | · | ja |
+| `notice_board` | Notice Board | 1 | ~~1~~ → **2** (#45) | · | · | ja |
+| `wish_tree` | Wish Tree | 2 | ~~1~~ → **3** (#46) | · | · | ja |
 | `pillar_box` | Pillar Box | 2 | 1 | · | · | ja |
-| `dragon_nest` | Dragon Nest | 1 | 1.5 | · | · | ja |
+| `dragon_nest` | Dragon Nest | 1 | ~~1.5~~ → **3** (#47) | · | · | ja |
 | `sugi_dama` | Sugidama | 1 | 1 | · | · | nee |
 | `koji_crock` | Koji Crock | 1 | 1 | · | · | nee |
 | `bottling_crate` | Bottling Crate | 1 | 1 | · | · | nee |
-| `barrel_stack` | Barrel Stack | 1 | 1 | · | · | nee |
+| `barrel_stack` | Barrel Stack | 1 | ~~1~~ → **2** (#48) | · | · | nee |
 | `steam_pipe` | Loose Steam Pipe | 1 | 1 | · | · | nee |
 | `tasting_counter` | Tasting Counter | 1 | 1 | · | · | nee |
 | `noren` | Noren | 1 | 1 | · | · | nee |

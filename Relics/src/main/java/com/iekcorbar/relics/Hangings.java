@@ -131,6 +131,10 @@ final class Hangings implements Listener {
 
     /** One box in local block units (x right, y up, z towards the viewer), around the centre of the relic's block floor. */
     private void box(Relics.Relic r, List<Entity> out, float yaw, double x0, double y0, double z0, double x1, double y1, double z1, Material m) {
+        // 0.7.11: the whole hanging is built from these local block units - a scaled board/tree
+        // must scale its parts too, not just the (vanilla placeholder) item model.
+        float s = r.type.scale;
+        x0 *= s; y0 *= s; z0 *= s; x1 *= s; y1 *= s; z1 *= s;
         double[] o = rot(x0, z0, yaw);
         Location at = new Location(r.world, r.x + 0.5 + o[0], r.y + y0, r.z + 0.5 + o[1], yaw, 0f);
         out.add(r.world.spawn(at, BlockDisplay.class, d -> {
@@ -166,7 +170,7 @@ final class Hangings implements Listener {
             box(r, out, yaw, -0.58, 1.50, -0.16, 0.58, 1.58, 0.16, Material.SPRUCE_PLANKS);
             box(r, out, yaw, -0.50, 1.58, -0.10, 0.50, 1.64, 0.10, Material.SPRUCE_SLAB);
             double[] o = rot(0, 0.075, yaw);
-            Location at = new Location(r.world, r.x + 0.5 + o[0], r.y + 0.98, r.z + 0.5 + o[1], yaw, 0f);
+            Location at = new Location(r.world, r.x + 0.5 + o[0] * r.type.scale, r.y + 0.98 * r.type.scale, r.z + 0.5 + o[1] * r.type.scale, yaw, 0f);
             out.add(r.world.spawn(at, TextDisplay.class, d -> {
                 d.setPersistent(false);
                 d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
@@ -176,7 +180,7 @@ final class Hangings implements Listener {
                 d.setLineWidth(105);
                 d.setViewRange(0.5f);
                 d.text(noticeText(r));
-                d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(0.34f, 0.34f, 0.34f), new Quaternionf()));
+                d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(0.34f * r.type.scale, 0.34f * r.type.scale, 0.34f * r.type.scale), new Quaternionf()));
             }));
         } else {
             // 13-11 (owner): "wishing tree is veel te klein" - the tanabata tree grew up: a real
@@ -197,7 +201,7 @@ final class Hangings implements Listener {
                 int col = Math.floorMod(parseInt(w[0]), STRIP.length);
                 double ang = i * 2.399963;   // golden angle: the strips spread evenly over the canopy fringe
                 double rad = 0.62 + 0.22 * ((i % 3) / 2.0);
-                Location at = new Location(r.world, r.x + 0.5 + Math.cos(ang) * rad, r.y + 1.30 - 0.10 * (i % 2), r.z + 0.5 + Math.sin(ang) * rad);
+                Location at = new Location(r.world, r.x + 0.5 + Math.cos(ang) * rad * r.type.scale, r.y + (1.30 - 0.10 * (i % 2)) * r.type.scale, r.z + 0.5 + Math.sin(ang) * rad * r.type.scale);
                 final int bg = STRIP[col];
                 out.add(r.world.spawn(at, TextDisplay.class, d -> {
                     d.setPersistent(false);
@@ -208,7 +212,7 @@ final class Hangings implements Listener {
                     d.setShadowed(false);
                     d.setViewRange(0.5f);
                     d.text(Component.text("  \n  \n  "));
-                    d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(0.45f, 0.45f, 0.45f), new Quaternionf()));
+                    d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(0.45f * r.type.scale, 0.45f * r.type.scale, 0.45f * r.type.scale), new Quaternionf()));
                 }));
             }
         }

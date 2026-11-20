@@ -226,14 +226,14 @@ enum RelicType {
     SNOW_PINE(Collection.ONSEN, "Snow-Laden Pine", "A small pine under a winter's worth of snow. It is built small and drawn big.",
             Base.NONE, 2, 0, "snow_pine", null, null, Effect.NONE, Use.NONE, 1.5f),
     NOTICE_BOARD(Collection.CURIO, "Notice Board", "A village notice board. Sneak + right-click (placer or staff) to pin a notice; everyone can read it.",
-            Base.NONE, 1, 0, "vanilla:oak_sign", null, null, Effect.NONE, Use.NOTICE, 1f),
+            Base.NONE, 1, 0, "vanilla:oak_sign", null, null, Effect.NONE, Use.NOTICE, 2f),
     WISH_TREE(Collection.CURIO, "Wish Tree", "A little cherry tree for tanabata wishes. Right-click with a sheet of paper and type your wish; it hangs in the branches.",
-            Base.NONE, 2, 0, "vanilla:cherry_sapling", null, null, Effect.NONE, Use.TANABATA, 1f),
+            Base.NONE, 2, 0, "vanilla:cherry_sapling", null, null, Effect.NONE, Use.TANABATA, 3f),
     PILLAR_BOX(Collection.CURIO, "Pillar Box", "A British pillar box in engine red, re-riveted in brass. Nobody has seen a postman - yet it is always empty.",
             Base.SOLID, 2, 0, "pillar_box", null, null, Effect.STEAM, Use.NONE, 1f),
 
     DRAGON_NEST(Collection.CURIO, "Dragon Nest", "A wide nest of woven straw with a bed of embers and a brass egg. Dragons go looking for places like this: wild ones settle nearby, tame ones rest here and lay their eggs in it.",
-            Base.LIGHT, 1, 6, "dragon_nest", null, null, Effect.FLAME, Use.NONE, 1.5f),
+            Base.LIGHT, 1, 6, "dragon_nest", null, null, Effect.FLAME, Use.NONE, 3f),
 
     // ---------------------------------------------------------------- Brewery & wooden helpers (0.3.9, shop/event stock: NOT craftable by default)
     SUGI_DAMA(Collection.CURIO, "Sugidama", "The cedar ball of a sakagura: hung up, the new brew is ready.",
@@ -243,7 +243,7 @@ enum RelicType {
     BOTTLING_CRATE(Collection.CURIO, "Bottling Crate", "Fresh bottles, packed in straw and ready for the shop.",
             Base.SOLID, 1, 0, "bottling_crate", null, null, Effect.NONE, Use.NONE, 1f, false),
     BARREL_STACK(Collection.CURIO, "Barrel Stack", "Two lying, one standing - a brewer's pyramid.",
-            Base.NONE, 1, 0, "barrel_stack", null, null, Effect.NONE, Use.NONE, 1f, false),
+            Base.NONE, 1, 0, "barrel_stack", null, null, Effect.NONE, Use.NONE, 2f, false),
     STEAM_PIPE(Collection.CURIO, "Loose Steam Pipe", "A spare line from the still. It was never quite shut off.",
             Base.NONE, 1, 0, "steam_pipe", null, null, Effect.STEAM, Use.NONE, 1f, false),
     TASTING_COUNTER(Collection.CURIO, "Tasting Counter", "Three cups, one opinion, no argument.",
