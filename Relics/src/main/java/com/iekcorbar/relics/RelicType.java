@@ -198,7 +198,7 @@ enum RelicType {
     GRAMOPHONE(Collection.CURIO, "Gramophone", "Right-click to play an old record.",
             Base.NONE, 1, 0, "gramophone", null, null, Effect.NONE, Use.GRAMOPHONE, 1.5f),
     TORII_GATE(Collection.CURIO, "Torii Gate", "Walk through it into somewhere a little calmer.",
-            Base.NONE, 1, 0, "torii_gate", null, null, Effect.NONE, Use.NONE, 1.5f),
+            Base.NONE, 1, 0, "torii_gate", null, null, Effect.NONE, Use.NONE, 2.25f),
     MANEKI_NEKO(Collection.CURIO, "Maneki-neko", "The beckoning cat waves luck your way.",
             Base.NONE, 1, 0, "maneki_neko", null, null, Effect.SWAP, Use.NONE, 1f),
     SHISHI_ODOSHI(Collection.CURIO, "Shishi-odoshi", "Fills, tips and clacks - the sound of a quiet garden.",
