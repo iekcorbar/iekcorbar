@@ -49,6 +49,7 @@ Let op:
 | 25 | `santa_mailbox` | schaal 1,0 | **2x + leuke hint** | `scale` 1f → **2f**; bij posten: 1 van 5 deterministische Noordpool-notities in de chat (met o.a. hint over het gift-window via `giftBoxes().window()`), zelfde patroon als Krampus-oordelen | ✅ code-aanpassing, wacht op build |
 | 26 | `countdown_clock` | schaal 1,0 | **2x** | `scale` 1f → **2f** (aftellen/sound via actionbar op dezelfde plek) | ✅ code-aanpassing, wacht op build |
 | 27 | `new_year_garland` | schaal 1,0 | **2x** | `scale` 1f → **2f** (vloer+muur, twinkle ongewijzigd) | ✅ code-aanpassing, wacht op build |
+| 28 | `heart_balloon` | schaal 1,0 | **3x** | `scale` 1f → **3f**; HOP-deining volgt de schaal (0,15×scale) zodat het grotere hart ook echt zichtbaar dobbert | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)

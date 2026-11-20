@@ -1079,7 +1079,7 @@ final class Relics implements Listener {
                         r.display.setInterpolationDelay(0);
                         r.display.setInterpolationDuration(phase == 0 ? 4 : 6);
                         Transformation tr = transform(r, 0);
-                        r.display.setTransformation(new Transformation(new Vector3f(0, phase == 0 ? 0.15f : 0f, 0), tr.getLeftRotation(), tr.getScale(), tr.getRightRotation()));
+                        r.display.setTransformation(new Transformation(new Vector3f(0, phase == 0 ? 0.15f * r.type.scale : 0f, 0), tr.getLeftRotation(), tr.getScale(), tr.getRightRotation()));
                     }
                 }
                 case HEART -> {

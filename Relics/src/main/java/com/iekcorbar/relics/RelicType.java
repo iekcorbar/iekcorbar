@@ -117,7 +117,7 @@ enum RelicType {
 
     // ---------------------------------------------------------------- Valentine's
     HEART_BALLOON(Collection.VALENTINE, "Heart Balloon", "One balloon redder than the sky it floats under. It bobs, but never leaves.",
-            Base.NONE, 1, 0, "heart_balloon", null, null, Effect.HOP, Use.NONE, 1f),
+            Base.NONE, 1, 0, "heart_balloon", null, null, Effect.HOP, Use.NONE, 3f),
     ROSE_UNDER_BELL(Collection.VALENTINE, "Rose Under a Bell", "A single rose under brass and glass. Someone is trying very hard.",
             Base.SOLID, 1, 0, "rose_bell", null, null, Effect.NONE, Use.NONE, 1f),
     LOVE_LOCK_RAIL(Collection.VALENTINE, "Love Lock Rail", "Clip a padlock on, drop the key in the well, walk on.",
