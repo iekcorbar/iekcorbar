@@ -99,7 +99,7 @@ enum RelicType {
     FIREWORK_LAUNCHER(Collection.NEW_YEAR, "Firework Launcher", "Right-click for a little show. At midnight on New Year it fires by itself.",
             Base.SOLID, 1, 0, "firework_launcher", null, null, Effect.NONE, Use.LAUNCH, 1f),
     COUNTDOWN_CLOCK(Collection.NEW_YEAR, "Countdown Clock", "Right-click to see how long until the New Year. It strikes twelve at midnight.",
-            Base.SOLID, 2, 0, "countdown_clock", null, null, Effect.CLOCK, Use.CLOCK, 1f),
+            Base.SOLID, 2, 0, "countdown_clock", null, null, Effect.CLOCK, Use.CLOCK, 2f),
     TEMPLE_BELL(Collection.NEW_YEAR, "Temple Bell", "Joya no kane: ring it 108 times to see the old year out.",
             Base.SOLID, 2, 0, "temple_bell", null, null, Effect.NONE, Use.BELL, 1f),
     KAGAMI_MOCHI(Collection.NEW_YEAR, "Kagami Mochi", "Two mochi and a bitter orange - luck for the year ahead.",
