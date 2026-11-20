@@ -134,15 +134,15 @@ final class Hangings implements Listener {
         // 0.7.11: the whole hanging is built from these local block units - a scaled board/tree
         // must scale its parts too, not just the (vanilla placeholder) item model.
         float s = r.type.scale;
-        x0 *= s; y0 *= s; z0 *= s; x1 *= s; y1 *= s; z1 *= s;
-        double[] o = rot(x0, z0, yaw);
-        Location at = new Location(r.world, r.x + 0.5 + o[0], r.y + y0, r.z + 0.5 + o[1], yaw, 0f);
+        final double ax0 = x0 * s, ay0 = y0 * s, az0 = z0 * s, ax1 = x1 * s, ay1 = y1 * s, az1 = z1 * s;
+        double[] o = rot(ax0, az0, yaw);
+        Location at = new Location(r.world, r.x + 0.5 + o[0], r.y + ay0, r.z + 0.5 + o[1], yaw, 0f);
         out.add(r.world.spawn(at, BlockDisplay.class, d -> {
             d.setPersistent(false);
             d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
             d.setBlock(m.createBlockData());
             d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(),
-                    new Vector3f((float) (x1 - x0), (float) (y1 - y0), (float) (z1 - z0)), new Quaternionf()));
+                    new Vector3f((float) (ax1 - ax0), (float) (ay1 - ay0), (float) (az1 - az0)), new Quaternionf()));
         }));
     }
 

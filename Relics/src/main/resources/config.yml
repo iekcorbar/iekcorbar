@@ -15,9 +15,8 @@ music-radius: 64
 # month, "any" is always open - handy to test the whole secret santa flow outside December). Default: Christmas.
 gift-window: "12-24 to 12-26"
 
-# Which relics are craftable at a workbench. A key per relic id; false = no recipe is registered, so the item
-# only comes from the shop, an event or staff (/relics give). Keys you leave out fall back to the shipped
-# default: everything is craftable EXCEPT the 0.3.9 brewery set below (listed here so you can flip them).
+# Relics are NEVER craftable (0.7.11 owner decision): every relic is won in crates or given at events.
+# The legacy crafting.<id> keys below are ignored by the code now - kept only for old-config compatibility.
 crafting:
   sugi_dama: false
   koji_crock: false
