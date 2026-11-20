@@ -79,6 +79,8 @@ Let op:
 | 55 | `onsen_tub` | schaal 1,0 | **2x** | `scale` 1f → **2f** (stoom-effect ongewijzigd) | ✅ code-aanpassing, wacht op build |
 | 56 | `onsen_lantern` | schaal 1,0 | **2x** | `scale` 1f → **2f** (lichtblok level 12 blijft) | ✅ code-aanpassing, wacht op build |
 | 57 | `snow_bunny` | schaal 1,0 | **+20%** | `scale` 1f → **1,2f** (oor-poses meegeschakend) | ✅ code-aanpassing, wacht op build |
+| 58 | `wash_set` | schaal 1,0 | **4x** | `scale` 1f → **4f** | ✅ code-aanpassing, wacht op build |
+| 59 | `towel_rack` | schaal 1,0 | **2x** | `scale` 1f → **2f** (sway ongewijzigd) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -220,8 +222,8 @@ Let op:
 | `onsen_lantern` | Snow-Viewing Lantern | 1 | ~~1~~ → **2** (#56) | · | · | ja |
 | `kotatsu` | Kotatsu | 1 | 1 | · | · | ja |
 | `snow_bunny` | Snow Bunny | 1 | ~~1~~ → **1.2** (#57) | · | · | ja |
-| `wash_set` | Wash Stool and Bucket | 1 | 1 | · | · | ja |
-| `towel_rack` | Towel Rack | 1 | 1 | · | · | ja |
+| `wash_set` | Wash Stool and Bucket | 1 | ~~1~~ → **4** (#58) | · | · | ja |
+| `towel_rack` | Towel Rack | 1 | ~~1~~ → **2** (#59) | · | · | ja |
 | `sake_tray` | Floating Sake Tray | 1 | 1 | · | · | ja |
 | `snow_pine` | Snow-Laden Pine | 2 | 1.5 | · | · | ja |
 
