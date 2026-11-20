@@ -174,7 +174,7 @@ enum RelicType {
 
     // ---------------------------------------------------------------- St. Patrick's Day
     POT_OF_GOLD(Collection.PATRICK, "Pot of Gold", "Right-click once a day for a little luck.",
-            Base.SOLID, 1, 0, "pot_of_gold", null, null, Effect.RAINBOW, Use.GOLD, 1f),
+            Base.SOLID, 1, 0, "pot_of_gold", null, null, Effect.RAINBOW, Use.GOLD, 2f),
     RAINBOW_ARCH(Collection.PATRICK, "Rainbow Arch", "There must be gold at the end of it.",
             Base.NONE, 1, 0, "rainbow_arch", null, null, Effect.RAINBOW, Use.NONE, 1f),
     SHAMROCK_PLANTER(Collection.PATRICK, "Shamrock Planter", "Three leaves each - keep looking for the fourth.",

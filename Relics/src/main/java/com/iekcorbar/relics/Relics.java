@@ -1091,7 +1091,7 @@ final class Relics implements Listener {
                 case RAINBOW -> {
                     if (rnd.nextInt(3) == 0) {
                         Color[] rb = {Color.RED, Color.ORANGE, Color.YELLOW, Color.LIME, Color.BLUE, Color.PURPLE};
-                        r.world.spawnParticle(Particle.DUST, c.clone().add(0, 0.7, 0), 1, 0.4, 0.3, 0.4, 0, new Particle.DustOptions(rb[rnd.nextInt(rb.length)], 0.8f));
+                        r.world.spawnParticle(Particle.DUST, c.clone().add(0, 0.7 * r.type.scale, 0), 1, 0.4, 0.3, 0.4, 0, new Particle.DustOptions(rb[rnd.nextInt(rb.length)], 0.8f));
                     }
                 }
                 case SWAP -> {
