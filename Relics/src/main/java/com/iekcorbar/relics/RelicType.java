@@ -83,7 +83,7 @@ enum RelicType {
     GINGERBREAD_HOUSE(Collection.XMAS, "Gingerbread House", "The roof is candy. Right-click to snap a piece off; right-click with a gingerbread cookie to re-decorate it.",
             Base.SOLID, 1, 0, "gingerbread_house", null, null, Effect.NONE, Use.COOKIES, 1.15f),
     CUCKOO_CLOCK(Collection.XMAS, "Cuckoo Clock", "A brass chalet clock with a small bird in the gable. Right-click and he sings.",
-            Base.SOLID, 1, 0, "cuckoo_clock", "cuckoo_clock_wall", null, Effect.NONE, Use.CHIME, 1f),
+            Base.SOLID, 1, 0, "cuckoo_clock", "cuckoo_clock_wall", null, Effect.NONE, Use.CHIME, 2f),
     NUTCRACKER(Collection.XMAS, "Nutcracker Guard", "Two blocks of very serious cheer. He keeps the door and he does not negotiate.",
             Base.SOLID, 2, 0, "nutcracker", null, null, Effect.NONE, Use.NONE, 1.2f),
     CHANDELIER(Collection.XMAS, "Candle Chandelier", "Hang it from a ceiling: brass ring, five candles, and flames that never stop flickering.",

@@ -1260,7 +1260,7 @@ final class Relics implements Listener {
             }
             case CHIME -> {                if (plugin.tick < r.busyUntil) return;
                 r.busyUntil = plugin.tick + 60;    // two "ku-ku"s, then he clears his throat again
-                var cloc = r.center().add(0, 0.9, 0);
+                var cloc = r.center().add(0, 0.45f * r.type.scale, 0);   // the bird sits higher on a scaled clock
                 r.world.playSound(cloc, "minecraft:block.bell.use", 0.6f, 1.4f);
                 Bukkit.getScheduler().runTaskLater(plugin, () -> r.world.playSound(cloc, "minecraft:block.bell.use", 0.6f, 1.1f), 10L);
                 r.world.spawnParticle(Particle.NOTE, cloc, 3, 0.2, 0.25, 0.2, 0.4);
