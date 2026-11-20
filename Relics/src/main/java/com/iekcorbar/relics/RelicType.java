@@ -113,7 +113,7 @@ enum RelicType {
     CHAMPAGNE_TOWER(Collection.NEW_YEAR, "Sparkling Cider Tower", "Take a glass with a right-click; refill it with Sparkling Cider.",
             Base.NONE, 1, 0, "champagne_tower", null, null, Effect.NONE, Use.TOWER, 1f),
     NEW_YEAR_GARLAND(Collection.NEW_YEAR, "New Year Garland", "Gold stars and streamers for the wall.",
-            Base.NONE, 1, 0, "new_year_garland", "new_year_garland", null, Effect.TWINKLE, Use.NONE, 1f),
+            Base.NONE, 1, 0, "new_year_garland", "new_year_garland", null, Effect.TWINKLE, Use.NONE, 2f),
 
     // ---------------------------------------------------------------- Valentine's
     HEART_BALLOON(Collection.VALENTINE, "Heart Balloon", "One balloon redder than the sky it floats under. It bobs, but never leaves.",
