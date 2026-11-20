@@ -170,7 +170,7 @@ enum RelicType {
     BLOSSOM_VASE(Collection.EASTER, "Blossom Vase", "A cherry branch in a porcelain vase.",
             Base.NONE, 1, 0, "blossom_vase", null, null, Effect.NONE, Use.NONE, 1f),
     EGG_TREE(Collection.EASTER, "Egg Tree", "Bare branches hung with painted eggs.",
-            Base.NONE, 1, 0, "egg_tree", null, null, Effect.NONE, Use.NONE, 1f),
+            Base.NONE, 1, 0, "egg_tree", null, null, Effect.NONE, Use.NONE, 3f),
 
     // ---------------------------------------------------------------- St. Patrick's Day
     POT_OF_GOLD(Collection.PATRICK, "Pot of Gold", "Right-click once a day for a little luck.",
