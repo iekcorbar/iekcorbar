@@ -125,7 +125,7 @@ enum RelicType {
     HEART_ARCH(Collection.VALENTINE, "Heart Arch", "Walk through it together and the town counts it official.",
             Base.NONE, 2, 0, "heart_arch", null, null, Effect.HEART, Use.NONE, 4f),
     CUPID_STATUE(Collection.VALENTINE, "Cupid Statue", "His marble arrow has never hit anyone. People still dodge.",
-            Base.SOLID, 1, 0, "cupid_statue", null, null, Effect.NONE, Use.NONE, 1.3f),
+            Base.SOLID, 1, 0, "cupid_statue", null, null, Effect.NONE, Use.NONE, 5.2f),
     WISHING_WELL(Collection.VALENTINE, "Wishing Well", "Right-click with a gold nugget: one coin, one wish, five seconds of believing.",
             Base.SOLID, 1, 0, "wishing_well", null, null, Effect.NONE, Use.WISH, 1f),
     SWAN_LANTERN(Collection.VALENTINE, "Twin Swan Lantern", "Two swans, one lamp. They pair for life - the lamp knows it.",

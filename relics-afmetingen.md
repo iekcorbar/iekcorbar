@@ -52,6 +52,7 @@ Let op:
 | 28 | `heart_balloon` | schaal 1,0 | **3x** | `scale` 1f → **3f**; HOP-deining volgt de schaal (0,15×scale) zodat het grotere hart ook echt zichtbaar dobbert | ✅ code-aanpassing, wacht op build |
 | 29 | `rose_under_bell` | model met massieve 'glass'-panes (palette is ondoorzichtig) - roos onzichtbaar | **beter model** | rose_bell herbouwd: open klok met 4 dunne hoekpijlers + koepelrand, echte gelaagde roos (buitenste/innerste bloembladen, hart, stengel met doornen, 2 bladeren, gevallen bloemblad), geelkoperen voet met naamplaatje. 22 elementen, bounds ✓. **Ook de sneeuwbol (#21) op dezelfde manier open gemaakt** (39 elementen, bounds ✓), anders bleef het dorpje achter ondoorzichtig glas verscholen | ✅ model-aanpassing, wacht op build |
 | 30 | `heart_arch` | schaal 2,0 | **2x** | `scale` 2f → **4f**; hart-particles volgen de schaal (spread/hoogte evenredig) | ✅ code-aanpassing, wacht op build |
+| 31 | `cupid_statue` | schaal 1,3 | **4x** | `scale` 1,3f → **5,2f** (beeld op ware grootte, hitbox 1 blijft) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -120,7 +121,7 @@ Let op:
 | `rose_under_bell` | Rose Under a Bell | 1 | 1 (#29: nieuw model) | · | · | ja |
 | `love_lock_rail` | Love Lock Rail | 1 | 1 | X | · | ja |
 | `heart_arch` | Heart Arch | 2 | ~~2~~ → **4** (#30) | · | · | ja |
-| `cupid_statue` | Cupid Statue | 1 | 1.3 | · | · | ja |
+| `cupid_statue` | Cupid Statue | 1 | ~~1.3~~ → **5.2** (#31) | · | · | ja |
 | `wishing_well` | Wishing Well | 1 | 1 | · | · | ja |
 | `swan_lantern` | Twin Swan Lantern | 1 | 1 | · | · | ja |
 | `valentine_banner` | Valentine Banner | 1 | 1 | X | · | ja |
