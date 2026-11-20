@@ -71,6 +71,7 @@ Let op:
 | 47 | `dragon_nest` | schaal 1,5 | **2x** | `scale` 1,5f → **3f** (nest en Wildlife-drakenpaar groter op het nest) | ✅ code-aanpassing, wacht op build |
 | 48 | `barrel_stack` | schaal 1,0 | **2x** | `scale` 1f → **2f** (shop-only, niet-craftbaar) | ✅ code-aanpassing, wacht op build |
 | 49 | `tasting_counter` | schaal 1,0 | **2x** | `scale` 1f → **2f** (shop-only) | ✅ code-aanpassing, wacht op build |
+| 50 | `noren` | op muur geplaatst = model 90° gekanteld ('op zn kop'); formaat is goed | **plaatsing beperken tot vloer** | `onInteract`: Norén weigert wall/ceiling-mount met hint ("place it on the ground") - het doek-model is alleen floor getekend. Bestaande verkeerd geplaatste Norén: slopen + op de grond terugzetten | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)

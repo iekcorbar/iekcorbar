@@ -483,6 +483,11 @@ final class Relics implements Listener {
         e.setCancelled(true);
         BlockFace face = e.getBlockFace();
         String mount = face == BlockFace.UP ? "floor" : face == BlockFace.DOWN ? "ceiling" : "wall";
+        if (t == RelicType.NOREN && !mount.equals("floor")) {   // the cloth gate is drawn hanging from a rail, floor-only
+            e.setCancelled(true);
+            p.sendActionBar(Component.text("A noren hangs in a doorway - place it on the ground, on top of a block.", NamedTextColor.GRAY));
+            return;
+        }
         Block target = b.isReplaceable() && at(b) == null ? b : b.getRelative(face);
         if (mount.equals("floor") && !target.getRelative(BlockFace.DOWN).getType().isSolid()) {
             p.sendActionBar(Component.text("This relic needs solid ground.", NamedTextColor.GRAY));
