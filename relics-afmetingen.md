@@ -24,6 +24,7 @@ Let op:
 |---|---|---|---|---|---|
 | 1 | `gamenight_crate` | schaal 1,0 (~0,7 blk hoog, ~0,75 breed) | **visueel 2x** | `RelicType.scale` 1f → **2f** (java-only, zelfde truc als Krampus; hitbox blijft 1) | ✅ code-aanpassing, wacht op één gezamenlijke build |
 | 2 | `gamenight_key` | schaal 1,0 | **visueel 2x** | `scale` 1f → **2f** — geplaatste sleutel ~1,4 blk hoog; item-in-hand blijft normaal formaat | ✅ code-aanpassing, wacht op build |
+| 3 | `creature_skull` | schaal 1,5 | **1,5x zo groot** | `scale` 1,5f → **2,25f** — geplaatste/muurschedel groeit mee; gedragen schedel op het hoofd blijft vanilla-formaat (dragon-head-display, los mechanisme); hitbox blijft 1 | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)

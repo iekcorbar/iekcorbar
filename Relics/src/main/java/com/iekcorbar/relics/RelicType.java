@@ -21,7 +21,7 @@ import java.util.Locale;
 enum RelicType {
     // ---------------------------------------------------------------- Shoutlander's Shadow
     CREATURE_SKULL(Collection.SHADOW, "Creature Skull", "One of Shoutlander's creatures. Something still burns behind the eyes.",
-            Base.SOLID, 1, 0, "creature_skull", "creature_skull_wall", null, Effect.SKULL, Use.NONE, 1.5f, false),
+            Base.SOLID, 1, 0, "creature_skull", "creature_skull_wall", null, Effect.SKULL, Use.NONE, 2.25f, false),
     CREATURE_RIBCAGE(Collection.SHADOW, "Creature Ribcage", "Whatever this was, it was big - and it died among the ruins.",
             Base.NONE, 3, 0, "creature_ribcage", null, null, Effect.NONE, Use.NONE, 3f, false),
     TORN_SETTLEMENT_BANNER(Collection.SHADOW, "Torn Settlement Banner", "The banner of the First Settlement. The claw marks are still there.",
