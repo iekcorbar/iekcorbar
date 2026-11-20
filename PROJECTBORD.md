@@ -12,17 +12,17 @@ JOUW RESTJES: arena plakken + aanwijzen (checklist-print `scripts/make_bedwars_a
 vóór de eerste pot!**), client-herstart + testpunten TE 15/16/18/19/20/21.
 ~~Discord~~ ✅ batch-, website- wiki-splitsposts GEPUBLICEERD 18-11 (zeven losse + vier batch/website
 md'tjes naar `archief/discord-gepubliceerd/`); site-1811d (wiki-scheiding + events-fix) UITGEROLD en live.
-**site-1811i.zip** [fdefe32ac6e4] (TE-punt 25/26, vervangt 1811h/g/f/e) naar Plesk: **live-map af** (route, menu's,
+**site-1811i.zip** [fdefe32ac6e4] (TE-punt 25/26, vervangt 1811h/g/f/e) naar Plesk **(✅ LIVE 20-11 via opvolger site-1811o, incl. map-erasie)**: **live-map af** (route, menu's,
 startpagina-tekst, staff-veld "Live Map URL", map_url-default, zoekindex) + **Staff Paneel →
 Analytics verhuist naar StaffHub** - StaffHub-deel is al live via SSH (knop website-analyse,
 token-doorlus, gids hoofdstuk 7 in node 3150); de token staat in /opt/staffhub/.env en moet
 ook in de site-.env.local op Plesk (exacte regel in TE-25). BluMap zelf draait door op map.iekcorbar.com. EN NIEUW (lees-triggers, eigenaarsidee): **enchanting-glow op de boekenkast** - paarse shimmer = boek nog nooit geopend, gouden shimmer = nieuwe update sinds je het las; openslaand boek dooft (TE-26).
 
-Peildatum: 20 nov 2026 middag — **GAME NIGHT WINNER'S CRATE + SAKAGURA-FRUITFIX LIVE 20-11 12:46** (gemeten: Relics 0.7.9 "121 relics", Sakagura 0.8.3, mixer alleen build66, Done 74,1 s, 0 eigen fouten; gamenight-crate-sectie geplakt; originele backup `/root/deploy-backup-20261120gamenight/`). Wacht: client-herstart + testpunten (crate-sleutelround, vrucht-onder-blad, Krampus-hoogte) en site-1811o naar Plesk. (Arena/bedwars en wikiglow-post: van de lijst af, eigenaar 20-11 - arena out-of-scope, glow gepubliceerd.)
+Peildatum: 20 nov 2026 middag — **GAME NIGHT WINNER'S CRATE + SAKAGURA-FRUITFIX LIVE 20-11 12:46** (gemeten: Relics 0.7.9 "121 relics", Sakagura 0.8.3, mixer alleen build66, Done 74,1 s, 0 eigen fouten; gamenight-crate-sectie geplakt; originele backup `/root/deploy-backup-20261120gamenight/`). Wacht: alleen nog client-herstart + testpunten (crate-sleutelround, vrucht-onder-blad, Krampus-hoogte). Site-1811o LIVE op Plesk (20-11, map-erasie inbegrepen - /map is nu echt 404); arena out-of-scope; alle Discord-posts gedaan.
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
 
 ## 🟢 Live op de server
-| **Sakagura 0.8.1 - pit bij boom-pluk + wilde orchards** | 19 nov 09:45 | Plukken hangfruit geeft dezelfde 1-op-3 pit-kans als de tuin; elke chunk rolt once 8% op een groep van 1-3 bomen passend bij het biome (driekwart volwassen, rijp-klok vult). Bestaande chunks doen mee bij herbelading. Gemeten: v0.8.1 enabled, Done 75,1 s, 0 fouten. Preview van zo'n boom: `archief/wild-orchard/wilde-appelboom.png`. site-1811l (wiki-zaad) wacht nog op Plesk. |
+| **Sakagura 0.8.1 - pit bij boom-pluk + wilde orchards** | 19 nov 09:45 | Plukken hangfruit geeft dezelfde 1-op-3 pit-kans als de tuin; elke chunk rolt once 8% op een groep van 1-3 bomen passend bij het biome (driekwart volwassen, rijp-klok vult). Bestaande chunks doen mee bij herbelading. Gemeten: v0.8.1 enabled, Done 75,1 s, 0 fouten. Preview van zo'n boom: `archief/wild-orchard/wilde-appelboom.png`. ~~site-1811l (wiki-zaad) wacht nog op Plesk~~ ✅ opgegaan in site-1811o, LIVE 20-11. |
 |---|---|---|
 
 | Blok | Sinds | Wat |
