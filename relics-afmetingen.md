@@ -22,6 +22,7 @@ Let op:
 ## Stel-lijst (fill this in via meldingen)
 | # | relic | observatie (nu) | gewenst (moet) | aanpassing | status |
 |---|---|---|---|---|---|
+| 1 | `gamenight_crate` | schaal 1,0 (~0,7 blk hoog, ~0,75 breed) | **visueel 2x** | `RelicType.scale` 1f → **2f** (java-only, zelfde truc als Krampus; hitbox blijft 1) | ✅ code-aanpassing, wacht op één gezamenlijke build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)

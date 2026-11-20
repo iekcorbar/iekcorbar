@@ -281,7 +281,7 @@ enum RelicType {
      * random shelves - winner prizes and keys are never rolled by anything else.
      */
     GAMENIGHT_CRATE(Collection.GAMENIGHT, "Winner's Crate", "The Game Night lock draws one prize from the Guild's sealed table. Winners hold the keys.",
-            Base.NONE, 1, 0, "gamenight_crate", "gamenight_crate_wall", null, Effect.NONE, Use.CRATE, 1f, false),
+            Base.NONE, 1, 0, "gamenight_crate", "gamenight_crate_wall", null, Effect.NONE, Use.CRATE, 2f, false),
     GAMENIGHT_KEY(Collection.GAMENIGHT, "Game Night Key", "Tonight's winner holds the key. Turn it once in the crate's lock - that is the whole of it.",
             Base.NONE, 1, 0, "gamenight_key", null, null, Effect.NONE, Use.NONE, 1f, false),
     GAMENIGHT_TROPHY(Collection.GAMENIGHT, "Champion's Trophy", "Brass two-handled, gold inside. The engraving reads only: WINNER.",
