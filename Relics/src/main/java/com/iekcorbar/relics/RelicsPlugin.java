@@ -679,10 +679,17 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             s.sendMessage(Component.text("/" + label + " gift <find <player> [radius] | rellock <new recipient>>", NamedTextColor.RED));
             return true;
         }
-        if (sub.equals("secret")) {   // Secret Santa: draw lots among the named players, everyone gets a fresh box and a private whisper
+        if (sub.equals("secret")) {   // Secret Santa: draw lots among the named players, everyone gets fresh boxes and a private whisper
             if (denied(s, "relics.give")) return true;
+            // optional trailing count: "/relics secret <players...> 2" - boxes (and different recipients) per player, default 1
+            int count = 1;
+            int stop = a.length;
+            if (a.length > 1 && a[a.length - 1].matches("\\d{1,2}")) {
+                count = Math.max(1, Integer.parseInt(a[a.length - 1]));
+                stop = a.length - 1;
+            }
             List<Player> players = new ArrayList<>();
-            for (int i = 1; i < a.length; i++) {
+            for (int i = 1; i < stop; i++) {
                 Player t = Bukkit.getPlayerExact(a[i]);
                 if (t == null) {
                     s.sendMessage(Component.text(a[i] + " is not online - Secret Santa hands the boxes out live.", NamedTextColor.RED));
@@ -691,27 +698,52 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
                 if (!players.contains(t)) players.add(t);
             }
             if (players.size() < 2) {
-                s.sendMessage(Component.text("/" + label + " secret <player> <player> [more...]", NamedTextColor.RED));
+                s.sendMessage(Component.text("/" + label + " secret <player> <player> [more...] [boxes-per-player]", NamedTextColor.RED));
                 return true;
             }
-            List<Player> draw = new ArrayList<>(players);
-            java.util.Collections.shuffle(draw);
-            for (int i = 0; i < players.size(); i++) {   // nobody draws themselves: every fixed point swaps with the next seat
-                if (draw.get(i) != players.get(i)) continue;
-                int k = (i + 1) % draw.size();
-                Player tmp = draw.set(i, draw.get(k));
-                draw.set(k, tmp);
+            if (count > players.size() - 1) {   // you cannot give to more DIFFERENT people than there are others
+                s.sendMessage(Component.text("Only " + (players.size() - 1) + " other players to give to - drawing " + (players.size() - 1) + " lots per player instead of " + count + ".", NamedTextColor.YELLOW));
+                count = players.size() - 1;
+            }
+            // Each lot is a fresh derangement (nobody themselves), and no player may draw the same recipient in two lots.
+            List<List<Player>> lots = new ArrayList<>();
+            for (int l = 0; l < count; l++) {
+                List<Player> draw = null;
+                for (int attempt = 0; attempt < 100 && draw == null; attempt++) {
+                    List<Player> d = new ArrayList<>(players);
+                    java.util.Collections.shuffle(d);
+                    for (int i = 0; i < players.size(); i++) {   // every fixed point swaps with the next seat
+                        if (d.get(i) != players.get(i)) continue;
+                        int k = (i + 1) % d.size();
+                        Player tmp = d.set(i, d.get(k));
+                        d.set(k, tmp);
+                    }
+                    boolean clash = false;
+                    for (List<Player> prev : lots)
+                        for (int i = 0; i < players.size() && !clash; i++) if (prev.get(i) == d.get(i)) clash = true;
+                    if (!clash) draw = d;
+                }
+                if (draw == null) {
+                    s.sendMessage(Component.text("The draw could not find " + count + " different recipients for everyone this time - run it again.", NamedTextColor.RED));
+                    return true;
+                }
+                lots.add(draw);
             }
             for (int i = 0; i < players.size(); i++) {
-                Player giver = players.get(i), lot = draw.get(i);
-                ItemStack box = relics.item(RelicType.GIFT_BOX, 1);
-                for (var left : giver.getInventory().addItem(box).values()) giver.getWorld().dropItemNaturally(giver.getLocation(), left);
-                giver.sendMessage(Component.text("Secret Santa: you wrap a present for " + lot.getName()
-                        + " - fill a box somewhere, lock it on them, and only they can open it when the gift window is open ("
+                Player giver = players.get(i);
+                StringBuilder names = new StringBuilder();
+                for (int l = 0; l < count; l++) {
+                    ItemStack box = relics.item(RelicType.GIFT_BOX, 1);
+                    for (var left : giver.getInventory().addItem(box).values()) giver.getWorld().dropItemNaturally(giver.getLocation(), left);
+                    names.append(names.isEmpty() ? "" : (l == count - 1 ? " and " : ", ")).append(lots.get(l).get(i).getName());
+                }
+                giver.sendMessage(Component.text("Secret Santa: you wrap " + count + " present(s) - one for " + names
+                        + (count > 1 ? ", each box locked to a different one of them" : "")
+                        + ". Fill a box somewhere, lock it on that name, and only they can open it when the gift window is open ("
                         + relics.giftBoxes().window() + ").", NamedTextColor.GOLD));
                 giver.playSound(giver.getLocation(), "minecraft:block.note_block.bell", 1f, 1.2f);
             }
-            s.sendMessage(Component.text("Drew lots for " + players.size() + " players: everyone got a fresh gift box and a private whisper of their secret name.", NamedTextColor.GREEN));
+            s.sendMessage(Component.text("Drew " + count + " lot(s) for " + players.size() + " players: everyone got fresh gift boxes and a private whisper of their secret name(s).", NamedTextColor.GREEN));
             return true;
         }
         if (sub.equals("give")) {
