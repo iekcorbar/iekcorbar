@@ -39,6 +39,7 @@ Let op:
 | 15 | `snowman` | schaal 1,0 | **2x** | `scale` 1f → **2f** | ✅ code-aanpassing, wacht op build |
 | 16 | `sleigh` | schaal 1,0 | **3x** | `scale` 1f → **3f** + zitplek volgt de schaal (`sit()` 0,35·(scale−1) hoger) | ✅ code-aanpassing, wacht op build |
 | 17 | `toy_train` | schaal 1,0 | **4x** | `scale` 1f → **4f** (draai-effect om zelfde anker) | ✅ code-aanpassing, wacht op build |
+| 18 | `gift_box` | schaal 1,5 | **2x** | `scale` 1,5f → **3f** (alle drie cadeau-wikkels meegeschakend); rechtsklik/vullen/locken werkt op dezelfde plek (geen apart hitboxje) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -72,7 +73,7 @@ Let op:
 | `snowman` | Snowman | 2 | 1 | · | · | ja |
 | `sleigh` | Sleigh | 1 | 1 | · | · | ja |
 | `toy_train` | Clockwork Toy Train | 1 | 1 | · | · | ja |
-| `gift_box` | Gift Box | 1 | 1.5 | · | · | ja |
+| `gift_box` | Gift Box | 1 | ~~1.5~~ → **3** (#18) | · | · | ja |
 | `advent_calendar` | Advent Calendar | 1 | 1 | X | · | ja |
 | `music_box` | Music Box | 1 | 1 | · | · | ja |
 | `snow_globe` | Snow Globe | 1 | 1 | · | · | ja |
