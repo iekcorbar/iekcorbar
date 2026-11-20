@@ -65,6 +65,7 @@ Let op:
 | 41 | `brass_telescope` | schaal 1,0 | **3x** | `scale` 1f → **3f** (zoom-effect via actionbar/potion ongewijzigd) | ✅ code-aanpassing, wacht op build |
 | 42 | `torii_gate` | schaal 1,5 | **1,5x** | `scale` 1,5f → **2,25f** (loop-through poort, hitbox blijft leeg) | ✅ code-aanpassing, wacht op build |
 | 43 | `shishi_odoshi` | schaal 1,0 | **2x** | `scale` 1f → **2f** (klak-animatie via variant-model, ongewijzigd) | ✅ code-aanpassing, wacht op build |
+| 44 | `byobu_screen` | schaal 1,0 | **2x** | `scale` 1f → **2f** | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -180,7 +181,7 @@ Let op:
 | `maneki_neko` | Maneki-neko | 1 | 1 | · | · | ja |
 | `shishi_odoshi` | Shishi-odoshi | 1 | ~~1~~ → **2** (#43) | · | · | ja |
 | `bonsai` | Bonsai | 1 | 1 | · | · | ja |
-| `byobu_screen` | Byobu Screen | 1 | 1 | · | · | ja |
+| `byobu_screen` | Byobu Screen | 1 | ~~1~~ → **2** (#44) | · | · | ja |
 | `wagasa_stand` | Wagasa Stand | 1 | 1 | · | · | ja |
 | `notice_board` | Notice Board | 1 | 1 | · | · | ja |
 | `wish_tree` | Wish Tree | 2 | 1 | · | · | ja |

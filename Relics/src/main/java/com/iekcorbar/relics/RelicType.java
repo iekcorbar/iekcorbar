@@ -206,7 +206,7 @@ enum RelicType {
     BONSAI(Collection.CURIO, "Bonsai", "Decades of patience in a little pot.",
             Base.NONE, 1, 0, "bonsai", null, null, Effect.NONE, Use.NONE, 1f),
     BYOBU_SCREEN(Collection.CURIO, "Byobu Screen", "A folding paper screen.",
-            Base.NONE, 1, 0, "byobu_screen", null, null, Effect.NONE, Use.NONE, 1f),
+            Base.NONE, 1, 0, "byobu_screen", null, null, Effect.NONE, Use.NONE, 2f),
     WAGASA_STAND(Collection.CURIO, "Wagasa Stand", "Paper umbrellas, ready for the rain.",
             Base.NONE, 1, 0, "wagasa_stand", null, null, Effect.NONE, Use.NONE, 1f),
     ONSEN_TUB(Collection.ONSEN, "Hinoki Bath Tub", "A cypress tub, steaming gently. Nobody remembers filling it.",
