@@ -216,7 +216,7 @@ enum RelicType {
     KOTATSU(Collection.ONSEN, "Kotatsu", "A low heated table under a heavy blanket. Nobody has ever left it willingly.",
             Base.NONE, 1, 0, "kotatsu", null, null, Effect.NONE, Use.NONE, 1f),
     SNOW_BUNNY(Collection.ONSEN, "Snow Bunny", "Two berries for eyes, two leaves for ears. Right-click to perk the ears up.",
-            Base.NONE, 1, 0, "snow_bunny", null, null, Effect.NONE, Use.POSE, 1f),
+            Base.NONE, 1, 0, "snow_bunny", null, null, Effect.NONE, Use.POSE, 1.2f),
     WASH_SET(Collection.ONSEN, "Wash Stool and Bucket", "Wash first, soak after. The rule is older than the tub.",
             Base.NONE, 1, 0, "wash_set", null, null, Effect.NONE, Use.NONE, 1f),
     TOWEL_RACK(Collection.ONSEN, "Towel Rack", "Two towels, always one damp.",
