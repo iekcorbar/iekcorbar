@@ -129,7 +129,7 @@ enum RelicType {
     WISHING_WELL(Collection.VALENTINE, "Wishing Well", "Right-click with a gold nugget: one coin, one wish, five seconds of believing.",
             Base.SOLID, 1, 0, "wishing_well", null, null, Effect.NONE, Use.WISH, 2f),
     SWAN_LANTERN(Collection.VALENTINE, "Twin Swan Lantern", "Two swans, one lamp. They pair for life - the lamp knows it.",
-            Base.LIGHT, 1, 12, "swan_lantern", null, null, Effect.FLAME, Use.NONE, 1f),
+            Base.LIGHT, 1, 12, "swan_lantern", null, null, Effect.FLAME, Use.NONE, 2f),
     VALENTINE_BANNER(Collection.VALENTINE, "Valentine Banner", "Deep rose velvet with a stitched heart. The seamstress sewed it twice.",
             Base.NONE, 1, 0, "valentine_banner_wall", "valentine_banner_wall", null, Effect.SWAY, Use.NONE, 1f),
     HEART_LANTERN(Collection.VALENTINE, "Heart Lantern", "A paper lantern with a heart cut in. On the tenth of February the town is all glow.",
