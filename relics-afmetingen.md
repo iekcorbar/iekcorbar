@@ -72,6 +72,12 @@ Let op:
 | 48 | `barrel_stack` | schaal 1,0 | **2x** | `scale` 1f → **2f** (shop-only, niet-craftbaar) | ✅ code-aanpassing, wacht op build |
 | 49 | `tasting_counter` | schaal 1,0 | **2x** | `scale` 1f → **2f** (shop-only) | ✅ code-aanpassing, wacht op build |
 | 50 | `noren` | op muur geplaatst = model 90° gekanteld ('op zn kop'); formaat is goed | **plaatsing beperken tot vloer** | `onInteract`: Norén weigert wall/ceiling-mount met hint ("place it on the ground") - het doek-model is alleen floor getekend. Bestaande verkeerd geplaatste Norén: slopen + op de grond terugzetten | ✅ code-aanpassing, wacht op build |
+| 51 | `bottle_rack` | formaat goed, muur-orientatie verkeerd (geen wall-model → 90° gekanteld) | **eigen muur-model** | `bottle_rack_wall()` in make_pack (27 elementen, spiegeling in Z: rug z≈16, flessen de kamer in, bounds ✓) + `wall` veld in RelicType + MODELS-registratie. Bestaand verkeerd geplaatst exemplaar: slopen + tegen muur terugzetten | ✅ code+model-aanpassing, wacht op build |
+| 52 | `drunkard_barrel` | schaal 1,0 | **2x** | `scale` 1f → **2f** (pose-varianten a/b meegeschakend) | ✅ code-aanpassing, wacht op build |
+| 53 | `greeter_doll` | schaal 1,0 | **3x** | `scale` 1f → **3f** (beide poses) | ✅ code-aanpassing, wacht op build |
+| 54 | `sweeper_doll` | schaal 1,0 | **3x** | `scale` 1f → **3f** (beide poses) | ✅ code-aanpassing, wacht op build |
+| 55 | `onsen_tub` | schaal 1,0 | **2x** | `scale` 1f → **2f** (stoom-effect ongewijzigd) | ✅ code-aanpassing, wacht op build |
+| 56 | `onsen_lantern` | schaal 1,0 | **2x** | `scale` 1f → **2f** (lichtblok level 12 blijft) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -201,16 +207,16 @@ Let op:
 | `tasting_counter` | Tasting Counter | 1 | ~~1~~ → **2** (#49) | · | · | nee |
 | `noren` | Noren | 1 | 1 | · | · | nee |
 | `brew_kettle` | Brew Kettle | 1 | 1 | · | · | nee |
-| `bottle_rack` | Bottle Rack | 1 | 1 | · | · | nee |
-| `drunkard_barrel` | Drunkard in a Barrel | 1 | 1 | · | · | nee |
-| `greeter_doll` | Greeter Doll | 1 | 1 | · | · | nee |
-| `sweeper_doll` | Sweeper Doll | 1 | 1 | · | · | nee |
+| `bottle_rack` | Bottle Rack | 1 | 1 (#51: wall-model) | · | · | nee |
+| `drunkard_barrel` | Drunkard in a Barrel | 1 | ~~1~~ → **2** (#52) | · | · | nee |
+| `greeter_doll` | Greeter Doll | 1 | ~~1~~ → **3** (#53) | · | · | nee |
+| `sweeper_doll` | Sweeper Doll | 1 | ~~1~~ → **3** (#54) | · | · | nee |
 
 ### Winter Onsen (8)
 | id | naam | hb-hoogte | scale | wall | plafond | craft |
 |---|---|---|---|---|---|---|
-| `onsen_tub` | Hinoki Bath Tub | 1 | 1 | · | · | ja |
-| `onsen_lantern` | Snow-Viewing Lantern | 1 | 1 | · | · | ja |
+| `onsen_tub` | Hinoki Bath Tub | 1 | ~~1~~ → **2** (#55) | · | · | ja |
+| `onsen_lantern` | Snow-Viewing Lantern | 1 | ~~1~~ → **2** (#56) | · | · | ja |
 | `kotatsu` | Kotatsu | 1 | 1 | · | · | ja |
 | `snow_bunny` | Snow Bunny | 1 | 1 | · | · | ja |
 | `wash_set` | Wash Stool and Bucket | 1 | 1 | · | · | ja |

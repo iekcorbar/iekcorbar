@@ -1412,10 +1412,23 @@ def drunkard_barrel(pose):
     return es
 
 
+def bottle_rack_wall():
+    """Wall version: the floor rack mirrored in Z so its back rail sits against the wall (z~16)
+    and the tokkuri bottles face the room. Without this the engine tilts the floor model 90 degrees."""
+    out = []
+    for e in bottle_rack():
+        m = json.loads(json.dumps(e))
+        z0, z1 = e["from"][2], e["to"][2]
+        m["from"][2] = round(23.2 - z1, 3)
+        m["to"][2] = round(23.2 - z0, 3)
+        out.append(m)
+    return out
+
+
 BREWERY = {
     "sugi_dama": lambda: shift(sugi_dama(), dy=-8), "koji_crock": koji_crock, "bottling_crate": bottling_crate,
     "barrel_stack": barrel_stack, "steam_pipe": steam_pipe, "tasting_counter": tasting_counter,
-    "noren": noren, "brew_kettle": brew_kettle, "bottle_rack": bottle_rack,
+    "noren": noren, "brew_kettle": brew_kettle, "bottle_rack": bottle_rack, "bottle_rack_wall": bottle_rack_wall,
     "greeter_doll": lambda: greeter_doll("a"), "greeter_doll_b": lambda: greeter_doll("b"),
     "sweeper_doll": lambda: sweeper_doll("a"), "sweeper_doll_b": lambda: sweeper_doll("b"),
     "drunkard_barrel": lambda: drunkard_barrel("a"), "drunkard_barrel_b": lambda: drunkard_barrel("b"),
