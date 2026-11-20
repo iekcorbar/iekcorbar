@@ -289,7 +289,7 @@ enum RelicType {
     GAMENIGHT_SASH(Collection.GAMENIGHT, "Winner's Sash", "Rose silk with a brass star. It fits anybody - champions come in all sizes.",
             Base.NONE, 1, 0, "gamenight_sash", null, null, Effect.NONE, Use.NONE, 1f, false),
     GAMENIGHT_DICE_TOWER(Collection.GAMENIGHT, "Dice Tower", "Drop the bones in at the top; whatever comes out is official. The Guild trusts the tower.",
-            Base.NONE, 1, 0, "gamenight_dice_tower", null, null, Effect.NONE, Use.NONE, 1f, false),
+            Base.NONE, 1, 0, "gamenight_dice_tower", null, null, Effect.NONE, Use.NONE, 2f, false),
     GAMENIGHT_CERTIFICATE(Collection.GAMENIGHT, "Winner's Certificate", "One line of text, one wax seal: for having won. Frame it or pin it - it is yours either way.",
             Base.NONE, 1, 0, "gamenight_certificate", "gamenight_certificate_wall", null, Effect.NONE, Use.NONE, 1f, false);
 

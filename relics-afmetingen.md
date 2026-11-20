@@ -82,6 +82,7 @@ Let op:
 | 58 | `wash_set` | schaal 1,0 | **4x** | `scale` 1f → **4f** | ✅ code-aanpassing, wacht op build |
 | 59 | `towel_rack` | schaal 1,0 | **2x** | `scale` 1f → **2f** (sway ongewijzigd) | ✅ code-aanpassing, wacht op build |
 | 60 | `gamenight_trophy` | schaal 1,0 + **paarse knipperende kubus** | **2x + magenta glans** | Oorzaak bug: `Effect.TWINKLE` wisselt naar `gamenight_trophy_b`, dat niet bestond → magenta missing-texture-blok. Fix: nieuw `_b`-model met magenta (`glow_purple`) gloedrand rond de beker (15 elementen, bounds ✓), zodat het knipperen een feature wordt. `scale` 1f → **2f** | ✅ code+model-aanpassing, wacht op build |
+| 61 | `gamenight_dice_tower` | schaal 1,0 | **2x** | `scale` 1f → **2f** | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -242,5 +243,5 @@ Let op:
 | `gamenight_trophy` | Champion's Trophy | 1 | ~~1~~ → **2** (#60) | · | · | nee |
 | `gamenight_sword` | Champion's Blade | 1 | 1 | X | · | nee |
 | `gamenight_sash` | Winner's Sash | 1 | 1 | · | · | nee |
-| `gamenight_dice_tower` | Dice Tower | 1 | 1 | · | · | nee |
+| `gamenight_dice_tower` | Dice Tower | 1 | ~~1~~ → **2** (#61) | · | · | nee |
 | `gamenight_certificate` | Winner's Certificate | 1 | 1 | X | · | nee |
