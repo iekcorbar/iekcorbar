@@ -1083,9 +1083,10 @@ final class Relics implements Listener {
                     }
                 }
                 case HEART -> {
-                    if (rnd.nextInt(6) == 0)
-                        r.world.spawnParticle(Particle.HEART, c.clone().add(rnd.nextDouble() - 0.5, 0.9 + rnd.nextDouble() * 0.6, rnd.nextDouble() - 0.5),
-                                1, 0.1, 0.05, 0.1, 0.02);
+                    if (rnd.nextInt(6) == 0)                                    // heart particles hug a scaled arch
+                        r.world.spawnParticle(Particle.HEART, c.clone().add((rnd.nextDouble() - 0.5) * r.type.scale * 0.5,
+                                        (0.45 + rnd.nextDouble() * 0.3) * r.type.scale,
+                                        (rnd.nextDouble() - 0.5) * r.type.scale * 0.5), 1, 0.1, 0.05, 0.1, 0.02);
                 }
                 case RAINBOW -> {
                     if (rnd.nextInt(3) == 0) {

@@ -123,7 +123,7 @@ enum RelicType {
     LOVE_LOCK_RAIL(Collection.VALENTINE, "Love Lock Rail", "Clip a padlock on, drop the key in the well, walk on.",
             Base.NONE, 1, 0, "love_lock_rail_wall", "love_lock_rail_wall", null, Effect.NONE, Use.NONE, 1f),
     HEART_ARCH(Collection.VALENTINE, "Heart Arch", "Walk through it together and the town counts it official.",
-            Base.NONE, 2, 0, "heart_arch", null, null, Effect.HEART, Use.NONE, 2f),
+            Base.NONE, 2, 0, "heart_arch", null, null, Effect.HEART, Use.NONE, 4f),
     CUPID_STATUE(Collection.VALENTINE, "Cupid Statue", "His marble arrow has never hit anyone. People still dodge.",
             Base.SOLID, 1, 0, "cupid_statue", null, null, Effect.NONE, Use.NONE, 1.3f),
     WISHING_WELL(Collection.VALENTINE, "Wishing Well", "Right-click with a gold nugget: one coin, one wish, five seconds of believing.",
