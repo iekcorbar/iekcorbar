@@ -60,6 +60,8 @@ Let op:
 | 36 | `egg_tree` | schaal 1,0 | **3x** | `scale` 1f → **3f** | ✅ code-aanpassing, wacht op build |
 | 37 | `pot_of_gold` | schaal 1,0 | **2x** | `scale` 1f → **2f**; regenboog-stof volgt schaal (0,7×scale) | ✅ code-aanpassing, wacht op build |
 | 38 | `rainbow_arch` | schaal 1,0 | **6x** | `scale` 1f → **6f** (regenboog-stof volgt de schaal sinds #37; loop-through, hitbox blijft leeg) | ✅ code-aanpassing, wacht op build |
+| 39 | `creature_skull` + `leprechaun_hat` | schedel zit ín het hoofd; hoed staat verkeerd op hoofd | **draagpositie corrigeren** | `HEAD_DISPLAY` in make_pack: schedel `translation [0,13,-2] @0,95` → **[0,18,-4] @1,1**; hoed had géén head-transform → **[0,16,0] @1,1**. Let op:.pack-zijde, kan ik niet zelf visueel checken - na de build even met een speler op het hoofd bekijken en evt. fijn bijstellen | ✅ model-aanpassing, wacht op build |
+| 40 | `green_ale_keg` | schaal 1,0 | **2x** | `scale` 1f → **2f** | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -162,7 +164,7 @@ Let op:
 | `shamrock_planter` | Shamrock Planter | 1 | 1 | · | · | ja |
 | `leprechaun_hat` | Leprechaun Hat | 1 | 1 | · | · | ja |
 | `celtic_harp` | Celtic Harp | 2 | 1.7 | · | · | ja |
-| `green_ale_keg` | Green Ale Keg | 1 | 1 | · | · | ja |
+| `green_ale_keg` | Green Ale Keg | 1 | ~~1~~ → **2** (#40) | · | · | ja |
 
 ### Curiosities (26)
 | id | naam | hb-hoogte | scale | wall | plafond | craft |

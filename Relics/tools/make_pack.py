@@ -114,7 +114,14 @@ def shift(es, dx=0, dy=0, dz=0):
 
 # worn on the head (the Creature Skull item is a dragon head, so it can be equipped): the model sits on top of the
 # head, snout forward, instead of disappearing inside it. Units are 1/16 block inside the head layer (scaled 0.625).
-HEAD_DISPLAY = {"creature_skull": {"head": {"rotation": [0, 0, 0], "translation": [0, 13, -2], "scale": [0.95, 0.95, 0.95]}}}
+HEAD_DISPLAY = {
+    # Creature Skull: a dragon-head item that can be worn in the head slot. 0.7.11: the old
+    # [0,13,-2] @0.95 buried the model in the head - lift it clear of the skull cap and push
+    # the snout forward so it reads as a helmet, not a face inside the head.
+    "creature_skull": {"head": {"rotation": [0, 0, 0], "translation": [0, 18, -4], "scale": [1.1, 1.1, 1.1]}},
+    # Leprechaun Hat: no head transform at all before 0.7.11, so it rendered inside the head.
+    "leprechaun_hat": {"head": {"rotation": [0, 0, 0], "translation": [0, 16, 0], "scale": [1.1, 1.1, 1.1]}},
+}
 
 
 def model(name, es):

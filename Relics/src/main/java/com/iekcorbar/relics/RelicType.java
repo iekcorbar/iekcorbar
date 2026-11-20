@@ -184,7 +184,7 @@ enum RelicType {
     CELTIC_HARP(Collection.PATRICK, "Celtic Harp", "Right-click to play on repeat (again to stop), sneak + right-click to pick the tune.",
             Base.NONE, 2, 0, "celtic_harp", null, null, Effect.NONE, Use.HARP, 1.7f),
     GREEN_ALE_KEG(Collection.PATRICK, "Green Ale Keg", "Everything is green today.",
-            Base.SOLID, 1, 0, "green_ale_keg", null, null, Effect.NONE, Use.NONE, 1f),
+            Base.SOLID, 1, 0, "green_ale_keg", null, null, Effect.NONE, Use.NONE, 2f),
 
     // ---------------------------------------------------------------- Curiosities (steampunk + Japanese, all year)
     BRASS_TELESCOPE(Collection.CURIO, "Brass Telescope", "Right-click to look through it.",
