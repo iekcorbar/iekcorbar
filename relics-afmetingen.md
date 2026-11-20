@@ -23,6 +23,7 @@ Let op:
 | # | relic | observatie (nu) | gewenst (moet) | aanpassing | status |
 |---|---|---|---|---|---|
 | 1 | `gamenight_crate` | schaal 1,0 (~0,7 blk hoog, ~0,75 breed) | **visueel 2x** | `RelicType.scale` 1f → **2f** (java-only, zelfde truc als Krampus; hitbox blijft 1) | ✅ code-aanpassing, wacht op één gezamenlijke build |
+| 2 | `gamenight_key` | schaal 1,0 | **visueel 2x** | `scale` 1f → **2f** — geplaatste sleutel ~1,4 blk hoog; item-in-hand blijft normaal formaat | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
