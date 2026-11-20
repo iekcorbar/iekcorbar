@@ -44,6 +44,7 @@ Let op:
 | 20 | `music_box` | schaal 1,0 | **2x** | `scale` 1f → **2f** (playlist/afspeelgedrag ongewijzigd, geluid komt van hetzelfde anker) | ✅ code-aanpassing, wacht op build |
 | 21 | `snow_globe` | schaal 1,0 + saai model | **2x + leuker + nieuw model** | `scale` 1f → **2f**; model herbouwd: geelkoperen voet, glazen bol met chalet (verlicht raam), twee pijnbomen, sneeuwman, sneeuwvlokken in de bol (35 elementen, bounds -16..32 ✓, palette kleuren ✓); shake-effect: 6 stijgende ringen SNOWFLAKE-deeltjes + extra chime, met validatie-guard tegen gebroken relics. **Raakt zowel jar als pack** | ✅ code+model-aanpassing, wacht op build |
 | 22 | `cuckoo_clock` | schaal 1,0 | **2x** | `scale` 1f → **2f** (vloer+muur); geluid/particles van de koekoek volgen de schaal (0,45×scale i.p.v. vast 0,9) | ✅ code-aanpassing, wacht op build |
+| 23 | `nutcracker` | schaal 1,2 | **zelfde als Krampus** | `scale` 1,2f → **2,9f** (Krampus-schaal exact overgenomen, hitbox 2 blijft); lore aangepast. Interpretation: even groot als de Krampus, niet 'nogmaals 2x' - als je laatste bedoelde, eindigt hij op 2,4 | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -85,7 +86,7 @@ Let op:
 | `cookie_plate` | Cookie Plate | 1 | 1 | · | · | ja |
 | `gingerbread_house` | Gingerbread House | 1 | 1.15 | · | · | ja |
 | `cuckoo_clock` | Cuckoo Clock | 1 | 1 | X | · | ja |
-| `nutcracker` | Nutcracker Guard | 2 | 1.2 | · | · | ja |
+| `nutcracker` | Nutcracker Guard | 2 | ~~1.2~~ → **2.9** (#23) | · | · | ja |
 | `chandelier` | Candle Chandelier | 1 | 1 | X | X | ja |
 | `plum_pudding` | Plum Pudding | 1 | 1.25 | · | · | ja |
 | `santa_mailbox` | Santa Mailbox | 1 | 1 | · | · | ja |
