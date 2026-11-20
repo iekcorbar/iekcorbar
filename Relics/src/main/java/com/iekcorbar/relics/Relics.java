@@ -1653,10 +1653,20 @@ final class Relics implements Listener {
 
     private void sit(Relic r, Player p) {
         if (p.isInsideVehicle()) return;
-        for (Relic s : seats.values()) if (s == r) return; // taken
+        boolean bench = r.type == RelicType.LOVERS_BENCH;
+        int taken = 0;
+        for (Relic s : seats.values()) if (s == r) taken++;
+        if (taken >= (bench ? 2 : 1)) return;                  // a bench holds two, every other seat holds one
         // the seat sits at 0.35 above the block floor on the 1x model; when the prop is scaled, the bottom-anchored
         // display lifts the cushion with it - follow it, or riders sink into a giant sleigh (0.7.11 tuning, #16)
-        Location at = r.center().add(0, -0.15 + (r.type == RelicType.SLEIGH ? 0.35 * (r.type.scale - 1) : 0), 0);
+        double lift = r.type == RelicType.SLEIGH ? 0.35 * (r.type.scale - 1)
+                : bench ? 0.21 * r.type.scale - 0.4 : 0;      // bench seat wood sits at 0.21 of its scale
+        Location at = r.center().add(0, -0.15 + lift, 0);
+        if (bench) {                                          // two seats side by side along the bench's long axis
+            float side = (taken == 0 ? -1f : 1f) * 0.22f * r.type.scale;
+            org.joml.Vector3f off = new org.joml.Vector3f(side, 0, 0).rotate(rotationRaw(r));
+            at.add(off.x, 0, off.z);
+        }
         at.setYaw(switch (r.facing) { case EAST -> -90; case SOUTH -> 0; case WEST -> 90; default -> 180; } + 180);
         ItemDisplay seat = r.world.spawn(at, ItemDisplay.class, d -> {
             d.setPersistent(false);
