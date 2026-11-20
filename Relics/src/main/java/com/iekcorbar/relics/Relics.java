@@ -1284,7 +1284,7 @@ final class Relics implements Listener {
                     // player+day, like the Krampus verdicts - the same visitor gets the same note that day.
                     String[] notes = {
                             "North Pole dispatch: wish filed under 'urgent-ish'. Elves are on it.",
-                            "A red pencil scribbles on the envelope: 'Do not open until " + relics.giftBoxes().window() + ".'",
+                            "A red pencil scribbles on the envelope: 'Do not open until " + giftBoxes().window() + ".'",
                             "The postmark says 'North Pole, two sleeps'. Nobody knows which two.",
                             "An elf notes: 'If this wish is for more inventory space, we cannot help. Yet.'",
                             "The mailbox gives a content clink. Somewhere, a reindeer sneezes." };
