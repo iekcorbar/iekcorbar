@@ -73,7 +73,7 @@ enum RelicType {
     ADVENT_CALENDAR(Collection.XMAS, "Advent Calendar", "From 1 to 24 December: open one door a day.",
             Base.NONE, 1, 0, "advent_calendar", "advent_calendar", null, Effect.NONE, Use.CALENDAR, 3f),
     MUSIC_BOX(Collection.XMAS, "Music Box", "Right-click to play the carol playlist on loop, sneak + right-click for songs, shuffle and pause.",
-            Base.NONE, 1, 0, "music_box", null, null, Effect.NONE, Use.MUSIC, 1f),
+            Base.NONE, 1, 0, "music_box", null, null, Effect.NONE, Use.MUSIC, 2f),
     SNOW_GLOBE(Collection.XMAS, "Snow Globe", "Shake it with a right-click.",
             Base.NONE, 1, 0, "snow_globe", null, null, Effect.NONE, Use.GLOBE, 1f),
     MARKET_STALL(Collection.XMAS, "Christmas Market Stall", "Ginger, greens and gold for sale.",

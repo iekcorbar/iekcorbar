@@ -41,6 +41,7 @@ Let op:
 | 17 | `toy_train` | schaal 1,0 | **4x** | `scale` 1f → **4f** (draai-effect om zelfde anker) | ✅ code-aanpassing, wacht op build |
 | 18 | `gift_box` | schaal 1,5 | **2x** | `scale` 1,5f → **3f** (alle drie cadeau-wikkels meegeschakend); rechtsklik/vullen/locken werkt op dezelfde plek (geen apart hitboxje) | ✅ code-aanpassing, wacht op build |
 | 19 | `advent_calendar` | schaal 1,0 | **3x** | `scale` 1f → **3f** (deur-logica/kalender zelf blijft op dezelfde plek; klikken gebeurt op het centrale blok van de relic) | ✅ code-aanpassing, wacht op build |
+| 20 | `music_box` | schaal 1,0 | **2x** | `scale` 1f → **2f** (playlist/afspeelgedrag ongewijzigd, geluid komt van hetzelfde anker) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
