@@ -188,7 +188,7 @@ enum RelicType {
 
     // ---------------------------------------------------------------- Curiosities (steampunk + Japanese, all year)
     BRASS_TELESCOPE(Collection.CURIO, "Brass Telescope", "Right-click to look through it.",
-            Base.NONE, 1, 0, "brass_telescope", null, null, Effect.NONE, Use.TELESCOPE, 1f),
+            Base.NONE, 1, 0, "brass_telescope", null, null, Effect.NONE, Use.TELESCOPE, 3f),
     STEAM_GAUGE_PANEL(Collection.CURIO, "Steam Gauge Panel", "The needles never sit still.",
             Base.NONE, 1, 0, "steam_gauge_panel", "steam_gauge_panel", null, Effect.SWAP, Use.NONE, 1f),
     TESLA_COIL(Collection.CURIO, "Tesla Coil", "Crackles, hums and lights the room.",
