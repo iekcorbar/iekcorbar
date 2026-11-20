@@ -127,7 +127,7 @@ enum RelicType {
     CUPID_STATUE(Collection.VALENTINE, "Cupid Statue", "His marble arrow has never hit anyone. People still dodge.",
             Base.SOLID, 1, 0, "cupid_statue", null, null, Effect.NONE, Use.NONE, 5.2f),
     WISHING_WELL(Collection.VALENTINE, "Wishing Well", "Right-click with a gold nugget: one coin, one wish, five seconds of believing.",
-            Base.SOLID, 1, 0, "wishing_well", null, null, Effect.NONE, Use.WISH, 1f),
+            Base.SOLID, 1, 0, "wishing_well", null, null, Effect.NONE, Use.WISH, 2f),
     SWAN_LANTERN(Collection.VALENTINE, "Twin Swan Lantern", "Two swans, one lamp. They pair for life - the lamp knows it.",
             Base.LIGHT, 1, 12, "swan_lantern", null, null, Effect.FLAME, Use.NONE, 1f),
     VALENTINE_BANNER(Collection.VALENTINE, "Valentine Banner", "Deep rose velvet with a stitched heart. The seamstress sewed it twice.",

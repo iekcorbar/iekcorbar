@@ -1337,7 +1337,7 @@ final class Relics implements Listener {
                 r.world.playSound(r.center(), "minecraft:entity.generic.splash", 0.8f, 1.1f);
                 r.world.playSound(r.center(), "relics:valentine.wish", 0.7f, 1f);
                 for (int k = 0; k < 4; k++)
-                    r.world.spawnParticle(Particle.HEART, r.center().add(0, 0.6, 0), 1, 0.25, 0.1, 0.25, 0.04);
+                    r.world.spawnParticle(Particle.HEART, r.center().add(0, 0.6 * r.type.scale, 0), 1, 0.25, 0.1, 0.25, 0.04);
                 p.sendActionBar(Component.text("Wish cast. The well keeps everything.", NamedTextColor.LIGHT_PURPLE));
                 plugin.adv().grant(p, "wish");
             }
