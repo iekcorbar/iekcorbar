@@ -202,7 +202,7 @@ enum RelicType {
     MANEKI_NEKO(Collection.CURIO, "Maneki-neko", "The beckoning cat waves luck your way.",
             Base.NONE, 1, 0, "maneki_neko", null, null, Effect.SWAP, Use.NONE, 1f),
     SHISHI_ODOSHI(Collection.CURIO, "Shishi-odoshi", "Fills, tips and clacks - the sound of a quiet garden.",
-            Base.NONE, 1, 0, "shishi_odoshi", null, null, Effect.SHISHI, Use.NONE, 1f),
+            Base.NONE, 1, 0, "shishi_odoshi", null, null, Effect.SHISHI, Use.NONE, 2f),
     BONSAI(Collection.CURIO, "Bonsai", "Decades of patience in a little pot.",
             Base.NONE, 1, 0, "bonsai", null, null, Effect.NONE, Use.NONE, 1f),
     BYOBU_SCREEN(Collection.CURIO, "Byobu Screen", "A folding paper screen.",
