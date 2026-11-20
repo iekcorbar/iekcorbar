@@ -271,11 +271,34 @@ enum RelicType {
      * blood moon stands above the horizon (see BloodMoon) blesses it on the spot.
      */
     BLOOD_TOKEN(Collection.HALLOWEEN, "Blood Token", "Minted under a crimson moon. The Guild keeps the dies - the night keeps the rest.",
-            Base.NONE, 1, 0, "blood_token", "blood_token_wall", null, Effect.NONE, Use.NONE, 1f, false);
+            Base.NONE, 1, 0, "blood_token", "blood_token_wall", null, Effect.NONE, Use.NONE, 1f, false),
+
+    // ---------------------------------------------------------------- Game Night (0.7.9): winner prizes
+    /**
+     * Prize stock of the Game Night Winner's Crate (see GameNight + config "gamenight-crate").
+     * The crate is a fixture staff places once per venue; winners get a one-use key.
+     * The filter in crateItems/randomStock keeps this whole collection off the shop's
+     * random shelves - winner prizes and keys are never rolled by anything else.
+     */
+    GAMENIGHT_CRATE(Collection.GAMENIGHT, "Winner's Crate", "The Game Night lock draws one prize from the Guild's sealed table. Winners hold the keys.",
+            Base.NONE, 1, 0, "gamenight_crate", "gamenight_crate_wall", null, Effect.NONE, Use.CRATE, 1f, false),
+    GAMENIGHT_KEY(Collection.GAMENIGHT, "Game Night Key", "Tonight's winner holds the key. Turn it once in the crate's lock - that is the whole of it.",
+            Base.NONE, 1, 0, "gamenight_key", null, null, Effect.NONE, Use.NONE, 1f, false),
+    GAMENIGHT_TROPHY(Collection.GAMENIGHT, "Champion's Trophy", "Brass two-handled, gold inside. The engraving reads only: WINNER.",
+            Base.NONE, 1, 0, "gamenight_trophy", null, null, Effect.TWINKLE, Use.NONE, 1f, false),
+    GAMENIGHT_SWORD(Collection.GAMENIGHT, "Champion's Blade", "Never sharpened, never needed. It hung above the door of every Game Night champion.",
+            Base.NONE, 1, 0, "gamenight_sword", "gamenight_sword_wall", null, Effect.NONE, Use.NONE, 1f, false),
+    GAMENIGHT_SASH(Collection.GAMENIGHT, "Winner's Sash", "Rose silk with a brass star. It fits anybody - champions come in all sizes.",
+            Base.NONE, 1, 0, "gamenight_sash", null, null, Effect.NONE, Use.NONE, 1f, false),
+    GAMENIGHT_DICE_TOWER(Collection.GAMENIGHT, "Dice Tower", "Drop the bones in at the top; whatever comes out is official. The Guild trusts the tower.",
+            Base.NONE, 1, 0, "gamenight_dice_tower", null, null, Effect.NONE, Use.NONE, 1f, false),
+    GAMENIGHT_CERTIFICATE(Collection.GAMENIGHT, "Winner's Certificate", "One line of text, one wax seal: for having won. Frame it or pin it - it is yours either way.",
+            Base.NONE, 1, 0, "gamenight_certificate", "gamenight_certificate_wall", null, Effect.NONE, Use.NONE, 1f, false);
 
     enum Collection {
         SHADOW("Shoutlander's Shadow"), XMAS("Xmas Town"), NEW_YEAR("New Year"), EASTER("Easter"), PATRICK("St. Patrick's Day"),
-        VALENTINE("Valentine's"), CURIO("Curiosities"), HALLOWEEN("Halloween Party"), ONSEN("Winter Onsen");
+        VALENTINE("Valentine's"), CURIO("Curiosities"), HALLOWEEN("Halloween Party"), ONSEN("Winter Onsen"),
+        GAMENIGHT("Game Night");
 
         final String title;
 
@@ -306,7 +329,7 @@ enum RelicType {
     enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, HEART, RAINBOW, SWAP, SPARK, SHISHI, DOLL }
 
     /** What a right-click does (NONE = show the lore line). POSE = wooden dolls swap their pose model. */
-    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE, WISH, JAR, BIRD, VEND, NOTICE, TANABATA, CHIME, POST, KRAMPUS }
+    enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE, WISH, JAR, BIRD, VEND, NOTICE, TANABATA, CHIME, POST, KRAMPUS, CRATE }
 
     final Collection collection;
     final String displayName, lore;

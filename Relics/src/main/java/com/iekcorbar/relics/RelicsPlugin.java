@@ -66,8 +66,8 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         return usedC;
     }
 
-    /** One 'items:' entry of crates.yml -> the items it hands out. */
-    ItemStack[] crateItems(String entry) {
+    /** One 'items:' entry of crates.yml -> the items it hands out. cmd: entries dispatch and hand nothing back. */
+    ItemStack[] crateItems(String entry, Player target) {
         String[] p = entry.toLowerCase(Locale.ROOT).split(":");
         switch (p[0]) {
             case "relic" -> {
@@ -85,7 +85,13 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
                     return new ItemStack[0];
                 }
                 if (java.util.concurrent.ThreadLocalRandom.current().nextDouble() >= pr) return new ItemStack[0];
-                return crateItems(String.join(":", java.util.Arrays.copyOfRange(p, 2, p.length)));
+                return crateItems(String.join(":", java.util.Arrays.copyOfRange(p, 2, p.length)), target);
+            }
+            case "cmd" -> {                                          // cmd:<console command with {player}> - the MMOItems/TechCore seam (0.7.9)
+                if (target == null) return new ItemStack[0];
+                String cmd = entry.trim().substring(entry.toLowerCase(Locale.ROOT).indexOf(':') + 1).trim();
+                org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(), cmd.replace("{player}", target.getName()));
+                return new ItemStack[0];
             }
             case "disc" -> {
                 Discs.Disc d = discs.byId(p.length > 1 ? p[1] : "");
@@ -101,9 +107,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
                 // random:relic[:COLLECTION] - one random shop-only relic (craftable:false stock)
                 List<RelicType> pool = new ArrayList<>();
                 for (RelicType t : RelicType.values()) {
-                    if (craftable(t) || t.use == RelicType.Use.GIFT || t.use == RelicType.Use.CALENDAR
-                            || t == RelicType.EASTER_EGG || t == RelicType.COUNTDOWN_BOARD
-                            || t == RelicType.BLOOD_TOKEN) continue;   // the token only comes from its own crate line
+                    if (!randomStock(t)) continue;
                     if (p.length > 2 && !t.collection.name().equalsIgnoreCase(p[2])) continue;
                     pool.add(t);
                 }
@@ -112,6 +116,37 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             default -> { }
         }
         return new ItemStack[0];
+    }
+
+    /**
+     * Relic stock that random draws may hand out (0.7.9 shared by crateItems and GameNight):
+     * shop-only (not craftable), never the window-locked ones (gifts, calendar, egg, boards),
+     * never the Blood Token (its own crate line) and never the Game Night collection -
+     * the winner's prizes and crate itself stay off the shop's random shelves.
+     */
+    boolean randomStock(RelicType t) {
+        return !craftable(t) && t.use != RelicType.Use.GIFT && t.use != RelicType.Use.CALENDAR
+                && t != RelicType.EASTER_EGG && t != RelicType.COUNTDOWN_BOARD && t != RelicType.BLOOD_TOKEN
+                && t.collection != RelicType.Collection.GAMENIGHT;
+    }
+
+    // ------------------------------------------------------------ Game Night winner crate (0.7.9)
+
+    /** Prize keys this player already drew on a Game Night (crates-used.yml, "gamenight.won.<uuid>"). */
+    List<String> wonPrizes(Player p) {
+        return usedConfig().getStringList("gamenight.won." + p.getUniqueId());
+    }
+
+    void recordWon(Player p, String key) {
+        String path = "gamenight.won." + p.getUniqueId();
+        List<String> won = usedConfig().getStringList(path);
+        if (!won.contains(key)) won.add(key);
+        usedConfig().set(path, won);
+        try {
+            usedConfig().save(new File(getDataFolder(), "crates-used.yml"));
+        } catch (Exception e) {
+            getLogger().warning("Could not save crates-used.yml: " + e.getMessage());
+        }
     }
 
     static String titleize(String id) {
@@ -133,6 +168,11 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     private Treats treats;
     private Discs discs;
     private Adv adv;
+    private GameNight gameNight;
+
+    GameNight gameNight() {
+        return gameNight;
+    }
 
     @Override
     public void onEnable() {
@@ -159,6 +199,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
         getServer().getPluginManager().registerEvents(discs, this);
         discs.registerRecipes();
         discs.installDatapack();
+        gameNight = new GameNight(this);
         adv = Achievements.create(this);
         adv.start();
         getServer().getServicesManager().register(java.util.function.Supplier.class, new ZukanData(this, relics), this, org.bukkit.plugin.ServicePriority.Normal); // recipe viewer (Zukan)
@@ -365,7 +406,7 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             }
             int n = 0;
             for (String entry : cr.getStringList("items"))
-                for (ItemStack it : crateItems(entry)) {
+                for (ItemStack it : crateItems(entry, target)) {
                     n++;
                     for (var left : target.getInventory().addItem(it).values())
                         target.getWorld().dropItemNaturally(target.getLocation(), left);

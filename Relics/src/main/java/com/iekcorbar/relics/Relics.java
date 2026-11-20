@@ -469,13 +469,19 @@ final class Relics implements Listener {
             return;
         }
         if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        if (hit != null && typeOf(e.getItem()) == null) {
+        RelicType held = typeOf(e.getItem());
+        if (hit != null && (held == null || (hit.type.use == RelicType.Use.CRATE && held == RelicType.GAMENIGHT_KEY))) {
             e.setCancelled(true);
             use(hit, p, e.getItem());
             return;
         }
-        RelicType t = typeOf(e.getItem());
+        RelicType t = held;
         if (t == null) return;
+        if (t == RelicType.GAMENIGHT_KEY) {                 // the key opens crates, it never becomes lawn ornament
+            e.setCancelled(true);
+            p.sendActionBar(Component.text("This key only turns in a Winner's Crate.", NamedTextColor.GRAY));
+            return;
+        }
         e.setCancelled(true);
         BlockFace face = e.getBlockFace();
         String mount = face == BlockFace.UP ? "floor" : face == BlockFace.DOWN ? "ceiling" : "wall";
@@ -1215,6 +1221,7 @@ final class Relics implements Listener {
                 markDirty(r);
             }
             case GIFT -> giftBoxes.use(r, p);
+            case CRATE -> plugin.gameNight().use(p, hand);   // Game Night winner crate (0.7.9): key in hand
             case NOTICE, TANABATA -> hangings.use(r, p, hand);
             case POSE -> {
                 r.twinkle = !r.twinkle;

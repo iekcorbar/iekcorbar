@@ -117,7 +117,7 @@ final class RelicsMenu implements Listener {
                         if (p[i].equals("relic") && i + 1 < p.length) out.computeIfAbsent(p[i + 1], k -> new ArrayList<>()).add(title);
                         else if (p[i].equals("random") && i + 1 < p.length && p[i + 1].equals("relic")) {
                             RelicType.Collection c = i + 2 < p.length ? RelicType.Collection.byId(p[i + 2]) : null;
-                            for (RelicType t : RelicType.values()) if (!plugin.craftable(t) && (c == null || t.collection == c))
+                            for (RelicType t : RelicType.values()) if (!plugin.craftable(t) && t.collection != RelicType.Collection.GAMENIGHT && (c == null || t.collection == c))
                                 out.computeIfAbsent(t.id(), k -> new ArrayList<>()).add(title + " (random)");
                         }
                     }

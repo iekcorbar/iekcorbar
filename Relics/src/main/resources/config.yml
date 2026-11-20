@@ -220,3 +220,80 @@ blood-moon:
   enabled: true
   start-hour: 20
   end-hour: 4
+# The Game Night Winner's Crate (0.7.9). Staff places the crate once per venue
+# (/relics give <you> gamenight_crate) and hands tonight's winner the key
+# (/relics give <winner> gamenight_key). One key = one opening = EXACTLY ONE prize,
+# rolled from the weighted rows below. pool:<name> rows draw one prize that this
+# player has NEVER won before (tracked in crates-used.yml); a fully won pool drops out
+# of the roll. fallback: is what a repeat-winner with every pool spent still gets.
+# cmd: entries run as console - the same seam the shop's give_command uses, so any
+# plugin item can be a prize. MMOItems ids/tiers verified against the live item folder
+# 2026-11-20; re-check after big MMOItems config changes (/mi give <TYPE> <ID> <player>).
+gamenight-crate:
+  broadcast: true
+  fallback: random:relic
+  prizes:
+    - prize:40:pool:common
+    - prize:25:pool:rare
+    - prize:15:pool:epic
+    - prize:10:pool:mythical
+    - prize:6:pool:legendary
+    - prize:4:relic:blood_token_blessed
+  pools:
+    common:
+      - random:relic
+      - random:disc
+      - relic:gamenight_trophy
+      - relic:gamenight_sword
+      - relic:gamenight_sash
+      - relic:gamenight_dice_tower
+      - relic:gamenight_certificate
+      - relic:blood_token
+    rare:
+      - cmd:mi give SWORD CUTLASS {player}
+      - cmd:mi give SWORD YANISDARK_SWORD {player}
+      - cmd:mi give DAGGER DRACULA_DAGGER {player}
+      - cmd:mi give KATANA FLOWING_KATANA {player}
+      - cmd:mi give BOW PRECISION_BOW {player}
+      - cmd:mi give BOW NETHERITE_BOW {player}
+      - cmd:mi give HAMMER HEAVY_HAMMER {player}
+      - cmd:mi give STAFF MANA_STAFF {player}
+      - cmd:mi give GAUNTLET FIGHTING_GAUNTLETS {player}
+      - cmd:mi give HALBERD BRAVE_HALBERD {player}
+      - cmd:mi give WHIP WIND_WHIP {player}
+      - cmd:mi give ARMOR ARCANE_HELM {player}
+      - cmd:mi give ARMOR SHADOWROBE {player}
+      - cmd:mi give ARMOR SHADOWVEIL {player}
+      - cmd:mi give ARMOR LARGE_MOTHRON_WINGS {player}
+      - cmd:mi give CROSSBOW MEDIEVAL_CROSSBOW {player}
+      - cmd:mi give TOOL CRACK_PICKAXE {player}
+    epic:
+      - cmd:mi give SWORD FALCON_BLADE {player}
+      - cmd:mi give KATANA MASTER_KATANA {player}
+      - cmd:mi give GREATSWORD EARTHLY_GREATSWORD {player}
+      - cmd:mi give LONG_SWORD DUAL_LONGSWORD {player}
+      - cmd:mi give THRUSTING_SWORD SKILLED_SWORD {player}
+      - cmd:mi give SPEAR WARRIOR_SPEAR {player}
+      - cmd:mi give MUSKET SNIPER_RIFLE {player}
+      - cmd:mi give WAND COSMOS_WAND {player}
+      - cmd:mi give TOME CELESTIAL_TOME {player}
+      - cmd:mi give TALISMAN THUNDER_BLESSING {player}
+      - cmd:mi give AXE UNDEAD_SLAYER {player}
+      - cmd:mi give ARMOR DRAGON_HELMET {player}
+      - cmd:mi give ARMOR DRAGON_CHESTPLATE {player}
+      - cmd:mi give ARMOR DRAGON_LEGGINGS {player}
+      - cmd:mi give ARMOR DRAGON_BOOTS {player}
+    mythical:
+      - cmd:mi give SWORD FROZEN_BLADE {player}
+      - cmd:mi give HAMMER THOR_HAMMER {player}
+      - cmd:mi give ARMOR UNDEAD_SLAYER_HELMET {player}
+      - cmd:mi give ARMOR UNDEAD_SLAYER_CHESTPLATE {player}
+      - cmd:mi give ARMOR UNDEAD_SLAYER_LEGGINGS {player}
+      - cmd:mi give ARMOR UNDEAD_SLAYER_BOOTS {player}
+    legendary:
+      - cmd:mi give SWORD AMETHYST_SWORD {player}
+      - cmd:mi give DAGGER POISONOUS_DAGGER {player}
+      - cmd:mi give GREATAXE BARBARIAN_AXE {player}
+      - cmd:mi give SHIELD SUPREME_SHIELD {player}
+      - cmd:mi give STAFF VOID_STAFF {player}
+      - cmd:mi give WAND BLAZE_WAND {player}

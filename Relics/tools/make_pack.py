@@ -1800,6 +1800,130 @@ ONSEN = {
 }
 
 
+# ------------------------------------------------------------------ Game Night (0.7.9)
+# The winner's crate fixture, its one-use key, and the five champion props. All drawn
+# inside 0..16 like the rest of the set (the client refuses elements outside -16..32).
+
+def gamenight_crate():
+    """Sealed steamer trunk: wood_old shell, brass banding, a gold lock plate on the front."""
+    e = [box(2, 0, 3, 14, 1, 13, "wood_char"),                                   # plinth
+         box(2.5, 1, 3.5, 13.5, 6, 12.5, "wood_old"),
+         box(2.5, 6, 3.5, 13.5, 7.5, 12.5, "wood_warm"),                         # domed lid
+         box(2.5, 6.2, 3.2, 13.5, 7.3, 3.5, "wood_warm"), box(2.5, 6.2, 12.5, 13.5, 7.3, 12.8, "wood_warm"),
+         box(3.4, 1, 3.2, 4.2, 7.6, 3.6, "brass"), box(11.8, 1, 3.2, 12.6, 7.6, 3.6, "brass"),  # front corner straps
+         box(3.4, 1, 12.4, 4.2, 7.6, 12.8, "brass"), box(11.8, 1, 12.4, 12.6, 7.6, 12.8, "brass"),
+         box(2.5, 2.4, 3.3, 13.5, 3.2, 3.5, "brass"), box(2.5, 2.4, 12.5, 13.5, 3.2, 12.7, "brass"),
+         box(6.6, 0.9, 3.3, 9.4, 2.6, 3.6, "brass"),                             # lock mount
+         box(7.2, 1.3, 3.2, 8.8, 2.3, 3.7, "gold"), box(7.85, 1.6, 3.15, 8.15, 2.15, 3.8, "coal")]  # plate + keyhole
+    for x in (5, 11):                                                            # side handles
+        e += [box(x - 0.3, 3.4, 3.3, x + 0.3, 4.6, 3.5, "chain")]
+    return e
+
+
+def gamenight_crate_wall():
+    """Same trunk, lying flat against the wall (z 13..16)."""
+    return shift(gamenight_crate(), 0, 0, 0)  # the floor model reads fine on a shelf; keep one silhouette
+
+
+def gamenight_key():
+    """A brass skeleton key on a rose ribbon bow - the winner's one-turn key."""
+    e = [box(7.4, 1.2, 7.6, 8.6, 2.4, 8.8, "brass"),                             # bow at the bottom
+         box(5.9, 1.4, 6.8, 7.1, 2.2, 8.0, "rose_red"), box(8.9, 1.4, 6.8, 10.1, 2.2, 8.0, "rose_red"),
+         box(7.7, 2.2, 7.9, 8.3, 3.4, 8.5, "brass"), box(7.7, 3.4, 7.7, 8.3, 9.8, 8.7, "brass"),  # shaft
+         box(7.2, 9.2, 7.2, 8.8, 10.8, 8.8, "brass"), box(7.6, 9.9, 7.6, 8.4, 11.1, 8.4, "brass"),  # ring bow top
+         box(8.3, 4.2, 7.9, 9.9, 5.0, 8.5, "brass"), box(8.3, 3.0, 7.9, 9.3, 3.8, 8.5, "brass")]   # teeth
+    return e
+
+
+def gamenight_trophy():
+    """Two-handled champion's cup on a marble-and-wood base."""
+    e = [box(5.5, 0, 5.5, 10.5, 1.2, 10.5, "wood_char"),
+         box(6.2, 1.2, 6.2, 9.8, 2, 9.8, "bone"),                                # marble slab
+         box(7.2, 2, 7.2, 8.8, 4.4, 8.8, "gold"),                                # stem
+         box(5.2, 4.4, 5.2, 10.8, 8.2, 10.8, "gold"),                            # bowl
+         box(4.9, 8, 4.9, 11.1, 8.7, 11.1, "gold_l"),                            # rim
+         box(5.8, 5, 5.8, 10.2, 7.4, 6.2, "amber"),                              # inner glow line (front)
+         box(3.1, 4.8, 7.2, 3.6, 7.6, 8.8, "gold_d"), box(2.6, 4.8, 7.6, 3.1, 7.6, 8.4, "gold_d"),   # left handle
+         box(12.4, 4.8, 7.2, 12.9, 7.6, 8.8, "gold_d"), box(12.9, 4.8, 7.6, 13.4, 7.6, 8.4, "gold_d"),
+         box(7.5, 2.6, 5.6, 8.5, 3.6, 5.7, "bone_l")]                            # "WINNER" plate hint
+    return e
+
+
+def gamenight_sword():
+    """Ceremonial blade point-up on a small brass stand - a champion's wall piece, never sharpened."""
+    e = [box(5.5, 0, 6, 10.5, 0.8, 10, "wood_char"),                             # stand foot
+         box(6.8, 0.8, 7.3, 9.2, 2, 8.7, "brass"),                               # cradle
+         box(7.3, 2, 7.5, 8.7, 3.2, 8.5, "brass"), box(7.5, 3.2, 7.7, 8.5, 4.2, 8.3, "iron"),  # grip
+         box(7.4, 4.2, 6.7, 8.6, 5, 9.3, "gold"),                                # crossguard
+         box(7.6, 5, 7.4, 8.4, 14.4, 8.6, "bone"),                               # blade
+         box(8, 5, 7.4, 8.15, 13.8, 8.6, "steel" if "steel" in NAMES else "glass"),  # fuller
+         box(7.7, 14.4, 7.6, 8.3, 15.4, 8.4, "bone_l"),                          # point
+         box(7.6, 2.2, 7.6, 8.4, 2.8, 8.4, "gold")]                              # pommel ring
+    return e
+
+
+def gamenight_sword_wall():
+    """Blade mounted diagonally on a wooden plaque (z 14.4..16 against the wall)."""
+    e = [box(2, 1, 15, 14, 15, 16, "wood_old")]
+    for i, (x, y) in enumerate([(5, 3), (6, 4.4), (7, 5.8), (8, 7.2), (9, 8.6), (10, 10)]):
+        e.append(box(x, y, 14.7, x + 1.4, y + 1.6, 15.3, "bone"))               # blade run
+    e += [box(4.2, 2.2, 14.6, 6.2, 3.6, 15.4, "gold"),                           # crossguard
+          box(3.2, 1.2, 14.6, 4.6, 2.6, 15.4, "iron"), box(2.6, 0.6, 14.6, 3.8, 1.8, 15.4, "brass"),  # grip + pommel
+          box(10.4, 11, 14.6, 11.6, 12.2, 15.4, "bone_l")]                       # point
+    return e
+
+
+def gamenight_sash():
+    """Rose silk sash with a brass star, draped over its display bar."""
+    e = [box(4, 0, 7, 12, 0.8, 9, "wood_char"),                                  # base
+         box(4.6, 0.8, 7.6, 5.4, 9.4, 8.4, "brass"), box(10.6, 0.8, 7.6, 11.4, 9.4, 8.4, "brass"),
+         box(4.6, 9.4, 7.6, 11.4, 10.2, 8.4, "brass")]                           # cross bar
+    drape = []
+    for i, y in enumerate([8.6, 7.4, 6.2, 5, 3.8, 2.6]):
+        drape.append(box(5.4 + i * 0.4, y, 7.5, 6.6 + i * 0.4, y + 1.4, 8.5, "rose_red"))
+    drape.append(box(6, 5.8, 7.4, 6.6, 6.4, 8.6, "gold"))                        # the star (small plate)
+    drape.append(box(9.2, 6.8, 7.5, 10.6, 8, 8.5, "rose_deep"))                  # hanging tail right
+    return e + drape
+
+
+def gamenight_dice_tower():
+    """Two-storey dice tower: open arch top, chute window, two cubes resting at the foot."""
+    e = [box(4, 0, 4, 12, 9, 12, "wood_old"),
+         box(4.4, 9, 4.4, 11.6, 10.2, 11.6, "wood_warm"),                        # cap
+         box(4, 10.2, 6.6, 12, 11.4, 9.4, "wood_char"),                          # funnel rim
+         box(5.2, 1.4, 3.4, 10.8, 5.6, 4.2, "wood_char"),                        # front arch window (open)
+         box(6, 2, 3.2, 10, 5, 3.6, "coal"),                                     # the dark inside
+         box(4.6, 0.8, 4.6, 5.4, 1.4, 5.4, "brass"), box(10.6, 0.8, 4.6, 11.4, 1.4, 5.4, "brass"),  # feet trim
+         ]
+    d1 = shift([box(6.2, 0, 11.6, 8.6, 2.4, 14, "bone"), box(6.9, 0, 11.2, 7.4, 2.4, 11.6, "coal")], 0, 0, -10.4)
+    d2 = shift([box(9.4, 0, 11.4, 11.4, 2, 13.4, "xred"), box(10.1, 0, 11, 10.7, 2.1, 11.4, "snow")], 0, 0, -10.4)
+    return e + d1 + d2
+
+
+def gamenight_certificate():
+    """Framed certificate leaning against a small easel: paper, text lines, wax seal."""
+    e = [box(3.5, 0, 6.5, 12.5, 0.7, 8.5, "wood_char"),                          # foot
+         box(4.2, 0.7, 6.8, 5.4, 1.2, 8.2, "brass"), box(10.6, 0.7, 6.8, 11.8, 1.2, 8.2, "brass"),
+         box(4.6, 1.2, 6.6, 11.4, 8.8, 7.4, "wood_old")]                         # frame, tilted flat-ish
+    e += [box(5.2, 1.8, 6.5, 10.8, 8.2, 7.0, "paper"),                           # the sheet
+          box(5.8, 6.6, 6.45, 9.8, 7.2, 6.6, "soot"),                            # headline line
+          box(5.8, 5.4, 6.45, 10.2, 5.8, 6.6, "soot"), box(5.8, 4.4, 6.45, 10.2, 4.8, 6.6, "soot"),
+          box(5.8, 3.4, 6.45, 8.4, 3.8, 6.6, "soot"),
+          box(8.6, 2, 6.4, 9.8, 3.2, 6.7, "rose_deep")]                          # wax seal
+    return e
+
+
+def gamenight_certificate_wall():
+    """Frame flat on the wall (z 14.4..16)."""
+    e = [box(3, 2, 15, 13, 13, 16, "wood_old"),
+         box(3.8, 2.8, 14.9, 12.2, 12.2, 15.4, "paper"),
+         box(4.6, 10.4, 14.85, 11.4, 11, 15.05, "soot"),
+         box(4.6, 9, 14.85, 11.4, 9.4, 15.05, "soot"), box(4.6, 8, 14.85, 11.4, 8.4, 15.05, "soot"),
+         box(4.6, 7, 14.85, 9.6, 7.4, 15.05, "soot"),
+         box(9.6, 4.4, 14.8, 11, 5.8, 15.1, "rose_deep")]
+    return e
+
+
 MODELS = {
     "creature_skull": skull, "creature_skull_wall": skull_wall, "creature_ribcage": ribcage,
     "torn_settlement_banner": banner, "torn_settlement_banner_wall": banner_wall,
@@ -1822,6 +1946,18 @@ MODELS["blood_token"] = blood_token        # RelicType: floor + wall, plain and 
 MODELS["blood_token_wall"] = lambda: blood_token_wall(False)
 MODELS["blood_token_blessed"] = blood_token_blessed
 MODELS["blood_token_blessed_wall"] = lambda: blood_token_wall(True)
+
+# Game Night (0.7.9): the winner's crate fixture, its one-use key and the five champion prizes
+MODELS["gamenight_crate"] = gamenight_crate
+MODELS["gamenight_crate_wall"] = gamenight_crate_wall
+MODELS["gamenight_key"] = gamenight_key
+MODELS["gamenight_trophy"] = gamenight_trophy
+MODELS["gamenight_sword"] = gamenight_sword
+MODELS["gamenight_sword_wall"] = gamenight_sword_wall
+MODELS["gamenight_sash"] = gamenight_sash
+MODELS["gamenight_dice_tower"] = gamenight_dice_tower
+MODELS["gamenight_certificate"] = gamenight_certificate
+MODELS["gamenight_certificate_wall"] = gamenight_certificate_wall
 
 
 
