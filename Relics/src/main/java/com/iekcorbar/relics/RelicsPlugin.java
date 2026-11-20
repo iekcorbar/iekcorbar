@@ -514,7 +514,6 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
             if (r.type == RelicType.COUNTDOWN_BOARD) s.sendMessage(Component.text(" Counts down to: " + relics.boards().describeZone(r), NamedTextColor.AQUA));
             if (Jukebox.isMusicProp(r)) s.sendMessage(Component.text(" " + relics.jukebox().state(r), NamedTextColor.AQUA));
             if (r.type == RelicType.GIFT_BOX) s.sendMessage(Component.text(" " + Gifts.status(r), NamedTextColor.LIGHT_PURPLE));
-            if (r.type == RelicType.ADVENT_WREATH && r.candles >= 0) s.sendMessage(Component.text(" " + r.candles + " candle(s) lit", NamedTextColor.GRAY));
             return true;
         }
         if (sub.equals("board")) {

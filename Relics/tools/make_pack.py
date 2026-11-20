@@ -793,6 +793,9 @@ XMAS = {
                           + [box(7.4, 10, 7.4, 10.5, 11.2, 8.6, "icing"), box(9.3, 8.5, 7.4, 10.5, 10, 8.6, "xred")],
 }
 for _n in range(5):
+    # advent_wreath-modellen blijven BEWUST in het pack na het verwijderen van de relic (0.7.11):
+    # oude kransen in spelersinventarissen dragen nog ITEM_MODEL relics:advent_wreath_* - zonder
+    # model/definitie wordt dat een paarse kubus. De relic zelf bestaat niet meer in RelicType.
     XMAS["advent_wreath_" + str(_n)] = (lambda n=_n: advent_wreath(n))
     XMAS["advent_wreath_wall_" + str(_n)] = (lambda n=_n: advent_wreath_wall(n))
 for _suffix, _col in (("", "xred"), ("_green", "xgreen"), ("_blue", "xblue"), ("_pink", "xpink"), ("_gold", "gold")):

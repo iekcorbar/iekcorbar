@@ -31,6 +31,14 @@ Let op:
 | 7 | `torn_settlement_banner` | schaal 3,0 (15-eenheden model, ~2,8 blk) | **3x, optie 2** | banner_cloth gegeneraliseerd (h/w-schaalfactoren, old calls unchanged), floor-banner herbouwd: paal 0..29 eenheden, lat bovenaan, dook 13x15 + scheuren; wall-bracket meebouwd. `scale` 3f → **4,5f** (visueel ~8,2 blk hoog, gemeten uit modelspan), height 3 → **5** (vloerbereikbaarheid: plaatsing vraagt 5 luchtblokken). Bounds gecheckt: alles -16..32 ✓. **LET OP: pakt pack-bouw mee (make_pack) - eerste stel-melding die íets aan het model doet** | ✅ code + model-aanpassing, wacht op build |
 | 8 | `gibbet_cage` | schaal 1,0 (9-args) | **2x visueel** | naar volledige constructor: `scale` **2f** (vloer + hangend meeschakend; craftable blijft false) | ✅ code-aanpassing, wacht op build |
 | 9 | `warding_totem` | schaal 1,0 (9-args) | **2x** | `scale` **2f** (ook de lit-variant - zelfde RelicType, draw() herberekent schaal); barriere-hitbox blijft 2 | ✅ code-aanpassing, wacht op build |
+| 10 | `advent_wreath` | - | **helemaal uit het spel** | RelicType-constante + Effect.ADVENT + recipe + place/loadChunk/candles-veld + info-regel + adventCandles() weg; **deur 21** → `relics:plum_pudding` + `relics:hot_chocolate 2`; **modellen blijven bewust in het pack** (oude kransen in inventarissen blijven renderen, geen paarse kubus); geplaatste kransen verdwijnen bij de eerstvolgende restart (displays niet persistent). **Bij de uitrol: ook deur 21 in de LIVE config.yml aanpassen - jar overschrijft nooit de serverconfig!** | ✅ code+config-aanpassing, wacht op build |
+| 11 | `steam_lantern` | schaal 1,0 (wél gewoon gegeven; model zit in de pack) | **2x** | `scale` 1f → **2f** (floor+wall+hanging; lichtblok level 14 blijft) | ✅ code-aanpassing, wacht op build |
+| 12 | `snow_lantern` | schaal 1,0 | **2x** | `scale` 1f → **2f** (lichtblok 1 blk level 12 blijft) | ✅ code-aanpassing, wacht op build |
+| 13 | `giant_candy_cane` | schaal 1,0 + lore "two blocks" | **2x** | `scale` 1f → **2f** + lore "nearly four blocks" (hitbox 2, dye-verven blijft) | ✅ code-aanpassing, wacht op build |
+| 14 | `hearth` | schaal 1,5 | **2x** | `scale` 1,5f → **3f** | ✅ code-aanpassing, wacht op build |
+| 15 | `snowman` | schaal 1,0 | **2x** | `scale` 1f → **2f** | ✅ code-aanpassing, wacht op build |
+| 16 | `sleigh` | schaal 1,0 | **3x** | `scale` 1f → **3f** + zitplek volgt de schaal (`sit()` 0,35·(scale−1) hoger) | ✅ code-aanpassing, wacht op build |
+| 17 | `toy_train` | schaal 1,0 | **4x** | `scale` 1f → **4f** (draai-effect om zelfde anker) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -50,7 +58,7 @@ Let op:
 | `warding_totem` | Warding Totem | 2 | 1.0 | · | · | ja |
 | `shattered_portal_shard` | Shattered Portal Shard | 1 | 1.0 | · | · | ja |
 
-### Xmas Town (24)
+### Xmas Town (23 — advent_wreath verwijderd, #10)
 | id | naam | hb-hoogte | scale | wall | plafond | craft |
 |---|---|---|---|---|---|---|
 | `christmas_tree` | Christmas Tree | 3 | 1.5 | · | · | ja |
@@ -60,7 +68,7 @@ Let op:
 | `snow_lantern` | Snow Lantern | 1 | 1 | · | · | ja |
 | `giant_candy_cane` | Giant Candy Cane | 2 | 1 | · | · | ja |
 | `kadomatsu` | Kadomatsu | 1 | 1 | · | · | ja |
-| `hearth` | Hearth | 3 | 1.5 | · | · | ja |
+| `hearth` | Hearth | 3 | ~~1.5~~ → **3** (#14) | · | · | ja |
 | `snowman` | Snowman | 2 | 1 | · | · | ja |
 | `sleigh` | Sleigh | 1 | 1 | · | · | ja |
 | `toy_train` | Clockwork Toy Train | 1 | 1 | · | · | ja |

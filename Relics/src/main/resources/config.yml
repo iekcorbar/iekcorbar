@@ -124,7 +124,7 @@ advent-calendar:
     18: ["EMERALD 4"]
     19: ["relics:snow_globe"]
     20: ["relics:hot_chocolate 3", "relics:candy_cane 3"]
-    21: ["relics:advent_wreath"]
+    21: ["relics:plum_pudding", "relics:hot_chocolate 2"]
     22: ["DIAMOND"]
     23: ["relics:music_box"]
     24: ["relics:christmas_tree", "relics:gift_box 3"]

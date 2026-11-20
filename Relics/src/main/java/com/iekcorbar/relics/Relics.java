@@ -86,7 +86,7 @@ final class Relics implements Listener {
         List<org.bukkit.entity.TextDisplay> texts;
         String[] last = new String[3];
         boolean lit, twinkle;
-        int hits, count, tune, candles = -1;
+        int hits, count, tune;
         long lastHit, busyUntil, lastUseMs;
         float angle;
         /** Gift box: colour model, who wrapped it, what is inside and who it is locked for. */
@@ -116,7 +116,6 @@ final class Relics implements Listener {
             };
             if (m == null) m = type.floor; // no model of its own for this face: the floor model, tilted by transform()
             if (type == RelicType.WARDING_TOTEM && lit) m = "warding_totem_lit";
-            if (type == RelicType.ADVENT_WREATH) m = (mount.equals("wall") ? "advent_wreath_wall_" : "advent_wreath_") + Math.max(0, candles);
             if ((type == RelicType.GIFT_BOX || type == RelicType.EASTER_EGG || type == RelicType.GIANT_CANDY_CANE
                     || type == RelicType.BLOOD_TOKEN) && !variant.isEmpty()) m = variant;
             if (type == RelicType.COOKIE_PLATE) m = count > 3 ? "cookie_plate" : count > 0 ? "cookie_plate_3" : "cookie_plate_0";
@@ -319,7 +318,6 @@ final class Relics implements Listener {
                 Material.GOLD_NUGGET, Material.GLOWSTONE_DUST);
         recipe(RelicType.STRING_LIGHTS, 4, Material.STRING, Material.STRING, Material.GLOWSTONE_DUST, Material.RED_DYE);
         recipe(RelicType.GIANT_CANDY_CANE, 1, Material.SUGAR, Material.SUGAR, Material.SUGAR, Material.SUGAR, Material.RED_DYE, Material.WHITE_DYE);
-        recipe(RelicType.ADVENT_WREATH, 1, Material.SPRUCE_LEAVES, Material.SPRUCE_LEAVES, Tag.CANDLES, Tag.CANDLES, Tag.CANDLES, Tag.CANDLES);
         recipe(RelicType.STEAM_LANTERN, 1, Material.LANTERN, Material.COPPER_INGOT, Material.GOLD_NUGGET);
         recipe(RelicType.SNOW_LANTERN, 1, Material.STONE, Material.STONE, Material.SNOWBALL, Material.TORCH);
         recipe(RelicType.KADOMATSU, 1, Material.BAMBOO, Material.BAMBOO, Material.BAMBOO, Material.SPRUCE_LEAVES, Material.RED_DYE);
@@ -525,7 +523,6 @@ final class Relics implements Listener {
         if (t == RelicType.NOTICE_BOARD) r.owner = p.getUniqueId();
         if (t == RelicType.COUNTDOWN_BOARD) r.owner = p.getUniqueId(); // the placer may change its zone
         if (t == RelicType.GIANT_CANDY_CANE) r.variant = CANE_COLOURS[ThreadLocalRandom.current().nextInt(CANE_COLOURS.length)];
-        if (t == RelicType.ADVENT_WREATH) r.candles = adventCandles();
         if (t == RelicType.BLOOD_TOKEN) {                          // the crimson moon blesses what it shines on
             plugin.adv().grant(p, "blood_token");
             if (blessedOf(hand) || BloodMoon.isBloodMoon(plugin, target.getWorld())) {
@@ -919,7 +916,6 @@ final class Relics implements Listener {
                     r.readGift(f[9]);
                 }
                 if (f.length > 10) r.staffPlaced = f[10].equals("1");
-                if (r.type == RelicType.ADVENT_WREATH) r.candles = adventCandles();
                 if (at(r.world.getBlockAt(r.x, r.y, r.z)) != null) continue;
                 index(r);
                 draw(r);
@@ -1063,21 +1059,6 @@ final class Relics implements Listener {
                     }
                     if (r.type == RelicType.CHRISTMAS_TREE && rnd.nextInt(6) == 0)
                         r.world.spawnParticle(Particle.SNOWFLAKE, c.clone().add(0, 1.2, 0), 1, 0.8, 1.0, 0.8, 0);
-                }
-                case ADVENT -> {
-                    if (tick % 200 == 0) {
-                        int n = adventCandles();
-                        if (n != r.candles) {
-                            r.candles = n;
-                            r.display.setItemStack(look(r.model()));
-                        }
-                    }
-                    Block b = r.world.getBlockAt(r.x, r.y, r.z);
-                    if (b.getBlockData() instanceof Light l) {
-                        l.setLevel(r.candles <= 0 ? 0 : Math.max(1, 3 + 3 * r.candles - rnd.nextInt(2)));
-                        b.setBlockData(l, false);
-                    }
-                    if (r.candles > 0 && rnd.nextInt(4) == 0) r.world.spawnParticle(Particle.SMALL_FLAME, c.clone().add(0, -0.05, 0), 1, 0.25, 0, 0.25, 0);
                 }
                 case STEAM -> {
                     // the Pillar Box leaks from its side vent: puff at vent height, not block centre
@@ -1644,7 +1625,9 @@ final class Relics implements Listener {
     private void sit(Relic r, Player p) {
         if (p.isInsideVehicle()) return;
         for (Relic s : seats.values()) if (s == r) return; // taken
-        Location at = r.center().add(0, -0.15, 0);
+        // the seat sits at 0.35 above the block floor on the 1x model; when the prop is scaled, the bottom-anchored
+        // display lifts the cushion with it - follow it, or riders sink into a giant sleigh (0.7.11 tuning, #16)
+        Location at = r.center().add(0, -0.15 + (r.type == RelicType.SLEIGH ? 0.35 * (r.type.scale - 1) : 0), 0);
         at.setYaw(switch (r.facing) { case EAST -> -90; case SOUTH -> 0; case WEST -> 90; default -> 180; } + 180);
         ItemDisplay seat = r.world.spawn(at, ItemDisplay.class, d -> {
             d.setPersistent(false);
@@ -1669,18 +1652,6 @@ final class Relics implements Listener {
     }
 
     // ------------------------------------------------------------ advent
-
-    /** Candles on the advent wreath: one per Advent Sunday reached (all four until Epiphany), else none. */
-    static int adventCandles() {
-        java.time.LocalDate today = java.time.LocalDate.now(RelicsPlugin.zone);
-        int year = today.getMonthValue() == 1 ? today.getYear() - 1 : today.getYear();
-        java.time.LocalDate christmas = java.time.LocalDate.of(year, 12, 25);
-        java.time.LocalDate fourth = christmas.minusDays(christmas.getDayOfWeek().getValue() % 7 == 0 ? 7 : christmas.getDayOfWeek().getValue() % 7);
-        java.time.LocalDate first = fourth.minusWeeks(3);
-        java.time.LocalDate end = java.time.LocalDate.of(year + 1, 1, 6);
-        if (today.isBefore(first) || today.isAfter(end)) return 0;
-        return (int) Math.min(4, 1 + java.time.temporal.ChronoUnit.DAYS.between(first, today) / 7);
-    }
 
     private void advent(Player p) {
         java.time.LocalDate today = java.time.LocalDate.now(RelicsPlugin.zone);

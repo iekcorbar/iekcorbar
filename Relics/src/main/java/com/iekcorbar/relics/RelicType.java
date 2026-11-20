@@ -52,24 +52,22 @@ enum RelicType {
             Base.SOLID, 3, 0, "christmas_tree", null, null, Effect.TWINKLE, Use.NONE, 1.5f),
     STRING_LIGHTS(Collection.XMAS, "String Lights", "Hang them on a wall or from a ceiling.",
             Base.LIGHT, 1, 7, "string_lights_ceiling", "string_lights", "string_lights_ceiling", Effect.TWINKLE, Use.NONE, 1f),
-    ADVENT_WREATH(Collection.XMAS, "Advent Wreath", "One more candle burns every Sunday of Advent.",
-            Base.LIGHT, 1, 3, "advent_wreath_4", "advent_wreath_wall_4", null, Effect.ADVENT, Use.NONE, 1f),
     STEAM_LANTERN(Collection.XMAS, "Brass Steam Lantern", "Warm light and a little puff of steam.",
-            Base.LIGHT, 1, 14, "steam_lantern", "steam_lantern_wall", "steam_lantern_hanging", Effect.STEAM, Use.NONE, 1f),
+            Base.LIGHT, 1, 14, "steam_lantern", "steam_lantern_wall", "steam_lantern_hanging", Effect.STEAM, Use.NONE, 2f),
     SNOW_LANTERN(Collection.XMAS, "Snow Lantern", "A yukimi stone lantern, capped with snow.",
-            Base.LIGHT, 1, 12, "snow_lantern", null, null, Effect.NONE, Use.NONE, 1f),
-    GIANT_CANDY_CANE(Collection.XMAS, "Giant Candy Cane", "Two blocks of peppermint. Right-click it with a dye to repaint the stripes.",
-            Base.SOLID, 2, 0, "candy_cane_giant", null, null, Effect.NONE, Use.CANE, 1f),
+            Base.LIGHT, 1, 12, "snow_lantern", null, null, Effect.NONE, Use.NONE, 2f),
+    GIANT_CANDY_CANE(Collection.XMAS, "Giant Candy Cane", "Nearly four blocks of peppermint. Right-click it with a dye to repaint the stripes.",
+            Base.SOLID, 2, 0, "candy_cane_giant", null, null, Effect.NONE, Use.CANE, 2f),
     KADOMATSU(Collection.XMAS, "Kadomatsu", "Bamboo and pine to welcome the new year.",
             Base.NONE, 1, 0, "kadomatsu", null, null, Effect.NONE, Use.NONE, 1f),
     HEARTH(Collection.XMAS, "Hearth", "Stockings on the mantle and a fire that keeps the snow outside.",
-            Base.SOLID, 3, 0, "hearth", null, null, Effect.HEARTH, Use.NONE, 1.5f),
+            Base.SOLID, 3, 0, "hearth", null, null, Effect.HEARTH, Use.NONE, 3f),
     SNOWMAN(Collection.XMAS, "Snowman", "Top hat, brass goggles, carrot nose.",
-            Base.SOLID, 2, 0, "snowman", null, null, Effect.SNOW, Use.NONE, 1f),
+            Base.SOLID, 2, 0, "snowman", null, null, Effect.SNOW, Use.NONE, 2f),
     SLEIGH(Collection.XMAS, "Sleigh", "Right-click to sit in it.",
-            Base.NONE, 1, 0, "sleigh", null, null, Effect.NONE, Use.SEAT, 1f),
+            Base.NONE, 1, 0, "sleigh", null, null, Effect.NONE, Use.SEAT, 3f),
     TOY_TRAIN(Collection.XMAS, "Clockwork Toy Train", "Round and round it goes.",
-            Base.NONE, 1, 0, "toy_train", null, null, Effect.TRAIN, Use.NONE, 1f),
+            Base.NONE, 1, 0, "toy_train", null, null, Effect.TRAIN, Use.NONE, 4f),
     GIFT_BOX(Collection.XMAS, "Gift Box", "Right-click to fill it with presents, lock it for one player, and only they can open it when the gift window is open (24-26 December by default).",
             Base.NONE, 1, 0, "gift_box", null, null, Effect.NONE, Use.GIFT, 1.5f),
     ADVENT_CALENDAR(Collection.XMAS, "Advent Calendar", "From 1 to 24 December: open one door a day.",
@@ -326,7 +324,7 @@ enum RelicType {
     /** SOLID = barrier (you bump into it); LIGHT = invisible light block; NONE = nothing (walk through). */
     enum Base { SOLID, LIGHT, NONE }
 
-    enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, ADVENT, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, HEART, RAINBOW, SWAP, SPARK, SHISHI, DOLL }
+    enum Effect { NONE, SKULL, SWAY, FLAME, GRAVE, GLYPHS, BUBBLES, PULSE, CAGE, ASH, TOTEM, PORTAL, TWINKLE, STEAM, HEARTH, SNOW, TRAIN, CLOCK, HOP, HEART, RAINBOW, SWAP, SPARK, SHISHI, DOLL }
 
     /** What a right-click does (NONE = show the lore line). POSE = wooden dolls swap their pose model. */
     enum Use { NONE, SEAT, GIFT, CALENDAR, MUSIC, GLOBE, COOKIES, LAUNCH, CLOCK, BELL, CONFETTI, TOWER, EGG, GOLD, HARP, GRAMOPHONE, BONES, TELESCOPE, CANE, BOARD, POSE, WISH, JAR, BIRD, VEND, NOTICE, TANABATA, CHIME, POST, KRAMPUS, CRATE }
