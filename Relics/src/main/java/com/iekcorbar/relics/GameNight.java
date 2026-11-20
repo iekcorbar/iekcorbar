@@ -58,9 +58,9 @@ final class GameNight {
             hand.setAmount(hand.getAmount() - 1);              // one key, one opening
             if (hand.getAmount() <= 0) p.getInventory().setItemInMainHand(null);
         }
-        deliver(p, pick);
-        if (plugin.getConfig().getBoolean("gamenight-crate.broadcast", true))
-            Bukkit.broadcast(Component.text(p.getName() + " turned the Game Night key and drew " + pretty(pick) + ".",
+        String won = deliver(p, pick);
+        if (won != null && plugin.getConfig().getBoolean("gamenight-crate.broadcast", true))
+            Bukkit.broadcast(Component.text(p.getName() + " turned the Game Night key and drew " + won + ".",
                     NamedTextColor.GOLD));
         p.playSound(p.getLocation(), Sound.BLOCK_BARREL_OPEN, 1f, 1.1f);
         p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 0.8f, 1.6f);
@@ -119,66 +119,71 @@ final class GameNight {
     /**
      * Hand the entry's prize to the player. Pool entries resolve to one concrete prize, are
      * marked won and delivered; plain entries run the crates.yml grammar (repeatable).
+     * Returns the display name of what was won (for the broadcast), or null on failure.
      */
-    private void deliver(Player p, String entry) {
+    private String deliver(Player p, String entry) {
         String e = entry.trim();
         String low = e.toLowerCase(Locale.ROOT);
         if (low.startsWith("pool:")) {
             List<String> left = poolLeft(p, e.substring(5));
-            if (left == null) {                           // spent since the roll: draw the fallback
-                deliver(p, plugin.getConfig().getString("gamenight-crate.fallback", "random:relic"));
-                return;
-            }
+            if (left == null)                               // spent since the roll: draw the fallback
+                return deliver(p, plugin.getConfig().getString("gamenight-crate.fallback", "random:relic"));
             String pick = left.get(ThreadLocalRandom.current().nextInt(left.size())).trim();
             if (pick.toLowerCase(Locale.ROOT).startsWith("random:")) {
-                String id = resolveRandom(p, pick);       // resolve to the concrete prize actually won
+                String id = resolveRandom(p, pick);         // resolve to the concrete prize actually won
                 if (id != null) pick = id;
             }
             plugin.recordWon(p, prizeKey(pick));
-            grant(p, pick);
-            return;
+            return grant(p, pick);
         }
         if (low.startsWith("cmd:")) {
             runCmd(p, e.substring(4).trim());
-            p.sendMessage(Component.text("The crate falls open: " + pretty(e) + "!", NamedTextColor.GOLD));
-            return;
+            String nm = pretty(e);
+            p.sendMessage(Component.text("The crate falls open: " + nm + "!", NamedTextColor.GOLD));
+            return nm;
         }
         if (low.startsWith("random:")) {
-            String id = resolveRandom(p, e);              // concrete entry, so the fallback also records nothing
-            if (id != null) grant(p, id);
-            return;
+            String id = resolveRandom(p, e);                // fallback rows may be random too (not recorded)
+            return id == null ? null : grant(p, id);
         }
-        // plain rows (relic:/disc:/chance:/cmd:) run the shop grammar as-is - repeatable
+        // plain rows (relic:/disc:/chance:) run the shop grammar as-is - repeatable
         for (ItemStack it : plugin.crateItems(e, p)) {
             for (ItemStack left : p.getInventory().addItem(it).values())
                 p.getWorld().dropItemNaturally(p.getLocation(), left);
         }
         String id = prizeKey(e);
-        if (id.startsWith("relic:") || id.startsWith("disc:") || id.startsWith("cmd:"))
-            p.sendMessage(Component.text("The crate falls open: " + pretty(id) + "!", NamedTextColor.GOLD));
+        if (id.startsWith("relic:") || id.startsWith("disc:") || id.startsWith("cmd:")) {
+            String nm = pretty(id);
+            p.sendMessage(Component.text("The crate falls open: " + nm + "!", NamedTextColor.GOLD));
+            return nm;
+        }
+        return null;
     }
 
-    /** Deliver a resolved prize entry: cmd: dispatches, relic:/disc: land in the inventory. */
-    private void grant(Player p, String entry) {
+    /** Deliver a resolved prize entry: cmd: dispatches, relic:/disc: land in the inventory; name back for the announce. */
+    private String grant(Player p, String entry) {
         String low = entry.toLowerCase(Locale.ROOT);
         if (low.startsWith("cmd:")) {
             runCmd(p, entry.trim().substring(4).trim());
-            p.sendMessage(Component.text("The crate falls open: " + pretty(entry) + "!", NamedTextColor.GOLD));
-            return;
+            String nm = pretty(entry);
+            p.sendMessage(Component.text("The crate falls open: " + nm + "!", NamedTextColor.GOLD));
+            return nm;
         }
         if (low.startsWith("random:")) {                  // fallback lines may be random too
             String id = resolveRandom(p, entry.trim());
-            if (id != null) grant(p, id);
-            return;
+            return id == null ? null : grant(p, id);
         }
         String id = prizeKey(entry);
         if (id.startsWith("relic:")) {
-            RelicType t = RelicType.byId(id.substring(6));
+            String rid = id.substring(6);
+            RelicType t = RelicType.byId(rid);
+            if (t == null && rid.endsWith("_blessed")) t = RelicType.byId(rid.substring(0, rid.length() - 8));
             if (t != null) {
-                for (ItemStack left : p.getInventory().addItem(plugin.relics().item(t, 1)).values())
+                for (ItemStack left : p.getInventory().addItem(plugin.relics().item(t, 1, rid.endsWith("_blessed"))).values())
                     p.getWorld().dropItemNaturally(p.getLocation(), left);
-                p.sendMessage(Component.text("The crate falls open: a " + t.displayName + "!", NamedTextColor.GOLD));
-                return;
+                String nm = rid.endsWith("_blessed") ? "Blessed " + t.displayName : "a " + t.displayName;
+                p.sendMessage(Component.text("The crate falls open: " + nm + "!", NamedTextColor.GOLD));
+                return nm;
             }
         } else if (id.startsWith("disc:")) {
             Discs.Disc d = plugin.discs().byId(id.substring(5));
@@ -186,10 +191,11 @@ final class GameNight {
                 for (ItemStack left : p.getInventory().addItem(plugin.discs().item(d)).values())
                     p.getWorld().dropItemNaturally(p.getLocation(), left);
                 p.sendMessage(Component.text("The crate falls open: " + d.title() + "!", NamedTextColor.GOLD));
-                return;
+                return d.title();
             }
         }
         plugin.getLogger().warning("Game Night: cannot grant prize '" + entry + "'");
+        return null;
     }
 
     /** random:relic[:COLL] / random:disc -> a concrete relic:/disc: entry (won-free first, repeats only when spent). */
@@ -231,8 +237,10 @@ final class GameNight {
     private String pretty(String entry) {
         String id = prizeKey(entry);
         if (id.startsWith("relic:")) {
-            RelicType t = RelicType.byId(id.substring(6));
-            if (t != null) return t.displayName;
+            String rid = id.substring(6);
+            RelicType t = RelicType.byId(rid);
+            if (t == null && rid.endsWith("_blessed")) t = RelicType.byId(rid.substring(0, rid.length() - 8));
+            if (t != null) return rid.endsWith("_blessed") ? "Blessed " + t.displayName : t.displayName;
         } else if (id.startsWith("disc:")) {
             Discs.Disc d = plugin.discs().byId(id.substring(5));
             if (d != null) return d.title();
