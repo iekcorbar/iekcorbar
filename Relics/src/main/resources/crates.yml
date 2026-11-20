@@ -66,13 +66,6 @@ lucky:
     - random:relic:curio
     - relic:blood_token   # the standard coin: always in, always plain
 
-vault:
-  title: "The Relic Vault — any relic"
-  items:
-    - random:relic:any        # 0.7.11: every relic in the game can be won here (except Game Night prizes)
-    - chance:0.1:random:disc  # sometimes a music disc comes with it
-    - chance:0.05:relic:blood_token_blessed
-
 hamper:
   title: "Haunted Hamper"
   items:

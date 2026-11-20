@@ -238,6 +238,7 @@ gamenight-crate:
     - prize:10:pool:mythical
     - prize:6:pool:legendary
     - prize:4:relic:blood_token_blessed
+    - prize:18:pool:any        # the old vault folded in: any relic, never the same one twice per player
   pools:
     common:
       - random:relic

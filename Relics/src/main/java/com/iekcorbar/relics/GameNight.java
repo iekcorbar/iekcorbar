@@ -103,12 +103,21 @@ final class GameNight {
 
     /** Entries of a named pool this player has not won yet; null when the pool is spent or missing. */
     private List<String> poolLeft(Player p, String pool) {
+        // 0.7.12: "pool:any" is the old vault-crate folded in - every relic in the game (Game Night
+        // prizes stay exclusive to their own key), filtered by what this player already drew.
+        List<String> won = plugin.wonPrizes(p);
+        if ("any".equalsIgnoreCase(pool.trim())) {
+            List<String> all = new ArrayList<>();
+            for (RelicType t : RelicType.values())
+                if (t.collection != RelicType.Collection.GAMENIGHT) all.add("relic:" + t.id());
+            all.removeIf(e -> won.contains(prizeKey(e)));
+            return all.isEmpty() ? null : all;
+        }
         List<String> all = plugin.getConfig().getStringList("gamenight-crate.pools." + pool.trim());
         if (all.isEmpty()) {
             plugin.getLogger().warning("gamenight-crate pool '" + pool.trim() + "' is missing or empty");
             return null;
         }
-        List<String> won = plugin.wonPrizes(p);
         List<String> left = new ArrayList<>();
         for (String e : all) if (!won.contains(prizeKey(e))) left.add(e);
         return left.isEmpty() ? null : left;
