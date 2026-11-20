@@ -91,7 +91,7 @@ enum RelicType {
     PLUM_PUDDING(Collection.XMAS, "Plum Pudding", "Brandy icing, holly berries, and steam that keeps the table warm all December.",
             Base.NONE, 1, 0, "plum_pudding", null, null, Effect.STEAM, Use.NONE, 1.25f),
     SANTA_MAILBOX(Collection.XMAS, "Santa Mailbox", "Right-click with paper or a written book to post a wish to the North Pole.",
-            Base.SOLID, 1, 0, "santa_mailbox", null, null, Effect.NONE, Use.POST, 1f),
+            Base.SOLID, 1, 0, "santa_mailbox", null, null, Effect.NONE, Use.POST, 2f),
     KRAMPUS(Collection.XMAS, "Krampus", "Santa's other half. Right-click and he weighs your November - the basket on his back is not full of toys.",
             Base.SOLID, 2, 0, "krampus", null, null, Effect.NONE, Use.KRAMPUS, 2.9f),
 

@@ -1274,6 +1274,16 @@ final class Relics implements Listener {
                     r.world.playSound(r.center(), "minecraft:entity.experience_orb.pickup", 0.7f, 1.6f);
                     r.world.spawnParticle(Particle.SNOWFLAKE, r.center().add(0, 1.0, 0), 12, 0.3, 0.3, 0.3, 0.02);
                     p.sendActionBar(Component.text("Posted. The North Pole reads every one of these.", NamedTextColor.GOLD));
+                    // 0.7.11: a little note from the North Pole with every posted wish. Deterministic per
+                    // player+day, like the Krampus verdicts - the same visitor gets the same note that day.
+                    String[] notes = {
+                            "North Pole dispatch: wish filed under 'urgent-ish'. Elves are on it.",
+                            "A red pencil scribbles on the envelope: 'Do not open until " + relics.giftBoxes().window() + ".'",
+                            "The postmark says 'North Pole, two sleeps'. Nobody knows which two.",
+                            "An elf notes: 'If this wish is for more inventory space, we cannot help. Yet.'",
+                            "The mailbox gives a content clink. Somewhere, a reindeer sneezes." };
+                    p.sendMessage(Component.text(notes[Math.floorMod(p.getName().hashCode()
+                            + Long.hashCode(java.time.LocalDate.now().toEpochDay()), notes.length)], NamedTextColor.GOLD));
                     org.bukkit.entity.Item flown = r.world.dropItem(r.center().add(0, 1.2, 0), new ItemStack(Material.PAPER),
                             d -> { d.setVelocity(new org.bukkit.util.Vector(0, 0.7, 0)); d.setPickupDelay(60); d.setPersistent(false); });
                     if (flown != null) flown.setGlowing(true);
