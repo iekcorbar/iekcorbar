@@ -71,7 +71,7 @@ enum RelicType {
     GIFT_BOX(Collection.XMAS, "Gift Box", "Right-click to fill it with presents, lock it for one player, and only they can open it when the gift window is open (24-26 December by default).",
             Base.NONE, 1, 0, "gift_box", null, null, Effect.NONE, Use.GIFT, 3f),
     ADVENT_CALENDAR(Collection.XMAS, "Advent Calendar", "From 1 to 24 December: open one door a day.",
-            Base.NONE, 1, 0, "advent_calendar", "advent_calendar", null, Effect.NONE, Use.CALENDAR, 1f),
+            Base.NONE, 1, 0, "advent_calendar", "advent_calendar", null, Effect.NONE, Use.CALENDAR, 3f),
     MUSIC_BOX(Collection.XMAS, "Music Box", "Right-click to play the carol playlist on loop, sneak + right-click for songs, shuffle and pause.",
             Base.NONE, 1, 0, "music_box", null, null, Effect.NONE, Use.MUSIC, 1f),
     SNOW_GLOBE(Collection.XMAS, "Snow Globe", "Shake it with a right-click.",
