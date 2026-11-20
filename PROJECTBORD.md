@@ -18,7 +18,7 @@ Analytics verhuist naar StaffHub** - StaffHub-deel is al live via SSH (knop webs
 token-doorlus, gids hoofdstuk 7 in node 3150); de token staat in /opt/staffhub/.env en moet
 ook in de site-.env.local op Plesk (exacte regel in TE-25). BluMap zelf draait door op map.iekcorbar.com. EN NIEUW (lees-triggers, eigenaarsidee): **enchanting-glow op de boekenkast** - paarse shimmer = boek nog nooit geopend, gouden shimmer = nieuwe update sinds je het las; openslaand boek dooft (TE-26).
 
-Peildatum: 20 nov 2026 middag — **GAME NIGHT WINNER'S CRATE + SAKAGURA-FRUITFIX LIVE 20-11 12:46** (gemeten: Relics 0.7.9 "121 relics", Sakagura 0.8.3, mixer alleen build66, Done 74,1 s, 0 eigen fouten; gamenight-crate-sectie geplakt; originele backup `/root/deploy-backup-20261120gamenight/`). Wacht: client-herstart + testpunten (crate-sleutelround, vrucht-onder-blad, Krampus-hoogte), site-1811o naar Plesk, arena, wikiglow-post.
+Peildatum: 20 nov 2026 middag — **GAME NIGHT WINNER'S CRATE + SAKAGURA-FRUITFIX LIVE 20-11 12:46** (gemeten: Relics 0.7.9 "121 relics", Sakagura 0.8.3, mixer alleen build66, Done 74,1 s, 0 eigen fouten; gamenight-crate-sectie geplakt; originele backup `/root/deploy-backup-20261120gamenight/`). Wacht: client-herstart + testpunten (crate-sleutelround, vrucht-onder-blad, Krampus-hoogte) en site-1811o naar Plesk. (Arena/bedwars en wikiglow-post: van de lijst af, eigenaar 20-11 - arena out-of-scope, glow gepubliceerd.)
 Vorige peildata: 15 nov: SiteSync 1.18.0 RCON-loos live; 14-11: 0.3.44 + 20 s-dwell live; 6 nov: rollback Paper 26.2 (26.3 Vulkan faalt op `#moj_import`).
 
 ## 🟢 Live op de server
