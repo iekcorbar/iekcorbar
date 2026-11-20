@@ -16,9 +16,13 @@ garden:
   wild-chance-per-chunk: 0.1
 
 trees:
-  # orchard trees (0.5.0): sapling -> sprout -> young tree -> full tree, then fruit ripens
-  minutes-per-stage: 20   # real minutes per growth step (bone meal skips one)
-  fruit-minutes: 20       # after picking, how long until the canopy shows fruit again
+  # orchard trees (0.5.0): sapling -> sprout -> young tree -> full tree, then fruit ripens.
+  # 0.8.2 (eigenaarsmelding "geen fruit na 30 min"): de klok ging van 20+20 naar 5+6 EN de
+  # vrucht hangt nu zichtbaar ONDER het blad (0.8.1 tekende hem op y+0,25, binnen de
+  # bladmassa - hij groeide dus wél, maar was onzichtbaar). Let op: deze waarden in de
+  # server-config winnen van de code-defaults - ouwe 20'en hier of daar make de fix nul.
+  minutes-per-stage: 5    # real minutes per growth step (bone meal skips one)
+  fruit-minutes: 6        # after picking, how long until the canopy shows fruit again
   break-hits: 3           # punches on the trunk before the tree comes down (drops the sapling)
 
 distilling:
