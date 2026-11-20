@@ -2028,6 +2028,11 @@ MODELS["gamenight_crate"] = gamenight_crate
 MODELS["gamenight_crate_wall"] = gamenight_crate_wall
 MODELS["gamenight_key"] = gamenight_key
 MODELS["gamenight_trophy"] = gamenight_trophy
+# 0.7.11: Effect.TWINKLE flips to "<id>_b" every 20 ticks; without this model the trophy
+# flashed a magenta missing-texture cube. The lit variant adds a magenta glow around the cup.
+MODELS["gamenight_trophy_b"] = lambda: gamenight_trophy() + [
+    box(5.0, 4.2, 5.0, 11.0, 8.6, 5.4, "glow_purple"), box(5.0, 4.2, 10.6, 11.0, 8.6, 11.0, "glow_purple"),
+    box(4.7, 4.2, 5.4, 5.1, 8.6, 10.6, "glow_purple"), box(10.9, 4.2, 5.4, 11.3, 8.6, 10.6, "glow_purple")]
 MODELS["gamenight_sword"] = gamenight_sword
 MODELS["gamenight_sword_wall"] = gamenight_sword_wall
 MODELS["gamenight_sash"] = gamenight_sash
