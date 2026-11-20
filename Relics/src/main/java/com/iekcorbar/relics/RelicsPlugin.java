@@ -44,11 +44,12 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
     static java.time.ZoneId zone = java.time.ZoneId.systemDefault();
 
     /**
-     * Is this relic craftable at a workbench? Config "crafting.<id>" wins; without that key the type's
-     * own default applies (the brewery set of 0.3.9 defaults to false: shop/event/reward stock).
+     * 0.7.11 (owner): NO relic is craftable any more - every relic is crate/event stock.
+     * Hard-coded on purpose: an old server config.yml with crafting.<id>: true would otherwise
+     * re-enable a recipe after an update. To re-enable one later, add an explicit exception here.
      */
     boolean craftable(RelicType t) {
-        return getConfig().getBoolean("crafting." + t.id(), t.craftableByDefault);
+        return false;
     }
 
     // ------------------------------------------------------------ shop crates (0.5.0)
@@ -104,11 +105,16 @@ public final class RelicsPlugin extends JavaPlugin implements TabExecutor {
                     for (Discs.Disc d : discs.discs.values()) if (d.recipe() == null) pool.add(d);
                     return pool.isEmpty() ? new ItemStack[0] : new ItemStack[]{discs.item(pool.get(rnd.nextInt(pool.size())))};
                 }
-                // random:relic[:COLLECTION] - one random shop-only relic (craftable:false stock)
+                // random:relic[:COLLECTION|any] - one random relic from the shop-only stock.
+                // "any" = literally every relic (0.7.11: nothing is craftable, so every
+                // relic must be win-able) except the Game Night collection, which stays
+                // exclusive to the key-crate.
                 List<RelicType> pool = new ArrayList<>();
+                boolean any = p.length > 2 && p[2].equalsIgnoreCase("any");
                 for (RelicType t : RelicType.values()) {
-                    if (!randomStock(t)) continue;
-                    if (p.length > 2 && !t.collection.name().equalsIgnoreCase(p[2])) continue;
+                    if (!any && !randomStock(t)) continue;
+                    if (any && t.collection == RelicType.Collection.GAMENIGHT) continue;
+                    if (p.length > 2 && !any && !t.collection.name().equalsIgnoreCase(p[2])) continue;
                     pool.add(t);
                 }
                 return pool.isEmpty() ? new ItemStack[0] : new ItemStack[]{relics.item(pool.get(rnd.nextInt(pool.size())), 1)};

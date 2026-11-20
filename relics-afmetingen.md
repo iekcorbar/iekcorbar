@@ -83,6 +83,7 @@ Let op:
 | 59 | `towel_rack` | schaal 1,0 | **2x** | `scale` 1f → **2f** (sway ongewijzigd) | ✅ code-aanpassing, wacht op build |
 | 60 | `gamenight_trophy` | schaal 1,0 + **paarse knipperende kubus** | **2x + magenta glans** | Oorzaak bug: `Effect.TWINKLE` wisselt naar `gamenight_trophy_b`, dat niet bestond → magenta missing-texture-blok. Fix: nieuw `_b`-model met magenta (`glow_purple`) gloedrand rond de beker (15 elementen, bounds ✓), zodat het knipperen een feature wordt. `scale` 1f → **2f** | ✅ code+model-aanpassing, wacht op build |
 | 61 | `gamenight_dice_tower` | schaal 1,0 | **2x** | `scale` 1f → **2f** | ✅ code-aanpassing, wacht op build |
+| 62 | **alle relics** | velen craftbaar via werktafel | **geen enkele craftbaar, alles winbaar in crates** | `craftable()` geeft nu altijd `false` (hard-coded, oude server-config met `crafting.<id>: true` kan het niet meer aanzetten); `random:relic:any` (= alle relics, behalve Game Night die exclusief via de sleutelkist blijft) + nieuwe crate `vault` in crates.yml (hot-file: **bij deploy ook de sectie in de live crates.yml plakken**). Muziekdiscs en Treats (eten) blijven wél craftbaar, zoals voorheen | ✅ code+config-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)

@@ -5,7 +5,9 @@
 # items: each entry is one of
 #   relic:<id>            the relic with that id (see RelicType)
 #   disc:<id>             that music disc
-#   random:relic[:COLL]   one random shop-only relic (optionally: only from collection COLL)
+#   random:relic[:COLLLECTION|any] one random shop-only relic (optionally: only from collection COLL;
+#                             any = every relic, but Game Night prizes stay in their own crate)
+#   cmd:<console command>     runs a console command, e.g. MMOItems prizes (0.7.9+)
 #   random:disc           one random shop-only music disc
 # once: true - the full bundle is only ever handed out ONCE per player; a second
 # purchase gives a polite refusal (staff can refund via the Shop Purchases view).
@@ -63,6 +65,13 @@ lucky:
     - random:disc
     - random:relic:curio
     - relic:blood_token   # the standard coin: always in, always plain
+
+vault:
+  title: "The Relic Vault — any relic"
+  items:
+    - random:relic:any        # 0.7.11: every relic in the game can be won here (except Game Night prizes)
+    - chance:0.1:random:disc  # sometimes a music disc comes with it
+    - chance:0.05:relic:blood_token_blessed
 
 hamper:
   title: "Haunted Hamper"
