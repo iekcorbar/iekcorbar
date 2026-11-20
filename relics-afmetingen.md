@@ -56,6 +56,7 @@ Let op:
 | 32 | `wishing_well` | schaal 1,0 | **2x** | `scale` 1f → **2f**; wens-hartjes stijgen mee (0,6×scale) | ✅ code-aanpassing, wacht op build |
 | 33 | `swan_lantern` | schaal 1,0 | **2x** | `scale` 1f → **2f** (lichtblok level 12 blijft 1 blok, vlamdeeltjes op dezelfde plek) | ✅ code-aanpassing, wacht op build |
 | 34 | `lovers_bench` | schaal 2,0 + 1 zitplek | **2x + 2 spelers naast elkaar** | `scale` 2f → **4f**; `sit()` telt zitplekken per relic (bank = 2, rest = 1), plaatsingen langs de lokale X-as (±0,22×scale, meegedraaid met `rotationRaw`), zithoogte volgt de schaal (0,21×scale). Afstappen/break ruimt alle plekken al op | ✅ code-aanpassing, wacht op build |
+| 35 | `heart_window` | schaal 1,0 + dichte ondoorzichtige 'glass'-pane | **2x + erdoorheen kijken** | `scale` 1f → **2f**; model: volledig glass-pane verwijderd, open frame met mullions + zwevende harten en dunne glazen rand-accenten (20 elementen, bounds ✓). Lichtblok level 6 is onzichtbaar en belemmert het zicht niet | ✅ code+model-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -138,7 +139,7 @@ Let op:
 | `love_potion_shelf` | Love Potion Shelf | 1 | 1 | X | · | ja |
 | `clockwork_heart` | Clockwork Heart | 1 | 1 | · | · | ja |
 | `lovers_bench` | Lovers' Bench | 1 | ~~2~~ → **4** (#34) | · | · | ja |
-| `heart_window` | Heart Window | 1 | 1 | X | · | ja |
+| `heart_window` | Heart Window | 1 | ~~1~~ → **2** (#35) | X | · | ja |
 | `amore_machine` | Amore Automatron | 1 | 1 | · | · | ja |
 
 ### Easter (5)

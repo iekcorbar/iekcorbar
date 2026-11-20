@@ -1668,10 +1668,15 @@ def lovers_bench():
 
 
 def heart_window():
+    # 0.7.11: the old full 'glass' pane was opaque (palette colour), so the window was a solid slab.
+    # Keep the frame, mullions and floating hearts, but leave the middle OPEN so you can look through it.
     e = [box(1, 0.6, 14.6, 15, 1.6, 15.6, "wood_old"), box(1, 14, 14.6, 15, 15, 15.6, "wood_old"),
          box(1, 1.6, 14.7, 2.1, 14, 15.5, "wood_old"), box(13.9, 1.6, 14.7, 14.9, 14, 15.5, "wood_old"),
-         box(2.1, 2.1, 14.9, 13.9, 13.5, 15.3, "glass"), box(7.7, 2.1, 14.8, 8.3, 13.5, 15.4, "iron"),
-         box(2.1, 7.5, 14.8, 13.9, 8.1, 15.4, "iron")]
+         box(7.7, 2.1, 14.8, 8.3, 13.5, 15.4, "iron"),                         # central mullion
+         box(2.1, 7.5, 14.8, 13.9, 8.1, 15.4, "iron")]                         # crossbar
+    # thin glass accents hugging the frame, never across the opening
+    e += [box(2.1, 2.1, 14.9, 2.6, 13.5, 15.3, "glass"), box(13.4, 2.1, 14.9, 13.9, 13.5, 15.3, "glass"),
+          box(2.6, 2.1, 14.9, 13.4, 2.6, 15.3, "glass"), box(2.6, 13, 14.9, 13.4, 13.5, 15.3, "glass")]
     e += heart_pix(5.1, 5.4, 14.75, 1.5, "rose_deep", d=0.5)
     e += heart_pix(10.9, 10.5, 14.75, 1.5, "rose_deep", d=0.5)
     e += [box(4.2, 11.2, 14.75, 5.6, 12.6, 15.25, "blush"), box(10.4, 3.2, 14.75, 11.8, 4.6, 15.25, "blush")]
