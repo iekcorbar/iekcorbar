@@ -247,7 +247,7 @@ enum RelicType {
     STEAM_PIPE(Collection.CURIO, "Loose Steam Pipe", "A spare line from the still. It was never quite shut off.",
             Base.NONE, 1, 0, "steam_pipe", null, null, Effect.STEAM, Use.NONE, 1f, false),
     TASTING_COUNTER(Collection.CURIO, "Tasting Counter", "Three cups, one opinion, no argument.",
-            Base.NONE, 1, 0, "tasting_counter", null, null, Effect.NONE, Use.NONE, 1f, false),
+            Base.NONE, 1, 0, "tasting_counter", null, null, Effect.NONE, Use.NONE, 2f, false),
     NOREN(Collection.CURIO, "Noren", "The brewery's cloth gate. Under it, you are a guest.",
             Base.NONE, 1, 0, "noren", null, null, Effect.SWAY, Use.NONE, 1f, false),
     BREW_KETTLE(Collection.CURIO, "Brew Kettle", "Charcoal under copper - tea for the distilling crew.",

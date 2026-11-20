@@ -70,6 +70,7 @@ Let op:
 | 46 | `wish_tree` | schaal 1,0 | **3x** | `scale` 1f → **3f**; Hangings: takken/bladeren/wensstroken + hitbox (1,1×1,9) volgen de schaal | ✅ code-aanpassing, wacht op build |
 | 47 | `dragon_nest` | schaal 1,5 | **2x** | `scale` 1,5f → **3f** (nest en Wildlife-drakenpaar groter op het nest) | ✅ code-aanpassing, wacht op build |
 | 48 | `barrel_stack` | schaal 1,0 | **2x** | `scale` 1f → **2f** (shop-only, niet-craftbaar) | ✅ code-aanpassing, wacht op build |
+| 49 | `tasting_counter` | schaal 1,0 | **2x** | `scale` 1f → **2f** (shop-only) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -196,7 +197,7 @@ Let op:
 | `bottling_crate` | Bottling Crate | 1 | 1 | · | · | nee |
 | `barrel_stack` | Barrel Stack | 1 | ~~1~~ → **2** (#48) | · | · | nee |
 | `steam_pipe` | Loose Steam Pipe | 1 | 1 | · | · | nee |
-| `tasting_counter` | Tasting Counter | 1 | 1 | · | · | nee |
+| `tasting_counter` | Tasting Counter | 1 | ~~1~~ → **2** (#49) | · | · | nee |
 | `noren` | Noren | 1 | 1 | · | · | nee |
 | `brew_kettle` | Brew Kettle | 1 | 1 | · | · | nee |
 | `bottle_rack` | Bottle Rack | 1 | 1 | · | · | nee |
