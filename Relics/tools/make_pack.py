@@ -172,25 +172,32 @@ def ribcage():
     return e
 
 
-def banner_cloth(x0, y_top, z, col="cloth"):
-    e = [box(x0, y_top - 9, z, x0 + 8, y_top, z + 0.4, col)]
+def banner_cloth(x0, y_top, z, col="cloth", h=9, w=8):
+    """Torn, claw-slashed hanging: scales with h/w so the big banner keeps its proportions."""
+    sx, sy = w / 8.0, h / 9.0
+    e = [box(x0, y_top - h, z, x0 + w, y_top, z + 0.4, col)]
     for i, (dx, l) in enumerate(((0, 3), (1.5, 1.5), (3, 4), (4.5, 2), (6.5, 3.5))):        # torn strips
-        e.append(box(x0 + dx, y_top - 9 - l, z, x0 + dx + 1.4, y_top - 9, z + 0.4, col if i % 2 else col + "_d"))
-    e += [box(x0 + 2, y_top - 4, z - 0.01, x0 + 3.5, y_top - 2.5, z + 0.41, "char"),         # burn holes / claw slashes
-          box(x0 + 5, y_top - 7, z - 0.01, x0 + 5.5, y_top - 1, z + 0.41, "char"),
-          box(x0 + 6, y_top - 7.5, z - 0.01, x0 + 6.5, y_top - 1.5, z + 0.41, "char"),
-          box(x0 + 1, y_top - 1.5, z - 0.02, x0 + 7, y_top - 0.8, z + 0.42, "brass_d")]     # tarnished emblem band
+        e.append(box(x0 + dx * sx, y_top - h - l * sy, z, x0 + (dx + 1.4) * sx, y_top - h, z + 0.4, col if i % 2 else col + "_d"))
+    e += [box(x0 + 2 * sx, y_top - 4 * sy, z - 0.01, x0 + 3.5 * sx, y_top - 2.5 * sy, z + 0.41, "char"),         # burn holes / claw slashes
+          box(x0 + 5 * sx, y_top - 7 * sy, z - 0.01, x0 + 5.5 * sx, y_top - 1 * sy, z + 0.41, "char"),
+          box(x0 + 6 * sx, y_top - 7.5 * sy, z - 0.01, x0 + 6.5 * sx, y_top - 1.5 * sy, z + 0.41, "char"),
+          box(x0 + 1 * sx, y_top - 1.5 * sy, z - 0.02, x0 + 7 * sx, y_top - 0.8 * sy, z + 0.42, "brass_d")]     # tarnished emblem band
     return e
 
 
 def banner():
-    """Burned, claw-torn banner of the First Settlement on a broken pole."""
-    return [box(7.4, 0, 9, 8.6, 15, 10.2, "wood_char"), box(7.0, 0, 8.6, 9.0, 1, 10.6, "wood_char_d"),
-            box(3.5, 14, 9.2, 12.5, 15, 10.0, "wood_char")] + banner_cloth(4, 14, 9.4)
+    """Burned, claw-torn banner of the First Settlement on a tall pole (0.7.11: rebuilt 3x, optie 2 -
+    the pole is long and slim, the crossbar sits at the top and the cloth hangs from it; the bottom
+    of the model stays on the ground because Relics.build anchors (scale-1)/2 up)."""
+    return [box(7.3, 0, 9.0, 8.7, 29, 10.4, "wood_char"),                    # slim tall pole
+            box(6.9, 0, 8.6, 9.1, 1.2, 10.8, "wood_char_d"),                 # foot
+            box(-0.5, 27.8, 9.1, 16.5, 29, 10.3, "wood_char")] + banner_cloth(1.5, 27.8, 9.4, h=15, w=13)
 
 
 def banner_wall():
-    return [box(3, 13, 14.5, 13, 14, 16, "iron_d"), box(4, 13.5, 13.5, 12, 14.5, 14.5, "wood_char")] + banner_cloth(4, 13.5, 13.8)
+    """The big banner hung flat on a wall bracket: crossbar high, cloth down along the wall."""
+    return [box(0.5, 27.5, 14.4, 15.5, 28.5, 16, "iron_d"),                  # long top bracket
+            box(1.5, 26.8, 13.4, 14.5, 27.6, 14.6, "wood_char")] + banner_cloth(1.5, 26.8, 13.8, h=15, w=13)
 
 
 def lantern_body(y=0):

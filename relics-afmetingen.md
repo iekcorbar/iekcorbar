@@ -28,7 +28,7 @@ Let op:
 | 4 | `creature_ribcage` | schaal 3,0 | **in verhouding met de (grotere) schedel** | `scale` 3f → **4,5f** (dezelfde ×1,5; verhouding ribcage/skull blijft 2,0; eronderdoorlopen blijft, hitbox `NONE`), vorm/model niet aangepast | ✅ code-aanpassing, wacht op build |
 | 5 | `charred_outpost_lantern` | schaal 1,0 (constructie zonder scale-veld) | **1,5x zo groot** | naar volledige constructor: `scale` **1,5f** (floor+wall+hanging meegeschaaald, lichtlevel 11 blijft, light-basis 1 blok) | ✅ code-aanpassing, wacht op build |
 | 6 | `ruin_monolith` | schaal 1,0 | **4x zo groot** | naar volledige constructor: `scale` **4f** — zuil ~4x, barrière-hitbox blijft 2 blokken (Krampus-precedent); glyph-glow volgt display, ENCHANT-deeltjes staan vast bij y+0,6 (bodem) - nacomment van eigenaar nodig of meepakken | ✅ code-aanpassing, wacht op build |
-| 7 | `torn_settlement_banner` | schaal 3,0 (15-eenheden model) | **3x, op optie 2 (model + ophanging netjes)** | banner_cloth gegeneraliseerd (h/w), floor-banner herbouwd (~30 eenheden: sm hogere paal, lat bovenaan, langer dook), wall-banner evenredig; `scale` 3f → **4,5f**, hitbox-kolom height 3 → **5** | ⏳ in uitvoering |
+| 7 | `torn_settlement_banner` | schaal 3,0 (15-eenheden model, ~2,8 blk) | **3x, optie 2** | banner_cloth gegeneraliseerd (h/w-schaalfactoren, old calls unchanged), floor-banner herbouwd: paal 0..29 eenheden, lat bovenaan, dook 13x15 + scheuren; wall-bracket meebouwd. `scale` 3f → **4,5f** (visueel ~8,2 blk hoog, gemeten uit modelspan), height 3 → **5** (vloerbereikbaarheid: plaatsing vraagt 5 luchtblokken). Bounds gecheckt: alles -16..32 ✓. **LET OP: pakt pack-bouw mee (make_pack) - eerste stel-melding die íets aan het model doet** | ✅ code + model-aanpassing, wacht op build |
 | 8 | `gibbet_cage` | schaal 1,0 (9-args) | **2x visueel** | naar volledige constructor: `scale` **2f** (vloer + hangend meeschakend; craftable blijft false) | ✅ code-aanpassing, wacht op build |
 | 9 | `warding_totem` | schaal 1,0 (9-args) | **2x** | `scale` **2f** (ook de lit-variant - zelfde RelicType, draw() herberekent schaal); barriere-hitbox blijft 2 | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
@@ -38,7 +38,7 @@ Let op:
 |---|---|---|---|---|---|---|
 | `creature_skull` | Creature Skull | 1 | 1.5 | X | · | nee |
 | `creature_ribcage` | Creature Ribcage | 3 | 3 | · | · | nee |
-| `torn_settlement_banner` | Torn Settlement Banner | 3 | 3 | X | · | nee |
+| `torn_settlement_banner` | Torn Settlement Banner | ~~3~~ → **5** | ~~3~~ → **4.5** (#7) | X | · | nee |
 | `charred_outpost_lantern` | Charred Outpost Lantern | 1 | ~~1.0~~ → **1.5** (#5) | X | X | nee |
 | `vigil_candles` | Vigil Candles | 1 | 1.0 | · | · | nee |
 | `settlers_grave` | Settler's Grave | 3 | 3 | · | · | nee |
