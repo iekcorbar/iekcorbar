@@ -59,6 +59,7 @@ Let op:
 | 35 | `heart_window` | schaal 1,0 + dichte ondoorzichtige 'glass'-pane | **2x + erdoorheen kijken** | `scale` 1f → **2f**; model: volledig glass-pane verwijderd, open frame met mullions + zwevende harten en dunne glazen rand-accenten (20 elementen, bounds ✓). Lichtblok level 6 is onzichtbaar en belemmert het zicht niet | ✅ code+model-aanpassing, wacht op build |
 | 36 | `egg_tree` | schaal 1,0 | **3x** | `scale` 1f → **3f** | ✅ code-aanpassing, wacht op build |
 | 37 | `pot_of_gold` | schaal 1,0 | **2x** | `scale` 1f → **2f**; regenboog-stof volgt schaal (0,7×scale) | ✅ code-aanpassing, wacht op build |
+| 38 | `rainbow_arch` | schaal 1,0 | **6x** | `scale` 1f → **6f** (regenboog-stof volgt de schaal sinds #37; loop-through, hitbox blijft leeg) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -157,7 +158,7 @@ Let op:
 | id | naam | hb-hoogte | scale | wall | plafond | craft |
 |---|---|---|---|---|---|---|
 | `pot_of_gold` | Pot of Gold | 1 | ~~1~~ → **2** (#37) | · | · | ja |
-| `rainbow_arch` | Rainbow Arch | 1 | 1 | · | · | ja |
+| `rainbow_arch` | Rainbow Arch | 1 | ~~1~~ → **6** (#38) | · | · | ja |
 | `shamrock_planter` | Shamrock Planter | 1 | 1 | · | · | ja |
 | `leprechaun_hat` | Leprechaun Hat | 1 | 1 | · | · | ja |
 | `celtic_harp` | Celtic Harp | 2 | 1.7 | · | · | ja |
