@@ -507,13 +507,40 @@ def music_box():
 
 
 def snow_globe():
-    e = [box(4, 0, 4, 12, 2.5, 12, "wood_warm"), box(3.6, 2, 3.6, 12.4, 2.6, 12.4, "brass"),
-         box(4.5, 2.6, 4.5, 11.5, 11, 4.8, "glass"), box(4.5, 2.6, 11.2, 11.5, 11, 11.5, "glass"), box(4.5, 2.6, 4.8, 4.8, 11, 11.2, "glass"),
-         box(11.2, 2.6, 4.8, 11.5, 11, 11.2, "glass"), box(5, 11, 5, 11, 12, 11, "glass"), box(6, 12, 6, 10, 12.6, 10, "glass"),
-         box(5, 2.6, 5, 11, 3.2, 11, "snow"), box(6, 3.2, 6.5, 9, 6, 9, "xred"), box(5.6, 6, 6.2, 9.4, 7.2, 9.4, "snow"),
-         box(9.5, 3.2, 7, 10.5, 8, 8, "pine")]
-    for x, y, z in ((6, 9, 7), (9, 10, 9), (7.5, 8, 10), (10, 7.5, 6)):
-        e.append(box(x, y, z, x + 0.4, y + 0.4, z + 0.4, "snow"))
+    """0.7.11: a whole miniature village in the glass - brass plinth, lit chalet, pines, a snowman
+    and flakes caught mid-swirl. (Kept inside the same ~1-block model space; scale lives in java.)"""
+    e = [box(3.4, 0, 3.4, 12.6, 2, 12.6, "wood_warm"),                       # turned wooden plinth
+         box(3.1, 1.6, 3.1, 12.9, 2.3, 12.9, "brass"),                        # brass foot ring
+         box(4, 2.3, 4, 12, 2.8, 12, "wood_warm_d"),                          # plinth lip
+         box(4.5, 2.8, 4.5, 11.5, 11.6, 4.9, "glass"),                        # four glass walls
+         box(4.5, 2.8, 11.1, 11.5, 11.6, 11.5, "glass"),
+         box(4.5, 2.8, 4.9, 4.9, 11.6, 11.1, "glass"),
+         box(11.1, 2.8, 4.9, 11.5, 11.6, 11.1, "glass"),
+         box(5, 11.6, 5, 11, 12.2, 11, "glass"),                              # dome crown
+         box(6, 12.1, 6, 10, 12.7, 10, "brass"),                              # crown rim
+         box(5, 2.8, 5, 11, 3.5, 11, "snow")]                                 # snow floor
+    # the chalet: timber walls, snowy pitched roof, a glowing window and a door
+    e += [box(6, 3.5, 6.2, 9.6, 6.4, 9.6, "wood_old"),
+          box(5.7, 6.4, 5.9, 9.9, 7.2, 9.9, "snow_l"),
+          box(6.4, 7.2, 6.6, 9.2, 8.1, 9.2, "snow"),
+          box(6.7, 4.5, 6.05, 7.7, 5.5, 6.2, "flame"),                        # lit window
+          box(6.6, 4.4, 6.15, 7.8, 5.6, 6.25, "brass"),
+          box(8.4, 3.5, 6.05, 9.2, 5.2, 6.2, "wood_char")]                    # door
+    # two little firs, with snow on the tiers
+    for x, z in ((5.1, 5.2), (10.1, 9.5)):
+        e += [box(x + 0.2, 3.5, z + 0.2, x + 0.8, 4.6, z + 0.8, "wood_old"),
+              box(x - 0.4, 4.4, z - 0.4, x + 1.4, 5.2, z + 1.4, "pine"),
+              box(x - 0.2, 5.1, z - 0.2, x + 1.2, 5.9, z + 1.2, "pine_l"),
+              box(x + 0.1, 5.8, z + 0.1, x + 0.9, 6.2, z + 0.9, "snow")]
+    # a tiny snowman beside the chalet
+    e += [box(10.1, 3.5, 5.1, 10.8, 4.4, 5.8, "snow"),
+          box(10.25, 4.4, 5.25, 10.65, 5.0, 5.65, "snow"),
+          box(10.05, 4.7, 5.0, 10.35, 4.95, 5.25, "coal"), box(10.55, 4.7, 5.0, 10.85, 4.95, 5.25, "coal"),
+          box(10.3, 4.6, 4.85, 10.6, 4.8, 5.05, "carrot")]
+    # six flakes frozen mid-swirl (the shake adds the moving ones)
+    for x, y, z in ((5.3, 9.2, 6.4), (6.4, 10.4, 8.8), (8.1, 9.6, 10.4),
+                    (10.5, 8.7, 7.2), (7.2, 8.4, 5.4), (9.4, 10.8, 6.1)):
+        e.append(box(x, y, z, x + 0.45, y + 0.45, z + 0.45, "snow_l"))
     return e
 
 

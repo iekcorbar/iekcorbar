@@ -1219,6 +1219,24 @@ final class Relics implements Listener {
                 r.world.spawnParticle(Particle.SNOWFLAKE, r.center().add(0, 0.2, 0), 20, 0.2, 0.2, 0.2, 0.01);
                 p.spawnParticle(Particle.SNOWFLAKE, p.getLocation().add(0, 2.5, 0), 80, 3, 1, 3, 0.01);
                 r.world.playSound(r.center(), "relics:snow_globe.chime", 0.7f, 1f);
+                // 0.7.11: a visible swirl around the globe (six rings, climbing) after the shake.
+                // Guarded: the relic can be broken while the rings are still scheduled.
+                float radius = 0.8f * r.type.scale;
+                for (int step = 0; step < 6; step++) {
+                    int s = step;
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                        if (r.display == null || !r.display.isValid()) return;
+                        var loc = r.center().add(0, 0.5 + s * 0.28 * r.type.scale, 0);
+                        for (int i = 0; i < 12; i++) {
+                            double a = i * Math.PI / 6 + s * 0.7;
+                            r.world.spawnParticle(Particle.SNOWFLAKE,
+                                    loc.clone().add(Math.cos(a) * radius, -0.1, Math.sin(a) * radius), 1, 0, 0, 0, 0.01);
+                        }
+                    }, step * 4L);
+                }
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+                    if (r.display != null && r.display.isValid()) r.world.playSound(r.center(), "relics:snow_globe.chime", 0.5f, 1.4f);
+                }, 16L);
             }
             case COOKIES -> {
                 Treats.Treat held = plugin.treats().typeOf(hand);

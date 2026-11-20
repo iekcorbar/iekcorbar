@@ -42,6 +42,7 @@ Let op:
 | 18 | `gift_box` | schaal 1,5 | **2x** | `scale` 1,5f → **3f** (alle drie cadeau-wikkels meegeschakend); rechtsklik/vullen/locken werkt op dezelfde plek (geen apart hitboxje) | ✅ code-aanpassing, wacht op build |
 | 19 | `advent_calendar` | schaal 1,0 | **3x** | `scale` 1f → **3f** (deur-logica/kalender zelf blijft op dezelfde plek; klikken gebeurt op het centrale blok van de relic) | ✅ code-aanpassing, wacht op build |
 | 20 | `music_box` | schaal 1,0 | **2x** | `scale` 1f → **2f** (playlist/afspeelgedrag ongewijzigd, geluid komt van hetzelfde anker) | ✅ code-aanpassing, wacht op build |
+| 21 | `snow_globe` | schaal 1,0 + saai model | **2x + leuker + nieuw model** | `scale` 1f → **2f**; model herbouwd: geelkoperen voet, glazen bol met chalet (verlicht raam), twee pijnbomen, sneeuwman, sneeuwvlokken in de bol (35 elementen, bounds -16..32 ✓, palette kleuren ✓); shake-effect: 6 stijgende ringen SNOWFLAKE-deeltjes + extra chime, met validatie-guard tegen gebroken relics. **Raakt zowel jar als pack** | ✅ code+model-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
