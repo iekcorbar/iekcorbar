@@ -26,6 +26,7 @@ Let op:
 | 2 | `gamenight_key` | schaal 1,0 | **visueel 2x** | `scale` 1f → **2f** — geplaatste sleutel ~1,4 blk hoog; item-in-hand blijft normaal formaat | ✅ code-aanpassing, wacht op build |
 | 3 | `creature_skull` | schaal 1,5 | **1,5x zo groot** | `scale` 1,5f → **2,25f** — geplaatste/muurschedel groeit mee; gedragen schedel op het hoofd blijft vanilla-formaat (dragon-head-display, los mechanisme); hitbox blijft 1 | ✅ code-aanpassing, wacht op build |
 | 4 | `creature_ribcage` | schaal 3,0 | **in verhouding met de (grotere) schedel** | `scale` 3f → **4,5f** (dezelfde ×1,5; verhouding ribcage/skull blijft 2,0; eronderdoorlopen blijft, hitbox `NONE`), vorm/model niet aangepast | ✅ code-aanpassing, wacht op build |
+| 5 | `charred_outpost_lantern` | schaal 1,0 (constructie zonder scale-veld) | **1,5x zo groot** | naar volledige constructor: `scale` **1,5f** (floor+wall+hanging meegeschaaald, lichtlevel 11 blijft, light-basis 1 blok) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
@@ -34,13 +35,13 @@ Let op:
 | `creature_skull` | Creature Skull | 1 | 1.5 | X | · | nee |
 | `creature_ribcage` | Creature Ribcage | 3 | 3 | · | · | nee |
 | `torn_settlement_banner` | Torn Settlement Banner | 3 | 3 | X | · | nee |
-| `charred_outpost_lantern` | Charred Outpost Lantern | 1 | 1.0 | X | X | ja |
-| `vigil_candles` | Vigil Candles | 1 | 1.0 | · | · | ja |
-| `settlers_grave` | Settler's Grave | 3 | 3 | · | · | ja |
-| `ruin_monolith` | Ruin Monolith | 2 | 1.0 | · | · | ja |
-| `specimen_jar` | Specimen Jar | 1 | 1.0 | · | · | ja |
-| `creature_egg_sac` | Creature Egg Sac | 1 | 1.0 | · | X | ja |
-| `gibbet_cage` | Gibbet Cage | 1 | 1.0 | · | X | ja |
+| `charred_outpost_lantern` | Charred Outpost Lantern | 1 | ~~1.0~~ → **1.5** (#5) | X | X | nee |
+| `vigil_candles` | Vigil Candles | 1 | 1.0 | · | · | nee |
+| `settlers_grave` | Settler's Grave | 3 | 3 | · | · | nee |
+| `ruin_monolith` | Ruin Monolith | 2 | 1.0 | · | · | nee |
+| `specimen_jar` | Specimen Jar | 1 | 1.0 | · | · | nee |
+| `creature_egg_sac` | Creature Egg Sac | 1 | 1.0 | · | X | nee |
+| `gibbet_cage` | Gibbet Cage | 1 | 1.0 | · | X | nee |
 | `ash_pile` | Ash Pile | 1 | 1.0 | · | · | ja |
 | `warding_totem` | Warding Totem | 2 | 1.0 | · | · | ja |
 | `shattered_portal_shard` | Shattered Portal Shard | 1 | 1.0 | · | · | ja |
