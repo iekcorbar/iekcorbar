@@ -512,10 +512,11 @@ def snow_globe():
     e = [box(3.4, 0, 3.4, 12.6, 2, 12.6, "wood_warm"),                       # turned wooden plinth
          box(3.1, 1.6, 3.1, 12.9, 2.3, 12.9, "brass"),                        # brass foot ring
          box(4, 2.3, 4, 12, 2.8, 12, "wood_warm_d"),                          # plinth lip
-         box(4.5, 2.8, 4.5, 11.5, 11.6, 4.9, "glass"),                        # four glass walls
-         box(4.5, 2.8, 11.1, 11.5, 11.6, 11.5, "glass"),
-         box(4.5, 2.8, 4.9, 4.9, 11.6, 11.1, "glass"),
-         box(11.1, 2.8, 4.9, 11.5, 11.6, 11.1, "glass"),
+         # open sides with slim glass posts + a mid band: solid 'glass' panes would hide the village
+         *[box(x, 2.8, z, x + 0.6, 11.6, z + 0.6, "glass")
+           for x, z in ((4.6, 4.6), (10.9, 4.6), (4.6, 10.9), (10.9, 10.9))],
+         box(4.6, 6.8, 4.6, 11.4, 7.1, 4.9, "glass"), box(4.6, 6.8, 11.1, 11.4, 7.1, 11.4, "glass"),
+         box(4.6, 6.8, 4.9, 4.9, 7.1, 11.1, "glass"), box(11.1, 6.8, 4.9, 11.4, 7.1, 11.1, "glass"),
          box(5, 11.6, 5, 11, 12.2, 11, "glass"),                              # dome crown
          box(6, 12.1, 6, 10, 12.7, 10, "brass"),                              # crown rim
          box(5, 2.8, 5, 11, 3.5, 11, "snow")]                                 # snow floor
@@ -1434,13 +1435,26 @@ def heart_balloon():
 
 
 def rose_bell():
-    e = [box(3, 0, 3, 13, 1.4, 13, "brass"), box(3.5, 1.4, 3.5, 12.5, 1.9, 12.5, "rose_gold"),
-         box(7.5, 1.9, 7.5, 8.5, 6.6, 8.5, "rose_leaf"), box(8.5, 3.6, 7.4, 10.4, 4.4, 8.6, "rose_leaf"),
-         box(6.6, 6.4, 6.6, 9.4, 9, 9.4, "rose_deep"), box(6.9, 9, 6.9, 9.1, 10, 9.1, "rose_red"),
-         box(4.1, 1.9, 4, 11.9, 10.2, 4.5, "glass"), box(4.1, 1.9, 11.5, 11.9, 10.2, 12, "glass"),
-         box(4, 1.9, 4.5, 4.5, 10.2, 11.5, "glass"), box(11.5, 1.9, 4.5, 12, 10.2, 11.5, "glass"),
-         box(5.6, 10.2, 5.6, 10.4, 10.9, 10.4, "glass"), box(7, 10.9, 7, 9, 11.6, 9, "glass"),
-         box(7.4, 11.6, 7.4, 8.6, 12.8, 8.6, "rose_gold")]
+    """A real rose under an OPEN glass cloche: the old solid 'glass' panes hid the flower completely
+    (the palette colour is opaque), so the sides are now four slim corner posts with just a top dome."""
+    e = [box(2.5, 0, 2.5, 13.5, 1.2, 13.5, "brass"),                       # heavy brass foot
+         box(2.8, 1.2, 2.8, 13.2, 1.8, 13.2, "rose_gold"),
+         box(3.2, 1.8, 3.2, 12.8, 2.2, 12.8, "brass_d")]
+    for x, z in ((3.6, 3.6), (11.6, 3.6), (3.6, 11.6), (11.6, 11.6)):       # open sides: corner posts only
+        e.append(box(x, 2.2, z, x + 0.8, 10.4, z + 0.8, "glass"))
+    e += [box(3.2, 10.4, 3.2, 12.8, 11.2, 12.8, "glass"),                   # dome rim
+          box(5.6, 11.2, 5.6, 10.4, 12.0, 10.4, "glass"),                   # crown
+          box(7.4, 12.0, 7.4, 8.6, 13.4, 8.6, "rose_gold")]                 # little finial
+    # the rose: stem with thorns, two leaves, a layered bloom and one fallen petal
+    e += [box(7.5, 2.2, 7.5, 8.5, 7.4, 8.5, "rose_leaf"),
+          box(8.5, 4.0, 7.7, 9.2, 4.6, 8.3, "rose_leaf_d"), box(6.8, 5.2, 7.7, 7.5, 5.8, 8.3, "rose_leaf_d"),
+          box(6.3, 3.6, 6.2, 8.1, 4.4, 7.4, "rose_leaf"), box(8.9, 4.8, 8.6, 10.5, 5.6, 9.8, "rose_leaf"),
+          box(5.6, 7.2, 5.6, 10.4, 9.0, 10.4, "rose_deep"),                 # outer petals
+          box(6.2, 8.2, 6.2, 9.8, 10.2, 9.8, "rose_red"),
+          box(7.0, 9.0, 7.0, 9.0, 10.8, 9.0, "blush"),                      # heart of the rose
+          box(5.4, 8.4, 7.2, 6.2, 9.2, 8.8, "rose_red"), box(9.8, 8.4, 7.2, 10.6, 9.2, 8.8, "rose_red"),
+          box(10.6, 2.2, 10.6, 11.4, 2.5, 11.4, "rose_red"),
+          box(6, 1.0, 2.35, 10, 1.6, 2.75, "gold")]                         # engraved plate
     return e
 
 
