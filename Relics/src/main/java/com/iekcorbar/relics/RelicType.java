@@ -87,7 +87,7 @@ enum RelicType {
     NUTCRACKER(Collection.XMAS, "Nutcracker Guard", "A very serious guard, as tall as the Krampus. He keeps the door and he does not negotiate.",
             Base.SOLID, 2, 0, "nutcracker", null, null, Effect.NONE, Use.NONE, 2.9f),
     CHANDELIER(Collection.XMAS, "Candle Chandelier", "Hang it from a ceiling: brass ring, five candles, and flames that never stop flickering.",
-            Base.LIGHT, 1, 13, "chandelier", "chandelier", "chandelier_ceiling", Effect.TWINKLE, Use.NONE, 1f),
+            Base.LIGHT, 1, 13, "chandelier", "chandelier", "chandelier_ceiling", Effect.TWINKLE, Use.NONE, 3f),
     PLUM_PUDDING(Collection.XMAS, "Plum Pudding", "Brandy icing, holly berries, and steam that keeps the table warm all December.",
             Base.NONE, 1, 0, "plum_pudding", null, null, Effect.STEAM, Use.NONE, 1.25f),
     SANTA_MAILBOX(Collection.XMAS, "Santa Mailbox", "Right-click with paper or a written book to post a wish to the North Pole.",

@@ -45,6 +45,7 @@ Let op:
 | 21 | `snow_globe` | schaal 1,0 + saai model | **2x + leuker + nieuw model** | `scale` 1f → **2f**; model herbouwd: geelkoperen voet, glazen bol met chalet (verlicht raam), twee pijnbomen, sneeuwman, sneeuwvlokken in de bol (35 elementen, bounds -16..32 ✓, palette kleuren ✓); shake-effect: 6 stijgende ringen SNOWFLAKE-deeltjes + extra chime, met validatie-guard tegen gebroken relics. **Raakt zowel jar als pack** | ✅ code+model-aanpassing, wacht op build |
 | 22 | `cuckoo_clock` | schaal 1,0 | **2x** | `scale` 1f → **2f** (vloer+muur); geluid/particles van de koekoek volgen de schaal (0,45×scale i.p.v. vast 0,9) | ✅ code-aanpassing, wacht op build |
 | 23 | `nutcracker` | schaal 1,2 | **zelfde als Krampus** | `scale` 1,2f → **2,9f** (Krampus-schaal exact overgenomen, hitbox 2 blijft); lore aangepast. Interpretation: even groot als de Krampus, niet 'nogmaals 2x' - als je laatste bedoelde, eindigt hij op 2,4 | ✅ code-aanpassing, wacht op build |
+| 24 | `chandelier` | schaal 1,0 | **3x** | `scale` 1f → **3f** (vloer/muur/plafond-variant meegeschakend, lichtblok level 13 en twinkle ongewijzigd) | ✅ code-aanpassing, wacht op build |
 | | | | | | ⚪ |
 
 ### Shoutlander's Shadow (13)
