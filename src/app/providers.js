@@ -977,6 +977,16 @@ export default function ClientProviders({ children }) {
                     >
                       <UserPlus className="w-3.5 h-3.5" /> Friends
                     </Link>
+                    <Link
+                      href="/invite"
+                      className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-md transition-all ${
+                        pathname.startsWith('/invite')
+                          ? 'text-sp-gold bg-sp-gold/10'
+                          : 'text-text-warm/80 hover:text-sp-gold hover:bg-sp-gold/5'
+                      }`}
+                    >
+                      <HeartHandshake className="w-3.5 h-3.5" /> Invite
+                    </Link>
                   </>
                 )}
 
@@ -1207,6 +1217,15 @@ export default function ClientProviders({ children }) {
                     }`}
                   >
                     <UserPlus className="w-4 h-4 shrink-0" /> Friends
+                  </Link>
+                  <Link
+                    href="/invite"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                      pathname.startsWith('/invite') ? 'bg-sp-gold/10 text-sp-gold' : 'text-text-warm/80 hover:bg-sp-charcoal hover:text-white'
+                    }`}
+                  >
+                    <HeartHandshake className="w-4 h-4 shrink-0" /> Invite a friend
                   </Link>
                 </>
               )}

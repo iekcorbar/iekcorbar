@@ -35,6 +35,22 @@ export default function WelcomePage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [refCode, setRefCode] = useState('');
+
+  // A friend's invite link is /welcome?ref=ABC123. Read it from the URL (no
+  // useSearchParams, so this page stays statically renderable) and remember it
+  // in sessionStorage for the rest of the onboarding flow.
+  useEffect(() => {
+    try {
+      const fromUrl = new URLSearchParams(window.location.search).get('ref') || '';
+      const saved = window.sessionStorage.getItem('iekcorbar_ref_code') || '';
+      const code = (fromUrl || saved).toUpperCase();
+      if (/^[A-F0-9]{6}$/.test(code)) {
+        setRefCode(code);
+        window.sessionStorage.setItem('iekcorbar_ref_code', code);
+      }
+    } catch { /* private mode / no storage: banner is optional */ }
+  }, []);
 
   const load = useCallback(async () => {
     try {
@@ -83,6 +99,13 @@ export default function WelcomePage() {
         <p className="text-text-warm/70 text-sm">Three steps and you are in. {doneCount} of 4 done.</p>
         <div className="h-1.5 rounded-full bg-neutral-800 overflow-hidden max-w-xs mx-auto"><div className="h-full bg-sp-gold transition-all" style={{ width: `${(doneCount / 4) * 100}%` }} /></div>
       </div>
+
+      {refCode && (
+        <div className="p-4 rounded-xl border border-sp-gold/50 bg-sp-gold/5 text-center space-y-1">
+          <p className="text-sm text-white">A friend invited you with code <strong className="font-mono text-sp-gold tracking-widest">{refCode}</strong>.</p>
+          <p className="text-xs text-text-warm/60">After your first join, use <code className="font-mono text-white">/friend claim {refCode}</code> in-game — you both get a small reward after 30 minutes.</p>
+        </div>
+      )}
 
       <Step n={1} icon={Check} title="Account created" done active={false}>
         <p>You are registered{user.mcUsername ? <> as <strong className="text-white font-mono">{user.mcUsername}</strong></> : null} and already on the whitelist.</p>
