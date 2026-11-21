@@ -1,0 +1,17 @@
+name: ProgressReset
+version: '${project.version}'
+main: com.iekcorbar.progressreset.ProgressResetPlugin
+api-version: '26.2'
+description: Staff-only one-time reset of the Wildlife journal and Relics collection.
+author: iekcorbar
+
+commands:
+  resetprogress:
+    description: Reset one player's Wildlife journal + Relics collection (one time only).
+    usage: /resetprogress <player> [confirm]
+    permission: progressreset.admin
+
+permissions:
+  progressreset.admin:
+    description: Allow the one-time progress reset.
+    default: op
