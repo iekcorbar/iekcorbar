@@ -540,9 +540,10 @@ MESH = {
     # species_builder kent een mesh alléén aan de soortnaam toe, niet aan de EXTRA-looks), de
     # pinguin een strandbal van 2,5 x 1,8 x 1,8 m in plaats van 1,1 m op z'n poten, en de leeuw
     # had een rig waarin ONE voorpoot 48 boxen kreeg en de andere 4 (vandaar "hoofd 3 px scheef").
-    "giraffe": dict(rig="quad", period=1.25, amp=20, style="pace",        # giraffen passen: dezelfde
-                    parents={"h_head": "neck"}, neck=6.0, head=5.0),      #   zijkant samen (zie gait())
-                                                                          #   nek 6° = hoofd ~1,4 blok swing
+    # giraffe: 21-11 terug naar hand-built. De grab3d-mesh gebruikte willekeurige
+    # paletkleuren (antler/capy_l/shell_brown/...) waardoor de vlekken nergens op sloegen.
+    # De nieuwe giraffe() tekent één samenhangend capy/spine-patroon met dezelfde
+    # verhouding, pace-gait (1,25 s) en nek-zwaai van 6°.
     "elephant": dict(rig="quad", period=1.4, amp=16, style="pace", head=2.0, tail=7),
     "crab": dict(rig="quad", period=0.5, amp=14, head=2.0),
     "orca": dict(rig="fish", period=0.9, amp=13, fluke=True),
@@ -2013,57 +2014,81 @@ def automaton(m):
                                     "position": [(0, (0, 0, 0)), (0.6, (0, -8, 0)), (1.0, (0, -8, 0))]}}, loop="hold")
 
 def giraffe(m):
-    """Tallest animal of the savanna (animal). ~4.5 m tall, drawn 40 px, Steve (1.8 m) is the size reference."""
-    fur, spot, mane, hoof, eye = "fur_light", "fur_brown", "fur_dark", "hoof", "eye"
-    m.bone("body", (0, 18, 0))
-    # body (long, horizontal)
-    m.box("body", -3.0, 16.0, -6.0, 3.0, 20.0, 6.0, fur)
-    m.box("body", -2.6, 15.5, -5.5, 2.6, 19.5, 5.5, spot)
-    # neck (long, vertical)
-    m.bone("neck", (0, 20.0, -4.0), "body")
-    m.box("neck", -1.6, 20.0, -5.0, 1.6, 36.0, -3.0, fur)
-    m.box("neck", -1.4, 20.0, -4.8, 1.4, 36.0, -3.2, spot)
-    # head
-    m.bone("h_head", (0, 36.0, -4.0), "neck")
-    m.box("h_head", -2.0, 36.0, -6.5, 2.0, 39.5, -3.5, fur)
-    m.box("h_head", -1.4, 35.5, -7.0, 1.4, 37.5, -6.0, spot)
-    # ossicones (horns)
-    m.sym("h_head", 1.0, 39.5, -5.0, 1.4, 42.0, -4.6, fur)
-    m.sym("h_head", 0.8, 41.5, -4.9, 1.2, 42.5, -4.5, spot)
-    # eyes
-    m.sym("h_head", 1.2, 37.5, -6.6, 1.6, 38.2, -6.4, eye)
-    # ears
-    m.sym("h_head", 1.8, 38.5, -5.0, 2.2, 39.5, -4.4, fur)
-    # legs (long)
-    for name, sx, z in (("leg_fl", 1, -4.5), ("leg_fr", -1, -4.5), ("leg_bl", 1, 4.5), ("leg_br", -1, 4.5)):
-        m.bone(name, (sx * 2.0, 16.0, z), "body")
-        x1, x2 = (1.4, 2.6) if sx > 0 else (-2.6, -1.4)
-        m.box(name, x1, 0.0, z - 0.8, x2, 16.2, z + 0.8, fur)
-        m.box(name, x1, 0.0, z - 1.0, x2, 1.5, z + 1.0, hoof)
-    # tail
-    m.bone("tail", (0, 18.0, 5.5), "body")
-    m.box("tail", -0.4, 14.0, 5.5, 0.4, 18.2, 9.0, fur)
-    m.box("tail", -0.6, 13.0, 8.5, 0.6, 14.5, 9.5, spot)
-    p = 2.6
-    m.anim("idle", p, {
-        "body": {"position": wave(6, p, 0.2, 0.0, axis=1)},
-        "h_head": {"rotation": wave(6, p, 1.5, 0.4, axis=2)},
-        "neck": {"rotation": wave(6, p, 2.0, 0.6, axis=0)},
-        "tail": {"rotation": wave(6, p, 3.0, 0.0, axis=2)},
+    """Giraffe, hand-built on the same silhouette as the old CC0 mesh: ~4.4 m tall at
+    scale 2.3, Steve (1.8 m) is the reference. Head points to -Z, paws to -X after
+    oriented(). Rounded shoulder/barrel, tapering neck, real snout + ossicones and a
+    coherent capy/spine spot pattern instead of the old mesh's scattered palette cells."""
+    fur, light, shade = "capy", "capy_l", "capy_d"
+    spot, spot_l, mane = "spine", "scute", "fur_dark"
+    m.bone("body", (0, 17.6, 0))
+    # barrel: five overlapping slices, wider at the chest, narrower over the hips
+    m.box("body", -2.4, 15.2, -7.4, 2.4, 19.4, -4.2, shade)        # deep chest
+    m.box("body", -3.1, 16.0, -6.6, 3.1, 21.0, -2.6, fur)          # shoulder mass
+    m.box("body", -2.9, 15.6, -3.4, 2.9, 20.6, 2.6, fur)           # mid barrel
+    m.box("body", -2.6, 15.8, 2.0, 2.6, 20.0, 6.0, fur)            # hips
+    m.box("body", -2.1, 16.4, 5.4, 2.1, 19.0, 7.8, shade)          # rump
+    m.box("body", -2.5, 20.4, -5.8, 2.5, 21.8, -1.6, shade)        # withers / shoulder hump
+    m.box("body", -2.2, 14.6, -4.0, 2.2, 15.6, 4.0, light)         # pale belly line
+    m.box("body", -1.8, 16.8, -7.2, 1.8, 17.4, 6.4, light)         # flank highlight
+    # neck: six leaning slices, tapering towards the poll; mane ridge behind
+    m.bone("neck", (0, 20.4, -5.0), "body")
+    for i in range(6):
+        y = 20.4 + i * 1.95
+        z = -5.0 - i * 0.62
+        w = 2.05 - i * 0.17
+        d = 1.75 - i * 0.10
+        m.box("neck", -w, y, z - d, w, y + 2.05, z + d, fur if i % 2 else light)
+        m.box("neck", -w + 0.25, y + 0.3, z + d - 0.2, w - 0.25, y + 1.7, z + d + 0.35, shade)
+        m.box("neck", -0.45, y + 0.4, z + d + 0.18, 0.45, y + 1.9, z + d + 0.62, mane)
+    # head: skull, muzzle, jaw, eyes, ears and the two ossicones
+    m.bone("h_head", (0, 30.6, -8.9), "neck")
+    m.box("h_head", -1.85, 29.4, -10.0, 1.85, 31.7, -7.4, fur)
+    m.box("h_head", -1.25, 28.9, -11.5, 1.25, 30.0, -9.4, light)   # long muzzle
+    m.box("h_head", -0.95, 28.9, -11.7, 0.95, 29.6, -11.3, "nose")
+    m.box("h_head", -1.05, 27.9, -10.8, 1.05, 28.7, -8.8, shade)   # jaw
+    m.sym("h_head", 1.45, 30.4, -10.2, 1.85, 30.9, -9.7, "eye")
+    m.sym("h_head", 2.0, 30.6, -8.9, 2.7, 31.7, -8.0, light)       # ears
+    m.sym("h_head", 1.0, 31.5, -9.0, 1.4, 32.6, -8.4, "antler")    # ossicones
+    m.sym("h_head", 1.05, 32.2, -9.05, 1.35, 32.8, -8.65, spot)    # dark tips
+    # spot pattern: irregular patches on both flanks and along the neck
+    patches = [(-5.6, 18.6, 1.3), (-4.2, 19.6, 1.1), (-3.0, 17.2, 1.5), (-1.2, 19.0, 1.2),
+               (0.4, 17.6, 1.4), (2.2, 19.2, 1.1), (3.8, 18.0, 1.3), (5.4, 18.4, 1.0)]
+    for z0, y0, s in patches:
+        for side in (-1, 1):
+            x = side * (2.85 if z0 < 2 else 2.55)
+            m.cube("body", (min(x, x + side * 0.35), y0, z0 - s / 2),
+                   (max(x, x + side * 0.35), y0 + s, z0 + s / 2), spot if z0 % 2 else spot_l)
+    for i in range(5):
+        y = 21.2 + i * 1.95
+        z = -5.3 - i * 0.62
+        w = 1.95 - i * 0.17
+        for side in (-1, 1):
+            x = side * w
+            m.cube("neck", (min(x, x + side * 0.3), y, z - 0.55),
+                   (max(x, x + side * 0.3), y + 0.85, z + 0.55), spot if i % 2 else spot_l)
+    # four long legs with a knee break and dark hooves
+    for name, sx, z in (("leg_fl", 1, -5.0), ("leg_fr", -1, -5.0), ("leg_bl", 1, 5.0), ("leg_br", -1, 5.0)):
+        m.bone(name, (sx * 2.15, 17.4, z), "body")
+        x1, x2 = (1.55, 2.65) if sx > 0 else (-2.65, -1.55)
+        m.box(name, x1, 8.6, z - 0.9, x2, 17.4, z + 0.9, fur)
+        m.box(name, x1 - 0.12, 8.0, z - 1.05, x2 + 0.12, 9.1, z + 1.05, shade)   # knee
+        m.box(name, x1 + 0.2, 1.3, z - 0.65, x2 - 0.2, 8.6, z + 0.65, fur)
+        m.box(name, x1 - 0.05, 0.0, z - 1.05, x2 + 0.05, 1.5, z + 1.05, "hoof")
+    # tail with a dark tuft
+    m.bone("tail", (0, 18.2, 7.2), "body")
+    m.box("tail", -0.42, 15.4, 7.2, 0.42, 18.4, 9.6, fur)
+    m.box("tail", -0.62, 14.3, 9.2, 0.62, 15.8, 10.6, mane)
+    # same gait and timing as the old mesh: pace, 6 degrees of neck sway
+    period = 1.25
+    gait(m, period, 20.0, head=5.0, tail=8.0, style="pace", bob=0.15,
+         extra={"neck": {"rotation": wave(8, period, 6.0, math.pi * 0.5)}})
+    q = 2.8
+    m.anim("idle", q, {
+        "body": {"position": [(0, (0, 0, 0)), (q / 2, (0, 0.12, 0)), (q, (0, 0, 0))]},
+        "h_head": {"rotation": [(0, (0, 0, 0)), (q / 2, (0, 5, 0)), (q, (0, 0, 0))]},
+        "neck": {"rotation": [(0, (0, 0, 0)), (q / 2, (4.8, 0, 0)), (q, (0, 0, 0))]},
     })
-    p = 2.0
-    m.anim("walk", p, {
-        "body": {"position": [(0, (0, 0, 0)), (p / 2, (0, 0.4, 0)), (p, (0, 0, 0))]},
-        "leg_fl": {"rotation": wave(4, p, 24.0, 0.0, axis=0)},
-        "leg_fr": {"rotation": wave(4, p, 24.0, math.pi, axis=0)},
-        "leg_bl": {"rotation": wave(4, p, 20.0, 0.0, axis=0)},
-        "leg_br": {"rotation": wave(4, p, 20.0, math.pi, axis=0)},
-        "neck": {"rotation": wave(4, p, 3.0, 0.3, axis=0)},
-        "h_head": {"rotation": wave(4, p, 2.0, 0.5, axis=2)},
-        "tail": {"rotation": wave(4, p, 5.0, 0.0, axis=2)},
-    })
-    m.anim("death", 1.0, {"body": {"rotation": [(0, (0, 0, 0)), (0.6, (12, 0, 0)), (1.0, (12, 0, 0))],
-                                    "position": [(0, (0, 0, 0)), (0.6, (0, -10, 0)), (1.0, (0, -10, 0))]}}, loop="hold")
+    death(m, drop=1.5)
 
 
 def lion(m):
