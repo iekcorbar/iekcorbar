@@ -1,0 +1,19 @@
+name: FriendInvite
+version: '${project.version}'
+main: com.iekcorbar.friendinvite.FriendInvitePlugin
+api-version: '26.2'
+description: Custom bring-a-friend rewards, fully self-contained.
+author: iekcorbar
+softdepend: [Kitchen, Relics]
+
+commands:
+  friend:
+    description: Get your invite code, claim a friend's code, or check your status.
+    usage: /friend <code|claim <code>|status>
+    aliases: [friendinvite]
+    permission: friendinvite.use
+
+permissions:
+  friendinvite.use:
+    description: Use the bring-a-friend commands.
+    default: true

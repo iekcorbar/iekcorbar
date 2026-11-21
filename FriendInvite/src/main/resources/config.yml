@@ -1,0 +1,22 @@
+# FriendInvite 1.0.0 - bring-a-friend rewards.
+# Rewards are dispatched as console commands; {player} is replaced with the recipient's name.
+# Requires Kitchen/Relics only at runtime (softdepend) - no compile dependency.
+# Change these and run /friend reload (or restart) to update; no code change needed.
+
+min-play-minutes: 30              # the new player must play this long before rewards drop
+claim-window-hours: 24            # a new player can claim an invite code within this window
+min-inviter-age-hours: 1          # the inviter must have been around this long
+
+rewards:
+  - "relics give {player} bonsai 1"
+  - "kitchen give {player} onigiri 8"
+
+# Optional DiscordSRV announcement (public global chat). Leave empty to use
+# DiscordSRV's default broadcast channel. The ID below is the live global channel.
+discord-channel-id: '1485253532876538046'
+
+# Anti-abuse (hard-coded, no toggle needed):
+# - one code can only be claimed by one new player
+# - a player can only claim once, ever
+# - no self-referral
+# - unlimited friends per inviter (deliberate: inviting several friends is allowed)
