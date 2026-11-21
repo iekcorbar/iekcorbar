@@ -224,7 +224,9 @@ blood-moon:
 # (/relics give <winner> gamenight_key). One key = one opening = EXACTLY ONE prize,
 # rolled from the weighted rows below. pool:<name> rows draw one prize that this
 # player has NEVER won before (tracked in crates-used.yml); a fully won pool drops out
-# of the roll. fallback: is what a repeat-winner with every pool spent still gets.
+# of the roll. Since 0.7.13 the only row is pool:any - EVERY relic (Game Night set
+# included) is in the draw, so the key never favours one tier. fallback: is what a
+# repeat-winner who has won every relic still gets.
 # cmd: entries run as console - the same seam the shop's give_command uses, so any
 # plugin item can be a prize. MMOItems ids/tiers verified against the live item folder
 # 2026-11-20; re-check after big MMOItems config changes (/mi give <TYPE> <ID> <player>).
@@ -232,13 +234,7 @@ gamenight-crate:
   broadcast: true
   fallback: random:relic
   prizes:
-    - prize:40:pool:common
-    - prize:25:pool:rare
-    - prize:15:pool:epic
-    - prize:10:pool:mythical
-    - prize:6:pool:legendary
-    - prize:4:relic:blood_token_blessed
-    - prize:18:pool:any        # the old vault folded in: any relic, never the same one twice per player
+    - prize:100:pool:any       # every relic (Game Night set included), never the same one twice per player
   pools:
     common:
       - random:relic
