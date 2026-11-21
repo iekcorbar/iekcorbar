@@ -12,7 +12,7 @@
 #      wordt niets weggelaten uit plaatsgebrek. Alleen ./backups (dat zijn de
 #      panel-eigen backups; die wil je niet dubbel) en ./cache (herbouwbaar)
 #      blijven buiten boord.
-#   3. Opruimen: de laatste 7 backups bewaard, de rest weg (~100 GB piek).
+#   3. Opruimen: de laatste 4 backups bewaard, de rest weg (~68 GB piek).
 #   4. Discord: het backup-kanaal krijgt zelf bericht - naam, grootte, duur en
 #      vrije schijfruimte. Lukt de backup niet, dan gaat er een alarmbericht
 #      heen; stilzwijgend falen bestaat niet.
@@ -23,7 +23,7 @@
 set -o pipefail
 VOLUME=/var/lib/pterodactyl/volumes/06b962a3-cf1d-4606-a254-a62027f0983d
 RUIMTE=/var/backups/iekcorbar
-BEHOU=7
+BEHOU=4
 ts=$(date +%F_%H%M)
 BESTAND="$RUIMTE/iekcorbar-$ts.tar.gz"
 LOG="$RUIMTE/iekcorbar-$ts.log"

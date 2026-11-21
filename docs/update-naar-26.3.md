@@ -4,7 +4,7 @@
 **Server:** 82.165.250.99 (Pterodactyl-container `06b962a3-...`, Paper 26.2 → 26.3)  
 **Huidige pack-build op server:** iekcorbar-pack-build33 (lokaal BUILD=37)  
 **Builds (custom plugins):** ✅ Herbouwd tegen Paper 26.3 API (paper-api 26.3.build.230-stable) op 6 nov 2026. Alle 15 jars staan in `deploy/` (zie TE-DEPLOYEN.txt). Nog niet naar de server geüpload (deploy-batching).  
-**Bestaande nacht-backup routine:** `/usr/local/sbin/iekcorbar-backup` (04:00, 7 rotaties) blijft ongewijzigd.
+**Bestaande nacht-backup routine:** `/usr/local/sbin/iekcorbar-backup` (04:00, sinds 21 nov 2026: 4 rotaties).
 
 > Let op: deze checklist is de **voorbereiding**. De eigenaar doet de daadwerkelijke server-update en de downloads die ik niet kan doen handmatig. Ik (agent) kan de custom iekcorbar-plugins herbouwen zodra je het sein geeft.
 
@@ -177,4 +177,4 @@ Deze zitten in `plugins/ResourcePackManager/mixer/` en worden door ResourcePackM
 
 **Backup-locatie (pre-update):**  
 `/var/backups/iekcorbar-pre-update-26.3/iekcorbar-pre-26.3-2026-11-06_1712.tar.gz` (17 GB).  
-Deze map wordt **niet** door de nacht-backup-routine aangeraakt (die werkt alleen in `/var/backups/iekcorbar/` met patroon `iekcorbar-*.tar.gz`), dus hij blijft bewaard totdat je hem zelf verwijdert.
+Deze map werd **niet** door de nacht-backup-routine aangeraakt (die werkt alleen in `/var/backups/iekcorbar/` met patroon `iekcorbar-*.tar.gz`) en is op 21 nov 2026 op verzoek van de eigenaar verwijderd.
