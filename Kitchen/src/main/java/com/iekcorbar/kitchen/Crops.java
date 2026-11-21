@@ -1,5 +1,6 @@
 package com.iekcorbar.kitchen;
 
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.key.Key;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
@@ -19,6 +20,8 @@ import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.block.data.type.Tripwire;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Interaction;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,6 +37,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -66,6 +70,8 @@ final class Crops implements Listener {
     private static final int POS_MASK = (1 << 17) - 1, TYPE_SHIFT = 17, STAGE_SHIFT = 25, WILD_SHIFT = 28;
     /** tune here if the plant model floats or sinks in the ground */
     static final float DISPLAY_SCALE = 1f, DISPLAY_Y = 0.5f;
+    /** 0.3.29: the plant needs its own clickable box, like Sakagura garden plants. */
+    static final float HIT_W = 0.9f, HIT_H = 0.95f;
 
     record Info(CropType type, int stage, boolean wild) {
         boolean ripe() {
@@ -78,6 +84,7 @@ final class Crops implements Listener {
         int stage;
         boolean wild;
         ItemDisplay display;
+        Interaction hitbox;
 
         Entry(CropType type, int stage, boolean wild) {
             this.type = type;
@@ -91,7 +98,7 @@ final class Crops implements Listener {
     }
 
     private final KitchenPlugin plugin;
-    private final NamespacedKey posKey, wildKey, tagKey;
+    private final NamespacedKey posKey, wildKey, tagKey, hitKey;
     /** world -> chunk key -> position -> entry. */
     private final Map<UUID, Map<Long, Map<Integer, Entry>>> crops = new HashMap<>();
     private final Map<UUID, Set<Long>> dirty = new HashMap<>();
@@ -106,6 +113,7 @@ final class Crops implements Listener {
         posKey = new NamespacedKey(plugin, "crops");
         wildKey = new NamespacedKey(plugin, "wild_v1");
         tagKey = new NamespacedKey(plugin, "crop_display");
+        hitKey = new NamespacedKey(plugin, "crop_hitbox");
         load();
     }
 
@@ -217,7 +225,10 @@ final class Crops implements Listener {
         Map<Long, Map<Integer, Entry>> w = crops.get(c.getWorld().getUID());
         if (w == null) return;
         Map<Integer, Entry> map = w.remove(c.getChunkKey());
-        if (map != null) for (Entry e : map.values()) if (e.display != null) e.display.remove();
+        if (map != null) for (Entry e : map.values()) {
+            if (e.display != null) e.display.remove();
+            if (e.hitbox != null) e.hitbox.remove();
+        }
     }
 
     private void save(Chunk c) {
@@ -246,13 +257,20 @@ final class Crops implements Listener {
     }
 
     void removeAllDisplays() {
-        for (Map<Long, Map<Integer, Entry>> w : crops.values())
-            for (Map<Integer, Entry> m : w.values())
-                for (Entry e : m.values())
+        for (Map<Long, Map<Integer, Entry>> w : crops.values()) {
+            for (Map<Integer, Entry> m : w.values()) {
+                for (Entry e : m.values()) {
                     if (e.display != null) {
                         e.display.remove();
                         e.display = null;
                     }
+                    if (e.hitbox != null) {
+                        e.hitbox.remove();
+                        e.hitbox = null;
+                    }
+                }
+            }
+        }
     }
 
     // ------------------------------------------------------------ the plant you see
@@ -266,17 +284,29 @@ final class Crops implements Listener {
     private void show(Block b, Entry e) {
         if (e.display != null && e.display.isValid()) {
             e.display.setItemStack(look(e));
-            return;
+        } else {
+            Location at = b.getLocation().add(0.5, DISPLAY_Y, 0.5);
+            e.display = b.getWorld().spawn(at, ItemDisplay.class, d -> {
+                d.setPersistent(false);
+                d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
+                d.setItemStack(look(e));
+                d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
+                d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(DISPLAY_SCALE, DISPLAY_SCALE, DISPLAY_SCALE), new Quaternionf()));
+                d.setBrightness(new Display.Brightness(Math.max(b.getLightFromBlocks(), 4), b.getLightFromSky()));
+            });
         }
-        Location at = b.getLocation().add(0.5, DISPLAY_Y, 0.5);
-        e.display = b.getWorld().spawn(at, ItemDisplay.class, d -> {
-            d.setPersistent(false);
-            d.getPersistentDataContainer().set(tagKey, PersistentDataType.BYTE, (byte) 1);
-            d.setItemStack(look(e));
-            d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
-            d.setTransformation(new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(DISPLAY_SCALE, DISPLAY_SCALE, DISPLAY_SCALE), new Quaternionf()));
-            d.setBrightness(new Display.Brightness(Math.max(b.getLightFromBlocks(), 4), b.getLightFromSky()));
-        });
+        // 0.3.29: the visible plant is only an ItemDisplay and a structure void has no outline.
+        // Without a box, aiming at the stalks sends the ray past the plant to whatever block
+        // stands behind; only the soil under it was clickable. Same fix as Sakagura gardens.
+        if (e.hitbox == null || !e.hitbox.isValid()) {
+            e.hitbox = b.getWorld().spawn(new Location(b.getWorld(), b.getX() + 0.5, b.getY(), b.getZ() + 0.5), Interaction.class, i -> {
+                i.setPersistent(false);
+                i.getPersistentDataContainer().set(hitKey, PersistentDataType.BYTE, (byte) 1);
+                i.setInteractionWidth(HIT_W);
+                i.setInteractionHeight(HIT_H);
+                i.setResponsive(true);
+            });
+        }
     }
 
     /** Updates stage bits + display + chunk data. */
@@ -379,7 +409,10 @@ final class Crops implements Listener {
         if (i == null) return;
         Map<Integer, Entry> m = entries(b);
         Entry e = m == null ? null : m.remove(pack(b));
-        if (e != null && e.display != null) e.display.remove();
+        if (e != null) {
+            if (e.display != null) e.display.remove();
+            if (e.hitbox != null) e.hitbox.remove();
+        }
         dirty.computeIfAbsent(b.getWorld().getUID(), k -> new HashSet<>())
                 .add(Chunk.getChunkKey(b.getX() >> 4, b.getZ() >> 4));
         b.setType(Material.AIR, false);
@@ -392,6 +425,59 @@ final class Crops implements Listener {
 
     // ------------------------------------------------------------ player actions
 
+    /** Bone-meal or harvest the crop in this structure void, from the soil click OR the plant hitbox. */
+    private void pick(Block b, Player p, ItemStack hand) {
+        Map<Integer, Entry> m = entries(b);
+        Entry en = m == null ? null : m.get(pack(b));
+        if (en == null) return;
+        Info info = en.info();
+        if (hand != null && hand.getType() == Material.BONE_MEAL && !en.wild && !info.ripe()) {
+            int stage = Math.min(CropType.STAGES - 1, en.stage + 1 + (ThreadLocalRandom.current().nextInt(3) == 0 ? 1 : 0));
+            setStage(b, en, stage, false);
+            if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
+            b.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, b.getLocation().add(0.5, 0.4, 0.5), 8, 0.3, 0.2, 0.3);
+            b.getWorld().playSound(b.getLocation(), Sound.ITEM_BONE_MEAL_USE, 1f, 1f);
+        } else if (info.ripe()) {
+            // pick by hand: drops the harvest and starts again (tea regrows from a later stage)
+            if (!plugin.canBreak(p, b.getRelative(BlockFace.DOWN))) return;
+            Location at = b.getLocation().add(0.5, 0.3, 0.5);
+            for (ItemStack it : drops(info)) b.getWorld().dropItemNaturally(at, it);
+            plugin.adv().grant(p, "harvest");
+            int back = en.type.regrowStage >= 0 ? en.type.regrowStage : 0;
+            setStage(b, en, back, false);
+            b.getWorld().playSound(at, Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1f);
+        }
+        p.swingMainHand();
+    }
+
+    /** The plant block an Interaction hitbox spawned by show() stands in, or null. */
+    private Block plantAt(Entity en) {
+        if (!(en instanceof Interaction) || !en.getPersistentDataContainer().has(hitKey, PersistentDataType.BYTE)) return null;
+        Block b = en.getWorld().getBlockAt(en.getLocation());
+        return info(b) == null ? null : b;
+    }
+
+    /** 0.3.29: right-click the plant you see, not only the soil under it. */
+    @EventHandler(ignoreCancelled = true)
+    public void onHitboxUse(PlayerInteractEntityEvent e) {
+        Block b = plantAt(e.getRightClicked());
+        if (b == null) return;
+        e.setCancelled(true);                                    // never also use the hand item on it
+        if (e.getHand() != EquipmentSlot.HAND) return;
+        pick(b, e.getPlayer(), e.getPlayer().getInventory().getItemInMainHand());
+    }
+
+    /** Punch the plant = break it, with the same soil protection check as a normal break. */
+    @EventHandler(ignoreCancelled = true)
+    public void onHitboxPunch(PrePlayerAttackEntityEvent e) {
+        Block b = plantAt(e.getAttacked());
+        if (b == null) return;
+        e.setCancelled(true);
+        Player p = e.getPlayer();
+        if (p.getGameMode() == GameMode.CREATIVE || plugin.canBreak(p, b.getRelative(BlockFace.DOWN)))
+            breakCrop(b, p.getGameMode() != GameMode.CREATIVE);
+    }
+
     @EventHandler(priority = EventPriority.LOW)
     public void onInteract(PlayerInteractEvent e) {
         Block soil = e.getClickedBlock();
@@ -402,27 +488,7 @@ final class Crops implements Listener {
         ItemStack hand = e.getItem();
         if (info != null) {
             e.setCancelled(true);
-            if (e.getHand() != EquipmentSlot.HAND) return;
-            Player p = e.getPlayer();
-            Entry en = entries(b).get(pack(b));
-            if (hand != null && hand.getType() == Material.BONE_MEAL && !en.wild && !info.ripe()) {
-                int stage = Math.min(CropType.STAGES - 1, en.stage + 1 + (ThreadLocalRandom.current().nextInt(3) == 0 ? 1 : 0));
-                setStage(b, en, stage, false);
-                if (p.getGameMode() != GameMode.CREATIVE) hand.setAmount(hand.getAmount() - 1);
-                b.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, b.getLocation().add(0.5, 0.4, 0.5), 8, 0.3, 0.2, 0.3);
-                b.getWorld().playSound(b.getLocation(), Sound.ITEM_BONE_MEAL_USE, 1f, 1f);
-                p.swingMainHand();
-            } else if (info.ripe()) {
-                // pick by hand: drops the harvest and starts again (tea regrows from a later stage)
-                if (!plugin.canBreak(p, soil)) return;
-                Location at = b.getLocation().add(0.5, 0.3, 0.5);
-                for (ItemStack it : drops(info)) b.getWorld().dropItemNaturally(at, it);
-                plugin.adv().grant(p, "harvest");
-                int back = en.type.regrowStage >= 0 ? en.type.regrowStage : 0;
-                setStage(b, en, back, false);
-                b.getWorld().playSound(at, Sound.BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES, 1f, 1f);
-                p.swingMainHand();
-            }
+            if (e.getHand() == EquipmentSlot.HAND) pick(b, e.getPlayer(), hand);
             return;
         }
         if (soil.getType() == Material.COMPOSTER) {                     // crop items into the composter
