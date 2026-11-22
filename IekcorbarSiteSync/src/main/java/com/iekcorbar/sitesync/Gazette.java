@@ -72,7 +72,7 @@ public class Gazette implements Listener, TabExecutor {
     private BukkitTask autoTask;
     private BukkitTask lecternTask;
     private long nextAutoRun = Long.MAX_VALUE;
-    private boolean autoInFlight = false;
+    private volatile boolean autoInFlight = false;
 
     public Gazette(IekcorbarSiteSync plugin, BookManager books) {
         this.plugin = plugin;
