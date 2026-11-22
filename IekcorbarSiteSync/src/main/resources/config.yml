@@ -33,6 +33,25 @@ season-sync:
   enabled: true
   every-seconds: 300
 
+# The weekly Gazette. The WEBSITE composes the edition (news_posts, events,
+# community numbers) and enqueues `gazette publish <issue> <base64>` into
+# site_command_queue; we only turn it into books/weekly_gazette.txt and hand
+# copies out. On Sunday 18:00 we call the site over HTTPS so no Plesk cron is
+# needed. The site is idempotent per ISO week.
+gazette:
+  site-url: "https://iekcorbar.com/api/gazette/publish"
+  # Must match GAZETTE_SECRET in the website's .env.local. Leave empty to
+  # disable the automatic call; staff can still publish from the Staff Panel.
+  secret: ""
+  auto:
+    enabled: true
+  # World + coordinates of the lectern that always holds the current edition.
+  # Set to "" to skip it. Format: world,x,y,z
+  lectern: ""
+  # FMM display model for the book item. "none" = vanilla written book.
+  # Phase 2 adds a dedicated steampunk kiosk/newspaper model.
+  model: "none"
+
 # Website → server commando-queue — de RCON-vervanging (15-11-2026).
 # RCON stond uit in server.properties omdat elk site-commando (en elke
 # reconnect-poging) de live console in spamde. De site schrijft commando's nu

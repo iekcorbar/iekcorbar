@@ -17,6 +17,7 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
     private SeasonSync seasonSync;
     private AdvancementManager advancementManager;
     private BookManager bookManager;
+    private Gazette gazette;
     private MusicManager musicManager;
     private CreativeHeadsManager creativeHeadsManager;
     private CommandQueueService commandQueue;
@@ -80,6 +81,11 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
         musicManager.start();
         bookManager.enable();
 
+        // The weekly Gazette — written by the website, delivered through the
+        // command queue, with an in-game lectern and a Sunday auto-publish call.
+        gazette = new Gazette(this, bookManager);
+        gazette.enable();
+
         // HeadDatabase: free heads only for staff in creative, see CreativeHeadsManager.
         creativeHeadsManager = new CreativeHeadsManager(this);
         creativeHeadsManager.enable();
@@ -97,6 +103,9 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (gazette != null) {
+            gazette.stop();
+        }
         if (musicManager != null) {
             musicManager.stop();
         }
@@ -166,6 +175,10 @@ public class IekcorbarSiteSync extends JavaPlugin implements Listener {
 
     public BookManager getBookManager() {
         return bookManager;
+    }
+
+    public Gazette getGazette() {
+        return gazette;
     }
 
     public MySQLSync getMysqlSync() {

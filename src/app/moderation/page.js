@@ -329,6 +329,9 @@ function ModerationContent() {
   const [newsContent, setNewsContent] = useState('');
   const [newsLink, setNewsLink] = useState('');
   const [loadingNews, setLoadingNews] = useState(true);
+  // Weekly Gazette: status of the current ISO week + publish/override action.
+  const [gazetteStatus, setGazetteStatus] = useState(null);
+  const [gazetteBusy, setGazetteBusy] = useState(false);
 
   // Guide, Rules, Vote, Reports, Settings states
   const [guideSteps, setGuideSteps] = useState([]);
@@ -638,6 +641,7 @@ function ModerationContent() {
     fetchUpdateCategories();
     fetchNewsPosts();
     fetchNewsTopics();
+    fetchGazetteStatus();
     fetchGuide();
     fetchRules();
     fetchTips();
@@ -1153,6 +1157,16 @@ function ModerationContent() {
       }
     } catch (err) {
       console.error("Failed to load news topics API", err);
+    }
+  }
+
+  async function fetchGazetteStatus() {
+    try {
+      const res = await fetch('/api/gazette/publish');
+      const data = await res.json();
+      if (res.ok) setGazetteStatus(data);
+    } catch (err) {
+      console.error("Failed to load Gazette status API", err);
     }
   }
 
@@ -2500,6 +2514,35 @@ function ModerationContent() {
       }
     } catch (err) {
       setError("Network error");
+    }
+  };
+
+  const handleGazettePublish = async (force = false) => {
+    setError('');
+    setSuccessMsg('');
+    setGazetteBusy(true);
+    try {
+      const res = await fetch('/api/gazette/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ force }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (data.alreadyPublished) {
+          setSuccessMsg(`Issue ${data.currentWeek} is already out this week.`);
+        } else {
+          setSuccessMsg(`Gazette #${data.issue} published — ${data.pages} pages, ${data.postsUsed} post(s), delivered in-game and to Discord.`);
+        }
+        await fetchGazetteStatus();
+      } else {
+        setError(data.error || "Failed to publish the Gazette");
+      }
+    } catch (err) {
+      setError("Network error");
+    } finally {
+      setGazetteBusy(false);
+      setTimeout(() => setSuccessMsg(''), 6000);
     }
   };
 
@@ -4511,6 +4554,50 @@ function ModerationContent() {
                 ))}
               </div>
             </form>
+
+            {/* WEEKLY GAZETTE — one click turns this week's posts into an in-game book */}
+            <div className="bg-sp-dark border border-sp-bronze p-4 rounded-xl space-y-3 steampunk-glass">
+              <h4 className="font-serif text-xs text-sp-gold uppercase tracking-wide border-b border-sp-bronze/10 pb-1.5 flex items-center gap-1.5">
+                <Newspaper className="w-4 h-4 text-sp-copper" /> Weekly Gazette
+              </h4>
+              <p className="text-[10px] text-text-warm/50 leading-relaxed">
+                Turns this week&apos;s posts, upcoming events and community numbers into the
+                in-game book at the spawn lectern, pings every member and posts to Discord.
+                Runs automatically on Sunday 18:00 — this is the manual override.
+              </p>
+              <div className="flex items-center justify-between text-[10px] font-mono">
+                <span className="text-text-warm/40">This week</span>
+                <span className="text-sp-gold">{gazetteStatus?.currentWeek || '…'}</span>
+              </div>
+              <div className="flex items-center justify-between text-[10px] font-mono">
+                <span className="text-text-warm/40">Last edition</span>
+                <span className={gazetteStatus?.lastIssue === gazetteStatus?.currentWeek ? 'text-emerald-400' : 'text-text-warm/60'}>
+                  {gazetteStatus?.lastIssue || 'none yet'}
+                </span>
+              </div>
+              <div className="flex gap-2 pt-1">
+                <button
+                  type="button"
+                  disabled={gazetteBusy}
+                  onClick={() => handleGazettePublish(false)}
+                  className="flex-1 py-2 bg-sp-gold hover:bg-white disabled:opacity-50 border border-transparent rounded-lg text-[10px] font-bold uppercase tracking-wider text-black transition-all cursor-pointer font-serif"
+                >
+                  {gazetteBusy ? 'Working…' : 'Publish edition'}
+                </button>
+                {gazetteStatus?.lastIssue === gazetteStatus?.currentWeek && (
+                  <button
+                    type="button"
+                    disabled={gazetteBusy}
+                    onClick={() => {
+                      if (confirm('Replace this week\'s Gazette with the current content?')) handleGazettePublish(true);
+                    }}
+                    className="px-3 py-2 border border-sp-bronze hover:border-sp-gold rounded-lg text-[10px] font-bold uppercase text-text-warm/70 hover:text-white transition-all cursor-pointer font-serif"
+                  >
+                    Republish
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* COLUMN 2: LIST OF POSTED NEWS/UPCOMING ITEMS */}

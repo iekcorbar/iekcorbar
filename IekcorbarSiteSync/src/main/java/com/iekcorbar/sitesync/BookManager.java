@@ -415,6 +415,24 @@ public class BookManager implements Listener, TabExecutor {
         if (!want.equals(haveId)) applyModel(hand, def);
     }
 
+    /** Creates the current item of a loaded book by id, or null if unknown. */
+    public ItemStack create(String id) {
+        BookDef def = books.get(id == null ? "" : id.toLowerCase(Locale.ROOT));
+        return def == null ? null : createItem(def);
+    }
+
+    /** Gives one copy of a book to every online player. Returns how many got one. */
+    public int giveToAll(String id) {
+        ItemStack item = create(id);
+        if (item == null) return 0;
+        int n = 0;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            give(p, item.clone());
+            n++;
+        }
+        return n;
+    }
+
     /** The custom book id of this item, or null if it isn't one of ours. */
     public String bookIdOf(ItemStack item) {
         if (item == null || item.getType() != Material.WRITTEN_BOOK || !item.hasItemMeta()) return null;

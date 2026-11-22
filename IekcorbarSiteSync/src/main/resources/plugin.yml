@@ -34,6 +34,12 @@ commands:
     permission-message: You do not have permission to manage custom books.
     usage: /ibook <list|info|give|giveseries|open|reload>
 
+  gazette:
+    description: The weekly Gazette — status, re-delivery and the website's publish hook
+    permission: iekcorbar.gazette.admin
+    permission-message: You do not have permission to manage the Gazette.
+    usage: /gazette <status|publish|reload|forget>
+
   iprop:
     description: FreeMinecraftModels props - give the Steam Wrench, reload props.yml
     permission: iekcorbar.props.admin
@@ -57,6 +63,9 @@ permissions:
     default: false
   iekcorbar.books.admin:
     description: Allows /ibook (give custom books, open them, reload books.yml and books/)
+    default: op
+  iekcorbar.gazette.admin:
+    description: Allows /gazette (inspect the weekly edition, force re-delivery, reload)
     default: op
   iekcorbar.webstats:
     description: Allows retrieving player stats via RCON
