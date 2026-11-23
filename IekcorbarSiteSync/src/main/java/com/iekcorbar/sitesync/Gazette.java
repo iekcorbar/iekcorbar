@@ -198,9 +198,9 @@ public class Gazette implements Listener, TabExecutor {
             World world = Bukkit.getWorld(parts[0].trim());
             if (world == null) return;
             Block block = world.getBlockAt(
-                    Integer.parseInt(parts[1].trim()),
-                    Integer.parseInt(parts[2].trim()),
-                    Integer.parseInt(parts[3].trim()));
+                    blockCoord(parts[1], "x"),
+                    blockCoord(parts[2], "y"),
+                    blockCoord(parts[3], "z"));
             if (!(block.getState() instanceof Lectern lectern)) {
                 plugin.getLogger().warning("[Gazette] No lectern at " + lecternSpec + ".");
                 return;
@@ -218,6 +218,15 @@ public class Gazette implements Listener, TabExecutor {
             lectern.update();
         } catch (Exception e) {
             plugin.getLogger().warning("[Gazette] fillLectern: " + e.getMessage());
+        }
+    }
+
+    /** F3 coordinates are often copied with decimals ("3030.447"); floor them to the block. */
+    private static int blockCoord(String value, String axis) {
+        try {
+            return (int) Math.floor(Double.parseDouble(value.trim()));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("bad " + axis + " coordinate '" + value.trim() + "'", e);
         }
     }
 
