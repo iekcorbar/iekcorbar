@@ -49,8 +49,9 @@ gazette:
   # Set to "" to skip it. Format: world,x,y,z
   lectern: ""
   # FMM display model for the book item. "none" = vanilla written book.
-  # Phase 2 adds a dedicated steampunk kiosk/newspaper model.
-  model: "none"
+  # "gazette_newspaper" is the folded paper: gazette_newspaper.bbmodel + .json in
+  # plugins/FreeMinecraftModels/models/steampunk_iekcorbar/books/ on the server.
+  model: "gazette_newspaper"
 
 # Website → server commando-queue — de RCON-vervanging (15-11-2026).
 # RCON stond uit in server.properties omdat elk site-commando (en elke

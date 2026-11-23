@@ -157,25 +157,26 @@ function buildPages(d, issueDate) {
   const dateLabel = issueDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   const pages = [];
 
+  // Printed in plain ink: no legacy colour/format codes anywhere in the paper.
   pages.push(...paginate(
-    `&0&8────────────────────────────\n` +
-    `&6The Iekcorbar Gazette\n` +
-    `&8Issue &e${info.week}&8 / &e${info.year}   ·   ${dateLabel}\n` +
-    `&7From the Guild Press\n` +
-    `&8────────────────────────────\n\n` +
-    `&7News from the server, the village and everyone in it.`
+    `────────────────────────────\n` +
+    `The Iekcorbar Gazette\n` +
+    `Issue ${info.week} / ${info.year}   ·   ${dateLabel}\n` +
+    `From the Guild Press\n` +
+    `────────────────────────────\n\n` +
+    `News from the server, the village and everyone in it.`
   ));
 
   if (chosen.length) {
-    let block = '&lTHIS WEEK&r\n\n';
+    let block = 'THIS WEEK\n\n';
     for (const post of chosen) {
       const title = plain(post.title) || 'Untitled';
       const body = plain(post.content).replace(/\s+/g, ' ').slice(0, 320);
-      block += `&6${title}&r\n&7${body}&r\n\n`;
+      block += `${title}\n${body}\n\n`;
     }
     pages.push(...paginate(block.trim()));
   } else {
-    pages.push(...paginate('&lTHIS WEEK&r\n\n&7A quiet week in the Guild. No new dispatches reached the press.\n\n&7Send in something worth printing!'));
+    pages.push(...paginate('THIS WEEK\n\nA quiet week in the Guild. No new dispatches reached the press.\n\nSend in something worth printing!'));
   }
 
   const upcoming = (Array.isArray(events) ? events : [])
@@ -183,37 +184,37 @@ function buildPages(d, issueDate) {
     .sort((a, b) => new Date(a.date || a.eventDate || a.start) - new Date(b.date || b.eventDate || b.start))
     .slice(0, 4);
   if (upcoming.length) {
-    let block = '&lCOMING UP&r\n\n';
+    let block = 'COMING UP\n\n';
     for (const e of upcoming) {
       const when = new Date(e.date || e.eventDate || e.start).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
-      block += `&6${plain(e.title || e.name || 'Event')}&r  &8(${when})\n`;
+      block += `${plain(e.title || e.name || 'Event')}  (${when})\n`;
     }
     pages.push(...paginate(block.trim()));
   }
 
   const numbers = [];
-  if (Array.isArray(users)) numbers.push(`&f${users.length}&7  registered members`);
-  if (claims != null) numbers.push(`&f${Number(claims).toLocaleString('en-GB')}&7  chunks claimed`);
-  if (jobs != null) numbers.push(`&f${Number(jobs).toLocaleString('en-GB')}&7  active jobs`);
-  if (votes?.[0]?.c != null) numbers.push(`&f${Number(votes[0].c).toLocaleString('en-GB')}&7  votes this week`);
-  if (top?.[0]?.username) numbers.push(`&f${plain(top[0].username)}&7  most hours in-game`);
+  if (Array.isArray(users)) numbers.push(`${users.length}  registered members`);
+  if (claims != null) numbers.push(`${Number(claims).toLocaleString('en-GB')}  chunks claimed`);
+  if (jobs != null) numbers.push(`${Number(jobs).toLocaleString('en-GB')}  active jobs`);
+  if (votes?.[0]?.c != null) numbers.push(`${Number(votes[0].c).toLocaleString('en-GB')}  votes this week`);
+  if (top?.[0]?.username) numbers.push(`${plain(top[0].username)}  most hours in-game`);
   if (numbers.length) {
-    pages.push(...paginate(`&lBY THE NUMBERS&r\n\n${numbers.map((n) => `•  ${n}`).join('\n')}`));
+    pages.push(...paginate(`BY THE NUMBERS\n\n${numbers.map((n) => `•  ${n}`).join('\n')}`));
   }
 
   if (weekPosts.length > chosen.length) {
     pages.push(...paginate(
-      `&lAND ELSEWHERE&r\n\n&7${weekPosts.length - chosen.length} more dispatch(es) this week — see &o${SITE_URL}/news&r&7.`
+      `AND ELSEWHERE\n\n${weekPosts.length - chosen.length} more dispatch(es) this week — see ${SITE_URL}/news.`
     ));
   }
 
   const joke = DID_YOU_KNOW[(info.week + info.year) % DID_YOU_KNOW.length];
-  pages.push(...paginate(`&lDID YOU KNOW&r\n\n&7${joke}`));
+  pages.push(...paginate(`DID YOU KNOW\n\n${joke}`));
   pages.push(...paginate(
-    `&0&8────────────────────────────\n` +
-    `&7More news: &o${SITE_URL}/news&r\n` +
-    `&7Chat with us: &o${DISCORD_INVITE}&r\n` +
-    `&8Printed by the Guild Press · ${info.year}`
+    `────────────────────────────\n` +
+    `More news: ${SITE_URL}/news\n` +
+    `Chat with us: ${DISCORD_INVITE}\n` +
+    `Printed by the Guild Press · ${info.year}`
   ));
 
   return pages;

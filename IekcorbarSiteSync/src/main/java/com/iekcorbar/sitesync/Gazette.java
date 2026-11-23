@@ -1,6 +1,5 @@
 package com.iekcorbar.sitesync;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -54,9 +53,6 @@ import java.util.Map;
 public class Gazette implements Listener, TabExecutor {
 
     public static final String BOOK_ID = "weekly_gazette";
-
-    private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.builder()
-            .character('&').hexColors().build();
 
     private final IekcorbarSiteSync plugin;
     private final BookManager books;
@@ -155,7 +151,7 @@ public class Gazette implements Listener, TabExecutor {
         }
         StringBuilder sb = new StringBuilder();
         sb.append("id: ").append(BOOK_ID).append('\n');
-        sb.append("title: &6The Iekcorbar Gazette\n");
+        sb.append("title: The Iekcorbar Gazette\n");
         sb.append("author: The Guild Press\n");
         sb.append("description: Issue #").append(issue).append(" - printed by the Guild Press\n");
         sb.append("series: The Gazette\n");
@@ -182,8 +178,8 @@ public class Gazette implements Listener, TabExecutor {
         plugin.getLogger().info("[Gazette] Published issue " + issue + " — " + given + " online player(s) served.");
         Bukkit.getScheduler().runTask(plugin, () -> {
             for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage(LEGACY.deserialize("&8[&6Gazette&8] &7Issue &e" + issue
-                        + " &7is out — check your inventory or the lectern at spawn."));
+                p.sendMessage("[Gazette] Issue " + issue
+                        + " is out — check your inventory or the lectern at spawn.");
             }
         });
         return true;
@@ -244,8 +240,8 @@ public class Gazette implements Listener, TabExecutor {
             player.getWorld().dropItemNaturally(player.getLocation(), rest);
         }
         player.getPersistentDataContainer().set(issueKey, PersistentDataType.INTEGER, currentIssue);
-        player.sendMessage(LEGACY.deserialize("&8[&6Gazette&8] &7Issue &e" + currentIssue
-                + " &7was printed while you were away — this one's on the Guild."));
+        player.sendMessage("[Gazette] Issue " + currentIssue
+                + " was printed while you were away — this one's on the Guild.");
     }
 
     // ------------------------------------------------------------------ auto trigger
@@ -305,43 +301,43 @@ public class Gazette implements Listener, TabExecutor {
         switch (sub) {
             case "publish" -> {
                 if (args.length < 3) {
-                    send(sender, "&cUsage: /gazette publish <issue> <base64>");
+                    send(sender, "Usage: /gazette publish <issue> <base64>");
                     return true;
                 }
                 boolean ok = publish(args[1], args[2]);
-                send(sender, ok ? "&aGazette issue " + args[1] + " published."
-                        : "&cCould not publish — bad issue number, payload or file path. Check the console.");
+                send(sender, ok ? "Gazette issue " + args[1] + " published."
+                        : "Could not publish — bad issue number, payload or file path. Check the console.");
             }
             case "status" -> {
-                send(sender, "&6Gazette&7 — current issue: &f" + (currentIssue > 0 ? currentIssue : "none")
-                        + "&7 | auto: &f" + (autoTask != null ? "on" : "off")
-                        + "&7 | next: &f" + (autoTask == null ? "-" : java.time.Instant.ofEpochMilli(nextAutoRun).toString()));
-                send(sender, "&7Lectern: &f" + (lecternSpec.isBlank() ? "(not configured)" : lecternSpec));
+                send(sender, "Gazette — current issue: " + (currentIssue > 0 ? currentIssue : "none")
+                        + " | auto: " + (autoTask != null ? "on" : "off")
+                        + " | next: " + (autoTask == null ? "-" : java.time.Instant.ofEpochMilli(nextAutoRun).toString()));
+                send(sender, "Lectern: " + (lecternSpec.isBlank() ? "(not configured)" : lecternSpec));
             }
             case "reload" -> {
                 loadConfig();
                 scheduleAuto();
                 books.reload();
-                send(sender, "&aGazette config reloaded.");
+                send(sender, "Gazette config reloaded.");
             }
             case "forget" -> {
                 if (args.length < 2) {
-                    send(sender, "&cUsage: /gazette forget <player>");
+                    send(sender, "Usage: /gazette forget <player>");
                     return true;
                 }
                 Player target = Bukkit.getPlayerExact(args[1]);
                 if (target == null) {
-                    send(sender, "&cPlayer is not online.");
+                    send(sender, "Player is not online.");
                     return true;
                 }
                 target.getPersistentDataContainer().remove(issueKey);
-                send(sender, "&aNext join will hand " + target.getName() + " the current issue again.");
+                send(sender, "Next join will hand " + target.getName() + " the current issue again.");
             }
             default -> {
-                send(sender, "&6/gazette status&7 — current issue and schedule");
-                send(sender, "&6/gazette publish <issue> <base64>&7 — used by the website queue");
-                send(sender, "&6/gazette reload&7 — re-read config + books");
-                send(sender, "&6/gazette forget <player>&7 — re-deliver on next join (testing)");
+                send(sender, "/gazette status — current issue and schedule");
+                send(sender, "/gazette publish <issue> <base64> — used by the website queue");
+                send(sender, "/gazette reload — re-read config + books");
+                send(sender, "/gazette forget <player> — re-deliver on next join (testing)");
             }
         }
         return true;
@@ -362,7 +358,7 @@ public class Gazette implements Listener, TabExecutor {
         return out;
     }
 
-    private static void send(CommandSender to, String legacy) {
-        to.sendMessage(LEGACY.deserialize(legacy));
+    private static void send(CommandSender to, String message) {
+        to.sendMessage(message);
     }
 }

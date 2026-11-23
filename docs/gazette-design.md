@@ -1,8 +1,9 @@
 # The Iekcorbar Gazette — ontwerp (besloten 22-11-2026)
 
 Wekelijkse krant die als custom written book in-game verschijnt, met een lectern in spawn,
-push-notificaties en een DiscordSRV-broadcast. Eén site-zip + één SiteSync-jar; pack ongewijzigd
-(fase 2 voegt een FMM-kiosk toe).
+push-notificaties en een DiscordSRV-broadcast. Eén site-zip + één SiteSync-jar; pack ongewijzigd.
+Fase 2 (23-11): het boek is kleurloos (geen `&`-codes) en heeft een FMM-model van een opgevouwen
+krant (`gazette_newspaper`) i.p.v. het vanilla boek — geen kiosk en geen pack-rebuild.
 
 ## Randvoorwaarde: twee databases
 
@@ -26,7 +27,7 @@ de plugin houdt `gazette.yml` bij.
 | Inhoud | `/news`-posts + aankomende events + community-cijfers + roterende "Did you know" |
 | Discord | `/discord broadcast` via de bestaande command queue (DiscordSRV 1.30.5 draait live) |
 | Kopieerbaar | Ja — `copyable: true`, spelers mogen 'm meenemen en op eigen lectern zetten |
-| Fase 2 | Steampunk kiosk via `PropPlacementManager` + FMM-model + pack-rebuild |
+| Fase 2 | FMM-model `gazette_newspaper` voor het boek + alle kleurcodes eruit (23-11, geen kiosk/pack) |
 
 ## Flow
 
@@ -89,5 +90,7 @@ Alles in `&`-legacy codes (BookManager snapt die al), gesplitst op `---`, max. ~
 ## Deploy
 
 Fase 1: site-zip + SiteSync-jar → twee regels in `deploy/TE-DEPLOYEN.txt`. Alleen de jar vraagt een
-server-restart. Pack ongewijzigd. Fase 2 (kiosk) voegt een FMM-model toe en vraagt een pack-rebuild
-met build-nummer-verhoging.
+server-restart. Pack ongewijzigd. Fase 2 (23-11): site-2311.zip + SiteSync-1.19.1.jar + twee
+FMM-bestanden in `plugins/FreeMinecraftModels/models/steampunk_iekcorbar/books/`; de live
+`config.yml` moet `gazette.model` naar `gazette_newspaper` meekrijgen (`saveDefaultConfig`
+ overschrijft nooit). Geen pack-rebuild, geen client-herstart.
