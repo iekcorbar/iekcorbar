@@ -36,7 +36,9 @@ FFMPEG = os.environ.get("FFMPEG") or (glob.glob(os.path.expandvars(
 MUSIC_SRC = os.path.join(ROOT, "sounds", "music", "overworld.mp3")
 END_SRC = os.path.join(ROOT, "sounds", "music", "end.mp3")
 SPAWN_SRC = os.path.join(ROOT, "sounds", "music", "spawn.mp3")
+XMAS_SRC = os.path.join(ROOT, "sounds", "music", "cristmastown.mp3")
 SPAWN_XFADE = 5.0  # s: staart en kop worden in elkaar gelegd, zodat de repeat geen naad heeft
+XMAS_XFADE = 5.0  # s: zelfde crossfade voor de kerst-ambient in cristmastown
 MUSIC_EVENTS = ["music.game", "music.creative", "music.under_water", "music.end", "music.dragon"] + [
     "music.nether." + b for b in ("nether_wastes", "crimson_forest", "soul_sand_valley",
                                    "warped_forest", "basalt_deltas")] + [
@@ -215,7 +217,9 @@ def own_sounds_json():
             "music.end": {"sounds": [{"name": "iekcorbar:music/end", "stream": True}],
                           "subtitle": ""},
             "music.spawn": {"sounds": [{"name": "iekcorbar:music/spawn", "stream": True}],
-                            "subtitle": ""}}
+                            "subtitle": ""},
+            "music.cristmastown": {"sounds": [{"name": "iekcorbar:music/cristmastown", "stream": True}],
+                                   "subtitle": ""}}
 
 
 def main():
@@ -235,6 +239,8 @@ def main():
                 z.writestr("assets/iekcorbar/sounds/music/spawn.ogg", loop_ogg(SPAWN_SRC))
             if os.path.exists(END_SRC):
                 z.writestr("assets/iekcorbar/sounds/music/end.ogg", music_ogg(END_SRC))
+            if os.path.exists(XMAS_SRC):
+                z.writestr("assets/iekcorbar/sounds/music/cristmastown.ogg", loop_ogg(XMAS_SRC, XMAS_XFADE))
             z.writestr("assets/iekcorbar/sounds.json", json.dumps(own_sounds_json(), indent=1))
             z.writestr("assets/minecraft/sounds.json", json.dumps(music_sounds_json(), indent=1))
     print("wrote", OUT, os.path.getsize(OUT), "bytes")

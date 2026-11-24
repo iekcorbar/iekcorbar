@@ -16,6 +16,7 @@ biomes: {}
 # Regio-id -> track. Bij overlap wint de regio met de hoogste WorldGuard-prioriteit.
 regions:
   spawn: spawn
+  cristmastown: cristmastown
 
 # Alles wat met dit begint (bv. betterstructures) -> track. Leeg = geen.
 region-prefixes: {}
@@ -37,3 +38,9 @@ tracks:
     gap: 0
     delay: 0
     title: "Spawn"
+  cristmastown:
+    sound: "iekcorbar:music.cristmastown"
+    seconds: 151.024
+    gap: 0
+    delay: 0
+    title: "Christmas Town"
